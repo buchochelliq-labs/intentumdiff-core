@@ -1,0 +1,54 @@
+# intentdiff-core — the IntentDiff engine workspace (the flagship repo).
+# Mirrors the monorepo's build topology: the Wasm-component members (index-engine +
+# the renderers) build under this workspace's profiles/patches, while the native
+# engine (crates/rust-core-host) and the `intentdiff` CLI (crates/cli) are standalone
+# crates with their own [patch]/[profile] — exactly as certified in the monorepo.
+[workspace]
+members = [
+    "crates/index-engine",
+    "crates/index-engine-lib",
+    "crates/terminal-renderer",
+    "crates/patch-renderer",
+    "crates/html-renderer",
+    "crates/llm-renderer",
+]
+resolver = "2"
+exclude = [
+    # The native engine: cdylib exposing the C ABI (intentdiff_call) + rlib for
+    # in-process Rust consumers. Own [patch]/[profile] (release opt-level=3).
+    "crates/rust-core-host",
+    # The native intentdiff CLI — links the engine in-process; own [patch]/[profile].
+    "crates/cli",
+]
+
+# Prevent accidental `cargo publish` until crates are ready for release
+[workspace.package]
+publish = false
+
+# Wasm components target WASI p2 (Component Model); mirrors the monorepo root profile.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+# Build scripts run on the host; compile them simply so Windows AppControl doesn't block them
+[profile.release.build-override]
+opt-level = 0
+codegen-units = 16
+debug = false
+
+[profile.release-wasm]
+inherits = "release"
+opt-level = "z"
+
+# Patch out or stabilize build scripts (vendored from the monorepo's crates/patches —
+# the base chain the workspace members reach; grammar patches live with the parser repos).
+[patch.crates-io]
+quote = { path = "crates/patches/quote" }
+zmij = { path = "crates/patches/zmij" }
+serde_core = { path = "crates/patches/serde_core" }
+serde_json = { path = "crates/patches/serde_json" }
+wit-bindgen-rust-macro = { path = "crates/patches/wit-bindgen-rust-macro" }
+tree-sitter = { path = "crates/patches/tree-sitter" }

@@ -1,0 +1,18 @@
+[package]
+name = "zmij"
+version = "1.0.21"
+edition = "2021"
+rust-version = "1.71"
+authors = ["David Tolnay <dtolnay@gmail.com>"]
+build = false
+description = "A double-to-string conversion algorithm based on Schubfach and yy"
+license = "MIT"
+repository = "https://github.com/dtolnay/zmij"
+
+[lib]
+name = "zmij"
+path = "src/lib.rs"
+
+[dependencies.no-panic]
+version = "0.1.36"
+optional = true

@@ -1,0 +1,351 @@
+/// intentdiff Plugin Interface  v1.0.0
+///
+/// This WIT file is the SOLE contract between the host (Python runtime) and
+/// any plugin (parser or renderer), regardless of what language the plugin is
+/// written in.  Use `wit-bindgen` to generate host or guest bindings.
+///
+/// Worlds
+/// ──────
+///   parser-plugin   — implement a parser (full-parse mode for new parsers)
+///   renderer-plugin — implement a renderer
+///
+/// Host imports
+/// ────────────
+/// The host exposes three utilities via `host-utils`.  Every world imports them
+/// so plugins can call them without carrying their own implementations.
+
+package intentdiff:plugin@1.0.0;
+
+// ---------------------------------------------------------------------------
+// Host-provided utilities
+// ---------------------------------------------------------------------------
+
+/// Functions implemented by the Python host and imported by every plugin.
+/// All I/O through these functions is the only outside-world contact a plugin
+/// has — the Wasm sandbox grants zero WASI capabilities.
+interface host-utils {
+    /// Remove trivia nodes from a CST JSON document.
+    ///
+    /// `cst-json`    — the raw CST returned by `cst-serializer` (host side).
+    /// `trivia-types` — node type names to strip, e.g. ["comment", "whitespace"].
+    ///
+    /// Returns the filtered CST JSON string.
+    strip-trivia: func(cst-json: string, trivia-types: list<string>) -> string;
+
+    /// Compute a structural hash for a CST subtree (JSON object or array).
+    ///
+    /// Algorithm: SHA-256, identical to the host's own hash so hashes are
+    /// comparable across plugin boundaries.
+    ///   leaf:     sha256(type + ":" + text)
+    ///   internal: sha256(type + "|" + join("|", map(hash, children)))
+    ///
+    /// Returns a lowercase hex string.
+    structural-hash: func(cst-json: string) -> string;
+
+    /// Emit a log message that the host routes to its logging subsystem.
+    ///
+    /// `level` — one of "trace", "debug", "info", "warn", "error".
+    log: func(level: string, message: string);
+}
+
+// ---------------------------------------------------------------------------
+// Parser interface
+// ---------------------------------------------------------------------------
+
+/// Implemented and exported by parser plugins.
+interface parser {
+    /// Declares how a parser plugin receives source input.
+    enum parser-mode {
+        /// Legacy compatibility mode. The host parses the source file and
+        /// passes CST JSON to `process`.
+        ///
+        /// New first-party and third-party parser plugins must use
+        /// `full-parse`. Product parser paths reject `interpret-cst` so the
+        /// engine boundary stays Rust/Wasm-owned.
+        interpret-cst,
+
+        /// The plugin receives raw source text and is responsible for parsing it
+        /// entirely on its own, usually with a Rust parser or tree-sitter grammar
+        /// compiled into the .wasm binary. This is the recommended and supported
+        /// mode for parser plugins.
+        full-parse,
+    }
+
+    /// Return the parsing mode for this plugin.
+    get-parser-mode: func() -> parser-mode;
+
+    /// A short unique identifier for the grammar, e.g. "python", "sql",
+    /// "solidity".  Must be lowercase, ASCII, no spaces.
+    grammar-id: func() -> string;
+
+    /// Given a filename and a snippet of content, return a language hint
+    /// string (e.g. "python") or an empty string if this plugin cannot
+    /// handle the file.  The host calls this for every registered parser
+    /// in priority order.  This is also the source of truth for the
+    /// playground /detect API; browser clients must not duplicate parser
+    /// language heuristics.
+    detect-language: func(filename: string, content: string) -> string;
+
+    /// Transform the input into a SemanticTree JSON string.
+    ///
+    /// `input`    — raw source (full-parse) or CST JSON (legacy interpret-cst).
+    /// `language` — language hint from `detect-language`.
+    /// `filename` — original filename (for diagnostics).
+    ///
+    /// Returns a JSON string conforming to the `SemanticTree` schema.
+    /// On error, return a JSON object with a top-level `"error"` key.
+    process: func(input: string, language: string, filename: string) -> string;
+
+    /// Return the list of CST node type names this plugin considers trivia
+    /// (comments, whitespace, semicolons, …).  The host calls `strip-trivia`
+    /// with this list before diffing.
+    trivia-node-types: func() -> list<string>;
+
+    /// All language IDs this plugin can handle. This is the source of truth
+    /// for the playground /languages API.
+    language-ids: func() -> list<string>;
+
+    /// Rich language metadata for playgrounds and API clients.
+    ///
+    /// This is the source of truth for editor language modes, default
+    /// filenames, file extensions, display names, plugin author metadata, and
+    /// the playground /language-info API. It must include one record for every
+    /// value returned by `language-ids`.
+    language-info: func() -> list<language-info-record>;
+
+    /// Dispatch priority.  Higher values win when multiple plugins claim the
+    /// same language.  Built-in parsers use 0.  Third-party plugins should
+    /// use 1 or higher to override built-ins.
+    priority: func() -> s32;
+
+    /// Optional source transformation applied before parser processing.
+    ///
+    /// Plugins that do not need any source transformation must return
+    /// ``source`` unchanged.
+    ///
+    /// Primary use-case: the dbt parser strips Jinja2 template expressions and
+    /// replaces them with SQL-valid placeholder identifiers (e.g.
+    /// ``dbt_ref__orders``) so that tree-sitter produces a clean AST.  The
+    /// dbt enricher plugin later decodes the placeholders and injects proper
+    /// ``jinja_ref`` / ``jinja_source`` semantic nodes.
+    preprocess-source: func(source: string) -> string;
+
+    /// Return a before/after source-code example for *language*.
+    /// This is the source of truth for the playground /example/{language} API.
+    ///
+    /// The `language` argument matches one of the values returned by
+    /// `language-ids`.  Both `old` and `new` must be non-empty and show a
+    /// meaningful semantic change (e.g. a refactoring or feature addition).
+    example: func(language: string) -> example-pair;
+
+    /// A before/after source-code example pair.
+    record example-pair {
+        old: string,
+        new: string,
+    }
+
+    /// Metadata for one language ID exposed by this parser plugin.
+    record language-info-record {
+        language-id: string,
+        language-name: string,
+        language-short-name: string,
+        monaco-language: string,
+        default-filename: string,
+        language-file-extensions: list<string>,
+        author: string,
+        plugin-version: string,
+        last-updated: string,
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Enricher interface
+// ---------------------------------------------------------------------------
+
+/// Implemented and exported by enricher plugins.
+///
+/// An enricher runs after the base parser and receives both the
+/// already-parsed SemanticNode tree (as JSON) and the original raw source.
+/// It may inject, modify, or annotate nodes and must return the updated
+/// tree as JSON.
+///
+/// Enrichers enable composable plugins: the dbt enricher injects
+/// ``jinja_ref``, ``jinja_source``, and ``macro_def`` nodes into an
+/// existing SQL SemanticNode tree without reimplementing SQL parsing.
+interface enricher {
+    /// Enrich a SemanticNode tree with additional semantic information.
+    ///
+    /// ``semantic-tree-json`` — JSON string of the SemanticNode tree produced
+    ///   by the base parser's ``process`` function.
+    /// ``raw-source``         — original (un-preprocessed) source text.
+    /// ``language``           — the language ID that selected this enricher.
+    /// ``filename``           — original filename (for diagnostics).
+    ///
+    /// Returns an updated SemanticNode tree JSON string.
+    /// On error, return ``semantic-tree-json`` unchanged so the pipeline
+    /// can continue without enrichment.
+    enrich: func(semantic-tree-json: string, raw-source: string, language: string, filename: string) -> string;
+
+    /// Language IDs this enricher handles (same vocabulary as parser language-ids).
+    language-ids: func() -> list<string>;
+
+    /// Dispatch priority; same semantics as ``parser.priority``.
+    priority: func() -> s32;
+}
+
+// ---------------------------------------------------------------------------
+// Renderer interface
+// ---------------------------------------------------------------------------
+
+/// Implemented and exported by renderer plugins.
+interface renderer {
+    /// Human-readable format name, e.g. "terminal", "html", "patch".
+    format-name: func() -> string;
+
+    /// Render a `SemanticDiff` JSON string into the target format.
+    ///
+    /// `diff-json` — a JSON string conforming to the `SemanticDiff` schema.
+    ///
+    /// Returns the rendered output as a string (ANSI, HTML, unified diff, …).
+    render: func(diff-json: string) -> string;
+
+    /// List of option keys this renderer accepts (for documentation / UIs).
+    supported-options: func() -> list<string>;
+
+    /// Dispatch priority; same semantics as `parser.priority`.
+    priority: func() -> s32;
+}
+
+// ---------------------------------------------------------------------------
+// Worlds
+// ---------------------------------------------------------------------------
+
+/// World that a parser plugin must satisfy.
+world parser-plugin {
+    /// Access host utilities.
+    import host-utils;
+    /// Expose the parser implementation.
+    export parser;
+}
+
+/// World that a renderer plugin must satisfy.
+world renderer-plugin {
+    /// Access host utilities.
+    import host-utils;
+    /// Expose the renderer implementation.
+    export renderer;
+}
+
+/// World that an enricher plugin must satisfy.
+world enricher-plugin {
+    /// Access host utilities.
+    import host-utils;
+    /// Expose the enricher implementation.
+    export enricher;
+}
+
+// ---------------------------------------------------------------------------
+// Index-engine interface
+// ---------------------------------------------------------------------------
+
+/// Implemented and exported by the index-engine plugin.
+///
+/// The index engine builds and diffs symbol tables across multiple files,
+/// enabling cross-file semantic analysis (MOVE_TO_MODULE, CROSS_FILE_RENAME,
+/// SPLIT_MODULE).
+/// It is the hot path for the ``SemanticIndex`` Python host API.
+interface index-engine {
+    /// Build a symbol table from a set of parsed files.
+    ///
+    /// ``files-json`` — JSON array of objects, each with shape:
+    ///   { "filename": str, "language": str, "tree": SemanticNode }
+    ///
+    /// Returns a ``SymbolTable`` JSON object:
+    ///   { "<qualified_name>": [{ "file": str, "node_type": str,
+    ///                            "node_id": str, "start_line": u32,
+    ///                            "start_col": u32, "end_line": u32,
+    ///                            "end_col": u32 }] }
+    ///
+    /// On error, returns a JSON object with a top-level ``"error"`` key.
+    build-symbol-table: func(files-json: string) -> string;
+
+    /// Compare two symbol tables and detect cross-file movements.
+    ///
+    /// ``old-json`` / ``new-json`` — ``SymbolTable`` JSON as returned by
+    ///   ``build-symbol-table``.
+    ///
+    /// Returns a JSON array of ``CrossFileChange`` objects:
+    ///   [{ "change_type": "MOVE_TO_MODULE" | "CROSS_FILE_RENAME" | "SPLIT_MODULE",
+    ///      "old_file": str, "new_file": str, "symbol_name": str,
+    ///      "old_node_id": str | null, "new_node_id": str | null,
+    ///      "confidence": f64, "description": str }]
+    diff-symbol-tables: func(old-json: string, new-json: string) -> string;
+
+    /// Build a reference table (call-sites and import usages) from a set of
+    /// parsed files.
+    ///
+    /// ``files-json`` — same input format as ``build-symbol-table``:
+    ///   JSON array of { "filename": str, "language": str, "tree": SemanticNode }
+    ///
+    /// Returns a ``ReferenceTable`` JSON object:
+    ///   { "<label>": [{ "qualified_name": str, "file": str, "node_id": str,
+    ///                   "reference_kind": "CALL" | "IMPORT" | "TYPE_USAGE",
+    ///                   "position": { "start_line": u32, "start_col": u32,
+    ///                                 "end_line": u32, "end_col": u32 },
+    ///                   "language": str, "enclosing_scope": str | null }] }
+    ///
+    /// On error, returns a JSON object with a top-level ``"error"`` key.
+    build-reference-table: func(files-json: string) -> string;
+}
+
+/// World that an index-engine plugin must satisfy.
+world index-engine-plugin {
+    /// Access host utilities.
+    import host-utils;
+    /// Expose the index engine implementation.
+    export index-engine;
+}
+
+// ---------------------------------------------------------------------------
+// Diff-analyzer interface
+// ---------------------------------------------------------------------------
+
+/// Implemented and exported by diff-analyzer plugins.
+///
+/// A diff analyzer runs after the classification stage and receives the
+/// complete SemanticDiff JSON for a single file.  It may add, modify, or
+/// annotate Change objects — including emitting custom language-specific
+/// change_type strings (e.g. "SQL_RENAME_TABLE", "GO_INTERFACE_CHANGE").
+///
+/// Diff analyzers enable language-specific post-processing without
+/// modifying the core diff engine.  They are discovered via the
+/// ``intentdiff.diff_analyzers`` entry-point group.
+interface diff-analyzer {
+    /// Analyze a completed SemanticDiff and return an updated version.
+    ///
+    /// ``diff-json``  — JSON string of the SemanticDiff produced by the
+    ///   classification stage.
+    /// ``language``   — the language ID of the file being analyzed.
+    /// ``filename``   — original filename (for diagnostics).
+    ///
+    /// Returns an updated SemanticDiff JSON string with any additional or
+    /// modified Change objects.  Return ``diff-json`` unchanged if no
+    /// language-specific changes apply.
+    /// On error, return ``diff-json`` unchanged so the pipeline continues.
+    analyze-diff: func(diff-json: string, language: string, filename: string) -> string;
+
+    /// Language IDs this analyzer handles (same vocabulary as parser language-ids).
+    language-ids: func() -> list<string>;
+
+    /// Dispatch priority; same semantics as ``parser.priority``.
+    /// Higher values run first.  Analyzers are chained in priority order.
+    priority: func() -> s32;
+}
+
+/// World that a diff-analyzer plugin must satisfy.
+world diff-analyzer-plugin {
+    /// Access host utilities.
+    import host-utils;
+    /// Expose the diff analyzer implementation.
+    export diff-analyzer;
+}

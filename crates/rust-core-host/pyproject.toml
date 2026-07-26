@@ -1,0 +1,14 @@
+[build-system]
+requires = ["maturin>=1.8,<2"]
+build-backend = "maturin"
+
+[project]
+name = "intentdiff-rust-core"
+version = "0.1.0"
+description = "Native Rust core host for IntentDiff"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+[tool.maturin]
+module-name = "intentdiff_rust_core"
+features = ["pyo3/extension-module"]

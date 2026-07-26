@@ -1,0 +1,27 @@
+[package]
+name = "wit-bindgen-rust-macro"
+version = "0.57.1"
+edition = "2024"
+license = "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT"
+# build = false: eliminate build script that only sets DEBUG_OUTPUT_DIR (a debug output path).
+# We replace env!("DEBUG_OUTPUT_DIR") with option_env!(...).unwrap_or(".") in src/lib.rs.
+# This avoids Windows AppControl blocking the build script binary.
+
+[lib]
+name = "wit_bindgen_rust_macro"
+path = "src/lib.rs"
+proc-macro = true
+
+[features]
+default = ["macro-string"]
+macro-string = ["dep:macro-string"]
+
+[dependencies]
+anyhow = "1.0.102"
+macro-string = { version = "0.2.0", optional = true }
+prettyplease = "0.2.20"
+proc-macro2 = "1.0"
+quote = "1"
+syn = { version = "2.0.89", features = ["printing"] }
+wit-bindgen-core = "0.57.1"
+wit-bindgen-rust = "0.57.1"

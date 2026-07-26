@@ -1,0 +1,10 @@
+# cbindgen config for maturin's `cffi` bindings mode (the pyo3-free release wheel, #82/B.6).
+#
+# The wheel loads the cdylib through `rust_core.py`'s ctypes accessor with hand-declared
+# signatures, so the generated header only needs the two extern "C" entry points. Restricting the
+# export to functions keeps cbindgen from emitting `#define`s for `pub const`s (e.g.
+# `MAX_CONTENT_BYTES (512 * 1024)`), which cffi's macro parser rejects.
+language = "C"
+
+[export]
+item_types = ["functions"]

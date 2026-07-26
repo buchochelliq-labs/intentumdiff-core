@@ -1,0 +1,45 @@
+[package]
+name = "serde_json"
+version = "1.0.149"
+edition = "2021"
+rust-version = "1.68"
+authors = [
+    "Erick Tryzelaar <erick.tryzelaar@gmail.com>",
+    "David Tolnay <dtolnay@gmail.com>",
+]
+build = false
+description = "A JSON serialization file format"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/serde-rs/json"
+
+[features]
+alloc = ["serde_core/alloc"]
+arbitrary_precision = []
+default = ["std"]
+float_roundtrip = []
+preserve_order = ["indexmap", "std"]
+raw_value = []
+std = ["memchr/std", "serde_core/std"]
+unbounded_depth = []
+
+[lib]
+name = "serde_json"
+path = "src/lib.rs"
+
+[dependencies.indexmap]
+version = "2.2.3"
+optional = true
+
+[dependencies.itoa]
+version = "1.0"
+
+[dependencies.memchr]
+version = "2"
+default-features = false
+
+[dependencies.serde_core]
+version = "1.0.220"
+default-features = false
+
+[dependencies.zmij]
+version = "1.0"
