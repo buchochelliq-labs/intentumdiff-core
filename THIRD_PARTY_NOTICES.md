@@ -9,4 +9,4 @@ This repository vendors patched copies of third-party crates under `crates/patch
 
 All other dependencies are consumed unmodified from crates.io under their declared licenses
 (see `Cargo.toml`/`Cargo.lock` per crate). A formal license scan precedes any commercial
-distribution (see [docs/OPEN_CORE.md](docs/OPEN_CORE.md)).
+distribution.
