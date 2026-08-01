@@ -76,5 +76,22 @@ jobs:
         uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
         with:
           key: components
+      - name: Authenticate cross-repo git deps
+        # Private sibling repos (the SDK / the engine) are git dependencies. GITHUB_TOKEN is
+        # scoped to THIS repo only, so cargo/pip cannot fetch them without an org-scoped
+        # token. Set the SPLIT_REPO_TOKEN secret (PAT or App token with read access to the
+        # buchochelliq-labs repos); without it this step warns and the build fails clearly.
+        env:
+          SPLIT_REPO_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
+        run: |
+          if [ -n "$SPLIT_REPO_TOKEN" ]; then
+            git config --global url."https://x-access-token:${SPLIT_REPO_TOKEN}@github.com/".insteadOf "https://github.com/"
+            echo "cross-repo git auth configured"
+          else
+            echo "::warning::SPLIT_REPO_TOKEN not set - private cross-repo dependencies will fail to fetch"
+          fi
+
       - name: Build the workspace components
         run: cargo build --release --target wasm32-wasip2
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
