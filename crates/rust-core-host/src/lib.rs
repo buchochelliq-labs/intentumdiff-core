@@ -1222,6 +1222,9 @@ const ANCHOR_ENTITY_TYPES: &[&str] = &[
     "procedure_declaration", "procedure_heading", "record_definition", "setter_signature",
     "source_method_declaration", "struct_declaration", "sub_declaration",
     "subroutine_declaration_statement", "trait_item",
+    // js-ts async variants: an async function is still the same kind of entity as its
+    // non-async counterpart, so it must keep anchoring (moves stay MOVEs, not DELETE+ADD).
+    "async_function_declaration", "async_method_definition",
 ];
 
 const ANCHOR_FUNCTION_TYPES: &[&str] = &[
@@ -1232,6 +1235,7 @@ const ANCHOR_FUNCTION_TYPES: &[&str] = &[
     "method", "method_signature", "method_statement", "module", "operation_declaration",
     "procedure_definition", "procedure_declaration", "procedure_heading", "setter_signature",
     "source_method_declaration", "sub_declaration", "subroutine_declaration_statement",
+    "async_function_declaration", "async_method_definition",
 ];
 
 const ANCHOR_ROOT_ENTITY_TYPES: &[&str] = &[
@@ -5887,6 +5891,14 @@ fn is_function_entity_type(node_type: &str) -> bool {
             | "constructor_declaration"
             | "function_statement"
             | "subroutine_declaration_statement"
+            // js-ts async variants (the parser's `async_*` node types).
+            | "async_function_declaration"
+            | "async_function"
+            | "async_function_expression"
+            | "async_arrow_function"
+            | "async_generator_function_declaration"
+            | "async_generator_function"
+            | "async_method_definition"
     ) || node_type == "async_function_def"
 }
 
@@ -8039,8 +8051,9 @@ fn refine_candidate_drafts<'a>(
     });
 }
 
-/// Env-gated draft tracer for parity debugging: set INTENTDIFF_FINALIZE_DEBUG=1 to see
-/// the surviving drafts after each finalize/refine pass on stderr.
+// Env-gated draft tracer for parity debugging: set INTENTDIFF_FINALIZE_DEBUG=1 to see
+// the surviving drafts after each finalize/refine pass on stderr. (Plain comment — a
+// macro invocation cannot carry an outer doc comment.)
 thread_local! {
     /// Per-pass trace for diagnostics mode (issue #54): None = off; Some = collecting
     /// (pass name, surviving change count) after every probed refine/finalize pass.
@@ -9024,8 +9037,10 @@ fn scope_label_for_node(node: &SemanticNode) -> Option<String> {
         "function_definition"
         | "async_function_def"
         | "function_declaration"
+        | "async_function_declaration"
         | "method_declaration"
         | "method_definition"
+        | "async_method_definition"
         | "function_item"
             if !node.label.is_empty() =>
         {
@@ -9323,6 +9338,7 @@ fn is_named_entity_type(node_type: &str) -> bool {
         | "class_definition"
         | "method_declaration"
         | "function_declaration"
+        | "async_function_declaration"
         // PowerShell functions (issue #57/#66: a pure two-function swap yielded ZERO changes
         // routed — the reorder promotion's named-entity guard didn't know the type, so both
         // REORDERs were suppressed as low-signal instead of promoting the order-inverted one
@@ -9367,10 +9383,10 @@ fn is_named_entity_type(node_type: &str) -> bool {
         | "package"
         | "section"
         | "environment"
-        // OCaml / ReasonML
+        // OCaml / ReasonML ("type_definition" is shared with — and already matched by —
+        // the GraphQL arm above)
         | "module_binding"
         | "module"
-        | "type_definition"
         | "value_definition"
         | "recursive_value"
         | "component"
@@ -9384,24 +9400,6 @@ fn has_suppressed_ancestor_id(id: &str, roots: &HashSet<String>) -> bool {
     let mut current = id;
     while let Some((parent, _)) = current.rsplit_once('.') {
         if roots.contains(parent) {
-            return true;
-        }
-        current = parent;
-    }
-    false
-}
-
-fn ancestor_has_type(
-    id: &str,
-    node_type: &str,
-    nodes_by_id: &HashMap<&str, &SemanticNode>,
-) -> bool {
-    let mut current = id;
-    while let Some((parent, _)) = current.rsplit_once('.') {
-        if nodes_by_id
-            .get(parent)
-            .is_some_and(|node| node.node_type == node_type)
-        {
             return true;
         }
         current = parent;
@@ -9500,6 +9498,8 @@ fn is_entity_container_type(node_type: &str) -> bool {
                 | "method_statement"
                 | "mixin_declaration"
                 | "arrow_function"
+                | "async_arrow_function"
+                | "async_method_definition"
                 | "class_declaration"
                 | "class_impl"
                 | "interface"

@@ -603,6 +603,11 @@ pub(crate) fn is_function_type(node_type: &str) -> bool {
             | "sub_declaration"
             | "subroutine_declaration_statement"
             | "arrow_function"
+            // js-ts async variants: a signature change to an async function is still a
+            // CHANGE_SIGNATURE refactoring.
+            | "async_function_declaration"
+            | "async_method_definition"
+            | "async_arrow_function"
     )
 }
 

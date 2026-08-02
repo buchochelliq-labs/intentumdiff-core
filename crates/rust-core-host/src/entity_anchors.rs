@@ -19,7 +19,15 @@ pub(crate) fn js_function_valued_declaration_label(node: &SemanticNode) -> Optio
             .any(|d| {
                 matches!(
                     d.node_type.to_lowercase().as_str(),
-                    "arrow_function" | "function" | "function_expression"
+                    // The `async_*` spellings are the js-ts parser's async variants — without
+                    // them `const f = async () => ...` would stop reading as a function-valued
+                    // declaration and lose its entity anchor.
+                    "arrow_function"
+                        | "function"
+                        | "function_expression"
+                        | "async_arrow_function"
+                        | "async_function"
+                        | "async_function_expression"
                 )
             });
         if has_function_value {
@@ -269,7 +277,7 @@ pub(crate) fn augment_entity_matching<'a>(
         matching.iter().map(|m| m.new_node.id.clone()).collect();
 
     let entity_pairs = recover_entity_pairs(old_root, new_root, &matching);
-    let mut add =
+    let add =
         |matching: &mut Vec<MatchPair<'a>>,
          matched_old: &mut HashSet<String>,
          matched_new: &mut HashSet<String>,

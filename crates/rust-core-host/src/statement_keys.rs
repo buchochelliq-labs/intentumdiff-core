@@ -317,8 +317,7 @@ pub(crate) fn delphi_callee(label: &str) -> String {
     for (i, ch) in text.char_indices() {
         if i == 0 {
             if !(ch.is_ascii_alphabetic() || ch == '_') {
-                end = 0;
-                break;
+                break; // end stays 0
             }
             end = i + ch.len_utf8();
         } else if ch.is_ascii_alphanumeric() || ch == '_' || ch == '.' {
