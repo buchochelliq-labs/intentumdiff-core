@@ -80,7 +80,17 @@ def stage_component(slug: str, out: Path, token: str) -> tuple[str, str, str]:
     repo = f"intentdiff-{slug}-parser"
     wanted = f"{slug.replace('-', '_')}_parser.wasm"
 
-    runs = json.loads(_get(f"{API}/repos/{ORG}/{repo}/actions/runs?status=success&per_page=1", token))
+    # `list-runs` is the call that needs Actions: Read — a token with only
+    # contents/metadata read (enough for the private git deps) 403s here, so name the
+    # stage in the error rather than leaving a bare "HTTP 403".
+    try:
+        runs = json.loads(
+            _get(f"{API}/repos/{ORG}/{repo}/actions/runs?status=success&per_page=1", token))
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(
+            f"{repo}: HTTP {exc.code} listing workflow runs - the token needs the "
+            f"Actions: Read permission on the parser repos"
+        ) from exc
     workflow_runs = runs.get("workflow_runs") or []
     if not workflow_runs:
         raise RuntimeError(f"{repo}: no successful workflow run to take a component from")
