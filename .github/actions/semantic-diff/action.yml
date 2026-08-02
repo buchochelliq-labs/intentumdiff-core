@@ -1,0 +1,161 @@
+name: IntentDiff PR Guard
+description: Run semantic diff, protected config guardrails, SARIF, artifacts, and PR summaries.
+
+inputs:
+  base-ref:
+    description: Old ref to compare from. Defaults to PR base SHA or HEAD~1.
+    required: false
+    default: ""
+  head-ref:
+    description: New ref to compare to. Defaults to PR head SHA or HEAD.
+    required: false
+    default: ""
+  policy:
+    description: Optional intentdiff.yaml policy path for guardrail rules.
+    required: false
+    default: ""
+  strict:
+    description: Exit 2 when immutable guardrail violations are found.
+    required: false
+    default: "false"
+  fuel:
+    description: Optional Wasm fuel floor. Use inf to disable metering.
+    required: false
+    default: ""
+  paths:
+    description: Optional newline- or comma-separated glob filters.
+    required: false
+    default: ""
+  comment:
+    description: Post or update a sticky PR summary comment.
+    required: false
+    default: "false"
+  github-token:
+    description: Token used for optional PR comments.
+    required: false
+    default: ""
+  upload-sarif:
+    description: Upload guardrail-only SARIF to GitHub code scanning.
+    required: false
+    default: "true"
+  upload-artifact:
+    description: Upload semantic diff reports as a workflow artifact.
+    required: false
+    default: "true"
+  artifact-name:
+    description: Workflow artifact name for generated reports.
+    required: false
+    default: semantic-diff-report
+  fail-on-semantic-change:
+    description: Exit non-zero when semantic changes are found.
+    required: false
+    default: "false"
+  report-dir:
+    description: Directory where report artifacts are written.
+    required: false
+    default: intentdiff-report
+
+outputs:
+  passed:
+    description: true when no configured failure condition was triggered.
+    value: ${{ steps.run.outputs.passed }}
+  semantic-changes:
+    description: Number of files with semantic changes.
+    value: ${{ steps.run.outputs.semantic-changes }}
+  style-only-changes:
+    description: Number of files with style-only changes.
+    value: ${{ steps.run.outputs.style-only-changes }}
+  guardrail-violations:
+    description: Number of protected config guardrail violations.
+    value: ${{ steps.run.outputs.guardrail-violations }}
+  immutable-violations:
+    description: Number of immutable guardrail violations.
+    value: ${{ steps.run.outputs.immutable-violations }}
+  important-violations:
+    description: Number of important guardrail violations.
+    value: ${{ steps.run.outputs.important-violations }}
+  cross-file-changes:
+    description: Number of detected cross-file semantic changes.
+    value: ${{ steps.run.outputs.cross-file-changes }}
+  report-dir:
+    description: Directory containing generated reports.
+    value: ${{ steps.run.outputs.report-dir }}
+  json-path:
+    description: Path to semantic-diff.json.
+    value: ${{ steps.run.outputs.json-path }}
+  sarif-path:
+    description: Path to guardrails.sarif.
+    value: ${{ steps.run.outputs.sarif-path }}
+  summary-path:
+    description: Path to summary.md.
+    value: ${{ steps.run.outputs.summary-path }}
+  html-path:
+    description: Path to intentdiff-review.html.
+    value: ${{ steps.run.outputs.html-path }}
+
+  intentdiff-version:
+    description: >-
+      Version specifier for the intentdiff package the action installs (e.g. "0.1.0",
+      ">=0.1,<0.2"). Empty installs the latest release.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+      with:
+        python-version: "3.12"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+
+    - name: Install IntentDiff
+      # The action installs the PUBLISHED wheel (self-contained: engine + parser
+      # components). It must never install $GITHUB_WORKSPACE — in a consumer's
+      # workflow that is THEIR repository, not IntentDiff.
+      shell: bash
+      run: uv pip install --system "intentdiff${{ inputs.intentdiff-version && format('=={0}', inputs.intentdiff-version) || '' }}"
+
+    - name: Run IntentDiff PR guard
+      id: run
+      shell: bash
+      run: |
+        set +e
+        python "$GITHUB_ACTION_PATH/github_action.py" --repo "$GITHUB_WORKSPACE"
+        code=$?
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+        exit 0
+      env:
+        INTENTDIFF_ACTION_BASE_REF: ${{ inputs.base-ref }}
+        INTENTDIFF_ACTION_HEAD_REF: ${{ inputs.head-ref }}
+        INTENTDIFF_ACTION_POLICY: ${{ inputs.policy }}
+        INTENTDIFF_ACTION_STRICT: ${{ inputs.strict }}
+        INTENTDIFF_ACTION_FUEL: ${{ inputs.fuel }}
+        INTENTDIFF_ACTION_PATHS: ${{ inputs.paths }}
+        INTENTDIFF_ACTION_COMMENT: ${{ inputs.comment }}
+        INTENTDIFF_ACTION_GITHUB_TOKEN: ${{ inputs.github-token || github.token }}
+        INTENTDIFF_ACTION_UPLOAD_SARIF: ${{ inputs.upload-sarif }}
+        INTENTDIFF_ACTION_UPLOAD_ARTIFACT: ${{ inputs.upload-artifact }}
+        INTENTDIFF_ACTION_ARTIFACT_NAME: ${{ inputs.artifact-name }}
+        INTENTDIFF_ACTION_FAIL_ON_SEMANTIC_CHANGE: ${{ inputs.fail-on-semantic-change }}
+        INTENTDIFF_ACTION_REPORT_DIR: ${{ inputs.report-dir }}
+
+    - name: Upload guardrail SARIF
+      if: ${{ steps.run.outputs.upload-sarif == 'true' }}
+      uses: github/codeql-action/upload-sarif@4f3212b61783c3c68e8309a0f18a699764811cda
+      with:
+        sarif_file: ${{ steps.run.outputs.sarif-path }}
+        category: intentdiff-guardrails
+
+    - name: Upload semantic diff reports
+      if: ${{ steps.run.outputs.upload-artifact == 'true' }}
+      uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+      with:
+        name: ${{ steps.run.outputs.artifact-name }}
+        path: ${{ steps.run.outputs.report-dir }}
+
+    - name: Fail when policy requires it
+      shell: bash
+      run: exit "${{ steps.run.outputs.exit-code }}"
