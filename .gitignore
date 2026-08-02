@@ -16,6 +16,3 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Prebuilt static libs are stray build output: the vendored tree-sitter
-# build.rs compiles lib.c from source into OUT_DIR and never reads these.
-*.a
