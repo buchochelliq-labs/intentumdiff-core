@@ -149,9 +149,6 @@ timed out; a broad `find` got auto-backgrounded. Work around it:
   any send. Default sends a locally-derived privacy-safe fact sheet (counts/enums/flags — no
   source, identifiers, or literals); verbatim source goes only to a **local** endpoint. Unit
   tests do **no** network.
-- **Don't commit** the repo-root test artifacts `boo.py` / `image.png`.
-- **Don't modify** `C:\Users\nickn\OneDrive\Documents\GitHub\MonacoEditorInterfaceDesign`
-  (read-only reference, not part of the architecture).
 
 ## Where to go next (the other intentdiff-* skills)
 
