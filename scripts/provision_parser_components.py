@@ -62,12 +62,12 @@ class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
 _OPENER = urllib.request.build_opener(_StripAuthOnRedirect)
 
 
-def _get(url: str, token: str) -> bytes:
+def _get(url: str, token: str, accept: str = "application/vnd.github+json") -> bytes:
     req = urllib.request.Request(
         url,
         headers={
             "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
+            "Accept": accept,
             "User-Agent": "intentdiff-core-provision",
         },
     )
@@ -75,8 +75,12 @@ def _get(url: str, token: str) -> bytes:
         return resp.read()
 
 
-def stage_component(slug: str, out: Path, token: str) -> tuple[str, str, str]:
-    """Stage one parser component. Returns (filename, source run sha, sha256)."""
+def fetch_component(slug: str, token: str) -> tuple[str, str, str, bytes]:
+    """Fetch one parser component. Returns (filename, source run sha, sha256, payload).
+
+    Deliberately does NOT write: nothing unverified should reach the staging dir, or a
+    later step could pick up a component the registry never vouched for.
+    """
     repo = f"intentdiff-{slug}-parser"
     wanted = f"{slug.replace('-', '_')}_parser.wasm"
 
@@ -115,10 +119,43 @@ def stage_component(slug: str, out: Path, token: str) -> tuple[str, str, str]:
             if name != wanted:
                 continue
             payload = archive.read(member)
-            (out / name).write_bytes(payload)
-            return name, run["head_sha"], hashlib.sha256(payload).hexdigest()
+            return name, run["head_sha"], hashlib.sha256(payload).hexdigest(), payload
 
     raise RuntimeError(f"{repo}: run {run['id']} artifact contains no {wanted}")
+
+
+# ── Registry pinning (#95) ────────────────────────────────────────────────────
+# "Latest successful artifact" is convenience, not a control: it trusts whatever the
+# parser repo last built. intentdiff-registry is the root of trust — it pins each
+# official plugin's component by SHA-256 — so verifying what we downloaded against
+# that pin is what makes the flow a supply-chain control rather than a download.
+#
+# Component builds are reproducible (two independent CI runs of one commit produce a
+# byte-identical .wasm), so a mismatch means the component genuinely changed, and the
+# fix is a registry PR through the vet gate — not a bypass here.
+
+REGISTRY_REPO = "intentdiff-registry"
+
+
+def load_registry_pins(token: str) -> dict[str, str]:
+    """Fetch registry.yaml and flatten it to {component filename: sha256}."""
+    try:
+        import yaml
+    except ImportError:  # pragma: no cover - environment problem, not logic
+        sys.exit("registry verification needs PyYAML (pip install pyyaml), or pass --no-verify")
+
+    raw = _get(
+        f"{API}/repos/{ORG}/{REGISTRY_REPO}/contents/registry.yaml",
+        token,
+        accept="application/vnd.github.raw",
+    )
+    document = yaml.safe_load(raw.decode("utf-8"))
+    pins: dict[str, str] = {}
+    for entry in (document.get("plugins") or {}).values():
+        pins.update(entry.get("wasm_checksums") or {})
+    if not pins:
+        sys.exit("registry.yaml carries no wasm_checksums - refusing to 'verify' nothing")
+    return pins
 
 
 def main() -> None:
@@ -127,6 +164,9 @@ def main() -> None:
                         help="directory to stage components into (INTENTDIFF_TEST_WASM_DIR)")
     parser.add_argument("--components", nargs="+", default=TIER_C_COMPONENTS,
                         help="parser slugs to stage (default: the Tier-C set)")
+    parser.add_argument("--no-verify", action="store_true",
+                        help="skip verification against the registry's pinned checksums "
+                             "(for bringing up a component the registry does not pin yet)")
     args = parser.parse_args()
 
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
@@ -136,13 +176,35 @@ def main() -> None:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
 
+    pins = {} if args.no_verify else load_registry_pins(token)
+    if args.no_verify:
+        print("WARNING: --no-verify - components are NOT checked against the registry")
+
     failures = []
     for slug in args.components:
         try:
-            name, head_sha, digest = stage_component(slug, out, token)
-            print(f"staged {name}  from {head_sha[:8]}  sha256={digest}")
+            name, head_sha, digest, payload = fetch_component(slug, token)
         except (RuntimeError, urllib.error.HTTPError) as exc:
             failures.append(f"{slug}: {exc}")
+            continue
+
+        if args.no_verify:
+            (out / name).write_bytes(payload)
+            print(f"staged {name}  from {head_sha[:8]}  sha256={digest}  (unverified)")
+            continue
+
+        pinned = pins.get(name)
+        if pinned is None:
+            failures.append(f"{slug}: {name} is not pinned in {REGISTRY_REPO}/registry.yaml")
+        elif pinned != digest:
+            failures.append(
+                f"{slug}: {name} CHECKSUM MISMATCH - registry pins {pinned}, the artifact "
+                f"of {head_sha[:8]} is {digest}. Either the component legitimately changed "
+                f"(re-pin it via a registry PR) or this artifact is not the certified build."
+            )
+        else:
+            (out / name).write_bytes(payload)
+            print(f"staged {name}  from {head_sha[:8]}  sha256={digest}  (registry-verified)")
 
     if failures:
         print(f"\nFAILED to stage {len(failures)} component(s):", file=sys.stderr)

@@ -37,11 +37,15 @@ jobs:
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
         # live in the sibling intentdiff-<lang>-parser repos. Pull the three they name
-        # from those repos' latest successful CI artifacts. Fail-closed: a missing
-        # component must stop the job here, not surface as an opaque panic in a test.
+        # from those repos' CI artifacts and verify each against the SHA-256 pinned in
+        # intentdiff-registry (#95) — the pin is what makes this a supply-chain control
+        # and not just a download. Fail-closed on a missing OR unverified component:
+        # nothing unpinned reaches the staging dir.
         # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
         # alone 403s on the workflow-run listing).
-        run: python scripts/provision_parser_components.py --out build/wasm
+        run: |
+          pip install "pyyaml>=6.0"
+          python scripts/provision_parser_components.py --out build/wasm
         env:
           GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Run engine pins (full gate, Tier-C included)
