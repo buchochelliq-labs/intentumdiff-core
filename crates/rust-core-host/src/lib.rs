@@ -5891,9 +5891,20 @@ fn is_function_entity_type(node_type: &str) -> bool {
             | "constructor_declaration"
             | "function_statement"
             | "subroutine_declaration_statement"
-            // js-ts async variants (the parser's `async_*` node types).
+            // Generators are functions. These were absent while their `async_*` twins
+            // below were present, so toggling `async` on a generator changed whether
+            // NodeFacts were derived at all (param_count/returns/side_effects appearing
+            // out of nowhere) rather than just flipping is_async. js-ts is the only
+            // parser that emits either spelling.
+            | "generator_function_declaration"
+            | "generator_function"
+            // js-ts async variants (the parser's `async_*` node types). `async_function`
+            // is deliberately absent: async_variant_of mints it only from a node whose
+            // kind() is "function", and in tree-sitter-javascript 0.23.1 "function" is
+            // `"named": false` - the anonymous keyword token, never a node kind. The
+            // reachable function-expression spelling is `async_function_expression`,
+            // which is here, matching its plain counterpart above.
             | "async_function_declaration"
-            | "async_function"
             | "async_function_expression"
             | "async_arrow_function"
             | "async_generator_function_declaration"
