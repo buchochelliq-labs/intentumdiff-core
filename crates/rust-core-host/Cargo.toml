@@ -12,8 +12,9 @@ license = "MIT"
 
 # tier-c-wasm (DEFAULT ON): gates the 25 Tier-C certification tests that load staged parser
 # components (python_parser.wasm etc.). In the monorepo the staging dir exists so the full gate
-# always runs; the extracted engine repo (#82) runs `cargo test --no-default-features` until
-# Phase D wires cross-repo component provisioning (INTENTDIFF_TEST_WASM_DIR overrides the dir).
+# always runs; the extracted engine repo (#82) points INTENTDIFF_TEST_WASM_DIR at components
+# provisioned from the parser repos' CI artifacts and runs the same full gate (Phase D).
+# `--no-default-features` remains the escape hatch for an environment with no components.
 [features]
 default = ["tier-c-wasm"]
 tier-c-wasm = []

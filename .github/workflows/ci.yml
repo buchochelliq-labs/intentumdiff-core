@@ -30,13 +30,29 @@ jobs:
         with:
           key: engine
           workspaces: crates/rust-core-host
-      - name: Run engine pins
+      - name: Install Python 3.12
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.12"
+      - name: Provision the Tier-C parser components
+        # The 25 Tier-C certification tests instantiate real parser components, which
+        # live in the sibling intentdiff-<lang>-parser repos. Pull the three they name
+        # from those repos' latest successful CI artifacts. Fail-closed: a missing
+        # component must stop the job here, not surface as an opaque panic in a test.
+        # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
+        # alone 403s on the workflow-run listing).
+        run: python scripts/provision_parser_components.py --out build/wasm
+        env:
+          GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
+      - name: Run engine pins (full gate, Tier-C included)
         # Standalone crate (not a workspace member) — run from the crate directory.
-        # --no-default-features skips the 25 tier-c-wasm tests that need staged parser
-        # components (built by the parser repos): Phase D wires cross-repo component
-        # provisioning (INTENTDIFF_TEST_WASM_DIR), then this flips back to the full gate.
-        run: cargo test --no-default-features
+        # This was `--no-default-features` (178 + 25 ignored) until component
+        # provisioning existed; with INTENTDIFF_TEST_WASM_DIR staged it is the full
+        # 203-test gate, matching the monorepo.
+        run: cargo test
         working-directory: crates/rust-core-host
+        env:
+          INTENTDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
 
   cli:
     name: Native CLI builds
