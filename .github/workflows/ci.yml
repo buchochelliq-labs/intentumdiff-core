@@ -17,6 +17,11 @@ jobs:
     name: Engine pins (cargo test)
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    env:
+      # GitHub does not pass secrets to workflows triggered by a PR from a fork, so on
+      # those runs this is 'false'. The steps below branch on it to give outside
+      # contributors a real signal instead of a hard failure they cannot fix.
+      HAS_SPLIT_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN != '' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -42,7 +47,9 @@ jobs:
         # and not just a download. Fail-closed on a missing OR unverified component:
         # nothing unpinned reaches the staging dir.
         # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
-        # alone 403s on the workflow-run listing).
+        # alone 403s on the workflow-run listing). Skipped on fork PRs, which get no
+        # secrets — see the reduced gate below.
+        if: env.HAS_SPLIT_TOKEN == 'true'
         run: |
           pip install "pyyaml>=6.0"
           python scripts/provision_parser_components.py --out build/wasm
@@ -53,10 +60,22 @@ jobs:
         # This was `--no-default-features` (178 + 25 ignored) until component
         # provisioning existed; with INTENTDIFF_TEST_WASM_DIR staged it is the full
         # 203-test gate, matching the monorepo.
+        if: env.HAS_SPLIT_TOKEN == 'true'
         run: cargo test
         working-directory: crates/rust-core-host
         env:
           INTENTDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
+      - name: Run engine pins (fork PR — Tier-C omitted)
+        # A fork PR cannot reach the parser artifacts, so the 25 Tier-C certification
+        # tests cannot run. Rather than fail on something a contributor has no way to
+        # fix, drop the default-on `tier-c-wasm` feature and run the remaining 178
+        # pins. Tier-C is still enforced on every branch PR and on main, so nothing
+        # merges without the full 203-test gate having run.
+        if: env.HAS_SPLIT_TOKEN != 'true'
+        run: |
+          echo "::notice::Fork PR - SPLIT_REPO_TOKEN unavailable, so the 25 Tier-C tests are skipped. A maintainer run will exercise the full gate."
+          cargo test --no-default-features
+        working-directory: crates/rust-core-host
 
   cli:
     name: Native CLI builds
@@ -97,10 +116,11 @@ jobs:
         with:
           key: components
       - name: Authenticate cross-repo git deps
-        # Private sibling repos (the SDK / the engine) are git dependencies. GITHUB_TOKEN is
-        # scoped to THIS repo only, so cargo/pip cannot fetch them without an org-scoped
-        # token. Set the SPLIT_REPO_TOKEN secret (PAT or App token with read access to the
-        # buchochelliq-labs repos); without it this step warns and the build fails clearly.
+        # The only cross-repo git dependency here is intentdiff-plugin-sdk, which is now
+        # PUBLIC — so this build resolves anonymously and works on fork PRs, which get no
+        # secrets. The step is kept because GITHUB_TOKEN is scoped to THIS repo only: if a
+        # private sibling is ever added back as a git dependency, SPLIT_REPO_TOKEN is what
+        # lets cargo fetch it. Absence is a warning, not an error, precisely so forks pass.
         env:
           SPLIT_REPO_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
         run: |
@@ -108,7 +128,7 @@ jobs:
             git config --global url."https://x-access-token:${SPLIT_REPO_TOKEN}@github.com/".insteadOf "https://github.com/"
             echo "cross-repo git auth configured"
           else
-            echo "::warning::SPLIT_REPO_TOKEN not set - private cross-repo dependencies will fail to fetch"
+            echo "::notice::SPLIT_REPO_TOKEN not set (expected on fork PRs) - all git dependencies are public, so the build continues"
           fi
 
       - name: Build the workspace components
