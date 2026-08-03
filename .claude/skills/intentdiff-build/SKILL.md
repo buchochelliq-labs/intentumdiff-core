@@ -82,9 +82,9 @@ which `rust_core.py` ctypes-loads. maturin is driven by the **repo-root `pyproje
 now **errors** (no pyproject there).
 
 ```bash
-rustup toolchain install 1.93.0          # first time only
+rustup toolchain install 1.95.0          # first time only
 python -m pip install maturin            # first time only
-RUSTUP_TOOLCHAIN=1.93.0 maturin develop --release    # from the REPO ROOT
+RUSTUP_TOOLCHAIN=1.95.0 maturin develop --release    # from the REPO ROOT
 ```
 This compiles the core and installs the cdylib as
 `.venv/Lib/site-packages/intentdiff/intentdiff_rust_core/intentdiff_rust_core.<ext>`
@@ -109,7 +109,7 @@ This compiles the core and installs the cdylib as
   ```bash
   export VIRTUAL_ENV=<repo>/.venv && export PATH="$VIRTUAL_ENV/Scripts:$PATH"
   export CARGO_PROFILE_RELEASE_DEBUG=false        # no .pdb in the artifact
-  RUSTUP_TOOLCHAIN=1.93.0 maturin build --release -b cffi --out /tmp/idwheel
+  RUSTUP_TOOLCHAIN=1.95.0 maturin build --release -b cffi --out /tmp/idwheel
   "$VIRTUAL_ENV/Scripts/python.exe" -m pip install --force-reinstall --no-deps /tmp/idwheel/*.whl
   ```
   Then `rm -f src/intentdiff/*.pyd` (shadow check below) and verify with the backend probe below.
@@ -135,11 +135,11 @@ This compiles the core and installs the cdylib as
   `python -c "import intentdiff.rust_core as r; print(type(r._load_backend()).__name__)"` must print
   `_CtypesBackend`.
 - **Release build OOM on Windows (issue #29):** `maturin develop --release` can crash rustc
-  1.93.0 (`handle_alloc_error` / `STATUS_STACK_BUFFER_OVERRUN`) — the ~12k-line `lib.rs` at
+  1.95.0 (`handle_alloc_error` / `STATUS_STACK_BUFFER_OVERRUN`) — the ~12k-line `lib.rs` at
   opt-level=3 + codegen-units=1 is one giant codegen unit. A **debug** build (`maturin develop`)
   is valid for correctness verification; only perf-sensitive work needs release. Lower-memory
   local override: `CARGO_PROFILE_RELEASE_CODEGEN_UNITS=16 maturin develop --release`.
-- **Toolchain pin:** Rust **1.93.0** (the RC native-wheel dry run is pinned to it; local
+- **Toolchain pin:** Rust **1.95.0** (the RC native-wheel dry run is pinned to it; local
   Windows release packaging has hit a `rustc 1.95.0` metadata ICE on optimized wheel builds).
 - **No Python engine fallback exists** (removed in #B.3/#90/#91): the Rust core is the only engine,
   so a build failure means a broken engine, not a silent degrade. Backend *selection* is the only
@@ -163,7 +163,7 @@ For a single parser, build that crate for the wasm target and copy its artifact 
 package = `intentdiff-<lang>-parser`, artifact = `intentdiff_<lang>_parser.wasm`, staged
 name = `<lang>_parser.wasm` (whatever `plugins/builtins.py` references):
 ```bash
-RUSTUP_TOOLCHAIN=1.93.0 cargo build --release --target wasm32-wasip2 -p intentdiff-<lang>-parser
+RUSTUP_TOOLCHAIN=1.95.0 cargo build --release --target wasm32-wasip2 -p intentdiff-<lang>-parser
 cp target/wasm32-wasip2/release/intentdiff_<lang>_parser.wasm src/intentdiff/wasm/<lang>_parser.wasm
 ```
 Never pipe the cargo build through `tail`/`grep` inside a `&&` chain — the pipe's exit status

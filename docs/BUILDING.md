@@ -1,9 +1,9 @@
 # Building intentdiff-core
 
-Toolchain: **Rust 1.93.0** (pinned in CI); target `wasm32-wasip2` for the Wasm components.
+Toolchain: **Rust 1.95.0** (pinned in CI); target `wasm32-wasip2` for the Wasm components.
 
 ```bash
-rustup toolchain install 1.93.0
+rustup toolchain install 1.95.0
 rustup target add wasm32-wasip2
 ```
 

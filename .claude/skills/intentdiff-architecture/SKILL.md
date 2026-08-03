@@ -87,7 +87,7 @@ tests/unit, tests/integration, tests/security   Python test suites + fixtures/
 ```bash
 # From the REPO ROOT (the crate is pyo3-free since #B.6 — maturin reads pyproject.toml's
 # `bindings = "cffi"`; `cd crates/rust-core-host && maturin …` now errors, no pyproject there).
-RUSTUP_TOOLCHAIN=1.93.0 maturin develop --release   # ALWAYS --release
+RUSTUP_TOOLCHAIN=1.95.0 maturin develop --release   # ALWAYS --release
 rm -f src/intentdiff/*.pyd                           # kill any retired pyo3 in-tree shadow
 ```
 - **Always `--release`.** A plain `maturin develop` is a *debug* core: functionally

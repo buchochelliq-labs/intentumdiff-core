@@ -64,7 +64,7 @@ for a broken producer.
 # The crate is pyo3-FREE (#B.6): run maturin from the REPO ROOT so it reads pyproject.toml
 # (`bindings = "cffi"`) — NOT `cd crates/rust-core-host` (that dir has no pyproject → maturin errors).
 Get-Process -Name intentdiff -ErrorAction SilentlyContinue | Stop-Process -Force   # Windows
-RUSTUP_TOOLCHAIN=1.93.0 maturin develop --release   # from repo root; cffi cdylib, not a pyo3 .pyd
+RUSTUP_TOOLCHAIN=1.95.0 maturin develop --release   # from repo root; cffi cdylib, not a pyo3 .pyd
 ```
 This builds a bare cdylib at `.venv/Lib/site-packages/intentdiff/intentdiff_rust_core/intentdiff_rust_core.<ext>`
 (`.dll`/`.so`/`.dylib`); `rust_core._load_backend()` ctypes-loads it over the C ABI (`intentdiff_call`).
