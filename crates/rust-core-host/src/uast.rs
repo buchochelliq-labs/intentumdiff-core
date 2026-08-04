@@ -302,3 +302,134 @@ mod structural_fact_tests {
         assert!(!rendered.contains("charge"), "leaked a token: {rendered}");
     }
 }
+
+// ============ Cross-language structural facts (#9) ============
+// Non-Python languages parse via Wasm and reach the fact pass as a PRUNED SemanticNode
+// tree, never a CST. SEMANTIC_TYPES carries statements and definitions only — no
+// `not_operator`, no `unary_expression`, no `comparison_operator` — so negation is gone
+// before we ever see the tree.
+//
+// That splits what is honestly derivable:
+//
+//   EarlyExit  YES. Tail position is pure structure: does anything follow this return?
+//              Pruning removes operators, not statement ORDER.
+//   Negated    NO. The operator is gone. Not "false" — UNOBSERVABLE.
+//
+// The distinction is the whole point of this module. Emitting `has_guard_clause: false`
+// for Java would read as "there is no guard clause" when it actually means "this pipeline
+// cannot tell". An explainer would then confidently describe a guard as a plain branch.
+// Absence of a fact is honest; a false fact is not.
+
+use crate::SemanticNode;
+
+impl SourceTree for SemanticNode {
+    fn node_type(&self) -> &str {
+        &self.node_type
+    }
+
+    fn span(&self) -> Span {
+        Span {
+            start_byte: 0,
+            end_byte: 0,
+            start_row: self.position.start_line,
+            end_row: self.position.end_line,
+        }
+    }
+
+    fn children(&self) -> Vec<&Self> {
+        self.children.iter().collect()
+    }
+
+    // No token(): a SemanticNode's label is a DERIVED display string, not source text.
+    // Handing it to negation detection would compare against something the grammar never
+    // produced, so the default None is the correct answer rather than a missing feature.
+}
+
+/// Structural facts derivable from a pruned semantic tree — every language.
+///
+/// Deliberately narrower than [`uast_structural_facts`]: only what survives pruning. See
+/// the module note above for why `has_guard_clause` is omitted rather than reported false.
+pub(crate) fn uast_structural_facts_pruned(node: &SemanticNode, language: &str) -> Option<Value> {
+    let uast = normalize(node, language);
+    let early_exits = count_with_role(&uast, Category::Return, Role::EarlyExit);
+    if early_exits == 0 {
+        return None;
+    }
+    Some(json!({ "early_exit_count": early_exits }))
+}
+
+#[cfg(test)]
+mod cross_language_tests {
+    use super::*;
+    use crate::NodePosition;
+
+    fn sem(node_type: &str, children: Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode {
+            id: String::new(),
+            node_type: node_type.to_owned(),
+            label: String::new(),
+            position: NodePosition {
+                start_line: 1,
+                start_col: 0,
+                end_line: 1,
+                end_col: 1,
+            },
+            structural_hash: String::new(),
+            children,
+            parent_type: None,
+            type_info: None,
+            facts: None,
+        }
+    }
+    fn sleaf(t: &str) -> SemanticNode {
+        sem(t, vec![])
+    }
+
+    #[test]
+    fn early_exit_is_derivable_from_a_pruned_tree() {
+        // Java/Go/Rust reach the fact pass here. Statement ORDER survives pruning, so tail
+        // position — and therefore EarlyExit — is still decidable.
+        let f = sem(
+            "function_definition",
+            vec![
+                sem("if_statement", vec![sleaf("return_statement")]),
+                sleaf("call"),
+            ],
+        );
+        let facts = uast_structural_facts_pruned(&f, "java").expect("facts");
+        assert_eq!(facts["early_exit_count"], 1);
+    }
+
+    #[test]
+    fn a_final_return_is_not_an_early_exit() {
+        let f = sem("function_definition", vec![sleaf("return_statement")]);
+        assert!(uast_structural_facts_pruned(&f, "go").is_none());
+    }
+
+    #[test]
+    fn guard_detection_is_omitted_not_reported_false() {
+        // THE honesty property. Pruning removed the operator, so negation is UNOBSERVABLE
+        // here. Reporting has_guard_clause: false would tell an explainer "no guard exists"
+        // when the truth is "this pipeline cannot see it".
+        let f = sem(
+            "function_definition",
+            vec![
+                sem("if_statement", vec![sleaf("return_statement")]),
+                sleaf("call"),
+            ],
+        );
+        let facts = uast_structural_facts_pruned(&f, "java").expect("facts");
+        assert!(
+            facts.get("has_guard_clause").is_none(),
+            "must not claim to know: {facts}"
+        );
+        assert!(facts.get("negated_condition_count").is_none());
+    }
+
+    #[test]
+    fn a_semantic_node_offers_no_token() {
+        // Its label is a derived display string, not source text; feeding it to negation
+        // detection would test against something the grammar never emitted.
+        assert_eq!(SourceTree::token(&sleaf("identifier")), None);
+    }
+}

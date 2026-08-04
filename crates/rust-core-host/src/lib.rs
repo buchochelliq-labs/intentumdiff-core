@@ -6230,6 +6230,19 @@ fn enrich_tree_facts(node: &mut SemanticNode) {
             node.facts = Some(derived);
         }
     }
+    // Cross-language structural facts (#9). This tree is PRUNED, so only what survives
+    // pruning is derivable: statement order does, operators do not. That yields
+    // early_exit_count for every language, while has_guard_clause stays absent rather than
+    // false — see uast.rs for why omitting beats claiming.
+    //
+    // Runs for function entities regardless of whether facts already exist, and merges, so
+    // the native Python path keeps its richer guard facts and everything else still gains
+    // the early-exit count. Idempotent: merge_facts never overwrites.
+    if is_function_entity_type(node.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts_pruned(node, "") {
+            merge_facts(&mut node.facts, structural);
+        }
+    }
     for child in &mut node.children {
         enrich_tree_facts(child);
     }
