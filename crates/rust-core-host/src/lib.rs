@@ -6049,6 +6049,16 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         return derive_class_facts(node);
     }
     if !is_function_entity_type(node_type) {
+        // Non-function shapes (#179). Until now this returned None, so a changed YAML key,
+        // Terraform block, TOML table or INI setting carried NO facts and the explainer had
+        // only the change type and label to work from — across 69 parsers that is most of a
+        // real review. Ordered before the bail-out so function/class facts are unaffected.
+        if let Some(keyed) = derive_keyed_facts(node) {
+            return Some(keyed);
+        }
+        if let Some(resource) = derive_resource_facts(node) {
+            return Some(resource);
+        }
         return None;
     }
     let mut facts = serde_json::Map::new();
@@ -7905,6 +7915,18 @@ fn draft_to_change(draft: &ChangeDraft<'_>) -> Value {
     }
     if let Some(text_diff) = &draft.text_diff {
         value.insert("text_diff".to_owned(), json!(text_diff));
+    }
+    // Fact delta (#178): what MOVED between the two fact bags, not what they hold. Derived
+    // here so every binding reads the same finding instead of each re-deriving it — this
+    // was extension-only TypeScript, invisible to the Go/Java skins. Omitted entirely when
+    // empty or when either side has no facts, so consumers can treat presence as meaning.
+    if let (Some(old_node), Some(new_node)) = (draft.old_node, draft.new_node) {
+        if let (Some(before), Some(after)) = (&old_node.facts, &new_node.facts) {
+            let delta = compute_fact_delta(before, after);
+            if !delta.is_empty() {
+                value.insert("fact_delta".to_owned(), Value::Array(delta));
+            }
+        }
     }
     Value::Object(value)
 }
