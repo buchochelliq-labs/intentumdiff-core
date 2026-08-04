@@ -6310,6 +6310,18 @@ fn convert_cst_with_hash_memo(
         type_info: None,
         facts: python_node_facts_value(node),
     };
+    // UAST-derived structural facts (#9): guard clauses, early exits, negated conditions.
+    // These describe how a function is ARRANGED, which the flag-and-count vocabulary cannot
+    // reach — `if not x: return` and `if x: work()` are both has_conditional + a call.
+    //
+    // Merged rather than replacing: the existing facts are correct and widely relied upon;
+    // this adds what they could not say. Only fires for function-shaped nodes, so the cost
+    // stays proportional to the number of functions rather than the number of nodes.
+    if is_function_entity_type(semantic.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts(node, "python") {
+            merge_facts(&mut semantic.facts, structural);
+        }
+    }
     // Decorator semantics (#69 catalog C/D): decorators are on this WRAPPER, not the inner def
     // python_node_facts_value saw — fold their flags in here so the native Python path carries
     // them (the #70 enrich pass does the same for non-Python trees). Idempotent.
@@ -6317,6 +6329,22 @@ fn convert_cst_with_hash_memo(
         apply_decorator_facts(&mut semantic);
     }
     Some(semantic)
+}
+
+/// Fold derived facts into a node's existing bag.
+///
+/// Existing keys WIN: `python_node_facts_value` reads the full CST before pruning, so where
+/// the two disagree the earlier pass saw more. This can only add.
+fn merge_facts(target: &mut Option<Value>, extra: Value) {
+    let Value::Object(extra) = extra else { return };
+    match target {
+        Some(Value::Object(existing)) => {
+            for (k, v) in extra {
+                existing.entry(k).or_insert(v);
+            }
+        }
+        _ => *target = Some(Value::Object(extra)),
+    }
 }
 
 fn is_semantic(node_type: &str) -> bool {
