@@ -142,10 +142,17 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
             for member in archive.namelist():
                 if not member.endswith(".wasm"):
                     continue
-                # the parser crates build `intentumdiff_<slug>_parser.wasm`; the host stages
-                # the component under its unprefixed plugin name.
+                # The parser crates build `intentumdiff_<slug>_parser.wasm`; the host
+                # stages the component under its unprefixed plugin name. BOTH prefixes
+                # must be accepted: the registry pins immutable artifacts BY REF, and the
+                # ones pinned today were built before the IntentDiff -> IntentumDiff
+                # rename, so they are still named intentdiff_*.wasm. Accepting only the
+                # new prefix leaves the name prefixed and nothing ever matches `wanted`.
                 name = Path(member).name
-                name = name[len("intentumdiff_"):] if name.startswith("intentumdiff_") else name
+                for _prefix in ("intentumdiff_", "intentdiff_"):
+                    if name.startswith(_prefix):
+                        name = name[len(_prefix):]
+                        break
                 if name != wanted:
                     continue
                 payload = archive.read(member)
