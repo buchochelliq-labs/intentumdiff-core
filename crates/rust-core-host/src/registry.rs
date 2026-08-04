@@ -52,7 +52,7 @@ pub(crate) fn validate_registry_ref_impl(git_ref: &str, strict: bool) -> Result<
 /// python `hub._validate_dep_hashes`: validate a plugin's `dep_hashes` keys/values and
 /// coverage. Returns human-readable errors ([] = well-formed). `dep_hashes` is passed as
 /// ordered `(key, value)` pairs so error ordering matches the Python dict iteration. The body
-/// is already pyo3-free, so the C ABI (`intentdiff_call`) calls it directly.
+/// is already pyo3-free, so the C ABI (`intentumdiff_call`) calls it directly.
 pub(crate) fn validate_dep_hashes_impl(
     dep_hashes: Vec<(String, String)>,
     allowed_dependencies: Vec<String>,
@@ -135,15 +135,15 @@ mod tests {
     #[test]
     fn dep_hashes_wellformed_and_covered() {
         let ok = validate_dep_hashes(
-            vec![("intentdiff-foo==1.0.0".into(), format!("sha256:{}", "a".repeat(64)))],
+            vec![("intentumdiff-foo==1.0.0".into(), format!("sha256:{}", "a".repeat(64)))],
             vec![],
-            "intentdiff-foo",
+            "intentumdiff-foo",
             None,
         );
         assert!(ok.is_empty(), "{ok:?}");
 
         // empty = self-contained wheel, no errors.
-        assert!(validate_dep_hashes(vec![], vec![], "intentdiff-foo", None).is_empty());
+        assert!(validate_dep_hashes(vec![], vec![], "intentumdiff-foo", None).is_empty());
     }
 
     #[test]
@@ -154,7 +154,7 @@ mod tests {
                 ("other-pkg==2.0".into(), format!("sha256:{}", "b".repeat(64))),
             ],
             vec![],
-            "intentdiff-foo",
+            "intentumdiff-foo",
             None,
         );
         let joined = errs.join(" | ");
@@ -168,11 +168,11 @@ mod tests {
     fn dep_hashes_allows_listed_extra_dependency() {
         let errs = validate_dep_hashes(
             vec![
-                ("intentdiff-foo==1.0.0".into(), format!("sha256:{}", "a".repeat(64))),
+                ("intentumdiff-foo==1.0.0".into(), format!("sha256:{}", "a".repeat(64))),
                 ("some-dep==3.1.4".into(), format!("sha256:{}", "c".repeat(64))),
             ],
             vec!["some_dep".into()],
-            "intentdiff-foo",
+            "intentumdiff-foo",
             None,
         );
         assert!(errs.is_empty(), "{errs:?}");

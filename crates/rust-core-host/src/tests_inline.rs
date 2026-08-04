@@ -109,13 +109,13 @@
     }
 
     /// The staged parser-component dir the Tier-C tests load from. Default = the monorepo's
-    /// staging (`src/intentdiff/wasm`); `INTENTDIFF_TEST_WASM_DIR` overrides it so an
+    /// staging (`src/intentumdiff/wasm`); `INTENTUMDIFF_TEST_WASM_DIR` overrides it so an
     /// extracted engine repo (#82 split) can point at any dir of built components.
     fn staged_wasm_dir() -> std::path::PathBuf {
-        std::env::var_os("INTENTDIFF_TEST_WASM_DIR")
+        std::env::var_os("INTENTUMDIFF_TEST_WASM_DIR")
             .map(std::path::PathBuf::from)
             .unwrap_or_else(|| {
-                Path::new(env!("CARGO_MANIFEST_DIR")).join("../../src/intentdiff/wasm")
+                Path::new(env!("CARGO_MANIFEST_DIR")).join("../../src/intentumdiff/wasm")
             })
     }
 
@@ -130,7 +130,7 @@
             .unwrap_or_else(|exc| {
                 panic!(
                     "staged parser component {name:?} not found in {:?} ({exc}); these Tier-C \
-                     tests need built parser wasm — set INTENTDIFF_TEST_WASM_DIR to a dir of \
+                     tests need built parser wasm — set INTENTUMDIFF_TEST_WASM_DIR to a dir of \
                      built components, or run with --no-default-features to skip the \
                      tier-c-wasm gated tests",
                     staged_wasm_dir()
@@ -147,7 +147,7 @@
     /// hardcoded "python"); the live-server's native non-Python diff path is built on it.
     /// `js_ts_parser.wasm` is a full-parse grammar, so the filtered-CST args are unused ("").
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn native_wasm_parse_typescript_pair_is_language_agnostic() {
         let wasm = bundled_wasm_path("js_ts_parser.wasm");
         let old_src = "function greet(name: string) {\n  return \"hi \" + name;\n}\n";

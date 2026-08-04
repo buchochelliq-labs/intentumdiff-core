@@ -121,4 +121,4 @@ false moves.
 For each row: (1) confirm this expectation is what we want; (2) implement in the Rust profile-family
 stage until it holds; (3) add a Rust `#[cfg(test)]` asserting it; (4) route the language through
 Rust (allowlist) so the Python test above passes through Rust, incl. under
-`INTENTDIFF_ENFORCE_RUST_ONLY_ENGINE=1`; (5) retire the Python profile branch.
+`INTENTUMDIFF_ENFORCE_RUST_ONLY_ENGINE=1`; (5) retire the Python profile branch.

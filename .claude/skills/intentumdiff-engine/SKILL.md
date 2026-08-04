@@ -1,21 +1,21 @@
 ---
-name: intentdiff-engine
+name: intentumdiff-engine
 description: >-
-  Deep reference for the IntentDiff semantic diff engine internals — the pipeline, data
+  Deep reference for the IntentumDiff semantic diff engine internals — the pipeline, data
   models, GumTree matching, change groups, and the change-group index-space contract. Use
   this whenever you touch diff logic, change grouping, matching, refactoring/move detection,
   invariances, noise suppression, presentation normalization, NodeFacts, or anything that
   reads/writes Change / ChangeGroup / SemanticDiff (`crates/rust-core-host`, or the Python
-  test-oracle in `src/intentdiff/analysis/` + `core/`). Especially consult this before
+  test-oracle in `src/intentumdiff/analysis/` + `core/`). Especially consult this before
   changing how change_groups reference changes — the `raw_change_indices` "index space" is a
   sharp edge that has repeatedly produced wrong output (a real change shown as "Noise").
-  Read the intentdiff-architecture skill first for the Rust-vs-Python boundary; new engine
+  Read the intentumdiff-architecture skill first for the Rust-vs-Python boundary; new engine
   logic belongs in Rust, not Python.
 ---
 
-# IntentDiff — Diff Engine Internals
+# IntentumDiff — Diff Engine Internals
 
-Remember the boundary (see `intentdiff-architecture`): **new engine logic goes into the
+Remember the boundary (see `intentumdiff-architecture`): **new engine logic goes into the
 Rust core** (`crates/rust-core-host`). The Python modules below (`analysis/`, `core/engine.py`)
 are a parity test-oracle, not where features should grow. When you fix a defect, decide
 whether the authoritative fix is in Rust; use the Python side only for the oracle or a
@@ -50,7 +50,7 @@ Source → [Preprocess] → Parse → Normalize → Diff → Analyze → [Enrich
 Full stage-by-stage detail (matching heuristics, refactoring signatures, fuel, cross-file):
 `docs/ARCHITECTURE.md`.
 
-## Data models (`src/intentdiff/core/models.py`, frozen pydantic v2)
+## Data models (`src/intentumdiff/core/models.py`, frozen pydantic v2)
 
 - **`SemanticNode`**: `id` (unique within tree), `node_type`, `label`, `position`,
   `structural_hash`, `children`, optional `parent_type`, `type_info`, and **`facts`
@@ -131,7 +131,7 @@ When you make something "ignored," attach an explainable `reason` — don't just
 `MEANINGFUL_CHANGE → Behavior`; `REFACTORING`/`MOVED_CODE → Internal`;
 `IGNORED_STYLE`/`NOISE_SUPPRESSED → excluded`; guardrail violations
 (`important`/`immutable`) → critical/pinned. The extension derives risk from `kind` (it is
-not a discrete engine field). See `intentdiff-release-notes` for how this drives notes.
+not a discrete engine field). See `intentumdiff-release-notes` for how this drives notes.
 
 ## Testing engine changes
 
@@ -139,7 +139,7 @@ not a discrete engine field). See `intentdiff-release-notes` for how this drives
   language_hint=...)` and inspect `diff.changes` + `diff.change_groups[*].raw_change_indices`
   / `metadata`.
 - Confirm a suspected pre-existing failure by stashing only your engine files and re-running
-  the same tests (see `intentdiff-dev-loop`).
+  the same tests (see `intentumdiff-dev-loop`).
 - Rust changes need `maturin develop --release`; pure-Python `analysis/` changes do not.
 
 ## DRY across the engine boundary (maintainer ruling, 2026-07-06)

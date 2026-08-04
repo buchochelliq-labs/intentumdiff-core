@@ -76,7 +76,7 @@ use crate::*;
         let _ = fs::remove_dir_all(outside);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_swap_of_two_functions_surfaces_moved_code() {
         // Issue #12 end-to-end: swapping two functions through the REAL batch pipeline must
         // surface moved code, never read as style-only / zero changes.
@@ -108,7 +108,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_adding_decorator_is_one_addition_no_false_moves_or_pairings() {
         // Issue #32 end-to-end: adding @cached above calc must not (a) report the untouched
         // class Box as a MOVE (it only shifted down one line), (b) fabricate an x->calc
@@ -149,7 +149,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_deleted_function_never_vanishes_behind_cross_matched_literals() {
         // Issue #31 end-to-end: deleting one function and adding an unrelated one must yield
         // DELETION + ADDITION. Previously the deleted function's internals label-matched the
@@ -261,7 +261,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_commit_json_suppresses_bytes_when_any_item_falls_back() {
         let request = json!({
             "schema_version": 1,
@@ -294,7 +294,7 @@ use crate::*;
         assert!(commit_json.is_none());
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_commit_json_requires_native_backend() {
         let request = json!({
             "schema_version": 1,
@@ -320,7 +320,7 @@ use crate::*;
         assert!(commit_json.is_none());
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_boundary_returns_final_diff_for_changed_python_pair() {
         let request = json!({
             "schema_version": 1,
@@ -357,7 +357,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_boundary_preserves_original_order_for_multiple_python_files() {
         let request = json!({
             "schema_version": 1,
@@ -391,7 +391,7 @@ use crate::*;
         assert_eq!(payload["metadata"]["complete_count"], 2);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn parallel_batch_matches_sequential_order_and_reports_workers() {
         let files = json!([
             {
@@ -508,7 +508,7 @@ use crate::*;
         assert_eq!(payload["diffs"][1]["reason"], "unsupported language");
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_returns_changed_python_candidate_when_wasm_available() {
         let request = json!({
             "schema_version": 1,
@@ -676,7 +676,7 @@ use crate::*;
         let telemetry = &diff["metadata"]["engine_telemetry"];
         let call = &telemetry["calls"][0];
         assert_eq!(telemetry["schema_version"], 1);
-        assert_eq!(call["plugin"], "intentdiff_rust_core");
+        assert_eq!(call["plugin"], "intentumdiff_rust_core");
         assert_eq!(call["function"], "finalize");
         assert_eq!(call["engine_owner"], "rust");
         assert_eq!(call["engine"], BATCH_ENGINE);
@@ -818,7 +818,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn native_candidate_matches_wasm_candidate_for_working_tree_small() {
         let old_source = concat!(
             "def charge_total(order):\n",
@@ -875,7 +875,7 @@ use crate::*;
         );
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_preloads_component_once_for_repeated_parser_path() {
         let wasm_path = python_wasm_path();
         let request = json!({
@@ -951,7 +951,7 @@ use crate::*;
             .contains("parser wasm path not found"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_product_unsupported_parser_plugin_returns_fallback_record() {
         let request = json!({
             "schema_version": 1,
@@ -974,7 +974,7 @@ use crate::*;
         assert_eq!(payload["diffs"][0]["reason"], "unsupported parser plugin");
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_product_style_only_changed_file_returns_fallback_record() {
         let request = json!({
             "schema_version": 1,
@@ -999,7 +999,7 @@ use crate::*;
             .contains("style-only changed file"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_product_parse_error_returns_fallback_record() {
         let request = json!({
             "schema_version": 1,

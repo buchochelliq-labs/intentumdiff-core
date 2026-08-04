@@ -1,19 +1,19 @@
 ---
-name: intentdiff-dev-loop
+name: intentumdiff-dev-loop
 description: >-
-  The development flywheel for the IntentDiff repo — how to take a unit of work from idea to
+  The development flywheel for the IntentumDiff repo — how to take a unit of work from idea to
   a verified, documented, committed change without breaking the invariants. Use this whenever
   you implement a feature or fix, pick up work from the backlog, respond to an audit finding,
   or maintain the repo. It gives the loop (sense → plan → change the RIGHT layer → verify with
   the RIGHT commands → document → commit), a layer-decision guide (Rust engine vs Python shell
   vs extension), the exact build/test/rebuild rules per layer (including when a maturin
   rebuild is and isn't needed), how to investigate test failures to root cause, how to avoid
-  stick-plaster fixes, and the commit conventions. Read intentdiff-architecture first; pull in
-  intentdiff-engine / -vscode / -release-notes / -perceptual-asset-diff for the area you touch,
-  and intentdiff-architecture-audit for the "sense" step.
+  stick-plaster fixes, and the commit conventions. Read intentumdiff-architecture first; pull in
+  intentumdiff-engine / -vscode / -release-notes / -perceptual-asset-diff for the area you touch,
+  and intentumdiff-architecture-audit for the "sense" step.
 ---
 
-# IntentDiff — Development flywheel
+# IntentumDiff — Development flywheel
 
 A repeatable loop so the repo can be continually developed without regressing its contracts.
 Each turn of the wheel: **sense → plan → change → verify → document → commit.**
@@ -22,7 +22,7 @@ Each turn of the wheel: **sense → plan → change → verify → document → 
 
 - **Backlog:** `docs/BACKLOG.md` (roadmap, RC gate, "Known issues (pre-existing)"). The RC gate
   section says what must stay green.
-- **Audit:** run `intentdiff-architecture-audit` to surface invariant violations and debt, or
+- **Audit:** run `intentumdiff-architecture-audit` to surface invariant violations and debt, or
   focus it on the area you're about to touch.
 - **Failing/xfail tests:** treat red tests as actionable signal — investigate, don't just
   report (see §4).
@@ -35,17 +35,17 @@ ballooning one change.
 | The change is about… | Layer / where it lives |
 |---|---|
 | Parsing, matching, diffing, grouping, refactoring/move detection, invariances, presentation, guardrails, cross-file, NodeFacts | **Rust core** `crates/rust-core-host` (the engine). New engine logic goes here — not Python. |
-| API/CLI shape, VCS/source collection, config, LiveServer/LSP/HTTP protocol, DTO compatibility | **Python shell** `src/intentdiff/` |
+| API/CLI shape, VCS/source collection, config, LiveServer/LSP/HTTP protocol, DTO compatibility | **Python shell** `src/intentumdiff/` |
 | Diff surfaces, CodeLens/Peek/decorations, review panel, intent "what/why", release notes, content classes, asset viewer, theme | **Extension** `plugins/vscode/` |
 
-If you find yourself adding semantic processing to `src/intentdiff/analysis/` or
+If you find yourself adding semantic processing to `src/intentumdiff/analysis/` or
 `core/engine.py`, stop — that's the test-oracle, not the product engine (see
-`intentdiff-architecture` → engine boundary). Confirm the authoritative fix belongs in Rust.
+`intentumdiff-architecture` → engine boundary). Confirm the authoritative fix belongs in Rust.
 
 ## 3. Change — follow the area skill + the invariants
 
-Read the relevant skill for the area (`intentdiff-engine`, `-vscode`, `-release-notes`,
-`-perceptual-asset-diff`) and honor the hard rules from `intentdiff-architecture`: engine
+Read the relevant skill for the area (`intentumdiff-engine`, `-vscode`, `-release-notes`,
+`-perceptual-asset-diff`) and honor the hard rules from `intentumdiff-architecture`: engine
 boundary, native-first diff, theme-native styling, BYOK/privacy, no committing `boo.py`/
 `image.png`, don't touch the MonacoEditorInterfaceDesign reference.
 
@@ -63,25 +63,25 @@ for a broken producer.
 # Rust core changed → rebuild (ALWAYS --release; stop the extension host on Windows first).
 # The crate is pyo3-FREE (#B.6): run maturin from the REPO ROOT so it reads pyproject.toml
 # (`bindings = "cffi"`) — NOT `cd crates/rust-core-host` (that dir has no pyproject → maturin errors).
-Get-Process -Name intentdiff -ErrorAction SilentlyContinue | Stop-Process -Force   # Windows
+Get-Process -Name intentumdiff -ErrorAction SilentlyContinue | Stop-Process -Force   # Windows
 RUSTUP_TOOLCHAIN=1.95.0 maturin develop --release   # from repo root; cffi cdylib, not a pyo3 .pyd
 ```
-This builds a bare cdylib at `.venv/Lib/site-packages/intentdiff/intentdiff_rust_core/intentdiff_rust_core.<ext>`
-(`.dll`/`.so`/`.dylib`); `rust_core._load_backend()` ctypes-loads it over the C ABI (`intentdiff_call`).
-Pure-Python (`src/intentdiff/`) or TypeScript (`plugins/vscode/`) changes need **no** maturin rebuild.
+This builds a bare cdylib at `.venv/Lib/site-packages/intentumdiff/intentumdiff_rust_core/intentumdiff_rust_core.<ext>`
+(`.dll`/`.so`/`.dylib`); `rust_core._load_backend()` ctypes-loads it over the C ABI (`intentumdiff_call`).
+Pure-Python (`src/intentumdiff/`) or TypeScript (`plugins/vscode/`) changes need **no** maturin rebuild.
 
 **A stale in-tree `.pyd` or standalone install SHADOWS the fresh cdylib — clear both or your
 rebuild is a no-op.** `_load_backend()` auto-detects: it uses a pyo3 *extension* if `find_spec`
-finds one whose origin ends in an extension suffix (a leftover `src/intentdiff/intentdiff_rust_core.pyd`
-from the old pyo3 era, or a `pip install`ed standalone `intentdiff_rust_core`), else the ctypes
+finds one whose origin ends in an extension suffix (a leftover `src/intentumdiff/intentumdiff_rust_core.pyd`
+from the old pyo3 era, or a `pip install`ed standalone `intentumdiff_rust_core`), else the ctypes
 path. A leftover pyo3 artifact silently exercises yesterday's engine. After any core rebuild:
 ```bash
-rm -f src/intentdiff/*.pyd                                   # kill the retired pyo3 in-tree shadow
-.venv/Scripts/python.exe -m pip uninstall -y intentdiff_rust_core 2>$null   # kill any standalone pyo3 install
+rm -f src/intentumdiff/*.pyd                                   # kill the retired pyo3 in-tree shadow
+.venv/Scripts/python.exe -m pip uninstall -y intentumdiff_rust_core 2>$null   # kill any standalone pyo3 install
 ```
 Verify which backend is live before trusting any probe:
-`python -c "import intentdiff.rust_core as r; print(type(r._load_backend()).__name__)"` must print
-`_CtypesBackend` (force it with `INTENTDIFF_RUST_CORE_CTYPES=1`; `INTENTDIFF_RUST_CORE_PYO3=1` selects pyo3 if one is present).
+`python -c "import intentumdiff.rust_core as r; print(type(r._load_backend()).__name__)"` must print
+`_CtypesBackend` (force it with `INTENTUMDIFF_RUST_CORE_CTYPES=1`; `INTENTUMDIFF_RUST_CORE_PYO3=1` selects pyo3 if one is present).
 
 **Test the layer you touched (and the ones downstream of it):**
 ```bash
@@ -95,7 +95,7 @@ cd plugins/vscode && npm run lint && npm run test          # lint = tsc --noEmit
 
 **Reproduce engine behavior directly** instead of guessing:
 `SemanticDiffer().diff_strings(old, new, filename, language_hint=...)` and inspect `changes` /
-`change_groups`. For the extension, use the panel-render harness (see `intentdiff-vscode`) +
+`change_groups`. For the extension, use the panel-render harness (see `intentumdiff-vscode`) +
 the Claude Preview MCP for visual/interaction checks.
 
 **Investigating a test failure — root cause, not report:**
@@ -125,7 +125,7 @@ signal. Capture the reasons with `pytest tests/unit -rsx --tb=no` and triage:
 - **skipped = mostly environmental gates; split reducible from irreducible.**
   *Reducible (recover the coverage):* a missing optional dep (`importorskip("duckdb")`,
   `importorskip("P4")` → `pip install` it) or an unbuilt Wasm parser (`"<lang>_parser.wasm not
-  built"` → build it, see `intentdiff-build`). *Irreducible (must carry an explicit reason and be
+  built"` → build it, see `intentumdiff-build`). *Irreducible (must carry an explicit reason and be
   justified/tracked):* platform-only (`skipif sys.platform == "win32"`, named-pipe), a
   non-applicable engine variant (`"no rust support"`/`"no rust finalizer"` parametrization), or
   optional browser/integration smokes (playwright/fastapi/uvicorn). Irreducible skips stay, but
@@ -186,7 +186,7 @@ When cutting whole regions/functions out of a big module (differ.py):
    were still used by surviving functions → 422 gate failures as `NameError`s at runtime,
    not import time). After any cut, run `python -m pyflakes` over every touched file and
    grep for "undefined" — it catches this class statically in seconds.
-2. **Import success ≠ correctness**: `import intentdiff.differ` passes with missing
+2. **Import success ≠ correctness**: `import intentumdiff.differ` passes with missing
    module-level names if they're only referenced inside function bodies. Collection
    passing means little; the pyflakes pass is the cheap gate.
 3. **Behavior pinned to the deleted layer hides in flag-flips**: the commit differ

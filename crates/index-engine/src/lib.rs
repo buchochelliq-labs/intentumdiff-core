@@ -17,7 +17,7 @@ wit_bindgen::generate!({
     world: "index-engine-plugin",
 });
 
-use crate::exports::intentdiff::plugin::index_engine::Guest;
+use crate::exports::intentumdiff::plugin::index_engine::Guest;
 
 struct IndexEngine;
 

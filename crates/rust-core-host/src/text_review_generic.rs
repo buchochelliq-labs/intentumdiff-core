@@ -341,7 +341,7 @@ pub(crate) fn net_out_relocated_lines(changes: Vec<Value>) -> Vec<Value> {
         .collect()
 }
 
-/// python presentation.generic_text_diff (issue #35). The C ABI (`intentdiff_call`) calls this
+/// python presentation.generic_text_diff (issue #35). The C ABI (`intentumdiff_call`) calls this
 /// directly. Infallible — an oversized input yields a `{"used": false}` envelope, not an error.
 pub(crate) fn generic_text_review_impl(
     old_source: &str,

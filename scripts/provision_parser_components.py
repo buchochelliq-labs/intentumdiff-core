@@ -3,11 +3,11 @@
 The engine's 25 Tier-C tests (`tier-c-wasm`, default ON) instantiate real parser
 components out of a staging dir. In the monorepo that dir is checked out beside the
 crate; in this extracted repo the components live in the sibling
-`intentdiff-<lang>-parser` repos, which publish each build as a `parser-wasm` artifact.
+`intentumdiff-<lang>-parser` repos, which publish each build as a `parser-wasm` artifact.
 
 This script pulls the components named on the command line from those repos' latest
 successful CI runs and stages them under --out, so the workflow can point
-`INTENTDIFF_TEST_WASM_DIR` at it and run the FULL gate instead of
+`INTENTUMDIFF_TEST_WASM_DIR` at it and run the FULL gate instead of
 `cargo test --no-default-features`.
 
 It is fail-closed: any component that cannot be staged is an error, because a silently
@@ -37,7 +37,7 @@ ORG = "buchochelliq-labs"
 API = "https://api.github.com"
 
 # The components the Tier-C tests name (crates/rust-core-host/src/tests_*.rs).
-# Keys are the parser slug: repo = intentdiff-<slug>-parser, file = <slug_>parser.wasm.
+# Keys are the parser slug: repo = intentumdiff-<slug>-parser, file = <slug_>parser.wasm.
 TIER_C_COMPONENTS = ["python", "go", "js-ts"]
 
 
@@ -68,7 +68,7 @@ def _get(url: str, token: str, accept: str = "application/vnd.github+json") -> b
         headers={
             "Authorization": f"Bearer {token}",
             "Accept": accept,
-            "User-Agent": "intentdiff-core-provision",
+            "User-Agent": "intentumdiff-core-provision",
         },
     )
     with _OPENER.open(req, timeout=120) as resp:
@@ -109,7 +109,7 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
     Deliberately does NOT write: nothing unverified should reach the staging dir, or a
     later step could pick up a component the registry never vouched for.
     """
-    repo = f"intentdiff-{slug}-parser"
+    repo = f"intentumdiff-{slug}-parser"
     wanted = f"{slug.replace('-', '_')}_parser.wasm"
 
     workflow_runs = _successful_runs(repo, token, ref)
@@ -142,10 +142,10 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
             for member in archive.namelist():
                 if not member.endswith(".wasm"):
                     continue
-                # the parser crates build `intentdiff_<slug>_parser.wasm`; the host stages
+                # the parser crates build `intentumdiff_<slug>_parser.wasm`; the host stages
                 # the component under its unprefixed plugin name.
                 name = Path(member).name
-                name = name[len("intentdiff_"):] if name.startswith("intentdiff_") else name
+                name = name[len("intentumdiff_"):] if name.startswith("intentumdiff_") else name
                 if name != wanted:
                     continue
                 payload = archive.read(member)
@@ -158,7 +158,7 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 
 
 # ── Registry pinning (#95) ────────────────────────────────────────────────────
-# intentdiff-registry is the root of trust: for each official plugin it pins BOTH the
+# intentumdiff-registry is the root of trust: for each official plugin it pins BOTH the
 # commit (`ref`) and the component's SHA-256. Provisioning honours both — it asks for
 # the successful run at the pinned ref, then verifies the bytes against the pinned
 # checksum. Together those make the flow a supply-chain control rather than a download.
@@ -172,7 +172,7 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 # byte-identical .wasm), so a mismatch AT THE PINNED REF means the component genuinely
 # changed, and the fix is a registry PR through the vet gate — not a bypass here.
 
-REGISTRY_REPO = "intentdiff-registry"
+REGISTRY_REPO = "intentumdiff-registry"
 
 
 def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -207,7 +207,7 @@ def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default=str(REPO_ROOT / "build" / "wasm"),
-                        help="directory to stage components into (INTENTDIFF_TEST_WASM_DIR)")
+                        help="directory to stage components into (INTENTUMDIFF_TEST_WASM_DIR)")
     parser.add_argument("--components", nargs="+", default=TIER_C_COMPONENTS,
                         help="parser slugs to stage (default: the Tier-C set)")
     parser.add_argument("--no-verify", action="store_true",
@@ -231,7 +231,7 @@ def main() -> None:
     failures = []
     for slug in args.components:
         # Take the build the registry pins, not whatever ran most recently.
-        ref = refs.get(f"intentdiff-{slug}-parser")
+        ref = refs.get(f"intentumdiff-{slug}-parser")
         try:
             name, head_sha, digest, payload = fetch_component(slug, token, ref)
         except (RuntimeError, urllib.error.HTTPError) as exc:

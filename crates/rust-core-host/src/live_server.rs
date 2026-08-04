@@ -240,11 +240,11 @@ pub fn live_parse_review_request_impl(
 }
 
 /// Mirror `guardrails._find_policy_path` / `_is_policy_file` for the live path: a guardrail policy
-/// is in effect when the target file IS `intentdiff.yaml`, a `guardrail_policy_path` is configured,
-/// or an `intentdiff.yaml` is discovered walking from the repo root upward. The native non-Python
+/// is in effect when the target file IS `intentumdiff.yaml`, a `guardrail_policy_path` is configured,
+/// or an `intentumdiff.yaml` is discovered walking from the repo root upward. The native non-Python
 /// diff chain doesn't attach guardrail violations, so the caller defers to the full differ when
 /// this returns true (the common no-policy case is served natively).
-/// Load the repo's `intentdiff.yaml` `config:` section (the #99 loader) — the SAME config the
+/// Load the repo's `intentumdiff.yaml` `config:` section (the #99 loader) — the SAME config the
 /// Python live-server builds its DiffConfig from (`_load_cli_config(config_start_path=repo)`).
 /// Returns the validated mapping as JSON ("{}" when no file), Err on a malformed file.
 pub fn live_load_project_config_impl(repo_path: &str) -> Result<String, String> {
@@ -255,7 +255,7 @@ fn is_guardrail_policy_filename(p: &str) -> bool {
     std::path::Path::new(p)
         .file_name()
         .and_then(|n| n.to_str())
-        .map(|n| n.eq_ignore_ascii_case("intentdiff.yaml"))
+        .map(|n| n.eq_ignore_ascii_case("intentumdiff.yaml"))
         .unwrap_or(false)
 }
 
@@ -301,7 +301,7 @@ fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPoli
     let discovered = explicit.or_else(|| {
         let mut dir = std::path::Path::new(repo_path).to_path_buf();
         loop {
-            let candidate = dir.join("intentdiff.yaml");
+            let candidate = dir.join("intentumdiff.yaml");
             if candidate.exists() {
                 return Some(candidate);
             }
@@ -411,7 +411,7 @@ fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPoli
     GuardrailPolicyState::Rules(rules)
 }
 
-/// python `apply_guardrails_to_diff`'s policy-file check: a change to intentdiff.yaml itself is
+/// python `apply_guardrails_to_diff`'s policy-file check: a change to intentumdiff.yaml itself is
 /// an IMMUTABLE violation regardless of rules.
 fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -> Value {
     let file = if !new_filename.is_empty() {
@@ -420,11 +420,11 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
         old_filename
     };
     json!({
-        "rule_id": "intentdiff.policy_file",
+        "rule_id": "intentumdiff.policy_file",
         "severity": "immutable",
         "file": file,
         "language": diff.get("language").cloned().unwrap_or_else(|| json!("")),
-        "semantic_path": "intentdiff.yaml",
+        "semantic_path": "intentumdiff.yaml",
         "node_type": "",
         "old_node_id": Value::Null,
         "new_node_id": Value::Null,
@@ -463,7 +463,7 @@ pub fn live_handle_diff_impl(
 }
 
 /// Content-vs-content diff with the SAME resolution/guardrail/branch behaviour as the live
-/// diff handler, minus the git read — the native LSP server's `intentdiff/semanticDiff`
+/// diff handler, minus the git read — the native LSP server's `intentumdiff/semanticDiff`
 /// two-file mode (#100 S3; the Python server serves it via `StringSource` + the differ).
 pub fn live_diff_contents_impl(
     repo_path: &str,
@@ -529,7 +529,7 @@ fn diff_resolved_sources(
             guardrail_rules.as_deref(),
         ) {
             Ok(mut diff) => {
-                // python apply_guardrails_to_diff's policy-file check: editing intentdiff.yaml
+                // python apply_guardrails_to_diff's policy-file check: editing intentumdiff.yaml
                 // itself is an IMMUTABLE violation.
                 if guardrails_enabled
                     && is_guardrail_policy_filename(path)
@@ -790,7 +790,7 @@ pub fn live_handle_review_impl(
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
         };
-        // python apply_guardrails_to_diff's policy-file check: an edit to intentdiff.yaml itself.
+        // python apply_guardrails_to_diff's policy-file check: an edit to intentumdiff.yaml itself.
         if guardrails_enabled
             && is_guardrail_policy_filename(&f.path)
             && f.old_content != f.new_content

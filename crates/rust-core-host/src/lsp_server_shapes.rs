@@ -1,7 +1,7 @@
 //! SemanticDiff → LSP shape mappings (#100 S3 slice 1), ported from
-//! `src/intentdiff/lsp_server/_codelens.py` and `_diagnostics.py`.
+//! `src/intentumdiff/lsp_server/_codelens.py` and `_diagnostics.py`.
 //!
-//! These are the intentdiff-HANDLER half of the future native LSP server (the generic
+//! These are the intentumdiff-HANDLER half of the future native LSP server (the generic
 //! JSON-RPC dispatch reuses the live-server binary's stdio pattern + the lsp-client
 //! codec). Output uses the LSP wire shapes exactly as `lsprotocol` serialises them
 //! (camelCase `character`, numeric severities), so a client cannot tell the producer
@@ -102,7 +102,7 @@ pub fn semantic_diff_to_diagnostics_value(diff: &Value) -> Vec<Value> {
             "range": node_to_lsp_range(new_node),
             "severity": SEVERITY_HINT,
             "message": "Style-only change — no semantic impact",
-            "source": "intentdiff",
+            "source": "intentumdiff",
         }));
     }
     for err in diff.get("parse_errors").and_then(Value::as_array).unwrap_or(&empty) {
@@ -117,7 +117,7 @@ pub fn semantic_diff_to_diagnostics_value(diff: &Value) -> Vec<Value> {
             },
             "severity": SEVERITY_WARNING,
             "message": format!("Parse error: {err_text}"),
-            "source": "intentdiff",
+            "source": "intentumdiff",
         }));
     }
     diags
@@ -191,7 +191,7 @@ mod tests {
         assert_eq!(diags.len(), 2);
         assert_eq!(diags[0]["severity"], 4);
         assert_eq!(diags[0]["message"], "Style-only change — no semantic impact");
-        assert_eq!(diags[0]["source"], "intentdiff");
+        assert_eq!(diags[0]["source"], "intentumdiff");
         assert_eq!(diags[1]["severity"], 2);
         assert_eq!(diags[1]["message"], "Parse error: unexpected token");
         assert_eq!(diags[1]["range"]["end"]["line"], 2_147_483_647i64);

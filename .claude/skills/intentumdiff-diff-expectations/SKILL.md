@@ -1,20 +1,20 @@
 ---
-name: intentdiff-diff-expectations
+name: intentumdiff-diff-expectations
 description: >-
-  The behavioral oracle for the IntentDiff engine — a scenario catalogue that says, per diff
+  The behavioral oracle for the IntentumDiff engine — a scenario catalogue that says, per diff
   scenario, exactly what the engine SHOULD produce (which changes, with which labels, and which
   change_groups are surfaced vs suppressed, and why). Use this whenever you implement, fix, port,
   or review engine behavior for a language/scenario, when you need the expected result for a test
   (Python acceptance OR Rust #[cfg(test)]), or when deciding "is this diff output correct?". This
   catalogue — not the Python `analysis/*` implementation — is the source of truth: Python is no
   longer the oracle. Every scenario here must be enforced by BOTH a Python acceptance assertion
-  (via `SemanticDiffer`) and a Rust unit test. Read intentdiff-language-profiles / -engine for the
-  mechanism, and intentdiff-dev-loop for the migrate-to-Rust workflow this oracle drives.
+  (via `SemanticDiffer`) and a Rust unit test. Read intentumdiff-language-profiles / -engine for the
+  mechanism, and intentumdiff-dev-loop for the migrate-to-Rust workflow this oracle drives.
 ---
 
-# IntentDiff — diff expectations (the behavioral oracle)
+# IntentumDiff — diff expectations (the behavioral oracle)
 
-**Why this exists.** IntentDiff's engine is moving from Python into the Rust core; the Python
+**Why this exists.** IntentumDiff's engine is moving from Python into the Rust core; the Python
 `analysis/*` implementation is legacy being retired, so it can no longer be the reference for
 "correct." The reference is now **explicit expectations**: for a given input, the exact review
 output the engine should produce. This catalogue is that reference. It is enforced at two layers
@@ -26,7 +26,7 @@ that must agree:
    on the Rust engine directly.
 
 A scenario is "certified" only when **both** layers pass and the language is on the
-`RUST_CERTIFIED_LANGUAGES` allowlist (see intentdiff-dev-loop / the migration plan). When they
+`RUST_CERTIFIED_LANGUAGES` allowlist (see intentumdiff-dev-loop / the migration plan). When they
 disagree, the catalogue wins — fix the code, not the expectation (unless the expectation itself is
 wrong, in which case change it here first, then both tests).
 

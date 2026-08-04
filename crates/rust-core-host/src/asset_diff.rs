@@ -63,7 +63,7 @@ struct ChangedRegion {
 }
 
 /// Perceptual image diff (#… asset diff) — parse options, run the diff, return JSON. The C ABI
-/// (`intentdiff_call`) calls this directly.
+/// (`intentumdiff_call`) calls this directly.
 pub(crate) fn diff_asset_image_impl(
     before_path: &str,
     after_path: &str,
@@ -1143,7 +1143,7 @@ fn make_temp_dir(label: &str) -> Result<PathBuf, String> {
         .duration_since(UNIX_EPOCH)
         .map_err(|exc| format!("system clock before epoch: {exc}"))?
         .as_nanos();
-    let path = std::env::temp_dir().join(format!("intentdiff-{label}-{nonce}"));
+    let path = std::env::temp_dir().join(format!("intentumdiff-{label}-{nonce}"));
     fs::create_dir_all(&path)
         .map_err(|exc| format!("create temp dir {}: {exc}", path.display()))?;
     Ok(path)
@@ -1213,7 +1213,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .expect("system clock before epoch")
             .as_nanos();
-        let dir = std::env::temp_dir().join(format!("intentdiff-asset-{name}-{nonce}"));
+        let dir = std::env::temp_dir().join(format!("intentumdiff-asset-{name}-{nonce}"));
         fs::create_dir_all(&dir).expect("create temp dir");
         dir
     }
@@ -1537,8 +1537,8 @@ mod tests {
         }
         let dir = temp_dir("git-image");
         run_test_git(&dir, &["init"]);
-        run_test_git(&dir, &["config", "user.email", "intentdiff@example.test"]);
-        run_test_git(&dir, &["config", "user.name", "IntentDiff Test"]);
+        run_test_git(&dir, &["config", "user.email", "intentumdiff@example.test"]);
+        run_test_git(&dir, &["config", "user.name", "IntentumDiff Test"]);
         let asset = dir.join("asset.png");
         write_png(&asset, &[[0, 0, 0, 255]; 4], 2, 2);
         run_test_git(&dir, &["add", "asset.png"]);
@@ -1577,8 +1577,8 @@ mod tests {
         }
         let dir = temp_dir("git-lifecycle");
         run_test_git(&dir, &["init"]);
-        run_test_git(&dir, &["config", "user.email", "intentdiff@example.test"]);
-        run_test_git(&dir, &["config", "user.name", "IntentDiff Test"]);
+        run_test_git(&dir, &["config", "user.email", "intentumdiff@example.test"]);
+        run_test_git(&dir, &["config", "user.name", "IntentumDiff Test"]);
 
         let modified = dir.join("modified.png");
         let deleted = dir.join("deleted.png");

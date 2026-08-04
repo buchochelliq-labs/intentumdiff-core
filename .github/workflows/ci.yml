@@ -41,9 +41,9 @@ jobs:
           python-version: "3.12"
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
-        # live in the sibling intentdiff-<lang>-parser repos. Pull the three they name
+        # live in the sibling intentumdiff-<lang>-parser repos. Pull the three they name
         # from those repos' CI artifacts and verify each against the SHA-256 pinned in
-        # intentdiff-registry (#95) — the pin is what makes this a supply-chain control
+        # intentumdiff-registry (#95) — the pin is what makes this a supply-chain control
         # and not just a download. Fail-closed on a missing OR unverified component:
         # nothing unpinned reaches the staging dir.
         # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
@@ -58,13 +58,13 @@ jobs:
       - name: Run engine pins (full gate, Tier-C included)
         # Standalone crate (not a workspace member) — run from the crate directory.
         # This was `--no-default-features` (178 + 25 ignored) until component
-        # provisioning existed; with INTENTDIFF_TEST_WASM_DIR staged it is the full
+        # provisioning existed; with INTENTUMDIFF_TEST_WASM_DIR staged it is the full
         # 203-test gate, matching the monorepo.
         if: env.HAS_SPLIT_TOKEN == 'true'
         run: cargo test
         working-directory: crates/rust-core-host
         env:
-          INTENTDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
+          INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
       - name: Run engine pins (fork PR — Tier-C omitted)
         # A fork PR cannot reach the parser artifacts, so the 25 Tier-C certification
         # tests cannot run. Rather than fail on something a contributor has no way to
@@ -94,7 +94,7 @@ jobs:
         with:
           key: cli
           workspaces: crates/cli
-      - name: Build the intentdiff CLI
+      - name: Build the intentumdiff CLI
         run: cargo build --release
         working-directory: crates/cli
 
@@ -116,7 +116,7 @@ jobs:
         with:
           key: components
       - name: Authenticate cross-repo git deps
-        # The only cross-repo git dependency here is intentdiff-plugin-sdk, which is now
+        # The only cross-repo git dependency here is intentumdiff-plugin-sdk, which is now
         # PUBLIC — so this build resolves anonymously and works on fork PRs, which get no
         # secrets. The step is kept because GITHUB_TOKEN is scoped to THIS repo only: if a
         # private sibling is ever added back as a git dependency, SPLIT_REPO_TOKEN is what

@@ -1,4 +1,4 @@
-"""GitHub Action helper for IntentDiff PR checks."""
+"""GitHub Action helper for IntentumDiff PR checks."""
 
 from __future__ import annotations
 
@@ -16,23 +16,23 @@ from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any
 
-from intentdiff import CommitDiffer
-from intentdiff.analysis.guardrail_reports import (
+from intentumdiff import CommitDiffer
+from intentumdiff.analysis.guardrail_reports import (
     build_guardrail_check_result,
     render_guardrail_annotations,
     render_guardrail_json,
     render_guardrail_sarif,
 )
-from intentdiff.core.config import find_intentdiff_config, load_project_diff_config
-from intentdiff.core.models import CommitDiff, DiffConfig, SemanticDiff
+from intentumdiff.core.config import find_intentumdiff_config, load_project_diff_config
+from intentumdiff.core.models import CommitDiff, DiffConfig, SemanticDiff
 
-COMMENT_MARKER = "<!-- intentdiff:summary -->"
-DEFAULT_REPORT_DIR = "intentdiff-report"
+COMMENT_MARKER = "<!-- intentumdiff:summary -->"
+DEFAULT_REPORT_DIR = "intentumdiff-report"
 SEMANTIC_JSON = "semantic-diff.json"
 GUARDRAILS_JSON = "guardrails.json"
 GUARDRAILS_SARIF = "guardrails.sarif"
 SUMMARY_MD = "summary.md"
-HTML_REPORT = "intentdiff-review.html"
+HTML_REPORT = "intentumdiff-review.html"
 
 
 @dataclass(frozen=True)
@@ -74,7 +74,7 @@ ApiRequest = Callable[[str, str, str, Mapping[str, Any] | None], Any]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run IntentDiff as a GitHub Action.")
+    parser = argparse.ArgumentParser(description="Run IntentumDiff as a GitHub Action.")
     parser.add_argument(
         "--repo",
         default=os.environ.get("GITHUB_WORKSPACE", "."),
@@ -88,22 +88,22 @@ def main(argv: Sequence[str] | None = None) -> int:
 def options_from_env(env: Mapping[str, str], *, repo: Path | None = None) -> ActionOptions:
     event = _load_event(env)
     base_ref, head_ref = _resolve_refs(env, event)
-    report_dir_text = _env(env, "INTENTDIFF_ACTION_REPORT_DIR", DEFAULT_REPORT_DIR)
+    report_dir_text = _env(env, "INTENTUMDIFF_ACTION_REPORT_DIR", DEFAULT_REPORT_DIR)
     return ActionOptions(
         repo=repo or Path(_env(env, "GITHUB_WORKSPACE", ".")),
-        base_ref=_env(env, "INTENTDIFF_ACTION_BASE_REF", base_ref),
-        head_ref=_env(env, "INTENTDIFF_ACTION_HEAD_REF", head_ref),
-        policy=_env(env, "INTENTDIFF_ACTION_POLICY", ""),
-        strict=parse_bool(_env(env, "INTENTDIFF_ACTION_STRICT", "false")),
-        fuel=_parse_optional_int(_env(env, "INTENTDIFF_ACTION_FUEL", "")),
-        paths=parse_paths(_env(env, "INTENTDIFF_ACTION_PATHS", "")),
-        comment=parse_bool(_env(env, "INTENTDIFF_ACTION_COMMENT", "false")),
-        github_token=_env(env, "INTENTDIFF_ACTION_GITHUB_TOKEN", ""),
-        upload_sarif=parse_bool(_env(env, "INTENTDIFF_ACTION_UPLOAD_SARIF", "true")),
-        upload_artifact=parse_bool(_env(env, "INTENTDIFF_ACTION_UPLOAD_ARTIFACT", "true")),
-        artifact_name=_env(env, "INTENTDIFF_ACTION_ARTIFACT_NAME", "semantic-diff-report"),
+        base_ref=_env(env, "INTENTUMDIFF_ACTION_BASE_REF", base_ref),
+        head_ref=_env(env, "INTENTUMDIFF_ACTION_HEAD_REF", head_ref),
+        policy=_env(env, "INTENTUMDIFF_ACTION_POLICY", ""),
+        strict=parse_bool(_env(env, "INTENTUMDIFF_ACTION_STRICT", "false")),
+        fuel=_parse_optional_int(_env(env, "INTENTUMDIFF_ACTION_FUEL", "")),
+        paths=parse_paths(_env(env, "INTENTUMDIFF_ACTION_PATHS", "")),
+        comment=parse_bool(_env(env, "INTENTUMDIFF_ACTION_COMMENT", "false")),
+        github_token=_env(env, "INTENTUMDIFF_ACTION_GITHUB_TOKEN", ""),
+        upload_sarif=parse_bool(_env(env, "INTENTUMDIFF_ACTION_UPLOAD_SARIF", "true")),
+        upload_artifact=parse_bool(_env(env, "INTENTUMDIFF_ACTION_UPLOAD_ARTIFACT", "true")),
+        artifact_name=_env(env, "INTENTUMDIFF_ACTION_ARTIFACT_NAME", "semantic-diff-report"),
         fail_on_semantic_change=parse_bool(
-            _env(env, "INTENTDIFF_ACTION_FAIL_ON_SEMANTIC_CHANGE", "false")
+            _env(env, "INTENTUMDIFF_ACTION_FAIL_ON_SEMANTIC_CHANGE", "false")
         ),
         report_dir=Path(report_dir_text),
     )
@@ -139,7 +139,7 @@ def run_action(
     if options.policy:
         config.guardrail_policy_path = _policy_path(options.repo, options.policy)
     else:
-        config.guardrail_policy_path = find_intentdiff_config(options.repo)
+        config.guardrail_policy_path = find_intentumdiff_config(options.repo)
     config.guardrails_strict = options.strict
 
     commit_diff = differ_factory(config).diff_commit(
@@ -219,7 +219,7 @@ def render_summary_markdown(commit_diff: CommitDiff, summary: ActionSummary) -> 
     status = "passed" if summary.passed else "needs attention"
     lines = [
         COMMENT_MARKER,
-        "# IntentDiff PR Guard",
+        "# IntentumDiff PR Guard",
         "",
         f"Status: **{status}**",
         "",
@@ -252,7 +252,7 @@ def render_summary_markdown(commit_diff: CommitDiff, summary: ActionSummary) -> 
         lines.append("")
     lines.append(
         "Artifacts include `semantic-diff.json`, `guardrails.json`, "
-        "`guardrails.sarif`, and `intentdiff-review.html`."
+        "`guardrails.sarif`, and `intentumdiff-review.html`."
     )
     return "\n".join(lines) + "\n"
 
@@ -289,7 +289,7 @@ def render_static_html_report(commit_diff: CommitDiff, summary: ActionSummary) -
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IntentDiff PR Review</title>
+  <title>IntentumDiff PR Review</title>
   <style>
     :root {{
       color-scheme: dark;
@@ -368,7 +368,7 @@ def render_static_html_report(commit_diff: CommitDiff, summary: ActionSummary) -
 <body>
 <main>
   <header>
-    <div class="eyebrow">IntentDiff PR Review</div>
+    <div class="eyebrow">IntentumDiff PR Review</div>
     <h1>Semantic review artifact</h1>
     <div class="status {status_class}">{_h(status_text)}</div>
     <div class="metrics">

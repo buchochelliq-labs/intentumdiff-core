@@ -117,7 +117,7 @@ pub(crate) fn supports_language_impl(language: &str) -> bool {
     language.eq_ignore_ascii_case("python")
 }
 
-/// python raw-source entry point (exact no-change only). The C ABI (`intentdiff_call`) calls this
+/// python raw-source entry point (exact no-change only). The C ABI (`intentumdiff_call`) calls this
 /// directly. `config_json` is accepted for signature parity with the CST entry point but unused here.
 pub(crate) fn diff_python_impl(
     old_content: &str,
@@ -143,7 +143,7 @@ pub(crate) fn diff_python_impl(
     payload.to_string()
 }
 
-/// python filtered-CST v1 entrypoint. The C ABI (`intentdiff_call`) calls this directly; the
+/// python filtered-CST v1 entrypoint. The C ABI (`intentumdiff_call`) calls this directly; the
 /// binding keeps the full signature (raw-source + wasm-path args are unused here) for parity.
 pub(crate) fn diff_python_cst_impl(
     old_filtered_cst_json: &str,
@@ -319,7 +319,7 @@ use markdown_review::*;
 
 
 /// python markdown post-presentation rules (issue #36): section moves (LIS insertion-shift
-/// discrimination) + heading renames by unique body hash. The C ABI (`intentdiff_call`) calls
+/// discrimination) + heading renames by unique body hash. The C ABI (`intentumdiff_call`) calls
 /// this directly. Infallible.
 pub(crate) fn markdown_section_review_impl(old_source: &str, new_source: &str) -> String {
     let old_sections = markdown_sections(old_source, "old");
@@ -2827,7 +2827,7 @@ impl WasiView for ParserHostState {
     }
 }
 
-impl parser_plugin::intentdiff::plugin::host_utils::Host for ParserHostState {
+impl parser_plugin::intentumdiff::plugin::host_utils::Host for ParserHostState {
     fn strip_trivia(&mut self, cst_json: String, trivia_types: Vec<String>) -> String {
         if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
             return json!({"error": "host-utils input exceeds byte limit"}).to_string();
@@ -4339,7 +4339,7 @@ fn batch_diff_item_sort_key(item: &Value) -> u64 {
 fn is_supported_python_plugin_id(plugin_id: &str) -> bool {
     matches!(
         plugin_id,
-        "" | "python" | "python-parser" | "python_parser" | "intentdiff:python:python"
+        "" | "python" | "python-parser" | "python_parser" | "intentumdiff:python:python"
     )
 }
 
@@ -4781,7 +4781,7 @@ fn evaluate_guardrail_rules_for_diff(
 /// return an in-band error envelope for empty input. Shape + hash recipe match python exactly.
 fn empty_semantic_tree_json(language: &str) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(format!("intentdiff-empty-tree:{language}").as_bytes());
+    hasher.update(format!("intentumdiff-empty-tree:{language}").as_bytes());
     let digest = format!("{:x}", hasher.finalize());
     json!({
         "id": "0",
@@ -5440,7 +5440,7 @@ fn run_python_wasm_process_pair_with_cached_component(
                 .map_err(|exc| format!("instantiate parser component: {exc}"))
         },
     )?;
-    let parser = bindings.intentdiff_plugin_parser();
+    let parser = bindings.intentumdiff_plugin_parser();
     let parser_mode = measure_optional(probe.as_deref_mut(), "rust_wasm_parser_mode", || {
         parser
             .call_get_parser_mode(&mut store)
@@ -5448,7 +5448,7 @@ fn run_python_wasm_process_pair_with_cached_component(
     })?;
     let full_parse = matches!(
         parser_mode,
-        parser_plugin::exports::intentdiff::plugin::parser::ParserMode::FullParse
+        parser_plugin::exports::intentumdiff::plugin::parser::ParserMode::FullParse
     );
     if !unlimited {
         measure_optional(
@@ -8062,7 +8062,7 @@ fn refine_candidate_drafts<'a>(
     });
 }
 
-// Env-gated draft tracer for parity debugging: set INTENTDIFF_FINALIZE_DEBUG=1 to see
+// Env-gated draft tracer for parity debugging: set INTENTUMDIFF_FINALIZE_DEBUG=1 to see
 // the surviving drafts after each finalize/refine pass on stderr. (Plain comment — a
 // macro invocation cannot carry an outer doc comment.)
 thread_local! {
@@ -8086,7 +8086,7 @@ fn finalize_debug_probe(stage: &str, changes: &[ChangeDraft<'_>]) {
             records.push((stage.to_string(), changes.len()));
         }
     });
-    if std::env::var("INTENTDIFF_FINALIZE_DEBUG").is_err() {
+    if std::env::var("INTENTUMDIFF_FINALIZE_DEBUG").is_err() {
         return;
     }
     let summary: Vec<String> = changes
@@ -8458,7 +8458,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     }
     metadata["rust_core"] = json!({
         "status": COMPLETE,
-        "backend": "intentdiff_rust_core",
+        "backend": "intentumdiff_rust_core",
         "supported_language": "python",
         "version": VERSION,
         "engine": "rust_core_stage11_finalizer_v1",
@@ -9655,7 +9655,7 @@ fn semantic_diff_payload(
     let metadata = json!({
         "rust_core": {
             "status": status,
-            "backend": "intentdiff_rust_core",
+            "backend": "intentumdiff_rust_core",
             "supported_language": "python",
             "version": VERSION,
             "details": extra_metadata,
@@ -9682,7 +9682,7 @@ fn rust_engine_telemetry_from_details(details: &Value) -> Value {
     let engine = details
         .get("engine")
         .and_then(Value::as_str)
-        .unwrap_or("intentdiff_rust_core");
+        .unwrap_or("intentumdiff_rust_core");
     let parser_backend = details
         .get("python_parser_backend")
         .and_then(Value::as_str)
@@ -9717,7 +9717,7 @@ fn rust_engine_telemetry_from_details(details: &Value) -> Value {
     json!({
         "schema_version": 1,
         "calls": [{
-            "plugin": "intentdiff_rust_core",
+            "plugin": "intentumdiff_rust_core",
             "function": "finalize",
             "engine_owner": "rust",
             "engine": engine,

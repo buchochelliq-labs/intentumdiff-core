@@ -1,9 +1,9 @@
 [package]
-name = "intentdiff-rust-core"
+name = "intentumdiff-rust-core"
 version = "0.1.0"
 edition = "2021"
 publish = false
-description = "Native Rust core host for IntentDiff"
+description = "Native Rust core host for IntentumDiff"
 license = "MIT"
 
 # The `python` feature + the pyo3 dep were removed (#82/B.6): the crate builds ONLY as the pure
@@ -12,7 +12,7 @@ license = "MIT"
 
 # tier-c-wasm (DEFAULT ON): gates the 25 Tier-C certification tests that load staged parser
 # components (python_parser.wasm etc.). In the monorepo the staging dir exists so the full gate
-# always runs; the extracted engine repo (#82) points INTENTDIFF_TEST_WASM_DIR at components
+# always runs; the extracted engine repo (#82) points INTENTUMDIFF_TEST_WASM_DIR at components
 # provisioned from the parser repos' CI artifacts and runs the same full gate (Phase D).
 # `--no-default-features` remains the escape hatch for an environment with no components.
 [features]
@@ -20,14 +20,14 @@ default = ["tier-c-wasm"]
 tier-c-wasm = []
 
 [lib]
-name = "intentdiff_rust_core"
-# cdylib exposing the C ABI (`intentdiff_call`) that every language binding drives (the Python
+name = "intentumdiff_rust_core"
+# cdylib exposing the C ABI (`intentumdiff_call`) that every language binding drives (the Python
 # ctypes shell loads it via `ctypes.CDLL`); rlib so a pure-Rust consumer (the native live-server
 # and lsp-server binaries, #100; the clap CLI, #B.4) can link the engine in-process without FFI.
 crate-type = ["cdylib", "rlib"]
 
 # The crate builds ONLY as the pure-Rust engine now (#82/B.6, drop-pyo3): the language boundary is
-# the ungated C ABI (`intentdiff_call`), and bindings (the Python ctypes shell, the clap CLI, future
+# the ungated C ABI (`intentumdiff_call`), and bindings (the Python ctypes shell, the clap CLI, future
 # Go/Java) drive it. The PyO3 `#[pymodule]`/`#[pyfunction]` skin was removed once the ctypes binding
 # reached parity (the whole suite passes over the C ABI). The engine compute was always pyo3-free.
 
@@ -39,7 +39,7 @@ anyhow = "1"
 index-engine-lib = { path = "../index-engine-lib" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-# Project-config (intentdiff.yaml) parsing for the config subsystem port (#99).
+# Project-config (intentumdiff.yaml) parsing for the config subsystem port (#99).
 # Same version the first-party databricks/dbt-schema parser crates already use.
 serde_yaml = "0.9"
 # Cache subsystem port (#101, A2.2): SQLite parse/diff cache (bundled SQLite so no

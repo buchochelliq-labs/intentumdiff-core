@@ -24,14 +24,14 @@ body:
   - type: input
     id: version
     attributes:
-      label: IntentDiff version
-      description: Output of `intentdiff --version`, or the extension version.
+      label: IntentumDiff version
+      description: Output of `intentumdiff --version`, or the extension version.
     validations:
       required: false
   - type: textarea
     id: env
     attributes:
       label: Environment
-      description: OS, and how you installed IntentDiff.
+      description: OS, and how you installed IntentumDiff.
     validations:
       required: false

@@ -1,4 +1,4 @@
-# Contributing to intentdiff-core
+# Contributing to intentumdiff-core
 
 ## Ground rules
 

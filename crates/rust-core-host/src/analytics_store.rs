@@ -533,7 +533,7 @@ mod tests {
 
     fn temp_db(name: &str) -> String {
         std::env::temp_dir()
-            .join(format!("intentdiff_analytics_{}_{}.db", std::process::id(), name))
+            .join(format!("intentumdiff_analytics_{}_{}.db", std::process::id(), name))
             .to_str()
             .unwrap()
             .to_string()
@@ -545,12 +545,12 @@ mod tests {
         assert_eq!(store.backend_name(), "sqlite");
     }
 
-    /// Runs ONLY when a libduckdb is provided (INTENTDIFF_DUCKDB_LIB) — the default test
+    /// Runs ONLY when a libduckdb is provided (INTENTUMDIFF_DUCKDB_LIB) — the default test
     /// run exercises the SQLite fallback. Run in isolation (`cargo test
     /// duckdb_backend_when_lib_provided`) so the env var doesn't flip the fallback asserts.
     #[test]
     fn duckdb_backend_when_lib_provided() {
-        if std::env::var("INTENTDIFF_DUCKDB_LIB").map(|v| v.is_empty()).unwrap_or(true) {
+        if std::env::var("INTENTUMDIFF_DUCKDB_LIB").map(|v| v.is_empty()).unwrap_or(true) {
             return;
         }
         let path = temp_db("duck");

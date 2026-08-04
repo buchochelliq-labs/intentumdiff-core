@@ -1,4 +1,4 @@
-/// intentdiff Plugin Interface  v1.0.0
+/// intentumdiff Plugin Interface  v1.0.0
 ///
 /// This WIT file is the SOLE contract between the host (Python runtime) and
 /// any plugin (parser or renderer), regardless of what language the plugin is
@@ -14,7 +14,7 @@
 /// The host exposes three utilities via `host-utils`.  Every world imports them
 /// so plugins can call them without carrying their own implementations.
 
-package intentdiff:plugin@1.0.0;
+package intentumdiff:plugin@1.0.0;
 
 // ---------------------------------------------------------------------------
 // Host-provided utilities
@@ -319,7 +319,7 @@ world index-engine-plugin {
 ///
 /// Diff analyzers enable language-specific post-processing without
 /// modifying the core diff engine.  They are discovered via the
-/// ``intentdiff.diff_analyzers`` entry-point group.
+/// ``intentumdiff.diff_analyzers`` entry-point group.
 interface diff-analyzer {
     /// Analyze a completed SemanticDiff and return an updated version.
     ///

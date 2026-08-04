@@ -7,7 +7,7 @@ wit_bindgen::generate!({
     world: "renderer-plugin",
 });
 
-use crate::exports::intentdiff::plugin::renderer::Guest;
+use crate::exports::intentumdiff::plugin::renderer::Guest;
 
 const _PLUGIN_METADATA: &str = include_str!("../plugin_metadata.info");
 
@@ -47,7 +47,7 @@ fn symbol_for(change_type: &str) -> &'static str {
 pub fn render_str(diff_json: &str) -> String {
     let diff: Value = match serde_json::from_str(diff_json) {
         Ok(v) => v,
-        Err(e) => return format!("[IntentDiff] ERROR: invalid diff JSON: {}", e),
+        Err(e) => return format!("[IntentumDiff] ERROR: invalid diff JSON: {}", e),
     };
 
     let mut out = String::new();

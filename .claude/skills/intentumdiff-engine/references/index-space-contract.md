@@ -27,7 +27,7 @@ Groups tag `metadata.index_space`:
 
 ## The single reconciliation: `_reindex_groups_to_final_changes`
 
-Located in `src/intentdiff/analysis/presentation.py`, applied as the **last** transform over
+Located in `src/intentumdiff/analysis/presentation.py`, applied as the **last** transform over
 `diff.change_groups` in `differ.py::_complete_final_diff` (after sorting and file-lifecycle,
 before telemetry/caching).
 

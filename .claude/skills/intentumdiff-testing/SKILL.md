@@ -1,7 +1,7 @@
 ---
-name: intentdiff-testing
+name: intentumdiff-testing
 description: >-
-  How to add and run tests across every layer of the IntentDiff repo — Python (pytest), Rust
+  How to add and run tests across every layer of the IntentumDiff repo — Python (pytest), Rust
   (cargo), and the VS Code extension (node:test) — plus the conventions and gotchas that make
   tests actually run and actually mean something. Use this whenever you write a test, run the
   suites, add a fixture, reproduce engine behavior in a test, investigate a failing/xfailed
@@ -9,14 +9,14 @@ description: >-
   add a test in each (including the extension's easy-to-miss "add the file to the test:unit
   list or it silently won't run" trap), the no-network / determinism rules, the
   stash-to-confirm-preexisting technique, and how to treat regressions vs documented gaps. Read
-  intentdiff-build to build before testing, and intentdiff-dev-loop for where testing fits the
+  intentumdiff-build to build before testing, and intentumdiff-dev-loop for where testing fits the
   workflow.
 ---
 
-# IntentDiff — Adding & running tests
+# IntentumDiff — Adding & running tests
 
 Three test stacks. Test the layer you changed **and the ones downstream of it**; a Rust-core
-change needs a `maturin develop --release` first (see `intentdiff-build`), a pure-Python or TS
+change needs a `maturin develop --release` first (see `intentumdiff-build`), a pure-Python or TS
 change does not.
 
 ## Run the suites
@@ -34,7 +34,7 @@ cargo test --workspace                  # everything
 
 # VS Code extension (from plugins/vscode). `test` compiles then runs node:test on out/.
 cd plugins/vscode && npm run lint && npm run test
-cd plugins/vscode && npm run test:integration   # gated by INTENTDIFF_SKIP_LIVE_DIFF=1
+cd plugins/vscode && npm run test:integration   # gated by INTENTUMDIFF_SKIP_LIVE_DIFF=1
 ```
 
 Test tree: `tests/unit`, `tests/integration`, `tests/security` (adversarial Wasm sandbox),
@@ -47,12 +47,12 @@ Test tree: `tests/unit`, `tests/integration`, `tests/security` (adversarial Wasm
 Drop a `test_*.py` in `tests/unit/` (pytest auto-discovers — no registration needed). For
 **engine behavior, drive the real engine** instead of hand-building trees where possible:
 ```python
-from intentdiff.differ import SemanticDiffer
+from intentumdiff.differ import SemanticDiffer
 diff = SemanticDiffer().diff_strings(old, new, "file.py", language_hint="python")
 assert [c.change_type for c in diff.changes] == [...]
 ```
 For pure functions (e.g. presentation helpers), import and call them directly and build the
-minimal frozen models (`SemanticNode`, `Change`, `ChangeGroup` from `intentdiff.core.models`).
+minimal frozen models (`SemanticNode`, `Change`, `ChangeGroup` from `intentumdiff.core.models`).
 Prefer real fixtures in `tests/fixtures/` for cross-language snippet coverage.
 
 ## Adding a test — VS Code extension (node:test) — READ THIS GOTCHA
@@ -72,7 +72,7 @@ must be vscode-free (no `import "vscode"`) so it runs under `node --test`; the t
 provider wrapper is covered by integration tests. **Unit tests must do no network** (the LLM
 prompt/parse logic is pure and tested; the fetch lives in the wrapper).
 
-For webview HTML/interaction, use the **panel-render harness** (see `intentdiff-vscode`):
+For webview HTML/interaction, use the **panel-render harness** (see `intentumdiff-vscode`):
 import `out/src/reviewWebviewModel.js`, build a model, render HTML, assert on it (JSDOM for
 script execution), or serve it for the Claude Preview MCP.
 
@@ -97,12 +97,12 @@ behavior covered here — it's the authoritative layer.
 - **`DiffConfig(diagnostics=True)` silently disables the Rust core paths** (both the certified
   batch and per-stage `rust_matching` are gated on `not diagnostics.enabled`) — a diagnostics
   trace therefore always shows the PYTHON pipeline and can never observe a rust-fed defect. To
-  inspect the rust path, monkeypatch `intentdiff.differ.try_rust_core_tree_diff` (spy on its
+  inspect the rust path, monkeypatch `intentumdiff.differ.try_rust_core_tree_diff` (spy on its
   inputs/outputs) or use the batch `entity_fast_path` metadata with `profile_phases`.
 - The rust-vs-python matching can be diffed directly: capture the rust `matching` via the spy,
   then call `differ._compute_matching(old_tree, new_tree, config)` on the captured trees.
 - **Splitting a module breaks monkeypatches silently (the #78–#81 splits, learned 3×).**
-  `patch("intentdiff.cli.X")`/`setattr(cli, "X", ...)` patches the *façade's* binding; after a
+  `patch("intentumdiff.cli.X")`/`setattr(cli, "X", ...)` patches the *façade's* binding; after a
   split, functions resolve `X` in their OWN module's globals, so the patch becomes inert — the
   test then exercises the real dependency and fails obscurely (or worse, passes while testing
   nothing; the live-server integration patches were inert for months). Rule: patch the module
@@ -110,7 +110,7 @@ behavior covered here — it's the authoritative layer.
   defined — e.g. handlers constructing `SemanticDiffer` directly ⇒ `cli._commands.SemanticDiffer`,
   but paths through the `_differ()` helper ⇒ `cli._shared.SemanticDiffer`. When splitting:
   grep tests for `"<module>.<name>"` patch strings FIRST, and keep the patchable seams
-  (e.g. `intentdiff.differ.try_rust_core_*`) in the module tests already target.
+  (e.g. `intentumdiff.differ.try_rust_core_*`) in the module tests already target.
 - **Splitting a file also silently weakens source-content ratchets.** themeColors.test.ts
   pins regexes against `extension.ts`/`reviewWebviewModel.ts` SOURCE (the #27 hex-count
   ratchet, CSP pins, git-apply flags). Moving code out of a scanned file makes the ratchet
@@ -149,7 +149,7 @@ dedicated file; the full-suite gate caught 3 placement regressions post-commit. 
 suites assert counts/labels — dedicated files pin finer behavior (e.g. inline-highlight
 placement), so both belong in the acceptance set.
 
-## Investigating a failure (don't just report it — see intentdiff-dev-loop)
+## Investigating a failure (don't just report it — see intentumdiff-dev-loop)
 
 1. Get the assertion: `pytest ... -q --tb=short`.
 2. Read the test's *intent* — is the expectation still correct, or did a phase/name legitimately
@@ -166,7 +166,7 @@ placement), so both belong in the acceptance set.
 `docs/BACKLOG.md` → "0.0.1 RC Release Gate" lists what must be green before tag/publish:
 Python proof gates, Rust parser/core tests, VS Code tests, competitor matrix + completion
 audit, release-media validators, package dry-runs, and `git diff --check`. The strict engine
-boundary gate runs with `INTENTDIFF_ENFORCE_RUST_ONLY_ENGINE=1`. Never mark work done with
+boundary gate runs with `INTENTUMDIFF_ENFORCE_RUST_ONLY_ENGINE=1`. Never mark work done with
 failing tests, partial implementation, or unresolved errors.
 
 ## Oracle modules look dead but aren't — check what the test CALLS before deleting

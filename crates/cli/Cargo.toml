@@ -1,25 +1,25 @@
-# The native IntentDiff CLI (#B.4b): a standalone `intentdiff` binary that links the PURE-RUST
-# engine (intentdiff-rust-core, default-features = false — no pyo3, no libpython) and drives it
+# The native IntentumDiff CLI (#B.4b): a standalone `intentumdiff` binary that links the PURE-RUST
+# engine (intentumdiff-rust-core, default-features = false — no pyo3, no libpython) and drives it
 # in-process. It absorbs the Python CLI's commands (diff / review / cache / analytics / plugins),
 # calling the same ungated `*_impl` functions the C ABI exposes plus the ungated cache/analytics
-# stores. At the split (#82) it ships as intentdiff-core's CLI. Standalone package (excluded from
+# stores. At the split (#82) it ships as intentumdiff-core's CLI. Standalone package (excluded from
 # the root workspace, like the core + live-server) so its [patch]/[profile] sections apply.
 
 [package]
-name = "intentdiff-cli"
+name = "intentumdiff-cli"
 version = "0.1.0"
 edition = "2021"
 publish = false
-description = "IntentDiff native CLI: diff / review / cache / analytics over the pure-Rust engine"
+description = "IntentumDiff native CLI: diff / review / cache / analytics over the pure-Rust engine"
 license = "MIT"
 
 [[bin]]
-name = "intentdiff"
+name = "intentumdiff"
 path = "src/main.rs"
 
 [dependencies]
 # default-features = false -> the pure-Rust engine (the `python` pyo3 feature stays off).
-intentdiff-rust-core = { path = "../rust-core-host", default-features = false }
+intentumdiff-rust-core = { path = "../rust-core-host", default-features = false }
 clap = { version = "4", features = ["derive"] }
 serde_json = "1"
 

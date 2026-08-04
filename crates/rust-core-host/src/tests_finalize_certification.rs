@@ -6,7 +6,7 @@ use super::*;
 use crate::*;
 
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_returns_certified_public_diff_for_python_change() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -34,7 +34,7 @@ use crate::*;
         assert!(payload["diff"]["changes"].as_array().unwrap().len() >= 1);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_certifies_compacted_literal_edit_as_one_modification() {
         // Before issue #13 was fixed, `return 1` -> `return 2` reached the finalizer as an
         // uncompacted MODIFICATION + stray literal ADDITION/DELETION, and the modification-only
@@ -55,7 +55,7 @@ use crate::*;
         assert_eq!(changes[0]["change_type"], "MODIFICATION");
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_still_falls_back_for_non_modification_output() {
         // The modification-only certification gate must stay reachable: a genuine ADDITION
         // (a brand-new function) is not certified by finalizer wave 1 and falls back.
@@ -74,7 +74,7 @@ use crate::*;
             .contains("modification-only"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_rejects_unknown_change_node_id() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -87,7 +87,7 @@ use crate::*;
         assert!(err.contains("unknown node id"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_rejects_oversized_sources() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -100,7 +100,7 @@ use crate::*;
         assert!(err.contains("old source is"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_commit_json_returns_certified_commit_bytes_for_complete_native_batch() {
         let request = json!({
             "schema_version": 1,
@@ -193,7 +193,7 @@ use crate::*;
         assert!(error.contains("end must be >= start"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_matches_working_tree_small_python_signature() {
         let old_source = concat!(
             "def charge_total(order):\n",
@@ -320,7 +320,7 @@ use crate::*;
         assert_eq!(signature, &expected);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_matches_rename_move_heavy_python_signature() {
         let old_billing = concat!(
             "def calculate_discount(customer, total):\n",
@@ -504,7 +504,7 @@ use crate::*;
         assert_eq!(Value::Array(signature), expected);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_large_python_signature_promotes_renamed_functions() {
         let wasm_path = python_wasm_path();
         let mut files = Vec::new();
@@ -601,7 +601,7 @@ use crate::*;
         }));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn native_candidate_large_python_signature_matches_wasm_candidate() {
         let wasm_path = python_wasm_path();
         let mut files = Vec::new();

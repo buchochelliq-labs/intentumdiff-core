@@ -33,11 +33,11 @@ churn.** Markdown additionally gets section-aware presentation. All verified in
 
 | If you see (X) | Expect (Y) | detail | MUST NOT |
 |---|---|---|---|
-| A new ignore/config line added (`.gitignore` `+ /.intentdiff`) | one `ADDITION` surfaced as a **first-class content change** (Content risk, not "Behavior"), not buried under the noise group | `text_line`; extension labels it Content/Config | the real insert nested under "Suppressed N noisy changes"; labelled "Behavior · New public API" |
+| A new ignore/config line added (`.gitignore` `+ /.intentumdiff`) | one `ADDITION` surfaced as a **first-class content change** (Content risk, not "Behavior"), not buried under the noise group | `text_line`; extension labels it Content/Config | the real insert nested under "Suppressed N noisy changes"; labelled "Behavior · New public API" |
 | An ignore/config line edited (`/dist` → `/build`) | one `MODIFICATION` `text_line`, highlight in `text_diff` | `text_line`; `text_diff="/[+buil]d[-ist]"` | char-span churn |
 | CRLF↔LF re-encoding + a real add | only the real add surfaces; the line-ending re-tokenization is suppressed (`generic_text_diff` group, `[]`) | — | every line reported as changed |
 
-## Content class → risk (extension surfacing; see intentdiff-vscode `contentClass.ts`)
+## Content class → risk (extension surfacing; see intentumdiff-vscode `contentClass.ts`)
 
 | If the file is (X) | Expect risk/label (Y) |
 |---|---|
@@ -91,7 +91,7 @@ heading-rename contract in test_generic_text_diff.py, and two Rust `#[cfg(test)]
 
 | If you see (X) | Expect (Y) | enforced by |
 |---|---|---|
-| A `.gitignore` (or `.dockerignore`/`.npmignore`/…) edit | language `gitignore`, NOT `generic` — pattern/comment/negation nodes, blank lines dropped structurally | `test_gitignore_parser.py`; crate `intentdiff-gitignore-parser` |
+| A `.gitignore` (or `.dockerignore`/`.npmignore`/…) edit | language `gitignore`, NOT `generic` — pattern/comment/negation nodes, blank lines dropped structurally | `test_gitignore_parser.py`; crate `intentumdiff-gitignore-parser` |
 | A single pattern added | one `ADDITION pattern '<text>'`, NO `presentation.generic_text_diff` NOISE_SUPPRESSED group, no "ungrouped raw evidence" — the extension promotes it to a first-class Meaningful change | `test_added_pattern_is_one_clean_change_with_no_noise_group` |
 | Blank lines added/removed between patterns | zero changes (spacing is invisible — the generic-text token-churn defect this parser removes) | `test_blank_line_churn_is_invisible` |
 | A negation (`!pattern`) | node_type `negated_pattern`, distinct from `pattern`, so un-negating reads as a real edit not a delete+add | `test_negation_is_distinct_from_a_plain_pattern` |

@@ -1,7 +1,7 @@
 ---
-name: intentdiff-architecture
+name: intentumdiff-architecture
 description: >-
-  Orientation and ground rules for the IntentDiff / py-semantic-diff repository (a
+  Orientation and ground rules for the IntentumDiff / py-semantic-diff repository (a
   Rust+Python semantic-diff engine with a VS Code extension). Use this skill FIRST
   whenever you start any task in this repo — implementing a feature, fixing a bug,
   reviewing code, or answering "how does X work / where does X live". It maps the repo,
@@ -9,13 +9,13 @@ description: >-
   (including the maturin --release and .pyd-locking gotchas that silently waste hours),
   and lists the hard invariants you must not break. If a task touches the diff engine,
   the extension UX, release notes, or images, read this then hand off to the more specific
-  intentdiff-* skill. Trigger even when the user doesn't say "architecture" — any work in
+  intentumdiff-* skill. Trigger even when the user doesn't say "architecture" — any work in
   this repo benefits from it.
 ---
 
-# IntentDiff — Architecture & Ground Rules
+# IntentumDiff — Architecture & Ground Rules
 
-IntentDiff is a **semantic** diff engine: it compares two versions of a file at the
+IntentumDiff is a **semantic** diff engine: it compares two versions of a file at the
 syntax-tree level (not line-by-line) to say *what changed and why it matters* —
 refactors vs behavior changes, moves, style-only noise, guardrail violations — and
 surfaces that as a CLI, a Python API/LiveServer, and a **VS Code extension**.
@@ -29,16 +29,16 @@ aspirational cleanup — it is the release contract.
   construction, matching, edit generation, refinement, moves, refactoring detection,
   invariances, presentation/grouping, guardrails, schema interpretation, cross-file
   analysis, and the final `SemanticDiff` output. The primary engine crate is
-  `crates/rust-core-host` (built as the `intentdiff_rust_core` PyO3 extension).
-- **Python owns** (`src/intentdiff/`): public API/CLI, VCS/source collection, config,
+  `crates/rust-core-host` (built as the `intentumdiff_rust_core` PyO3 extension).
+- **Python owns** (`src/intentumdiff/`): public API/CLI, VCS/source collection, config,
   LiveServer/LSP/HTTP protocol glue, DTO compatibility, packaging/docs/release tooling.
 - **New processing logic goes into Rust, never Python.** Python engine modules
-  (`intentdiff.analysis.*`, `intentdiff.core.engine`) remain only as a *temporary test
+  (`intentumdiff.analysis.*`, `intentumdiff.core.engine`) remain only as a *temporary test
   oracle* until each slice is parity-certified in Rust. Do not extend them.
 
 Sources of truth (read when the boundary matters):
 `docs/RUST_PYTHON_ENGINE_ARCHITECTURE.md` and `docs/ENGINE_BOUNDARY_AUDIT.md`. The strict
-gate runs with `INTENTDIFF_ENFORCE_RUST_ONLY_ENGINE=1`.
+gate runs with `INTENTUMDIFF_ENFORCE_RUST_ONLY_ENGINE=1`.
 
 ### North star: Rust is the *complete* backend; bindings are thin (roadmap — `docs/TARGET_ARCHITECTURE.md`, #82)
 
@@ -62,7 +62,7 @@ layer*.
 ## Repo map (where things live)
 
 ```
-src/intentdiff/            Python shell: differ.py (orchestrator), core/models.py
+src/intentumdiff/            Python shell: differ.py (orchestrator), core/models.py
                            (frozen pydantic v2), analysis/ (shrinking remnant:
                            guardrails, invariances, cross_file, diagnostics,
                            schema_resolver/user_schemas, keyed_profiles (guardrails
@@ -76,7 +76,7 @@ src/intentdiff/            Python shell: differ.py (orchestrator), core/models.p
 crates/                    Rust: rust-core-host (the engine), parsers/* (Wasm parser
                            components per language), index-engine, renderers, sdk
 plugins/vscode/            The VS Code extension (TypeScript). src/ + test/ + media/ + docs/
-plugins/intentdiff_dbt/    Separately-packaged dbt plugin
+plugins/intentumdiff_dbt/    Separately-packaged dbt plugin
 docs/                      Architecture + subsystem docs + BACKLOG.md (roadmap/known issues)
 tests/unit, tests/integration, tests/security   Python test suites + fixtures/
 ```
@@ -88,18 +88,18 @@ tests/unit, tests/integration, tests/security   Python test suites + fixtures/
 # From the REPO ROOT (the crate is pyo3-free since #B.6 — maturin reads pyproject.toml's
 # `bindings = "cffi"`; `cd crates/rust-core-host && maturin …` now errors, no pyproject there).
 RUSTUP_TOOLCHAIN=1.95.0 maturin develop --release   # ALWAYS --release
-rm -f src/intentdiff/*.pyd                           # kill any retired pyo3 in-tree shadow
+rm -f src/intentumdiff/*.pyd                           # kill any retired pyo3 in-tree shadow
 ```
 - **Always `--release`.** A plain `maturin develop` is a *debug* core: functionally
   identical but ~20–50× slower on compute paths (the perceptual image diff drops from
   ~6 s to ~0.3 s purely from `--release`). Details: `docs/BUILDING.md`.
 - **Windows lock:** the extension keeps the core `.dll` loaded. Stop it before rebuilding
   or the install fails with `Access is denied (os error 5)`:
-  `Get-Process -Name intentdiff | Stop-Process -Force`. The in-tree
-  `src/intentdiff/intentdiff_rust_core.pyd` SHADOWS every install (loader tries
-  `intentdiff.intentdiff_rust_core` first) — after building, copy the fresh `.pyd` over it
+  `Get-Process -Name intentumdiff | Stop-Process -Force`. The in-tree
+  `src/intentumdiff/intentumdiff_rust_core.pyd` SHADOWS every install (loader tries
+  `intentumdiff.intentumdiff_rust_core` first) — after building, copy the fresh `.pyd` over it
   and verify via `_load_backend().__file__`, not a bare import (full recipe:
-  intentdiff-build's stale-shadow bullet).
+  intentumdiff-build's stale-shadow bullet).
 - **Pure Python or TypeScript change → no maturin rebuild.** Only rebuild for Rust
   source changes.
 
@@ -110,7 +110,7 @@ rm -f src/intentdiff/*.pyd                           # kill any retired pyo3 in-
 
 **Extension:** `cd plugins/vscode && npm run lint && npm run test` (`lint` is `tsc
 --noEmit`; `test` is `node --test` on compiled `out/`). Integration tests gate on
-`INTENTDIFF_SKIP_LIVE_DIFF=1`.
+`INTENTUMDIFF_SKIP_LIVE_DIFF=1`.
 
 ## Repo I/O (OneDrive) — search gotcha & how to work around it
 
@@ -122,9 +122,9 @@ timed out; a broad `find` got auto-backgrounded. Work around it:
 - **Prefer `Read` on a known direct path over discovery.** The repo map above + a file's imports
   usually tell you the exact path — read it directly instead of globbing to find it (e.g. the
   profile modules are named in `analysis/presentation.py`'s imports; the WIT is
-  `src/intentdiff/plugins/wit/plugin.wit`).
+  `src/intentumdiff/plugins/wit/plugin.wit`).
 - **Scope every `Grep`/`Glob` to a subdirectory**, not the repo root — e.g. search
-  `plugins/vscode/src`, `src/intentdiff/analysis`, or `crates/rust-core-host/src`, never `**` from
+  `plugins/vscode/src`, `src/intentumdiff/analysis`, or `crates/rust-core-host/src`, never `**` from
   the top.
 - **Avoid `find` / unscoped `**` globs.** If you must search broadly, target one subtree at a time.
 - **Don't block on a long scan** — if a shell search gets backgrounded, abandon it and re-run a
@@ -137,11 +137,11 @@ timed out; a broad `find` got auto-backgrounded. Work around it:
 
 - **Engine:** don't move processing/analysis logic into Python; it belongs in Rust.
 - **VS Code diff is native-first:** open diffs with `vscode.diff` (left = read-only
-  `intentdiff-base:` from `git show <ref>:<path>`, right = the real editable working file).
+  `intentumdiff-base:` from `git show <ref>:<path>`, right = the real editable working file).
   Do **not** reintroduce Monaco, `createDiffEditor` webview embeds, the `media/monaco/`
   bundle, or the retired gap machinery (`gapStates`, `expandGap`, floating chevrons).
 - **Theme-native styling:** chrome uses `--vscode-*` vars; change categories use the
-  contributed `intentdiff.semanticChanges.*` color IDs. No hardcoded chrome hex literals,
+  contributed `intentumdiff.semanticChanges.*` color IDs. No hardcoded chrome hex literals,
   no bundled Google Fonts / JetBrains Mono. Codicons only (`codicon codicon-*`) — never
   ship custom chrome SVG icons. Must read in Dark+, Light+, and High-Contrast.
 - **Privacy (BYOK):** never bundle an API key or run a paid proxy. The LLM explainer is
@@ -150,28 +150,28 @@ timed out; a broad `find` got auto-backgrounded. Work around it:
   source, identifiers, or literals); verbatim source goes only to a **local** endpoint. Unit
   tests do **no** network.
 
-## Where to go next (the other intentdiff-* skills)
+## Where to go next (the other intentumdiff-* skills)
 
-- **`intentdiff-engine`** — diff internals: models, GumTree matching, change groups and the
+- **`intentumdiff-engine`** — diff internals: models, GumTree matching, change groups and the
   **index-space contract** (`raw_change_indices`), NodeFacts, invariances, presentation.
-- **`intentdiff-vscode`** — the extension: native diff, CodeLens/Peek/decorations, review
+- **`intentumdiff-vscode`** — the extension: native diff, CodeLens/Peek/decorations, review
   panel, content classes, theme/privacy rules.
-- **`intentdiff-release-notes`** — intent "what/why", risk buckets, deterministic + BYOK-LLM
+- **`intentumdiff-release-notes`** — intent "what/why", risk buckets, deterministic + BYOK-LLM
   narrative.
-- **`intentdiff-perceptual-asset-diff`** — image/asset diff (engine artifacts + viewer).
-- **`intentdiff-architecture-audit`** — reason over the codebase and produce a findings
+- **`intentumdiff-perceptual-asset-diff`** — image/asset diff (engine artifacts + viewer).
+- **`intentumdiff-architecture-audit`** — reason over the codebase and produce a findings
   report (the flywheel's "find all the problems" step).
-- **`intentdiff-dev-loop`** — the flywheel: pick work → change the right layer → verify →
+- **`intentumdiff-dev-loop`** — the flywheel: pick work → change the right layer → verify →
   document → commit.
-- **`intentdiff-build`** — build any layer from source (Rust core, Wasm parsers, extension,
+- **`intentumdiff-build`** — build any layer from source (Rust core, Wasm parsers, extension,
   dbt plugin), the toolchain pins, and the rebuild-or-not decision.
-- **`intentdiff-testing`** — add and run tests across Python / Rust / the extension, the
+- **`intentumdiff-testing`** — add and run tests across Python / Rust / the extension, the
   conventions, and the pre-existing-vs-introduced technique.
-- **`intentdiff-parsers`** — the Wasm parser plugins + WIT contract; add or fix a language at
+- **`intentumdiff-parsers`** — the Wasm parser plugins + WIT contract; add or fix a language at
   the grammar/tree level.
-- **`intentdiff-language-profiles`** — the per-language diff tuning (keyed/review/scaffold node
+- **`intentumdiff-language-profiles`** — the per-language diff tuning (keyed/review/scaffold node
   types) above the parser; where most per-language quality bugs live.
-- **`intentdiff-guardrails`** — protected-config policy (`intentdiff.yaml`), keyed/resource
+- **`intentumdiff-guardrails`** — protected-config policy (`intentumdiff.yaml`), keyed/resource
   identity, important-vs-immutable severity.
 
 ## Doc index (read on demand)

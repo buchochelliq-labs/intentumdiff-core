@@ -1,19 +1,19 @@
 ---
-name: intentdiff-language-profiles
+name: intentumdiff-language-profiles
 description: >-
-  The per-language diff-tuning layer that sits above the parser — how IntentDiff decides, for
+  The per-language diff-tuning layer that sits above the parser — how IntentumDiff decides, for
   each language, what counts as a stable identity key, what surfaces as a meaningful change, and
   what is scaffold noise to suppress. Use this whenever a diff is wrong for a specific language:
   a real change reported as noise (or vice versa), parameter/label "leakage", a changed
   entity suppressed, an anonymous-move false positive, or a bad label on a statement/command.
-  It covers the profile families in `src/intentdiff/analysis/*_profiles.py` (statement, keyed,
+  It covers the profile families in `src/intentumdiff/analysis/*_profiles.py` (statement, keyed,
   resource, path, query, language/functional-entity) and how they feed matching + presentation
-  grouping. Most of the repo's per-language test failures live here. Read intentdiff-engine for
-  the diff/grouping pipeline and intentdiff-parsers for the grammar layer beneath this; new
+  grouping. Most of the repo's per-language test failures live here. Read intentumdiff-engine for
+  the diff/grouping pipeline and intentumdiff-parsers for the grammar layer beneath this; new
   authoritative logic ultimately belongs in the Rust core.
 ---
 
-# IntentDiff — Language / statement / keyed profiles
+# IntentumDiff — Language / statement / keyed profiles
 
 Above the raw parser (which produces a `SemanticNode` tree) sits a **per-language tuning layer**
 that tells the matcher and the presentation stage how to treat that language's node types. Get
@@ -22,7 +22,7 @@ This is where most per-language quality bugs — and most of the repo's failing 
 tests — actually live.
 
 > Boundary note: these profiles currently live in the Python `analysis/` test-oracle. New
-> authoritative behavior belongs in the Rust core (see `intentdiff-architecture`); use the
+> authoritative behavior belongs in the Rust core (see `intentumdiff-architecture`); use the
 > Python profiles to reproduce, characterize, and pin behavior, and to decide the correct Rust
 > fix. Changing a `.py` profile needs no maturin rebuild; the Rust equivalent does.
 
@@ -84,7 +84,7 @@ identity and meaningfulness match human intent. Add/adjust the fixture and re-ru
 ## Reproduce & verify
 
 ```python
-from intentdiff.differ import SemanticDiffer
+from intentumdiff.differ import SemanticDiffer
 diff = SemanticDiffer().diff_strings(old, new, "x.sh", language_hint="bash")
 for c in diff.changes: print(c.change_type, (c.new_node or c.old_node).node_type, c.description)
 for g in diff.change_groups: print(g.kind, g.metadata.get("reason"))

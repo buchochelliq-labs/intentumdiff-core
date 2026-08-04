@@ -301,7 +301,7 @@ fn validate_svn_ref(value: &str) -> Result<(), String> {
 }
 
 /// python `VcsBackend.resolve_root` — work-tree root for *repo_path* under *vcs*, dispatched per
-/// VCS. The C ABI (`intentdiff_call`) calls this directly.
+/// VCS. The C ABI (`intentumdiff_call`) calls this directly.
 pub(crate) fn vcs_backend_resolve_root_impl(vcs: &str, repo_path: &str) -> Result<String, String> {
     // Perforce: the client root is a field of `p4 info`, not raw stdout.
     if vcs == "p4" {

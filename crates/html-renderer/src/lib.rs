@@ -7,7 +7,7 @@ wit_bindgen::generate!({
     world: "renderer-plugin",
 });
 
-use crate::exports::intentdiff::plugin::renderer::Guest;
+use crate::exports::intentumdiff::plugin::renderer::Guest;
 
 const _PLUGIN_METADATA: &str = include_str!("../plugin_metadata.info");
 

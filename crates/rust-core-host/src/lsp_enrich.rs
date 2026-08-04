@@ -1,5 +1,5 @@
 //! LSP hover-target collection (#100 S2 slice 3) — the tree-aware half of
-//! `TypeEnricher` (`src/intentdiff/lsp/enricher.py`), ported walk-for-walk. The generic
+//! `TypeEnricher` (`src/intentumdiff/lsp/enricher.py`), ported walk-for-walk. The generic
 //! transport half (batch hover under a concurrency cap) lives in `crates/lsp-client`;
 //! this module only decides WHERE to hover and WHICH node id receives each result.
 //!

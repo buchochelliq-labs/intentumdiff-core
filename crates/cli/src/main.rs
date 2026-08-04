@@ -1,19 +1,19 @@
-//! The native IntentDiff CLI (`intentdiff`) — #B.4b. A thin clap front-end over the pure-Rust
-//! engine: it links `intentdiff-rust-core` (no pyo3) and drives the ungated engine `*_impl`
+//! The native IntentumDiff CLI (`intentumdiff`) — #B.4b. A thin clap front-end over the pure-Rust
+//! engine: it links `intentumdiff-rust-core` (no pyo3) and drives the ungated engine `*_impl`
 //! functions + the ungated cache/analytics stores in-process. This replaces the Python
-//! `intentdiff` console script; commands are added slice by slice (cache first).
+//! `intentumdiff` console script; commands are added slice by slice (cache first).
 
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use clap::{Parser, Subcommand};
-use intentdiff_rust_core::analytics_store::AnalyticsStore;
-use intentdiff_rust_core::cache_store::{SqliteStore, StoreError};
+use intentumdiff_rust_core::analytics_store::AnalyticsStore;
+use intentumdiff_rust_core::cache_store::{SqliteStore, StoreError};
 use serde_json::json;
 
 /// The version/build descriptor shown by `--version` (clap prepends the bin name) so this native
-/// binary is unmistakable from the Python `intentdiff` console script (which resolves first on
-/// PATH). `intentdiff engine` prints the same with the name.
+/// binary is unmistakable from the Python `intentumdiff` console script (which resolves first on
+/// PATH). `intentumdiff engine` prints the same with the name.
 const ENGINE_BANNER: &str = concat!(
     env!("CARGO_PKG_VERSION"),
     " — NATIVE build (pure-Rust core, no Python / pyo3)"
@@ -21,13 +21,13 @@ const ENGINE_BANNER: &str = concat!(
 
 #[derive(Parser)]
 #[command(
-    name = "intentdiff",
+    name = "intentumdiff",
     version = ENGINE_BANNER,
-    about = "IntentDiff — semantic diff engine · NATIVE clap CLI (pure-Rust core, no Python runtime)",
-    long_about = "IntentDiff — semantic diff engine.\n\nThis is the NATIVE clap CLI: it links the pure-Rust core directly (no pyo3, no \
-                  Python runtime). If a bare `intentdiff` invocation looks different, PATH is \
+    about = "IntentumDiff — semantic diff engine · NATIVE clap CLI (pure-Rust core, no Python runtime)",
+    long_about = "IntentumDiff — semantic diff engine.\n\nThis is the NATIVE clap CLI: it links the pure-Rust core directly (no pyo3, no \
+                  Python runtime). If a bare `intentumdiff` invocation looks different, PATH is \
                   resolving the Python console script instead — run this binary by its full path, \
-                  or check `intentdiff engine`."
+                  or check `intentumdiff engine`."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -37,7 +37,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Command {
     /// Print the running engine banner (native Rust core) — the Python CLI has no such command,
-    /// so `intentdiff engine` is the quickest way to tell the two apart.
+    /// so `intentumdiff engine` is the quickest way to tell the two apart.
     Engine,
     /// Diff two local files (semantic diff via the native engine).
     File {
@@ -98,13 +98,13 @@ enum Command {
         action: AssetAction,
     },
     /// Start the native live-server (keystroke diff/review over the JSON line protocol).
-    /// Extra args are forwarded to the `intentdiff-live-server` binary.
+    /// Extra args are forwarded to the `intentumdiff-live-server` binary.
     LiveServer {
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         args: Vec<String>,
     },
     /// Start the native LSP server for editor integration.
-    /// Extra args are forwarded to the `intentdiff-lsp-server` binary.
+    /// Extra args are forwarded to the `intentumdiff-lsp-server` binary.
     LspServer {
         #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
         args: Vec<String>,
@@ -123,7 +123,7 @@ enum Command {
         #[arg(long, default_value = "HEAD")]
         r#ref: String,
         /// Cache directory (the store lives at `<cache-path>/cache.db`).
-        #[arg(long, default_value = ".intentdiff-cache")]
+        #[arg(long, default_value = ".intentumdiff-cache")]
         cache_path: PathBuf,
         /// Re-index even if a symbol index already exists for this commit.
         #[arg(long)]
@@ -132,7 +132,7 @@ enum Command {
         #[arg(long)]
         wasm_dir: Option<PathBuf>,
     },
-    /// Check a git diff against the repo's protected-config guardrail policy (intentdiff.yaml).
+    /// Check a git diff against the repo's protected-config guardrail policy (intentumdiff.yaml).
     Guardrails {
         /// Repository path to check.
         #[arg(default_value = ".")]
@@ -155,7 +155,7 @@ enum Command {
 #[derive(clap::Args)]
 struct AssetOpts {
     /// Directory for generated asset-diff artifacts.
-    #[arg(long, default_value = ".intentdiff/assets", global = true)]
+    #[arg(long, default_value = ".intentumdiff/assets", global = true)]
     out: PathBuf,
     /// How to compare images with different dimensions.
     #[arg(long, default_value = "strict", value_parser = ["strict", "resize", "pad"])]
@@ -224,11 +224,11 @@ enum AssetAction {
     },
 }
 
-/// The shared `--db FILE` analytics-store path (default `.intentdiff/diagnostics.duckdb`, matching
+/// The shared `--db FILE` analytics-store path (default `.intentumdiff/diagnostics.duckdb`, matching
 /// the Python CLI). The store opens the provided DuckDB when available, else the SQLite fallback.
 #[derive(clap::Args)]
 struct DiagDb {
-    #[arg(long, default_value = ".intentdiff/diagnostics.duckdb", global = true)]
+    #[arg(long, default_value = ".intentumdiff/diagnostics.duckdb", global = true)]
     db: PathBuf,
 }
 
@@ -260,7 +260,7 @@ enum DiagAction {
 #[derive(clap::Args)]
 struct DiffOpts {
     /// Directory holding the bundled parser `.wasm` + `parser_manifest.json`. Defaults to
-    /// `$INTENTDIFF_WASM_DIR`, then a dir next to the binary, then the monorepo dev layout.
+    /// `$INTENTUMDIFF_WASM_DIR`, then a dir next to the binary, then the monorepo dev layout.
     #[arg(long)]
     wasm_dir: Option<PathBuf>,
     /// Emit the full SemanticDiff as JSON instead of a plain summary. (Rich output is parked —
@@ -273,8 +273,8 @@ struct DiffOpts {
 /// Python CLI's `Path(cache_path) / "cache.db"`).
 #[derive(clap::Args)]
 struct CacheDir {
-    /// Directory holding `cache.db` (default: `.intentdiff-cache`).
-    #[arg(long, default_value = ".intentdiff-cache", global = true)]
+    /// Directory holding `cache.db` (default: `.intentumdiff-cache`).
+    #[arg(long, default_value = ".intentumdiff-cache", global = true)]
     cache_path: PathBuf,
 }
 
@@ -422,8 +422,8 @@ fn run_cache(action: CacheAction) -> Result<(), String> {
     Ok(())
 }
 
-/// Resolve the bundled-parser directory: `--wasm-dir` > `$INTENTDIFF_WASM_DIR` > a `wasm/` dir next
-/// to the binary (the shipped shape) > the monorepo dev layout (`src/intentdiff/wasm`, found by
+/// Resolve the bundled-parser directory: `--wasm-dir` > `$INTENTUMDIFF_WASM_DIR` > a `wasm/` dir next
+/// to the binary (the shipped shape) > the monorepo dev layout (`src/intentumdiff/wasm`, found by
 /// walking the exe's ancestors). Every candidate is verified by `parser_manifest.json` — mirrors
 /// the native live-server's resolver so both binaries find parsers identically.
 fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
@@ -431,7 +431,7 @@ fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
     if let Some(dir) = explicit {
         return dir.to_string_lossy().into_owned();
     }
-    if let Ok(dir) = std::env::var("INTENTDIFF_WASM_DIR") {
+    if let Ok(dir) = std::env::var("INTENTUMDIFF_WASM_DIR") {
         if !dir.trim().is_empty() {
             return dir;
         }
@@ -443,7 +443,7 @@ fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
                 return shipped.to_string_lossy().into_owned();
             }
             for ancestor in exe_dir.ancestors() {
-                let dev = ancestor.join("src").join("intentdiff").join("wasm");
+                let dev = ancestor.join("src").join("intentumdiff").join("wasm");
                 if has_manifest(&dev) {
                     return dev.to_string_lossy().into_owned();
                 }
@@ -457,7 +457,7 @@ fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
 /// resolves the parser from *filename*'s extension against the bundled manifest).
 fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(), String> {
     let wasm_dir = resolve_wasm_dir(opts.wasm_dir.as_deref());
-    let raw = intentdiff_rust_core::live_server::live_diff_contents_impl(
+    let raw = intentumdiff_rust_core::live_server::live_diff_contents_impl(
         ".", filename, old, new, "{}", &wasm_dir,
     )?;
     let result: serde_json::Value = serde_json::from_str(&raw).map_err(|e| e.to_string())?;
@@ -543,7 +543,7 @@ fn run_git(
         }
     });
     let wasm_dir = resolve_wasm_dir(opts.wasm_dir.as_deref());
-    let raw = intentdiff_rust_core::live_server::live_handle_review_impl(
+    let raw = intentumdiff_rust_core::live_server::live_handle_review_impl(
         repo, &old_ref, new_ref, "{}", &wasm_dir,
     )?;
     let result: serde_json::Value = serde_json::from_str(&raw).map_err(|e| e.to_string())?;
@@ -642,7 +642,7 @@ fn run_diagnostics(action: DiagAction) -> Result<(), String> {
 /// `{ok:false, error}` envelope as an `Err`. Used for engine ops without a public `*_impl`.
 fn dispatch_result(name: &str, args: &[serde_json::Value]) -> Result<serde_json::Value, String> {
     let envelope: serde_json::Value =
-        serde_json::from_str(&intentdiff_rust_core::c_abi::dispatch(name, args))
+        serde_json::from_str(&intentumdiff_rust_core::c_abi::dispatch(name, args))
             .map_err(|e| e.to_string())?;
     if envelope.get("ok").and_then(|v| v.as_bool()) != Some(true) {
         return Err(envelope
@@ -692,12 +692,12 @@ fn run_assets(action: AssetAction) -> Result<(), String> {
 }
 
 /// Check a git diff against the repo's guardrail policy. The native review loads the
-/// `intentdiff.yaml` policy itself (walking from the repo root) and attaches violations; this
+/// `intentumdiff.yaml` policy itself (walking from the repo root) and attaches violations; this
 /// surfaces them and, under `--strict`, exits 2 for CI gating.
 fn run_guardrails(repo: &str, old: &str, new: &str, strict: bool, opts: &DiffOpts) -> Result<(), String> {
     let wasm_dir = resolve_wasm_dir(opts.wasm_dir.as_deref());
     let raw =
-        intentdiff_rust_core::live_server::live_handle_review_impl(repo, old, new, "{}", &wasm_dir)?;
+        intentumdiff_rust_core::live_server::live_handle_review_impl(repo, old, new, "{}", &wasm_dir)?;
     let result: serde_json::Value = serde_json::from_str(&raw).map_err(|e| e.to_string())?;
     if let Some(reason) = result.get("fallback").and_then(|v| v.as_str()) {
         return Err(format!("guardrail policy could not be evaluated natively: {reason}"));
@@ -735,7 +735,7 @@ fn run_guardrails(repo: &str, old: &str, new: &str, strict: bool, opts: &DiffOpt
 }
 
 /// List the bundled parser plugins from `parser_manifest.json`. (Third-party plugin management —
-/// add/install/remove — is pip-ecosystem I/O and stays in the Python CLI → intentdiff-python.)
+/// add/install/remove — is pip-ecosystem I/O and stays in the Python CLI → intentumdiff-python.)
 fn run_plugins(action: Option<PluginAction>) -> Result<(), String> {
     let (wasm_dir_opt, as_json) = match action {
         Some(PluginAction::List { wasm_dir, json }) => (wasm_dir, json),
@@ -846,7 +846,7 @@ fn run_index(
     let repo_root = git_out(repo, &["rev-parse", "--show-toplevel"])?.trim().to_owned();
     let commit_sha = git_out(repo, &["rev-parse", git_ref])?.trim().to_owned();
     let short = &commit_sha[..commit_sha.len().min(8)];
-    let index_key = intentdiff_rust_core::make_index_key(&repo_root, &commit_sha);
+    let index_key = intentumdiff_rust_core::make_index_key(&repo_root, &commit_sha);
 
     let db = cache_path.join("cache.db");
     let store = SqliteStore::open(db.to_string_lossy().as_ref(), 30, 500).map_err(store_error_message)?;
@@ -871,7 +871,7 @@ fn run_index(
             }
         };
         // Unresolvable extension or a parse failure -> skip the file (not the whole index).
-        match intentdiff_rust_core::parse_to_tree(file, &content, "{}", &wasm_dir) {
+        match intentumdiff_rust_core::parse_to_tree(file, &content, "{}", &wasm_dir) {
             Ok(parsed) => {
                 let v: serde_json::Value = serde_json::from_str(&parsed).map_err(|e| e.to_string())?;
                 entries.push(json!({
@@ -903,7 +903,7 @@ fn run_index(
 fn run(cli: Cli) -> Result<(), String> {
     match cli.command {
         Command::Engine => {
-            println!("intentdiff {ENGINE_BANNER}");
+            println!("intentumdiff {ENGINE_BANNER}");
             Ok(())
         }
         Command::File { old, new, opts } => {
@@ -932,16 +932,16 @@ fn run(cli: Cli) -> Result<(), String> {
         }
         Command::LiveServer { args } => {
             let bin = resolve_sibling_bin(
-                "intentdiff-live-server",
-                "INTENTDIFF_LIVE_SERVER_BIN",
+                "intentumdiff-live-server",
+                "INTENTUMDIFF_LIVE_SERVER_BIN",
                 "live-server",
             );
             run_server(&bin, &args)
         }
         Command::LspServer { args } => {
             let bin = resolve_sibling_bin(
-                "intentdiff-lsp-server",
-                "INTENTDIFF_LSP_SERVER_BIN",
+                "intentumdiff-lsp-server",
+                "INTENTUMDIFF_LSP_SERVER_BIN",
                 "lsp-server",
             );
             run_server(&bin, &args)

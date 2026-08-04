@@ -1114,16 +1114,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "intentdiff-cli"
+name = "intentumdiff-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
- "intentdiff-rust-core",
+ "intentumdiff-rust-core",
  "serde_json",
 ]
 
 [[package]]
-name = "intentdiff-rust-core"
+name = "intentumdiff-rust-core"
 version = "0.1.0"
 dependencies = [
  "anyhow",

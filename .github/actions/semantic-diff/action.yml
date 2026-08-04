@@ -1,4 +1,4 @@
-name: IntentDiff PR Guard
+name: IntentumDiff PR Guard
 description: Run semantic diff, protected config guardrails, SARIF, artifacts, and PR summaries.
 
 inputs:
@@ -11,7 +11,7 @@ inputs:
     required: false
     default: ""
   policy:
-    description: Optional intentdiff.yaml policy path for guardrail rules.
+    description: Optional intentumdiff.yaml policy path for guardrail rules.
     required: false
     default: ""
   strict:
@@ -53,7 +53,7 @@ inputs:
   report-dir:
     description: Directory where report artifacts are written.
     required: false
-    default: intentdiff-report
+    default: intentumdiff-report
 
 outputs:
   passed:
@@ -90,12 +90,12 @@ outputs:
     description: Path to summary.md.
     value: ${{ steps.run.outputs.summary-path }}
   html-path:
-    description: Path to intentdiff-review.html.
+    description: Path to intentumdiff-review.html.
     value: ${{ steps.run.outputs.html-path }}
 
-  intentdiff-version:
+  intentumdiff-version:
     description: >-
-      Version specifier for the intentdiff package the action installs (e.g. "0.1.0",
+      Version specifier for the intentumdiff package the action installs (e.g. "0.1.0",
       ">=0.1,<0.2"). Empty installs the latest release.
     required: false
     default: ""
@@ -111,14 +111,14 @@ runs:
     - name: Install uv
       uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
 
-    - name: Install IntentDiff
+    - name: Install IntentumDiff
       # The action installs the PUBLISHED wheel (self-contained: engine + parser
       # components). It must never install $GITHUB_WORKSPACE — in a consumer's
-      # workflow that is THEIR repository, not IntentDiff.
+      # workflow that is THEIR repository, not IntentumDiff.
       shell: bash
-      run: uv pip install --system "intentdiff${{ inputs.intentdiff-version && format('=={0}', inputs.intentdiff-version) || '' }}"
+      run: uv pip install --system "intentumdiff${{ inputs.intentumdiff-version && format('=={0}', inputs.intentumdiff-version) || '' }}"
 
-    - name: Run IntentDiff PR guard
+    - name: Run IntentumDiff PR guard
       id: run
       shell: bash
       run: |
@@ -128,26 +128,26 @@ runs:
         echo "exit-code=$code" >> "$GITHUB_OUTPUT"
         exit 0
       env:
-        INTENTDIFF_ACTION_BASE_REF: ${{ inputs.base-ref }}
-        INTENTDIFF_ACTION_HEAD_REF: ${{ inputs.head-ref }}
-        INTENTDIFF_ACTION_POLICY: ${{ inputs.policy }}
-        INTENTDIFF_ACTION_STRICT: ${{ inputs.strict }}
-        INTENTDIFF_ACTION_FUEL: ${{ inputs.fuel }}
-        INTENTDIFF_ACTION_PATHS: ${{ inputs.paths }}
-        INTENTDIFF_ACTION_COMMENT: ${{ inputs.comment }}
-        INTENTDIFF_ACTION_GITHUB_TOKEN: ${{ inputs.github-token || github.token }}
-        INTENTDIFF_ACTION_UPLOAD_SARIF: ${{ inputs.upload-sarif }}
-        INTENTDIFF_ACTION_UPLOAD_ARTIFACT: ${{ inputs.upload-artifact }}
-        INTENTDIFF_ACTION_ARTIFACT_NAME: ${{ inputs.artifact-name }}
-        INTENTDIFF_ACTION_FAIL_ON_SEMANTIC_CHANGE: ${{ inputs.fail-on-semantic-change }}
-        INTENTDIFF_ACTION_REPORT_DIR: ${{ inputs.report-dir }}
+        INTENTUMDIFF_ACTION_BASE_REF: ${{ inputs.base-ref }}
+        INTENTUMDIFF_ACTION_HEAD_REF: ${{ inputs.head-ref }}
+        INTENTUMDIFF_ACTION_POLICY: ${{ inputs.policy }}
+        INTENTUMDIFF_ACTION_STRICT: ${{ inputs.strict }}
+        INTENTUMDIFF_ACTION_FUEL: ${{ inputs.fuel }}
+        INTENTUMDIFF_ACTION_PATHS: ${{ inputs.paths }}
+        INTENTUMDIFF_ACTION_COMMENT: ${{ inputs.comment }}
+        INTENTUMDIFF_ACTION_GITHUB_TOKEN: ${{ inputs.github-token || github.token }}
+        INTENTUMDIFF_ACTION_UPLOAD_SARIF: ${{ inputs.upload-sarif }}
+        INTENTUMDIFF_ACTION_UPLOAD_ARTIFACT: ${{ inputs.upload-artifact }}
+        INTENTUMDIFF_ACTION_ARTIFACT_NAME: ${{ inputs.artifact-name }}
+        INTENTUMDIFF_ACTION_FAIL_ON_SEMANTIC_CHANGE: ${{ inputs.fail-on-semantic-change }}
+        INTENTUMDIFF_ACTION_REPORT_DIR: ${{ inputs.report-dir }}
 
     - name: Upload guardrail SARIF
       if: ${{ steps.run.outputs.upload-sarif == 'true' }}
       uses: github/codeql-action/upload-sarif@4f3212b61783c3c68e8309a0f18a699764811cda
       with:
         sarif_file: ${{ steps.run.outputs.sarif-path }}
-        category: intentdiff-guardrails
+        category: intentumdiff-guardrails
 
     - name: Upload semantic diff reports
       if: ${{ steps.run.outputs.upload-artifact == 'true' }}

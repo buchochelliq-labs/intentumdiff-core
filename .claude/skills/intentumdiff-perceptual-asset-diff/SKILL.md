@@ -1,19 +1,19 @@
 ---
-name: intentdiff-perceptual-asset-diff
+name: intentumdiff-perceptual-asset-diff
 description: >-
-  The IntentDiff perceptual image/asset diff — how binary assets are compared and visualised.
+  The IntentumDiff perceptual image/asset diff — how binary assets are compared and visualised.
   Use this whenever you work on image diffing, the asset viewer, or the interactive comparison
   UX (side-by-side / onion / swipe / difference, marching-ants lasso, blink comparator,
   interactive hotspots, channel histograms), or when extending perceptual diff to new media
   (video / audio / other binary). It covers the strict split — ALL pixel work happens in the
   Rust engine (`crates/rust-core-host/src/asset_diff.rs`), the webview only renders artifacts
   and draws SVG overlays — plus the data shapes and the performance gotcha (release build).
-  Read intentdiff-architecture and intentdiff-vscode first.
+  Read intentumdiff-architecture and intentumdiff-vscode first.
 ---
 
-# IntentDiff — Perceptual asset diff
+# IntentumDiff — Perceptual asset diff
 
-For images (and, on the roadmap, other binary media), IntentDiff shows a *perceptual*
+For images (and, on the roadmap, other binary media), IntentumDiff shows a *perceptual*
 comparison instead of a text diff. The hard architectural rule: **all decode/compute happens
 in the Rust engine; the webview does no image processing** — it renders engine-produced PNG
 artifacts and draws lightweight SVG/CSS overlays on top.
@@ -58,14 +58,14 @@ breaks overlay alignment. Wrap each `<img>` in an inline-block box sized to the 
 
 Image-extension files route to asset review instead of the text semantic diff
 (`isImageLikePath`, and the engine's `content_type` category). Clicking an image's Evidence
-must open the asset viewer, not an `intentdiff-base:` text diff.
+must open the asset viewer, not an `intentumdiff-base:` text diff.
 
 ## Performance
 
 The perceptual pipeline is compute-heavy (PNG deflate encoding + per-pixel passes). It is
 ~20–50× slower on a **debug** core — always build with `maturin develop --release` (a 1050×700
 image drops from ~6 s to ~0.3 s). The VS Code compare is also non-blocking: the preview shows
-instantly and upgrades when the engine result is ready. See `intentdiff-architecture` (build)
+instantly and upgrades when the engine result is ready. See `intentumdiff-architecture` (build)
 and `docs/PERCEPTUAL_ASSET_DIFF.md`.
 
 ## Roadmap: video / audio / other binary (`docs/BACKLOG.md`)
@@ -81,6 +81,6 @@ Extend the pattern by content-type routing, keeping all decode/compute in Rust a
 
 `test/reviewWebviewModel.test.ts` asserts the Swipe tab, blink controls, lasso `<svg>` with
 per-hotspot `data-asset-hotspot`, histogram `<svg>` bars, and that the panel script executes.
-For interaction, use the panel-render harness (see `intentdiff-vscode`) with a real image
+For interaction, use the panel-render harness (see `intentumdiff-vscode`) with a real image
 injected as every artifact, served for the Claude Preview MCP; resize narrow (~760px) to
 confirm no overflow regression. Rust side: `cargo test -p rust-core-host`.

@@ -1,7 +1,7 @@
 //! Runtime-loaded DuckDB C API — the "provided" analytics engine (#101, A2.2).
 //!
 //! `dlopen`s a configurable `libduckdb` (via `libloading`) and binds the stable DuckDB C
-//! API. Used only when a libduckdb is available (`$INTENTDIFF_DUCKDB_LIB` or a standard
+//! API. Used only when a libduckdb is available (`$INTENTUMDIFF_DUCKDB_LIB` or a standard
 //! name on the loader path); the analytics store falls back to SQLite otherwise, so the
 //! core never links or requires DuckDB. Parameterized via prepared statements (no SQL
 //! interpolation of values); `duckdb_value_varchar` results are freed with `duckdb_free`
@@ -314,10 +314,10 @@ impl DuckDbHandle {
 }
 
 /// Try to open a DuckDB database at *db_path* using a provided libduckdb. Tries
-/// `$INTENTDIFF_DUCKDB_LIB` first, then platform default names on the loader path.
+/// `$INTENTUMDIFF_DUCKDB_LIB` first, then platform default names on the loader path.
 pub fn try_open(db_path: &str) -> Option<DuckDbHandle> {
     let mut candidates: Vec<String> = Vec::new();
-    if let Ok(env_lib) = std::env::var("INTENTDIFF_DUCKDB_LIB") {
+    if let Ok(env_lib) = std::env::var("INTENTUMDIFF_DUCKDB_LIB") {
         if !env_lib.is_empty() {
             candidates.push(env_lib);
         }

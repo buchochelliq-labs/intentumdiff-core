@@ -36,7 +36,7 @@ specifics are in [failing-scenarios.md](failing-scenarios.md).
 
 | If you see (X) | Expect (Y) | enforced by |
 |---|---|---|
-| Any exposed `change_group` | its `raw_change_indices` are **valid final `changes` indices owned by node identity, or `[]`** (producers carry node ids or emit empty; consumers range-check) | `test_reindex_groups.py`; intentdiff-engine → index-space-contract |
+| Any exposed `change_group` | its `raw_change_indices` are **valid final `changes` indices owned by node identity, or `[]`** (producers carry node ids or emit empty; consumers range-check) | `test_reindex_groups.py`; intentumdiff-engine → index-space-contract |
 | A group that suppressed changes now absent from the final list (reorder-suppress, `generic_text_diff`) | `raw_change_indices=[]`, count preserved in `suppressed_count` | `test_reindex_groups.py` |
 
 ## Data / keyed languages
@@ -50,13 +50,13 @@ specifics are in [failing-scenarios.md](failing-scenarios.md).
 
 | If you see (X) | Expect (Y) | rule_id / group | enforced by |
 |---|---|---|---|
-| Generic-parser token churn (e.g. `.gitignore` edit) | replaced with stable line/char spans; `NOISE_SUPPRESSED` group owns `[]`; the real edit surfaces as a first-class **content** change (not "Behavior", not buried noise) | `presentation.generic_text_diff` | intentdiff-vscode content classes; `test_reindex_groups.py` |
+| Generic-parser token churn (e.g. `.gitignore` edit) | replaced with stable line/char spans; `NOISE_SUPPRESSED` group owns `[]`; the real edit surfaces as a first-class **content** change (not "Behavior", not buried noise) | `presentation.generic_text_diff` | intentumdiff-vscode content classes; `test_reindex_groups.py` |
 
 ## Guardrails
 
 | If you see (X) | Expect (Y) | enforced by |
 |---|---|---|
-| A protected semantic path changes in a keyed/resource config language | a `GuardrailViolation` (`rule_id`, severity `important`/`immutable`, `semantic_path`, old/new value), **key-based** not line-based | intentdiff-guardrails; guardrail tests |
+| A protected semantic path changes in a keyed/resource config language | a `GuardrailViolation` (`rule_id`, severity `important`/`immutable`, `semantic_path`, old/new value), **key-based** not line-based | intentumdiff-guardrails; guardrail tests |
 
 ## Hardening invariants (oracle-free, issue #45)
 

@@ -25,7 +25,7 @@ use crate::*;
     }
     #[test]
     fn same_id_named_relabel_promotes_to_refactoring_rename_not_move() {
-        // Oracle scenario (intentdiff-diff-expectations / issue #10): a clean function rename
+        // Oracle scenario (intentumdiff-diff-expectations / issue #10): a clean function rename
         // (greet -> welcome) — same structural id, same node type, same position, only the
         // label changed — is a REFACTORING rename, never a MOVE. The old behavior emitted
         // change_type "MOVE" here, surfacing the rename as MOVE + a redundant identifier
