@@ -122,7 +122,7 @@ timed out; a broad `find` got auto-backgrounded. Work around it:
 - **Prefer `Read` on a known direct path over discovery.** The repo map above + a file's imports
   usually tell you the exact path — read it directly instead of globbing to find it (e.g. the
   profile modules are named in `analysis/presentation.py`'s imports; the WIT is
-  `src/intentumdiff/plugins/wit/plugin.wit`).
+  `src/intentdiff/plugins/wit/plugin.wit`).
 - **Scope every `Grep`/`Glob` to a subdirectory**, not the repo root — e.g. search
   `plugins/vscode/src`, `src/intentumdiff/analysis`, or `crates/rust-core-host/src`, never `**` from
   the top.

@@ -2827,7 +2827,7 @@ impl WasiView for ParserHostState {
     }
 }
 
-impl parser_plugin::intentumdiff::plugin::host_utils::Host for ParserHostState {
+impl parser_plugin::intentdiff::plugin::host_utils::Host for ParserHostState {
     fn strip_trivia(&mut self, cst_json: String, trivia_types: Vec<String>) -> String {
         if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
             return json!({"error": "host-utils input exceeds byte limit"}).to_string();
@@ -5440,7 +5440,7 @@ fn run_python_wasm_process_pair_with_cached_component(
                 .map_err(|exc| format!("instantiate parser component: {exc}"))
         },
     )?;
-    let parser = bindings.intentumdiff_plugin_parser();
+    let parser = bindings.intentdiff_plugin_parser();
     let parser_mode = measure_optional(probe.as_deref_mut(), "rust_wasm_parser_mode", || {
         parser
             .call_get_parser_mode(&mut store)
@@ -5448,7 +5448,7 @@ fn run_python_wasm_process_pair_with_cached_component(
     })?;
     let full_parse = matches!(
         parser_mode,
-        parser_plugin::exports::intentumdiff::plugin::parser::ParserMode::FullParse
+        parser_plugin::exports::intentdiff::plugin::parser::ParserMode::FullParse
     );
     if !unlimited {
         measure_optional(
