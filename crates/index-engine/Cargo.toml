@@ -9,7 +9,7 @@ license     = "MIT"
 crate-type = ["cdylib"]
 
 [dependencies]
-intentumdiff-plugin-sdk = { git = "https://github.com/buchochelliq-labs/intentumdiff-plugin-sdk", tag = "v0.2.0-beta.1" }
+intentumdiff-plugin-sdk = { git = "https://github.com/buchochelliq-labs/intentumdiff-plugin-sdk", tag = "v0.0.2-beta.1" }
 index-engine-lib = { path = "../index-engine-lib" }
 wit-bindgen  = { version = "0.57", default-features = false, features = ["std", "macros"] }
 
