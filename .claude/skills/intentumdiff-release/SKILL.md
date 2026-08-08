@@ -63,6 +63,66 @@ impossible.
 3. Tag from `main`; the tag triggers publication
 4. Open the next RC branch immediately, so in-flight work has a base
 
+## MANDATORY: smoke-test the artefact before any publish
+
+**CI proves the code builds. It does not prove the artefact works.** These are different
+claims, and only the second one matters to a user.
+
+IntentumDiff **0.0.1 shipped broken and had to be pulled from PyPI and both extension
+marketplaces**, despite every check being green. Four defects, all invisible to CI and all
+obvious within thirty seconds of installing the published package:
+
+| Defect | Why CI could not see it |
+|---|---|
+| ~69 "Failed to catalog parser plugin" errors on every run | the distribution name was missing from the package's own first-party trust list; in a source checkout the distribution resolves differently and the check passes |
+| `python -m intentumdiff` failed | no `__main__.py`; nothing in CI invoked it |
+| Error message linked to an unregistered domain | no test followed a documented URL |
+| README's headline example raised `NameError` | it was a fragment; nothing ever ran it |
+
+None of these is exotic. All four were found by installing the wheel and typing what the
+README says to type.
+
+### The gate
+
+Before tagging **any** release:
+
+```bash
+python scripts/smoke_published_wheel.py --wheel dist/<built>.whl   # pre-publish
+python scripts/smoke_published_wheel.py                            # post-publish
+```
+
+It installs into a clean venv and checks what a user does in their first five minutes:
+install, import, console script, `python -m`, a real diff, **clean stderr**, and that
+**every URL in the output resolves**.
+
+Two of those deserve emphasis, because exit codes hide both:
+
+- **Clean stderr.** 0.0.1 returned correct results *and* printed 69 errors. Exit code 0.
+- **Live URLs.** A link in an error message is a promise; a dead one is worse than none.
+
+### Beyond the script
+
+The script is the floor, not the ceiling. Also required before a release:
+
+- **Run every example in every README verbatim.** Extract the code block, execute it,
+  compare against the documented output. A fragment that cannot run is a broken example.
+- **Follow every link in user-facing docs.** Dead links are how docs rot silently.
+- **Exercise the extension in a vanilla VS Code**, not a dev host — a clean profile, no
+  workspace settings, no other extensions.
+- **Confirm the claimed feature actually works.** Not "the code path is covered" — install
+  it and watch it do the thing.
+
+## Ship beta first
+
+The first release of anything user-facing is a **prerelease**: `0.0.2b1`, `0.0.2-beta.1`.
+
+A version without a beta marker is a claim of stability. Make that claim after the artefact
+has been installed and used, never before — the cost of retracting it is far higher than
+the cost of a `b1` suffix. PyPI cannot delete a version and a Marketplace listing cannot be
+overwritten, so "we can fix it in the next one" is not a recovery plan.
+
+Promote to a stable version only once the beta has been smoke-tested and actually used.
+
 ## Version rules
 
 - The tag **must** match the version in the manifest — `pyproject.toml`, `package.json`,
