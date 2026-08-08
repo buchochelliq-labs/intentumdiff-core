@@ -6040,6 +6040,7 @@ fn apply_decorator_facts(node: &mut SemanticNode) {
 
 mod node_facts;
 use node_facts::*;
+mod uast;
 
 /// Derive privacy-safe facts for a function or class entity from its pruned SemanticNode subtree.
 fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
@@ -6049,6 +6050,16 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         return derive_class_facts(node);
     }
     if !is_function_entity_type(node_type) {
+        // Non-function shapes (#179). Until now this returned None, so a changed YAML key,
+        // Terraform block, TOML table or INI setting carried NO facts and the explainer had
+        // only the change type and label to work from — across 69 parsers that is most of a
+        // real review. Ordered before the bail-out so function/class facts are unaffected.
+        if let Some(keyed) = derive_keyed_facts(node) {
+            return Some(keyed);
+        }
+        if let Some(resource) = derive_resource_facts(node) {
+            return Some(resource);
+        }
         return None;
     }
     let mut facts = serde_json::Map::new();
@@ -6219,6 +6230,19 @@ fn enrich_tree_facts(node: &mut SemanticNode) {
             node.facts = Some(derived);
         }
     }
+    // Cross-language structural facts (#9). This tree is PRUNED, so only what survives
+    // pruning is derivable: statement order does, operators do not. That yields
+    // early_exit_count for every language, while has_guard_clause stays absent rather than
+    // false — see uast.rs for why omitting beats claiming.
+    //
+    // Runs for function entities regardless of whether facts already exist, and merges, so
+    // the native Python path keeps its richer guard facts and everything else still gains
+    // the early-exit count. Idempotent: merge_facts never overwrites.
+    if is_function_entity_type(node.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts_pruned(node, "") {
+            merge_facts(&mut node.facts, structural);
+        }
+    }
     for child in &mut node.children {
         enrich_tree_facts(child);
     }
@@ -6299,6 +6323,18 @@ fn convert_cst_with_hash_memo(
         type_info: None,
         facts: python_node_facts_value(node),
     };
+    // UAST-derived structural facts (#9): guard clauses, early exits, negated conditions.
+    // These describe how a function is ARRANGED, which the flag-and-count vocabulary cannot
+    // reach — `if not x: return` and `if x: work()` are both has_conditional + a call.
+    //
+    // Merged rather than replacing: the existing facts are correct and widely relied upon;
+    // this adds what they could not say. Only fires for function-shaped nodes, so the cost
+    // stays proportional to the number of functions rather than the number of nodes.
+    if is_function_entity_type(semantic.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts(node, "python") {
+            merge_facts(&mut semantic.facts, structural);
+        }
+    }
     // Decorator semantics (#69 catalog C/D): decorators are on this WRAPPER, not the inner def
     // python_node_facts_value saw — fold their flags in here so the native Python path carries
     // them (the #70 enrich pass does the same for non-Python trees). Idempotent.
@@ -6306,6 +6342,22 @@ fn convert_cst_with_hash_memo(
         apply_decorator_facts(&mut semantic);
     }
     Some(semantic)
+}
+
+/// Fold derived facts into a node's existing bag.
+///
+/// Existing keys WIN: `python_node_facts_value` reads the full CST before pruning, so where
+/// the two disagree the earlier pass saw more. This can only add.
+fn merge_facts(target: &mut Option<Value>, extra: Value) {
+    let Value::Object(extra) = extra else { return };
+    match target {
+        Some(Value::Object(existing)) => {
+            for (k, v) in extra {
+                existing.entry(k).or_insert(v);
+            }
+        }
+        _ => *target = Some(Value::Object(extra)),
+    }
 }
 
 fn is_semantic(node_type: &str) -> bool {
@@ -7905,6 +7957,18 @@ fn draft_to_change(draft: &ChangeDraft<'_>) -> Value {
     }
     if let Some(text_diff) = &draft.text_diff {
         value.insert("text_diff".to_owned(), json!(text_diff));
+    }
+    // Fact delta (#178): what MOVED between the two fact bags, not what they hold. Derived
+    // here so every binding reads the same finding instead of each re-deriving it — this
+    // was extension-only TypeScript, invisible to the Go/Java skins. Omitted entirely when
+    // empty or when either side has no facts, so consumers can treat presence as meaning.
+    if let (Some(old_node), Some(new_node)) = (draft.old_node, draft.new_node) {
+        if let (Some(before), Some(after)) = (&old_node.facts, &new_node.facts) {
+            let delta = compute_fact_delta(before, after);
+            if !delta.is_empty() {
+                value.insert("fact_delta".to_owned(), Value::Array(delta));
+            }
+        }
     }
     Value::Object(value)
 }
