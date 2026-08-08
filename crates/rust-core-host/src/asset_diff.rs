@@ -64,7 +64,7 @@ struct ChangedRegion {
 
 /// Perceptual image diff (#… asset diff) — parse options, run the diff, return JSON. The C ABI
 /// (`intentumdiff_call`) calls this directly.
-pub(crate) fn diff_asset_image_impl(
+pub fn diff_asset_image_impl(
     before_path: &str,
     after_path: &str,
     output_dir: &str,
@@ -82,7 +82,7 @@ pub(crate) fn diff_asset_image_impl(
 }
 
 /// Perceptual image diff across a git range (base..head) — the changed-image variant.
-pub(crate) fn diff_git_assets_impl(
+pub fn diff_git_assets_impl(
     repo_path: &str,
     base: &str,
     head: &str,
@@ -99,6 +99,133 @@ pub(crate) fn diff_git_assets_impl(
         &options,
     )
     .map(|value| value.to_string())
+}
+
+/// Perceptual diff of ONE tracked image, `base` → `head` (empty `head` = working tree).
+///
+/// An editor knows a repo-relative path and a base ref; it does not have the *before* bytes,
+/// because they live in the object store rather than on disk. Materialising them is git work,
+/// so it happens here: a language binding that shelled out to `git show` and wrote a temp file
+/// would be doing backend work no other binding could share.
+///
+/// Added and deleted images have no counterpart to compare against and come back as an
+/// honest `skipped` record with the reason — never a fabricated comparison.
+pub fn diff_git_asset_path_impl(
+    repo_path: &str,
+    base: &str,
+    head: &str,
+    rel_path: &str,
+    output_dir: &str,
+    options_json: &str,
+) -> Result<String, String> {
+    let options: ImageDiffOptions =
+        serde_json::from_str(options_json).map_err(|exc| format!("options JSON: {exc}"))?;
+    diff_git_asset_path_value(
+        Path::new(repo_path),
+        base,
+        head,
+        rel_path,
+        Path::new(output_dir),
+        &options,
+    )
+    .map(|value| value.to_string())
+}
+
+fn diff_git_asset_path_value(
+    repo_path: &Path,
+    base: &str,
+    head: &str,
+    rel_path: &str,
+    output_dir: &Path,
+    options: &ImageDiffOptions,
+) -> Result<serde_json::Value, String> {
+    validate_git_rel_path(rel_path)?;
+    if !is_supported_image_path(rel_path) {
+        return Err(format!(
+            "not a perceptually comparable image path: {rel_path}"
+        ));
+    }
+    let root = git_root(repo_path)?;
+    // Callers address files relative to the directory they serve, which is not always the git
+    // root — a monorepo subfolder opened as a workspace is ordinary. git addresses blobs from
+    // the root, so translate once here rather than making every caller know the difference.
+    let git_rel = git_relative_path(repo_path, &root, rel_path);
+    let (effective_base, effective_head, _) = git_asset_diff_args(base, head)?;
+
+    // A `git show` failure means either "no such blob at that rev" (the file is new) or "no such
+    // rev" (the caller's base is wrong). Reporting the second as "added image" would send a user
+    // hunting through their assets for a mistake that is in their `ref` setting, so resolve the
+    // rev first and let a bad one surface as the error it is.
+    resolve_git_rev(&root, &effective_base)?;
+    let Ok(before_bytes) = git_show_bytes(&root, &effective_base, &git_rel) else {
+        return Ok(skipped_asset(
+            rel_path,
+            "A",
+            "Added image has no before asset for perceptual comparison.",
+        ));
+    };
+    let after_bytes = if head.is_empty() {
+        let working = root.join(&git_rel);
+        match fs::read(&working) {
+            Ok(bytes) => bytes,
+            Err(_) => {
+                return Ok(skipped_asset(
+                    rel_path,
+                    "D",
+                    "Deleted image has no after asset for perceptual comparison.",
+                ))
+            }
+        }
+    } else {
+        let rev = if head == ":staged" { "" } else { &effective_head };
+        match git_show_bytes(&root, rev, &git_rel) {
+            Ok(bytes) => bytes,
+            Err(_) => {
+                return Ok(skipped_asset(
+                    rel_path,
+                    "D",
+                    "Deleted image has no after asset for perceptual comparison.",
+                ))
+            }
+        }
+    };
+
+    fs::create_dir_all(output_dir)
+        .map_err(|exc| format!("create output directory {}: {exc}", output_dir.display()))?;
+    let temp_root = make_temp_dir("git-asset")?;
+    let staged = write_temp_asset(&temp_root, "before", rel_path, &before_bytes).and_then(
+        |before_path| {
+            write_temp_asset(&temp_root, "after", rel_path, &after_bytes)
+                .map(|after_path| (before_path, after_path))
+        },
+    );
+    // Content-addressed output directory. An editor renders these artifacts by file path, so a
+    // stable directory means an edited image re-renders behind the SAME url — and the viewer
+    // shows the previous comparison while reporting the new metrics. Keying the directory on
+    // what was actually compared makes each result its own resource, and makes a repeat of the
+    // same comparison land on the same one.
+    let leaf = format!(
+        "{}-{}",
+        asset_output_leaf(rel_path),
+        &content_digest(&before_bytes, &after_bytes)[..12],
+    );
+    let result = staged.and_then(|(before_path, after_path)| {
+        diff_asset_image_value(
+            &before_path,
+            &after_path,
+            &output_dir.join(&leaf),
+            &ImageDiffOptions {
+                file_path: Some(rel_path.to_string()),
+                dimension_policy: options.dimension_policy.clone(),
+                pixel_threshold: options.pixel_threshold,
+                region_min_area: options.region_min_area,
+                alpha_handling: options.alpha_handling.clone(),
+                max_decoded_pixels: options.max_decoded_pixels,
+            },
+        )
+    });
+    let _ = fs::remove_dir_all(&temp_root);
+    result
 }
 
 fn diff_git_assets_value(
@@ -983,6 +1110,40 @@ fn git_root(repo_path: &Path) -> Result<PathBuf, String> {
     Ok(PathBuf::from(root.trim()))
 }
 
+/// Re-express a *served-directory*-relative path as a *git-root*-relative one.
+///
+/// Falls back to the path as given when the served directory cannot be located under the root,
+/// which is the correct answer whenever they are the same directory.
+fn git_relative_path(repo_path: &Path, root: &Path, rel_path: &str) -> String {
+    let served = repo_path.canonicalize();
+    let root_abs = root.canonicalize();
+    let (Ok(served), Ok(root_abs)) = (served, root_abs) else {
+        return rel_path.to_string();
+    };
+    match served.strip_prefix(&root_abs) {
+        Ok(prefix) if !prefix.as_os_str().is_empty() => {
+            format!("{}/{rel_path}", prefix.to_string_lossy().replace('\\', "/"))
+        }
+        _ => rel_path.to_string(),
+    }
+}
+
+/// Resolve a rev so a bad `ref` is reported as a bad ref rather than mistaken for a new file.
+fn resolve_git_rev(root: &Path, rev: &str) -> Result<(), String> {
+    if rev.is_empty() {
+        return Ok(());
+    }
+    if rev.starts_with('-') {
+        return Err(format!("unsafe git rev: {rev}"));
+    }
+    run_git_bytes(
+        root,
+        &["rev-parse".to_string(), "--verify".to_string(), format!("{rev}^{{commit}}")],
+    )
+    .map(|_| ())
+    .map_err(|_| format!("git rev not found: {rev}"))
+}
+
 fn git_asset_diff_args(base: &str, head: &str) -> Result<(String, String, Vec<String>), String> {
     if head == ":staged" {
         return Ok((
@@ -1166,6 +1327,15 @@ fn write_temp_asset(
     let path = root.join(format!("{label}-{}{suffix}", &digest[..16]));
     fs::write(&path, data).map_err(|exc| format!("write temp asset {}: {exc}", path.display()))?;
     Ok(path)
+}
+
+/// Identity of a comparison: the two images that went into it.
+fn content_digest(before: &[u8], after: &[u8]) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update((before.len() as u64).to_le_bytes());
+    hasher.update(before);
+    hasher.update(after);
+    hex::encode(hasher.finalize())
 }
 
 fn asset_output_leaf(rel_path: &str) -> String {
@@ -1627,5 +1797,191 @@ mod tests {
             1
         );
         assert_eq!(staged["head"], ":staged");
+    }
+
+    /// The invariant the editor's per-file asset request depends on: given a repo-relative path
+    /// and a base ref, the engine materialises the before blob itself and returns a comparison
+    /// carrying every artifact the viewer renders. A binding supplies paths, never pixels or git.
+    #[test]
+    fn single_git_asset_path_compares_against_the_base_ref() {
+        if Command::new("git").arg("--version").output().is_err() {
+            return;
+        }
+        let dir = temp_dir("git-single");
+        run_test_git(&dir, &["init"]);
+        run_test_git(&dir, &["config", "user.email", "intentumdiff@example.test"]);
+        run_test_git(&dir, &["config", "user.name", "IntentumDiff Test"]);
+        fs::create_dir_all(dir.join("assets")).expect("assets dir");
+        let asset = dir.join("assets").join("card.png");
+        let pixels = noisy_pixels(32, 32);
+        write_png(&asset, &pixels, 32, 32);
+        run_test_git(&dir, &["add", "."]);
+        run_test_git(&dir, &["commit", "-m", "base"]);
+
+        let mut changed = pixels.clone();
+        for y in 8..20usize {
+            for x in 6..18usize {
+                changed[y * 32 + x] = [255, 0, 255, 255];
+            }
+        }
+        write_png(&asset, &changed, 32, 32);
+
+        let result = diff_git_asset_path_value(
+            &dir,
+            "HEAD",
+            "",
+            "assets/card.png",
+            &dir.join("out"),
+            &ImageDiffOptions::default(),
+        )
+        .expect("single-path git asset diff");
+
+        assert_eq!(result["status"], "compared");
+        assert_eq!(result["file_path"], "assets/card.png");
+        // Every artifact the perceptual viewer can render must be present and on disk — the
+        // panel showed "perceptual diff pending" for as long as nothing asked for these.
+        for layer in [
+            "before",
+            "after",
+            "diff",
+            "heatmap",
+            "mask",
+            "overlay",
+            "contact_sheet",
+        ] {
+            let path = result["artifacts"][layer]
+                .as_str()
+                .unwrap_or_else(|| panic!("artifact {layer} missing from the manifest"));
+            assert!(
+                Path::new(path).is_file(),
+                "artifact {layer} was announced at {path} but not written"
+            );
+        }
+        assert!(result["changed_pixel_percentage"].as_f64().unwrap_or(0.0) > 0.0);
+        assert!(!result["hotspots"].as_array().expect("hotspots").is_empty());
+        assert!(result["comparison_dimensions"]["width"] == 32);
+
+        // Serving a subdirectory of the repository is ordinary (a monorepo folder opened as a
+        // workspace). The path arrives relative to what was served; git wants it from the root.
+        let nested = diff_git_asset_path_value(
+            &dir.join("assets"),
+            "HEAD",
+            "",
+            "card.png",
+            &dir.join("out-nested"),
+            &ImageDiffOptions::default(),
+        )
+        .expect("a served subdirectory still resolves the blob");
+        assert_eq!(nested["status"], "compared");
+        assert_eq!(nested["file_path"], "card.png");
+
+        // Editing the image again must not reuse the previous artifact paths: an editor renders
+        // these by path, so a reused path shows the OLD comparison beside the new metrics.
+        let first_diff = result["artifacts"]["diff"].as_str().expect("diff artifact");
+        let mut again = changed.clone();
+        for x in 24..30usize {
+            again[x] = [0, 255, 0, 255];
+        }
+        write_png(&asset, &again, 32, 32);
+        let second = diff_git_asset_path_value(
+            &dir,
+            "HEAD",
+            "",
+            "assets/card.png",
+            &dir.join("out"),
+            &ImageDiffOptions::default(),
+        )
+        .expect("second comparison");
+        let second_diff = second["artifacts"]["diff"].as_str().expect("diff artifact");
+        assert_ne!(first_diff, second_diff, "a new comparison needs a new artifact path");
+        assert!(Path::new(first_diff).is_file(), "the earlier artifacts survive");
+        assert!(Path::new(second_diff).is_file());
+
+        // The same comparison run twice is the same result, and reuses its directory.
+        let repeat = diff_git_asset_path_value(
+            &dir,
+            "HEAD",
+            "",
+            "assets/card.png",
+            &dir.join("out"),
+            &ImageDiffOptions::default(),
+        )
+        .expect("repeat comparison");
+        assert_eq!(repeat["artifacts"]["diff"].as_str(), Some(second_diff));
+    }
+
+    /// Added and deleted images have nothing to compare against. The engine says so, with a
+    /// reason — the alternative (an empty "comparison") is the fabrication this replaced.
+    #[test]
+    fn single_git_asset_path_skips_added_and_deleted_images() {
+        if Command::new("git").arg("--version").output().is_err() {
+            return;
+        }
+        let dir = temp_dir("git-single-lifecycle");
+        run_test_git(&dir, &["init"]);
+        run_test_git(&dir, &["config", "user.email", "intentumdiff@example.test"]);
+        run_test_git(&dir, &["config", "user.name", "IntentumDiff Test"]);
+        let deleted = dir.join("deleted.png");
+        write_png(&deleted, &[[0, 0, 0, 255]; 4], 2, 2);
+        run_test_git(&dir, &["add", "."]);
+        run_test_git(&dir, &["commit", "-m", "base"]);
+        fs::remove_file(&deleted).expect("delete image");
+        write_png(&dir.join("added.png"), &[[0, 255, 0, 255]; 4], 2, 2);
+
+        let options = ImageDiffOptions::default();
+        let added = diff_git_asset_path_value(&dir, "HEAD", "", "added.png", &dir.join("a"), &options)
+            .expect("added asset");
+        assert_eq!(added["status"], "skipped");
+        assert_eq!(added["change_type"], "A");
+        assert!(added["reason"].as_str().unwrap_or_default().contains("no before"));
+
+        let removed =
+            diff_git_asset_path_value(&dir, "HEAD", "", "deleted.png", &dir.join("d"), &options)
+                .expect("deleted asset");
+        assert_eq!(removed["status"], "skipped");
+        assert_eq!(removed["change_type"], "D");
+    }
+
+    /// A base ref that does not exist is a configuration mistake, and must not be reported as
+    /// "this image is new" — that sends the reader looking at the wrong thing entirely.
+    #[test]
+    fn single_git_asset_path_reports_a_bad_ref_as_a_bad_ref() {
+        if Command::new("git").arg("--version").output().is_err() {
+            return;
+        }
+        let dir = temp_dir("git-single-badref");
+        run_test_git(&dir, &["init"]);
+        run_test_git(&dir, &["config", "user.email", "intentumdiff@example.test"]);
+        run_test_git(&dir, &["config", "user.name", "IntentumDiff Test"]);
+        write_png(&dir.join("card.png"), &[[0, 0, 0, 255]; 4], 2, 2);
+        run_test_git(&dir, &["add", "."]);
+        run_test_git(&dir, &["commit", "-m", "base"]);
+
+        let err = diff_git_asset_path_value(
+            &dir,
+            "no-such-ref",
+            "",
+            "card.png",
+            &dir.join("out"),
+            &ImageDiffOptions::default(),
+        )
+        .expect_err("an unresolvable base ref should not masquerade as an added image");
+        assert!(err.contains("git rev not found"), "unexpected error: {err}");
+    }
+
+    /// Path containment lives in the protocol layer, but the engine refuses traversal too:
+    /// a defence that exists in exactly one place is one refactor away from not existing.
+    #[test]
+    fn single_git_asset_path_refuses_traversal_and_non_images() {
+        let dir = temp_dir("git-single-guard");
+        let options = ImageDiffOptions::default();
+        let escape =
+            diff_git_asset_path_value(&dir, "HEAD", "", "../secret.png", &dir.join("o"), &options)
+                .expect_err("traversal must be refused");
+        assert!(escape.contains("unsafe git asset path"));
+        let wrong_kind =
+            diff_git_asset_path_value(&dir, "HEAD", "", "src/main.rs", &dir.join("o"), &options)
+                .expect_err("a source file is not a perceptual asset");
+        assert!(wrong_kind.contains("not a perceptually comparable image path"));
     }
 }
