@@ -63,6 +63,60 @@ impossible.
 3. Tag from `main`; the tag triggers publication
 4. Open the next RC branch immediately, so in-flight work has a base
 
+## Definition of ready to release
+
+**Nothing is published until every box below is ticked.** Not "mostly", not "the important
+ones" — all of them. This list exists because 0.0.1 was published with green CI and had to
+be pulled from three registries within a day.
+
+If a box cannot be ticked, the release does not happen. The correct response to schedule
+pressure is a later release, never a lower bar.
+
+### Artefact
+
+- [ ] `smoke_published_wheel.py` passes against a **locally built** artefact
+- [ ] Every check inside it passes — install, import, console script, `python -m`, a real
+      diff, **clean stderr**, **all URLs resolve**
+- [ ] The extension VSIX installs into a **clean VS Code profile** and works there
+- [ ] Extension host log is clean — no errors, no warnings about missing files
+- [ ] Tested on every platform the artefact claims to support
+
+### Docs
+
+- [ ] Documentation site is **live**, not planned
+- [ ] **Every** example in **every** README has been extracted and run verbatim, and its
+      real output matches what the doc claims
+- [ ] **Every** link in user-facing docs resolves — READMEs, error messages, `--help`,
+      the Marketplace listing
+- [ ] No reference to a page, domain or command that does not exist
+- [ ] Demo media shows the CURRENT build, not an older UI
+
+### Correctness
+
+- [ ] Full test suite green in every affected repo, run in **that** repo
+- [ ] The headline claim demonstrably works on a real repository — not a fixture
+- [ ] Known limitations are written down and honest. A missing capability documented is
+      fine; one implied to work is not
+- [ ] No regression against the previous release on a real-world diff
+
+### Release hygiene
+
+- [ ] Version is a **prerelease** unless the artefact has been used in anger
+- [ ] Tag matches the manifest exactly
+- [ ] CHANGELOG says what changed, in the user's terms
+- [ ] Prior broken versions yanked or unpublished
+- [ ] A rollback plan exists — and note that for PyPI and the marketplaces, "rollback"
+      means yank plus a new version, never delete
+
+### The rule behind the list
+
+**Green CI is not evidence a product works.** It is evidence the code compiles and the
+tests we thought to write pass. Every 0.0.1 defect passed CI and was obvious thirty seconds
+after installing the package.
+
+Before publishing, someone must install the artefact and use it the way the README says to.
+Every time. No exceptions, however small the change looks.
+
 ## MANDATORY: smoke-test the artefact before any publish
 
 **CI proves the code builds. It does not prove the artefact works.** These are different
