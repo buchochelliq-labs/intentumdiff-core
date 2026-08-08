@@ -42,7 +42,7 @@ pub fn live_limits_impl() -> String {
 /// python `LiveServer._capabilities` (pure Rust).
 pub fn live_capabilities_impl() -> String {
     json!({
-        "operations": ["hello", "diff", "review", "cancel"],
+        "operations": ["hello", "diff", "review", "cancel", "asset_diff"],
         "legacy_diff": true,
         "stream": true,
         "per_request_ref": true,
@@ -826,6 +826,269 @@ pub fn live_handle_review_impl(
     Ok(json!({ "commit_diff": commit_diff }).to_string())
 }
 
+// ---------------------------------------------------------------------------
+// Perceptual asset diff (op "asset_diff")
+// ---------------------------------------------------------------------------
+
+const ASSET_OP: &str = "asset_diff";
+/// Where engine-written artifacts land: inside the repo's cache, never the work tree.
+const ASSET_CACHE_DIR: &str = ".intentumdiff-cache";
+
+/// python `LiveServer._asset_diff_request` — the perceptual image op, served for BOTH servers
+/// from one implementation.
+///
+/// The engine has produced overlay/heatmap/mask/diff/contact-sheet artifacts all along and
+/// nothing ever asked for them; this is the protocol method that does. Only *marshalling*
+/// lives here — paths in, the engine's artifact manifest out.
+///
+/// Two request shapes, both engine-served:
+///
+/// * `{"path": …, "ref"?: …, "head"?: …}` — one tracked image against a git ref. This is what a
+///   reviewing editor has: a repo-relative path and a base. The *before* bytes are in the object
+///   store, and materialising them is git work, so the engine does it.
+/// * `{"before_path": …, "after_path": …}` — two files that already exist on disk.
+///
+/// Paths resolve against the served repo and are refused if they escape it: a protocol method
+/// that accepts file paths must not become an arbitrary-file reader, and the output directory
+/// must not be able to write outside the cache.
+///
+/// Never fails: every problem comes back as a protocol error response, because one bad request
+/// must not take the connection down with it.
+pub fn live_handle_asset_diff_impl(
+    repo_path: &str,
+    default_ref: &str,
+    request_json: &str,
+    seq: i64,
+) -> String {
+    asset_diff_response(repo_path, default_ref, request_json, seq).to_string()
+}
+
+fn asset_diff_response(repo_path: &str, default_ref: &str, request_json: &str, seq: i64) -> Value {
+    let request: Value = match serde_json::from_str(request_json) {
+        Ok(value) => value,
+        Err(_) => return error_obj(seq, "invalid_json", "request is not valid JSON", ASSET_OP),
+    };
+    // `options` absent or null is an empty option set; anything else goes to the engine as-is so
+    // a malformed one is reported by the parser that owns the shape, not guessed at here.
+    let options_json = match request.get("options") {
+        Some(value) if !value.is_null() => value.to_string(),
+        _ => "{}".to_owned(),
+    };
+    let root = resolve_for_containment(std::path::Path::new(repo_path));
+    // Belt and braces: an empty root would make every containment test below trivially pass,
+    // which is the one failure mode a path guard must never have.
+    if root.as_os_str().is_empty() {
+        return error_obj(
+            seq,
+            "invalid_request",
+            "no repository is being served",
+            ASSET_OP,
+        );
+    }
+
+    let rel_path = request.get("path").and_then(Value::as_str).unwrap_or("");
+    if !rel_path.is_empty() {
+        // The path is repo-relative by construction and validated in the core, and is checked
+        // here too: containment for this op must not depend on a single implementation
+        // continuing to care.
+        let normalized = rel_path.replace('\\', "/").trim_start_matches('/').to_owned();
+        let candidate = resolve_for_containment(&root.join(&normalized));
+        if candidate == root || !candidate.starts_with(&root) {
+            return error_obj(
+                seq,
+                "invalid_request",
+                "path escapes the served repository",
+                ASSET_OP,
+            );
+        }
+        let out_dir = match prepare_asset_output_dir(repo_path) {
+            Ok(dir) => dir,
+            Err(message) => return error_obj(seq, "internal", &message, ASSET_OP),
+        };
+        let request_ref = request.get("ref").and_then(Value::as_str).unwrap_or("");
+        let base = match (request_ref.is_empty(), default_ref.is_empty()) {
+            (false, _) => request_ref,
+            (true, false) => default_ref,
+            (true, true) => "HEAD",
+        };
+        let head = request.get("head").and_then(Value::as_str).unwrap_or("");
+        return asset_manifest_response(
+            crate::asset_diff::diff_git_asset_path_impl(
+                repo_path,
+                base,
+                head,
+                &normalized,
+                &out_dir.to_string_lossy(),
+                &options_json,
+            ),
+            seq,
+        );
+    }
+
+    let before = request
+        .get("before_path")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    let after = request
+        .get("after_path")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    if before.is_empty() || after.is_empty() {
+        return error_obj(
+            seq,
+            "invalid_request",
+            "asset_diff needs path, or before_path and after_path",
+            ASSET_OP,
+        );
+    }
+    let mut resolved = Vec::with_capacity(2);
+    for (label, value) in [("before_path", before), ("after_path", after)] {
+        let raw = std::path::Path::new(value);
+        let joined = if raw.is_absolute() {
+            raw.to_path_buf()
+        } else {
+            root.join(raw)
+        };
+        let candidate = resolve_for_containment(&joined);
+        if !candidate.starts_with(&root) {
+            return error_obj(
+                seq,
+                "invalid_request",
+                &format!("{label} escapes the served repository"),
+                ASSET_OP,
+            );
+        }
+        resolved.push(candidate);
+    }
+    let out_dir = match prepare_asset_output_dir(repo_path) {
+        Ok(dir) => dir,
+        Err(message) => return error_obj(seq, "internal", &message, ASSET_OP),
+    };
+    asset_manifest_response(
+        crate::asset_diff::diff_asset_image_impl(
+            &resolved[0].to_string_lossy(),
+            &resolved[1].to_string_lossy(),
+            &out_dir.to_string_lossy(),
+            &options_json,
+        ),
+        seq,
+    )
+}
+
+/// The engine's manifest, shaped into a protocol response. `done` is always true: this op has
+/// no streaming form, so the client is waiting for exactly one answer.
+fn asset_manifest_response(engine_result: Result<String, String>, seq: i64) -> Value {
+    let raw = match engine_result {
+        Ok(raw) => raw,
+        Err(exc) => {
+            return error_obj(
+                seq,
+                "internal",
+                &format!("asset diff failed: {exc}"),
+                ASSET_OP,
+            )
+        }
+    };
+    match serde_json::from_str::<Value>(&raw) {
+        Ok(result) => json!({
+            "op": ASSET_OP,
+            "seq": seq,
+            "ok": true,
+            "done": true,
+            "result": result,
+        }),
+        Err(exc) => error_obj(
+            seq,
+            "internal",
+            &format!("asset diff returned unreadable JSON: {exc}"),
+            ASSET_OP,
+        ),
+    }
+}
+
+/// Create `<repo>/.intentumdiff-cache/assets`, and make the cache ignore itself on the way.
+fn prepare_asset_output_dir(repo_path: &str) -> Result<std::path::PathBuf, String> {
+    let cache_dir = std::path::Path::new(repo_path).join(ASSET_CACHE_DIR);
+    let out_dir = cache_dir.join("assets");
+    std::fs::create_dir_all(&out_dir)
+        .map_err(|exc| format!("create artifact directory {}: {exc}", out_dir.display()))?;
+    ensure_cache_is_self_ignoring(&cache_dir);
+    Ok(out_dir)
+}
+
+/// Write `.gitignore` containing `*` inside our own cache directory.
+///
+/// A tool that writes generated images into someone's repository and then relies on them
+/// remembering to ignore it will show up as untracked noise in their next `git status`, and
+/// eventually in a commit. Making the directory ignore ITSELF means a user never has to know it
+/// exists — the same trick `.pytest_cache` and Cargo's `target/` use.
+///
+/// Written once and left alone; a user who deliberately edits it keeps their version. A failure
+/// is swallowed on purpose: a read-only checkout must not break diffing.
+fn ensure_cache_is_self_ignoring(cache_dir: &std::path::Path) {
+    let marker = cache_dir.join(".gitignore");
+    if marker.exists() {
+        return;
+    }
+    let _ = std::fs::write(
+        &marker,
+        "# Created by IntentumDiff. Generated artifacts only - safe to delete.\n*\n",
+    );
+}
+
+/// Fold `.` and `..` away without touching the filesystem.
+fn normalize_lexically(path: &std::path::Path) -> std::path::PathBuf {
+    let mut out = std::path::PathBuf::new();
+    for component in path.components() {
+        match component {
+            std::path::Component::CurDir => {}
+            std::path::Component::ParentDir => {
+                out.pop();
+            }
+            other => out.push(other.as_os_str()),
+        }
+    }
+    out
+}
+
+/// Resolve *path* to the spelling `fs::canonicalize` would give, WITHOUT requiring the leaf to
+/// exist.
+///
+/// Containment has to hold for files that are not there — a deleted image is precisely a case
+/// this op must still answer — and `canonicalize` refuses a missing path. Canonicalising the
+/// nearest ancestor that does exist and re-attaching the remainder keeps both sides of the
+/// comparison in one spelling: on Windows the canonical form carries a `\\?\` prefix an
+/// ordinary `C:\…` path does not, and comparing across the two would refuse a legitimate
+/// in-repo path for a reason that has nothing to do with containment.
+fn resolve_for_containment(path: &std::path::Path) -> std::path::PathBuf {
+    // The ordinary case, and the only one that also follows symlinks: a path that exists.
+    // Doing this FIRST matters for a relative path — the binary's repo argument defaults to
+    // "." — which folds to nothing lexically and would leave containment comparing against an
+    // empty root, i.e. not comparing at all.
+    if let Ok(real) = std::fs::canonicalize(path) {
+        return real;
+    }
+    let lexical = normalize_lexically(path);
+    let mut suffix: Vec<std::ffi::OsString> = Vec::new();
+    let mut probe = lexical.as_path();
+    loop {
+        if let Ok(real) = std::fs::canonicalize(probe) {
+            let mut out = real;
+            for part in suffix.iter().rev() {
+                out.push(part);
+            }
+            return out;
+        }
+        match (probe.file_name(), probe.parent()) {
+            (Some(name), Some(parent)) => {
+                suffix.push(name.to_os_string());
+                probe = parent;
+            }
+            _ => return lexical,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -914,6 +1177,301 @@ mod tests {
         // absent -> 0
         let v = parse(r#"{"path":"a.py","content":"x"}"#);
         assert_eq!(v["parsed"]["seq"], 0);
+    }
+
+    // ── asset_diff (intentumdiff-vscode#25) ────────────────────────────────────────────────
+    // The engine's own pins are `single_git_asset_path_*` in asset_diff.rs; these pin the
+    // PROTOCOL layer above them — the piece the native live-server was missing entirely, where
+    // an unknown op made the review panel report "Perceptual comparison unavailable".
+
+    fn asset_temp_dir(name: &str) -> std::path::PathBuf {
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("system clock before epoch")
+            .as_nanos();
+        let dir = std::env::temp_dir().join(format!("intentumdiff-live-asset-{name}-{nonce}"));
+        std::fs::create_dir_all(&dir).expect("create temp dir");
+        dir
+    }
+
+    fn asset_git(repo: &std::path::Path, args: &[&str]) {
+        let status = std::process::Command::new("git")
+            .arg("-C")
+            .arg(repo)
+            .args(args)
+            .status();
+        match status {
+            Ok(status) if status.success() => {}
+            Ok(status) => panic!("git {} failed with {status}", args.join(" ")),
+            Err(_) => {}
+        }
+    }
+
+    fn have_git() -> bool {
+        std::process::Command::new("git")
+            .arg("--version")
+            .output()
+            .is_ok()
+    }
+
+    /// A deterministic image; `shift` moves a block so two calls differ perceptibly.
+    fn write_asset_png(path: &std::path::Path, shift: u8) {
+        let mut image = image::RgbaImage::new(32, 32);
+        for y in 0..32u32 {
+            for x in 0..32u32 {
+                let base: u8 = if (x / 4 + y / 4) % 2 == 0 { 30 } else { 200 };
+                let lit = (8..22).contains(&y) && (6..20).contains(&x);
+                let value = if lit { base.max(120).saturating_add(shift) } else { base };
+                image.put_pixel(x, y, image::Rgba([value, 60, 140, 255]));
+            }
+        }
+        image.save(path).expect("save test png");
+    }
+
+    /// A repo whose committed image differs from its working-tree copy.
+    fn asset_repo(name: &str) -> std::path::PathBuf {
+        let repo = asset_temp_dir(name);
+        asset_git(&repo, &["init"]);
+        asset_git(&repo, &["config", "user.email", "intentumdiff@example.test"]);
+        asset_git(&repo, &["config", "user.name", "IntentumDiff Test"]);
+        std::fs::create_dir_all(repo.join("assets")).expect("assets dir");
+        write_asset_png(&repo.join("assets").join("card.png"), 0);
+        asset_git(&repo, &["add", "."]);
+        asset_git(&repo, &["commit", "-m", "base"]);
+        write_asset_png(&repo.join("assets").join("card.png"), 90);
+        repo
+    }
+
+    fn asset_diff(repo: &std::path::Path, default_ref: &str, request: Value) -> Value {
+        serde_json::from_str(&live_handle_asset_diff_impl(
+            &repo.to_string_lossy(),
+            default_ref,
+            &request.to_string(),
+            7,
+        ))
+        .expect("the handler always answers with JSON")
+    }
+
+    /// The whole point of the op: a repo-relative path and a ref go in, and the ENGINE's artifact
+    /// manifest comes back — not a summary assembled on the protocol side of the boundary.
+    #[test]
+    fn asset_diff_returns_the_engines_manifest() {
+        if !have_git() {
+            return;
+        }
+        let repo = asset_repo("manifest");
+        let response = asset_diff(&repo, "HEAD", json!({ "path": "assets/card.png" }));
+
+        assert_eq!(response["op"], "asset_diff");
+        assert_eq!(response["seq"], 7);
+        assert_eq!(response["ok"], true);
+        assert_eq!(response["done"], true);
+        let result = &response["result"];
+        assert_eq!(result["status"], "compared");
+        assert_eq!(result["file_path"], "assets/card.png");
+        for layer in [
+            "before",
+            "after",
+            "diff",
+            "heatmap",
+            "mask",
+            "overlay",
+            "contact_sheet",
+        ] {
+            let path = result["artifacts"][layer]
+                .as_str()
+                .unwrap_or_else(|| panic!("artifact {layer} missing from the manifest"));
+            assert!(
+                std::path::Path::new(path).is_file(),
+                "artifact {layer} was announced at {path} but not written"
+            );
+        }
+        assert!(result["changed_pixel_percentage"].as_f64().unwrap_or(0.0) > 0.0);
+    }
+
+    /// Artifacts land in the cache, and the cache ignores ITSELF — a tool that writes generated
+    /// images into someone's repository must not leave them staring at untracked noise.
+    #[test]
+    fn asset_diff_artifacts_land_in_a_self_ignoring_cache() {
+        if !have_git() {
+            return;
+        }
+        let repo = asset_repo("cache");
+        let response = asset_diff(&repo, "HEAD", json!({ "path": "assets/card.png" }));
+
+        let cache = repo.join(ASSET_CACHE_DIR);
+        let artifact = std::path::Path::new(
+            response["result"]["artifacts"]["heatmap"]
+                .as_str()
+                .expect("heatmap artifact"),
+        )
+        .to_path_buf();
+        assert!(
+            artifact.starts_with(&cache),
+            "artifacts must not land in the work tree: {}",
+            artifact.display()
+        );
+        let ignore = std::fs::read_to_string(cache.join(".gitignore")).expect("cache .gitignore");
+        assert!(ignore.contains('*'), "cache must ignore itself: {ignore}");
+
+        // Written once and left alone: a user who edits it keeps their version.
+        std::fs::write(cache.join(".gitignore"), "mine\n").expect("rewrite");
+        asset_diff(&repo, "HEAD", json!({ "path": "assets/card.png" }));
+        assert_eq!(
+            std::fs::read_to_string(cache.join(".gitignore")).expect("cache .gitignore"),
+            "mine\n"
+        );
+    }
+
+    /// A protocol method that takes file paths must not become an arbitrary-file reader.
+    #[test]
+    fn asset_diff_refuses_paths_that_escape_the_served_repo() {
+        let repo = asset_temp_dir("escape");
+        std::fs::create_dir_all(repo.join("assets")).expect("assets dir");
+        // A leading slash is stripped, not treated as an absolute path — "/etc/passwd" addresses
+        // `<repo>/etc/passwd`, which is contained. What must never resolve is a path that CLIMBS.
+        for path in ["../outside.png", "..\\outside.png", "assets/../../outside.png"] {
+            let response = asset_diff(&repo, "HEAD", json!({ "path": path }));
+            assert_eq!(response["ok"], false, "{path} should be refused");
+            assert_eq!(response["error"]["code"], "invalid_request", "{path}");
+            assert_eq!(response["op"], "asset_diff", "{path}");
+        }
+
+        let pair = asset_diff(
+            &repo,
+            "HEAD",
+            json!({ "before_path": "../a.png", "after_path": "assets/b.png" }),
+        );
+        assert_eq!(pair["ok"], false);
+        assert!(pair["error"]["message"]
+            .as_str()
+            .unwrap_or_default()
+            .contains("before_path"));
+
+        // An unusable root must refuse, not degrade to a containment test that compares against
+        // nothing and therefore lets everything through.
+        let rootless: Value = serde_json::from_str(&live_handle_asset_diff_impl(
+            "",
+            "HEAD",
+            &json!({ "path": "../../outside.png" }).to_string(),
+            1,
+        ))
+        .expect("json answer");
+        assert_eq!(rootless["ok"], false);
+        assert_eq!(rootless["error"]["code"], "invalid_request");
+    }
+
+    /// A request naming neither shape is a client mistake, and says so instead of erroring
+    /// somewhere deeper with a message about a path nobody sent.
+    #[test]
+    fn asset_diff_without_a_path_or_pair_is_refused() {
+        let repo = asset_temp_dir("empty-request");
+        let response = asset_diff(&repo, "HEAD", json!({ "seq": 7 }));
+        assert_eq!(response["ok"], false);
+        assert_eq!(response["error"]["code"], "invalid_request");
+        assert!(response["error"]["message"]
+            .as_str()
+            .unwrap_or_default()
+            .contains("before_path"));
+    }
+
+    /// A request without a `ref` uses the ref the server was started with. Pinned through an
+    /// unresolvable default, because a silently-wrong base produces a plausible comparison.
+    #[test]
+    fn asset_diff_falls_back_to_the_servers_default_ref() {
+        if !have_git() {
+            return;
+        }
+        let repo = asset_repo("default-ref");
+        let response = asset_diff(&repo, "no-such-ref", json!({ "path": "assets/card.png" }));
+
+        assert_eq!(response["ok"], false);
+        let message = response["error"]["message"].as_str().unwrap_or_default();
+        assert!(
+            message.contains("git rev not found"),
+            "an unresolvable ref must surface as one: {message}"
+        );
+
+        // An explicit ref still wins over the server default.
+        let explicit = asset_diff(
+            &repo,
+            "no-such-ref",
+            json!({ "path": "assets/card.png", "ref": "HEAD" }),
+        );
+        assert_eq!(explicit["ok"], true, "{explicit}");
+    }
+
+    /// The second request shape: two files already on disk, no git involved.
+    #[test]
+    fn asset_diff_compares_an_explicit_before_after_pair() {
+        let repo = asset_temp_dir("pair");
+        std::fs::create_dir_all(repo.join("assets")).expect("assets dir");
+        write_asset_png(&repo.join("assets").join("before.png"), 0);
+        write_asset_png(&repo.join("assets").join("after.png"), 90);
+
+        let response = asset_diff(
+            &repo,
+            "HEAD",
+            json!({ "before_path": "assets/before.png", "after_path": "assets/after.png" }),
+        );
+
+        assert_eq!(response["ok"], true, "{response}");
+        assert_eq!(response["result"]["status"], "compared");
+        assert!(response["result"]["artifacts"]["overlay"].is_string());
+    }
+
+    /// An engine failure is a protocol error, not a dropped connection or a panic.
+    #[test]
+    fn asset_diff_reports_engine_failures_as_errors() {
+        let repo = asset_temp_dir("engine-error");
+        let response = asset_diff(&repo, "HEAD", json!({ "path": "assets/notes.txt" }));
+        assert_eq!(response["ok"], false);
+        assert!(response["error"]["message"]
+            .as_str()
+            .unwrap_or_default()
+            .contains("asset diff failed"));
+
+        let malformed = serde_json::from_str::<Value>(&live_handle_asset_diff_impl(
+            &repo.to_string_lossy(),
+            "HEAD",
+            "{not json",
+            3,
+        ))
+        .expect("even a malformed request gets a JSON answer");
+        assert_eq!(malformed["error"]["code"], "invalid_json");
+        assert_eq!(malformed["seq"], 3);
+    }
+
+    /// Containment must hold for a file that is not there: a DELETED image is exactly the case
+    /// the op still has to answer, so the check cannot depend on the leaf existing.
+    #[test]
+    fn asset_diff_still_answers_for_a_deleted_image() {
+        if !have_git() {
+            return;
+        }
+        let repo = asset_repo("deleted");
+        std::fs::remove_file(repo.join("assets").join("card.png")).expect("delete image");
+
+        let response = asset_diff(&repo, "HEAD", json!({ "path": "assets/card.png" }));
+
+        assert_eq!(response["ok"], true, "{response}");
+        assert_eq!(response["result"]["status"], "skipped");
+        assert_eq!(response["result"]["change_type"], "D");
+    }
+
+    /// Advertised capability and served op have to agree, or a client that trusts the ready
+    /// line asks for something that comes back as `invalid_op`.
+    #[test]
+    fn capabilities_advertise_the_asset_diff_op() {
+        let capabilities: Value =
+            serde_json::from_str(&live_capabilities_impl()).expect("capabilities json");
+        let operations = capabilities["operations"]
+            .as_array()
+            .expect("operations list");
+        assert!(
+            operations.iter().any(|op| op == "asset_diff"),
+            "asset_diff must be advertised: {operations:?}"
+        );
     }
 
     #[test]
