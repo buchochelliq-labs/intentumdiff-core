@@ -1,0 +1,17 @@
+{
+ "delete_entity": {
+  "ok": true
+ },
+ "rename_entity": {
+  "xfail": "no paired change carries 'html' -> 'htmlRenamed'"
+ },
+ "duplicate_entity": {
+  "xfail": "no ADDITION mentions the copy 'htmlCopy'"
+ },
+ "modify_literal": {
+  "skip": "no literals discoverable in the semantic tree"
+ },
+ "swap_siblings": {
+  "ok": true
+ }
+}

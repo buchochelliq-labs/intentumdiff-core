@@ -1,0 +1,33 @@
+{
+ "language": "dockerfile",
+ "filename": "Dockerfile",
+ "visible_tokens": [
+  "./",
+  "/app",
+  "8080",
+  "APP_PORT",
+  "CMD",
+  "COPY package.json",
+  "ENV APP_PORT",
+  "ENV LOG_LEVEL",
+  "EXPOSE",
+  "HEALTHCHECK",
+  "LABEL",
+  "LOG_LEVEL",
+  "RUN",
+  "USER svc_runner",
+  "WORKDIR /app",
+  "builder",
+  "curl --fail http://localhost:9091/health",
+  "info",
+  "maintainer",
+  "node",
+  "node:18-alpine",
+  "npm install --omit=dev",
+  "package.json",
+  "svc_runner"
+ ],
+ "append_statement": null,
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}

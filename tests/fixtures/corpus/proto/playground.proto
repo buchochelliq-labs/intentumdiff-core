@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package billing.v1;
+
+message Invoice {
+  string reference = 1;
+  int64 total_cents = 2;
+  bool settled = 7;
+}
+
+message Customer {
+  string display_name = 1;
+  string region_code = 2;
+}
+
+service Billing {
+  rpc FetchInvoice(Invoice) returns (Invoice);
+}

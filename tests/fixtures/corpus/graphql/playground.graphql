@@ -1,0 +1,16 @@
+type User {
+  id: ID
+  name: String
+  loginCount: Int
+}
+
+type Invoice {
+  reference: String
+  total: Float
+}
+
+query RecentInvoices {
+  invoices(limit: 25) {
+    reference
+  }
+}

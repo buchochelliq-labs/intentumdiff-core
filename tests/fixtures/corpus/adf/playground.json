@@ -1,0 +1,33 @@
+{
+  "name": "CopyPipeline",
+  "properties": {
+    "parameters": {
+      "targetFolder": {"type": "string", "defaultValue": "output"}
+    },
+    "activities": [
+      {
+        "name": "CopyData",
+        "type": "Copy",
+        "inputs":  [{"referenceName": "Source", "type": "DatasetReference"}],
+        "outputs": [{"referenceName": "Sink",   "type": "DatasetReference"}],
+        "typeProperties": {"source": {"type": "BlobSource"}, "sink": {"type": "BlobSink"}}
+      },
+      {
+        "name": "ProbeHealth",
+        "type": "WebActivity",
+        "typeProperties": {"url": "https://example.test/health", "method": "GET"}
+      },
+      {
+        "name": "AuditSnapshot",
+        "type": "WebActivity",
+        "typeProperties": {"url": "https://example.test/audit", "method": "GET"}
+      },
+      {
+        "name": "LogSuccess",
+        "type": "WebActivity",
+        "dependsOn": [{"activity": "CopyData", "dependencyConditions": ["Succeeded"]}],
+        "typeProperties": {"url": "https://example.com/log", "method": "POST"}
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+ "language": "m",
+ "filename": "query.m",
+ "visible_tokens": [
+  "FilteredRows",
+  "RenamedColumns",
+  "Source",
+  "Sql.Database(\"server\", \"sales\")",
+  "Table.AddColumn(FilteredRows, \"Region\", each \"emea\")",
+  "Table.FirstN(Source, 5)",
+  "Table.RenameColumns(TaggedRows, {{\"Amount\", \"OrderAmount\"}})",
+  "Table.SelectRows(Source, each [Amount] > 100)",
+  "TaggedRows",
+  "UnusedPreview"
+ ],
+ "append_statement": null,
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}

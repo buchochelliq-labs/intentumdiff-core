@@ -1,0 +1,12 @@
+function processData(input, options) {
+    validated = validate(input)
+    result = transform(validated, options)
+    log("Processing complete")
+    return result
+}
+
+config = {
+    timeout: 60,
+    retries: 5,
+    verbose: true
+}
