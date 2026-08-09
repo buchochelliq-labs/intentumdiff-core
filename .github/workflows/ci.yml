@@ -42,18 +42,30 @@ jobs:
         # and not just a download. Fail-closed on a missing OR unverified component:
         # nothing unpinned reaches the staging dir.
         # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
-        # alone 403s on the workflow-run listing).
+        # alone 403s on the workflow-run listing). When the token is absent (e.g.
+        # Dependabot PRs) the step is skipped and the test step falls back to
+        # --no-default-features (178 tests, Tier-C skipped) rather than failing.
         run: |
-          pip install "pyyaml>=6.0"
-          python scripts/provision_parser_components.py --out build/wasm
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::SPLIT_REPO_TOKEN not set — Tier-C provisioning skipped; tests will run with --no-default-features"
+            echo "TIER_C_AVAILABLE=false" >> "$GITHUB_ENV"
+          else
+            pip install "pyyaml>=6.0"
+            python scripts/provision_parser_components.py --out build/wasm
+            echo "TIER_C_AVAILABLE=true" >> "$GITHUB_ENV"
+          fi
         env:
           GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Run engine pins (full gate, Tier-C included)
         # Standalone crate (not a workspace member) — run from the crate directory.
-        # This was `--no-default-features` (178 + 25 ignored) until component
-        # provisioning existed; with INTENTDIFF_TEST_WASM_DIR staged it is the full
-        # 203-test gate, matching the monorepo.
-        run: cargo test
+        # Full gate (203 tests) when components were staged; --no-default-features
+        # (178 tests, 25 Tier-C skipped) when SPLIT_REPO_TOKEN was unavailable.
+        run: |
+          if [ "$TIER_C_AVAILABLE" = "true" ]; then
+            cargo test
+          else
+            cargo test --no-default-features
+          fi
         working-directory: crates/rust-core-host
         env:
           INTENTDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
