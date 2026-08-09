@@ -1,14 +1,14 @@
 [package]
-name = "intentdiff-html-renderer"
+name = "intentumdiff-html-renderer"
 version = "0.1.0"
 edition = "2021"
-description = "HTML renderer plugin for IntentDiff"
+description = "HTML renderer plugin for IntentumDiff"
 license = "MIT"
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-intentdiff-plugin-sdk = { git = "https://github.com/buchochelliq-labs/intentdiff-plugin-sdk", tag = "v0.1.0" }
+intentumdiff-plugin-sdk = { git = "https://github.com/buchochelliq-labs/intentumdiff-plugin-sdk", tag = "v0.0.2-beta.1" }
 serde_json = "1"
 wit-bindgen = { version = "0.57", default-features = false, features = ["std", "macros"] }

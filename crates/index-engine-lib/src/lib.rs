@@ -1,7 +1,7 @@
 //! Index-engine core logic (shared native + Wasm library).
 //!
 //! The pure symbol/reference-table extraction and cross-file diff, factored out
-//! of the `intentdiff-index-engine` Wasm plugin so the native `rust-core-host`
+//! of the `intentumdiff-index-engine` Wasm plugin so the native `rust-core-host`
 //! certified commit path can call it directly (no Wasm round-trip). The Wasm
 //! plugin (`crates/index-engine`) is now a thin WIT wrapper over these functions.
 //! Mirrors the `sql-parser-lib` split.

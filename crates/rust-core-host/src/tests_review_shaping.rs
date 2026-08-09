@@ -141,14 +141,14 @@ use crate::*;
     #[test]
     fn generic_text_single_added_line_with_audit_group() {
         let old = "a\nb";
-        let new = "a\nb\n\n/.intentdiff";
+        let new = "a\nb\n\n/.intentumdiff";
         let payload: Value =
             serde_json::from_str(&generic_text_review_json(old, new, 4).unwrap()).unwrap();
         assert_eq!(payload["used"], Value::Bool(true));
         let changes = payload["changes"].as_array().unwrap();
         assert_eq!(changes.len(), 1, "{changes:?}");
         assert_eq!(changes[0]["change_type"], "ADDITION");
-        assert_eq!(changes[0]["new_node"]["label"], "/.intentdiff");
+        assert_eq!(changes[0]["new_node"]["label"], "/.intentumdiff");
         let group = &payload["group"];
         assert_eq!(group["rule_id"], "presentation.generic_text_diff");
         assert_eq!(group["metadata"]["suppressed_count"], 4);
@@ -410,10 +410,10 @@ use crate::*;
     }
     #[test]
     fn ignore_intent_descriptions_read_as_human_review() {
-        let add = node("1", "pattern", "/.intentdiff", Vec::new());
+        let add = node("1", "pattern", "/.intentumdiff", Vec::new());
         assert_eq!(
             ignore_intent_description("ADDITION", None, Some(&add)).as_deref(),
-            Some("Adds an ignore rule for /.intentdiff")
+            Some("Adds an ignore rule for /.intentumdiff")
         );
         let del = node("2", "pattern", "*.log", Vec::new());
         assert_eq!(
@@ -443,8 +443,8 @@ use crate::*;
         // Oracle (issue #57 json/yaml): array SCALARS key by content identity + same-label
         // ordinal — never by position — so an insertion cannot re-identify later siblings.
         // The ':'-stripping pair normalizer must NOT apply (onCommand:* values are distinct).
-        let s1 = node("0.0.1.0", "string", "onCommand:intentdiff.toggle", Vec::new());
-        let s2 = node("0.0.1.1", "string", "onCommand:intentdiff.showOutput", Vec::new());
+        let s1 = node("0.0.1.0", "string", "onCommand:intentumdiff.toggle", Vec::new());
+        let s2 = node("0.0.1.1", "string", "onCommand:intentumdiff.showOutput", Vec::new());
         let array = node("0.0.1", "array", "array", vec![s1, s2]);
         let key_node = node("0.0.0", "string", "activationEvents", Vec::new());
         let pair = node("0.0", "pair", "activationEvents", vec![key_node, array]);
@@ -453,7 +453,7 @@ use crate::*;
         let k1 = keyed_data_key(*by_id.get("0.0.1.0").unwrap(), &by_id, "json").unwrap();
         let k2 = keyed_data_key(*by_id.get("0.0.1.1").unwrap(), &by_id, "json").unwrap();
         assert_ne!(k1, k2, "distinct scalar contents must not share a key");
-        assert!(k1.contains(&"onCommand:intentdiff.toggle".to_string()));
+        assert!(k1.contains(&"onCommand:intentumdiff.toggle".to_string()));
         // The pair itself keys by its key path.
         let kp = keyed_data_key(*by_id.get("0.0").unwrap(), &by_id, "json").unwrap();
         assert_eq!(kp, vec!["json", "pair", "activationevents"]);

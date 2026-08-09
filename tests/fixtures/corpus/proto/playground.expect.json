@@ -1,0 +1,23 @@
+{
+ "language": "proto",
+ "filename": "service.proto",
+ "visible_tokens": [
+  "Billing",
+  "Customer",
+  "FetchInvoice",
+  "Invoice",
+  "billing",
+  "bool",
+  "display_name",
+  "int64",
+  "reference",
+  "region_code",
+  "settled",
+  "string",
+  "syntax = \"proto3\";",
+  "total_cents"
+ ],
+ "append_statement": "message AuditEvent {\n  string actor = 1;\n}",
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}

@@ -1,4 +1,4 @@
-# IntentDiff Patched Crates
+# IntentumDiff Patched Crates
 
 This directory contains local crate patches used by the Rust engine and parser
 workspace. Keep this set small. Every patch must have a clear reason, a removal

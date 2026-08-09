@@ -1,20 +1,20 @@
-# The IntentDiff C ABI — the binding-author contract
+# The IntentumDiff C ABI — the binding-author contract
 
-The engine ships as a native shared library (`intentdiff_rust_core.{dll,so,dylib}`) exposing
+The engine ships as a native shared library (`intentumdiff_rust_core.{dll,so,dylib}`) exposing
 **one stable language boundary**. Every binding — Python (ctypes), Go, Java (FFM), and any
 future language — drives the identical surface. Bindings do zero functional work.
 
 ## The two exports
 
 ```c
-char *intentdiff_call(const char *name, const char *args_json);
-void  intentdiff_free(char *ptr);
+char *intentumdiff_call(const char *name, const char *args_json);
+void  intentumdiff_free(char *ptr);
 ```
 
 - `name` — the engine function to invoke (UTF-8 C string).
 - `args_json` — a **JSON array of positional arguments** (`"[]"` for none — never `null`).
 - Returns a heap-allocated UTF-8 JSON **envelope** which the caller MUST release with
-  `intentdiff_free`. A `NULL` return means an allocation/encoding failure only.
+  `intentumdiff_free`. A `NULL` return means an allocation/encoding failure only.
 - The boundary catches panics (unwinding across `extern "C"` is UB) and reports them as
   `internal` errors.
 
@@ -60,6 +60,6 @@ names with the `_json` suffix dropped (the two commit functions keep it).
 
 ## Reference bindings
 
-- Python: [`intentdiff-python`](https://github.com/buchochelliq-labs/intentdiff-python) (`src/intentdiff/rust_core.py` — `_CtypesBackend`)
-- Go: [`intentdiff-go`](https://github.com/buchochelliq-labs/intentdiff-go)
-- Java: [`intentdiff-java`](https://github.com/buchochelliq-labs/intentdiff-java)
+- Python: [`intentumdiff-python`](https://github.com/buchochelliq-labs/intentumdiff-python) (`src/intentumdiff/rust_core.py` — `_CtypesBackend`)
+- Go: [`intentumdiff-go`](https://github.com/buchochelliq-labs/intentumdiff-go)
+- Java: [`intentumdiff-java`](https://github.com/buchochelliq-labs/intentumdiff-java)

@@ -1,4 +1,4 @@
-# IntentDiff engine architecture
+# IntentumDiff engine architecture
 
 The engine is the **complete shared backend**: everything functional lives here, and every
 product surface is a thin binding over the [C ABI](C_ABI.md).
@@ -28,7 +28,7 @@ source pair ──► parse ──► SemanticNode trees ──► match ──�
 | Crate | Role |
 |---|---|
 | `crates/rust-core-host` | the engine (this document); builds as **cdylib** (the C ABI) + **rlib** (in-process Rust consumers) |
-| `crates/cli` | the native `intentdiff` CLI — links the engine rlib, standalone `[patch]`/`[profile]` |
+| `crates/cli` | the native `intentumdiff` CLI — links the engine rlib, standalone `[patch]`/`[profile]` |
 | `crates/index-engine-lib` | symbol/reference tables + cross-file diff, linked natively AND into the index Wasm component |
 | `crates/index-engine`, `crates/*-renderer` | Wasm components (workspace members; SDK git dep) |
 | `crates/patches` | vendored `[patch.crates-io]` crates (build-script stabilization) |
@@ -39,17 +39,17 @@ build's top-level manifest).
 
 ## Subsystems in the engine
 
-Config (intentdiff.yaml), the SQLite parse/diff cache + analytics store (stateless C-ABI
+Config (intentumdiff.yaml), the SQLite parse/diff cache + analytics store (stateless C-ABI
 surfaces over warm path-keyed registries), the registry client validators (#88 controls),
 git/VCS readers (git/hg/svn/p4 CLIs — no libgit2), the perceptual image diff, and the
 live-diff/review/LSP protocol handlers consumed by
-[intentdiff-live-server](https://github.com/buchochelliq-labs/intentdiff-live-server) and
-[intentdiff-lsp](https://github.com/buchochelliq-labs/intentdiff-lsp).
+[intentumdiff-live-server](https://github.com/buchochelliq-labs/intentumdiff-live-server) and
+[intentumdiff-lsp](https://github.com/buchochelliq-labs/intentumdiff-lsp).
 
 ## Test tiers
 
 - **Tier A** — the engine pin suite (`cargo test` in `crates/rust-core-host`): 178 always-on
   pins + 25 `tier-c-wasm` certification tests that load staged parser components (default-on
   feature; CI runs `--no-default-features` until cross-repo component provisioning is wired;
-  point `INTENTDIFF_TEST_WASM_DIR` at a dir of built components to run them anywhere).
+  point `INTENTUMDIFF_TEST_WASM_DIR` at a dir of built components to run them anywhere).
 - Component and binding tiers live in their own repos; the registry pins trusted artifacts.

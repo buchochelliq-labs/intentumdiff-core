@@ -650,7 +650,7 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
     changes.extend(recovered);
 
     // python presentation._describe_keyed_data_additions: an added array OBJECT is described by
-    // its identifying pair ("Insert command 'intentdiff.toggleEditorDiff'"), not "object([1])".
+    // its identifying pair ("Insert command 'intentumdiff.toggleEditorDiff'"), not "object([1])".
     const SUMMARY_KEYS: &[&str] = &["command", "name", "id", "key", "title", "label"];
     for change in changes.iter_mut() {
         if change.change_type != "ADDITION" {

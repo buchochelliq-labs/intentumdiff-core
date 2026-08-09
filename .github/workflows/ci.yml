@@ -17,8 +17,13 @@ jobs:
     name: Engine pins (cargo test)
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    env:
+      # GitHub does not pass secrets to workflows triggered by a PR from a fork, so on
+      # those runs this is 'false'. The steps below branch on it to give outside
+      # contributors a real signal instead of a hard failure they cannot fix.
+      HAS_SPLIT_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
@@ -36,46 +41,48 @@ jobs:
           python-version: "3.12"
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
-        # live in the sibling intentdiff-<lang>-parser repos. Pull the three they name
+        # live in the sibling intentumdiff-<lang>-parser repos. Pull the three they name
         # from those repos' CI artifacts and verify each against the SHA-256 pinned in
-        # intentdiff-registry (#95) — the pin is what makes this a supply-chain control
+        # intentumdiff-registry (#95) — the pin is what makes this a supply-chain control
         # and not just a download. Fail-closed on a missing OR unverified component:
         # nothing unpinned reaches the staging dir.
         # Needs SPLIT_REPO_TOKEN to carry the Actions: Read permission (contents:read
-        # alone 403s on the workflow-run listing). When the token is absent (e.g.
-        # Dependabot PRs) the step is skipped and the test step falls back to
-        # --no-default-features (178 tests, Tier-C skipped) rather than failing.
+        # alone 403s on the workflow-run listing). Skipped on fork PRs, which get no
+        # secrets — see the reduced gate below.
+        if: env.HAS_SPLIT_TOKEN == 'true'
         run: |
-          if [ -z "$GH_TOKEN" ]; then
-            echo "::warning::SPLIT_REPO_TOKEN not set — Tier-C provisioning skipped; tests will run with --no-default-features"
-            echo "TIER_C_AVAILABLE=false" >> "$GITHUB_ENV"
-          else
-            pip install "pyyaml>=6.0"
-            python scripts/provision_parser_components.py --out build/wasm
-            echo "TIER_C_AVAILABLE=true" >> "$GITHUB_ENV"
-          fi
+          pip install "pyyaml>=6.0"
+          python scripts/provision_parser_components.py --out build/wasm
         env:
           GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Run engine pins (full gate, Tier-C included)
         # Standalone crate (not a workspace member) — run from the crate directory.
-        # Full gate (203 tests) when components were staged; --no-default-features
-        # (178 tests, 25 Tier-C skipped) when SPLIT_REPO_TOKEN was unavailable.
-        run: |
-          if [ "$TIER_C_AVAILABLE" = "true" ]; then
-            cargo test
-          else
-            cargo test --no-default-features
-          fi
+        # This was `--no-default-features` (178 + 25 ignored) until component
+        # provisioning existed; with INTENTUMDIFF_TEST_WASM_DIR staged it is the full
+        # 203-test gate, matching the monorepo.
+        if: env.HAS_SPLIT_TOKEN == 'true'
+        run: cargo test
         working-directory: crates/rust-core-host
         env:
-          INTENTDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
+          INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
+      - name: Run engine pins (fork PR — Tier-C omitted)
+        # A fork PR cannot reach the parser artifacts, so the 25 Tier-C certification
+        # tests cannot run. Rather than fail on something a contributor has no way to
+        # fix, drop the default-on `tier-c-wasm` feature and run the remaining 178
+        # pins. Tier-C is still enforced on every branch PR and on main, so nothing
+        # merges without the full 203-test gate having run.
+        if: env.HAS_SPLIT_TOKEN != 'true'
+        run: |
+          echo "::notice::Fork PR - SPLIT_REPO_TOKEN unavailable, so the 25 Tier-C tests are skipped. A maintainer run will exercise the full gate."
+          cargo test --no-default-features
+        working-directory: crates/rust-core-host
 
   cli:
     name: Native CLI builds
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
@@ -87,7 +94,7 @@ jobs:
         with:
           key: cli
           workspaces: crates/cli
-      - name: Build the intentdiff CLI
+      - name: Build the intentumdiff CLI
         run: cargo build --release
         working-directory: crates/cli
 
@@ -96,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0 (+ wasm32-wasip2)
@@ -109,10 +116,11 @@ jobs:
         with:
           key: components
       - name: Authenticate cross-repo git deps
-        # Private sibling repos (the SDK / the engine) are git dependencies. GITHUB_TOKEN is
-        # scoped to THIS repo only, so cargo/pip cannot fetch them without an org-scoped
-        # token. Set the SPLIT_REPO_TOKEN secret (PAT or App token with read access to the
-        # buchochelliq-labs repos); without it this step warns and the build fails clearly.
+        # The only cross-repo git dependency here is intentumdiff-plugin-sdk, which is now
+        # PUBLIC — so this build resolves anonymously and works on fork PRs, which get no
+        # secrets. The step is kept because GITHUB_TOKEN is scoped to THIS repo only: if a
+        # private sibling is ever added back as a git dependency, SPLIT_REPO_TOKEN is what
+        # lets cargo fetch it. Absence is a warning, not an error, precisely so forks pass.
         env:
           SPLIT_REPO_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
         run: |
@@ -120,10 +128,48 @@ jobs:
             git config --global url."https://x-access-token:${SPLIT_REPO_TOKEN}@github.com/".insteadOf "https://github.com/"
             echo "cross-repo git auth configured"
           else
-            echo "::warning::SPLIT_REPO_TOKEN not set - private cross-repo dependencies will fail to fetch"
+            echo "::notice::SPLIT_REPO_TOKEN not set (expected on fork PRs) - all git dependencies are public, so the build continues"
           fi
 
       - name: Build the workspace components
         run: cargo build --release --target wasm32-wasip2
         env:
           CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+      - name: Collect the renderer components
+        # Built here and, until now, discarded with the runner. Nothing downstream could
+        # stage them, so intentumdiff-python's suite ran with ZERO renderers loaded and
+        # still reported green - see intentumdiff-python#22.
+        #
+        # cargo names the artifact after the crate (intentumdiff_html_renderer.wasm); the
+        # product name drops the prefix (html_renderer.wasm). Rename on the way out so a
+        # consumer stages a directory it can use directly.
+        run: |
+          set -euo pipefail
+          mkdir -p dist/renderers
+          missing=0
+          for name in html llm patch terminal; do
+            src="target/wasm32-wasip2/release/intentumdiff_${name}_renderer.wasm"
+            if [ -f "$src" ]; then
+              cp "$src" "dist/renderers/${name}_renderer.wasm"
+            else
+              echo "::error::renderer component missing: $src"
+              missing=$((missing + 1))
+            fi
+          done
+          # Fail closed. A partial upload is worse than none: the consumer stages what it
+          # gets, loses a renderer silently, and reports green - exactly the failure this
+          # step exists to end.
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::$missing renderer component(s) missing - refusing to publish a partial set"
+            exit 1
+          fi
+          ls -l dist/renderers
+
+      - name: Upload the renderer components
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: renderer-components
+          path: dist/renderers/*.wasm
+          if-no-files-found: error
+          retention-days: 30

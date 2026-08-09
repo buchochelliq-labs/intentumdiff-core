@@ -1,11 +1,11 @@
-# IntentDiff PR Guard Action
+# IntentumDiff PR Guard Action
 
 Local pre-release GitHub Action for semantic diff checks, protected config
 guardrails, SARIF upload, report artifacts, static HTML review output, and
 optional PR comments.
 
 This action expects the repository to be checked out first. Use
-`fetch-depth: 0` so IntentDiff can compare the requested refs.
+`fetch-depth: 0` so IntentumDiff can compare the requested refs.
 
 ```yaml
 name: Semantic diff
@@ -39,7 +39,7 @@ jobs:
 |---|---|---|
 | `base-ref` | PR base SHA or `HEAD~1` | Old ref. |
 | `head-ref` | PR head SHA or `HEAD` | New ref. |
-| `policy` | auto-discovered `intentdiff.yaml` | Guardrail policy override. |
+| `policy` | auto-discovered `intentumdiff.yaml` | Guardrail policy override. |
 | `strict` | `false` | Fail with exit code `2` for immutable guardrail violations. |
 | `paths` | all changed files | Newline- or comma-separated glob filters. |
 | `comment` | `false` | Post/update a sticky PR summary comment. |
@@ -49,14 +49,14 @@ jobs:
 
 ## Reports
 
-The action writes these files under `report-dir` (`intentdiff-report` by
+The action writes these files under `report-dir` (`intentumdiff-report` by
 default):
 
 - `semantic-diff.json`
 - `guardrails.json`
 - `guardrails.sarif`
 - `summary.md`
-- `intentdiff-review.html`
+- `intentumdiff-review.html`
 
 SARIF is guardrail-only in this slice. The JSON report contains the full
 `CommitDiff`, including per-file `SemanticDiff` output and cross-file changes.
@@ -66,14 +66,14 @@ GitHub App.
 
 ## Status
 
-This action installs the **published `intentdiff` wheel** from PyPI (self-contained: engine +
+This action installs the **published `intentumdiff` wheel** from PyPI (self-contained: engine +
 parser components) and runs the PR guard shipped alongside it (`github_action.py`), against the
 consumer's checkout. It therefore activates once the package is published; pin a version with
-the `intentdiff-version` input for reproducible runs.
+the `intentumdiff-version` input for reproducible runs.
 
 ```yaml
-- uses: buchochelliq-labs/intentdiff-core/.github/actions/semantic-diff@main
+- uses: buchochelliq-labs/intentumdiff-core/.github/actions/semantic-diff@main
   with:
     comment: true
-    intentdiff-version: "0.1.0"
+    intentumdiff-version: "0.1.0"
 ```

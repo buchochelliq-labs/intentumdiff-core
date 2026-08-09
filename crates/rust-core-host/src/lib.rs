@@ -20,7 +20,10 @@ use wasmtime_wasi::{WasiCtx, WasiCtxBuilder, WasiCtxView, WasiView};
 // deleted with the `python` feature (#B.6). `duckdb_ffi` (pure dlopen, no pyo3) is ungated too.
 pub mod analytics_store;
 pub mod analytics_registry;
-mod asset_diff;
+// pub for the same reason `live_server` is: the perceptual asset entry points are engine API,
+// and an in-process consumer (the native live-server binary, #100) reaches them by linking the
+// crate rather than through the C ABI.
+pub mod asset_diff;
 mod duckdb_ffi;
 mod git_source;
 mod registry;
@@ -117,7 +120,7 @@ pub(crate) fn supports_language_impl(language: &str) -> bool {
     language.eq_ignore_ascii_case("python")
 }
 
-/// python raw-source entry point (exact no-change only). The C ABI (`intentdiff_call`) calls this
+/// python raw-source entry point (exact no-change only). The C ABI (`intentumdiff_call`) calls this
 /// directly. `config_json` is accepted for signature parity with the CST entry point but unused here.
 pub(crate) fn diff_python_impl(
     old_content: &str,
@@ -143,7 +146,7 @@ pub(crate) fn diff_python_impl(
     payload.to_string()
 }
 
-/// python filtered-CST v1 entrypoint. The C ABI (`intentdiff_call`) calls this directly; the
+/// python filtered-CST v1 entrypoint. The C ABI (`intentumdiff_call`) calls this directly; the
 /// binding keeps the full signature (raw-source + wasm-path args are unused here) for parity.
 pub(crate) fn diff_python_cst_impl(
     old_filtered_cst_json: &str,
@@ -159,10 +162,21 @@ pub(crate) fn diff_python_cst_impl(
         serde_json::from_str(old_filtered_cst_json).map_err(|exc| format!("old CST JSON: {exc}"))?;
     let new_cst: CstNode =
         serde_json::from_str(new_filtered_cst_json).map_err(|exc| format!("new CST JSON: {exc}"))?;
-    let old_tree = convert_cst(&old_cst, "0", None)
+    let mut old_tree = convert_cst(&old_cst, "0", None)
         .ok_or_else(|| "old CST produced no semantic tree".to_string())?;
-    let new_tree = convert_cst(&new_cst, "0", None)
+    let mut new_tree = convert_cst(&new_cst, "0", None)
         .ok_or_else(|| "new CST produced no semantic tree".to_string())?;
+    // Fill any facts the CST pass could not reach, exactly as the serialized-tree entry point
+    // does. `convert_cst` derives facts from the RAW CST, whose shape varies by parser, so it
+    // can return a partial bag — a tree-sitter CST nests calls and keeps keyword tokens where
+    // the native CST does not, which silently cost this path `recursive`, `has_error_handling`,
+    // `method_count`, `control_shape` and `behavior_category`.
+    //
+    // `enrich_tree_facts` derives from the NORMALISED tree, which is parser-independent, and
+    // merges without overwriting — so the pre-pruning CST pass still wins every key it did
+    // compute. Without this call the two entry points disagreed about the same source.
+    enrich_tree_facts(&mut old_tree);
+    enrich_tree_facts(&mut new_tree);
     validate_unique_ids(&old_tree).map_err(|exc| format!("old semantic tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new semantic tree: {exc}"))?;
 
@@ -319,7 +333,7 @@ use markdown_review::*;
 
 
 /// python markdown post-presentation rules (issue #36): section moves (LIS insertion-shift
-/// discrimination) + heading renames by unique body hash. The C ABI (`intentdiff_call`) calls
+/// discrimination) + heading renames by unique body hash. The C ABI (`intentumdiff_call`) calls
 /// this directly. Infallible.
 pub(crate) fn markdown_section_review_impl(old_source: &str, new_source: &str) -> String {
     let old_sections = markdown_sections(old_source, "old");
@@ -3067,8 +3081,8 @@ fn diff_python_sources_final_impl(
         return Err("parse errors require Python token fallback".to_owned());
     }
     let (
-        old_tree,
-        new_tree,
+        mut old_tree,
+        mut new_tree,
         wasm_cache_hit,
         wasm_cache_key,
         wasm_batch_preloaded,
@@ -3298,6 +3312,24 @@ fn diff_python_sources_final_impl(
             )
         }
     };
+    // Fill facts the raw-CST pass could not reach — once, where BOTH parser arms converge.
+    //
+    // Facts are derived from the RAW CST, whose shape varies by parser: tree-sitter keeps
+    // keyword tokens and nests calls where the native builder does not. That pass therefore
+    // returns a PARTIAL bag, and nothing downstream completed it, so this path silently lost
+    // `recursive`, `has_error_handling`, `method_count`, `control_shape` and
+    // `behavior_category`.
+    //
+    // Deliberately placed after the arms rather than inside either: putting it in one arm is
+    // how the two builders drifted apart in the first place.
+    //
+    // `enrich_tree_facts` derives from the NORMALISED tree, which is parser-independent, and
+    // merges without overwriting — the pre-pruning CST pass still wins every key it computed.
+    probe.measure("rust_semantic_facts_enrich", || {
+        enrich_tree_facts(&mut old_tree);
+        enrich_tree_facts(&mut new_tree);
+        Ok::<(), String>(())
+    })?;
     let old_index = TreeIndex::new(&old_tree);
     let new_index = TreeIndex::new(&new_tree);
     probe.measure("rust_semantic_node_validation", || {
@@ -4336,11 +4368,76 @@ fn batch_diff_item_sort_key(item: &Value) -> u64 {
         .unwrap_or(u64::MAX)
 }
 
+/// Distributions that ship the FIRST-PARTY Python parser.
+///
+/// A catalogued plugin id is qualified by the DISTRIBUTION name, and the Python binding is
+/// published as `intentumdiff-python` while its import package is `intentumdiff` — so the same
+/// certified parser arrives spelled two ways depending on how it was catalogued.
+///
+/// Accepting only `intentumdiff:...` made the core reject the certified parser as unsupported,
+/// so the certified batch path declined and execution fell through to routed finalize. That
+/// fallthrough is Rust→Rust, so no engine gate fired: the diff was correct and the engine was
+/// Rust, while the certification and the facts only that path derives were silently absent.
+///
+/// An explicit allowlist, never a prefix or suffix match — accepting an arbitrary
+/// `<dist>:python:python` would let a third-party plugin claim the certified path.
+const PYTHON_PLUGIN_DISTRIBUTIONS: [&str; 3] =
+    ["intentumdiff", "intentumdiff-python", "intentumdiff_python"];
+
 fn is_supported_python_plugin_id(plugin_id: &str) -> bool {
-    matches!(
-        plugin_id,
-        "" | "python" | "python-parser" | "python_parser" | "intentdiff:python:python"
-    )
+    if matches!(plugin_id, "" | "python" | "python-parser" | "python_parser") {
+        return true;
+    }
+    match plugin_id.split(':').collect::<Vec<_>>()[..] {
+        [dist, "python", "python"] => PYTHON_PLUGIN_DISTRIBUTIONS.contains(&dist),
+        _ => false,
+    }
+}
+
+#[cfg(test)]
+mod python_plugin_id_tests {
+    use super::*;
+
+    #[test]
+    fn the_distribution_qualified_id_is_certified() {
+        // THE bug. The binding publishes as `intentumdiff-python`, so this is the spelling the
+        // core actually receives once parsers can be catalogued at all. Rejecting it made the
+        // certified batch path decline with "unsupported parser plugin".
+        assert!(is_supported_python_plugin_id("intentumdiff-python:python:python"));
+        assert!(is_supported_python_plugin_id("intentumdiff_python:python:python"));
+    }
+
+    #[test]
+    fn the_import_package_spelling_still_works() {
+        assert!(is_supported_python_plugin_id("intentumdiff:python:python"));
+    }
+
+    #[test]
+    fn the_bare_and_absent_spellings_still_work() {
+        for id in ["", "python", "python-parser", "python_parser"] {
+            assert!(is_supported_python_plugin_id(id), "{id:?}");
+        }
+    }
+
+    #[test]
+    fn a_third_party_plugin_cannot_claim_the_certified_path() {
+        // The reason this is an allowlist rather than a `*:python:python` pattern. Certification
+        // is a trust statement; anyone could name their distribution to match a loose rule.
+        for id in [
+            "evil:python:python",
+            "intentumdiff-evil:python:python",
+            "notintentumdiff:python:python",
+        ] {
+            assert!(!is_supported_python_plugin_id(id), "{id:?} must not certify");
+        }
+    }
+
+    #[test]
+    fn a_first_party_distribution_shipping_another_language_is_not_python() {
+        assert!(!is_supported_python_plugin_id("intentumdiff-python:ruby:ruby"));
+        assert!(!is_supported_python_plugin_id("intentumdiff:python"));
+        assert!(!is_supported_python_plugin_id("intentumdiff:python:python:extra"));
+    }
 }
 
 fn value_str<'a>(value: &'a Value, snake: &str, camel: &str) -> Option<&'a str> {
@@ -4781,7 +4878,7 @@ fn evaluate_guardrail_rules_for_diff(
 /// return an in-band error envelope for empty input. Shape + hash recipe match python exactly.
 fn empty_semantic_tree_json(language: &str) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(format!("intentdiff-empty-tree:{language}").as_bytes());
+    hasher.update(format!("intentumdiff-empty-tree:{language}").as_bytes());
     let digest = format!("{:x}", hasher.finalize());
     json!({
         "id": "0",
@@ -5556,10 +5653,22 @@ fn cst_is_trivial_stmt(stmt: &CstNode) -> bool {
 /// None when the returned value is computed (call/operator/name/collection) or multi-valued.
 /// Kind only — never the literal value itself — so it is safe for the privacy fact sheet.
 fn cst_return_literal_kind(ret: &CstNode) -> Option<&'static str> {
-    if ret.children.len() != 1 {
+    // Ignore the syntax that carries no value. A tree-sitter CST keeps the `return` keyword
+    // (and any punctuation) as children of the return statement; the native CST does not.
+    // Requiring `children.len() == 1` therefore made this function answer differently for
+    // IDENTICAL source depending on which parser produced the tree — "literal" natively,
+    // "value" through the Wasm parser — which is how every non-native path silently lost
+    // `return_kind`.
+    let mut values = ret.children.iter().filter(|c| {
+        !matches!(c.node_type.as_str(), "return" | "return_keyword")
+            && !c.node_type.chars().all(|ch| ch.is_ascii_punctuation())
+    });
+    let value = values.next()?;
+    if values.next().is_some() {
+        // More than one value node: not a single literal.
         return None;
     }
-    match ret.children[0].node_type.as_str() {
+    match value.node_type.as_str() {
         "integer" => Some("int"),
         "float" => Some("float"),
         "string" | "concatenated_string" => Some("str"),
@@ -5935,20 +6044,90 @@ fn is_class_body_container(node_type: &str) -> bool {
 /// body container. Count only — never a member name.
 fn derive_class_facts(node: &SemanticNode) -> Option<Value> {
     let mut method_count = 0usize;
+    let mut field_count = 0usize;
     for child in &node.children {
         if is_function_entity_type(child.node_type.as_str()) {
             method_count += 1;
         } else if is_class_body_container(child.node_type.as_str()) {
-            method_count += child
-                .children
-                .iter()
-                .filter(|m| is_function_entity_type(m.node_type.as_str()))
-                .count();
+            for member in &child.children {
+                if is_function_entity_type(member.node_type.as_str()) {
+                    method_count += 1;
+                } else if is_class_field_member(member) {
+                    field_count += 1;
+                }
+            }
         }
     }
+
+    // Bases decide the class KIND. The CST pass reads these from an `argument_list` child,
+    // which only exists on a tree-sitter Python CST — so every other parser, and every other
+    // language, lost `is_enum` / `is_exception` entirely. Reading them from the normalised
+    // tree instead makes the facts available regardless of who parsed it.
+    let mut base_count = 0usize;
+    let mut is_enum = false;
+    let mut is_exception = false;
+    for child in &node.children {
+        if !is_class_bases_container(child.node_type.as_str()) {
+            continue;
+        }
+        for arg in &child.children {
+            let Some(name) = semantic_base_name(arg) else {
+                continue;
+            };
+            base_count += 1;
+            is_enum |= is_enum_base_name(name);
+            is_exception |= is_exception_base_name(name);
+        }
+    }
+
     let mut facts = serde_json::Map::new();
     facts.insert("method_count".to_owned(), json!(method_count));
+    facts.insert("field_count".to_owned(), json!(field_count));
+    if base_count > 0 {
+        facts.insert("base_count".to_owned(), json!(base_count));
+    }
+    if is_enum {
+        facts.insert("is_enum".to_owned(), json!(true));
+    }
+    if is_exception {
+        facts.insert("is_exception".to_owned(), json!(true));
+    }
     Some(Value::Object(facts))
+}
+
+/// A class member that holds data rather than behaviour. Count only — never a field name.
+fn is_class_field_member(member: &SemanticNode) -> bool {
+    match member.node_type.as_str() {
+        "field_declaration" | "property_declaration" | "variable_declaration" => true,
+        // Python spells a class attribute as a bare assignment statement.
+        "expression_statement" => member
+            .children
+            .iter()
+            .any(|c| matches!(c.node_type.as_str(), "assignment" | "augmented_assignment")),
+        "assignment" => true,
+        _ => false,
+    }
+}
+
+/// Where a class lists its bases. Parsers disagree on the wrapper, so accept the known spellings
+/// rather than the single tree-sitter-Python one the CST pass assumes.
+fn is_class_bases_container(node_type: &str) -> bool {
+    matches!(
+        node_type,
+        "argument_list" | "superclasses" | "base_class_clause" | "class_heritage" | "extends_clause"
+    )
+}
+
+/// The base's name from a normalised node — its label, or a lone identifier child's label.
+/// Used ONLY to classify the class kind (enum / exception); never emitted.
+fn semantic_base_name(arg: &SemanticNode) -> Option<&str> {
+    if !arg.label.is_empty() {
+        return Some(arg.label.as_str());
+    }
+    arg.children
+        .iter()
+        .find(|c| !c.label.is_empty())
+        .map(|c| c.label.as_str())
 }
 
 /// The decorator's rightmost name — `property` from `@property`, `lru_cache` from
@@ -6040,6 +6219,7 @@ fn apply_decorator_facts(node: &mut SemanticNode) {
 
 mod node_facts;
 use node_facts::*;
+mod uast;
 
 /// Derive privacy-safe facts for a function or class entity from its pruned SemanticNode subtree.
 fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
@@ -6049,6 +6229,16 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         return derive_class_facts(node);
     }
     if !is_function_entity_type(node_type) {
+        // Non-function shapes (#179). Until now this returned None, so a changed YAML key,
+        // Terraform block, TOML table or INI setting carried NO facts and the explainer had
+        // only the change type and label to work from — across 69 parsers that is most of a
+        // real review. Ordered before the bail-out so function/class facts are unaffected.
+        if let Some(keyed) = derive_keyed_facts(node) {
+            return Some(keyed);
+        }
+        if let Some(resource) = derive_resource_facts(node) {
+            return Some(resource);
+        }
         return None;
     }
     let mut facts = serde_json::Map::new();
@@ -6058,6 +6248,50 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         .find(|c| is_parameter_list_type(c.node_type.as_str()))
     {
         facts.insert("param_count".to_owned(), json!(params.children.len()));
+        // Signature shape, counts only — never a parameter name. The CST pass derives these
+        // from tree-sitter-Python spellings, so every other parser lost them; reading the
+        // normalised tree makes them available whoever parsed it.
+        let mut default_count = 0usize;
+        let mut keyword_only_count = 0usize;
+        let mut has_variadic = false;
+        let mut has_kwargs = false;
+        // Anything after `*args` or a bare `*` is keyword-only.
+        let mut after_splat = false;
+        for p in &params.children {
+            match p.node_type.as_str() {
+                "default_parameter" | "typed_default_parameter" | "optional_parameter"
+                | "default_value" => {
+                    default_count += 1;
+                    if after_splat {
+                        keyword_only_count += 1;
+                    }
+                }
+                "list_splat_pattern" | "variadic_parameter" | "rest_parameter" => {
+                    has_variadic = true;
+                    after_splat = true;
+                }
+                "keyword_separator" => after_splat = true,
+                "dictionary_splat_pattern" | "keyword_parameter" => has_kwargs = true,
+                "identifier" | "typed_parameter" => {
+                    if after_splat {
+                        keyword_only_count += 1;
+                    }
+                }
+                _ => {}
+            }
+        }
+        if default_count > 0 {
+            facts.insert("default_count".to_owned(), json!(default_count));
+        }
+        if keyword_only_count > 0 {
+            facts.insert("keyword_only_count".to_owned(), json!(keyword_only_count));
+        }
+        if has_variadic {
+            facts.insert("has_variadic".to_owned(), json!(true));
+        }
+        if has_kwargs {
+            facts.insert("has_kwargs".to_owned(), json!(true));
+        }
     }
     let mut has_return = false;
     let mut value_return_kinds: Vec<Option<&'static str>> = Vec::new();
@@ -6214,9 +6448,46 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
 /// Fill `facts` for function entities that lack them (non-Python trees), in place. Leaves nodes
 /// that already carry facts (the Python native path) untouched.
 fn enrich_tree_facts(node: &mut SemanticNode) {
-    if node.facts.is_none() {
-        if let Some(derived) = derive_node_facts(node) {
-            node.facts = Some(derived);
+    // Derive and MERGE, rather than deriving only when facts are entirely absent.
+    //
+    // `python_node_facts_value` reads the raw CST, whose shape varies by parser, so it can
+    // return a PARTIAL bag — enough to make `facts.is_none()` false while `side_effects`,
+    // `return_kind` and friends are still missing. Skipping on "has any facts at all" then
+    // froze that partial bag in place forever.
+    //
+    // `derive_node_facts` works from the NORMALISED SemanticNode, which is parser-independent,
+    // so it is the more reliable of the two. It still cannot win outright: the CST pass sees
+    // the tree before pruning, so where both produce a key the earlier one saw more.
+    // `merge_facts` never overwrites, so this can only fill gaps.
+    let had_facts = node.facts.is_some();
+    let derived = derive_node_facts(node);
+    let derived_keys = match derived.as_ref() {
+        Some(Value::Object(map)) => map.len(),
+        _ => 0,
+    };
+    let added = derived.map_or(0, |d| merge_facts(&mut node.facts, d));
+    if facts_trace_enabled() && (had_facts || derived_keys > 0) {
+        // Records what each pass contributed, so "why is this fact missing?" is answerable
+        // from a user's log instead of a rebuild. `cst` alone on a function entity means the
+        // raw-CST pass produced everything and the normalised pass added nothing; a large
+        // `derived` with a small `+n` means the CST pass had already claimed those keys.
+        let trace = format!(
+            "{}enrich(derived={derived_keys},added={added})",
+            if had_facts { "cst," } else { "" }
+        );
+        push_facts_trace(&mut node.facts, &trace);
+    }
+    // Cross-language structural facts (#9). This tree is PRUNED, so only what survives
+    // pruning is derivable: statement order does, operators do not. That yields
+    // early_exit_count for every language, while has_guard_clause stays absent rather than
+    // false — see uast.rs for why omitting beats claiming.
+    //
+    // Runs for function entities regardless of whether facts already exist, and merges, so
+    // the native Python path keeps its richer guard facts and everything else still gains
+    // the early-exit count. Idempotent: merge_facts never overwrites.
+    if is_function_entity_type(node.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts_pruned(node, "") {
+            merge_facts(&mut node.facts, structural);
         }
     }
     for child in &mut node.children {
@@ -6299,6 +6570,18 @@ fn convert_cst_with_hash_memo(
         type_info: None,
         facts: python_node_facts_value(node),
     };
+    // UAST-derived structural facts (#9): guard clauses, early exits, negated conditions.
+    // These describe how a function is ARRANGED, which the flag-and-count vocabulary cannot
+    // reach — `if not x: return` and `if x: work()` are both has_conditional + a call.
+    //
+    // Merged rather than replacing: the existing facts are correct and widely relied upon;
+    // this adds what they could not say. Only fires for function-shaped nodes, so the cost
+    // stays proportional to the number of functions rather than the number of nodes.
+    if is_function_entity_type(semantic.node_type.as_str()) {
+        if let Some(structural) = uast::uast_structural_facts(node, "python") {
+            merge_facts(&mut semantic.facts, structural);
+        }
+    }
     // Decorator semantics (#69 catalog C/D): decorators are on this WRAPPER, not the inner def
     // python_node_facts_value saw — fold their flags in here so the native Python path carries
     // them (the #70 enrich pass does the same for non-Python trees). Idempotent.
@@ -6306,6 +6589,177 @@ fn convert_cst_with_hash_memo(
         apply_decorator_facts(&mut semantic);
     }
     Some(semantic)
+}
+
+/// Fold derived facts into a node's existing bag.
+///
+/// Existing keys WIN: `python_node_facts_value` reads the full CST before pruning, so where
+/// the two disagree the earlier pass saw more. This can only add.
+fn merge_facts(target: &mut Option<Value>, extra: Value) -> usize {
+    let Value::Object(extra) = extra else { return 0 };
+    let mut added = 0usize;
+    match target {
+        Some(Value::Object(existing)) => {
+            for (k, v) in extra {
+                // A null carries no information. `entry().or_insert()` treated a key present
+                // with a null as already answered, so a partial bag from the raw-CST pass
+                // permanently blocked the normalised pass from completing it — the node kept
+                // `behavior_category: null` forever rather than gaining the real value.
+                if v.is_null() {
+                    continue;
+                }
+                match existing.get(&k) {
+                    // `returns` has a specificity order. "value" means "returns something,
+                    // kind unknown" — it is what the CST pass falls back to whenever it
+                    // cannot identify the literal, which happens whenever the parser's tree
+                    // shape differs from the one it assumes. "literal" is a strictly better
+                    // answer, so letting the vaguer one win would discard a real result.
+                    Some(current)
+                        if k == "returns"
+                            && current.as_str() == Some("value")
+                            && v.as_str() == Some("literal") =>
+                    {
+                        existing.insert(k, v);
+                        added += 1;
+                    }
+                    Some(current) if !current.is_null() => {}
+                    _ => {
+                        existing.insert(k, v);
+                        added += 1;
+                    }
+                }
+            }
+        }
+        _ => {
+            added = extra.len();
+            *target = Some(Value::Object(extra));
+        }
+    }
+    added
+}
+
+/// Whether to record which pass produced which facts. Off by default; one env read, cached.
+///
+/// Exists so a user can attach `INTENTUMDIFF_TRACE_FACTS=1` output to a bug report and we can
+/// see which derivation ran without reproducing their tree. Diagnosing this by rebuilding took
+/// four cycles; the trace answers it in one run.
+fn facts_trace_enabled() -> bool {
+    static ENABLED: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *ENABLED.get_or_init(|| {
+        matches!(
+            std::env::var("INTENTUMDIFF_TRACE_FACTS").as_deref(),
+            Ok("1") | Ok("true") | Ok("yes")
+        )
+    })
+}
+
+/// Append a pass marker to a node's `facts_trace`, creating the bag if needed.
+fn push_facts_trace(target: &mut Option<Value>, marker: &str) {
+    let entry = match target {
+        Some(Value::Object(existing)) => existing,
+        _ => {
+            *target = Some(json!({ "facts_trace": marker }));
+            return;
+        }
+    };
+    match entry.get("facts_trace").and_then(Value::as_str) {
+        Some(prev) => {
+            let combined = format!("{prev};{marker}");
+            entry.insert("facts_trace".to_owned(), json!(combined));
+        }
+        None => {
+            entry.insert("facts_trace".to_owned(), json!(marker));
+        }
+    }
+}
+
+/// Merge semantics for the two fact derivations.
+///
+/// These are the engine invariants; `tests/unit/test_fact_derivation_provenance.py` is the
+/// acceptance half that proves the wiring survives the binding. Both are required — a Go or
+/// Java binding gets the guarantee from here, not from pytest.
+#[cfg(test)]
+mod fact_merge_tests {
+    use super::*;
+
+    #[test]
+    fn a_null_does_not_block_the_pass_that_can_supply_the_value() {
+        // THE bug. The CST pass emits a partial bag whose unreachable facts sit as explicit
+        // nulls. `entry().or_insert()` treated those as answered, so the normalised pass —
+        // which ran on every node, every time — could never complete them.
+        let mut target = Some(json!({ "behavior_category": null, "returns": "none" }));
+        let added = merge_facts(&mut target, json!({ "behavior_category": "validator" }));
+        assert_eq!(added, 1, "a null must not count as an existing answer");
+        assert_eq!(target.as_ref().unwrap()["behavior_category"], json!("validator"));
+    }
+
+    #[test]
+    fn a_real_existing_value_still_wins() {
+        // The CST pass reads the tree BEFORE pruning, so where both produce a key it saw more.
+        // Gap-filling must not become overwriting.
+        let mut target = Some(json!({ "body": "substantive" }));
+        let added = merge_facts(&mut target, json!({ "body": "stub" }));
+        assert_eq!(added, 0);
+        assert_eq!(target.as_ref().unwrap()["body"], json!("substantive"));
+    }
+
+    #[test]
+    fn a_vague_returns_is_upgraded_by_a_specific_one() {
+        // "value" is the CST pass's fallback for "returns something, kind unknown" — which is
+        // what it answers whenever the parser's tree shape differs from the one it assumes.
+        // "literal" is strictly better, so the vaguer answer must not win.
+        let mut target = Some(json!({ "returns": "value" }));
+        let added = merge_facts(&mut target, json!({ "returns": "literal", "return_kind": "int" }));
+        assert_eq!(added, 2);
+        assert_eq!(target.as_ref().unwrap()["returns"], json!("literal"));
+        assert_eq!(target.as_ref().unwrap()["return_kind"], json!("int"));
+    }
+
+    #[test]
+    fn the_upgrade_does_not_run_backwards() {
+        let mut target = Some(json!({ "returns": "literal" }));
+        merge_facts(&mut target, json!({ "returns": "value" }));
+        assert_eq!(target.as_ref().unwrap()["returns"], json!("literal"));
+    }
+
+    #[test]
+    fn an_incoming_null_is_never_written() {
+        // A null carries no information in either direction.
+        let mut target = Some(json!({}));
+        let added = merge_facts(&mut target, json!({ "is_enum": null }));
+        assert_eq!(added, 0);
+        assert!(target.as_ref().unwrap().get("is_enum").is_none());
+    }
+
+    #[test]
+    fn merge_reports_what_it_actually_contributed() {
+        // `derived=N,added=0` in a trace is the signature of the null-blocking bug, so the
+        // count has to be truthful for the diagnostic to be worth anything.
+        let mut target = Some(json!({ "a": 1, "b": null }));
+        let added = merge_facts(&mut target, json!({ "a": 2, "b": 3, "c": 4 }));
+        assert_eq!(added, 2, "b was null and c was absent; a was already answered");
+    }
+
+    #[test]
+    fn tracing_is_off_unless_the_environment_asks_for_it() {
+        // Diagnostic payload must never appear in normal output.
+        assert!(
+            !facts_trace_enabled(),
+            "INTENTUMDIFF_TRACE_FACTS must default off; a set env var breaks this test's premise"
+        );
+    }
+
+    #[test]
+    fn a_trace_marker_accumulates_rather_than_replacing() {
+        // Enrichment runs more than once; the trace has to show the sequence, not the last one.
+        let mut target = Some(json!({ "returns": "none" }));
+        push_facts_trace(&mut target, "cst");
+        push_facts_trace(&mut target, "enrich(derived=8,added=6)");
+        assert_eq!(
+            target.as_ref().unwrap()["facts_trace"],
+            json!("cst;enrich(derived=8,added=6)")
+        );
+    }
 }
 
 fn is_semantic(node_type: &str) -> bool {
@@ -7906,6 +8360,18 @@ fn draft_to_change(draft: &ChangeDraft<'_>) -> Value {
     if let Some(text_diff) = &draft.text_diff {
         value.insert("text_diff".to_owned(), json!(text_diff));
     }
+    // Fact delta (#178): what MOVED between the two fact bags, not what they hold. Derived
+    // here so every binding reads the same finding instead of each re-deriving it — this
+    // was extension-only TypeScript, invisible to the Go/Java skins. Omitted entirely when
+    // empty or when either side has no facts, so consumers can treat presence as meaning.
+    if let (Some(old_node), Some(new_node)) = (draft.old_node, draft.new_node) {
+        if let (Some(before), Some(after)) = (&old_node.facts, &new_node.facts) {
+            let delta = compute_fact_delta(before, after);
+            if !delta.is_empty() {
+                value.insert("fact_delta".to_owned(), Value::Array(delta));
+            }
+        }
+    }
     Value::Object(value)
 }
 
@@ -8062,7 +8528,7 @@ fn refine_candidate_drafts<'a>(
     });
 }
 
-// Env-gated draft tracer for parity debugging: set INTENTDIFF_FINALIZE_DEBUG=1 to see
+// Env-gated draft tracer for parity debugging: set INTENTUMDIFF_FINALIZE_DEBUG=1 to see
 // the surviving drafts after each finalize/refine pass on stderr. (Plain comment — a
 // macro invocation cannot carry an outer doc comment.)
 thread_local! {
@@ -8086,7 +8552,7 @@ fn finalize_debug_probe(stage: &str, changes: &[ChangeDraft<'_>]) {
             records.push((stage.to_string(), changes.len()));
         }
     });
-    if std::env::var("INTENTDIFF_FINALIZE_DEBUG").is_err() {
+    if std::env::var("INTENTUMDIFF_FINALIZE_DEBUG").is_err() {
         return;
     }
     let summary: Vec<String> = changes
@@ -8458,7 +8924,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     }
     metadata["rust_core"] = json!({
         "status": COMPLETE,
-        "backend": "intentdiff_rust_core",
+        "backend": "intentumdiff_rust_core",
         "supported_language": "python",
         "version": VERSION,
         "engine": "rust_core_stage11_finalizer_v1",
@@ -9655,7 +10121,7 @@ fn semantic_diff_payload(
     let metadata = json!({
         "rust_core": {
             "status": status,
-            "backend": "intentdiff_rust_core",
+            "backend": "intentumdiff_rust_core",
             "supported_language": "python",
             "version": VERSION,
             "details": extra_metadata,
@@ -9682,7 +10148,7 @@ fn rust_engine_telemetry_from_details(details: &Value) -> Value {
     let engine = details
         .get("engine")
         .and_then(Value::as_str)
-        .unwrap_or("intentdiff_rust_core");
+        .unwrap_or("intentumdiff_rust_core");
     let parser_backend = details
         .get("python_parser_backend")
         .and_then(Value::as_str)
@@ -9717,7 +10183,7 @@ fn rust_engine_telemetry_from_details(details: &Value) -> Value {
     json!({
         "schema_version": 1,
         "calls": [{
-            "plugin": "intentdiff_rust_core",
+            "plugin": "intentumdiff_rust_core",
             "function": "finalize",
             "engine_owner": "rust",
             "engine": engine,

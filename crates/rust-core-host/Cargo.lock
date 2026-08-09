@@ -986,7 +986,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "intentdiff-rust-core"
+name = "intentumdiff-ast"
+version = "0.1.0"
+source = "git+https://github.com/buchochelliq-labs/intentumdiff-ast?tag=v0.1.0#79b8df9f1af10ce35f0e4c25294bc9fd1d40d53c"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "intentumdiff-rust-core"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -996,6 +1004,7 @@ dependencies = [
  "image",
  "index-engine-lib",
  "infer",
+ "intentumdiff-ast",
  "libloading",
  "rayon",
  "regex",

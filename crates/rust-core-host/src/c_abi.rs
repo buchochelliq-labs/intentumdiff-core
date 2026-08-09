@@ -1,4 +1,4 @@
-//! The stable C ABI (`intentdiff_call`) — Phase B, the split-readiness gate.
+//! The stable C ABI (`intentumdiff_call`) — Phase B, the split-readiness gate.
 //!
 //! A single `extern "C"` dispatch entrypoint that lets ANY language binding (Python via
 //! ctypes/cffi, Go via cgo, Node via N-API, …) drive the pure-Rust engine WITHOUT libpython or
@@ -7,10 +7,10 @@
 //! was retired once the ctypes binding reached parity over this ABI (#B.6).
 //!
 //! Contract (JSON in, JSON out — the wire is UTF-8 C strings):
-//! - `intentdiff_call(name, args_json)`: *name* is the function; *args_json* is a JSON array of
+//! - `intentumdiff_call(name, args_json)`: *name* is the function; *args_json* is a JSON array of
 //!   positional arguments (or empty/`"[]"` for none). Returns a heap-allocated JSON envelope
 //!   `{"ok": true, "result": <value>}` or `{"ok": false, "error": "<message>"}`, which the caller
-//!   MUST free with [`intentdiff_free`]. A NULL return means only an allocation/encoding failure.
+//!   MUST free with [`intentumdiff_free`]. A NULL return means only an allocation/encoding failure.
 //! - The boundary catches panics (unwinding across `extern "C"` is UB) and reports them as errors.
 //!
 //! Every handler delegates to the crate's plain-Rust `*_impl` functions — the same code the
@@ -27,10 +27,10 @@ use serde_json::{json, Value};
 ///
 /// # Safety
 /// `name` and `args_json` must be valid, NUL-terminated UTF-8 C strings (or NULL, which is
-/// reported as an error). The returned pointer must be freed with [`intentdiff_free`] and not
+/// reported as an error). The returned pointer must be freed with [`intentumdiff_free`] and not
 /// used afterwards.
 #[no_mangle]
-pub unsafe extern "C" fn intentdiff_call(
+pub unsafe extern "C" fn intentumdiff_call(
     name: *const c_char,
     args_json: *const c_char,
 ) -> *mut c_char {
@@ -42,12 +42,12 @@ pub unsafe extern "C" fn intentdiff_call(
     }
 }
 
-/// Free a string returned by [`intentdiff_call`].
+/// Free a string returned by [`intentumdiff_call`].
 ///
 /// # Safety
-/// `ptr` must be a pointer previously returned by [`intentdiff_call`] and not already freed.
+/// `ptr` must be a pointer previously returned by [`intentumdiff_call`] and not already freed.
 #[no_mangle]
-pub unsafe extern "C" fn intentdiff_free(ptr: *mut c_char) {
+pub unsafe extern "C" fn intentumdiff_free(ptr: *mut c_char) {
     if !ptr.is_null() {
         drop(CString::from_raw(ptr));
     }
@@ -292,6 +292,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "config_json")?,
             arg_str(args, 5, "wasm_dir")?,
         ),
+        // Perceptual image op. Returns a whole protocol response (success OR error envelope) —
+        // a bad request is a response, not a failed call, so this handler never errors.
+        "live_handle_asset_diff" => Ok(crate::live_server::live_handle_asset_diff_impl(
+            arg_str(args, 0, "repo_path")?,
+            arg_str(args, 1, "default_ref")?,
+            arg_str(args, 2, "request_json")?,
+            arg_i64(args, 3, "seq")?,
+        )),
         "live_handle_review" => crate::live_server::live_handle_review_impl(
             arg_str(args, 0, "repo_path")?,
             arg_str(args, 1, "old_ref")?,
@@ -315,7 +323,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 0, "start_path")?,
             arg_opt_str(args, 1, "explicit_path")?,
         ),
-        "find_intentdiff_config_path" => Ok(json!(crate::config::find_config_path(
+        "find_intentumdiff_config_path" => Ok(json!(crate::config::find_config_path(
             arg_opt_str(args, 0, "start_path")?,
             arg_opt_str(args, 1, "explicit_path")?,
         )
@@ -676,6 +684,16 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 3, "output_dir")?,
             arg_str(args, 4, "options_json")?,
         ),
+        // One tracked image against a ref — what an editor reviewing a single file needs. The
+        // engine materialises the base blob, so no binding has to shell out to git for it.
+        "diff_git_asset_path" => crate::asset_diff::diff_git_asset_path_impl(
+            arg_str(args, 0, "repo_path")?,
+            arg_str(args, 1, "base")?,
+            arg_str(args, 2, "head")?,
+            arg_str(args, 3, "rel_path")?,
+            arg_str(args, 4, "output_dir")?,
+            arg_str(args, 5, "options_json")?,
+        ),
         // Review finalization + profile/guardrail enrichment — the remaining lib.rs engine seams.
         "finalize_review" => crate::finalize_review_impl(
             arg_str(args, 0, "old_tree_json")?,
@@ -845,13 +863,13 @@ mod tests {
     }
 
     #[test]
-    fn ffi_round_trip_through_intentdiff_call() {
+    fn ffi_round_trip_through_intentumdiff_call() {
         let name = CString::new("version").unwrap();
         let args = CString::new("[]").unwrap();
-        let ptr = unsafe { intentdiff_call(name.as_ptr(), args.as_ptr()) };
+        let ptr = unsafe { intentumdiff_call(name.as_ptr(), args.as_ptr()) };
         assert!(!ptr.is_null());
         let out = unsafe { CStr::from_ptr(ptr).to_str().unwrap().to_owned() };
-        unsafe { intentdiff_free(ptr) };
+        unsafe { intentumdiff_free(ptr) };
         let env: Value = serde_json::from_str(&out).unwrap();
         assert_eq!(env["ok"], true);
         assert_eq!(env["result"], crate::VERSION);
@@ -884,7 +902,7 @@ mod tests {
         assert!(env["result"].is_object());
         // find_config_path returns a path string or null (the walk-up may find a repo config
         // from the cwd fallback) — either is a valid, non-error result.
-        let env = call("find_intentdiff_config_path", json!([null, null]));
+        let env = call("find_intentumdiff_config_path", json!([null, null]));
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_string() || env["result"].is_null());
         // A non-string, non-null arg is a clear error.
@@ -1103,6 +1121,17 @@ mod tests {
         );
         assert_eq!(env["ok"], false);
         assert!(env["error"].as_str().unwrap().contains("options JSON"));
+        // The single-path git variant is reachable by name and rejects a non-image path before
+        // it touches git — the editor's per-file asset request lands here.
+        let env = call(
+            "diff_git_asset_path",
+            json!(["/repo", "HEAD", "", "src/main.rs", "/out", "{}"]),
+        );
+        assert_eq!(env["ok"], false);
+        assert!(env["error"]
+            .as_str()
+            .unwrap()
+            .contains("not a perceptually comparable image path"));
     }
 
     #[test]
@@ -1118,7 +1147,7 @@ mod tests {
         // dep-hashes: a well-formed, self-covered pinning yields an empty error list.
         let env = call(
             "validate_dep_hashes",
-            json!([[["intentdiff-foo==1.0.0", format!("sha256:{}", "a".repeat(64))]], [], "intentdiff-foo", null]),
+            json!([[["intentumdiff-foo==1.0.0", format!("sha256:{}", "a".repeat(64))]], [], "intentumdiff-foo", null]),
         );
         assert_eq!(env["ok"], true);
         assert_eq!(env["result"].as_array().unwrap().len(), 0);
@@ -1235,9 +1264,9 @@ mod tests {
     #[test]
     fn null_args_are_rejected_without_crashing() {
         let name = CString::new("version").unwrap();
-        let ptr = unsafe { intentdiff_call(name.as_ptr(), std::ptr::null()) };
+        let ptr = unsafe { intentumdiff_call(name.as_ptr(), std::ptr::null()) };
         let out = unsafe { CStr::from_ptr(ptr).to_str().unwrap().to_owned() };
-        unsafe { intentdiff_free(ptr) };
+        unsafe { intentumdiff_free(ptr) };
         let env: Value = serde_json::from_str(&out).unwrap();
         assert_eq!(env["ok"], false);
         // A NULL/malformed call at the FFI boundary is classified bad_request.

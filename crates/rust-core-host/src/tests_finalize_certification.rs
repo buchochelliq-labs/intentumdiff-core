@@ -6,7 +6,7 @@ use super::*;
 use crate::*;
 
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_returns_certified_public_diff_for_python_change() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -34,7 +34,7 @@ use crate::*;
         assert!(payload["diff"]["changes"].as_array().unwrap().len() >= 1);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_certifies_compacted_literal_edit_as_one_modification() {
         // Before issue #13 was fixed, `return 1` -> `return 2` reached the finalizer as an
         // uncompacted MODIFICATION + stray literal ADDITION/DELETION, and the modification-only
@@ -55,7 +55,7 @@ use crate::*;
         assert_eq!(changes[0]["change_type"], "MODIFICATION");
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_still_falls_back_for_non_modification_output() {
         // The modification-only certification gate must stay reachable: a genuine ADDITION
         // (a brand-new function) is not certified by finalizer wave 1 and falls back.
@@ -74,7 +74,7 @@ use crate::*;
             .contains("modification-only"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_rejects_unknown_change_node_id() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -87,7 +87,7 @@ use crate::*;
         assert!(err.contains("unknown node id"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn stage11_finalizer_rejects_oversized_sources() {
         let mut request = stage11_finalizer_request(
             "def answer():\n    return 1\n",
@@ -100,7 +100,7 @@ use crate::*;
         assert!(err.contains("old source is"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_commit_json_returns_certified_commit_bytes_for_complete_native_batch() {
         let request = json!({
             "schema_version": 1,
@@ -193,7 +193,7 @@ use crate::*;
         assert!(error.contains("end must be >= start"));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_matches_working_tree_small_python_signature() {
         let old_source = concat!(
             "def charge_total(order):\n",
@@ -320,7 +320,7 @@ use crate::*;
         assert_eq!(signature, &expected);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_matches_rename_move_heavy_python_signature() {
         let old_billing = concat!(
             "def calculate_discount(customer, total):\n",
@@ -504,7 +504,7 @@ use crate::*;
         assert_eq!(Value::Array(signature), expected);
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn batch_candidate_large_python_signature_promotes_renamed_functions() {
         let wasm_path = python_wasm_path();
         let mut files = Vec::new();
@@ -539,11 +539,23 @@ use crate::*;
         }
 
         assert_eq!(payload["status"], CANDIDATE);
-        // 12 entries per file: 12 body modifications, with each of the 3 renamed functions
-        // collapsing to ONE REFACTORING rename (issue #10 — previously MOVE + a redundant
-        // identifier MODIFICATION, i.e. 15 entries per file / 450 total).
-        assert_eq!(signature.len(), 360);
-        assert!(signature.iter().any(|item| {
+        // 15 entries per file / 450 total.
+        //
+        // This asserted 360 — every renamed function collapsing to ONE REFACTORING (issue #10).
+        // That expectation was WRONG, and it was encoding intentumdiff-core#18: the fixture adds
+        // a guard clause to EVERY function ("if total < 0: return 0"), and every fifth function
+        // is ALSO renamed. Collapsing those to a lone REFACTORING claimed "structure changed,
+        // behaviour did not" about a function that now returns 0 for negative totals.
+        //
+        // The extra 90 entries are those real behavioural changes, no longer discarded with the
+        // DELETION/ADDITION pair the rename promotion replaced. A rename is only promoted when
+        // the body is unchanged; see rename_body_is_unchanged in draft_suppressors.rs.
+        assert_eq!(signature.len(), 450);
+        // calculate_0_0 was renamed AND gained a guard clause, so it must NOT be reported as a
+        // REFACTORING — that label states behaviour did not change, and here it did. This
+        // asserted the entry was PRESENT, which is the bug in intentumdiff-core#18 written as
+        // an expectation. Now asserts its absence.
+        assert!(!signature.iter().any(|item| {
             item == &json!({
                 "old_filename": "src/module_0.py",
                 "new_filename": "src/module_0.py",
@@ -588,7 +600,11 @@ use crate::*;
             item.get("old_filename").and_then(Value::as_str) == Some("src/module_0.py")
                 && old_node.get("id").and_then(Value::as_str) == Some("0.0.0")
         }));
-        assert!(!signature.iter().any(|item| {
+        // calculate_0_0 was renamed AND gained a guard clause, so its real changes MUST be
+        // visible. This forbade DELETION/ADDITION for it — correct only while every rename
+        // collapsed to a REFACTORING, which is the bug (intentumdiff-core#18). Suppressing
+        // these is precisely how the behavioural change disappeared.
+        assert!(signature.iter().any(|item| {
             let old_node = item.get("old").unwrap_or(&Value::Null);
             let new_node = item.get("new").unwrap_or(&Value::Null);
             item.get("old_filename").and_then(Value::as_str) == Some("src/module_0.py")
@@ -601,7 +617,7 @@ use crate::*;
         }));
     }
     #[test]
-    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn native_candidate_large_python_signature_matches_wasm_candidate() {
         let wasm_path = python_wasm_path();
         let mut files = Vec::new();
@@ -635,8 +651,13 @@ use crate::*;
             serde_json::from_str(&diff_batch(&native_request.to_string()).unwrap()).unwrap();
         let native_signature = candidate_signature_from_payload(&native);
 
-        // 360 = 12 entries × 30 files; renames collapse to one REFACTORING each (issue #10).
-        assert_eq!(native_signature.len(), 360);
+        // 450 = 15 entries × 30 files. Was 360, on the same wrong assumption corrected above:
+        // the fixture adds a guard clause to every function, so a renamed function did NOT
+        // merely get renamed and must not collapse to one REFACTORING (intentumdiff-core#18).
+        //
+        // The parity assertion below is the point of this test and is unaffected — native and
+        // wasm must agree, whatever the count is.
+        assert_eq!(native_signature.len(), 450);
         assert_eq!(native_signature, candidate_signature_from_payload(&wasm));
     }
     #[test]

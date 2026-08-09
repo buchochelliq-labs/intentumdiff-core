@@ -128,45 +128,45 @@ dependencies = [
 ]
 
 [[package]]
-name = "intentdiff-html-renderer"
+name = "intentumdiff-html-renderer"
 version = "0.1.0"
 dependencies = [
- "intentdiff-plugin-sdk",
+ "intentumdiff-plugin-sdk",
  "serde_json",
  "wit-bindgen",
 ]
 
 [[package]]
-name = "intentdiff-index-engine"
+name = "intentumdiff-index-engine"
 version = "0.1.0"
 dependencies = [
  "index-engine-lib",
- "intentdiff-plugin-sdk",
+ "intentumdiff-plugin-sdk",
  "wit-bindgen",
 ]
 
 [[package]]
-name = "intentdiff-llm-renderer"
+name = "intentumdiff-llm-renderer"
 version = "0.1.0"
 dependencies = [
- "intentdiff-plugin-sdk",
+ "intentumdiff-plugin-sdk",
  "serde_json",
  "wit-bindgen",
 ]
 
 [[package]]
-name = "intentdiff-patch-renderer"
+name = "intentumdiff-patch-renderer"
 version = "0.1.0"
 dependencies = [
- "intentdiff-plugin-sdk",
+ "intentumdiff-plugin-sdk",
  "serde_json",
  "wit-bindgen",
 ]
 
 [[package]]
-name = "intentdiff-plugin-sdk"
+name = "intentumdiff-plugin-sdk"
 version = "0.1.0"
-source = "git+https://github.com/buchochelliq-labs/intentdiff-plugin-sdk?tag=v0.1.0#908a8a1d31d084afb38d3dcb91142fc0726046de"
+source = "git+https://github.com/buchochelliq-labs/intentumdiff-plugin-sdk?tag=v0.1.0#908a8a1d31d084afb38d3dcb91142fc0726046de"
 dependencies = [
  "hex",
  "serde",
@@ -176,10 +176,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "intentdiff-terminal-renderer"
+name = "intentumdiff-terminal-renderer"
 version = "0.1.0"
 dependencies = [
- "intentdiff-plugin-sdk",
+ "intentumdiff-plugin-sdk",
  "serde_json",
  "wit-bindgen",
 ]

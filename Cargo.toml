@@ -1,7 +1,7 @@
-# intentdiff-core — the IntentDiff engine workspace (the flagship repo).
+# intentumdiff-core — the IntentumDiff engine workspace (the flagship repo).
 # Mirrors the monorepo's build topology: the Wasm-component members (index-engine +
 # the renderers) build under this workspace's profiles/patches, while the native
-# engine (crates/rust-core-host) and the `intentdiff` CLI (crates/cli) are standalone
+# engine (crates/rust-core-host) and the `intentumdiff` CLI (crates/cli) are standalone
 # crates with their own [patch]/[profile] — exactly as certified in the monorepo.
 [workspace]
 members = [
@@ -14,10 +14,10 @@ members = [
 ]
 resolver = "2"
 exclude = [
-    # The native engine: cdylib exposing the C ABI (intentdiff_call) + rlib for
+    # The native engine: cdylib exposing the C ABI (intentumdiff_call) + rlib for
     # in-process Rust consumers. Own [patch]/[profile] (release opt-level=3).
     "crates/rust-core-host",
-    # The native intentdiff CLI — links the engine in-process; own [patch]/[profile].
+    # The native intentumdiff CLI — links the engine in-process; own [patch]/[profile].
     "crates/cli",
 ]
 

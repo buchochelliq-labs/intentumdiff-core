@@ -1,5 +1,5 @@
-//! Project configuration loading (`intentdiff.yaml`) — the config subsystem port
-//! (#99, A2.1). Python's `core/config.py` (`find_intentdiff_config` +
+//! Project configuration loading (`intentumdiff.yaml`) — the config subsystem port
+//! (#99, A2.1). Python's `core/config.py` (`find_intentumdiff_config` +
 //! `load_project_diff_config`) moves here so every binding resolves config identically;
 //! the Python shell keeps only the `DiffConfig` DTO construction from the returned
 //! mapping. Behaviour mirrors the retired Python exactly (file walk, YAML parse, the
@@ -9,7 +9,7 @@ use std::collections::HashSet;
 use std::env;
 use std::path::PathBuf;
 
-const INTENTDIFF_CONFIG_FILENAME: &str = "intentdiff.yaml";
+const INTENTUMDIFF_CONFIG_FILENAME: &str = "intentumdiff.yaml";
 
 /// The keys accepted under the `config:` mapping — mirrors python `_DIFF_CONFIG_KEYS`.
 const DIFF_CONFIG_KEYS: &[&str] = &[
@@ -23,7 +23,7 @@ const DIFF_CONFIG_KEYS: &[&str] = &[
     "strict_plugins",
 ];
 
-/// python `config.find_intentdiff_config`: the nearest `intentdiff.yaml` from
+/// python `config.find_intentumdiff_config`: the nearest `intentumdiff.yaml` from
 /// *start_path* (and cwd) upward, or an explicit path when it exists.
 pub(crate) fn find_config_path(start_path: Option<&str>, explicit_path: Option<&str>) -> Option<PathBuf> {
     if let Some(ep) = explicit_path {
@@ -59,7 +59,7 @@ pub(crate) fn find_config_path(start_path: Option<&str>, explicit_path: Option<&
             if !seen.insert(directory.clone()) {
                 continue;
             }
-            let candidate = directory.join(INTENTDIFF_CONFIG_FILENAME);
+            let candidate = directory.join(INTENTUMDIFF_CONFIG_FILENAME);
             if candidate.exists() {
                 return Some(candidate);
             }
@@ -167,7 +167,7 @@ fn parse_underscore_number(text: &str) -> Option<serde_json::Value> {
 
 /// Shell-facing config loader (#99): returns the validated `config` mapping as JSON
 /// (`"{}"` when absent); raises `ValueError` on a malformed file / unsupported keys.
-/// Shell-facing config finder (#99): the resolved `intentdiff.yaml` path, or `None`.
+/// Shell-facing config finder (#99): the resolved `intentumdiff.yaml` path, or `None`.
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -183,7 +183,7 @@ mod tests {
         fn new(body: &str) -> Self {
             let n = COUNTER.fetch_add(1, Ordering::SeqCst);
             let path = env::temp_dir().join(format!(
-                "intentdiff_cfg_{}_{}.yaml",
+                "intentumdiff_cfg_{}_{}.yaml",
                 std::process::id(),
                 n
             ));
@@ -225,7 +225,7 @@ mod tests {
     #[test]
     fn missing_file_and_absent_section_return_empty() {
         assert_eq!(
-            load_config_section(None, Some("/no/such/intentdiff.yaml")).unwrap(),
+            load_config_section(None, Some("/no/such/intentumdiff.yaml")).unwrap(),
             "{}"
         );
         let f = TempYaml::new("guardrails:\n  protected: []\n");

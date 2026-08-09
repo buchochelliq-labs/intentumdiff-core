@@ -1,6 +1,6 @@
-# Agent instructions — intentdiff-core
+# Agent instructions — intentumdiff-core
 
-This is the IntentDiff **engine**: the complete shared backend. Every binding is thin.
+This is the IntentumDiff **engine**: the complete shared backend. Every binding is thin.
 
 ## Hard invariants
 - New processing logic lands HERE, never in a binding repo. If Go would need it, it's engine.
@@ -11,7 +11,7 @@ This is the IntentDiff **engine**: the complete shared backend. Every binding is
 
 ## Build + test (Rust 1.93.0)
 ```bash
-cd crates/rust-core-host && cargo test          # 178 + 25 tier-c (needs INTENTDIFF_TEST_WASM_DIR)
+cd crates/rust-core-host && cargo test          # 178 + 25 tier-c (needs INTENTUMDIFF_TEST_WASM_DIR)
 cargo build --release --target wasm32-wasip2    # workspace wasm members, from repo root
 cd crates/cli && cargo build --release
 ```

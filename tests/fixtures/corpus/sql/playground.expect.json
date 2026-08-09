@@ -1,0 +1,32 @@
+{
+ "language": "sql",
+ "filename": "code.sql",
+ "visible_tokens": [
+  "'2025-06-30'",
+  "'2026-01-01'",
+  "FROM accounts WHERE last_login < '2025-06-30'",
+  "FROM orders WHERE placed_at > '2026-01-01'",
+  "FROM users WHERE active = 1",
+  "WHERE active = 1",
+  "WHERE last_login < '2025-06-30'",
+  "WHERE placed_at > '2026-01-01'",
+  "accounts",
+  "active",
+  "active = 1",
+  "active_users",
+  "dormant_accounts",
+  "id",
+  "last_login",
+  "last_login < '2025-06-30'",
+  "name",
+  "orders",
+  "placed_at",
+  "placed_at > '2026-01-01'",
+  "recent_orders",
+  "total",
+  "users"
+ ],
+ "append_statement": null,
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}
