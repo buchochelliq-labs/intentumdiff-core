@@ -1,0 +1,629 @@
+{
+  "abap": {
+    "visible": 5,
+    "invisible": [
+      "REPORT",
+      "z_demo",
+      "FORM",
+      "greet",
+      "lv_name",
+      "string",
+      "DATA",
+      "Hello",
+      "WRITE",
+      "ENDFORM",
+      "add_numbers"
+    ],
+    "mutation_xfail": {}
+  },
+  "adf": {
+    "visible": 9,
+    "invisible": [
+      "name",
+      "properties",
+      "parameters",
+      "type",
+      "defaultValue",
+      "output",
+      "activities",
+      "inputs",
+      "referenceName",
+      "DatasetReference",
+      "outputs",
+      "typeProperties",
+      "source",
+      "BlobSource",
+      "sink",
+      "BlobSink",
+      "dependsOn",
+      "activity",
+      "dependencyConditions",
+      "Succeeded",
+      "url",
+      "https",
+      "example",
+      "com",
+      "log",
+      "method",
+      "POST"
+    ],
+    "mutation_xfail": {}
+  },
+  "asciidoc": {
+    "visible": 0,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "asm": {
+    "visible": 21,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "assemblyscript": {
+    "visible": 3,
+    "invisible": [
+      "export",
+      "i32"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "astro": {
+    "visible": 11,
+    "invisible": [
+      "const",
+      "Site",
+      "Date",
+      "getFullYear",
+      "Hello",
+      "World",
+      "Welcome",
+      "site",
+      "copy"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "bash": {
+    "visible": 9,
+    "invisible": [
+      "bin",
+      "bash"
+    ],
+    "mutation_xfail": {}
+  },
+  "c": {
+    "visible": 10,
+    "invisible": [
+      "include",
+      "const",
+      "char"
+    ],
+    "mutation_xfail": {}
+  },
+  "clojure": {
+    "visible": 8,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "cpp": {
+    "visible": 12,
+    "invisible": [
+      "include",
+      "const",
+      "auto"
+    ],
+    "mutation_xfail": {}
+  },
+  "csharp": {
+    "visible": 10,
+    "invisible": [
+      "using",
+      "public",
+      "foreach"
+    ],
+    "mutation_xfail": {}
+  },
+  "css": {
+    "visible": 20,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "dart": {
+    "visible": 6,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "databricks": {
+    "visible": 6,
+    "invisible": [
+      "name",
+      "parameters",
+      "default",
+      "tasks",
+      "task_key",
+      "notebook_path",
+      "notebooks",
+      "depends_on"
+    ],
+    "mutation_xfail": {}
+  },
+  "databricks-workflow": {
+    "visible": 6,
+    "invisible": [
+      "name",
+      "parameters",
+      "default",
+      "tasks",
+      "task_key",
+      "notebook_path",
+      "notebooks",
+      "depends_on"
+    ],
+    "mutation_xfail": {}
+  },
+  "dax": {
+    "visible": 14,
+    "invisible": [
+      "DEFINE",
+      "MEASURE",
+      "EVALUATE"
+    ],
+    "mutation_xfail": {}
+  },
+  "delphi": {
+    "visible": 10,
+    "invisible": [
+      "program",
+      "procedure",
+      "const",
+      "string",
+      "begin",
+      "Integer"
+    ],
+    "mutation_xfail": {}
+  },
+  "dockerfile": {
+    "visible": 15,
+    "invisible": [
+      "index"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "elixir": {
+    "visible": 7,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "generic": {
+    "visible": 14,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "go": {
+    "visible": 6,
+    "invisible": [
+      "func"
+    ],
+    "mutation_xfail": {}
+  },
+  "graphql": {
+    "visible": 2,
+    "invisible": [
+      "type",
+      "String"
+    ],
+    "mutation_xfail": {}
+  },
+  "groovy": {
+    "visible": 6,
+    "invisible": [
+      "String"
+    ],
+    "mutation_xfail": {}
+  },
+  "haskell": {
+    "visible": 6,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "hcl": {
+    "visible": 16,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "html": {
+    "visible": 23,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "java": {
+    "visible": 13,
+    "invisible": [
+      "double"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "javascript": {
+    "visible": 7,
+    "invisible": [
+      "const"
+    ],
+    "mutation_xfail": {}
+  },
+  "json": {
+    "visible": 12,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "kotlin": {
+    "visible": 7,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "latex": {
+    "visible": 0,
+    "invisible": [
+      "section"
+    ],
+    "mutation_xfail": {}
+  },
+  "lua": {
+    "visible": 7,
+    "invisible": [
+      "local"
+    ],
+    "mutation_xfail": {}
+  },
+  "m": {
+    "visible": 13,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "mdx": {
+    "visible": 11,
+    "invisible": [
+      "Welcome",
+      "docs",
+      "guide",
+      "helps",
+      "you",
+      "get",
+      "running",
+      "Make",
+      "sure",
+      "have",
+      "Node",
+      "installed"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "ocaml": {
+    "visible": 1,
+    "invisible": [],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "odin": {
+    "visible": 5,
+    "invisible": [
+      "package",
+      "core",
+      "fmt",
+      "proc",
+      "name",
+      "string",
+      "printf",
+      "Hello",
+      "World",
+      "println"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)",
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "perl": {
+    "visible": 5,
+    "invisible": [
+      "strict",
+      "warnings",
+      "sub"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "php": {
+    "visible": 5,
+    "invisible": [
+      "php",
+      "string"
+    ],
+    "mutation_xfail": {}
+  },
+  "plsql": {
+    "visible": 16,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "po": {
+    "visible": 1,
+    "invisible": [
+      "msgid",
+      "msgstr"
+    ],
+    "mutation_xfail": {}
+  },
+  "postscript": {
+    "visible": 1,
+    "invisible": [
+      "Helvetica",
+      "findfont",
+      "scalefont",
+      "setfont",
+      "moveto",
+      "show",
+      "Hello",
+      "World",
+      "Goodbye",
+      "showpage"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "powershell": {
+    "visible": 11,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "puppet": {
+    "visible": 13,
+    "invisible": [
+      "String",
+      "present"
+    ],
+    "mutation_xfail": {}
+  },
+  "python": {
+    "visible": 9,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "qsharp": {
+    "visible": 4,
+    "invisible": [
+      "namespace",
+      "open",
+      "Microsoft",
+      "Quantum",
+      "Intrinsic",
+      "Canon",
+      "operation",
+      "name",
+      "String",
+      "Unit",
+      "Message",
+      "Result",
+      "use",
+      "Qubit",
+      "result",
+      "Reset"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "r": {
+    "visible": 6,
+    "invisible": [
+      "Hello"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "reasonml": {
+    "visible": 1,
+    "invisible": [],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "ruby": {
+    "visible": 5,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "rust": {
+    "visible": 4,
+    "invisible": [
+      "i32",
+      "pow"
+    ],
+    "mutation_xfail": {}
+  },
+  "sas": {
+    "visible": 0,
+    "invisible": [
+      "target",
+      "World",
+      "data",
+      "work",
+      "greeting",
+      "name",
+      "suffix",
+      "message",
+      "cats",
+      "Hello",
+      "length",
+      "lengthn",
+      "put",
+      "run",
+      "proc"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "scala": {
+    "visible": 9,
+    "invisible": [
+      "object"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "scss": {
+    "visible": 21,
+    "invisible": [
+      "mixin",
+      "include"
+    ],
+    "mutation_xfail": {}
+  },
+  "sql": {
+    "visible": 12,
+    "invisible": [
+      "SELECT"
+    ],
+    "mutation_xfail": {}
+  },
+  "squirrel": {
+    "visible": 5,
+    "invisible": [
+      "Hello"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "svelte": {
+    "visible": 6,
+    "invisible": [
+      "World",
+      "Hello",
+      "Count",
+      "Increment"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)",
+      "edit_'_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "swift": {
+    "visible": 8,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "tsql": {
+    "visible": 10,
+    "invisible": [
+      "LEFT",
+      "JOIN",
+      "WHERE",
+      "GROUP",
+      "ORDER"
+    ],
+    "mutation_xfail": {}
+  },
+  "tsx": {
+    "visible": 10,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "typescript": {
+    "visible": 10,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "vbnet": {
+    "visible": 8,
+    "invisible": [
+      "Module",
+      "Sub",
+      "String",
+      "Integer"
+    ],
+    "mutation_xfail": {}
+  },
+  "vue": {
+    "visible": 13,
+    "invisible": [
+      "Change",
+      "Hello",
+      "World",
+      "Alice",
+      "Bob",
+      "Carol",
+      "length"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)",
+      "edit_'_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "wast": {
+    "visible": 7,
+    "invisible": [
+      "func",
+      "param",
+      "result",
+      "export"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "wat": {
+    "visible": 7,
+    "invisible": [
+      "func",
+      "param",
+      "result",
+      "export"
+    ],
+    "mutation_xfail": {
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "xml": {
+    "visible": 12,
+    "invisible": [
+      "xml",
+      "encoding",
+      "UTF"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)",
+      "edit_\"_string": "content mutation reported style-only (issue #41 class)"
+    }
+  },
+  "yaml": {
+    "visible": 11,
+    "invisible": [],
+    "mutation_xfail": {}
+  },
+  "zig": {
+    "visible": 6,
+    "invisible": [
+      "const",
+      "i32",
+      "pub"
+    ],
+    "mutation_xfail": {
+      "bump_numeric_literal": "content mutation reported style-only (issue #41 class)"
+    }
+  }
+}

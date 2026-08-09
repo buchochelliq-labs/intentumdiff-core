@@ -1,0 +1,26 @@
+{
+ "language": "cmake",
+ "filename": "CMakeLists.txt",
+ "visible_tokens": [
+  "-Wall",
+  "-Wextra",
+  "3.20",
+  "45",
+  "AGENT_TIMEOUT",
+  "PRIVATE",
+  "STATUS",
+  "VERSION",
+  "agent",
+  "building the deploy agent",
+  "deploy_agent",
+  "enable_warnings",
+  "main.c",
+  "print_banner",
+  "project(deploy_agent)",
+  "target_name",
+  "transport.c"
+ ],
+ "append_statement": "install(TARGETS agent RUNTIME DESTINATION bin)",
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}

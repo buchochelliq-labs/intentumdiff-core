@@ -32,6 +32,14 @@ crate-type = ["cdylib", "rlib"]
 # reached parity (the whole suite passes over the C ABI). The engine compute was always pyo3-free.
 
 [dependencies]
+# The canonical AST vocabulary (#9). Pinned to a tag, not a branch: the category and role
+# sets are a CONTRACT for anything derived from them, and a moving dependency would let the
+# vocabulary shift underneath the engine without a visible change here.
+#
+# Note the direction — the core normalises CST -> UAST ITSELF. The parser plugins are
+# untouched, because changing what they emit is a WIT contract change: 69 components
+# rebuilt, re-certified and every registry checksum re-pinned.
+intentumdiff-ast = { git = "https://github.com/buchochelliq-labs/intentumdiff-ast", tag = "v0.1.0" }
 anyhow = "1"
 # Shared symbol/reference-table + cross-file-diff engine, also linked into the
 # index-engine Wasm plugin. Lets the native host compute cross-file changes
@@ -78,3 +86,10 @@ serde_core = { path = "../patches/serde_core" }
 opt-level = 3
 codegen-units = 1
 strip = true
+
+# Standalone workspace root. The repo-root [workspace] already EXCLUDES this crate, so it was
+# always built as its own root (hence the crate-local Cargo.lock). Declaring it explicitly is a
+# no-op for a normal checkout and fixes NESTED checkouts: cargo walks past a workspace that
+# excludes the package, so a git worktree created inside the repo resolved to the OUTER
+# workspace and failed with "current package believes it's in a workspace when it's not".
+[workspace]

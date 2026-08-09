@@ -36,9 +36,19 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 ORG = "buchochelliq-labs"
 API = "https://api.github.com"
 
-# The components the Tier-C tests name (crates/rust-core-host/src/tests_*.rs).
+# The components the engine's own tests name (crates/rust-core-host/src/tests_*.rs).
 # Keys are the parser slug: repo = intentumdiff-<slug>-parser, file = <slug_>parser.wasm.
-TIER_C_COMPONENTS = ["python", "go", "js-ts"]
+#
+# `python`, `go`, `js-ts` are named by the Tier-C certification tests.
+# `ini` and `asm` are named by the language-parity harness (#23) as its wasm-backed
+# increment languages - `python` runs the certified NATIVE batch and `generic`
+# short-circuits before any component, so without these two the harness would exercise
+# no Wasm dispatch at all.
+#
+# Keep this list in step with the harness's INCREMENT_LANGUAGES. It is not cosmetic: the
+# harness FAILS when a mapped component is absent, deliberately, because the alternative
+# is a language silently dropping out of the matrix while the suite still reports green.
+TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm"]
 
 
 class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):

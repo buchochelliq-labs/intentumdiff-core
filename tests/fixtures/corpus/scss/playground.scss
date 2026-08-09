@@ -1,0 +1,20 @@
+$primary:     #2563eb;
+$primary-dark: #1d4ed8;
+$white:        #ffffff;
+
+@mixin button-base {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button {
+  @include button-base;
+  background-color: $primary;
+  color: $white;
+  padding: 8px 16px;
+
+  &:hover { background-color: $primary-dark; }
+  &:focus { outline: 2px solid #93c5fd; }
+}

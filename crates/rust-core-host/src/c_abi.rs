@@ -292,6 +292,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "config_json")?,
             arg_str(args, 5, "wasm_dir")?,
         ),
+        // Perceptual image op. Returns a whole protocol response (success OR error envelope) —
+        // a bad request is a response, not a failed call, so this handler never errors.
+        "live_handle_asset_diff" => Ok(crate::live_server::live_handle_asset_diff_impl(
+            arg_str(args, 0, "repo_path")?,
+            arg_str(args, 1, "default_ref")?,
+            arg_str(args, 2, "request_json")?,
+            arg_i64(args, 3, "seq")?,
+        )),
         "live_handle_review" => crate::live_server::live_handle_review_impl(
             arg_str(args, 0, "repo_path")?,
             arg_str(args, 1, "old_ref")?,
@@ -675,6 +683,16 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 2, "head")?,
             arg_str(args, 3, "output_dir")?,
             arg_str(args, 4, "options_json")?,
+        ),
+        // One tracked image against a ref — what an editor reviewing a single file needs. The
+        // engine materialises the base blob, so no binding has to shell out to git for it.
+        "diff_git_asset_path" => crate::asset_diff::diff_git_asset_path_impl(
+            arg_str(args, 0, "repo_path")?,
+            arg_str(args, 1, "base")?,
+            arg_str(args, 2, "head")?,
+            arg_str(args, 3, "rel_path")?,
+            arg_str(args, 4, "output_dir")?,
+            arg_str(args, 5, "options_json")?,
         ),
         // Review finalization + profile/guardrail enrichment — the remaining lib.rs engine seams.
         "finalize_review" => crate::finalize_review_impl(
@@ -1103,6 +1121,17 @@ mod tests {
         );
         assert_eq!(env["ok"], false);
         assert!(env["error"].as_str().unwrap().contains("options JSON"));
+        // The single-path git variant is reachable by name and rejects a non-image path before
+        // it touches git — the editor's per-file asset request lands here.
+        let env = call(
+            "diff_git_asset_path",
+            json!(["/repo", "HEAD", "", "src/main.rs", "/out", "{}"]),
+        );
+        assert_eq!(env["ok"], false);
+        assert!(env["error"]
+            .as_str()
+            .unwrap()
+            .contains("not a perceptually comparable image path"));
     }
 
     #[test]

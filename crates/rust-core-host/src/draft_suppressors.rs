@@ -113,6 +113,12 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
             || new_node.label == old_node.label
             || existing_move_pairs.contains(&(old_node.id.as_str(), old_node.id.as_str()))
             || !same_id_named_rename_looks_compatible_node(old_node, new_node)
+            // A rename is only a rename when the BODY did not change. This promotion DISCARDS
+            // the DELETION and ADDITION it collapses, so any change inside those subtrees is
+            // discarded with them — and the survivor is labelled REFACTORING, which tells a
+            // reviewer that behaviour did NOT change. Renaming a function while editing it is
+            // one of the commonest shapes in review, so this silently marked risky changes safe.
+            || !rename_body_is_unchanged(old_node, new_node)
         {
             continue;
         }
@@ -147,6 +153,129 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
         !node.is_some_and(|node| promoted_keys.contains(&(node.node_type.clone(), node.id.clone())))
     });
     changes.extend(promoted);
+}
+
+/// Node types that CARRY an entity's name rather than form part of its body.
+///
+/// Python spells it `identifier`; an INI section spells it `section_name`, whose label is the
+/// literal string "section_name" and whose hash is a SHA of the name. That combination defeats
+/// every content-based heuristic at once — the label never mentions the name, so no label
+/// filter drops it, and the hash never contains the name either, so no contamination check
+/// fires. It is recognisable only by its TYPE.
+fn carries_entity_name(node_type: &str) -> bool {
+    node_type == "identifier" || node_type == "name" || node_type.ends_with("_name")
+}
+
+/// Whether the two entities differ ONLY in their own name.
+///
+/// Compares the structural hash of every child except the entity's own identifier — that
+/// identifier is precisely what a rename changes, so including it would make every rename look
+/// like a body change. Everything else must match exactly.
+///
+/// Deliberately conservative: when the body differs we decline to promote, so the underlying
+/// DELETION and ADDITION survive and the real changes are reported. Noisier than a single
+/// tidy "Rename", and honest — a missed behavioural change presented as REFACTORING is the
+/// worst output this engine can produce.
+pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    // Exclude the child that CARRIES the entity's name, whatever its node type. Python spells
+    // it `identifier`; a Markdown section holds its title in a child whose label is the section
+    // label; line-scanner parsers (kotlin, swift, ini) keep the whole declaration line, so its
+    // label and hash both move on a rename though nothing else did.
+    //
+    // Both names are tested on BOTH sides. Filtering with only the node's own label was
+    // asymmetric: an ini value `host=server.example.com` contains `server` but not
+    // `serverRenamed`, so it was dropped from one shape and kept in the other, and a pure
+    // rename looked like a body change.
+    fn body_shape<'a>(
+        node: &'a SemanticNode,
+        old_name: &str,
+        new_name: &str,
+    ) -> Vec<(&'a str, &'a str)> {
+        node.children
+            .iter()
+            .filter(|child| {
+                if carries_entity_name(&child.node_type) {
+                    return false;
+                }
+                let mentions = |name: &str| {
+                    !name.is_empty() && (child.label == name || child.label.contains(name))
+                };
+                !mentions(old_name) && !mentions(new_name)
+            })
+            .map(|child| (child.node_type.as_str(), child.structural_hash.as_str()))
+            .collect()
+    }
+
+    // Structural hashes are the strongest evidence available, so they are used wherever they
+    // can be trusted. A hash that CONTAINS the entity's name cannot be: an INI section's
+    // children hash their qualified path, so renaming `[server]` to `[serverRenamed]`
+    // re-hashes `host`, `port` and `timeout_seconds` even though not one was touched, and no
+    // label-based filter recovers that — the name is inside the hash of children whose labels
+    // never mention it.
+    //
+    // So the fallback is applied PER CHILD and only where the hash is demonstrably
+    // name-contaminated. Applying it wholesale is wrong and was caught by
+    // `a_rename_with_an_edited_body_is_not_an_unchanged_body`: a Python function body carries
+    // its change in the hash while its label stays empty, so a blanket label comparison called
+    // an edited body unchanged and handed #18 straight back.
+    fn normalise(label: &str, old_name: &str, new_name: &str) -> String {
+        let mut out = label.to_string();
+        // Longest first, so renaming `server` -> `serverRenamed` does not leave `Renamed`
+        // behind by replacing the prefix inside the longer name.
+        let mut names = [old_name, new_name];
+        names.sort_by_key(|n| std::cmp::Reverse(n.len()));
+        for name in names {
+            if !name.is_empty() {
+                out = out.replace(name, "\u{1}");
+            }
+        }
+        out
+    }
+
+    /// A child's comparable identity: its hash when that hash is trustworthy, and its
+    /// name-normalised label plus subtree when the hash mentions the entity's name and so
+    /// cannot distinguish a rename from an edit.
+    fn child_key(child: &SemanticNode, old_name: &str, new_name: &str) -> String {
+        let mentions = |text: &str| {
+            let hit = |name: &str| !name.is_empty() && text.contains(name);
+            hit(old_name) || hit(new_name)
+        };
+        if !mentions(&child.structural_hash) {
+            return format!("h\u{2}{}\u{2}{}", child.node_type, child.structural_hash);
+        }
+        let mut key = format!(
+            "n\u{2}{}\u{2}{}",
+            child.node_type,
+            normalise(&child.label, old_name, new_name)
+        );
+        for grandchild in &child.children {
+            key.push('\u{3}');
+            key.push_str(&child_key(grandchild, old_name, new_name));
+        }
+        key
+    }
+
+    fn keyed_shape(node: &SemanticNode, old_name: &str, new_name: &str) -> Vec<String> {
+        node.children
+            .iter()
+            .filter(|child| {
+                if carries_entity_name(&child.node_type) {
+                    return false;
+                }
+                let mentions = |name: &str| {
+                    !name.is_empty() && (child.label == name || child.label.contains(name))
+                };
+                !mentions(old_name) && !mentions(new_name)
+            })
+            .map(|child| child_key(child, old_name, new_name))
+            .collect()
+    }
+
+    let (old_name, new_name) = (old_node.label.as_str(), new_node.label.as_str());
+    if body_shape(old_node, old_name, new_name) == body_shape(new_node, old_name, new_name) {
+        return true;
+    }
+    keyed_shape(old_node, old_name, new_name) == keyed_shape(new_node, old_name, new_name)
 }
 
 pub(crate) fn same_id_named_rename_looks_compatible_node(
@@ -1041,4 +1170,114 @@ pub(crate) fn suppress_candidate_container_noise_drafts<'a>(
         index += 1;
         keep
     });
+}
+/// A rename must never hide a behavioural change in the same entity.
+///
+/// The promotion this guards DISCARDS the DELETION/ADDITION pair it collapses, so any change
+/// inside those subtrees is discarded with them — and the survivor is labelled REFACTORING,
+/// which asserts behaviour did NOT change. See intentumdiff-core#18.
+#[cfg(test)]
+mod rename_body_tests {
+    use super::*;
+
+    fn node(id: &str, node_type: &str, label: &str, hash: &str, children: Vec<SemanticNode>)
+        -> SemanticNode
+    {
+        SemanticNode {
+            id: id.to_owned(),
+            node_type: node_type.to_owned(),
+            label: label.to_owned(),
+            position: NodePosition { start_line: 1, start_col: 0, end_line: 1, end_col: 0 },
+            structural_hash: hash.to_owned(),
+            children,
+            parent_type: None,
+            type_info: None,
+            facts: None,
+        }
+    }
+
+    fn func(label: &str, body_hash: &str) -> SemanticNode {
+        node("f1", "function_definition", label, "outer", vec![
+            node("i1", "identifier", label, "ident-of-name", vec![]),
+            node("b1", "block", "", body_hash, vec![]),
+        ])
+    }
+
+    #[test]
+    fn a_pure_rename_has_an_unchanged_body() {
+        // The name differs, the body hash does not — exactly what REFACTORING is for.
+        assert!(rename_body_is_unchanged(&func("total", "same"), &func("calculate_total", "same")));
+    }
+
+    /// An INI section, whose children hash their QUALIFIED PATH. Renaming the section therefore
+    /// re-hashes every key inside it even though not one of them was edited — the section name
+    /// is baked into the hash of children whose labels never mention it, so no label-based
+    /// filter can recover the match.
+    fn ini_section(name: &str, port: &str) -> SemanticNode {
+        node("s1", "section", name, &format!("sec:{name}"), vec![
+            node("k1", "property", "host = 0.0.0.0", &format!("{name}.host"), vec![]),
+            node("k2", "property", &format!("port = {port}"), &format!("{name}.port"), vec![]),
+            node("k3", "property", "timeout_seconds = 45", &format!("{name}.timeout"), vec![]),
+        ])
+    }
+
+    #[test]
+    fn a_renamed_ini_section_with_untouched_keys_has_an_unchanged_body() {
+        // Every child hash differs, and every child label is identical. Hash comparison cannot
+        // answer this; the normalised-shape fallback can.
+        assert!(rename_body_is_unchanged(
+            &ini_section("server", "8080"),
+            &ini_section("serverRenamed", "8080"),
+        ));
+    }
+
+    #[test]
+    fn a_renamed_ini_section_with_an_edited_key_is_not_an_unchanged_body() {
+        // The #18 guarantee, on the path that made the fallback necessary. `port` changed, so
+        // this must NOT be promoted to a tidy REFACTORING even though the hashes are useless
+        // here and every other key is untouched.
+        assert!(!rename_body_is_unchanged(
+            &ini_section("server", "8080"),
+            &ini_section("serverRenamed", "9090"),
+        ));
+    }
+
+    #[test]
+    fn normalising_the_name_does_not_leave_a_suffix_behind() {
+        // `server` is a PREFIX of `serverRenamed`. Replacing the short name first would turn
+        // `serverRenamed` into `\u{1}Renamed` on one side and `\u{1}` on the other, so a pure
+        // rename would look like a body change. Longest-first ordering is what prevents that.
+        let old = node("s1", "section", "server", "h", vec![
+            node("c1", "property", "alias = server", "a", vec![]),
+        ]);
+        let new = node("s1", "section", "serverRenamed", "h2", vec![
+            node("c1", "property", "alias = serverRenamed", "b", vec![]),
+        ]);
+        assert!(rename_body_is_unchanged(&old, &new));
+    }
+
+    #[test]
+    fn a_rename_with_an_edited_body_is_not_an_unchanged_body() {
+        // THE regression. Previously the guard asked only whether the entity started on the
+        // same line, so this promoted and the body edit vanished.
+        assert!(!rename_body_is_unchanged(&func("total", "before"), &func("calculate_total", "after")));
+    }
+
+    #[test]
+    fn the_entitys_own_identifier_is_ignored() {
+        // Including it would make EVERY rename look like a body change, disabling the feature
+        // rather than fixing it.
+        let a = func("total", "same");
+        let b = func("calculate_total", "same");
+        assert_ne!(a.children[0].label, b.children[0].label, "fixture must differ by name");
+        assert!(rename_body_is_unchanged(&a, &b));
+    }
+
+    #[test]
+    fn a_body_gaining_a_statement_is_a_change() {
+        let a = func("total", "same");
+        let mut b = func("total", "same");
+        b.children.push(node("s2", "if_statement", "", "new-guard", vec![]));
+        assert!(!rename_body_is_unchanged(&a, &b));
+    }
 }
