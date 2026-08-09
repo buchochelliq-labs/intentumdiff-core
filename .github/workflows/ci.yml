@@ -135,3 +135,41 @@ jobs:
         run: cargo build --release --target wasm32-wasip2
         env:
           CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+      - name: Collect the renderer components
+        # Built here and, until now, discarded with the runner. Nothing downstream could
+        # stage them, so intentumdiff-python's suite ran with ZERO renderers loaded and
+        # still reported green - see intentumdiff-python#22.
+        #
+        # cargo names the artifact after the crate (intentumdiff_html_renderer.wasm); the
+        # product name drops the prefix (html_renderer.wasm). Rename on the way out so a
+        # consumer stages a directory it can use directly.
+        run: |
+          set -euo pipefail
+          mkdir -p dist/renderers
+          missing=0
+          for name in html llm patch terminal; do
+            src="target/wasm32-wasip2/release/intentumdiff_${name}_renderer.wasm"
+            if [ -f "$src" ]; then
+              cp "$src" "dist/renderers/${name}_renderer.wasm"
+            else
+              echo "::error::renderer component missing: $src"
+              missing=$((missing + 1))
+            fi
+          done
+          # Fail closed. A partial upload is worse than none: the consumer stages what it
+          # gets, loses a renderer silently, and reports green - exactly the failure this
+          # step exists to end.
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::$missing renderer component(s) missing - refusing to publish a partial set"
+            exit 1
+          fi
+          ls -l dist/renderers
+
+      - name: Upload the renderer components
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: renderer-components
+          path: dist/renderers/*.wasm
+          if-no-files-found: error
+          retention-days: 30
