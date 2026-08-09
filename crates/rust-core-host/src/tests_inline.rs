@@ -445,3 +445,13 @@ mod host_and_batch;
 mod matching_and_promotion;
 #[path = "tests_review_shaping.rs"]
 mod review_shaping;
+
+// Rust language-parity harness (#23): a 1:1 port of tests/unit/construct_edit_matrix.py driven
+// over the same corpus, so every language the Python matrix covers is also covered from
+// `cargo test` - in-process, no subprocess, no GIL.
+#[path = "tests_edit_matrix_port.rs"]
+mod edit_matrix_port;
+#[path = "tests_edit_matrix_corpus.rs"]
+mod edit_matrix_corpus;
+#[path = "tests_edit_matrix.rs"]
+mod edit_matrix;
