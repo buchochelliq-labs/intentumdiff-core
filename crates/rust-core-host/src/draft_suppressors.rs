@@ -166,14 +166,36 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
 /// tidy "Rename", and honest — a missed behavioural change presented as REFACTORING is the
 /// worst output this engine can produce.
 pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
-    fn body_shape(node: &SemanticNode) -> Vec<(&str, &str)> {
+    // Exclude the child that CARRIES the entity's name, whatever its node type. Python spells
+    // it `identifier`; a Markdown section holds its title in a child whose label is the section
+    // label; line-scanner parsers (kotlin, swift, ini) keep the whole declaration line, so its
+    // label and hash both move on a rename though nothing else did.
+    //
+    // Both names are tested on BOTH sides. Filtering with only the node's own label was
+    // asymmetric: an ini value `host=server.example.com` contains `server` but not
+    // `serverRenamed`, so it was dropped from one shape and kept in the other, and a pure
+    // rename looked like a body change.
+    fn body_shape<'a>(
+        node: &'a SemanticNode,
+        old_name: &str,
+        new_name: &str,
+    ) -> Vec<(&'a str, &'a str)> {
         node.children
             .iter()
-            .filter(|child| child.node_type != "identifier")
+            .filter(|child| {
+                if child.node_type == "identifier" {
+                    return false;
+                }
+                let mentions = |name: &str| {
+                    !name.is_empty() && (child.label == name || child.label.contains(name))
+                };
+                !mentions(old_name) && !mentions(new_name)
+            })
             .map(|child| (child.node_type.as_str(), child.structural_hash.as_str()))
             .collect()
     }
-    body_shape(old_node) == body_shape(new_node)
+    let (old_name, new_name) = (old_node.label.as_str(), new_node.label.as_str());
+    body_shape(old_node, old_name, new_name) == body_shape(new_node, old_name, new_name)
 }
 
 pub(crate) fn same_id_named_rename_looks_compatible_node(
