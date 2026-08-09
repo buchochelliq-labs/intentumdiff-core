@@ -113,6 +113,12 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
             || new_node.label == old_node.label
             || existing_move_pairs.contains(&(old_node.id.as_str(), old_node.id.as_str()))
             || !same_id_named_rename_looks_compatible_node(old_node, new_node)
+            // A rename is only a rename when the BODY did not change. This promotion DISCARDS
+            // the DELETION and ADDITION it collapses, so any change inside those subtrees is
+            // discarded with them — and the survivor is labelled REFACTORING, which tells a
+            // reviewer that behaviour did NOT change. Renaming a function while editing it is
+            // one of the commonest shapes in review, so this silently marked risky changes safe.
+            || !rename_body_is_unchanged(old_node, new_node)
         {
             continue;
         }
@@ -147,6 +153,27 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
         !node.is_some_and(|node| promoted_keys.contains(&(node.node_type.clone(), node.id.clone())))
     });
     changes.extend(promoted);
+}
+
+/// Whether the two entities differ ONLY in their own name.
+///
+/// Compares the structural hash of every child except the entity's own identifier — that
+/// identifier is precisely what a rename changes, so including it would make every rename look
+/// like a body change. Everything else must match exactly.
+///
+/// Deliberately conservative: when the body differs we decline to promote, so the underlying
+/// DELETION and ADDITION survive and the real changes are reported. Noisier than a single
+/// tidy "Rename", and honest — a missed behavioural change presented as REFACTORING is the
+/// worst output this engine can produce.
+pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    fn body_shape(node: &SemanticNode) -> Vec<(&str, &str)> {
+        node.children
+            .iter()
+            .filter(|child| child.node_type != "identifier")
+            .map(|child| (child.node_type.as_str(), child.structural_hash.as_str()))
+            .collect()
+    }
+    body_shape(old_node) == body_shape(new_node)
 }
 
 pub(crate) fn same_id_named_rename_looks_compatible_node(
@@ -1041,4 +1068,67 @@ pub(crate) fn suppress_candidate_container_noise_drafts<'a>(
         index += 1;
         keep
     });
+}
+/// A rename must never hide a behavioural change in the same entity.
+///
+/// The promotion this guards DISCARDS the DELETION/ADDITION pair it collapses, so any change
+/// inside those subtrees is discarded with them — and the survivor is labelled REFACTORING,
+/// which asserts behaviour did NOT change. See intentumdiff-core#18.
+#[cfg(test)]
+mod rename_body_tests {
+    use super::*;
+
+    fn node(id: &str, node_type: &str, label: &str, hash: &str, children: Vec<SemanticNode>)
+        -> SemanticNode
+    {
+        SemanticNode {
+            id: id.to_owned(),
+            node_type: node_type.to_owned(),
+            label: label.to_owned(),
+            position: NodePosition { start_line: 1, start_col: 0, end_line: 1, end_col: 0 },
+            structural_hash: hash.to_owned(),
+            children,
+            parent_type: None,
+            type_info: None,
+            facts: None,
+        }
+    }
+
+    fn func(label: &str, body_hash: &str) -> SemanticNode {
+        node("f1", "function_definition", label, "outer", vec![
+            node("i1", "identifier", label, "ident-of-name", vec![]),
+            node("b1", "block", "", body_hash, vec![]),
+        ])
+    }
+
+    #[test]
+    fn a_pure_rename_has_an_unchanged_body() {
+        // The name differs, the body hash does not — exactly what REFACTORING is for.
+        assert!(rename_body_is_unchanged(&func("total", "same"), &func("calculate_total", "same")));
+    }
+
+    #[test]
+    fn a_rename_with_an_edited_body_is_not_an_unchanged_body() {
+        // THE regression. Previously the guard asked only whether the entity started on the
+        // same line, so this promoted and the body edit vanished.
+        assert!(!rename_body_is_unchanged(&func("total", "before"), &func("calculate_total", "after")));
+    }
+
+    #[test]
+    fn the_entitys_own_identifier_is_ignored() {
+        // Including it would make EVERY rename look like a body change, disabling the feature
+        // rather than fixing it.
+        let a = func("total", "same");
+        let b = func("calculate_total", "same");
+        assert_ne!(a.children[0].label, b.children[0].label, "fixture must differ by name");
+        assert!(rename_body_is_unchanged(&a, &b));
+    }
+
+    #[test]
+    fn a_body_gaining_a_statement_is_a_change() {
+        let a = func("total", "same");
+        let mut b = func("total", "same");
+        b.children.push(node("s2", "if_statement", "", "new-guard", vec![]));
+        assert!(!rename_body_is_unchanged(&a, &b));
+    }
 }
