@@ -1,0 +1,17 @@
+{
+  "delete_entity": {
+    "skip": "delete_entity not derivable from this snippet"
+  },
+  "rename_entity": {
+    "ok": true
+  },
+  "duplicate_entity": {
+    "ok": true
+  },
+  "modify_literal": {
+    "xfail": "the only discoverable literal is the import path 'core:fmt' (a string_content leaf); editing it produces no paired change carrying the old value"
+  },
+  "swap_siblings": {
+    "ok": true
+  }
+}

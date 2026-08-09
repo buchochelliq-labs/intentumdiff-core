@@ -1,0 +1,12 @@
+DEFINE
+MEASURE Sales[Order Count] = COUNTROWS(Sales)
+MEASURE Sales[Max Discount] = MAX(Sales[Discount])
+MEASURE Sales[Total Sales] = SUM(Sales[Amount])
+MEASURE Sales[Sales YTD] =
+    TOTALYTD(SUM(Sales[Amount]), Dates[Date])
+MEASURE Sales[Sales Growth %] =
+    DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),
+           CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))
+
+EVALUATE
+SUMMARIZECOLUMNS(Dates[Year], "Total", [Total Sales], "Growth", [Sales Growth %])

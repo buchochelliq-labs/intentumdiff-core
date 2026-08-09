@@ -1,0 +1,17 @@
+{
+ "delete_entity": {
+  "ok": true
+ },
+ "rename_entity": {
+  "xfail": "no paired change carries 'print_msg' -> 'print_msgRenamed'"
+ },
+ "duplicate_entity": {
+  "ok": true
+ },
+ "modify_literal": {
+  "skip": "no literals discoverable in the semantic tree"
+ },
+ "swap_siblings": {
+  "ok": true
+ }
+}

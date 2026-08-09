@@ -1,0 +1,20 @@
+{
+ "language": "make",
+ "filename": "Makefile",
+ "visible_tokens": [
+  "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+  "./app --selftest",
+  "CC",
+  "LDFLAGS",
+  "archive",
+  "build",
+  "cppcheck --enable=warning main.c",
+  "lint",
+  "main.c utils.c",
+  "tar -czf app.tgz app",
+  "test"
+ ],
+ "append_statement": "install:\n\tcp app /usr/local/bin/app",
+ "mutation_xfail": {},
+ "invisible_tokens_at_generation": []
+}
