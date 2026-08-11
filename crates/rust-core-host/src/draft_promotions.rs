@@ -105,6 +105,46 @@ pub(crate) fn collect_semantic_leaf_tokens(node: &SemanticNode, result: &mut Has
     }
 }
 
+/// True when two node ids describe the same structural position except that exactly one
+/// sibling index moved.
+///
+/// Node ids are positional: `convert_cst` builds them as `{parent}.{child_index}`. That makes
+/// identity fragile in a specific, predictable way — inserting a sibling renumbers everything
+/// after it, and every descendant with it. Rename detection paired DELETION with ADDITION on
+/// exact id equality, so it could only ever see a rename when nothing was inserted before the
+/// node. Extract-method ALWAYS inserts a sibling, which is why the canonical refactor —
+/// rename a function and pull a helper out of it — degraded to an unrelated delete/add pair,
+/// exactly what a line diff gives.
+///
+/// This relaxes the key by the smallest amount that covers that case: same depth, same path,
+/// one numeric component shifted. It deliberately does NOT fall back to matching on label
+/// similarity. 0.0.1 did something like that and confidently paired `calculate_total` with a
+/// newly extracted `_subtotal` at 100% — a wrong answer, which is worse for a reviewer than
+/// no answer.
+fn ids_differ_only_by_one_sibling_index(old: &str, new: &str) -> bool {
+    let old_parts: Vec<&str> = old.split('.').collect();
+    let new_parts: Vec<&str> = new.split('.').collect();
+    if old_parts.len() != new_parts.len() {
+        return false;
+    }
+    let mut shifted = 0usize;
+    for (a, b) in old_parts.iter().zip(new_parts.iter()) {
+        if a == b {
+            continue;
+        }
+        // Only a CHILD INDEX may differ. A differing non-numeric component means a different
+        // structural path, not the same node in a new position.
+        if a.parse::<usize>().is_err() || b.parse::<usize>().is_err() {
+            return false;
+        }
+        shifted += 1;
+        if shifted > 1 {
+            return false;
+        }
+    }
+    shifted == 1
+}
+
 pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
 ) {
@@ -127,8 +167,24 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         .filter_map(|change| change.new_node)
         .filter(|node| node.node_type == "identifier" && !node.label.is_empty())
     {
-        let Some(old_node) = deleted_by_id.get(new_node.id.as_str()) else {
-            continue;
+        let old_node = match deleted_by_id.get(new_node.id.as_str()) {
+            Some(node) => node,
+            None => {
+                // No exact match. Accept a node whose id differs by exactly one sibling
+                // index — but ONLY if there is exactly one such candidate. Ambiguity here is
+                // how false renames get promoted, and a confident wrong pairing is worse
+                // than reporting nothing.
+                let mut shifted = deleted_by_id.iter().filter(|(old_id, _)| {
+                    ids_differ_only_by_one_sibling_index(old_id, new_node.id.as_str())
+                });
+                let Some((_, candidate)) = shifted.next() else {
+                    continue;
+                };
+                if shifted.next().is_some() {
+                    continue;
+                }
+                candidate
+            }
         };
         let label_pair = (old_node.label.clone(), new_node.label.clone());
         if old_node.label == new_node.label
@@ -2050,4 +2106,51 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     let suppressed = before.saturating_sub(result.len());
     *changes = result;
     (suppressed, promoted_indices)
+}
+#[cfg(test)]
+mod sibling_shift_rename_tests {
+    use super::ids_differ_only_by_one_sibling_index as shifted;
+
+    // Node ids are positional (`{parent}.{child_index}`), so inserting a sibling renumbers
+    // everything after it. These pin the exact amount of slack rename pairing is allowed.
+
+    #[test]
+    fn a_single_shifted_child_index_is_the_same_node_moved() {
+        // Extracting a helper ahead of a function: it was child 1, it is now child 2.
+        assert!(shifted("root.1.0", "root.2.0"));
+        assert!(shifted("root.0", "root.1"));
+    }
+
+    #[test]
+    fn an_identical_id_is_not_a_shift() {
+        // Handled by the exact-match path; treating it as a shift would double-promote.
+        assert!(!shifted("root.1.0", "root.1.0"));
+    }
+
+    #[test]
+    fn two_shifted_components_are_a_different_node() {
+        // Both the parent and the child moved. That is no longer "the same node, later" -
+        // it is a different position, and pairing it would be a guess.
+        assert!(!shifted("root.1.0", "root.2.1"));
+    }
+
+    #[test]
+    fn different_depths_never_match() {
+        assert!(!shifted("root.1", "root.1.0"));
+        assert!(!shifted("root.1.0.2", "root.1.0"));
+    }
+
+    #[test]
+    fn a_non_numeric_component_must_match_exactly() {
+        // Only a CHILD INDEX may differ. A different structural path is a different node,
+        // however similar the rest of the id looks.
+        assert!(!shifted("alpha.1", "beta.1"));
+        assert!(!shifted("root.body.0", "root.params.0"));
+    }
+
+    #[test]
+    fn the_shift_may_be_at_any_depth() {
+        assert!(shifted("root.0.3.1", "root.0.4.1"));
+        assert!(shifted("root.5.2.7", "root.5.2.8"));
+    }
 }
