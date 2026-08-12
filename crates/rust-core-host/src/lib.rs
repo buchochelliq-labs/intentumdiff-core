@@ -7607,10 +7607,43 @@ fn bottom_up_match<'a>(
         .iter()
         .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
         .collect();
+    // Why this exists: the bottom-up matcher decides whether two nodes are "the same" and
+    // then says nothing about how. When a diff is wrong, reading this function tells you what
+    // it COULD do, not what it DID - and those differ. Five attempts at intentumdiff-python#45
+    // were made from code reading alone; three reached confident wrong conclusions that the
+    // first actual measurement refuted in a single run.
+    //
+    // The measurement that settled it looked like this:
+    //
+    //     [match] 0.0 'calc' (function_definition) - 1 candidate(s)
+    //     [match]     vs 'compute' - gate REJECT (named=true label_eq=false parent_ok=true)
+    //
+    // i.e. the pair WAS a candidate, scope passed, the label inequality alone rejected it, and
+    // no similarity score was ever computed - which retired every threshold hypothesis at once.
+    //
+    // Off unless INTENTUMDIFF_TRACE_MATCH is set, and it writes to stderr, so a normal run is
+    // byte-identical. Reading the env var once per call rather than per candidate keeps it off
+    // the hot path.
+    let trace_match = std::env::var("INTENTUMDIFF_TRACE_MATCH").is_ok();
     for old_node in unmatched_old {
         let Some(candidates) = new_by_type.get(old_node.node_type.as_str()) else {
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match] {} '{}' — NO CANDIDATES of type {}",
+                    old_node.id, old_node.label, old_node.node_type
+                );
+            }
             continue;
         };
+        if trace_match && !old_node.label.is_empty() {
+            eprintln!(
+                "[match] {} '{}' ({}) — {} candidate(s)",
+                old_node.id,
+                old_node.label,
+                old_node.node_type,
+                candidates.len()
+            );
+        }
         let old_desc_count = old_index
             .subtree_sizes
             .get(old_node.id.as_str())
@@ -7623,7 +7656,23 @@ fn bottom_up_match<'a>(
             if matched_new.contains(new_node.id.as_str()) {
                 continue;
             }
-            if !bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index) {
+            let compatible =
+                bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index);
+            if trace_match && !old_node.label.is_empty() {
+                let named = is_named_entity_type(old_node.node_type.as_str());
+                let parent_ok = !named
+                    || label_match_parent_compatible(old_node, new_node, old_index, new_index);
+                let label_ok = !named || old_node.label == new_node.label;
+                eprintln!(
+                    "[match]     vs '{}' — gate {} (named={} label_eq={} parent_ok={})",
+                    new_node.label,
+                    if compatible { "PASS" } else { "REJECT" },
+                    named,
+                    label_ok,
+                    parent_ok
+                );
+            }
+            if !compatible {
                 continue;
             }
             // Scope gate (issue #19, delphi statement scoping): a container may only
@@ -7655,6 +7704,12 @@ fn bottom_up_match<'a>(
                 old_node.node_type.as_str(),
                 new_node.node_type.as_str(),
             );
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match]     vs '{}' — dice {:.3} (need > {:.3})",
+                    new_node.label, score, best_score
+                );
+            }
             if score > best_score {
                 best_score = score;
                 best_match = Some(new_node);
