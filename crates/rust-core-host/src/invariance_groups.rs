@@ -956,6 +956,7 @@ pub(crate) fn rust_canonicalize_css_colors(source: &str) -> (String, Vec<(String
     let mut quote = None;
     let mut escaped = false;
     let mut comment = false;
+    let mut nesting = Vec::new();
     let mut i = 0;
     while i < bytes.len() {
         let c = bytes[i];
@@ -968,6 +969,18 @@ pub(crate) fn rust_canonicalize_css_colors(source: &str) -> (String, Vec<(String
         } else if c == b'/' && bytes.get(i + 1) == Some(&b'*') {
             comment = true; i += 2; continue;
         } else if c == b'\'' || c == b'"' { quote = Some(c); }
+        else if c == b'\\' { i += 2; continue; }
+        else if matches!(c, b'(' | b'[') { nesting.push(c); }
+        else if matches!(c, b')' | b']') {
+            if nesting.pop() != Some(if c == b')' { b'(' } else { b'[' }) {
+                return (source.to_owned(), Vec::new());
+            }
+        }
+        else if !nesting.is_empty() {
+            // Nested separators are custom-property/function token data, not
+            // declarations. Brace-valued constructs remain conservatively exact.
+            if matches!(c, b'{' | b'}') { return (source.to_owned(), Vec::new()); }
+        }
         else if c == b'{' {
             // A brace within a value (notably a custom-property token stream)
             // does not introduce declarations we are entitled to interpret.
@@ -1007,6 +1020,9 @@ pub(crate) fn rust_canonicalize_css_colors(source: &str) -> (String, Vec<(String
             if c == b'}' { in_block = false; }
         }
         i += 1;
+    }
+    if !nesting.is_empty() || quote.is_some() || comment {
+        return (source.to_owned(), Vec::new());
     }
     let mut output = source.to_owned();
     for (start, end, canonical) in replacements.into_iter().rev() {
@@ -1882,6 +1898,8 @@ mod css_value_scope_tests {
             ("a{animation-name:red}", "a{animation-name:RED}"),
             ("a{background:url(red)}", "a{background:url(RED)}"),
             ("x { --theme: { color: red; }; }", "x { --theme: { color: #f00; }; }"),
+            ("a { --theme: (x; color: red;); }", "a { --theme: (x; color: #f00;); }"),
+            ("a { --theme: [x; color: red;]; }", "a { --theme: [x; color: #f00;]; }"),
         ] {
             assert_ne!(canonical(old), canonical(new), "{old} versus {new}");
         }

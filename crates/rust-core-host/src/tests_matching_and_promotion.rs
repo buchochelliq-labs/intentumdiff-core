@@ -5,6 +5,30 @@
 use super::*;
 use crate::*;
 
+#[test]
+fn callable_renames_accept_actual_parser_shapes_without_parameter_children() {
+    // Captured from the published Wasm components listed in the fixture README.
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/callable_parser_shapes.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["old_source"].as_str().unwrap(), case["new_source"].as_str().unwrap(),
+            case["language"].as_str().unwrap(), "{}",
+        ).unwrap()).unwrap();
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["old_node"]["label"] == case["old_name"]
+            && c["new_node"]["label"] == case["new_name"]), "{}: {result}", case["language"]);
+        if case["language"] == "vue" {
+            let old: SemanticNode = serde_json::from_value(case["old_tree"].clone()).unwrap();
+            let new: SemanticNode = serde_json::from_value(case["new_tree"].clone()).unwrap();
+            let changed = format!("{}\nother();", case["new_source"].as_str().unwrap());
+            assert!(!callable_renames::exact_source_rename(&old.children[0], &new.children[0],
+                Some((case["old_source"].as_str().unwrap(), &changed))));
+        }
+    }
+}
+
 fn rename_review_routes(old: &str, new: &str) -> Vec<(&'static str, Value)> {
     let request = json!({
         "schema_version": 1, "python_parser_backend": "native",

@@ -13,6 +13,9 @@
 - Move active Python literal enrichment and tree-equivalence evaluation behind the C ABI;
   preserve UTF-8 source spans and literal whitespace. Limit CSS color equivalence to values.
 
+- Preserve exact callable renames across parser signature shapes and opaque declarations,
+  while retaining ambiguity protections. Keep nested CSS custom-property tokens meaningful.
+
 ## v0.1.0 — 2026-07-26
 
 Initial import from the IntentumDiff monorepo (files-only; the monorepo remains the archive of

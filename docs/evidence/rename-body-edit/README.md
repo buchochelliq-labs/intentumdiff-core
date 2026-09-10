@@ -27,15 +27,15 @@ with no source checkout on `PYTHONPATH`. Verified import and loaded library path
 new environment's `site-packages`; backend is `_CtypesBackend`.
 
 - Wheel: `intentumdiff_python-0.0.2b1-py3-none-manylinux_2_39_x86_64.whl`.
-- SHA-256: `6db8c91158cab2b48f0eb56ff7e2b33e2d9280bae290b7633f05c48a34fefdbc`.
-- Rust library suite: **269 passed, 25 feature-gated checks ignored**, with the mapped
+- SHA-256: `f9d032e04f675fa3830a01a274118afdfdc5a3c098fbc78b01b941aa2eb294dc`.
+- Rust library suite: **270 passed, 25 feature-gated checks ignored**, with the mapped
   INI/assembly/Python parser components staged for the edit matrix.
-- Installed-wheel focused checks: **69 passed**.
-- Source-checkout public wrapper/scenario checks: **97 passed, 2 existing expected failures**
+- Installed-wheel focused checks: **73 passed**, plus **8 previously failing real-parser rename cases passed** outside the checkout.
+- Source-checkout public wrapper/scenario checks: **146 passed, 29 existing skips, 2 existing expected failures**
   (JavaScript added-parameter and import/use noise).
 - Immutable-ref provisioning regression: passed; CI can fetch the exact candidate core SHA.
 
-The wheel is an unoptimised local correctness build with two parser components. It is not
+The wheel is an unoptimised local correctness build with ten parser components. It is not
 an all-language, all-platform release artifact. Supported-platform builds, complete component
 provenance and the full Python CI suite remain required release gates.
 
@@ -103,3 +103,31 @@ intentumdiff file old.py new.py
 Always verify the loaded cdylib path after rebuilding. Rust tests may update only an rlib;
 use an explicit cdylib build for ctypes probes. Analytics fixtures need a fresh temporary
 directory to avoid process-ID database collisions across runs.
+
+
+## Independent review and full-CI follow-up
+
+The first full Python CI run against this candidate exposed eight cross-language rename
+regressions plus a synthetic backend missing the new enrichment adapter. The narrow Python
+signature vocabulary could not serve AssemblyScript, Bash, Dart, Delphi, Kotlin,
+PowerShell, Swift and Vue. Rust now accepts exact declaration-source name substitutions
+without requiring parameter children. A zero-width opaque node needs the stronger whole-file
+single-name-change proof. Existing scope and bidirectional uniqueness checks remain; Bash
+statement matching preserves that proven callable identity. The old positional fallback
+remains disabled. Captured parser-tree fixtures are in the Rust crate's tests/fixtures.
+
+A new independent reviewer found that nested CSS semicolons were being interpreted as
+property separators inside custom-property token data. Rust now tracks parentheses and
+brackets, preserves escaped separators, and conservatively declines malformed nesting.
+Known colour properties still recognise supported named/hex/rgb equivalence.
+
+The reviewer independently confirmed all eight former rename failures and adversarial
+PowerShell/Bash/opaque-node cases, and six CSS positive/negative cases. No new blocker in
+these follow-up fixes remained. Source construct-edit checks: **44 passed, 6 existing skips**.
+The refreshed installed-wheel CLI capture is visually unchanged: all three original intents
+remain. Fresh full platform CI is still required after these follow-up commits.
+
+Next work: core#21 owns incomplete-code fallback (currently Python whitespace token diffing,
+which cannot be treated as an oracle); core#48 includes duplicate-decorator ordering;
+core#49 owns spurious block moves; core#50 owns literal evaluator completeness; core#51
+tracks a pre-existing missing declaration-name change when its string literal changes too.

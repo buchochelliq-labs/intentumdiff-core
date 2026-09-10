@@ -496,6 +496,7 @@ pub(crate) fn augment_statement_profile_matching<'a>(
     new_tree: &'a SemanticNode,
     matching: Vec<MatchPair<'a>>,
     language: &str,
+    sources: Option<(&str, &str)>,
 ) -> Vec<MatchPair<'a>> {
     if !statement_profile_language(language) {
         return matching;
@@ -517,7 +518,10 @@ pub(crate) fn augment_statement_profile_matching<'a>(
     for pair in &matching {
         let ok = old_keys.get(pair.old_node.id.as_str());
         let nk = new_keys.get(pair.new_node.id.as_str());
-        if (ok.is_some() || nk.is_some()) && (ok.is_none() || nk.is_none() || ok != nk) {
+        // A proven declaration rename changes a name-based function key. Keep
+        // that established identity; command/assignment key protections remain.
+        let callable_rename = callable_renames::exact_source_rename(pair.old_node, pair.new_node, sources);
+        if !callable_rename && (ok.is_some() || nk.is_some()) && (ok.is_none() || nk.is_none() || ok != nk) {
             continue;
         }
         if matched_old.contains(pair.old_node.id.as_str())

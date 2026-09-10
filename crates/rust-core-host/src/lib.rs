@@ -1509,7 +1509,7 @@ fn finalize_review_impl(
     let matching = augment_resource_profile_matching(&old_tree, &new_tree, matching, language);
     // Statement-profile matching (issue #57 asm/bash/delphi): re-pair keyed statements by identity
     // so an operand-value edit is a MODIFICATION, not DELETE+ADD. No-op for other languages.
-    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language);
+    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language, Some((old_source, new_source)));
     // Query-profile matching (issue #57 sql): clauses/relations/fields pair by role + normalized
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
@@ -1535,7 +1535,7 @@ fn finalize_review_impl(
         } else {
             Vec::new()
         };
-    refine_candidate_drafts(&mut drafts, &matching, None, language);
+    refine_candidate_drafts(&mut drafts, &matching, None, language, Some((old_source, new_source)));
     // Statement-profile cross-key split (issue #57 bash): must run BEFORE finalize's parent/child
     // suppression turns the keyed statement pair into a leaf word MODIFICATION.
     split_cross_key_statement_modifications_drafts(&mut drafts, &old_tree, &new_tree, language);
@@ -3379,7 +3379,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
-    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python");
+    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
     let review_finalization_started = probe.enabled().then(Instant::now);
@@ -8453,8 +8453,9 @@ fn refine_candidate_drafts<'a>(
     matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
     language: &str,
+    sources: Option<(&str, &str)>,
 ) {
-    callable_renames::promote_rename_updates(changes);
+    callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
         probe.as_deref_mut(),

@@ -65,7 +65,43 @@ fn similarity(old: &SemanticNode, new: &SemanticNode) -> Option<f64> {
     Some(common as f64 / (an + bn - common) as f64)
 }
 
+// Some parsers omit parameter nodes, nest their signature, or expose an opaque
+// callable. Exact declaration-source evidence can still establish continuity;
+// it must not depend on one grammar's parameter vocabulary or positional IDs.
+pub(crate) fn exact_source_rename(old: &SemanticNode, new: &SemanticNode, sources: Option<(&str, &str)>) -> bool {
+    if old.node_type != new.node_type || !anchor_is_function(old)
+        || old.label.is_empty() || new.label.is_empty() || old.label == new.label {
+        return false;
+    }
+    let Some((os, ns)) = sources else { return false; };
+    let before = slice_source_text(&os.lines().collect::<Vec<_>>(), &old.position);
+    let after = slice_source_text(&ns.lines().collect::<Vec<_>>(), &new.position);
+    // An opaque, zero-width parser node supplies no body evidence. In that case
+    // require the entire file to differ only at this one declaration-name token.
+    let (before, after) = if before.is_empty() && after.is_empty() {
+        let old_line = os.lines().nth(old.position.start_line as usize).unwrap_or("");
+        let new_line = ns.lines().nth(new.position.start_line as usize).unwrap_or("");
+        if !old_line.contains(&old.label) || !new_line.contains(&new.label) { return false; }
+        (os, ns)
+    } else { (before.as_str(), after.as_str()) };
+    fn split_name<'a>(source: &'a str, name: &str) -> Option<(&'a str, &'a str)> {
+        let word = |c: char| c.is_alphanumeric() || matches!(c, '_' | '$');
+        let mut matches = source.match_indices(name).filter(|(i, _)| {
+            !source[..*i].chars().next_back().is_some_and(word)
+                && !source[*i + name.len()..].chars().next().is_some_and(word)
+        });
+        let (i, _) = matches.next()?;
+        if matches.next().is_some() { return None; }
+        Some((&source[..i], &source[i + name.len()..]))
+    }
+    match (split_name(before, &old.label), split_name(after, &new.label)) {
+        (Some(a), Some(b)) => a == b,
+        _ => false,
+    }
+}
+
 fn same_body(old: &SemanticNode, new: &SemanticNode, sources: Option<(&str, &str)>) -> bool {
+    if exact_source_rename(old, new, sources) { return true; }
     // Ordered subtrees, not a bag of tokens: reordering calls is not an exact body.
     let body = |node: &SemanticNode| {
         node.children
@@ -114,7 +150,8 @@ pub(crate) fn seed_renamed_callables<'a>(
             let same_scope = scope_path(old, o) == scope_path(new, n);
             if same_scope
                 && label_match_parent_compatible(o, n, old, new)
-                && similarity(o, n).is_some_and(|score| score >= threshold.max(0.5))
+                && (exact_source_rename(o, n, sources)
+                    || similarity(o, n).is_some_and(|score| score >= threshold.max(0.5)))
             {
                 candidates.push((*o, *n));
             }
@@ -142,7 +179,7 @@ pub(crate) fn seed_renamed_callables<'a>(
     }
 }
 
-pub(crate) fn promote_rename_updates(changes: &mut Vec<ChangeDraft<'_>>) {
+pub(crate) fn promote_rename_updates(changes: &mut Vec<ChangeDraft<'_>>, sources: Option<(&str, &str)>) {
     let mut name_pairs = Vec::new();
     for change in changes.iter_mut() {
         if change.change_type != "MODIFICATION" {
@@ -151,7 +188,9 @@ pub(crate) fn promote_rename_updates(changes: &mut Vec<ChangeDraft<'_>>) {
         let (Some(old), Some(new)) = (change.old_node, change.new_node) else {
             continue;
         };
-        let Some(score) = similarity(old, new).filter(|s| *s >= 0.5) else {
+        let score = if exact_source_rename(old, new, sources) { Some(1.0) }
+            else { similarity(old, new).filter(|s| *s >= 0.5) };
+        let Some(score) = score else {
             continue;
         };
         change.change_type = "REFACTORING";
