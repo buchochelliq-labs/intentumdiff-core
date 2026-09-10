@@ -1946,6 +1946,18 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     // subsequence of new sibling indices, walked in old order) are insertion shifts; the rest
     // genuinely moved and are promoted to MOVE drafts (mirroring the Python
     // ``_suppress_low_signal_reorders`` entity promotion).
+    let rename_pairs: HashSet<(String, String)> = changes.iter()
+        .filter(|c| c.refactoring_kind == Some("RENAME_SYMBOL"))
+        .filter_map(|c| Some((c.old_node?.id.clone(), c.new_node?.id.clone())))
+        .collect();
+    let same_identity = |old: &SemanticNode, new: &SemanticNode| {
+        old.node_type == new.node_type && (old.label == new.label
+            || rename_pairs.contains(&(old.id.clone(), new.id.clone())))
+    };
+    let inside_rename = |old: &SemanticNode, new: &SemanticNode| {
+        rename_pairs.iter().any(|(o, n)| old.id.starts_with(&format!("{o}."))
+            && new.id.starts_with(&format!("{n}.")))
+    };
     let before = changes.len();
     let mut group_members: HashMap<String, Vec<(usize, usize, usize)>> = HashMap::new();
     for (idx, change) in changes.iter().enumerate() {
@@ -1978,9 +1990,7 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                         || ct.contains("class")
                 })
         };
-        if old_node.node_type != new_node.node_type
-            || old_node.label != new_node.label
-            || !reorder_entity(old_node)
+        if !same_identity(old_node, new_node) || !(reorder_entity(old_node) || inside_rename(old_node, new_node))
         {
             continue;
         }
@@ -2019,7 +2029,7 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         let same_identity = matches!(
             (change.old_node, change.new_node),
             (Some(old_node), Some(new_node))
-                if old_node.node_type == new_node.node_type && old_node.label == new_node.label
+                if same_identity(old_node, new_node)
         );
         if !same_identity {
             result.push(change);
@@ -2029,16 +2039,23 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             let old_node = change
                 .old_node
                 .expect("genuine mover reorder always carries both nodes");
+            // Reordering executable children within a renamed callable can change
+            // behavior (e.g. increment then multiply). The rename only owns its name.
+            let behavior_reorder = change.new_node.is_some_and(|new_node|
+                inside_rename(old_node, new_node) && !is_named_entity_type(&old_node.node_type));
             let description = format!(
-                "Move {}('{}') from sibling {} to {}",
+                "{} {}('{}') from sibling {} to {}",
+                if behavior_reorder { "Reorder statement" } else { "Move" },
                 old_node.node_type,
                 old_node.label,
                 change.old_index.map(|i| i.to_string()).unwrap_or_default(),
                 change.new_index.map(|i| i.to_string()).unwrap_or_default(),
             );
-            promoted_indices.push(result.len());
+            if !behavior_reorder {
+                promoted_indices.push(result.len());
+            }
             result.push(ChangeDraft {
-                change_type: "MOVE",
+                change_type: if behavior_reorder { "MODIFICATION" } else { "MOVE" },
                 confidence: change.confidence.min(0.85),
                 description,
                 ..change

@@ -1387,6 +1387,8 @@ fn augment_html_path_matching<'a>(
 // later unchanged values into bogus MODIFICATIONs, and a key reorder pairs by identity. The
 // adf/databricks/dbt keys are NOT ported: those languages are already routed-green without them.
 
+mod callable_renames;
+
 mod keyed_data;
 use keyed_data::*;
 
@@ -3464,6 +3466,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -6883,6 +6886,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
         &mut diagnostics,
         detailed_diagnostics,
     );
+    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity);
     let before_top_down = matches.len();
     matches = top_down_match_with_existing(&old_index, &new_index, min_height, matches);
     diagnostics.structural_matches += matches.len().saturating_sub(before_top_down);
@@ -8446,6 +8450,7 @@ fn refine_candidate_drafts<'a>(
     mut probe: Option<&mut PhaseProbe>,
     language: &str,
 ) {
+    callable_renames::promote_rename_updates(changes);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
         probe.as_deref_mut(),
@@ -8673,7 +8678,13 @@ fn finalize_python_review_drafts<'a>(
         }));
         // The formatting-equivalence relabel is a PYTHON style rule; it carried
         // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        if language == "python" {
+        // A renamed callable can suppress positional shifts while retaining real
+        // body edits. Suppression alone cannot prove formatting equivalence for
+        // those surviving changes or assign their nodes to ignored-style evidence.
+        if language == "python" && !changes.iter().any(|change| {
+            change.refactoring_kind.as_deref() == Some("RENAME_SYMBOL")
+                && change.old_node.map(anchor_is_function).unwrap_or(false)
+        }) {
             finalization
                 .change_groups
                 .push(python_formatting_equivalence_group(changes));
@@ -8892,6 +8903,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9142,12 +9154,9 @@ fn stage11_change_description(
 
 mod invariance_groups;
 use invariance_groups::*;
-/// MEANINGFUL_CHANGE groups for the finalize-routed path ONLY (issue #57): python's
-/// presentation surfaces every surviving semantic change as a MEANINGFUL_CHANGE group
-/// carrying the change's labels; routed languages skip python presentation entirely, so
-/// downstream classifiers saw group-less output and read every edit as 'other' (csharp
-/// pilot). Deliberately NOT part of final_change_groups_from_drafts — the certified
-/// batch path feeds python presentation, which builds its own groups.
+/// Every final Rust route owns its meaningful groups. The certified batch returns
+/// directly through the thin Python wrapper, so it cannot rely on Python presentation
+/// to add these groups (especially for body edits next to a callable rename).
 fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
     changes
         .iter()
@@ -9368,6 +9377,16 @@ fn final_change_group_from_draft(
     });
     if let Some(refactoring_kind) = change.refactoring_kind {
         group["refactoring_kind"] = json!(refactoring_kind);
+    }
+    // A callable rename owns the declaration identity, not every descendant.
+    // Including body IDs/labels lets group compaction swallow independent behavior edits.
+    if change.refactoring_kind == Some("RENAME_SYMBOL")
+        && change.old_node.is_some_and(anchor_is_function)
+    {
+        group["old_labels"] = json!(change.old_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["new_labels"] = json!(change.new_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["old_node_ids"] = json!(change.old_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
+        group["new_node_ids"] = json!(change.new_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
     }
     group
 }

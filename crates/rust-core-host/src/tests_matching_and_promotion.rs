@@ -5,6 +5,114 @@
 use super::*;
 use crate::*;
 
+fn rename_review_routes(old: &str, new: &str) -> Vec<(&'static str, Value)> {
+    let request = json!({
+        "schema_version": 1, "python_parser_backend": "native",
+        "files": [{"old_source": old, "new_source": new,
+            "old_filename": "example.py", "new_filename": "example.py",
+            "language": "python", "parser_wasm_path": "unused.wasm"}]
+    });
+    let batch: Value = serde_json::from_str(&diff_batch(&request.to_string()).unwrap()).unwrap();
+    assert_eq!(batch["status"], COMPLETE, "{batch}");
+    fn tree(source: &str) -> String {
+        let cst: CstNode = serde_json::from_str(&python_wasm_filtered_cst(source).unwrap()).unwrap();
+        serde_json::to_string(&convert_cst(&cst, "0", None).unwrap()).unwrap()
+    }
+    let routed: Value = serde_json::from_str(&finalize_review_impl(
+        &tree(old), &tree(new), old, new, "python", "{}"
+    ).unwrap()).unwrap();
+    vec![("batch", batch["diffs"][0]["diff"].clone()), ("routed", routed)]
+}
+
+fn assert_function_rename(result: &Value, old: &str, new: &str) {
+    let changes = result["changes"].as_array().unwrap();
+    assert!(changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+        && c["old_node"]["label"] == old && c["new_node"]["label"] == new
+        && c["old_node"]["node_type"] == "function_definition"), "{result}");
+}
+
+#[test]
+fn renamed_function_with_body_edit_preserves_both_intents() {
+    for (_, result) in rename_review_routes("def calc(x):\n    return x + 1\n", "def compute(x):\n    return x + 2\n") {
+        assert_function_rename(&result, "calc", "compute");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION" && c["old_node"]["label"] == "1"
+            && c["new_node"]["label"] == "2"), "{result}");
+        assert_ne!(result["is_style_only"], true);
+        let literal_index = result["changes"].as_array().unwrap().iter().position(|c|
+            c["change_type"] == "MODIFICATION" && c["new_node"]["label"] == "2").unwrap();
+        assert!(result["change_groups"].as_array().unwrap().iter().any(|g|
+            g["kind"] == "MEANINGFUL_CHANGE"
+            && g["raw_change_indices"].as_array().unwrap().contains(&json!(literal_index))), "{result}");
+
+    }
+}
+
+#[test]
+fn renamed_function_with_inserted_helper_keeps_cap_edit() {
+    let old = "import os\nimport sys\n\ndef calculate_total(items):\n    total = 0\n    for i in items:\n        total += i.price * i.qty\n    return min(total, 50)\n";
+    let new = "import sys\nimport os\n\ndef _subtotal(i):\n    return i.price * i.qty\n\ndef compute_order_total(items):\n    total = 0\n    for i in items:\n        total += _subtotal(i)\n    return min(total, 75)\n";
+    for (route, result) in rename_review_routes(old, new) {
+        assert!(result["changes"].as_array().unwrap().iter().all(|c| c["change_type"] != "REORDER" && c["change_type"] != "MOVE"), "{route}: insertion is not relocation: {result}");
+        assert_function_rename(&result, "calculate_total", "compute_order_total");
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+            && c["old_node"]["label"] == "50" && c["new_node"]["label"] == "75"), "{result}");
+        assert!(!changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
+        assert!(changes.iter().any(|c| c["new_node"]["label"] == "_subtotal"), "helper must remain visible: {result}");
+    }
+}
+
+#[test]
+fn renamed_function_controls_decline_ambiguous_and_unrelated_pairs() {
+    for (old, new) in [
+        ("def old_one(): return 1\ndef keep(): return 0\n",
+         "def keep(): return 0\ndef new_one(): return 2\n"),
+        ("def alpha(a): return a * 3\n", "def beta(b): return b - 9\n"),
+        ("def alpha(x): return x + 1\ndef beta(x): return x + 1\n",
+         "def gamma(x): return x + 2\ndef delta(x): return x + 2\n"),
+        ("class A:\n    class Inner:\n        def calc(x): return x + 1\nclass B:\n    class Inner:\n        pass\n",
+         "class A:\n    class Inner:\n        pass\nclass B:\n    class Inner:\n        def compute(x): return x + 2\n"),
+        ("class A:\n    def calc(x): return x + 1\n",
+         "class B:\n    def compute(x): return x + 2\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+        }
+    }
+}
+
+#[test]
+fn renamed_function_control_preserves_pure_rename_and_existing_identity() {
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n", "def compute(x): return x + 1\n") {
+        assert_function_rename(&result, "calc", "compute");
+    }
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n",
+        "def compute(x): return x + 2\ndef calc(x): return x + 1\n") {
+        assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_keeps_behavioral_statement_order_changes() {
+    for (old, new) in [
+        ("def calc(x):\n    x = x + 1\n    x = x * 2\n    return x\n",
+         "def compute(x):\n    x = x * 2\n    x = x + 1\n    return x\n"),
+        ("def calc(x):\n    first(x)\n    second(x)\n    return x\n",
+         "def compute(x):\n    second(x)\n    first(x)\n    return x\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert_function_rename(&result, "calc", "compute");
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder statement")), "{result}");
+        }
+    }
+}
+
     #[test]
     fn cst_diff_reports_update_for_renamed_python_function() {
         let out = diff_python_cst_json(

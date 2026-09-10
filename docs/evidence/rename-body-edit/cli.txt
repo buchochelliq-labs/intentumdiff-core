@@ -1,0 +1,21 @@
+$ intentumdiff file old.py new.py
+╭────────────────────────── IntentumDiff ───────────────────────────╮
+│ Semantic review shell  v0.0.1                                     │
+│ Diff with meaning. Moves, intent, guardrails, and review signals. │
+╰───────────────────────────────────────────────────────────────────╯
+╭─ Semantic diff ──╮
+│ Old       old.py │
+│ New       new.py │
+│ Language  python │
+│ Changes   4      │
+╰──────────────────╯
+
+                                                                                
+  Type           Description                                                    
+ ────────────────────────────────────────────────────────────────────────────── 
+  ADDITION       Insert -> function_definition('_subtotal')                     
+  REFACTORING    Rename function_definition('calculate_total') ->               
+                 ('compute_order_total')                                        
+  MODIFICATION   Update integer('50') -> integer('75')                          
+  ADDITION       Insert -> call('_subtotal')                                    
+                                                                                

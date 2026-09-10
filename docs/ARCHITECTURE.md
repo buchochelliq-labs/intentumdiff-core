@@ -1,7 +1,11 @@
 # IntentumDiff engine architecture
 
-The engine is the **complete shared backend**: everything functional lives here, and every
-product surface is a thin binding over the [C ABI](C_ABI.md).
+The architectural target is a **complete shared backend**, with every product surface a thin
+binding over the [C ABI](C_ABI.md). The Python-first audit found active semantic postprocessing
+in the Python shell; its removal is tracked in
+[Python#54](https://github.com/buchochelliq-labs/intentumdiff-python/issues/54).
+Overlapping implementations must be compared against explicit semantic expectations before
+migration; neither implementation is automatically the correctness oracle.
 
 ## Pipeline
 
@@ -18,10 +22,24 @@ source pair ──► parse ──► SemanticNode trees ──► match ──�
 3. **Match.** Hash-based subtree matching, entity anchoring, rename/move promotion, cross-file
    symbol/reference matching (via `index-engine-lib`, linked natively).
 4. **Classify.** Each change becomes MEANINGFUL / REFACTORING / MOVED / IGNORED_STYLE / NOISE
-   with a derived confidence and an intent description; invariance rules (a data-driven
-   catalog) suppress known-equivalent rewrites; guardrail rules evaluate protected paths.
+   with a derived confidence and an intent description; invariance rules suppress
+   known-equivalent rewrites; guardrail rules evaluate protected paths. Authoritative catalogue
+   consolidation is tracked in [#39](https://github.com/buchochelliq-labs/intentumdiff-core/issues/39).
 5. **Finalize.** Presentation passes (grouping, compaction, reorder suppression, per-language
    statement/keyed/resource profiles) produce the public `SemanticDiff`.
+
+## Callable rename continuity
+
+Existing entity identities are matched first. An unmatched callable can then establish
+continuity across a rename when its signature is unchanged, its full enclosing named scope
+agrees, its bodies have comparable sizes and shared concrete content, and the candidate is
+unique in both directions. Similarity is symmetric; containment in an extracted helper alone
+does not establish a rename. Ambiguous cases remain unpaired.
+
+The rename changes the declaration name only. Body modifications remain separate changes;
+the older safety guard on collapsing whole deletion/addition subtrees remains in place.
+Insertion shifts use the established rename identity when distinguishing shifts from moves.
+See the [reproduction and CLI evidence](evidence/rename-body-edit/README.md).
 
 ## Crate topology
 
