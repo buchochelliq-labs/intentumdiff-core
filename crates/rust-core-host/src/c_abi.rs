@@ -703,6 +703,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "language")?,
             arg_str(args, 5, "config_json")?,
         ),
+        "enrich_literal_labels" => crate::enrich_literal_labels_json_str(
+            arg_str(args, 0, "tree_json")?,
+            arg_str(args, 1, "source")?,
+        ),
+        "review_trees_equivalent" => crate::review_trees_equivalent_impl(
+            arg_str(args, 0, "old_tree_json")?,
+            arg_str(args, 1, "new_tree_json")?,
+        ),
         "enrich_profile_labels" => crate::enrich_profile_labels_impl(
             arg_str(args, 0, "tree_json")?,
             arg_str(args, 1, "source")?,
@@ -1099,6 +1107,10 @@ mod tests {
             json!([tree, tree, "", "", "python", "{}"]),
         );
         assert_eq!(env["ok"], true);
+        assert_eq!(call("enrich_literal_labels", json!([tree, ""]))["ok"], true);
+        let equivalent = call("review_trees_equivalent", json!([tree, tree]));
+        assert_eq!(equivalent["ok"], true);
+        assert_eq!(equivalent["result"], true);
         // profile-label enrichment (optional identity_fields defaulting to null) round-trips.
         assert_eq!(
             call("enrich_profile_labels", json!([tree, "", "json", null]))["ok"],
@@ -1110,6 +1122,23 @@ mod tests {
         assert!(env["result"].is_object());
         // registering an empty XML-dialect set replaces with zero dialects.
         assert_eq!(call("register_user_xml_dialects", json!([[]]))["result"], 0);
+    }
+
+    #[test]
+    fn literal_enrichment_preserves_physical_lines_and_value_whitespace() {
+        let source = "a=\"\u{2028}\"; b=\" target \"\r\n";
+        let tree = json!({"id":"s", "node_type":"string", "label":"string",
+            "position":{"start_line":0,"start_col":11,"end_line":0,"end_col":21},
+            "structural_hash":"h","children":[]});
+        let result = call("enrich_literal_labels", json!([tree.to_string(), source]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["label"], " target ");
+        let mut changed = tree.clone();
+        changed["label"] = json!("a  b");
+        let mut original = tree;
+        original["label"] = json!("a b");
+        let eq = call("review_trees_equivalent", json!([original.to_string(), changed.to_string()]));
+        assert_eq!(eq["result"], false, "{eq}");
     }
 
     #[test]

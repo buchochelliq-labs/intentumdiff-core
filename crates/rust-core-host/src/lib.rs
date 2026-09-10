@@ -1483,12 +1483,14 @@ fn finalize_review_impl(
     if config.collect_trace {
         finalize_trace_start();
     }
-    let matching = compute_matching(
-        &old_tree,
-        &new_tree,
+    let matching = compute_matching_with_diagnostics_indexed(
+        &TreeIndex::new(&old_tree),
+        &TreeIndex::new(&new_tree),
         config.min_height,
         config.min_similarity,
-    );
+        false,
+        Some((old_source, new_source)),
+    ).pairs;
     // Entity-anchored matching (issue #57, anchors.py port): re-pair same-identity entities and
     // their stable descendants BEFORE the edit script — relocated content becomes MOVEs instead
     // of DELETE+ADD churn (mirrors the default path's differ.py stage ordering: entity →
@@ -3354,6 +3356,7 @@ fn diff_python_sources_final_impl(
             config.min_height,
             config.min_similarity,
             detailed_matching_diagnostics,
+            Some((old_source, new_source)),
         ))
     })?;
     let matching = matching_report.pairs;
@@ -4700,7 +4703,8 @@ pub(crate) fn run_python_wasm_process_pair(
     Ok((result.old_tree, result.new_tree))
 }
 
-/// python `_differ_presentation._slice_source_text` (CHAR-based columns for python-string parity).
+/// Parser source spans use zero-based UTF-8 byte columns. Invalid boundaries fail
+/// closed; character slicing corrupts evidence after non-ASCII source text.
 fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
     let start_line = position.start_line as usize;
     let end_line = position.end_line as usize;
@@ -4708,10 +4712,7 @@ fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
         return String::new();
     }
     let char_slice = |line: &str, from: usize, to: Option<usize>| -> String {
-        match to {
-            Some(t) => line.chars().skip(from).take(t.saturating_sub(from)).collect(),
-            None => line.chars().skip(from).collect(),
-        }
+        line.get(from..to.unwrap_or(line.len())).unwrap_or_default().to_owned()
     };
     if start_line == end_line {
         return char_slice(
@@ -4750,13 +4751,14 @@ fn clean_string_literal_label(text: &str) -> String {
         && matches!(chars[0], '\'' | '"' | '`')
     {
         let inner: String = chars[1..chars.len() - 1].iter().collect();
-        return inner.trim().to_owned();
+        return inner;
     }
     value.trim().to_owned()
 }
 
 /// python `_differ_presentation._enrich_literal_labels` (differ.py stage 4-7): string-literal
-/// leaves get their DECODED source value as label (and order_by_clause its "descending" marker).
+/// leaves get source text with delimiters removed (not escape decoding), and
+/// order_by_clause gets its "descending" marker.
 /// Keyed profile enrichment AND guardrail semantic paths key off these labels — skipping this
 /// left native json/yaml pairs unlabeled, which silently produced ZERO guardrail semantic paths
 /// (the rule-eval gap found porting native guardrails).
@@ -6864,6 +6866,7 @@ fn compute_matching_with_diagnostics_mode<'a>(
         min_height,
         min_similarity,
         detailed_diagnostics,
+        None,
     )
 }
 
@@ -6873,6 +6876,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     min_height: usize,
     min_similarity: f64,
     detailed_diagnostics: bool,
+    sources: Option<(&str, &str)>,
 ) -> MatchingReport<'a> {
     let mut diagnostics = MatchingDiagnostics {
         attempted: true,
@@ -6886,7 +6890,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
         &mut diagnostics,
         detailed_diagnostics,
     );
-    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity);
+    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity, sources);
     let before_top_down = matches.len();
     matches = top_down_match_with_existing(&old_index, &new_index, min_height, matches);
     diagnostics.structural_matches += matches.len().saturating_sub(before_top_down);
@@ -8690,6 +8694,10 @@ fn finalize_python_review_drafts<'a>(
                 .push(python_formatting_equivalence_group(changes));
         }
     }
+    if language == "python" {
+        decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
+        function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
+    }
     add_compact_superseded_group_for_refactorings(changes, finalization);
     apply_python_literal_invariances(
         changes,
@@ -8703,6 +8711,8 @@ fn finalize_python_review_drafts<'a>(
 }
 
 mod draft_promotions;
+mod decorator_order;
+mod function_extraction;
 use draft_promotions::*;
 
 
@@ -10117,7 +10127,16 @@ fn semantic_diff_payload_with_style(
 /// program; labels differing in content are not.
 fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
     let mut hasher = Sha256::new();
-    let normalized: String = node.label.split_whitespace().collect::<Vec<_>>().join(" ");
+    // Whitespace within literal values is data. Parent labels may contain quoted
+    // source too, so conservatively preserve those rather than proving equivalence.
+    let normalized = if node.node_type.to_lowercase().contains("string")
+        || matches!(node.node_type.as_str(), "character_literal" | "char_literal" | "character")
+        || node.label.contains(['\'', '"', '`'])
+    {
+        node.label.clone()
+    } else {
+        node.label.split_whitespace().collect::<Vec<_>>().join(" ")
+    };
     hasher.update(node.node_type.as_bytes());
     hasher.update(b":");
     hasher.update(normalized.as_bytes());
@@ -10126,6 +10145,12 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
         hasher.update(whitespace_normalized_tree_hash(child).as_bytes());
     }
     format!("{:x}", hasher.finalize())
+}
+
+fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
+    let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
+    let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
+    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
 }
 
 fn semantic_diff_payload(

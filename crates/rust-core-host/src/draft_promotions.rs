@@ -1990,7 +1990,8 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                         || ct.contains("class")
                 })
         };
-        if !same_identity(old_node, new_node) || !(reorder_entity(old_node) || inside_rename(old_node, new_node))
+        if !same_identity(old_node, new_node) || !(reorder_entity(old_node)
+            || old_node.node_type == "decorator" || inside_rename(old_node, new_node))
         {
             continue;
         }
@@ -2041,11 +2042,12 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                 .expect("genuine mover reorder always carries both nodes");
             // Reordering executable children within a renamed callable can change
             // behavior (e.g. increment then multiply). The rename only owns its name.
-            let behavior_reorder = change.new_node.is_some_and(|new_node|
+            let decorator_reorder = old_node.node_type == "decorator";
+            let behavior_reorder = decorator_reorder || change.new_node.is_some_and(|new_node|
                 inside_rename(old_node, new_node) && !is_named_entity_type(&old_node.node_type));
             let description = format!(
                 "{} {}('{}') from sibling {} to {}",
-                if behavior_reorder { "Reorder statement" } else { "Move" },
+                if decorator_reorder { "Reorder decorator" } else if behavior_reorder { "Reorder statement" } else { "Move" },
                 old_node.node_type,
                 old_node.label,
                 change.old_index.map(|i| i.to_string()).unwrap_or_default(),

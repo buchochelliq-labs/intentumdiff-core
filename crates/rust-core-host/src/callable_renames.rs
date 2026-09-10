@@ -65,11 +65,39 @@ fn similarity(old: &SemanticNode, new: &SemanticNode) -> Option<f64> {
     Some(common as f64 / (an + bn - common) as f64)
 }
 
+fn same_body(old: &SemanticNode, new: &SemanticNode, sources: Option<(&str, &str)>) -> bool {
+    // Ordered subtrees, not a bag of tokens: reordering calls is not an exact body.
+    let body = |node: &SemanticNode| {
+        node.children
+            .iter()
+            .filter(|c| !(anchor_is_name(c) && c.label == node.label))
+            .map(|c| (c.node_type.clone(), c.structural_hash.clone()))
+            .collect::<Vec<_>>()
+    };
+    if body(old) != body(new) {
+        return false;
+    }
+    // Parser trees may omit punctuation such as + versus *. Verify exact source
+    // evidence too before letting this candidate outrank another plausible body.
+    sources.is_some_and(|(os, ns)| {
+        let snippets = |node: &SemanticNode, source: &str| {
+            let lines: Vec<_> = source.lines().collect();
+            node.children
+                .iter()
+                .filter(|c| !(anchor_is_name(c) && c.label == node.label))
+                .map(|c| slice_source_text(&lines, &c.position).trim().to_owned())
+                .collect::<Vec<_>>()
+        };
+        snippets(old, os) == snippets(new, ns)
+    })
+}
+
 pub(crate) fn seed_renamed_callables<'a>(
     old: &TreeIndex<'a>,
     new: &TreeIndex<'a>,
     pairs: &mut Vec<MatchPair<'a>>,
     threshold: f64,
+    sources: Option<(&str, &str)>,
 ) {
     let occupied_old: HashSet<&str> = pairs.iter().map(|p| p.old_node.id.as_str()).collect();
     let occupied_new: HashSet<&str> = pairs.iter().map(|p| p.new_node.id.as_str()).collect();
@@ -83,22 +111,6 @@ pub(crate) fn seed_renamed_callables<'a>(
                 continue;
             }
             // Enclosing named scope must retain its identity. Do not infer cross-scope renames.
-            fn scope_path<'b>(
-                index: &'b TreeIndex<'_>,
-                node: &SemanticNode,
-            ) -> Vec<(String, String)> {
-                let mut path = Vec::new();
-                let mut cursor = node.id.as_str();
-                while let Some(parent_id) = index.parent.get(cursor) {
-                    if let Some(parent) = index.by_id.get(parent_id) {
-                        if is_named_entity_type(&parent.node_type) {
-                            path.push((parent.node_type.clone(), parent.label.clone()));
-                        }
-                    }
-                    cursor = parent_id;
-                }
-                path
-            }
             let same_scope = scope_path(old, o) == scope_path(new, n);
             if same_scope
                 && label_match_parent_compatible(o, n, old, new)
@@ -108,6 +120,16 @@ pub(crate) fn seed_renamed_callables<'a>(
             }
         }
     }
+    // Consume stronger evidence before positional/bottom-up matching can steal it.
+    // A weak edge must not compete with an exact body at either end.
+    let exact: Vec<_> = candidates
+        .iter()
+        .copied()
+        .filter(|(o, n)| same_body(o, n, sources))
+        .collect();
+    candidates.retain(|(o, n)| {
+        same_body(o, n, sources) || !exact.iter().any(|(eo, en)| eo.id == o.id || en.id == n.id)
+    });
     for (o, n) in &candidates {
         if candidates.iter().filter(|(a, _)| a.id == o.id).count() == 1
             && candidates.iter().filter(|(_, b)| b.id == n.id).count() == 1
@@ -157,4 +179,21 @@ pub(crate) fn promote_rename_updates(changes: &mut Vec<ChangeDraft<'_>>) {
             c.old_node.is_some_and(|x| &x.id == o) || c.new_node.is_some_and(|x| &x.id == n)
         })
     });
+}
+
+pub(crate) fn scope_path<'b>(
+    index: &'b TreeIndex<'_>,
+    node: &SemanticNode,
+) -> Vec<(String, String)> {
+    let mut path = Vec::new();
+    let mut cursor = node.id.as_str();
+    while let Some(parent_id) = index.parent.get(cursor) {
+        if let Some(parent) = index.by_id.get(parent_id) {
+            if is_named_entity_type(&parent.node_type) {
+                path.push((parent.node_type.clone(), parent.label.clone()));
+            }
+        }
+        cursor = parent_id;
+    }
+    path
 }

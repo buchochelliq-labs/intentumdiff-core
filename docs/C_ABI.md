@@ -6,6 +6,19 @@ future language — drives the identical surface. Bindings do zero functional wo
 
 ## The two exports
 
+Semantic source positions use zero-based lines and UTF-8 byte columns, matching parser spans.
+Bindings must not reinterpret columns as character indices.
+
+Additional semantic helpers:
+
+| Handler | Positional arguments | Result |
+|---|---|---|
+| `enrich_literal_labels` | tree JSON string, source string | enriched tree |
+| `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
+
+These share the engine implementations used by native routes. Malformed trees return the
+normal error envelope. Equivalence preserves whitespace in string and character values.
+
 ```c
 char *intentumdiff_call(const char *name, const char *args_json);
 void  intentumdiff_free(char *ptr);

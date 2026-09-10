@@ -1,91 +1,105 @@
-# Rename with body edits: development evidence
+# Rename, extraction and body edits: candidate evidence
 
 Tracks [core#44](https://github.com/buchochelliq-labs/intentumdiff-core/issues/44),
-the rename/body-edit portion of [Python#45](https://github.com/buchochelliq-labs/intentumdiff-python/issues/45).
-This is development-build evidence on Linux x86_64, not release certification.
+[core#45](https://github.com/buchochelliq-labs/intentumdiff-core/issues/45),
+[core#47](https://github.com/buchochelliq-labs/intentumdiff-core/issues/47), and
+[Python#45](https://github.com/buchochelliq-labs/intentumdiff-python/issues/45).
+This is Linux x86_64 development-candidate evidence, not release certification.
 
-## Expected behavior
+## Observed behavior
 
-Compare [old.py](old.py) and [new.py](new.py): the original function continues as
-`compute_order_total`, while the cap changes from `50` to `75`. Both facts must be visible.
-The newly added `_subtotal` must never be mistaken for the renamed original function.
-Helper extraction classification remains outstanding; this change keeps the helper and call
-visible as additions and does not close the complete Python issue.
+Compare [old.py](old.py) and [new.py](new.py): three separate changes survive:
+`calculate_total` becomes `compute_order_total`, `_subtotal` is extracted, and the cap changes
+from `50` to `75`. The cap owns a separate meaningful-change group.
 
-![Actual CLI output, recorded through Rich and rendered to PNG](cli.png)
+![CLI from the installed candidate wheel](cli.png)
 
-[Plain CLI output](cli.txt). The capture invokes the source checkout's real `file` command,
-records its Rich console, then renders the SVG to PNG. The banner's existing `v0.0.1` value
-comes from that checkout; it is not a new version or a released-wheel claim.
+[Plain CLI output](cli.txt). This is actual output from the installed wheel's CLI, recorded
+through Rich and rendered from SVG to PNG. The window decoration is generated; it is not an
+operating-system screenshot. The installed console script was separately run successfully.
+The banner reports the existing candidate version `0.0.2b1`; nothing was published or tagged.
 
-## Diagnosis and boundary audit
+## Artifact verification
 
-Default Python-language `SemanticDiffer` returns Rust's native batch result. Diagnostics
-uses the real Wasm parser, Rust tree finalisation, and remaining Python postprocessing.
-Removing the named-label gate alone did not fix the minimal case: the measured function Dice
-score was zero, with only module roots matched. Renamed scopes blocked the descendant seeds
-needed by bottom-up matching. The fix seeds conservative callable continuity before those
-scope gates, without removing the unchanged-body safety guard on whole-subtree collapse.
+Built using the Python repository's real maturin configuration, staged Rust source, the C ABI
+and real Python/JavaScript/TypeScript parser components. Installed in a fresh environment,
+with no source checkout on `PYTHONPATH`. Verified import and loaded library paths under the
+new environment's `site-packages`; backend is `_CtypesBackend`.
 
-Python still evaluates invariance rules, enriches labels and makes some style-equivalence
-decisions. This is active processing, tracked in [Python#54](https://github.com/buchochelliq-labs/intentumdiff-python/issues/54)
-and [core#39](https://github.com/buchochelliq-labs/intentumdiff-core/issues/39).
-Direct Python/Rust integer comparisons agree with independently stated expectations:
-`1→0x1` and `1_000→1000` are equivalent; `50→75` and
-`9007199254740992→9007199254740993` remain changes. This is not a claim of full evaluator parity.
+- Wheel: `intentumdiff_python-0.0.2b1-py3-none-manylinux_2_39_x86_64.whl`.
+- SHA-256: `6db8c91158cab2b48f0eb56ff7e2b33e2d9280bae290b7633f05c48a34fefdbc`.
+- Rust library suite: **269 passed, 25 feature-gated checks ignored**, with the mapped
+  INI/assembly/Python parser components staged for the edit matrix.
+- Installed-wheel focused checks: **69 passed**.
+- Source-checkout public wrapper/scenario checks: **97 passed, 2 existing expected failures**
+  (JavaScript added-parameter and import/use noise).
+- Immutable-ref provisioning regression: passed; CI can fetch the exact candidate core SHA.
 
-## Reproduction
+The wheel is an unoptimised local correctness build with two parser components. It is not
+an all-language, all-platform release artifact. Supported-platform builds, complete component
+provenance and the full Python CI suite remain required release gates.
 
-Build the core, stage the parser components in the Python checkout, then use that freshly
-built cdylib through `_CtypesBackend`. Confirm the loaded library path before running:
+## Boundary audit and independent judgment
 
-```sh
-cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --lib
-cargo rustc --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --lib --crate-type cdylib
-python -m pytest tests/unit/test_rename_body_edit.py tests/unit/test_scenarios_python.py tests/unit/test_scenarios_javascript.py -q
-python -m intentumdiff file old.py new.py
-```
+Correction to the initial audit: production `differ.py` already imported invariance evaluation
+from `rust_core.py`. No production imports of legacy `analysis.invariances` were found.
+The active duplicate code was literal-label enrichment and recursive tree equivalence; both
+now delegate to shared Rust handlers through thin DTO adapters.
 
-Core baseline: `80003118bff83eba645ad259bc9a44d36f63a5ab`.
-Python baseline: `06f0dcc1830f648f413f2a0ed45e802f436e1e53`.
+Independent probes found that character slicing corrupted byte-based parser spans after
+non-ASCII text. Rust now uses UTF-8 byte columns; actual Unicode-prefix, U+2028 and CRLF
+cases preserve labels. String and character whitespace remains data.
+
+The legacy Python evaluator and Rust agree on `1→0x1`, `1_000→1000`, `50→75` and adjacent
+large integers. They differ on arbitrary-precision integers beyond i128, unicode escapes and
+some numeric spellings. Those are catalogue/evaluator completeness work under
+[core#39](https://github.com/buchochelliq-labs/intentumdiff-core/issues/39), not active wrapper drift.
+Neither implementation is an oracle: JSON adjacent integers and JavaScript negative zero must
+remain distinct where runtime semantics distinguish them.
+
+Both implementations incorrectly treated CSS selectors/text as colors. The active Rust rule
+now only canonicalizes whole values of known color properties. Selectors, strings, custom
+properties and nested custom-property token streams remain uninterpreted.
+
+## Independent reviews and bounded behavior
+
+Independent agents reviewed matching, extraction, and the wrapper boundary/CSS work. Review
+found and retested cross-scope matches, lost statement/decorator order, ambiguous positional
+fallbacks, short-name body loss, shadowed helpers, definition-time effects and Unicode spans.
+All blockers in these scoped changes were fixed and independently confirmed.
+
+Extraction deliberately requires a unique added module-level helper defined before its caller,
+a single supported return expression, unchanged simple arguments and exact replacement context.
+It rejects shadowed names, annotations, decorators, changed expressions, side-effecting helper
+bodies and ambiguous occurrences. This is structural recognition, not a general proof of
+runtime equivalence. Unsupported extraction shapes stay explicit changes.
+
+Known remaining output limits: a genuinely modified decorator may report its argument edit
+without separately asserting its ambiguous reorder; one operator-based rename case retains
+extra block-move noise. These are tracked in [core#48](https://github.com/buchochelliq-labs/intentumdiff-core/issues/48)
+and [core#49](https://github.com/buchochelliq-labs/intentumdiff-core/issues/49).
+Literal evaluator completeness is [core#50](https://github.com/buchochelliq-labs/intentumdiff-core/issues/50).
+Neither output limitation hides the tested meaningful edits.
+
+## Reproduction inputs
+
+Original core RC: `80003118bff83eba645ad259bc9a44d36f63a5ab`.
+Original Python RC: `06f0dcc1830f648f413f2a0ed45e802f436e1e53`.
 Parser sources built with Rust 1.98.1 for `wasm32-wasip2`:
 
 - Python: `4d825be9e26f96871539b990d1171b1815b8538f`.
 - JavaScript/TypeScript: `c7ae6476889dd0db4a88907735ed06c7f155d07b`.
-- Both pin SDK `v0.0.2-beta.1` (`eab92af5`).
+- INI (Rust edit matrix): `339ec28e9f2ffdc5d18cd41ecf0911daf244f108`.
+- Assembly (Rust edit matrix): `457411a27d3d928313ea7cda1dae97ddf68a533e`.
+- SDK: `v0.0.2-beta.1` (`eab92af5`).
 
-Core correctness iterations use the unoptimised profile with debug information disabled.
-Release builds, all supported platforms, and the complete parser estate remain release gates.
+```sh
+python scripts/provision_build_inputs.py --core-dir ../intentumdiff-core --wasm-dir COMPONENTS
+maturin build --bindings cffi --profile dev --no-default-features
+python -m pytest tests/unit/test_rename_body_edit.py tests/unit/test_rust_semantic_boundary.py -q
+intentumdiff file old.py new.py
+```
 
-## Independent review
-
-An independent agent found two blockers in the initial candidate: matching across different
-outer classes with the same inner class name, and losing reordered dependent statements under
-a renamed function. Both examples were added as regressions. The candidate now checks full
-enclosing scope and preserves executable statement reorder evidence as meaningful changes.
-The rename group owns the declaration identity, not its entire body; final Rust routes create
-their own meaningful groups instead of relying on Python to fill them in.
-
-The reviewer also found a pre-existing ambiguous-source selection defect, tracked separately
-in [core#45](https://github.com/buchochelliq-labs/intentumdiff-core/issues/45).
-
-Final independent review confirmed the scoped fix: literal edits and executable reorders
-remain visible, cross-scope false matches are rejected, groups own separate final indices,
-and contradictory formatting/moved-code groups are absent for executable reorders.
-Suppressed positional shifts during a callable rename are not proof of formatting equivalence.
-Existing decorator-order loss remains a separate limitation, as does helper extraction.
-
-## Verified results
-
-- Core library suite: **263 passed, 25 ignored** with `--no-default-features`.
-  The ignored Tier-C checks require their component configuration; they are not counted as passes.
-- Public Python/native and real Wasm parser checks: **50 passed, 2 expected failures**.
-  The existing JavaScript expected failures concern added-parameter and import/use noise.
-- Baseline comparison: both minimal and full rename/body-edit regressions failed on the
-  original RC, while two conservative controls passed.
-- Independent focused Rust review: **5 passed, 1 Wasm-dependent check skipped**;
-  direct probes additionally checked the freshly built C ABI library.
-
-Tests used a fresh temporary directory because the analytics fixture's process-ID database
-name can collide with a stale file across runs. All evidence above uses the final source
-candidate and the explicit rebuilt cdylib, not a stale shared build artifact.
+Always verify the loaded cdylib path after rebuilding. Rust tests may update only an rlib;
+use an explicit cdylib build for ctypes probes. Analytics fixtures need a fresh temporary
+directory to avoid process-ID database collisions across runs.

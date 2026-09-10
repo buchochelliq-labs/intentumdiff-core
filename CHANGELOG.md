@@ -6,7 +6,12 @@
   reorders, including insertion of a sibling helper. Require unambiguous body and
   enclosing-scope evidence; keep meaningful body groups separate from rename groups.
 - Add native and routed regression evidence for Python, plus public-wrapper
-  JavaScript/TypeScript checks. Helper extraction classification remains outstanding.
+  JavaScript/TypeScript checks.
+- Prefer exact source/body evidence for callable continuity, reject ambiguous positional
+  fallbacks, and preserve Python decorator order through sibling insertion and formatting.
+- Recognize bounded Python expression-to-helper extraction while retaining unrelated edits.
+- Move active Python literal enrichment and tree-equivalence evaluation behind the C ABI;
+  preserve UTF-8 source spans and literal whitespace. Limit CSS color equivalence to values.
 
 ## v0.1.0 — 2026-07-26
 

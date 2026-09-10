@@ -32,6 +32,66 @@ fn assert_function_rename(result: &Value, old: &str, new: &str) {
 }
 
 #[test]
+fn rename_prefers_unique_exact_body_over_position() {
+    for (old, new) in [
+        ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x * 1\n", "def c(x): return x * 1\n"),
+    ] {
+      for (_, result) in rename_review_routes(old, new) {
+        assert_function_rename(&result, "b", "c");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "DELETION" && c["old_node"]["label"] == "a"), "{result}");
+      }
+    }
+}
+
+#[test]
+fn decorator_order_is_behavior_with_or_without_rename() {
+    for name in ["calc", "compute"] {
+        let old = "@cache\n@authorize\ndef calc(x): return x + 1\n";
+        let new = format!("@authorize\n@cache\ndef {name}(x): return x + 1\n");
+        for (_, result) in rename_review_routes(old, &new) {
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        }
+    }
+}
+
+#[test]
+fn decorator_insertion_does_not_hide_existing_order_change() {
+    for (_, result) in rename_review_routes("@a\n@b\ndef f(x): return x\n",
+        "@c\n@b\n@a\ndef f(x): return x\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION"
+            && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "ADDITION"), "{result}");
+    }
+}
+
+#[test]
+fn extraction_requires_exact_expression_arguments_and_context() {
+    let old = "def calc(x):\n    return x * 2\n";
+    for new in [
+        "def helper(x):\n    return x + 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(3)\n",
+        "def helper(x):\n    log(x)\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "@decorate\ndef helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    print(helper(x))\n",
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+        }
+    }
+    for (_, result) in rename_review_routes(old,
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+    }
+}
+
+#[test]
 fn renamed_function_with_body_edit_preserves_both_intents() {
     for (_, result) in rename_review_routes("def calc(x):\n    return x + 1\n", "def compute(x):\n    return x + 2\n") {
         assert_function_rename(&result, "calc", "compute");
@@ -61,12 +121,16 @@ fn renamed_function_with_inserted_helper_keeps_cap_edit() {
         assert!(!changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
             && c["new_node"]["label"] == "_subtotal"), "{result}");
         assert!(changes.iter().any(|c| c["new_node"]["label"] == "_subtotal"), "helper must remain visible: {result}");
+        assert!(changes.iter().any(|c| c["refactoring_kind"] == "EXTRACT_FUNCTION"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
     }
 }
 
 #[test]
 fn renamed_function_controls_decline_ambiguous_and_unrelated_pairs() {
     for (old, new) in [
+        ("def a(): return 1\n", "def b(): return 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x + 1\n", "def c(x): return x + 1\n"),
         ("def old_one(): return 1\ndef keep(): return 0\n",
          "def keep(): return 0\ndef new_one(): return 2\n"),
         ("def alpha(a): return a * 3\n", "def beta(b): return b - 9\n"),
@@ -132,12 +196,9 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         assert!(!changes.is_empty());
     }
     #[test]
-    fn same_id_named_relabel_promotes_to_refactoring_rename_not_move() {
-        // Oracle scenario (intentumdiff-diff-expectations / issue #10): a clean function rename
-        // (greet -> welcome) — same structural id, same node type, same position, only the
-        // label changed — is a REFACTORING rename, never a MOVE. The old behavior emitted
-        // change_type "MOVE" here, surfacing the rename as MOVE + a redundant identifier
-        // modification while the Python oracle collapses it to one change.
+    fn positional_callable_relabel_without_body_evidence_stays_explicit() {
+        // IDs are positions, not identities. Empty synthetic callables provide no
+        // evidence for a rename; real-source pure-renames are covered separately.
         let old_fn = node("0.1", "function_definition", "greet", vec![]);
         let new_fn = node("0.1", "function_definition", "welcome", vec![]);
         let mut changes = vec![
@@ -167,15 +228,8 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
 
         promote_same_id_named_renames_from_add_delete_drafts(&mut changes);
 
-        assert_eq!(
-            changes.len(),
-            1,
-            "add+delete must collapse to one change: {changes:?}"
-        );
-        assert_eq!(changes[0].change_type, "REFACTORING");
-        assert_eq!(changes[0].refactoring_kind, Some("RENAME_SYMBOL"));
-        assert_eq!(changes[0].old_node.unwrap().label, "greet");
-        assert_eq!(changes[0].new_node.unwrap().label, "welcome");
+        assert_eq!(changes.len(), 2, "position alone cannot collapse a callable: {changes:?}");
+        assert!(changes.iter().all(|c| c.refactoring_kind.is_none()));
     }
     #[test]
     fn markdown_section_swap_is_one_move() {
