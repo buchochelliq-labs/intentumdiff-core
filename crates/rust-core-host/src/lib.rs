@@ -1387,6 +1387,8 @@ fn augment_html_path_matching<'a>(
 // later unchanged values into bogus MODIFICATIONs, and a key reorder pairs by identity. The
 // adf/databricks/dbt keys are NOT ported: those languages are already routed-green without them.
 
+mod callable_renames;
+
 mod keyed_data;
 use keyed_data::*;
 
@@ -1481,12 +1483,14 @@ fn finalize_review_impl(
     if config.collect_trace {
         finalize_trace_start();
     }
-    let matching = compute_matching(
-        &old_tree,
-        &new_tree,
+    let matching = compute_matching_with_diagnostics_indexed(
+        &TreeIndex::new(&old_tree),
+        &TreeIndex::new(&new_tree),
         config.min_height,
         config.min_similarity,
-    );
+        false,
+        Some((old_source, new_source)),
+    ).pairs;
     // Entity-anchored matching (issue #57, anchors.py port): re-pair same-identity entities and
     // their stable descendants BEFORE the edit script — relocated content becomes MOVEs instead
     // of DELETE+ADD churn (mirrors the default path's differ.py stage ordering: entity →
@@ -1505,7 +1509,7 @@ fn finalize_review_impl(
     let matching = augment_resource_profile_matching(&old_tree, &new_tree, matching, language);
     // Statement-profile matching (issue #57 asm/bash/delphi): re-pair keyed statements by identity
     // so an operand-value edit is a MODIFICATION, not DELETE+ADD. No-op for other languages.
-    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language);
+    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language, Some((old_source, new_source)));
     // Query-profile matching (issue #57 sql): clauses/relations/fields pair by role + normalized
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
@@ -1531,7 +1535,7 @@ fn finalize_review_impl(
         } else {
             Vec::new()
         };
-    refine_candidate_drafts(&mut drafts, &matching, None, language);
+    refine_candidate_drafts(&mut drafts, &matching, None, language, Some((old_source, new_source)));
     // Statement-profile cross-key split (issue #57 bash): must run BEFORE finalize's parent/child
     // suppression turns the keyed statement pair into a leaf word MODIFICATION.
     split_cross_key_statement_modifications_drafts(&mut drafts, &old_tree, &new_tree, language);
@@ -3352,6 +3356,7 @@ fn diff_python_sources_final_impl(
             config.min_height,
             config.min_similarity,
             detailed_matching_diagnostics,
+            Some((old_source, new_source)),
         ))
     })?;
     let matching = matching_report.pairs;
@@ -3374,7 +3379,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
-    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python");
+    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
     let review_finalization_started = probe.enabled().then(Instant::now);
@@ -3464,6 +3469,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -4697,7 +4703,8 @@ pub(crate) fn run_python_wasm_process_pair(
     Ok((result.old_tree, result.new_tree))
 }
 
-/// python `_differ_presentation._slice_source_text` (CHAR-based columns for python-string parity).
+/// Parser source spans use zero-based UTF-8 byte columns. Invalid boundaries fail
+/// closed; character slicing corrupts evidence after non-ASCII source text.
 fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
     let start_line = position.start_line as usize;
     let end_line = position.end_line as usize;
@@ -4705,10 +4712,7 @@ fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
         return String::new();
     }
     let char_slice = |line: &str, from: usize, to: Option<usize>| -> String {
-        match to {
-            Some(t) => line.chars().skip(from).take(t.saturating_sub(from)).collect(),
-            None => line.chars().skip(from).collect(),
-        }
+        line.get(from..to.unwrap_or(line.len())).unwrap_or_default().to_owned()
     };
     if start_line == end_line {
         return char_slice(
@@ -4747,13 +4751,14 @@ fn clean_string_literal_label(text: &str) -> String {
         && matches!(chars[0], '\'' | '"' | '`')
     {
         let inner: String = chars[1..chars.len() - 1].iter().collect();
-        return inner.trim().to_owned();
+        return inner;
     }
     value.trim().to_owned()
 }
 
 /// python `_differ_presentation._enrich_literal_labels` (differ.py stage 4-7): string-literal
-/// leaves get their DECODED source value as label (and order_by_clause its "descending" marker).
+/// leaves get source text with delimiters removed (not escape decoding), and
+/// order_by_clause gets its "descending" marker.
 /// Keyed profile enrichment AND guardrail semantic paths key off these labels — skipping this
 /// left native json/yaml pairs unlabeled, which silently produced ZERO guardrail semantic paths
 /// (the rule-eval gap found porting native guardrails).
@@ -6861,6 +6866,7 @@ fn compute_matching_with_diagnostics_mode<'a>(
         min_height,
         min_similarity,
         detailed_diagnostics,
+        None,
     )
 }
 
@@ -6870,6 +6876,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     min_height: usize,
     min_similarity: f64,
     detailed_diagnostics: bool,
+    sources: Option<(&str, &str)>,
 ) -> MatchingReport<'a> {
     let mut diagnostics = MatchingDiagnostics {
         attempted: true,
@@ -6883,6 +6890,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
         &mut diagnostics,
         detailed_diagnostics,
     );
+    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity, sources);
     let before_top_down = matches.len();
     matches = top_down_match_with_existing(&old_index, &new_index, min_height, matches);
     diagnostics.structural_matches += matches.len().saturating_sub(before_top_down);
@@ -8445,7 +8453,9 @@ fn refine_candidate_drafts<'a>(
     matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
     language: &str,
+    sources: Option<(&str, &str)>,
 ) {
+    callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
         probe.as_deref_mut(),
@@ -8673,11 +8683,21 @@ fn finalize_python_review_drafts<'a>(
         }));
         // The formatting-equivalence relabel is a PYTHON style rule; it carried
         // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        if language == "python" {
+        // A renamed callable can suppress positional shifts while retaining real
+        // body edits. Suppression alone cannot prove formatting equivalence for
+        // those surviving changes or assign their nodes to ignored-style evidence.
+        if language == "python" && !changes.iter().any(|change| {
+            change.refactoring_kind.as_deref() == Some("RENAME_SYMBOL")
+                && change.old_node.map(anchor_is_function).unwrap_or(false)
+        }) {
             finalization
                 .change_groups
                 .push(python_formatting_equivalence_group(changes));
         }
+    }
+    if language == "python" {
+        decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
+        function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
     }
     add_compact_superseded_group_for_refactorings(changes, finalization);
     apply_python_literal_invariances(
@@ -8692,6 +8712,8 @@ fn finalize_python_review_drafts<'a>(
 }
 
 mod draft_promotions;
+mod decorator_order;
+mod function_extraction;
 use draft_promotions::*;
 
 
@@ -8892,6 +8914,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9142,12 +9165,9 @@ fn stage11_change_description(
 
 mod invariance_groups;
 use invariance_groups::*;
-/// MEANINGFUL_CHANGE groups for the finalize-routed path ONLY (issue #57): python's
-/// presentation surfaces every surviving semantic change as a MEANINGFUL_CHANGE group
-/// carrying the change's labels; routed languages skip python presentation entirely, so
-/// downstream classifiers saw group-less output and read every edit as 'other' (csharp
-/// pilot). Deliberately NOT part of final_change_groups_from_drafts — the certified
-/// batch path feeds python presentation, which builds its own groups.
+/// Every final Rust route owns its meaningful groups. The certified batch returns
+/// directly through the thin Python wrapper, so it cannot rely on Python presentation
+/// to add these groups (especially for body edits next to a callable rename).
 fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
     changes
         .iter()
@@ -9368,6 +9388,16 @@ fn final_change_group_from_draft(
     });
     if let Some(refactoring_kind) = change.refactoring_kind {
         group["refactoring_kind"] = json!(refactoring_kind);
+    }
+    // A callable rename owns the declaration identity, not every descendant.
+    // Including body IDs/labels lets group compaction swallow independent behavior edits.
+    if change.refactoring_kind == Some("RENAME_SYMBOL")
+        && change.old_node.is_some_and(anchor_is_function)
+    {
+        group["old_labels"] = json!(change.old_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["new_labels"] = json!(change.new_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["old_node_ids"] = json!(change.old_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
+        group["new_node_ids"] = json!(change.new_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
     }
     group
 }
@@ -10098,7 +10128,16 @@ fn semantic_diff_payload_with_style(
 /// program; labels differing in content are not.
 fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
     let mut hasher = Sha256::new();
-    let normalized: String = node.label.split_whitespace().collect::<Vec<_>>().join(" ");
+    // Whitespace within literal values is data. Parent labels may contain quoted
+    // source too, so conservatively preserve those rather than proving equivalence.
+    let normalized = if node.node_type.to_lowercase().contains("string")
+        || matches!(node.node_type.as_str(), "character_literal" | "char_literal" | "character")
+        || node.label.contains(['\'', '"', '`'])
+    {
+        node.label.clone()
+    } else {
+        node.label.split_whitespace().collect::<Vec<_>>().join(" ")
+    };
     hasher.update(node.node_type.as_bytes());
     hasher.update(b":");
     hasher.update(normalized.as_bytes());
@@ -10107,6 +10146,12 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
         hasher.update(whitespace_normalized_tree_hash(child).as_bytes());
     }
     format!("{:x}", hasher.finalize())
+}
+
+fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
+    let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
+    let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
+    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
 }
 
 fn semantic_diff_payload(

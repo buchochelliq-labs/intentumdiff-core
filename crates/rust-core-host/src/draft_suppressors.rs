@@ -101,6 +101,11 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
     let mut promoted_keys = HashSet::new();
     let mut promoted = Vec::new();
     for old_node in deleted_entities {
+        // Callable continuity was already considered before matching. A positional
+        // fallback here would override declined ambiguity and discard whole bodies.
+        if anchor_is_function(old_node) {
+            continue;
+        }
         if old_node.id.is_empty() || old_node.node_type.is_empty() || old_node.label.is_empty() {
             continue;
         }
@@ -177,6 +182,12 @@ fn carries_entity_name(node_type: &str) -> bool {
 /// tidy "Rename", and honest — a missed behavioural change presented as REFACTORING is the
 /// worst output this engine can produce.
 pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    if anchor_is_function(old_node) && anchor_is_function(new_node) {
+        let shape = |node: &SemanticNode| node.children.iter()
+            .filter(|c| !(carries_entity_name(&c.node_type) && c.label == node.label))
+            .map(|c| (c.node_type.clone(), c.structural_hash.clone())).collect::<Vec<_>>();
+        return shape(old_node) == shape(new_node);
+    }
     // Exclude the child that CARRIES the entity's name, whatever its node type. Python spells
     // it `identifier`; a Markdown section holds its title in a child whose label is the section
     // label; line-scanner parsers (kotlin, swift, ini) keep the whole declaration line, so its
