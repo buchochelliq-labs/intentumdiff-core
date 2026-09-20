@@ -76,3 +76,30 @@ names with the `_json` suffix dropped (the two commit functions keep it).
 - Python: [`intentumdiff-python`](https://github.com/buchochelliq-labs/intentumdiff-python) (`src/intentumdiff/rust_core.py` — `_CtypesBackend`)
 - Go: [`intentumdiff-go`](https://github.com/buchochelliq-labs/intentumdiff-go)
 - Java: [`intentumdiff-java`](https://github.com/buchochelliq-labs/intentumdiff-java)
+
+### Incomplete-source review (core #21)
+
+`parse_errors_present(source, tree_json, language)` returns a boolean. It examines
+raw CST or semantic-tree error/missing markers; Python also uses the native parser
+because semantic plugins can prune those markers. Call before trivia equivalence.
+Malformed tree JSON is an error. Source is bounded to 4 MiB and tree JSON to 16 MiB.
+
+`source_fallback_diff(old_source, new_source, old_filename, new_filename, language,
+reason)` returns a complete diff with `is_fallback=true`. It compares exact UTF-8
+source, preserving indentation, line endings and literal whitespace. It emits one
+contiguous range spanning all edits (possibly including unchanged text between
+edits), found by equal character prefix/suffix. `metadata.source_ranges` contains
+exclusive UTF-8 byte offsets on each side; node positions use zero-based lines and
+byte columns. Node labels preview at most 160 characters, while ranges and hashes
+cover the entire changed region. Consumers retain original sources for full text.
+
+Changed input is review-worthy with confidence 0.5 and semantic equivalence unknown;
+it is never called refactoring or style-only. Identical input has no changes. The
+operation is linear and accepts at most 4 MiB per source. `reason=parse_errors`
+adds a parse diagnostic; other decline reasons do not invent parse failures.
+
+Native Python batches return `COMPLETE` with this fallback diff, rather than a
+control-plane `FALLBACK` request for a binding to perform comparison. The
+`fallback_to_token_diff` configuration name remains compatible but now selects
+Rust source comparison. `finalize_review` can likewise return `fallback_diff`;
+bindings must preserve that full payload and only attach filenames/lifecycle.

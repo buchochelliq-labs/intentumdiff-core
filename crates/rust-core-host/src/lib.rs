@@ -1,3 +1,4 @@
+mod source_fallback;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
 use serde::{Deserialize, Serialize};
@@ -1416,6 +1417,16 @@ fn finalize_review_impl(
     validate_unique_ids(&old_tree).map_err(|exc| format!("old tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new tree: {exc}"))?;
 
+    if config.fallback_to_token_diff && (
+        source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
+        source_fallback::parse_errors_present_impl(new_source, new_tree_json, language)? == "true"
+    ) {
+        let diff = source_fallback::source_fallback_diff_impl(old_source, new_source, "", "", language, "parse_errors")?;
+        return Ok(json!({"used":true,"engine":"rust_source_fallback_v1", "changes":diff["changes"],
+            "change_groups":diff["change_groups"],"is_style_only":false,"no_surviving_changes":!diff["has_semantic_changes"].as_bool().unwrap_or(false),
+            "ignored_style_changes":[],"fallback_diff":diff}).to_string());
+    }
+
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
     if old_count > config.max_nodes || new_count > config.max_nodes {
@@ -2350,6 +2361,7 @@ struct RustCoreConfig {
     plugin_fuel: u64,
     profile_phases: bool,
     collect_trace: bool,
+    fallback_to_token_diff: bool,
 }
 
 impl RustCoreConfig {
@@ -2366,6 +2378,7 @@ impl RustCoreConfig {
                 .or_else(|| value.get("minSimilarity"))
                 .and_then(Value::as_f64)
                 .unwrap_or(0.5),
+            fallback_to_token_diff: value.get("fallback_to_token_diff").and_then(Value::as_bool).unwrap_or(true),
             collect_trace: value
                 .get("collect_trace")
                 .and_then(Value::as_bool)
@@ -3079,10 +3092,12 @@ fn diff_python_sources_final_impl(
     let new_ts_tree = probe.measure("rust_tree_sitter_parse_new", || {
         parse_python_tree(new_source)
     })?;
-    if certified_product
+    if config.fallback_to_token_diff
         && (old_ts_tree.root_node().has_error() || new_ts_tree.root_node().has_error())
     {
-        return Err("parse errors require Python token fallback".to_owned());
+        let mut diff = source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors")?;
+        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle);
+        return Ok(diff);
     }
     let (
         mut old_tree,
@@ -4123,6 +4138,23 @@ fn diff_batch_file_item(
     let file_lifecycle = infer_file_lifecycle_from_file(file);
 
     if old_source == new_source {
+        if RustCoreConfig::from_json(config_json).fallback_to_token_diff {
+            let incomplete = source_fallback::parse_errors_present_impl(old_source, "{}", "python")
+                .and_then(|errors| if errors == "true" {
+                    source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors").map(Some)
+                } else { Ok(None) });
+            match incomplete {
+                Ok(Some(mut diff)) => {
+                    attach_content_type_metadata(&mut diff, old_source, new_source);
+                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+                    return BatchItemResult::complete(json!({"index":index,"old_filename":old_filename,
+                        "new_filename":new_filename,"language":"python","status":COMPLETE,"diff":diff}), false);
+                }
+                Err(reason) => return BatchItemResult::fallback(batch_fallback_item(index, old_filename, new_filename, &reason)),
+                Ok(None) => {}
+            }
+        }
+
         let certification = if python_parser_backend == PYTHON_PARSER_BACKEND_NATIVE {
             PYTHON_NATIVE_V4KB_CERTIFICATION
         } else {
@@ -5166,6 +5198,19 @@ pub(crate) fn native_wasm_single_diff(
             "finalize declined: {}",
             fin.get("reason").and_then(Value::as_str).unwrap_or("used=false")
         ));
+    }
+
+    if let Some(mut diff) = fin.get("fallback_diff").cloned() {
+        diff["old_filename"] = json!(old_filename);
+        diff["new_filename"] = json!(new_filename);
+        let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
+        apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+        if let Some(rules) = guardrail_rules {
+            let violations = evaluate_guardrail_rules_for_diff(
+                &diff, rules, language, old_filename, new_filename, "null", "null");
+            attach_guardrail_violations(&mut diff, violations);
+        }
+        return Ok(diff);
     }
 
     let mut changes = fin

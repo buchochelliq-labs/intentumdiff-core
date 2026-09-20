@@ -703,6 +703,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "language")?,
             arg_str(args, 5, "config_json")?,
         ),
+        "source_fallback_diff" => crate::source_fallback::source_fallback_diff_impl(
+            arg_str(args, 0, "old_source")?, arg_str(args, 1, "new_source")?,
+            arg_str(args, 2, "old_filename")?, arg_str(args, 3, "new_filename")?,
+            arg_str(args, 4, "language")?, arg_str(args, 5, "reason")?,
+        ).map(|v| v.to_string()),
+        "parse_errors_present" => crate::source_fallback::parse_errors_present_impl(
+            arg_str(args, 0, "source")?, arg_str(args, 1, "tree_json")?, arg_str(args, 2, "language")?,
+        ),
         "enrich_literal_labels" => crate::enrich_literal_labels_json_str(
             arg_str(args, 0, "tree_json")?,
             arg_str(args, 1, "source")?,
@@ -821,6 +829,52 @@ mod tests {
 
     fn call(name: &str, args: Value) -> Value {
         serde_json::from_str(&dispatch(name, args.as_array().unwrap())).unwrap()
+    }
+
+    #[test]
+    fn incomplete_parse_detection_and_bounds_use_the_abi() {
+        for (source, tree, language, expected) in [
+            ("def broken(", "{}", "python", true),
+            ("x = 1", "{}", "python", false),
+            ("", r#"{"children":[{"is_missing":true}]}"#, "javascript", true),
+            ("", r#"{"children":[{"node_type":"ERROR"}]}"#, "", true),
+        ] {
+            let env = call("parse_errors_present", json!([source, tree, language]));
+            assert_eq!(env["ok"], true);
+            assert_eq!(env["result"], expected);
+        }
+        assert_eq!(call("parse_errors_present", json!(["", "invalid", "js"]))["ok"], false);
+        assert_eq!(call("source_fallback_diff", json!([]))["ok"], false);
+        let too_big = "x".repeat(4 * 1024 * 1024 + 1);
+        assert_eq!(call("source_fallback_diff", json!([too_big, "", "a", "a", "js", "parse_errors"]))["ok"], false);
+    }
+
+    #[test]
+    fn incomplete_source_preserves_exact_bytes() {
+        for (old, new) in [
+            ("def broken(:\n x = \"hello  world\"\n", "def broken(:\n x = \"hello world\"\n"),
+            ("def broken(:\n    x = 1\n", "def broken(:\n  x = 1\n"),
+            ("é\r\n\"unterminated  ", "é\r\n\"unterminated "),
+            ("", "def broken("), ("def broken(", ""),
+        ] {
+            let env = call("source_fallback_diff", json!([old, new, "a.py", "a.py", "python", "parse_errors"]));
+            assert_eq!(env["ok"], true, "{env}");
+            let diff = &env["result"];
+            assert_eq!(diff["is_fallback"], true);
+            assert_eq!(diff["is_style_only"], false);
+            assert_eq!(diff["changes"].as_array().unwrap().len(), 1);
+            let range = &diff["metadata"]["source_ranges"];
+            let a = range["old_start_byte"].as_u64().unwrap() as usize;
+            let b = range["old_end_byte"].as_u64().unwrap() as usize;
+            let c = range["new_start_byte"].as_u64().unwrap() as usize;
+            let d = range["new_end_byte"].as_u64().unwrap() as usize;
+            assert_eq!(format!("{}{}{}", &old[..a], &new[c..d], &old[b..]), new);
+            assert_eq!(diff["change_groups"][0]["kind"], "MEANINGFUL_CHANGE");
+            assert_eq!(diff["metadata"]["engine_owner"], "rust");
+        }
+        let env = call("source_fallback_diff", json!(["x(", "x(", "a", "a", "python", "parse_errors"]));
+        assert_eq!(env["result"]["has_semantic_changes"], false);
+        assert_eq!(env["result"]["changes"], json!([]));
     }
 
     #[test]
