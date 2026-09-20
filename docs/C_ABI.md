@@ -103,3 +103,9 @@ control-plane `FALLBACK` request for a binding to perform comparison. The
 `fallback_to_token_diff` configuration name remains compatible but now selects
 Rust source comparison. `finalize_review` can likewise return `fallback_diff`;
 bindings must preserve that full payload and only attach filenames/lifecycle.
+
+Build provisioning searches up to ten pages of 100 successful workflow runs at
+the registry-pinned commit. GitHub-generated `dynamic/` jobs are ignored; they do
+not publish project parser artifacts. Commit and component-checksum checks remain
+mandatory. This prevents scheduled-job history from hiding a still-valid build
+(core #54); missing or expired artifacts still fail provisioning explicitly.
