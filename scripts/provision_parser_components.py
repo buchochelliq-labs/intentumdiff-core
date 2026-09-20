@@ -94,23 +94,28 @@ def _successful_runs(repo: str, token: str, ref: str | None) -> list[dict]:
     at a different build, and the checksum gate then fails for the wrong reason. It
     reads as "the component changed" when nothing about the component changed at all.
     """
+    query = "status=success&per_page=100"
     if ref:
-        query = f"head_sha={ref}&status=success&per_page=20"
-    else:
-        # No pin (a component the registry does not vouch for yet, or --no-verify).
-        query = "status=success&per_page=1"
-
-    # `list-runs` is the call that needs Actions: Read — a token with only
-    # contents/metadata read (enough for the private git deps) 403s here, so name the
-    # stage in the error rather than leaving a bare "HTTP 403".
-    try:
-        runs = json.loads(_get(f"{API}/repos/{ORG}/{repo}/actions/runs?{query}", token))
-    except urllib.error.HTTPError as exc:
-        raise RuntimeError(
-            f"{repo}: HTTP {exc.code} listing workflow runs - the token needs the "
-            f"Actions: Read permission on the parser repos"
-        ) from exc
-    return runs.get("workflow_runs") or []
+        query += f"&head_sha={ref}"
+    result: list[dict] = []
+    # GitHub caps filtered workflow-run searches at 1,000 results. Walk the
+    # available history instead of letting scheduled jobs hide the pinned build.
+    for page in range(1, 11):
+        try:
+            runs = json.loads(_get(
+                f"{API}/repos/{ORG}/{repo}/actions/runs?{query}&page={page}", token))
+        except urllib.error.HTTPError as exc:
+            raise RuntimeError(
+                f"{repo}: HTTP {exc.code} listing workflow runs - the token needs the "
+                f"Actions: Read permission on the parser repos"
+            ) from exc
+        batch = runs.get("workflow_runs") or []
+        result.extend(run for run in batch
+                      if (not ref or run.get("head_sha") == ref)
+                      and not run.get("path", "").startswith("dynamic/"))
+        if len(batch) < 100:
+            break
+    return result
 
 
 def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str, str, str, bytes]:

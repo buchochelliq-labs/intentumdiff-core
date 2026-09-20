@@ -703,6 +703,22 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "language")?,
             arg_str(args, 5, "config_json")?,
         ),
+        "source_fallback_diff" => crate::source_fallback::source_fallback_diff_impl(
+            arg_str(args, 0, "old_source")?, arg_str(args, 1, "new_source")?,
+            arg_str(args, 2, "old_filename")?, arg_str(args, 3, "new_filename")?,
+            arg_str(args, 4, "language")?, arg_str(args, 5, "reason")?,
+        ).map(|v| v.to_string()),
+        "parse_errors_present" => crate::source_fallback::parse_errors_present_impl(
+            arg_str(args, 0, "source")?, arg_str(args, 1, "tree_json")?, arg_str(args, 2, "language")?,
+        ),
+        "enrich_literal_labels" => crate::enrich_literal_labels_json_str(
+            arg_str(args, 0, "tree_json")?,
+            arg_str(args, 1, "source")?,
+        ),
+        "review_trees_equivalent" => crate::review_trees_equivalent_impl(
+            arg_str(args, 0, "old_tree_json")?,
+            arg_str(args, 1, "new_tree_json")?,
+        ),
         "enrich_profile_labels" => crate::enrich_profile_labels_impl(
             arg_str(args, 0, "tree_json")?,
             arg_str(args, 1, "source")?,
@@ -813,6 +829,52 @@ mod tests {
 
     fn call(name: &str, args: Value) -> Value {
         serde_json::from_str(&dispatch(name, args.as_array().unwrap())).unwrap()
+    }
+
+    #[test]
+    fn incomplete_parse_detection_and_bounds_use_the_abi() {
+        for (source, tree, language, expected) in [
+            ("def broken(", "{}", "python", true),
+            ("x = 1", "{}", "python", false),
+            ("", r#"{"children":[{"is_missing":true}]}"#, "javascript", true),
+            ("", r#"{"children":[{"node_type":"ERROR"}]}"#, "", true),
+        ] {
+            let env = call("parse_errors_present", json!([source, tree, language]));
+            assert_eq!(env["ok"], true);
+            assert_eq!(env["result"], expected);
+        }
+        assert_eq!(call("parse_errors_present", json!(["", "invalid", "js"]))["ok"], false);
+        assert_eq!(call("source_fallback_diff", json!([]))["ok"], false);
+        let too_big = "x".repeat(4 * 1024 * 1024 + 1);
+        assert_eq!(call("source_fallback_diff", json!([too_big, "", "a", "a", "js", "parse_errors"]))["ok"], false);
+    }
+
+    #[test]
+    fn incomplete_source_preserves_exact_bytes() {
+        for (old, new) in [
+            ("def broken(:\n x = \"hello  world\"\n", "def broken(:\n x = \"hello world\"\n"),
+            ("def broken(:\n    x = 1\n", "def broken(:\n  x = 1\n"),
+            ("é\r\n\"unterminated  ", "é\r\n\"unterminated "),
+            ("", "def broken("), ("def broken(", ""),
+        ] {
+            let env = call("source_fallback_diff", json!([old, new, "a.py", "a.py", "python", "parse_errors"]));
+            assert_eq!(env["ok"], true, "{env}");
+            let diff = &env["result"];
+            assert_eq!(diff["is_fallback"], true);
+            assert_eq!(diff["is_style_only"], false);
+            assert_eq!(diff["changes"].as_array().unwrap().len(), 1);
+            let range = &diff["metadata"]["source_ranges"];
+            let a = range["old_start_byte"].as_u64().unwrap() as usize;
+            let b = range["old_end_byte"].as_u64().unwrap() as usize;
+            let c = range["new_start_byte"].as_u64().unwrap() as usize;
+            let d = range["new_end_byte"].as_u64().unwrap() as usize;
+            assert_eq!(format!("{}{}{}", &old[..a], &new[c..d], &old[b..]), new);
+            assert_eq!(diff["change_groups"][0]["kind"], "MEANINGFUL_CHANGE");
+            assert_eq!(diff["metadata"]["engine_owner"], "rust");
+        }
+        let env = call("source_fallback_diff", json!(["x(", "x(", "a", "a", "python", "parse_errors"]));
+        assert_eq!(env["result"]["has_semantic_changes"], false);
+        assert_eq!(env["result"]["changes"], json!([]));
     }
 
     #[test]
@@ -1099,6 +1161,10 @@ mod tests {
             json!([tree, tree, "", "", "python", "{}"]),
         );
         assert_eq!(env["ok"], true);
+        assert_eq!(call("enrich_literal_labels", json!([tree, ""]))["ok"], true);
+        let equivalent = call("review_trees_equivalent", json!([tree, tree]));
+        assert_eq!(equivalent["ok"], true);
+        assert_eq!(equivalent["result"], true);
         // profile-label enrichment (optional identity_fields defaulting to null) round-trips.
         assert_eq!(
             call("enrich_profile_labels", json!([tree, "", "json", null]))["ok"],
@@ -1110,6 +1176,23 @@ mod tests {
         assert!(env["result"].is_object());
         // registering an empty XML-dialect set replaces with zero dialects.
         assert_eq!(call("register_user_xml_dialects", json!([[]]))["result"], 0);
+    }
+
+    #[test]
+    fn literal_enrichment_preserves_physical_lines_and_value_whitespace() {
+        let source = "a=\"\u{2028}\"; b=\" target \"\r\n";
+        let tree = json!({"id":"s", "node_type":"string", "label":"string",
+            "position":{"start_line":0,"start_col":11,"end_line":0,"end_col":21},
+            "structural_hash":"h","children":[]});
+        let result = call("enrich_literal_labels", json!([tree.to_string(), source]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["label"], " target ");
+        let mut changed = tree.clone();
+        changed["label"] = json!("a  b");
+        let mut original = tree;
+        original["label"] = json!("a b");
+        let eq = call("review_trees_equivalent", json!([original.to_string(), changed.to_string()]));
+        assert_eq!(eq["result"], false, "{eq}");
     }
 
     #[test]
