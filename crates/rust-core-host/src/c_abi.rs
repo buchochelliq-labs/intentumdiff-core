@@ -811,6 +811,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         )),
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
+        "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
+        "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
         "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
@@ -884,6 +886,18 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn content_detection_envelopes() {
+        let request = json!({"entries":[{"plugin_id":"py","grammar_id":"py","languages":["python"],"priority":1}],"content":"def f(): pass"});
+        let plan = call("content_detection_plan", json!([request.to_string()]));
+        assert_eq!(plan["ok"], true);
+        assert_eq!(plan["result"]["indices"], json!([0]));
+        let good = json!({"request":request,"observations":[{"index":0,"language":"python"}]});
+        assert_eq!(call("content_detection_finish", json!([good.to_string()]))["result"]["results"][0]["language"], "python");
+        let bad = json!({"request":request,"observations":[{"index":0,"language":"ruby"}]});
+        assert_eq!(call("content_detection_finish", json!([bad.to_string()]))["ok"], false);
+    }
 
     #[test]
     fn patch_reconstruction_envelopes() {

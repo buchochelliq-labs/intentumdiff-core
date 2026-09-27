@@ -6,6 +6,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "content_detection" {
+        let input = serde_json::from_value(request["request"].clone())?;
+        let observations: Vec<intentumdiff_rust_core::content_detection::Observation> = serde_json::from_value(request["observations"].clone())?;
+        let result = intentumdiff_rust_core::content_detection::finish(&input, &observations);
+        let output = match result {
+            Ok(result) => serde_json::json!({"result":result}),
+            Err(error) => serde_json::json!({"error":error}),
+        };
+        println!("{}", output);
+        return Ok(());
+    }
     if request["handler"] == "cache_list_entries_filtered" {
         let q = &request["query"];
         let store = intentumdiff_rust_core::cache_store::SqliteStore::open(request["path"].as_str().ok_or("path")?, 30, 500).map_err(|e| format!("{e:?}"))?;
