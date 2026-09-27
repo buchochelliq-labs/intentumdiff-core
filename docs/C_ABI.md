@@ -234,3 +234,20 @@ The Dockerfile source fixture compares complete changes/groups/semantic flags
 through native and Python APIs. Native omits optional null DTO fields; comparison
 deserializes both through the public SemanticDiff schema without discarding any
 change, node, group or evidence field.
+
+### Cache metadata filtering
+
+`cache_list_entries_filtered(path, ttl_days, max_mb, table, language, since,
+before, min_size, max_size, limit, file_glob)` delegates to the public Rust
+`cache_store::SqliteStore::list_entries_filtered` (also available through
+`cache_registry`). The existing `cache_list_entries` boolean-window operation
+remains available for compatibility; new bindings should use the filtered form.
+
+Rust applies language/time/size filters, then matches either old or new diff
+filename, then limits the result. Rows are ordered by `created_at DESC, key ASC`.
+Globs use case-sensitive fnmatch syntax on every platform: `*`, `?`, character
+classes and negation; separators are ordinary characters and backslash is not an
+escape. This intentionally removes the old Windows Python case normalization.
+Null/empty patterns and patterns on non-diff tables impose no filename filter.
+Limits must be positive. Only metadata is read; matching streams until the
+requested number of results is reached, without a finite over-fetch window.

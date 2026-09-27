@@ -626,6 +626,19 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_i64(args, 9, "limit")?,
             arg_opt_bool(args, 10, "with_glob")?,
         )),
+        "cache_list_entries_filtered" => store_json(crate::cache_registry::list_entries_filtered(
+            arg_str(args, 0, "path")?,
+            arg_i64(args, 1, "ttl_days")?,
+            arg_i64(args, 2, "max_mb")?,
+            arg_str(args, 3, "table")?,
+            arg_opt_str(args, 4, "language")?,
+            arg_opt_json(args, 5, "since")?,
+            arg_opt_json(args, 6, "before")?,
+            arg_opt_json(args, 7, "min_size")?,
+            arg_opt_json(args, 8, "max_size")?,
+            arg_i64(args, 9, "limit")?,
+            arg_opt_str(args, 10, "file_glob")?,
+        )),
         "cache_get_entry_metadata" => store_opt(crate::cache_registry::get_entry_metadata(
             arg_str(args, 0, "path")?,
             arg_i64(args, 1, "ttl_days")?,
@@ -1131,6 +1144,15 @@ mod tests {
         // Admin surface reaches the same warm store.
         let stats = call("cache_stats", json!([path, 30, 500]));
         assert_eq!(stats["result"]["diff_cache"]["count"], 1);
+
+        let filtered = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "b.py"]));
+        assert_eq!(filtered["ok"], true);
+        assert_eq!(filtered["result"][0]["key"], "k");
+        let missing = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "*.rs"]));
+        assert_eq!(missing["result"], json!([]));
+        let invalid = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, "*"]));
+        assert_eq!(invalid["ok"], false);
+        assert_eq!(invalid["error_type"], "value_error");
 
         // A bad-limit list is a value_error (the store's ValueError parity).
         let bad = call("cache_list_entries", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, false]));

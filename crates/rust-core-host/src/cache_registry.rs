@@ -153,6 +153,25 @@ pub fn list_entries(
     )
 }
 
+#[allow(clippy::too_many_arguments)]
+pub fn list_entries_filtered(
+    path: &str,
+    ttl_days: i64,
+    max_mb: i64,
+    table: &str,
+    language: Option<&str>,
+    since: Option<i64>,
+    before: Option<i64>,
+    min_size: Option<i64>,
+    max_size: Option<i64>,
+    limit: i64,
+    file_glob: Option<&str>,
+) -> Result<String, StoreError> {
+    store_for(path, ttl_days, max_mb)?.list_entries_filtered(
+        table, language, since, before, min_size, max_size, limit, file_glob,
+    )
+}
+
 pub fn get_entry_metadata(
     path: &str,
     ttl_days: i64,
