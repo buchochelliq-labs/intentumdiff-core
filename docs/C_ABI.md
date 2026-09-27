@@ -274,3 +274,31 @@ The outcome contains ordered result DTOs and `not_found` for an explicit plugin
 with no valid match. Python only invokes adapters, marshals DTOs and maps this
 no-match outcome to its public exception. This slice does not migrate the existing
 component loader or filename `detect_parser` failure/fallback policy (#108).
+
+### Filename selection actions
+
+`filename_selection_next({request, events})` accepts a JSON string and delegates
+to public Rust `filename_selection::next_action`. Request fields are catalogue
+`entries` (the candidate-planner DTO), `filename`, `content`, optional
+`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+Actions are tagged `load`, `probe`, `selected`, `not_found`, or `failure`.
+Hosts append exactly the requested `loaded`/`load_failed` or
+`probed`/`probe_failed` event and replay. Loaded metadata includes grammar ID,
+languages and priority. Failure actions identify the original host exception by
+its event index. Probe samples are complete UTF-8 prefixes of at most 2048 bytes.
+
+Hints precede filename candidates, other specific parsers, then generic. Strict
+hints and explicit plugin requests never cross their boundary. The existing
+non-explicit catalogue-hint alias of a generic component remains supported.
+Metadata for all candidates in the current phase is loaded before ranking by
+loaded priority and stable catalogue identity. A fuel/security denial during
+that phase is terminal even when another candidate might succeed. Later phases
+are not loaded after success. Ordinary load failures can fall through; probe
+failures and undeclared claims cannot. Hosts must mark security/fuel load errors
+terminal; Python uses typed exceptions, including `PluginSecurityError`, a
+backward-compatible `PluginLoadError` subtype.
+
+Events are bounded to twice the catalogue length and validated against the
+requested action; duplicate/out-of-order events and events after an outcome fail.
+The existing native bundled-manifest resolver has not yet adopted this protocol;
+its integration and broader inventory loading remain tracked in #108.
