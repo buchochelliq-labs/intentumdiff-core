@@ -6,6 +6,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "reconstruct_patch" {
+        let result = intentumdiff_rust_core::patch_source::reconstruct(request["patch"].as_str().ok_or("patch")?, request["original"].as_str(), request["filename"].as_str(), request["require_complete"].as_bool().unwrap_or(false));
+        let output = match result { Ok(result) => serde_json::to_value(result)?, Err(error) => serde_json::json!({"error":error}) };
+        println!("{}", output);
+        return Ok(());
+    }
     if request["handler"] == "hover_targets_utf16" {
         println!("{}", serde_json::to_string(&intentumdiff_rust_core::lsp_enrich::collect_utf16_hover_targets(&request["tree"], request["source"].as_str().ok_or("source")?)?)?);
         return Ok(());
