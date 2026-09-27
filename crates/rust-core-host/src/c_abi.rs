@@ -381,6 +381,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "build_symbol_table" => {
             Ok(index_engine_lib::build_symbol_table_impl(arg_str(args, 0, "files_json")?))
         }
+        "reconstruct_patch" => crate::patch_source::reconstruct_json_impl(arg_str(args, 0, "request_json")?),
         "resolve_references" => {
             let definitions: Vec<index_engine_lib::SymbolDefinition> = serde_json::from_str(arg_str(args, 0, "definitions_json")?).map_err(|e| e.to_string())?;
             let references: Vec<index_engine_lib::ReferenceUsage> = serde_json::from_str(arg_str(args, 1, "references_json")?).map_err(|e| e.to_string())?;
@@ -868,6 +869,15 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn patch_reconstruction_envelopes() {
+        let request = json!({"patch_text":"--- a/x\n+++ b/x\n@@ -1 +1 @@\n-old\n+new\n", "original_content":"old\n"});
+        let out = call("reconstruct_patch",json!([request.to_string()]));
+        assert_eq!(out["ok"],true,"{out}");
+        assert_eq!(out["result"]["new_content"],"new\n");
+        assert_eq!(call("reconstruct_patch",json!(["{}"]))["ok"],false);
+    }
 
     #[test]
     fn hover_utf16_envelopes() {
