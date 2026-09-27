@@ -6,6 +6,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "cache_list_entries_filtered" {
+        let q = &request["query"];
+        let store = intentumdiff_rust_core::cache_store::SqliteStore::open(request["path"].as_str().ok_or("path")?, 30, 500).map_err(|e| format!("{e:?}"))?;
+        let output = store.list_entries_filtered("diff_cache", q["language"].as_str(), q["since"].as_i64(), q["before"].as_i64(), q["min_size"].as_i64(), q["max_size"].as_i64(), q["limit"].as_i64().unwrap_or(50), q["file_glob"].as_str()).map_err(|e| format!("{e:?}"))?;
+        println!("{output}");
+        return Ok(());
+    }
     if request["handler"] == "parser_candidate_shortlist" {
         let entries: Vec<intentumdiff_rust_core::parser_routing::Candidate> = serde_json::from_value(request["entries"].clone())?;
         let query = serde_json::from_value(request["query"].clone())?;

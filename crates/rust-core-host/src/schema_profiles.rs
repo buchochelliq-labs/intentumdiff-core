@@ -751,6 +751,11 @@ pub fn validate_descriptor(
 }
 // Python fnmatch-compatible wildcards, including character classes; slash is ordinary text.
 fn glob_matches(pattern: &str, text: &str) -> bool {
+    compile_filename_glob(pattern).is_ok_and(|r| r.is_match(text))
+}
+
+/// Case-sensitive fnmatch syntax, with path separators treated as ordinary characters.
+pub(crate) fn compile_filename_glob(pattern: &str) -> Result<Regex, regex::Error> {
     let chars: Vec<char> = pattern.chars().collect();
     let mut regex = String::from("\\A");
     let mut i = 0;
@@ -808,7 +813,7 @@ fn glob_matches(pattern: &str, text: &str) -> bool {
         i += 1;
     }
     regex.push_str("\\z");
-    Regex::new(&format!("(?s:{regex})")).is_ok_and(|r| r.is_match(text))
+    Regex::new(&format!("(?s:{regex})"))
 }
 /// URL claims take precedence over filename/root-marker matches across all profiles.
 pub fn match_user_profile(

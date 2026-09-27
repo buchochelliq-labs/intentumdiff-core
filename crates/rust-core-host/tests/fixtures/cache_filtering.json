@@ -1,0 +1,269 @@
+{
+  "rows": [
+    {
+      "key": "older",
+      "old_filename": "old.py",
+      "new_filename": "new.txt",
+      "language": "python",
+      "created_at": 4000000000,
+      "size_bytes": 10
+    },
+    {
+      "key": "a",
+      "old_filename": "src/a.txt",
+      "new_filename": "src/a.py",
+      "language": "PYTHON",
+      "created_at": 4000000001,
+      "size_bytes": 20
+    },
+    {
+      "key": "b",
+      "old_filename": "UPPER.PY",
+      "new_filename": "win\\b.py",
+      "language": "python",
+      "created_at": 4000000001,
+      "size_bytes": 30
+    },
+    {
+      "key": "unicode",
+      "old_filename": "é.py",
+      "new_filename": "[name].txt",
+      "language": "text",
+      "created_at": 4000000002,
+      "size_bytes": 40
+    },
+    {
+      "key": "noise-00",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-01",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-02",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-03",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-04",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-05",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-06",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-07",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-08",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-09",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    },
+    {
+      "key": "noise-10",
+      "old_filename": "x.txt",
+      "new_filename": "y.txt",
+      "language": "text",
+      "created_at": 4000000003,
+      "size_bytes": 50
+    }
+  ],
+  "cases": [
+    {
+      "name": "beyond-window",
+      "query": {
+        "file_glob": "old.py",
+        "limit": 1
+      },
+      "expected_keys": [
+        "older"
+      ]
+    },
+    {
+      "name": "rename-new",
+      "query": {
+        "file_glob": "src/*.py"
+      },
+      "expected_keys": [
+        "a"
+      ]
+    },
+    {
+      "name": "rename-old",
+      "query": {
+        "file_glob": "old.*"
+      },
+      "expected_keys": [
+        "older"
+      ]
+    },
+    {
+      "name": "case-sensitive",
+      "query": {
+        "file_glob": "upper.py"
+      },
+      "expected_keys": []
+    },
+    {
+      "name": "backslash",
+      "query": {
+        "file_glob": "win\\?.py"
+      },
+      "expected_keys": [
+        "b"
+      ]
+    },
+    {
+      "name": "slash-distinct",
+      "query": {
+        "file_glob": "win/?.py"
+      },
+      "expected_keys": []
+    },
+    {
+      "name": "unicode",
+      "query": {
+        "file_glob": "?.py"
+      },
+      "expected_keys": [
+        "unicode"
+      ]
+    },
+    {
+      "name": "classes",
+      "query": {
+        "file_glob": "[a-z]*.py"
+      },
+      "expected_keys": [
+        "a",
+        "b",
+        "older"
+      ]
+    },
+    {
+      "name": "negated-class",
+      "query": {
+        "file_glob": "[!a-z].py"
+      },
+      "expected_keys": [
+        "unicode"
+      ]
+    },
+    {
+      "name": "invalid-range",
+      "query": {
+        "file_glob": "[z-a].py"
+      },
+      "expected_keys": []
+    },
+    {
+      "name": "literal-bracket",
+      "query": {
+        "file_glob": "[[]name].txt"
+      },
+      "expected_keys": [
+        "unicode"
+      ]
+    },
+    {
+      "name": "combined",
+      "query": {
+        "file_glob": "*.py",
+        "language": "python",
+        "since": 4000000001,
+        "before": 4000000001,
+        "min_size": 20,
+        "max_size": 20
+      },
+      "expected_keys": [
+        "a"
+      ]
+    },
+    {
+      "name": "tie-order",
+      "query": {
+        "file_glob": "*.py",
+        "language": "python",
+        "limit": 2
+      },
+      "expected_keys": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "name": "empty-pattern",
+      "query": {
+        "file_glob": "",
+        "limit": 2
+      },
+      "expected_keys": [
+        "noise-00",
+        "noise-01"
+      ]
+    },
+    {
+      "name": "null-pattern",
+      "query": {
+        "limit": 2
+      },
+      "expected_keys": [
+        "noise-00",
+        "noise-01"
+      ]
+    }
+  ]
+}
