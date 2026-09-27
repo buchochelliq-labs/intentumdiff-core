@@ -13,6 +13,8 @@ Additional semantic helpers:
 
 | Handler | Positional arguments | Result |
 |---|---|---|
+| `empty_semantic_tree` | language string | canonical empty source tree (native: `lifecycle::empty_tree`) |
+| `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
 | `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
@@ -155,3 +157,9 @@ Hosts discover/read policy files; Rust interprets root `protected` and nested `g
 forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
 Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
 Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
+It owns invariance suppression, generic/Markdown replacement, group indices, style decisions
+and evidence. Suppression of non-equivalent sources does not manufacture equivalence evidence.
+Partially retained meaningful groups describe only surviving changes; partially invalidated
+relationship classifications are discarded. Explicit non-final index spaces are preserved.

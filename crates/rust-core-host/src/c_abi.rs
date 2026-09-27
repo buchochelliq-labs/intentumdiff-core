@@ -436,6 +436,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                     .to_string()
             }
         }),
+        "empty_semantic_tree" => Ok(crate::lifecycle::empty_tree(arg_str(args, 0, "language")?).to_string()),
+        "complete_routed_review" => value_request(args, crate::routed_review::complete),
         "apply_guardrail_policy" => {
             let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
                 .map_err(|e| format!("request: {e}"))?;
@@ -859,6 +861,20 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn routed_review_envelopes() {
+        let empty = call("empty_semantic_tree", json!(["sql"]));
+        assert_eq!(empty["ok"], true);
+        assert_eq!(empty["result"]["children"], json!([]));
+        assert_eq!(empty["result"], crate::lifecycle::empty_tree("sql"));
+        let request = json!({"language":"generic","old_source":"old","new_source":"new",
+            "old_filename":"a.txt","new_filename":"a.txt","finalized":{"changes":[],"change_groups":[]}});
+        let result = call("complete_routed_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["has_semantic_changes"], true);
+        assert_eq!(call("complete_routed_review", json!(["{}"]))["ok"], false);
+    }
 
     #[test]
     fn guardrail_policy_envelopes_preserve_errors_and_results() {

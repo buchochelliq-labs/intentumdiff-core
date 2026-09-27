@@ -6,6 +6,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "complete_routed_review" {
+        println!("{}", intentumdiff_rust_core::routed_review::complete(&request["request"])?);
+        return Ok(());
+    }
     if request["handler"] == "parse_guardrail_policy" {
         let result = intentumdiff_rust_core::guardrail_policy::parse_policy(request["source"].as_str().ok_or("source required")?);
         let output = match result {
