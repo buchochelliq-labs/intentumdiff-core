@@ -6,6 +6,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "parser_candidate_shortlist" {
+        let entries: Vec<intentumdiff_rust_core::parser_routing::Candidate> = serde_json::from_value(request["entries"].clone())?;
+        let query = serde_json::from_value(request["query"].clone())?;
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::parser_routing::shortlist(&entries, &query)?)?);
+        return Ok(());
+    }
     if request["handler"] == "match_ignore_rules" {
         let files: Vec<intentumdiff_rust_core::ignore_rules::IgnoreFile> = serde_json::from_value(request["files"].clone())?;
         let rules = intentumdiff_rust_core::ignore_rules::IgnoreRules::new(&files)?;

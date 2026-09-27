@@ -1,0 +1,650 @@
+[
+  {
+    "name": "cmake_special",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "src/CMakeLists.txt"
+    },
+    "expected": [
+      "cmake",
+      "generic"
+    ]
+  },
+  {
+    "name": "docker_special",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "Dockerfile"
+    },
+    "expected": [
+      "docker"
+    ]
+  },
+  {
+    "name": "windows_path",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "C:\\project\\Dockerfile"
+    },
+    "expected": [
+      "docker"
+    ]
+  },
+  {
+    "name": "case_insensitive",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "src/MAIN.PY"
+    },
+    "expected": [
+      "python"
+    ]
+  },
+  {
+    "name": "unknown_generic_last",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "unknown"
+    },
+    "expected": [
+      "cmake",
+      "docker",
+      "python",
+      "generic"
+    ]
+  },
+  {
+    "name": "hint",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "x.txt",
+      "language_hint": "python"
+    },
+    "expected": [
+      "python"
+    ]
+  },
+  {
+    "name": "explicit_alias",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "filename": "x.txt",
+      "plugin_id": "py-plugin"
+    },
+    "expected": [
+      "python"
+    ]
+  },
+  {
+    "name": "missing_plugin",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "plugin_id": "missing"
+    },
+    "expected": []
+  },
+  {
+    "name": "missing_language",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "language_hint": "missing"
+    },
+    "expected": []
+  },
+  {
+    "name": "candidate_filter",
+    "entries": [
+      {
+        "id": "generic",
+        "aliases": [
+          "generic"
+        ],
+        "languages": [
+          "generic"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      },
+      {
+        "id": "python",
+        "aliases": [
+          "py-plugin"
+        ],
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py",
+          ".pyi"
+        ]
+      },
+      {
+        "id": "cmake",
+        "aliases": [
+          "cmake"
+        ],
+        "languages": [
+          "cmake"
+        ],
+        "extensions": [
+          ".cmake",
+          "CMakeLists.txt"
+        ]
+      },
+      {
+        "id": "docker",
+        "aliases": [
+          "dockerfile"
+        ],
+        "languages": [
+          "dockerfile"
+        ],
+        "extensions": [
+          "Dockerfile"
+        ]
+      }
+    ],
+    "query": {
+      "candidates": [
+        "python",
+        "dockerfile"
+      ]
+    },
+    "expected": [
+      "docker",
+      "python"
+    ]
+  },
+  {
+    "name": "declared_priority",
+    "entries": [
+      {
+        "id": "low",
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py"
+        ],
+        "priority": 1
+      },
+      {
+        "id": "high",
+        "languages": [
+          "python"
+        ],
+        "extensions": [
+          ".py"
+        ],
+        "priority": 10
+      }
+    ],
+    "query": {
+      "filename": "x.py"
+    },
+    "expected": [
+      "high",
+      "low"
+    ]
+  }
+]
