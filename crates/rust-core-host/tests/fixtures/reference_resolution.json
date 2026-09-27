@@ -1,0 +1,233 @@
+[
+  {
+    "name": "undefined",
+    "definitions": [],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null
+      }
+    ],
+    "expected_file": null,
+    "sources": {
+      "caller.py": "f()\n"
+    }
+  },
+  {
+    "name": "unique",
+    "definitions": [
+      {
+        "qualified_name": "f",
+        "file": "a.py",
+        "node_type": "function_definition",
+        "node_id": "f-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      }
+    ],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null
+      }
+    ],
+    "expected_file": "a.py",
+    "sources": {
+      "a.py": "def f():\n    pass\n",
+      "caller.py": "f()\n"
+    }
+  },
+  {
+    "name": "ambiguous",
+    "definitions": [
+      {
+        "qualified_name": "f",
+        "file": "a.py",
+        "node_type": "function_definition",
+        "node_id": "f-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      },
+      {
+        "qualified_name": "f",
+        "file": "b.py",
+        "node_type": "function_definition",
+        "node_id": "f-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      }
+    ],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null
+      }
+    ],
+    "expected_file": null,
+    "sources": {
+      "a.py": "def f():\n    pass\n",
+      "caller.py": "f()\n",
+      "b.py": "def f():\n    pass\n"
+    }
+  },
+  {
+    "name": "clear_stale_resolution",
+    "definitions": [],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null,
+        "resolved_definition": {
+          "qualified_name": "f",
+          "file": "a.py",
+          "node_type": "function_definition",
+          "node_id": "f-def",
+          "language": "python",
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 1,
+          "end_col": 8
+        }
+      }
+    ],
+    "expected_file": null,
+    "sources": {
+      "caller.py": "f()\n"
+    }
+  },
+  {
+    "name": "different_name_never_resolves",
+    "definitions": [
+      {
+        "qualified_name": "g",
+        "file": "g.py",
+        "node_type": "function_definition",
+        "node_id": "g-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      }
+    ],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null
+      }
+    ],
+    "expected_file": null,
+    "sources": {
+      "g.py": "def g():\n    pass\n",
+      "caller.py": "f()\n"
+    }
+  },
+  {
+    "name": "unrelated_definition_does_not_create_ambiguity",
+    "definitions": [
+      {
+        "qualified_name": "f",
+        "file": "a.py",
+        "node_type": "function_definition",
+        "node_id": "f-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      },
+      {
+        "qualified_name": "g",
+        "file": "g.py",
+        "node_type": "function_definition",
+        "node_id": "g-def",
+        "language": "python",
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 1,
+        "end_col": 8
+      }
+    ],
+    "references": [
+      {
+        "qualified_name": "f",
+        "file": "caller.py",
+        "node_id": "f-call",
+        "reference_kind": "CALL",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 3
+        },
+        "language": "python",
+        "enclosing_scope": null
+      }
+    ],
+    "expected_file": "a.py",
+    "sources": {
+      "a.py": "def f():\n    pass\n",
+      "caller.py": "f()\n",
+      "g.py": "def g():\n    pass\n"
+    }
+  }
+]
