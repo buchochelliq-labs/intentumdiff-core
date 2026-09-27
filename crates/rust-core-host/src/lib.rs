@@ -52,6 +52,8 @@ pub mod cache_store;
 pub mod cache_registry;
 mod config;
 pub mod content_type;
+pub mod ignore_rules;
+pub mod parser_routing;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const COMPLETE: &str = "complete";
