@@ -5,6 +5,202 @@
 use super::*;
 use crate::*;
 
+#[test]
+fn callable_renames_accept_actual_parser_shapes_without_parameter_children() {
+    // Captured from the published Wasm components listed in the fixture README.
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/callable_parser_shapes.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["old_source"].as_str().unwrap(), case["new_source"].as_str().unwrap(),
+            case["language"].as_str().unwrap(), "{}",
+        ).unwrap()).unwrap();
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["old_node"]["label"] == case["old_name"]
+            && c["new_node"]["label"] == case["new_name"]), "{}: {result}", case["language"]);
+        if case["language"] == "vue" {
+            let old: SemanticNode = serde_json::from_value(case["old_tree"].clone()).unwrap();
+            let new: SemanticNode = serde_json::from_value(case["new_tree"].clone()).unwrap();
+            let changed = format!("{}\nother();", case["new_source"].as_str().unwrap());
+            assert!(!callable_renames::exact_source_rename(&old.children[0], &new.children[0],
+                Some((case["old_source"].as_str().unwrap(), &changed))));
+        }
+    }
+}
+
+fn rename_review_routes(old: &str, new: &str) -> Vec<(&'static str, Value)> {
+    let request = json!({
+        "schema_version": 1, "python_parser_backend": "native",
+        "files": [{"old_source": old, "new_source": new,
+            "old_filename": "example.py", "new_filename": "example.py",
+            "language": "python", "parser_wasm_path": "unused.wasm"}]
+    });
+    let batch: Value = serde_json::from_str(&diff_batch(&request.to_string()).unwrap()).unwrap();
+    assert_eq!(batch["status"], COMPLETE, "{batch}");
+    fn tree(source: &str) -> String {
+        let cst: CstNode = serde_json::from_str(&python_wasm_filtered_cst(source).unwrap()).unwrap();
+        serde_json::to_string(&convert_cst(&cst, "0", None).unwrap()).unwrap()
+    }
+    let routed: Value = serde_json::from_str(&finalize_review_impl(
+        &tree(old), &tree(new), old, new, "python", "{}"
+    ).unwrap()).unwrap();
+    vec![("batch", batch["diffs"][0]["diff"].clone()), ("routed", routed)]
+}
+
+fn assert_function_rename(result: &Value, old: &str, new: &str) {
+    let changes = result["changes"].as_array().unwrap();
+    assert!(changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+        && c["old_node"]["label"] == old && c["new_node"]["label"] == new
+        && c["old_node"]["node_type"] == "function_definition"), "{result}");
+}
+
+#[test]
+fn rename_prefers_unique_exact_body_over_position() {
+    for (old, new) in [
+        ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x * 1\n", "def c(x): return x * 1\n"),
+    ] {
+      for (_, result) in rename_review_routes(old, new) {
+        assert_function_rename(&result, "b", "c");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "DELETION" && c["old_node"]["label"] == "a"), "{result}");
+      }
+    }
+}
+
+#[test]
+fn decorator_order_is_behavior_with_or_without_rename() {
+    for name in ["calc", "compute"] {
+        let old = "@cache\n@authorize\ndef calc(x): return x + 1\n";
+        let new = format!("@authorize\n@cache\ndef {name}(x): return x + 1\n");
+        for (_, result) in rename_review_routes(old, &new) {
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        }
+    }
+}
+
+#[test]
+fn decorator_insertion_does_not_hide_existing_order_change() {
+    for (_, result) in rename_review_routes("@a\n@b\ndef f(x): return x\n",
+        "@c\n@b\n@a\ndef f(x): return x\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION"
+            && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "ADDITION"), "{result}");
+    }
+}
+
+#[test]
+fn extraction_requires_exact_expression_arguments_and_context() {
+    let old = "def calc(x):\n    return x * 2\n";
+    for new in [
+        "def helper(x):\n    return x + 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(3)\n",
+        "def helper(x):\n    log(x)\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "@decorate\ndef helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    print(helper(x))\n",
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+        }
+    }
+    for (_, result) in rename_review_routes(old,
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_with_body_edit_preserves_both_intents() {
+    for (_, result) in rename_review_routes("def calc(x):\n    return x + 1\n", "def compute(x):\n    return x + 2\n") {
+        assert_function_rename(&result, "calc", "compute");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION" && c["old_node"]["label"] == "1"
+            && c["new_node"]["label"] == "2"), "{result}");
+        assert_ne!(result["is_style_only"], true);
+        let literal_index = result["changes"].as_array().unwrap().iter().position(|c|
+            c["change_type"] == "MODIFICATION" && c["new_node"]["label"] == "2").unwrap();
+        assert!(result["change_groups"].as_array().unwrap().iter().any(|g|
+            g["kind"] == "MEANINGFUL_CHANGE"
+            && g["raw_change_indices"].as_array().unwrap().contains(&json!(literal_index))), "{result}");
+
+    }
+}
+
+#[test]
+fn renamed_function_with_inserted_helper_keeps_cap_edit() {
+    let old = "import os\nimport sys\n\ndef calculate_total(items):\n    total = 0\n    for i in items:\n        total += i.price * i.qty\n    return min(total, 50)\n";
+    let new = "import sys\nimport os\n\ndef _subtotal(i):\n    return i.price * i.qty\n\ndef compute_order_total(items):\n    total = 0\n    for i in items:\n        total += _subtotal(i)\n    return min(total, 75)\n";
+    for (route, result) in rename_review_routes(old, new) {
+        assert!(result["changes"].as_array().unwrap().iter().all(|c| c["change_type"] != "REORDER" && c["change_type"] != "MOVE"), "{route}: insertion is not relocation: {result}");
+        assert_function_rename(&result, "calculate_total", "compute_order_total");
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+            && c["old_node"]["label"] == "50" && c["new_node"]["label"] == "75"), "{result}");
+        assert!(!changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
+        assert!(changes.iter().any(|c| c["new_node"]["label"] == "_subtotal"), "helper must remain visible: {result}");
+        assert!(changes.iter().any(|c| c["refactoring_kind"] == "EXTRACT_FUNCTION"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_controls_decline_ambiguous_and_unrelated_pairs() {
+    for (old, new) in [
+        ("def a(): return 1\n", "def b(): return 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x + 1\n", "def c(x): return x + 1\n"),
+        ("def old_one(): return 1\ndef keep(): return 0\n",
+         "def keep(): return 0\ndef new_one(): return 2\n"),
+        ("def alpha(a): return a * 3\n", "def beta(b): return b - 9\n"),
+        ("def alpha(x): return x + 1\ndef beta(x): return x + 1\n",
+         "def gamma(x): return x + 2\ndef delta(x): return x + 2\n"),
+        ("class A:\n    class Inner:\n        def calc(x): return x + 1\nclass B:\n    class Inner:\n        pass\n",
+         "class A:\n    class Inner:\n        pass\nclass B:\n    class Inner:\n        def compute(x): return x + 2\n"),
+        ("class A:\n    def calc(x): return x + 1\n",
+         "class B:\n    def compute(x): return x + 2\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+        }
+    }
+}
+
+#[test]
+fn renamed_function_control_preserves_pure_rename_and_existing_identity() {
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n", "def compute(x): return x + 1\n") {
+        assert_function_rename(&result, "calc", "compute");
+    }
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n",
+        "def compute(x): return x + 2\ndef calc(x): return x + 1\n") {
+        assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_keeps_behavioral_statement_order_changes() {
+    for (old, new) in [
+        ("def calc(x):\n    x = x + 1\n    x = x * 2\n    return x\n",
+         "def compute(x):\n    x = x * 2\n    x = x + 1\n    return x\n"),
+        ("def calc(x):\n    first(x)\n    second(x)\n    return x\n",
+         "def compute(x):\n    second(x)\n    first(x)\n    return x\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert_function_rename(&result, "calc", "compute");
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder statement")), "{result}");
+        }
+    }
+}
+
     #[test]
     fn cst_diff_reports_update_for_renamed_python_function() {
         let out = diff_python_cst_json(
@@ -24,12 +220,9 @@ use crate::*;
         assert!(!changes.is_empty());
     }
     #[test]
-    fn same_id_named_relabel_promotes_to_refactoring_rename_not_move() {
-        // Oracle scenario (intentumdiff-diff-expectations / issue #10): a clean function rename
-        // (greet -> welcome) — same structural id, same node type, same position, only the
-        // label changed — is a REFACTORING rename, never a MOVE. The old behavior emitted
-        // change_type "MOVE" here, surfacing the rename as MOVE + a redundant identifier
-        // modification while the Python oracle collapses it to one change.
+    fn positional_callable_relabel_without_body_evidence_stays_explicit() {
+        // IDs are positions, not identities. Empty synthetic callables provide no
+        // evidence for a rename; real-source pure-renames are covered separately.
         let old_fn = node("0.1", "function_definition", "greet", vec![]);
         let new_fn = node("0.1", "function_definition", "welcome", vec![]);
         let mut changes = vec![
@@ -59,15 +252,8 @@ use crate::*;
 
         promote_same_id_named_renames_from_add_delete_drafts(&mut changes);
 
-        assert_eq!(
-            changes.len(),
-            1,
-            "add+delete must collapse to one change: {changes:?}"
-        );
-        assert_eq!(changes[0].change_type, "REFACTORING");
-        assert_eq!(changes[0].refactoring_kind, Some("RENAME_SYMBOL"));
-        assert_eq!(changes[0].old_node.unwrap().label, "greet");
-        assert_eq!(changes[0].new_node.unwrap().label, "welcome");
+        assert_eq!(changes.len(), 2, "position alone cannot collapse a callable: {changes:?}");
+        assert!(changes.iter().all(|c| c.refactoring_kind.is_none()));
     }
     #[test]
     fn markdown_section_swap_is_one_move() {

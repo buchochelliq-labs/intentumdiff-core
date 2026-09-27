@@ -39,6 +39,10 @@ jobs:
         uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: "3.12"
+      - name: Test parser artifact discovery
+        run: |
+          pip install pytest
+          python -m pytest tests/tooling -q
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
         # live in the sibling intentumdiff-<lang>-parser repos. Pull the three they name

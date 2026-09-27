@@ -1,7 +1,11 @@
 # IntentumDiff engine architecture
 
-The engine is the **complete shared backend**: everything functional lives here, and every
-product surface is a thin binding over the [C ABI](C_ABI.md).
+The architectural target is a **complete shared backend**, with every product surface a thin
+binding over the [C ABI](C_ABI.md). The Python-first audit found duplicate literal enrichment
+and tree-equivalence processing, now delegated to core; the audit is tracked in
+[Python#54](https://github.com/buchochelliq-labs/intentumdiff-python/issues/54).
+Overlapping implementations must be compared against explicit semantic expectations before
+migration; neither implementation is automatically the correctness oracle.
 
 ## Pipeline
 
@@ -18,10 +22,41 @@ source pair ──► parse ──► SemanticNode trees ──► match ──�
 3. **Match.** Hash-based subtree matching, entity anchoring, rename/move promotion, cross-file
    symbol/reference matching (via `index-engine-lib`, linked natively).
 4. **Classify.** Each change becomes MEANINGFUL / REFACTORING / MOVED / IGNORED_STYLE / NOISE
-   with a derived confidence and an intent description; invariance rules (a data-driven
-   catalog) suppress known-equivalent rewrites; guardrail rules evaluate protected paths.
+   with a derived confidence and an intent description; invariance rules suppress
+   known-equivalent rewrites; guardrail rules evaluate protected paths. Authoritative catalogue
+   consolidation is tracked in [#39](https://github.com/buchochelliq-labs/intentumdiff-core/issues/39).
 5. **Finalize.** Presentation passes (grouping, compaction, reorder suppression, per-language
    statement/keyed/resource profiles) produce the public `SemanticDiff`.
+
+## Callable rename continuity
+
+Existing entity identities are matched first. An unmatched callable can then establish
+continuity across a rename when its signature is unchanged, its full enclosing named scope
+agrees, its bodies have comparable sizes and shared concrete content, and the candidate is
+unique in both directions. Similarity is symmetric; containment in an extracted helper alone
+does not establish a rename. Ambiguous cases remain unpaired.
+
+The rename changes the declaration name only. Body modifications remain separate changes;
+positional whole-callable deletion/addition collapse cannot override declined ambiguity.
+Exact body candidates use source spans as well as hashes: parser hashes can omit operators.
+Insertion shifts use the established rename identity when distinguishing shifts from moves.
+See the [reproduction and CLI evidence](evidence/rename-body-edit/README.md).
+
+Python decorator composition is ordered. Reorder evidence includes stationary surviving
+decorators, so inserting another decorator cannot hide an existing swap. Inter-token spacing
+is ignored without ignoring quoted values. Ambiguous changed decorators remain explicit edits.
+
+Python expression extraction is conservative: one added, undecorated, unannotated module
+helper must return the exact expression replaced in a continuing caller, with unchanged
+arguments and surrounding context. Shadowed/duplicate names, side-effecting helper bodies,
+and helpers defined after the caller are declined. This is structural recognition, not a
+proof of arbitrary runtime equivalence.
+
+The active invariance path already used Rust before this change; `analysis/invariances.py`
+is a legacy comparison implementation, not a production fallback. Catalogue consolidation
+remains separate work. Source enrichment uses zero-based UTF-8 byte columns. String and
+character whitespace is data. CSS color equivalence only interprets complete values of known
+color properties; selectors, strings, custom properties and complex value blocks remain data.
 
 ## Crate topology
 

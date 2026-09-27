@@ -946,41 +946,87 @@ pub(crate) fn rust_css_color_equivalence(
 }
 
 pub(crate) fn rust_canonicalize_css_colors(source: &str) -> (String, Vec<(String, String, (usize, usize))>) {
+    // Only entire values of known color properties are color evidence. Scanning
+    // arbitrary words rewrites selectors (.red), strings and custom-property data.
     let mut tokens = Vec::new();
-    let mut output = String::with_capacity(source.len());
+    let mut replacements = Vec::new();
     let bytes = source.as_bytes();
-    let mut idx = 0usize;
-    while idx < bytes.len() {
-        if bytes[idx] == b'#' {
-            if let Some((label, canonical, end)) = rust_parse_hex_color(source, idx) {
-                output.push_str(&canonical);
-                tokens.push((label, canonical, (idx, end)));
-                idx = end;
-                continue;
+    let mut start = 0;
+    let mut in_block = false;
+    let mut quote = None;
+    let mut escaped = false;
+    let mut comment = false;
+    let mut nesting = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        let c = bytes[i];
+        if comment {
+            if c == b'*' && bytes.get(i + 1) == Some(&b'/') { comment = false; i += 2; continue; }
+        } else if let Some(q) = quote {
+            if escaped { escaped = false; }
+            else if c == b'\\' { escaped = true; }
+            else if c == q { quote = None; }
+        } else if c == b'/' && bytes.get(i + 1) == Some(&b'*') {
+            comment = true; i += 2; continue;
+        } else if c == b'\'' || c == b'"' { quote = Some(c); }
+        else if c == b'\\' { i += 2; continue; }
+        else if matches!(c, b'(' | b'[') { nesting.push(c); }
+        else if matches!(c, b')' | b']') {
+            if nesting.pop() != Some(if c == b')' { b'(' } else { b'[' }) {
+                return (source.to_owned(), Vec::new());
             }
         }
-        if rust_starts_with_ascii_case_insensitive(source, idx, "rgb(") {
-            if let Some((label, canonical, end)) = rust_parse_rgb_color(source, idx) {
-                output.push_str(&canonical);
-                tokens.push((label, canonical, (idx, end)));
-                idx = end;
-                continue;
-            }
+        else if !nesting.is_empty() {
+            // Nested separators are custom-property/function token data, not
+            // declarations. Brace-valued constructs remain conservatively exact.
+            if matches!(c, b'{' | b'}') { return (source.to_owned(), Vec::new()); }
         }
-        let ch = source[idx..].chars().next().unwrap();
-        if ch.is_ascii_alphabetic() {
-            let end = rust_ascii_word_end(source, idx);
-            let word = &source[idx..end];
-            if let Some((red, green, blue)) = rust_css_named_color(word) {
-                let canonical = rust_format_srgb(red, green, blue);
-                output.push_str(&canonical);
-                tokens.push((word.to_owned(), canonical, (idx, end)));
-                idx = end;
-                continue;
+        else if c == b'{' {
+            // A brace within a value (notably a custom-property token stream)
+            // does not introduce declarations we are entitled to interpret.
+            if in_block && source[start..i].contains(':') {
+                return (source.to_owned(), Vec::new());
             }
+            in_block = true; start = i + 1;
         }
-        output.push(ch);
-        idx += ch.len_utf8();
+        else if c == b';' || c == b'}' {
+            if in_block {
+                let declaration = &source[start..i];
+                if let Some(colon) = declaration.find(':') {
+                    let property = declaration[..colon].trim().to_ascii_lowercase();
+                    if matches!(property.as_str(), "color" | "background-color" | "border-color"
+                        | "border-top-color" | "border-right-color" | "border-bottom-color"
+                        | "border-left-color" | "outline-color" | "text-decoration-color"
+                        | "background" | "fill" | "stroke") {
+                        let raw = &declaration[colon + 1..];
+                        let value = raw.trim();
+                        let offset = start + colon + 1 + raw.len() - raw.trim_start().len();
+                        let parsed = if value.starts_with('#') {
+                            rust_parse_hex_color(value, 0).filter(|(_, _, end)| *end == value.len())
+                        } else if value.to_ascii_lowercase().starts_with("rgb(") {
+                            rust_parse_rgb_color(value, 0).filter(|(_, _, end)| *end == value.len())
+                        } else {
+                            rust_css_named_color(value).map(|(r, g, b)|
+                                (value.to_owned(), rust_format_srgb(r, g, b), value.len()))
+                        };
+                        if let Some((label, canonical, len)) = parsed {
+                            replacements.push((offset, offset + len, canonical.clone()));
+                            tokens.push((label, canonical, (offset, offset + len)));
+                        }
+                    }
+                }
+            }
+            start = i + 1;
+            if c == b'}' { in_block = false; }
+        }
+        i += 1;
+    }
+    if !nesting.is_empty() || quote.is_some() || comment {
+        return (source.to_owned(), Vec::new());
+    }
+    let mut output = source.to_owned();
+    for (start, end, canonical) in replacements.into_iter().rev() {
+        output.replace_range(start..end, &canonical);
     }
     (output, tokens)
 }
@@ -1834,3 +1880,28 @@ pub(crate) fn formatting_equivalence_group_drafts(
     Some((group, ignored))
 }
 
+
+#[cfg(test)]
+mod css_value_scope_tests {
+    use super::*;
+
+    #[test]
+    fn css_colors_are_only_canonicalized_as_property_values() {
+        let canonical = |s| rust_canonicalize_css_colors(s).0;
+        assert_eq!(canonical("a{color:red}"), canonical("a{color:#ff0000}"));
+        assert_eq!(canonical("a{background:rgb(255, 0, 0)}"), canonical("a{background:red}"));
+        for (old, new) in [
+            (".red{color:red}", ".RED{color:red}"),
+            ("#abc{color:red}", "#aabbcc{color:red}"),
+            ("a{content:\"red\"}", "a{content:\"RED\"}"),
+            ("a{--theme:red}", "a{--theme:RED}"),
+            ("a{animation-name:red}", "a{animation-name:RED}"),
+            ("a{background:url(red)}", "a{background:url(RED)}"),
+            ("x { --theme: { color: red; }; }", "x { --theme: { color: #f00; }; }"),
+            ("a { --theme: (x; color: red;); }", "a { --theme: (x; color: #f00;); }"),
+            ("a { --theme: [x; color: red;]; }", "a { --theme: [x; color: #f00;]; }"),
+        ] {
+            assert_ne!(canonical(old), canonical(new), "{old} versus {new}");
+        }
+    }
+}

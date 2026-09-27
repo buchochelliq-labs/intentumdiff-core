@@ -1,3 +1,4 @@
+mod source_fallback;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
 use serde::{Deserialize, Serialize};
@@ -30,6 +31,12 @@ mod registry;
 // pub: the live-server protocol + handler impls are the engine's binding-independent public
 // API — the native live-server binary (crates/live-server, #100) links them feature-off.
 pub mod c_abi;
+pub mod api;
+pub mod lifecycle;
+pub mod compile_context;
+pub mod schema_profiles;
+mod schema_context;
+pub mod host_utils;
 pub mod live_server;
 mod lsp_enrich;
 pub mod lsp_server_shapes;
@@ -328,7 +335,7 @@ mod text_review_generic;
 use text_review_generic::*;
 
 
-mod markdown_review;
+pub mod markdown_review;
 use markdown_review::*;
 
 
@@ -1387,6 +1394,8 @@ fn augment_html_path_matching<'a>(
 // later unchanged values into bogus MODIFICATIONs, and a key reorder pairs by identity. The
 // adf/databricks/dbt keys are NOT ported: those languages are already routed-green without them.
 
+mod callable_renames;
+
 mod keyed_data;
 use keyed_data::*;
 
@@ -1413,6 +1422,16 @@ fn finalize_review_impl(
         serde_json::from_str(new_tree_json).map_err(|exc| format!("new tree: {exc}"))?;
     validate_unique_ids(&old_tree).map_err(|exc| format!("old tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new tree: {exc}"))?;
+
+    if config.fallback_to_token_diff && (
+        source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
+        source_fallback::parse_errors_present_impl(new_source, new_tree_json, language)? == "true"
+    ) {
+        let diff = source_fallback::source_fallback_diff_impl(old_source, new_source, "", "", language, "parse_errors")?;
+        return Ok(json!({"used":true,"engine":"rust_source_fallback_v1", "changes":diff["changes"],
+            "change_groups":diff["change_groups"],"is_style_only":false,"no_surviving_changes":!diff["has_semantic_changes"].as_bool().unwrap_or(false),
+            "ignored_style_changes":[],"fallback_diff":diff}).to_string());
+    }
 
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
@@ -1481,12 +1500,14 @@ fn finalize_review_impl(
     if config.collect_trace {
         finalize_trace_start();
     }
-    let matching = compute_matching(
-        &old_tree,
-        &new_tree,
+    let matching = compute_matching_with_diagnostics_indexed(
+        &TreeIndex::new(&old_tree),
+        &TreeIndex::new(&new_tree),
         config.min_height,
         config.min_similarity,
-    );
+        false,
+        Some((old_source, new_source)),
+    ).pairs;
     // Entity-anchored matching (issue #57, anchors.py port): re-pair same-identity entities and
     // their stable descendants BEFORE the edit script — relocated content becomes MOVEs instead
     // of DELETE+ADD churn (mirrors the default path's differ.py stage ordering: entity →
@@ -1505,7 +1526,7 @@ fn finalize_review_impl(
     let matching = augment_resource_profile_matching(&old_tree, &new_tree, matching, language);
     // Statement-profile matching (issue #57 asm/bash/delphi): re-pair keyed statements by identity
     // so an operand-value edit is a MODIFICATION, not DELETE+ADD. No-op for other languages.
-    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language);
+    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language, Some((old_source, new_source)));
     // Query-profile matching (issue #57 sql): clauses/relations/fields pair by role + normalized
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
@@ -1531,7 +1552,7 @@ fn finalize_review_impl(
         } else {
             Vec::new()
         };
-    refine_candidate_drafts(&mut drafts, &matching, None, language);
+    refine_candidate_drafts(&mut drafts, &matching, None, language, Some((old_source, new_source)));
     // Statement-profile cross-key split (issue #57 bash): must run BEFORE finalize's parent/child
     // suppression turns the keyed statement pair into a leaf word MODIFICATION.
     split_cross_key_statement_modifications_drafts(&mut drafts, &old_tree, &new_tree, language);
@@ -2346,6 +2367,7 @@ struct RustCoreConfig {
     plugin_fuel: u64,
     profile_phases: bool,
     collect_trace: bool,
+    fallback_to_token_diff: bool,
 }
 
 impl RustCoreConfig {
@@ -2362,6 +2384,7 @@ impl RustCoreConfig {
                 .or_else(|| value.get("minSimilarity"))
                 .and_then(Value::as_f64)
                 .unwrap_or(0.5),
+            fallback_to_token_diff: value.get("fallback_to_token_diff").and_then(Value::as_bool).unwrap_or(true),
             collect_trace: value
                 .get("collect_trace")
                 .and_then(Value::as_bool)
@@ -2797,6 +2820,7 @@ impl PhaseProbe {
 }
 
 struct ParserHostState {
+    host_error: Option<String>,
     table: ResourceTable,
     ctx: WasiCtx,
 }
@@ -2826,6 +2850,7 @@ static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserCo
 impl ParserHostState {
     fn new() -> Self {
         Self {
+            host_error: None,
             table: ResourceTable::new(),
             ctx: WasiCtxBuilder::new().build(),
         }
@@ -2843,26 +2868,17 @@ impl WasiView for ParserHostState {
 
 impl parser_plugin::intentdiff::plugin::host_utils::Host for ParserHostState {
     fn strip_trivia(&mut self, cst_json: String, trivia_types: Vec<String>) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            return json!({"error": "host-utils input exceeds byte limit"}).to_string();
+        match host_utils::strip_trivia(&cst_json, &trivia_types, &host_utils::Limits::default()) {
+            Ok(value) => value.to_string(),
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        if let Err(detail) = check_trivia_type_limit(&trivia_types) {
-            return json!({"error": detail}).to_string();
-        }
-        strip_trivia_json(&cst_json, &trivia_types).unwrap_or(cst_json)
     }
 
     fn structural_hash(&mut self, cst_json: String) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            let mut hasher = Sha256::new();
-            hasher.update(b"host-utils input exceeds byte limit");
-            return hex::encode(hasher.finalize());
+        match host_utils::structural_hash(&cst_json, &host_utils::Limits::default()) {
+            Ok(value) => value,
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        semantic_hash_json(&cst_json).unwrap_or_else(|_| {
-            let mut hasher = Sha256::new();
-            hasher.update(cst_json.as_bytes());
-            hex::encode(hasher.finalize())
-        })
     }
 
     fn log(&mut self, _level: String, _message: String) {}
@@ -3075,10 +3091,12 @@ fn diff_python_sources_final_impl(
     let new_ts_tree = probe.measure("rust_tree_sitter_parse_new", || {
         parse_python_tree(new_source)
     })?;
-    if certified_product
+    if config.fallback_to_token_diff
         && (old_ts_tree.root_node().has_error() || new_ts_tree.root_node().has_error())
     {
-        return Err("parse errors require Python token fallback".to_owned());
+        let mut diff = source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors")?;
+        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle);
+        return Ok(diff);
     }
     let (
         mut old_tree,
@@ -3352,6 +3370,7 @@ fn diff_python_sources_final_impl(
             config.min_height,
             config.min_similarity,
             detailed_matching_diagnostics,
+            Some((old_source, new_source)),
         ))
     })?;
     let matching = matching_report.pairs;
@@ -3374,7 +3393,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
-    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python");
+    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
     let review_finalization_started = probe.enabled().then(Instant::now);
@@ -3464,6 +3483,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -4117,6 +4137,23 @@ fn diff_batch_file_item(
     let file_lifecycle = infer_file_lifecycle_from_file(file);
 
     if old_source == new_source {
+        if RustCoreConfig::from_json(config_json).fallback_to_token_diff {
+            let incomplete = source_fallback::parse_errors_present_impl(old_source, "{}", "python")
+                .and_then(|errors| if errors == "true" {
+                    source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors").map(Some)
+                } else { Ok(None) });
+            match incomplete {
+                Ok(Some(mut diff)) => {
+                    attach_content_type_metadata(&mut diff, old_source, new_source);
+                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+                    return BatchItemResult::complete(json!({"index":index,"old_filename":old_filename,
+                        "new_filename":new_filename,"language":"python","status":COMPLETE,"diff":diff}), false);
+                }
+                Err(reason) => return BatchItemResult::fallback(batch_fallback_item(index, old_filename, new_filename, &reason)),
+                Ok(None) => {}
+            }
+        }
+
         let certification = if python_parser_backend == PYTHON_PARSER_BACKEND_NATIVE {
             PYTHON_NATIVE_V4KB_CERTIFICATION
         } else {
@@ -4697,7 +4734,8 @@ pub(crate) fn run_python_wasm_process_pair(
     Ok((result.old_tree, result.new_tree))
 }
 
-/// python `_differ_presentation._slice_source_text` (CHAR-based columns for python-string parity).
+/// Parser source spans use zero-based UTF-8 byte columns. Invalid boundaries fail
+/// closed; character slicing corrupts evidence after non-ASCII source text.
 fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
     let start_line = position.start_line as usize;
     let end_line = position.end_line as usize;
@@ -4705,10 +4743,7 @@ fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
         return String::new();
     }
     let char_slice = |line: &str, from: usize, to: Option<usize>| -> String {
-        match to {
-            Some(t) => line.chars().skip(from).take(t.saturating_sub(from)).collect(),
-            None => line.chars().skip(from).collect(),
-        }
+        line.get(from..to.unwrap_or(line.len())).unwrap_or_default().to_owned()
     };
     if start_line == end_line {
         return char_slice(
@@ -4747,13 +4782,14 @@ fn clean_string_literal_label(text: &str) -> String {
         && matches!(chars[0], '\'' | '"' | '`')
     {
         let inner: String = chars[1..chars.len() - 1].iter().collect();
-        return inner.trim().to_owned();
+        return inner;
     }
     value.trim().to_owned()
 }
 
 /// python `_differ_presentation._enrich_literal_labels` (differ.py stage 4-7): string-literal
-/// leaves get their DECODED source value as label (and order_by_clause its "descending" marker).
+/// leaves get source text with delimiters removed (not escape decoding), and
+/// order_by_clause gets its "descending" marker.
 /// Keyed profile enrichment AND guardrail semantic paths key off these labels — skipping this
 /// left native json/yaml pairs unlabeled, which silently produced ZERO guardrail semantic paths
 /// (the rule-eval gap found porting native guardrails).
@@ -4896,6 +4932,12 @@ fn empty_semantic_tree_json(language: &str) -> String {
 /// the stage-12 zero-change style evidence mirrored (differ.py:1918). The audit
 /// NOISE_SUPPRESSED group is omitted (it only records the discarded finalize's churn count,
 /// which this path never computes).
+/// Review text (including Markdown presentation) directly from the public Rust API.
+/// Language-aware consumers can use `live_server::live_diff_contents_impl` with parser context.
+pub fn review_text(old_source:&str,new_source:&str,old_filename:&str,new_filename:&str)->Result<Value,String>{
+    native_generic_text_diff("generic",old_source,new_source,old_filename,new_filename)
+}
+
 fn native_generic_text_diff(
     language: &str,
     old_source: &str,
@@ -4936,6 +4978,17 @@ fn native_generic_text_diff(
             }
         }
     }
+    let presented = markdown_review::reconcile(
+        markdown_review::Presentation { changes, change_groups, ignored_style_changes:metadata["ignored_style_changes"].as_array().cloned().unwrap_or_default() },
+        old_source,new_source,old_filename,new_filename,markdown_review::ReviewPhase::All,
+    )?;
+    metadata.as_object_mut().unwrap().remove("ignored_style_changes");
+    if !presented.ignored_style_changes.is_empty() {
+        metadata["ignored_style_changes"] = json!(presented.ignored_style_changes);
+    }
+    let changes=presented.changes;
+    let change_groups=presented.change_groups;
+    let is_style_only=is_style_only && changes.is_empty();
     let has_semantic_changes = !changes.is_empty();
     let mut diff = json!({
         "old_filename": old_filename,
@@ -5130,15 +5183,15 @@ pub(crate) fn native_wasm_single_diff(
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
         .map_err(|exc| format!("literal enrich (new): {exc}"))?;
-    // Stage-7b profile-label enrichment (differ.py:1611): fill keyed/path/query/statement/resource
-    // identity labels from children BEFORE the diff, so e.g. a sql SELECT `term` folds its field
-    // identity into one node (otherwise the field surfaces as a spurious second change). No-op for
-    // non-profile languages. The differ enriches the trees here too, so finalize sees the same
-    // input. identity_fields=None matches the default (no-schema) case the differ passes for
-    // json/yaml; a configured schema's identity fields aren't threaded to the live path yet.
-    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, None)
+    // Resolve schema identities per file, for both native and binding consumers.
+    let schema_config: Value = serde_json::from_str(config_json).unwrap_or_else(|_|json!({}));
+    let (identity_fields, schema_metadata, xml_dialects) = schema_context::resolve(
+        &schema_config, new_filename, language, if new_source.is_empty(){old_source}else{new_source},
+    )?;
+    let _xml_scope = xml_schema::scoped_xml_dialects(xml_dialects);
+    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, Some(identity_fields.clone()))
         .map_err(|exc| format!("profile enrich (old): {exc}"))?;
-    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, None)
+    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, Some(identity_fields))
         .map_err(|exc| format!("profile enrich (new): {exc}"))?;
 
     // Tree-diff + finalize in one call — the same core the differ routes through for every
@@ -5161,6 +5214,22 @@ pub(crate) fn native_wasm_single_diff(
             "finalize declined: {}",
             fin.get("reason").and_then(Value::as_str).unwrap_or("used=false")
         ));
+    }
+
+    if let Some(mut diff) = fin.get("fallback_diff").cloned() {
+        diff["old_filename"] = json!(old_filename);
+        diff["new_filename"] = json!(new_filename);
+        let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
+        if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
+    }
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+        if let Some(rules) = guardrail_rules {
+            let violations = evaluate_guardrail_rules_for_diff(
+                &diff, rules, language, old_filename, new_filename, "null", "null");
+            attach_guardrail_violations(&mut diff, violations);
+        }
+        return Ok(diff);
     }
 
     let mut changes = fin
@@ -5249,6 +5318,9 @@ pub(crate) fn native_wasm_single_diff(
         },
     });
 
+    if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
+    }
     // File lifecycle (add/delete/modify) — mirrors differ's _apply_file_lifecycle_to_diff.
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
     apply_file_lifecycle_to_diff(&mut diff, lifecycle);
@@ -5573,6 +5645,7 @@ fn run_python_wasm_process_pair_with_cached_component(
             .call_process(&mut store, old_input, language, old_filename)
             .map_err(|exc| format!("call parser process for old source: {exc:#}"))
     })?;
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("old parser output", &old_tree, max_output_bytes)?;
     if !unlimited {
         measure_optional(probe.as_deref_mut(), "rust_wasm_fuel_reset", || {
@@ -5586,6 +5659,7 @@ fn run_python_wasm_process_pair_with_cached_component(
             .call_process(&mut store, new_input, language, new_filename)
             .map_err(|exc| format!("call parser process for new source: {exc:#}"))
     })?;
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("new parser output", &new_tree, max_output_bytes)?;
     Ok((old_tree, new_tree))
 }
@@ -6861,6 +6935,7 @@ fn compute_matching_with_diagnostics_mode<'a>(
         min_height,
         min_similarity,
         detailed_diagnostics,
+        None,
     )
 }
 
@@ -6870,6 +6945,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     min_height: usize,
     min_similarity: f64,
     detailed_diagnostics: bool,
+    sources: Option<(&str, &str)>,
 ) -> MatchingReport<'a> {
     let mut diagnostics = MatchingDiagnostics {
         attempted: true,
@@ -6883,6 +6959,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
         &mut diagnostics,
         detailed_diagnostics,
     );
+    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity, sources);
     let before_top_down = matches.len();
     matches = top_down_match_with_existing(&old_index, &new_index, min_height, matches);
     diagnostics.structural_matches += matches.len().saturating_sub(before_top_down);
@@ -8445,7 +8522,9 @@ fn refine_candidate_drafts<'a>(
     matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
     language: &str,
+    sources: Option<(&str, &str)>,
 ) {
+    callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
         probe.as_deref_mut(),
@@ -8673,11 +8752,21 @@ fn finalize_python_review_drafts<'a>(
         }));
         // The formatting-equivalence relabel is a PYTHON style rule; it carried
         // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        if language == "python" {
+        // A renamed callable can suppress positional shifts while retaining real
+        // body edits. Suppression alone cannot prove formatting equivalence for
+        // those surviving changes or assign their nodes to ignored-style evidence.
+        if language == "python" && !changes.iter().any(|change| {
+            change.refactoring_kind.as_deref() == Some("RENAME_SYMBOL")
+                && change.old_node.map(anchor_is_function).unwrap_or(false)
+        }) {
             finalization
                 .change_groups
                 .push(python_formatting_equivalence_group(changes));
         }
+    }
+    if language == "python" {
+        decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
+        function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
     }
     add_compact_superseded_group_for_refactorings(changes, finalization);
     apply_python_literal_invariances(
@@ -8692,6 +8781,8 @@ fn finalize_python_review_drafts<'a>(
 }
 
 mod draft_promotions;
+mod decorator_order;
+mod function_extraction;
 use draft_promotions::*;
 
 
@@ -8892,6 +8983,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9142,12 +9234,9 @@ fn stage11_change_description(
 
 mod invariance_groups;
 use invariance_groups::*;
-/// MEANINGFUL_CHANGE groups for the finalize-routed path ONLY (issue #57): python's
-/// presentation surfaces every surviving semantic change as a MEANINGFUL_CHANGE group
-/// carrying the change's labels; routed languages skip python presentation entirely, so
-/// downstream classifiers saw group-less output and read every edit as 'other' (csharp
-/// pilot). Deliberately NOT part of final_change_groups_from_drafts — the certified
-/// batch path feeds python presentation, which builds its own groups.
+/// Every final Rust route owns its meaningful groups. The certified batch returns
+/// directly through the thin Python wrapper, so it cannot rely on Python presentation
+/// to add these groups (especially for body edits next to a callable rename).
 fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
     changes
         .iter()
@@ -9368,6 +9457,16 @@ fn final_change_group_from_draft(
     });
     if let Some(refactoring_kind) = change.refactoring_kind {
         group["refactoring_kind"] = json!(refactoring_kind);
+    }
+    // A callable rename owns the declaration identity, not every descendant.
+    // Including body IDs/labels lets group compaction swallow independent behavior edits.
+    if change.refactoring_kind == Some("RENAME_SYMBOL")
+        && change.old_node.is_some_and(anchor_is_function)
+    {
+        group["old_labels"] = json!(change.old_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["new_labels"] = json!(change.new_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["old_node_ids"] = json!(change.old_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
+        group["new_node_ids"] = json!(change.new_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
     }
     group
 }
@@ -10010,6 +10109,9 @@ fn lifecycle_from_status(status: Option<&str>) -> Option<&'static str> {
     {
         return Some("added");
     }
+    if ["modified", "modify", "m", "changed"].iter().any(|item| status.eq_ignore_ascii_case(item)) {
+        return Some("modified");
+    }
     if ["deleted", "delete", "d", "removed", "remove"]
         .iter()
         .any(|item| status.eq_ignore_ascii_case(item))
@@ -10098,7 +10200,16 @@ fn semantic_diff_payload_with_style(
 /// program; labels differing in content are not.
 fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
     let mut hasher = Sha256::new();
-    let normalized: String = node.label.split_whitespace().collect::<Vec<_>>().join(" ");
+    // Whitespace within literal values is data. Parent labels may contain quoted
+    // source too, so conservatively preserve those rather than proving equivalence.
+    let normalized = if node.node_type.to_lowercase().contains("string")
+        || matches!(node.node_type.as_str(), "character_literal" | "char_literal" | "character")
+        || node.label.contains(['\'', '"', '`'])
+    {
+        node.label.clone()
+    } else {
+        node.label.split_whitespace().collect::<Vec<_>>().join(" ")
+    };
     hasher.update(node.node_type.as_bytes());
     hasher.update(b":");
     hasher.update(normalized.as_bytes());
@@ -10107,6 +10218,12 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
         hasher.update(whitespace_normalized_tree_hash(child).as_bytes());
     }
     format!("{:x}", hasher.finalize())
+}
+
+fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
+    let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
+    let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
+    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
 }
 
 fn semantic_diff_payload(

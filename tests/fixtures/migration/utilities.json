@@ -1,0 +1,43 @@
+[
+  {
+    "id": "modified-empty-old",
+    "handler": "infer_file_lifecycle",
+    "args": [
+      "",
+      "x",
+      "modified"
+    ],
+    "expected": "modified"
+  },
+  {
+    "id": "modified-empty-new",
+    "handler": "infer_file_lifecycle",
+    "args": [
+      "x",
+      "",
+      "modified"
+    ],
+    "expected": "modified"
+  },
+  {
+    "id": "glob-[a&&b].json",
+    "handler": "glob_profile",
+    "pattern": "[a&&b].json",
+    "filename": "a.json",
+    "expected": true
+  },
+  {
+    "id": "glob-[a~~b].json",
+    "handler": "glob_profile",
+    "pattern": "[a~~b].json",
+    "filename": "~.json",
+    "expected": true
+  },
+  {
+    "id": "glob-[a--c].json",
+    "handler": "glob_profile",
+    "pattern": "[a--c].json",
+    "filename": "c.json",
+    "expected": true
+  }
+]
