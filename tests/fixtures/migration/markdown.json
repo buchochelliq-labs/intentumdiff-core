@@ -1,0 +1,130 @@
+[
+  {
+    "id": "heading_rename",
+    "old": "# Old\nsame\n",
+    "new": "# New\nsame\n",
+    "required_labels": [
+      "# Old",
+      "# New"
+    ],
+    "exact_changes": 1,
+    "moves": 0
+  },
+  {
+    "id": "heading_and_body",
+    "old": "# Old\nbefore\n",
+    "new": "# New\nafter\n",
+    "required_labels": [
+      "# Old",
+      "# New",
+      "before",
+      "after"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "duplicate_headings",
+    "old": "# A\none\n# B\ntwo\n# A\nthree\n",
+    "new": "# B\ntwo\n# A\none\n# A\nchanged\n",
+    "required_labels": [
+      "three",
+      "changed"
+    ]
+  },
+  {
+    "id": "duplicate_bodies",
+    "old": "# A\nsame\n# B\nsame\n",
+    "new": "# C\nsame\n# B\nsame\n",
+    "required_labels": [
+      "# A",
+      "# C"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "insert_section",
+    "old": "# A\none\n# B\ntwo\n",
+    "new": "# New\nzero\n# A\none\n# B\ntwo\n",
+    "required_labels": [
+      "# New",
+      "zero"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "fenced_example",
+    "old": "```\n# Example\nold\n```\n",
+    "new": "```\n# Example\nnew\n```\n",
+    "required_labels": [
+      "old",
+      "new"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "unrelated_edit",
+    "old": "# Old\nsame\n# Other\nbefore\n",
+    "new": "# New\nsame\n# Other\nafter\n",
+    "required_labels": [
+      "# Old",
+      "# New",
+      "before",
+      "after"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "unicode",
+    "old": "# Café\nété\n",
+    "new": "# Café\nhiver\n",
+    "required_labels": [
+      "été",
+      "hiver"
+    ],
+    "moves": 0
+  },
+  {
+    "id": "move-not-trivia",
+    "old": "# A\none\n# B\ntwo\n",
+    "new": "# B\ntwo\n# A\none\n",
+    "required_labels": [
+      "# B"
+    ],
+    "exact_changes": 1,
+    "moves": 1,
+    "forbidden_group_kinds": [
+      "IGNORED_STYLE"
+    ],
+    "forbid_ignored_style": true
+  },
+  {
+    "id": "unicode-byte-columns",
+    "old": "été\n",
+    "new": "hiver\n",
+    "required_labels": [
+      "été",
+      "hiver"
+    ],
+    "exact_changes": 1,
+    "moves": 0,
+    "end_columns": [
+      5,
+      5
+    ]
+  },
+  {
+    "id": "unicode-section-byte-columns",
+    "old": "# Old\nété\n",
+    "new": "# New\nété\n",
+    "required_labels": [
+      "# Old",
+      "# New"
+    ],
+    "exact_changes": 1,
+    "moves": 0,
+    "end_columns": [
+      5,
+      5
+    ]
+  }
+]

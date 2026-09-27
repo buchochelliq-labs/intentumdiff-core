@@ -525,10 +525,13 @@ fn diff_resolved_sources(
             content,
             path,
             path,
-            config_json,
+            &crate::schema_context::config_for_repo(config_json, repo_path)?,
             guardrail_rules.as_deref(),
         ) {
             Ok(mut diff) => {
+                if let Some(context) = crate::compile_context::discover(path, &resolved.language, std::path::Path::new(repo_path))? {
+                    diff["metadata"]["compile_commands"] = context;
+                }
                 // python apply_guardrails_to_diff's policy-file check: editing intentumdiff.yaml
                 // itself is an IMMUTABLE violation.
                 if guardrails_enabled
@@ -782,7 +785,7 @@ pub fn live_handle_review_impl(
                 &f.new_content,
                 &f.old_path,
                 &f.new_path,
-                config_json,
+                &crate::schema_context::config_for_repo(config_json, repo_path)?,
                 guardrail_rules.as_deref(),
             ) {
                 Ok(d) => d,

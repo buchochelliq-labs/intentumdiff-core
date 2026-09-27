@@ -202,7 +202,7 @@ pub(crate) fn generic_text_deletion_value(line: &str, line_no: usize) -> Option<
         // Symmetric with insertions: blank-line churn is layout, not content (issue #15).
         return None;
     }
-    let len = line.chars().count().max(1);
+    let len = line.len().max(1);
     Some(serde_json::json!({
         "change_type": "DELETION",
         "old_node": generic_text_node_json(
@@ -217,8 +217,8 @@ pub(crate) fn generic_text_addition_value(line: &str, line_no: usize) -> Option<
     if trimmed.is_empty() {
         return None;
     }
-    let leading = line.chars().count() - line.trim_start().chars().count();
-    let end = line.trim_end().chars().count();
+    let leading = line.len() - line.trim_start().len();
+    let end = line.trim_end().len();
     Some(serde_json::json!({
         "change_type": "ADDITION",
         "new_node": generic_text_node_json(
@@ -264,10 +264,10 @@ pub(crate) fn generic_text_changes_value(old_source: &str, new_source: &str) -> 
                         "change_type": "MODIFICATION",
                         "old_node": generic_text_node_json(
                             &format!("generic-old-mod-{old_no}"), old_line, old_no, 0,
-                            old_no, old_line.chars().count().max(1)),
+                            old_no, old_line.len().max(1)),
                         "new_node": generic_text_node_json(
                             &format!("generic-new-mod-{new_no}"), new_line, new_no, 0,
-                            new_no, new_line.chars().count().max(1)),
+                            new_no, new_line.len().max(1)),
                         "confidence": 0.98,
                         "description": format!(
                             "Change line {}: {:?} -> {:?}", new_no + 1, old_line, new_line),

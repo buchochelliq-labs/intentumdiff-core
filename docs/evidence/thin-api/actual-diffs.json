@@ -1,0 +1,2357 @@
+[
+  {
+    "id": "heading_rename",
+    "old": "# Old\nsame\n",
+    "new": "# New\nsame\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "0c46c41d4bd20eb361d3f3f6ef3caf2d45ec94ba5c6b24d3babcc80ee47dbf70",
+            "children": []
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "877ee499b1217648038a08b2b32b393c71125cbe07784ab808b4bb7ce71f24c1",
+            "children": []
+          },
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "confidence": 0.9
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "confidence": 0.9,
+          "metadata": {
+            "renamed_section_count": 1
+          },
+          "new_labels": [
+            "# New"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "rule_id": "presentation.markdown_section_heading_rename"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "0c46c41d4bd20eb361d3f3f6ef3caf2d45ec94ba5c6b24d3babcc80ee47dbf70",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "877ee499b1217648038a08b2b32b393c71125cbe07784ab808b4bb7ce71f24c1",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.9,
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "new_labels": [
+            "# New"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "confidence": 0.9,
+          "rule_id": "presentation.markdown_section_heading_rename",
+          "refactoring_kind": null,
+          "metadata": {
+            "renamed_section_count": 1
+          }
+        }
+      ],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "heading_and_body",
+    "old": "# Old\nbefore\n",
+    "new": "# New\nafter\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "27b5e37f32b9c7a5e88a3fc135d91b1c59d5014d8f1295f0d02a903499ee3787",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e11122c63a0234230cc2ca4db6a2400db4a61eba2f7d7678096fa209acf7b550",
+            "children": []
+          },
+          "description": "Change line 1: \"# Old\" -> \"# New\"",
+          "confidence": 0.98,
+          "text_diff": "# [-Old][+New]"
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-1",
+            "node_type": "text_line",
+            "label": "before",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 6
+            },
+            "structural_hash": "84f729023169c01200fe66364a1010a187e5ef17c9c1c47a348c6e2e2259efc7",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-1",
+            "node_type": "text_line",
+            "label": "after",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "b07230aaf8c8392743fac0d8ed4ede46c50d90f3e80f4354fa20d115631595e1",
+            "children": []
+          },
+          "description": "Change line 2: \"before\" -> \"after\"",
+          "confidence": 0.98,
+          "text_diff": "[-b][+aft]e[-fo]r[-e]"
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "27b5e37f32b9c7a5e88a3fc135d91b1c59d5014d8f1295f0d02a903499ee3787",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e11122c63a0234230cc2ca4db6a2400db4a61eba2f7d7678096fa209acf7b550",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 1: \"# Old\" -> \"# New\"",
+          "text_diff": "# [-Old][+New]",
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-1",
+            "node_type": "text_line",
+            "label": "before",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 6
+            },
+            "structural_hash": "84f729023169c01200fe66364a1010a187e5ef17c9c1c47a348c6e2e2259efc7",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-1",
+            "node_type": "text_line",
+            "label": "after",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "b07230aaf8c8392743fac0d8ed4ede46c50d90f3e80f4354fa20d115631595e1",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 2: \"before\" -> \"after\"",
+          "text_diff": "[-b][+aft]e[-fo]r[-e]",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "duplicate_headings",
+    "old": "# A\none\n# B\ntwo\n# A\nthree\n",
+    "new": "# B\ntwo\n# A\none\n# A\nchanged\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "DELETION",
+          "old_node": {
+            "id": "generic-old-1",
+            "node_type": "text_line",
+            "label": "one",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "99d9c45cc3f7ef7dac3f0def58fb3acd789b99898d53419c149794805dc794f8",
+            "children": []
+          },
+          "new_node": null,
+          "description": "Delete line 2: \"one\"",
+          "confidence": 0.98
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-5",
+            "node_type": "text_line",
+            "label": "three",
+            "position": {
+              "start_line": 5,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 5
+            },
+            "structural_hash": "931b3879f8a707698474b807b0efe56e0fd26cdc658b0f8246fc1460fbb93396",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-3",
+            "node_type": "text_line",
+            "label": "one",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "7f051b4cd99a4c97b8774ab496557a964819a2b7257f5ec9c9953f004cfbb68e",
+            "children": []
+          },
+          "description": "Change line 4: \"three\" -> \"one\"",
+          "confidence": 0.98,
+          "text_diff": "[-thr][+on]e[-e]"
+        },
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-5",
+            "node_type": "text_line",
+            "label": "changed",
+            "position": {
+              "start_line": 5,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 7
+            },
+            "structural_hash": "6887dc0671d44b3a6011842c131d62e676ffe91900b0137e5716cc4a94228738",
+            "children": []
+          },
+          "description": "Insert line 6: \"changed\"",
+          "confidence": 0.98
+        },
+        {
+          "change_type": "MOVE",
+          "old_node": {
+            "id": "markdown-old-1",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": []
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": []
+          },
+          "description": "Move Markdown section \"# B\"",
+          "confidence": 0.9
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MOVED_CODE",
+          "raw_change_indices": [
+            3
+          ],
+          "confidence": 0.9,
+          "metadata": {
+            "moved_section_count": 1
+          },
+          "new_labels": [
+            "# B"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "old_labels": [
+            "# B"
+          ],
+          "old_node_ids": [
+            "markdown-old-1"
+          ],
+          "rule_id": "presentation.markdown_section_move"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "DELETION",
+          "old_node": {
+            "id": "generic-old-1",
+            "node_type": "text_line",
+            "label": "one",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "99d9c45cc3f7ef7dac3f0def58fb3acd789b99898d53419c149794805dc794f8",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": null,
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Delete line 2: \"one\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-5",
+            "node_type": "text_line",
+            "label": "three",
+            "position": {
+              "start_line": 5,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 5
+            },
+            "structural_hash": "931b3879f8a707698474b807b0efe56e0fd26cdc658b0f8246fc1460fbb93396",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-3",
+            "node_type": "text_line",
+            "label": "one",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "7f051b4cd99a4c97b8774ab496557a964819a2b7257f5ec9c9953f004cfbb68e",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 4: \"three\" -> \"one\"",
+          "text_diff": "[-thr][+on]e[-e]",
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-5",
+            "node_type": "text_line",
+            "label": "changed",
+            "position": {
+              "start_line": 5,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 7
+            },
+            "structural_hash": "6887dc0671d44b3a6011842c131d62e676ffe91900b0137e5716cc4a94228738",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Insert line 6: \"changed\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "MOVE",
+          "old_node": {
+            "id": "markdown-old-1",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.9,
+          "description": "Move Markdown section \"# B\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MOVED_CODE",
+          "raw_change_indices": [
+            3
+          ],
+          "old_labels": [
+            "# B"
+          ],
+          "new_labels": [
+            "# B"
+          ],
+          "old_node_ids": [
+            "markdown-old-1"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "confidence": 0.9,
+          "rule_id": "presentation.markdown_section_move",
+          "refactoring_kind": null,
+          "metadata": {
+            "moved_section_count": 1
+          }
+        }
+      ],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "duplicate_bodies",
+    "old": "# A\nsame\n# B\nsame\n",
+    "new": "# C\nsame\n# B\nsame\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "# A",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 3
+            },
+            "structural_hash": "e2100e3264a1d50b3b1e42d1eb4fd5e653a440cba54afdacaf72daa5972363cf",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "# C",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 3
+            },
+            "structural_hash": "1f17ed49f924730b99fbc761c791c13d19ed603a9f770293370f693e25567438",
+            "children": []
+          },
+          "description": "Change line 1: \"# A\" -> \"# C\"",
+          "confidence": 0.98,
+          "text_diff": "# [-A][+C]"
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "# A",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 3
+            },
+            "structural_hash": "e2100e3264a1d50b3b1e42d1eb4fd5e653a440cba54afdacaf72daa5972363cf",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "# C",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 3
+            },
+            "structural_hash": "1f17ed49f924730b99fbc761c791c13d19ed603a9f770293370f693e25567438",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 1: \"# A\" -> \"# C\"",
+          "text_diff": "# [-A][+C]",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "insert_section",
+    "old": "# A\none\n# B\ntwo\n",
+    "new": "# New\nzero\n# A\none\n# B\ntwo\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-0",
+            "node_type": "text_line",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e11122c63a0234230cc2ca4db6a2400db4a61eba2f7d7678096fa209acf7b550",
+            "children": []
+          },
+          "description": "Insert line 1: \"# New\"",
+          "confidence": 0.98
+        },
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-1",
+            "node_type": "text_line",
+            "label": "zero",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "4f70bf81abded92c18617558bd0bb5a6d411ba8188c1e0f69c7fdf2a9fabba4f",
+            "children": []
+          },
+          "description": "Insert line 2: \"zero\"",
+          "confidence": 0.98
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-0",
+            "node_type": "text_line",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e11122c63a0234230cc2ca4db6a2400db4a61eba2f7d7678096fa209acf7b550",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Insert line 1: \"# New\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "ADDITION",
+          "old_node": null,
+          "new_node": {
+            "id": "generic-new-1",
+            "node_type": "text_line",
+            "label": "zero",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "4f70bf81abded92c18617558bd0bb5a6d411ba8188c1e0f69c7fdf2a9fabba4f",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Insert line 2: \"zero\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "fenced_example",
+    "old": "```\n# Example\nold\n```\n",
+    "new": "```\n# Example\nnew\n```\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-2",
+            "node_type": "text_line",
+            "label": "old",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 3
+            },
+            "structural_hash": "cb396e155ef6815ad6d9ec0344ee5562cfa3209ef9a5c27f8d7b9ee0b652c6f6",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-2",
+            "node_type": "text_line",
+            "label": "new",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 3
+            },
+            "structural_hash": "6684e053fc856fb40da7625bfc3d86bd1faf892f70e55bc9940d5b6902a9c61d",
+            "children": []
+          },
+          "description": "Change line 3: \"old\" -> \"new\"",
+          "confidence": 0.98,
+          "text_diff": "[-old][+new]"
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-2",
+            "node_type": "text_line",
+            "label": "old",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 3
+            },
+            "structural_hash": "cb396e155ef6815ad6d9ec0344ee5562cfa3209ef9a5c27f8d7b9ee0b652c6f6",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-2",
+            "node_type": "text_line",
+            "label": "new",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 3
+            },
+            "structural_hash": "6684e053fc856fb40da7625bfc3d86bd1faf892f70e55bc9940d5b6902a9c61d",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 3: \"old\" -> \"new\"",
+          "text_diff": "[-old][+new]",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "unrelated_edit",
+    "old": "# Old\nsame\n# Other\nbefore\n",
+    "new": "# New\nsame\n# Other\nafter\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-3",
+            "node_type": "text_line",
+            "label": "before",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 6
+            },
+            "structural_hash": "f2a2bd55f52c8654cc6de96abc5b66550f14a82f4ac6cf3f76980d64c9a4d39e",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-3",
+            "node_type": "text_line",
+            "label": "after",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 5
+            },
+            "structural_hash": "54ee596852591a5bb39d36c5a96bae68c0ad3e2a034d340e64b2b13038c89b2e",
+            "children": []
+          },
+          "description": "Change line 4: \"before\" -> \"after\"",
+          "confidence": 0.98,
+          "text_diff": "[-b][+aft]e[-fo]r[-e]"
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "0c46c41d4bd20eb361d3f3f6ef3caf2d45ec94ba5c6b24d3babcc80ee47dbf70",
+            "children": []
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "877ee499b1217648038a08b2b32b393c71125cbe07784ab808b4bb7ce71f24c1",
+            "children": []
+          },
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "confidence": 0.9
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            1
+          ],
+          "confidence": 0.9,
+          "metadata": {
+            "renamed_section_count": 1
+          },
+          "new_labels": [
+            "# New"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "rule_id": "presentation.markdown_section_heading_rename"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-3",
+            "node_type": "text_line",
+            "label": "before",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 6
+            },
+            "structural_hash": "f2a2bd55f52c8654cc6de96abc5b66550f14a82f4ac6cf3f76980d64c9a4d39e",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-3",
+            "node_type": "text_line",
+            "label": "after",
+            "position": {
+              "start_line": 3,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 5
+            },
+            "structural_hash": "54ee596852591a5bb39d36c5a96bae68c0ad3e2a034d340e64b2b13038c89b2e",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 4: \"before\" -> \"after\"",
+          "text_diff": "[-b][+aft]e[-fo]r[-e]",
+          "old_index": null,
+          "new_index": null
+        },
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "0c46c41d4bd20eb361d3f3f6ef3caf2d45ec94ba5c6b24d3babcc80ee47dbf70",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 4
+            },
+            "structural_hash": "877ee499b1217648038a08b2b32b393c71125cbe07784ab808b4bb7ce71f24c1",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.9,
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            1
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "new_labels": [
+            "# New"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "confidence": 0.9,
+          "rule_id": "presentation.markdown_section_heading_rename",
+          "refactoring_kind": null,
+          "metadata": {
+            "renamed_section_count": 1
+          }
+        }
+      ],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "unicode",
+    "old": "# Café\nété\n",
+    "new": "# Café\nhiver\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-1",
+            "node_type": "text_line",
+            "label": "été",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "9d87dcb89241993d780c677baa0606a381512b3eaf518098d25a8907c3400ef7",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-1",
+            "node_type": "text_line",
+            "label": "hiver",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "17d94cf5c739ab84ee5024e967f5729ddc90647620c0e26177bca3e9098500b9",
+            "children": []
+          },
+          "description": "Change line 2: \"été\" -> \"hiver\"",
+          "confidence": 0.98,
+          "text_diff": "[-été][+hiver]"
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-1",
+            "node_type": "text_line",
+            "label": "été",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "9d87dcb89241993d780c677baa0606a381512b3eaf518098d25a8907c3400ef7",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-1",
+            "node_type": "text_line",
+            "label": "hiver",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "17d94cf5c739ab84ee5024e967f5729ddc90647620c0e26177bca3e9098500b9",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 2: \"été\" -> \"hiver\"",
+          "text_diff": "[-été][+hiver]",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "move-not-trivia",
+    "old": "# A\none\n# B\ntwo\n",
+    "new": "# B\ntwo\n# A\none\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MOVE",
+          "old_node": {
+            "id": "markdown-old-1",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": []
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": []
+          },
+          "description": "Move Markdown section \"# B\"",
+          "confidence": 0.9
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MOVED_CODE",
+          "raw_change_indices": [
+            0
+          ],
+          "confidence": 0.9,
+          "metadata": {
+            "moved_section_count": 1
+          },
+          "new_labels": [
+            "# B"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "old_labels": [
+            "# B"
+          ],
+          "old_node_ids": [
+            "markdown-old-1"
+          ],
+          "rule_id": "presentation.markdown_section_move"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MOVE",
+          "old_node": {
+            "id": "markdown-old-1",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 2,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# B",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 3
+            },
+            "structural_hash": "5855bdbe102fa2aac8b997f50847e9ffb715676508c19a20931cfc152a75f992",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.9,
+          "description": "Move Markdown section \"# B\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MOVED_CODE",
+          "raw_change_indices": [
+            0
+          ],
+          "old_labels": [
+            "# B"
+          ],
+          "new_labels": [
+            "# B"
+          ],
+          "old_node_ids": [
+            "markdown-old-1"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "confidence": 0.9,
+          "rule_id": "presentation.markdown_section_move",
+          "refactoring_kind": null,
+          "metadata": {
+            "moved_section_count": 1
+          }
+        }
+      ],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "unicode-byte-columns",
+    "old": "été\n",
+    "new": "hiver\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "été",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e200a6abf9a374ccd6bfd19f4a1402baf21680357f77eb5335d06973bc165bc3",
+            "children": []
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "hiver",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "f901c44d008ddc27afe52e54349d1e1dc0444b967b7e7469834864dfc7b5d5cf",
+            "children": []
+          },
+          "description": "Change line 1: \"été\" -> \"hiver\"",
+          "confidence": 0.98,
+          "text_diff": "[-été][+hiver]"
+        }
+      ],
+      "change_groups": [],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "generic-old-mod-0",
+            "node_type": "text_line",
+            "label": "été",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "e200a6abf9a374ccd6bfd19f4a1402baf21680357f77eb5335d06973bc165bc3",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "generic-new-mod-0",
+            "node_type": "text_line",
+            "label": "hiver",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 5
+            },
+            "structural_hash": "f901c44d008ddc27afe52e54349d1e1dc0444b967b7e7469834864dfc7b5d5cf",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.98,
+          "description": "Change line 1: \"été\" -> \"hiver\"",
+          "text_diff": "[-été][+hiver]",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "unicode-section-byte-columns",
+    "old": "# Old\nété\n",
+    "new": "# New\nété\n",
+    "rust": {
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "83d76e11d868dc6af62898eec3b95a09c2868f6cb20ec23c2012936ec7656da8",
+            "children": []
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "16bdaa1bc42f0dedd3e734ce424cfe63a3f7cc1559ff82d55a3273723e9d5e23",
+            "children": []
+          },
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "confidence": 0.9
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "confidence": 0.9,
+          "metadata": {
+            "renamed_section_count": 1
+          },
+          "new_labels": [
+            "# New"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "rule_id": "presentation.markdown_section_heading_rename"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "markdown-old-0",
+            "node_type": "markdown_section",
+            "label": "# Old",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "83d76e11d868dc6af62898eec3b95a09c2868f6cb20ec23c2012936ec7656da8",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "markdown-new-0",
+            "node_type": "markdown_section",
+            "label": "# New",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 5
+            },
+            "structural_hash": "16bdaa1bc42f0dedd3e734ce424cfe63a3f7cc1559ff82d55a3273723e9d5e23",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 0.9,
+          "description": "Rename Markdown section \"# Old\" -> \"# New\"",
+          "text_diff": null,
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "old_labels": [
+            "# Old"
+          ],
+          "new_labels": [
+            "# New"
+          ],
+          "old_node_ids": [
+            "markdown-old-0"
+          ],
+          "new_node_ids": [
+            "markdown-new-0"
+          ],
+          "confidence": 0.9,
+          "rule_id": "presentation.markdown_section_heading_rename",
+          "refactoring_kind": null,
+          "metadata": {
+            "renamed_section_count": 1
+          }
+        }
+      ],
+      "old_filename": "doc.md",
+      "new_filename": "doc.md",
+      "language": "generic",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "generic_text_review_native_v1",
+          "stage": "native_live_generic",
+          "used": true
+        },
+        "semantic_contract": "generic_text_review_native_v1"
+      }
+    }
+  },
+  {
+    "id": "schema-custom-identity",
+    "old": "{\n \"acmeApiVersion\": 1,\n \"routes\": [\n  {\n   \"route\": \"checkout\",\n   \"handler\": \"pay_v1\"\n  },\n  {\n   \"route\": \"search\",\n   \"handler\": \"search_v1\"\n  }\n ]\n}",
+    "new": "{\n \"acmeApiVersion\": 1,\n \"routes\": [\n  {\n   \"route\": \"search\",\n   \"handler\": \"search_v1\"\n  },\n  {\n   \"route\": \"checkout\",\n   \"handler\": \"pay_v2\"\n  }\n ]\n}",
+    "rust": {
+      "old_filename": "service.acme.json",
+      "new_filename": "service.acme.json",
+      "language": "json",
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "0.0.1.1.0.1.1",
+            "node_type": "string",
+            "label": "pay_v1",
+            "position": {
+              "start_line": 5,
+              "start_col": 14,
+              "end_line": 5,
+              "end_col": 22
+            },
+            "structural_hash": "65cc65a4fb97805b73feb5fb50217a57fa1b6c6d04ea6d19a99a2dc8d91d6f5e",
+            "children": []
+          },
+          "new_node": {
+            "id": "0.0.1.1.1.1.1",
+            "node_type": "string",
+            "label": "pay_v2",
+            "position": {
+              "start_line": 9,
+              "start_col": 14,
+              "end_line": 9,
+              "end_col": 22
+            },
+            "structural_hash": "01799b7697f9c1f242dc2192615e6018429cf206ea7925ba63558808f37a7597",
+            "children": []
+          },
+          "description": "Update moved string('pay_v1') -> string('pay_v2')",
+          "confidence": 1.0,
+          "text_diff": "pay_v1 -> pay_v2"
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "NOISE_SUPPRESSED",
+          "raw_change_indices": [],
+          "confidence": 0.8,
+          "metadata": {
+            "suppressed_count": 2
+          },
+          "new_labels": [],
+          "new_node_ids": [],
+          "old_labels": [],
+          "old_node_ids": [],
+          "rule_id": "refinement.suppress_low_signal_reorders"
+        },
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "confidence": 1.0,
+          "metadata": {
+            "index_space": "final_changes"
+          },
+          "new_labels": [
+            "pay_v2"
+          ],
+          "new_node_ids": [
+            "0.0.1.1.1.1.1"
+          ],
+          "old_labels": [
+            "pay_v1"
+          ],
+          "old_node_ids": [
+            "0.0.1.1.0.1.1"
+          ],
+          "rule_id": "presentation.final_meaningful_group"
+        }
+      ],
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "is_fallback": false,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "rust_finalize_review_v1",
+          "stage": "per_stage_finalize_routing_native_live",
+          "used": true
+        },
+        "schema": {
+          "errors": [],
+          "identity_fields": [
+            "route"
+          ],
+          "provider_id": "user:acme-service-config",
+          "status": "user-profile"
+        },
+        "semantic_contract": "rust_finalize_review_v1"
+      },
+      "gitignore_excluded": false,
+      "guardrail_violations": [],
+      "llm_summary": "",
+      "parse_errors": []
+    },
+    "python": {
+      "guardrail_violations": [],
+      "changes": [
+        {
+          "change_type": "MODIFICATION",
+          "old_node": {
+            "id": "0.0.1.1.0.1.1",
+            "node_type": "string",
+            "label": "pay_v1",
+            "position": {
+              "start_line": 5,
+              "start_col": 14,
+              "end_line": 5,
+              "end_col": 22
+            },
+            "structural_hash": "65cc65a4fb97805b73feb5fb50217a57fa1b6c6d04ea6d19a99a2dc8d91d6f5e",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "new_node": {
+            "id": "0.0.1.1.1.1.1",
+            "node_type": "string",
+            "label": "pay_v2",
+            "position": {
+              "start_line": 9,
+              "start_col": 14,
+              "end_line": 9,
+              "end_col": 22
+            },
+            "structural_hash": "01799b7697f9c1f242dc2192615e6018429cf206ea7925ba63558808f37a7597",
+            "children": [],
+            "parent_type": null,
+            "type_info": null,
+            "facts": null
+          },
+          "refactoring_kind": null,
+          "confidence": 1.0,
+          "description": "Update moved string('pay_v1') -> string('pay_v2')",
+          "text_diff": "pay_v1 -> pay_v2",
+          "old_index": null,
+          "new_index": null
+        }
+      ],
+      "change_groups": [
+        {
+          "kind": "NOISE_SUPPRESSED",
+          "raw_change_indices": [],
+          "old_labels": [],
+          "new_labels": [],
+          "old_node_ids": [],
+          "new_node_ids": [],
+          "confidence": 0.8,
+          "rule_id": "refinement.suppress_low_signal_reorders",
+          "refactoring_kind": null,
+          "metadata": {
+            "suppressed_count": 2
+          }
+        },
+        {
+          "kind": "MEANINGFUL_CHANGE",
+          "raw_change_indices": [
+            0
+          ],
+          "old_labels": [
+            "pay_v1"
+          ],
+          "new_labels": [
+            "pay_v2"
+          ],
+          "old_node_ids": [
+            "0.0.1.1.0.1.1"
+          ],
+          "new_node_ids": [
+            "0.0.1.1.1.1.1"
+          ],
+          "confidence": 1.0,
+          "rule_id": "presentation.final_meaningful_group",
+          "refactoring_kind": null,
+          "metadata": {
+            "index_space": "final_changes"
+          }
+        }
+      ],
+      "old_filename": "service.acme.json",
+      "new_filename": "service.acme.json",
+      "language": "json",
+      "has_semantic_changes": true,
+      "is_style_only": false,
+      "parse_errors": [],
+      "llm_summary": "",
+      "gitignore_excluded": false,
+      "is_fallback": false,
+      "staging_status": null,
+      "metadata": {
+        "engine_owner": "rust",
+        "file_lifecycle": "modified",
+        "rust_core": {
+          "engine": "rust_finalize_review_v1",
+          "stage": "per_stage_finalize_routing",
+          "used": true
+        },
+        "schema": {
+          "available": false,
+          "detected": true,
+          "identity_fields": [
+            "route"
+          ],
+          "provider_id": "user:acme-service-config",
+          "source_url": null,
+          "status": "user-profile"
+        },
+        "semantic_contract": "rust_finalize_review_v1",
+        "engine_telemetry": {
+          "schema_version": 1,
+          "calls": [
+            {
+              "plugin": "/workspace/scratch/fed8dfeecaeb/intentumdiff-python/src/intentumdiff/wasm/json_parser.wasm",
+              "function": "process",
+              "engine_owner": "python",
+              "engine": "python_wasmtime_plugin_host",
+              "provenance": "first_party_wasm",
+              "call_count": 2,
+              "elapsed_ms": 0.695,
+              "fuel_budget": 100000000,
+              "fuel_consumed": 1702349,
+              "total_fuel_consumed": 3404698,
+              "max_fuel_used_percent": 1.702,
+              "language": "json",
+              "filename": "service.acme.json",
+              "input_bytes": 306,
+              "input_lines": 26,
+              "statuses": {
+                "ok": 2
+              },
+              "trusted": true
+            },
+            {
+              "plugin": "/workspace/scratch/fed8dfeecaeb/intentumdiff-python/src/intentumdiff/wasm/json_parser.wasm",
+              "function": "detect-language",
+              "engine_owner": "python",
+              "engine": "python_wasmtime_plugin_host",
+              "provenance": "first_party_wasm",
+              "call_count": 1,
+              "elapsed_ms": 0.532,
+              "fuel_budget": 100000000,
+              "fuel_consumed": 3064,
+              "total_fuel_consumed": 3064,
+              "max_fuel_used_percent": 0.003,
+              "language": null,
+              "filename": null,
+              "input_bytes": 0,
+              "input_lines": 0,
+              "statuses": {
+                "ok": 1
+              },
+              "trusted": true
+            },
+            {
+              "plugin": "/workspace/scratch/fed8dfeecaeb/intentumdiff-python/src/intentumdiff/wasm/json_parser.wasm",
+              "function": "grammar-id",
+              "engine_owner": "python",
+              "engine": "python_wasmtime_plugin_host",
+              "provenance": "first_party_wasm",
+              "call_count": 1,
+              "elapsed_ms": 0.161,
+              "fuel_budget": 100000000,
+              "fuel_consumed": 421,
+              "total_fuel_consumed": 421,
+              "max_fuel_used_percent": 0.0,
+              "language": null,
+              "filename": null,
+              "input_bytes": 0,
+              "input_lines": 0,
+              "statuses": {
+                "ok": 1
+              },
+              "trusted": true
+            },
+            {
+              "plugin": "/workspace/scratch/fed8dfeecaeb/intentumdiff-python/src/intentumdiff/wasm/json_parser.wasm",
+              "function": "get-parser-mode",
+              "engine_owner": "python",
+              "engine": "python_wasmtime_plugin_host",
+              "provenance": "first_party_wasm",
+              "call_count": 1,
+              "elapsed_ms": 0.061,
+              "fuel_budget": 100000000,
+              "fuel_consumed": 9,
+              "total_fuel_consumed": 9,
+              "max_fuel_used_percent": 0.0,
+              "language": null,
+              "filename": null,
+              "input_bytes": 0,
+              "input_lines": 0,
+              "statuses": {
+                "ok": 1
+              },
+              "trusted": true
+            }
+          ],
+          "fuel_hotspots": []
+        },
+        "content_type": {
+          "mime": "text/plain",
+          "extension": "",
+          "category": "text",
+          "is_text": true
+        }
+      }
+    }
+  },
+  {
+    "id": "modified-empty-old",
+    "handler": "infer_file_lifecycle",
+    "args": [
+      "",
+      "x",
+      "modified"
+    ],
+    "expected": "modified",
+    "rust": "modified",
+    "python": "modified"
+  },
+  {
+    "id": "modified-empty-new",
+    "handler": "infer_file_lifecycle",
+    "args": [
+      "x",
+      "",
+      "modified"
+    ],
+    "expected": "modified",
+    "rust": "modified",
+    "python": "modified"
+  },
+  {
+    "id": "glob-[a&&b].json",
+    "handler": "glob_profile",
+    "pattern": "[a&&b].json",
+    "filename": "a.json",
+    "expected": true,
+    "rust": true,
+    "python": true
+  },
+  {
+    "id": "glob-[a~~b].json",
+    "handler": "glob_profile",
+    "pattern": "[a~~b].json",
+    "filename": "~.json",
+    "expected": true,
+    "rust": true,
+    "python": true
+  },
+  {
+    "id": "glob-[a--c].json",
+    "handler": "glob_profile",
+    "pattern": "[a--c].json",
+    "filename": "c.json",
+    "expected": true,
+    "rust": true,
+    "python": true
+  }
+]

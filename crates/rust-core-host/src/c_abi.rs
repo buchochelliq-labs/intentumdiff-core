@@ -250,6 +250,31 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
     // FileNotFoundError the git readers raise).
     let outcome: Result<String, String> = (|| match name {
         "version" => Ok(crate::VERSION.to_owned()),
+        "review_text" => crate::review_text(arg_str(args,0,"old_source")?,arg_str(args,1,"new_source")?,
+            arg_str(args,2,"old_filename")?,arg_str(args,3,"new_filename")?).map(|v|v.to_string()),
+        "reconcile_markdown" => serde_json::to_string(&crate::markdown_review::reconcile(
+            arg_json(args,0,"presentation")?,arg_str(args,1,"old_source")?,arg_str(args,2,"new_source")?,
+            arg_str(args,3,"old_filename")?,arg_str(args,4,"new_filename")?,arg_json(args,5,"phase")?
+        )?).map_err(|e|e.to_string()),
+        "compile_context" => value_request(args, crate::compile_context::request),
+        "schema_profiles" => crate::schema_profiles::schema_profiles_impl(arg_str(args,0,"request_json")?),
+        "infer_file_lifecycle" => Ok(json!(crate::lifecycle::infer(
+            arg_str(args,0,"old_source")?,arg_str(args,1,"new_source")?,arg_opt_str(args,2,"status")?
+        )).to_string()),
+        "finalize_file_lifecycle" => crate::lifecycle::finalize(
+            arg_json(args,0,"diff")?,arg_json(args,1,"lifecycle")?
+        ).map(|v|v.to_string()),
+        "host_strip_trivia" => crate::host_utils::strip_trivia(
+            arg_str(args,0,"tree")?, &arg_json::<Vec<String>>(args,1,"trivia_types")?,
+            &args.get(2).filter(|v|!v.is_null()).map(|v|serde_json::from_value(v.clone())).transpose()
+                .map_err(|e|format!("host limits: {e}"))?.unwrap_or_default()
+        ).map(|v|v.to_string()),
+        "host_structural_hash" => crate::host_utils::structural_hash(
+            arg_str(args,0,"tree")?,
+            &args.get(1).filter(|v|!v.is_null()).map(|v|serde_json::from_value(v.clone())).transpose()
+                .map_err(|e|format!("host limits: {e}"))?.unwrap_or_default()
+        ).map(|v|json!(v).to_string()),
+
         "live_capabilities" => Ok(crate::live_server::live_capabilities_impl()),
         "live_limits" => Ok(crate::live_server::live_limits_impl()),
         "live_normalise_request_path" => Ok(crate::live_server::live_normalise_request_path_impl(
@@ -824,6 +849,38 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn migration_lifecycle_preserves_meaningful_evidence() {
+        let diff = json!({"changes":[{"description":"new source"}],
+            "change_groups":[{"kind":"IGNORED_STYLE"},{"kind":"MEANINGFUL_CHANGE"}],
+            "is_style_only":true,"has_semantic_changes":false,"metadata":{"other":1}});
+        let added = call("finalize_file_lifecycle", json!([diff, "added"]));
+        assert_eq!(added["ok"], true, "{added}");
+        assert_eq!(added["result"]["change_groups"],json!([{"kind":"MEANINGFUL_CHANGE"}]));
+        assert_eq!(added["result"]["has_semantic_changes"],true);
+        assert_eq!(added["result"]["is_style_only"],false);
+        assert_eq!(added["result"]["metadata"]["other"],1);
+        let modified = call("finalize_file_lifecycle", json!([diff, "modified"]));
+        assert_eq!(modified["result"]["change_groups"],diff["change_groups"]);
+        assert_eq!(call("infer_file_lifecycle", json!(["", "", "added"]))["result"], "added");
+        assert_eq!(call("infer_file_lifecycle", json!(["", "", null]))["result"], "modified");
+        assert_eq!(call("finalize_file_lifecycle", json!([diff, "nonsense"]))["ok"],false);
+    }
+
+    #[test]
+    fn migration_host_utils_have_one_tree_contract() {
+        let root = json!({"type":"comment","text":"comment","children":[]}).to_string();
+        assert_eq!(call("host_strip_trivia", json!([root,["comment"]])),json!({"ok":true,"result":null}));
+        let cst=json!({"type":"identifier","text":"café","children":[]}).to_string();
+        let semantic=json!({"node_type":"identifier","label":"café","children":[]}).to_string();
+        let a=call("host_structural_hash",json!([cst]));
+        let b=call("host_structural_hash",json!([semantic]));
+        assert_eq!(a["ok"],true,"{a}");
+        assert_eq!(a,b);
+        assert_eq!(call("host_structural_hash",json!(["{"]))["ok"],false);
+        assert_eq!(call("host_strip_trivia",json!(["{",[]]))["ok"],false);
+    }
     use super::*;
     use std::ffi::CString;
 
@@ -1354,5 +1411,49 @@ mod tests {
         assert_eq!(env["ok"], false);
         // A NULL/malformed call at the FFI boundary is classified bad_request.
         assert_eq!(env["error_type"], "bad_request");
+    }
+}
+
+#[cfg(test)]
+mod markdown_migration_tests {
+    use super::*;
+    #[test]
+    fn native_generic_markdown_reconciles_heading_rename() {
+        let diff=crate::native_generic_text_diff("generic","# Old\nsame\n","# New\nsame\n","a.md","a.md").unwrap();
+        assert!(diff["changes"].as_array().unwrap().iter().any(|c|c["description"].as_str().unwrap_or("").starts_with("Rename Markdown section")),"{diff}");
+    }
+    #[test]
+    fn fenced_examples_are_not_document_sections() {
+        assert!(crate::markdown_sections("```\n# Not a section\nvalue\n```\n","old").is_empty());
+    }
+}
+
+#[cfg(test)]
+mod migration_corpus {
+    use super::*;
+    #[test]
+    fn shared_markdown_output_validity_corpus() {
+        let cases:Value=serde_json::from_str(include_str!("../../../tests/fixtures/migration/markdown.json")).unwrap();
+        for case in cases.as_array().unwrap(){
+            let args=json!([case["old"],case["new"],"doc.md","doc.md"]);
+            let env:Value=serde_json::from_str(&dispatch("review_text",args.as_array().unwrap())).unwrap();
+            assert_eq!(env["ok"],true,"{}: {env}",case["id"]);
+            let diff=&env["result"];let changes=diff["changes"].as_array().unwrap();
+            let labels:Vec<&str>=changes.iter().flat_map(|c|[c["old_node"]["label"].as_str(),c["new_node"]["label"].as_str()]).flatten().collect();
+            for required in case["required_labels"].as_array().unwrap(){assert!(labels.contains(&required.as_str().unwrap()),"{} missing {required}: {diff}",case["id"]);}
+            if let Some(count)=case["exact_changes"].as_u64(){assert_eq!(changes.len() as u64,count,"{}",case["id"]);}
+            if let Some(count)=case["moves"].as_u64(){assert_eq!(changes.iter().filter(|c|c["change_type"]=="MOVE").count() as u64,count,"{}",case["id"]);}
+            assert_eq!(diff["has_semantic_changes"],true);assert_eq!(diff["is_style_only"],false);
+            if let Some(columns) = case["end_columns"].as_array() {
+                assert_eq!(changes[0]["old_node"]["position"]["end_col"], columns[0]);
+                assert_eq!(changes[0]["new_node"]["position"]["end_col"], columns[1]);
+            }
+            if case["forbid_ignored_style"] == true { assert!(diff["metadata"].get("ignored_style_changes").is_none(), "{diff}"); }
+            if let Some(forbidden) = case["forbidden_group_kinds"].as_array() {
+                for group in diff["change_groups"].as_array().unwrap() { assert!(!forbidden.contains(&group["kind"]), "{diff}"); }
+            }
+
+            for group in diff["change_groups"].as_array().unwrap(){for index in group["raw_change_indices"].as_array().unwrap(){assert!(index.as_u64().unwrap()<(changes.len() as u64));}}
+        }
     }
 }
