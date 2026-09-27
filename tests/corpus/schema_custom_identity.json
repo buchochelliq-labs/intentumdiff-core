@@ -1,0 +1,51 @@
+{
+  "filename": "service.acme.json",
+  "language": "json",
+  "descriptor": {
+    "language_id": "acme-service-config",
+    "match": {
+      "filename_patterns": [
+        "service.acme.json"
+      ],
+      "root_markers": [
+        "acmeApiVersion"
+      ]
+    },
+    "keyed_arrays": {
+      "/routes": [
+        "route"
+      ]
+    }
+  },
+  "old": "{\n \"acmeApiVersion\": 1,\n \"routes\": [\n  {\n   \"route\": \"checkout\",\n   \"handler\": \"pay_v1\"\n  },\n  {\n   \"route\": \"search\",\n   \"handler\": \"search_v1\"\n  }\n ]\n}",
+  "new": "{\n \"acmeApiVersion\": 1,\n \"routes\": [\n  {\n   \"route\": \"search\",\n   \"handler\": \"search_v1\"\n  },\n  {\n   \"route\": \"checkout\",\n   \"handler\": \"pay_v2\"\n  }\n ]\n}",
+  "expected": {
+    "changes": [
+      {
+        "change_type": "MODIFICATION",
+        "old_label": "pay_v1",
+        "new_label": "pay_v2",
+        "old_start": [
+          5,
+          14
+        ],
+        "new_start": [
+          9,
+          14
+        ]
+      }
+    ],
+    "forbidden_change_types": [
+      "ADDITION",
+      "DELETION",
+      "MOVE"
+    ],
+    "has_semantic_changes": true,
+    "is_style_only": false,
+    "meaningful_group_indices": [
+      [
+        0
+      ]
+    ]
+  }
+}

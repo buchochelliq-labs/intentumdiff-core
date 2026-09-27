@@ -31,6 +31,12 @@ mod registry;
 // pub: the live-server protocol + handler impls are the engine's binding-independent public
 // API — the native live-server binary (crates/live-server, #100) links them feature-off.
 pub mod c_abi;
+pub mod api;
+pub mod lifecycle;
+pub mod compile_context;
+pub mod schema_profiles;
+mod schema_context;
+pub mod host_utils;
 pub mod live_server;
 mod lsp_enrich;
 pub mod lsp_server_shapes;
@@ -329,7 +335,7 @@ mod text_review_generic;
 use text_review_generic::*;
 
 
-mod markdown_review;
+pub mod markdown_review;
 use markdown_review::*;
 
 
@@ -2814,6 +2820,7 @@ impl PhaseProbe {
 }
 
 struct ParserHostState {
+    host_error: Option<String>,
     table: ResourceTable,
     ctx: WasiCtx,
 }
@@ -2843,6 +2850,7 @@ static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserCo
 impl ParserHostState {
     fn new() -> Self {
         Self {
+            host_error: None,
             table: ResourceTable::new(),
             ctx: WasiCtxBuilder::new().build(),
         }
@@ -2860,26 +2868,17 @@ impl WasiView for ParserHostState {
 
 impl parser_plugin::intentdiff::plugin::host_utils::Host for ParserHostState {
     fn strip_trivia(&mut self, cst_json: String, trivia_types: Vec<String>) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            return json!({"error": "host-utils input exceeds byte limit"}).to_string();
+        match host_utils::strip_trivia(&cst_json, &trivia_types, &host_utils::Limits::default()) {
+            Ok(value) => value.to_string(),
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        if let Err(detail) = check_trivia_type_limit(&trivia_types) {
-            return json!({"error": detail}).to_string();
-        }
-        strip_trivia_json(&cst_json, &trivia_types).unwrap_or(cst_json)
     }
 
     fn structural_hash(&mut self, cst_json: String) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            let mut hasher = Sha256::new();
-            hasher.update(b"host-utils input exceeds byte limit");
-            return hex::encode(hasher.finalize());
+        match host_utils::structural_hash(&cst_json, &host_utils::Limits::default()) {
+            Ok(value) => value,
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        semantic_hash_json(&cst_json).unwrap_or_else(|_| {
-            let mut hasher = Sha256::new();
-            hasher.update(cst_json.as_bytes());
-            hex::encode(hasher.finalize())
-        })
     }
 
     fn log(&mut self, _level: String, _message: String) {}
@@ -4933,6 +4932,12 @@ fn empty_semantic_tree_json(language: &str) -> String {
 /// the stage-12 zero-change style evidence mirrored (differ.py:1918). The audit
 /// NOISE_SUPPRESSED group is omitted (it only records the discarded finalize's churn count,
 /// which this path never computes).
+/// Review text (including Markdown presentation) directly from the public Rust API.
+/// Language-aware consumers can use `live_server::live_diff_contents_impl` with parser context.
+pub fn review_text(old_source:&str,new_source:&str,old_filename:&str,new_filename:&str)->Result<Value,String>{
+    native_generic_text_diff("generic",old_source,new_source,old_filename,new_filename)
+}
+
 fn native_generic_text_diff(
     language: &str,
     old_source: &str,
@@ -4973,6 +4978,17 @@ fn native_generic_text_diff(
             }
         }
     }
+    let presented = markdown_review::reconcile(
+        markdown_review::Presentation { changes, change_groups, ignored_style_changes:metadata["ignored_style_changes"].as_array().cloned().unwrap_or_default() },
+        old_source,new_source,old_filename,new_filename,markdown_review::ReviewPhase::All,
+    )?;
+    metadata.as_object_mut().unwrap().remove("ignored_style_changes");
+    if !presented.ignored_style_changes.is_empty() {
+        metadata["ignored_style_changes"] = json!(presented.ignored_style_changes);
+    }
+    let changes=presented.changes;
+    let change_groups=presented.change_groups;
+    let is_style_only=is_style_only && changes.is_empty();
     let has_semantic_changes = !changes.is_empty();
     let mut diff = json!({
         "old_filename": old_filename,
@@ -5167,15 +5183,15 @@ pub(crate) fn native_wasm_single_diff(
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
         .map_err(|exc| format!("literal enrich (new): {exc}"))?;
-    // Stage-7b profile-label enrichment (differ.py:1611): fill keyed/path/query/statement/resource
-    // identity labels from children BEFORE the diff, so e.g. a sql SELECT `term` folds its field
-    // identity into one node (otherwise the field surfaces as a spurious second change). No-op for
-    // non-profile languages. The differ enriches the trees here too, so finalize sees the same
-    // input. identity_fields=None matches the default (no-schema) case the differ passes for
-    // json/yaml; a configured schema's identity fields aren't threaded to the live path yet.
-    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, None)
+    // Resolve schema identities per file, for both native and binding consumers.
+    let schema_config: Value = serde_json::from_str(config_json).unwrap_or_else(|_|json!({}));
+    let (identity_fields, schema_metadata, xml_dialects) = schema_context::resolve(
+        &schema_config, new_filename, language, if new_source.is_empty(){old_source}else{new_source},
+    )?;
+    let _xml_scope = xml_schema::scoped_xml_dialects(xml_dialects);
+    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, Some(identity_fields.clone()))
         .map_err(|exc| format!("profile enrich (old): {exc}"))?;
-    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, None)
+    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, Some(identity_fields))
         .map_err(|exc| format!("profile enrich (new): {exc}"))?;
 
     // Tree-diff + finalize in one call — the same core the differ routes through for every
@@ -5204,7 +5220,10 @@ pub(crate) fn native_wasm_single_diff(
         diff["old_filename"] = json!(old_filename);
         diff["new_filename"] = json!(new_filename);
         let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
-        apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+        if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
+    }
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
         if let Some(rules) = guardrail_rules {
             let violations = evaluate_guardrail_rules_for_diff(
                 &diff, rules, language, old_filename, new_filename, "null", "null");
@@ -5299,6 +5318,9 @@ pub(crate) fn native_wasm_single_diff(
         },
     });
 
+    if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
+    }
     // File lifecycle (add/delete/modify) — mirrors differ's _apply_file_lifecycle_to_diff.
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
     apply_file_lifecycle_to_diff(&mut diff, lifecycle);
@@ -5623,6 +5645,7 @@ fn run_python_wasm_process_pair_with_cached_component(
             .call_process(&mut store, old_input, language, old_filename)
             .map_err(|exc| format!("call parser process for old source: {exc:#}"))
     })?;
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("old parser output", &old_tree, max_output_bytes)?;
     if !unlimited {
         measure_optional(probe.as_deref_mut(), "rust_wasm_fuel_reset", || {
@@ -5636,6 +5659,7 @@ fn run_python_wasm_process_pair_with_cached_component(
             .call_process(&mut store, new_input, language, new_filename)
             .map_err(|exc| format!("call parser process for new source: {exc:#}"))
     })?;
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("new parser output", &new_tree, max_output_bytes)?;
     Ok((old_tree, new_tree))
 }
@@ -10084,6 +10108,9 @@ fn lifecycle_from_status(status: Option<&str>) -> Option<&'static str> {
         .any(|item| status.eq_ignore_ascii_case(item))
     {
         return Some("added");
+    }
+    if ["modified", "modify", "m", "changed"].iter().any(|item| status.eq_ignore_ascii_case(item)) {
+        return Some("modified");
     }
     if ["deleted", "delete", "d", "removed", "remove"]
         .iter()

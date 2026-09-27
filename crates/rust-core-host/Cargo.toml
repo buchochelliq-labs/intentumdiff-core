@@ -46,7 +46,7 @@ anyhow = "1"
 # without a Wasm round-trip (Rust-authoritative for #91).
 index-engine-lib = { path = "../index-engine-lib" }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde_json = { version = "1", features = ["unbounded_depth"] }
 # Project-config (intentumdiff.yaml) parsing for the config subsystem port (#99).
 # Same version the first-party databricks/dbt-schema parser crates already use.
 serde_yaml = "0.9"
