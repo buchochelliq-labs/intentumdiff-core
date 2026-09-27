@@ -379,6 +379,11 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "build_symbol_table" => {
             Ok(index_engine_lib::build_symbol_table_impl(arg_str(args, 0, "files_json")?))
         }
+        "resolve_references" => {
+            let definitions: Vec<index_engine_lib::SymbolDefinition> = serde_json::from_str(arg_str(args, 0, "definitions_json")?).map_err(|e| e.to_string())?;
+            let references: Vec<index_engine_lib::ReferenceUsage> = serde_json::from_str(arg_str(args, 1, "references_json")?).map_err(|e| e.to_string())?;
+            serde_json::to_string(&index_engine_lib::resolve_references(&definitions, &references)).map_err(|e| e.to_string())
+        }
         "build_reference_table" => {
             Ok(index_engine_lib::build_reference_table_impl(arg_str(args, 0, "files_json")?))
         }
@@ -861,6 +866,13 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn reference_resolution_envelopes() {
+        assert_eq!(call("resolve_references", json!(["[]", "[]"])), json!({"ok":true,"result":[]}));
+        assert_eq!(call("resolve_references", json!(["{}", "[]"]))["ok"], false);
+        assert_eq!(call("resolve_references", json!(["[]", "[{}]"]))["ok"], false);
+    }
 
     #[test]
     fn routed_review_envelopes() {

@@ -13,6 +13,7 @@ Additional semantic helpers:
 
 | Handler | Positional arguments | Result |
 |---|---|---|
+| `resolve_references` | definition-array JSON string, usage-array JSON string | usages with unique exact-name definition attached; ambiguity clears resolution |
 | `empty_semantic_tree` | language string | canonical empty source tree (native: `lifecycle::empty_tree`) |
 | `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
@@ -163,3 +164,8 @@ It owns invariance suppression, generic/Markdown replacement, group indices, sty
 and evidence. Suppression of non-equivalent sources does not manufacture equivalence evidence.
 Partially retained meaningful groups describe only surviving changes; partially invalidated
 relationship classifications are discarded. Explicit non-final index spaces are preserved.
+
+Native Rust uses `symbol_index::{SymbolDefinition, ReferenceUsage, ReferencePosition, resolve_references}`.
+Resolution matches exact qualified names, never chooses arbitrarily between multiple definitions,
+and returns new DTOs without mutating the input usages. Python retains ordinary map lookup and
+DTO transport; it does not decide uniqueness. Malformed ABI arrays return errors.

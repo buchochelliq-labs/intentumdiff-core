@@ -6,6 +6,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "resolve_references" {
+        let definitions: Vec<intentumdiff_rust_core::symbol_index::SymbolDefinition> = serde_json::from_value(request["definitions"].clone())?;
+        let references: Vec<intentumdiff_rust_core::symbol_index::ReferenceUsage> = serde_json::from_value(request["references"].clone())?;
+        let result = intentumdiff_rust_core::symbol_index::resolve_references(&definitions, &references);
+        println!("{}", serde_json::to_string(&result)?);
+        return Ok(());
+    }
     if request["handler"] == "complete_routed_review" {
         println!("{}", intentumdiff_rust_core::routed_review::complete(&request["request"])?);
         return Ok(());
