@@ -37,7 +37,11 @@ impl ContentType {
 }
 
 /// Detect the content type from the leading bytes of a file.
+pub const HEAD_BYTES: usize = 8192;
+
+/// Inspect at most HEAD_BYTES; every binding and native caller uses this window.
 pub fn detect_content_type(head: &[u8]) -> ContentType {
+    let head = &head[..head.len().min(HEAD_BYTES)];
     if head.is_empty() {
         return ContentType { mime: "inode/x-empty".into(), extension: String::new(), category: "empty".into(), is_text: true };
     }

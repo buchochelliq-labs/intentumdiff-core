@@ -193,3 +193,7 @@ rejects excerpts. Creation/deletion headers establish the empty opposite side.
 Bindings must preserve this scope; Python exposes `is_partial` and warns on excerpts.
 
 Filename inference follows the conventional `a/` old and `b/` new header pair; creation `b/` and deletion `a/` headers use the same convention. Plain headers naming the same `a/` or `b/` directory preserve it. Single-sided headers can be ambiguous: provide an explicit filename to preserve a literal prefix.
+
+## Content routing
+
+`content_type::detect_content_type` is a supported native Rust API, also exposed as `detect_content_type` through the C ABI. Rust owns the 8192-byte sampling window and routing decision. This is leading-sample classification, not complete-file UTF-8 validation: an incomplete final code point is tolerated because a caller may supply a truncated sample. Literal U+FFFD is valid text; explicit invalid UTF-8 and NUL classify as binary. Required engine failures propagate in Python. Native Git probes and Python streaming review use this shared detector.
