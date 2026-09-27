@@ -335,6 +335,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "diff_batch" => {
             crate::diff_batch_impl(arg_str(args, 0, "request_json")?).map(|v| v.to_string())
         }
+        "lsp_collect_utf16_hover_targets" => crate::lsp_enrich::collect_utf16_hover_targets_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "source")?),
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
@@ -866,6 +868,13 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn hover_utf16_envelopes() {
+        let tree = json!({"id":"value","node_type":"variable_name","position":{"start_line":0,"start_col":6},"children":[]}).to_string();
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, "\"é\"; value = 1"])), json!({"ok":true,"result":[{"id":"value","line":0,"col":5}]}));
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, ""]))["ok"],false);
+    }
 
     #[test]
     fn reference_resolution_envelopes() {

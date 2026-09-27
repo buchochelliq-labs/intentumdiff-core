@@ -6,6 +6,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "hover_targets_utf16" {
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::lsp_enrich::collect_utf16_hover_targets(&request["tree"], request["source"].as_str().ok_or("source")?)?)?);
+        return Ok(());
+    }
+    if request["handler"] == "hover_targets" {
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::lsp_enrich::collect_hover_targets(&request["tree"]))?);
+        return Ok(());
+    }
     if request["handler"] == "resolve_references" {
         let definitions: Vec<intentumdiff_rust_core::symbol_index::SymbolDefinition> = serde_json::from_value(request["definitions"].clone())?;
         let references: Vec<intentumdiff_rust_core::symbol_index::ReferenceUsage> = serde_json::from_value(request["references"].clone())?;

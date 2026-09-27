@@ -169,3 +169,11 @@ Native Rust uses `symbol_index::{SymbolDefinition, ReferenceUsage, ReferencePosi
 Resolution matches exact qualified names, never chooses arbitrarily between multiple definitions,
 and returns new DTOs without mutating the input usages. Python retains ordinary map lookup and
 DTO transport; it does not decide uniqueness. Malformed ABI arrays return errors.
+
+Native Rust hover selection is available as `lsp_enrich::collect_hover_targets`, shared
+with `lsp_collect_hover_targets`. Returned columns are semantic UTF-8 byte columns.
+Use `lsp_enrich::collect_utf16_hover_targets(tree, source)` or the
+`lsp_collect_utf16_hover_targets` ABI handler (tree JSON string, source string) to
+prepare UTF-16 protocol positions. Invalid source offsets and coordinate overflow
+return explicit errors. Python advertises UTF-16 and uses this converted API.
+Python selection failures must propagate; there is no Python semantic tree walker fallback.

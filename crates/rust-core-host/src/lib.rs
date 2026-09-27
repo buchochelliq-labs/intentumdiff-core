@@ -42,7 +42,7 @@ pub mod routed_review;
 /// Shared typed symbol/reference API for native Rust consumers.
 pub use index_engine_lib as symbol_index;
 pub mod live_server;
-mod lsp_enrich;
+pub mod lsp_enrich;
 pub mod lsp_server_shapes;
 mod parser_registry;
 mod vcs_backend;
