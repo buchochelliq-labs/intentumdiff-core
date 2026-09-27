@@ -1,0 +1,31 @@
+[
+  {
+    "name": "severity_number",
+    "source": "protected: [{language: json, path: secret, severity: 42}]",
+    "error": "severity"
+  },
+  {
+    "name": "severity_null",
+    "source": "protected: [{language: json, path: secret, severity: null}]",
+    "error": "severity"
+  },
+  {
+    "name": "severity_list",
+    "source": "protected: [{language: json, path: secret, severity: []}]",
+    "error": "severity"
+  },
+  {
+    "name": "default_severity",
+    "source": "protected: [{language: json, path: secret}]",
+    "expected": [
+      {
+        "rule_id": "guardrail.1",
+        "language": "json",
+        "path": "secret",
+        "severity": "important",
+        "message": "Protected path secret changed",
+        "files": []
+      }
+    ]
+  }
+]

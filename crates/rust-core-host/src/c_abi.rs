@@ -436,11 +436,21 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                     .to_string()
             }
         }),
+        "apply_guardrail_policy" => {
+            let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
+                .map_err(|e| format!("request: {e}"))?;
+            serde_json::to_string(&crate::guardrail_policy::apply_policy(&request)?)
+                .map_err(|e| format!("serialize: {e}"))
+        }
+        "parse_guardrail_policy" => {
+            serde_json::to_string(&crate::guardrail_policy::parse_policy(arg_str(args, 0, "source")?)?)
+                .map_err(|e| format!("serialize: {e}"))
+        }
         "evaluate_guardrail_rules" => {
             let request: crate::GuardrailEvalRequest =
                 serde_json::from_str(arg_str(args, 0, "request_json")?)
                     .map_err(|e| format!("request: {e}"))?;
-            serde_json::to_string(&crate::evaluate_guardrail_rules(&request))
+            serde_json::to_string(&crate::evaluate_guardrail_rules_checked(&request)?)
                 .map_err(|e| format!("serialize: {e}"))
         }
         "enrich_node_facts" => {
@@ -849,6 +859,22 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn guardrail_policy_envelopes_preserve_errors_and_results() {
+        let rules = call("parse_guardrail_policy", json!(["protected: [{language: json, path: secret}] "]));
+        assert_eq!(rules["ok"], true);
+        assert_eq!(rules["result"][0]["severity"], "important");
+        for severity in ["42", "null", "[]"] {
+            let source = format!("protected: [{{language: json, path: secret, severity: {severity}}}]");
+            assert_eq!(call("parse_guardrail_policy", json!([source]))["ok"], false);
+        }
+        let request = json!({"diff":{"language":"yaml", "old_filename":"intentumdiff.yaml", "new_filename":"intentumdiff.yaml", "changes":[]}, "old_source":"old", "new_source":"new", "rules":[]});
+        let applied = call("apply_guardrail_policy", json!([request.to_string()]));
+        assert_eq!(applied["ok"], true, "{applied}");
+        assert_eq!(applied["result"]["metadata"]["guardrails"]["immutable_count"], 1);
+        assert_eq!(call("apply_guardrail_policy", json!(["{}"]))["ok"], false);
+    }
 
     #[test]
     fn migration_lifecycle_preserves_meaningful_evidence() {

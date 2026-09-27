@@ -13,6 +13,8 @@ Additional semantic helpers:
 
 | Handler | Positional arguments | Result |
 |---|---|---|
+| `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
+| `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
 
@@ -145,3 +147,11 @@ extensible attributes/metadata preserve unknown engine fields. Classification na
 are open strings for forward compatibility. `ReviewOptions::settings` accepts the
 same configuration keys as native live review. Lower-level Rust operations remain
 public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
+
+## Shared guardrail policy
+
+Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
+Hosts discover/read policy files; Rust interprets root `protected` and nested `guardrails.protected`
+forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
+Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
+Applicable rules require both semantic trees. Errors must propagate through bindings.

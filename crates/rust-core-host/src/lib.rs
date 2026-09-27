@@ -37,6 +37,7 @@ pub mod compile_context;
 pub mod schema_profiles;
 mod schema_context;
 pub mod host_utils;
+pub mod guardrail_policy;
 pub mod live_server;
 mod lsp_enrich;
 pub mod lsp_server_shapes;
@@ -2110,6 +2111,15 @@ fn guardrail_file_matches(rule: &GuardrailRuleInput, old_filename: &str, new_fil
 
 /// python guardrails._evaluate_policy_rules: match a parsed policy's protected paths
 /// against the diff's changes and construct the violations.
+fn evaluate_guardrail_rules_checked(request: &GuardrailEvalRequest) -> Result<Vec<GuardrailViolationOutput>, String> {
+    let relevant = request.rules.iter().any(|rule| rule.language == request.language.to_lowercase()
+        && guardrail_file_matches(rule, &request.old_filename, &request.new_filename));
+    if relevant && (request.old_tree.is_none() || request.new_tree.is_none()) {
+        return Err("guardrail evaluation requires parsed trees for applicable rules".into());
+    }
+    Ok(evaluate_guardrail_rules(request))
+}
+
 fn evaluate_guardrail_rules(request: &GuardrailEvalRequest) -> Vec<GuardrailViolationOutput> {
     let language = request.language.to_lowercase();
     let file = if !request.new_filename.is_empty() {
@@ -4857,8 +4867,7 @@ pub(crate) fn attach_guardrail_violations(diff: &mut Value, new_violations: Vec<
 /// Evaluate protected-path guardrail rules against a served native diff (#100): builds the SAME
 /// eval request the Python glue marshals (`analysis/guardrails._evaluate_policy_rules`) from the
 /// enriched trees + final changes, runs the A1.3 rule engine, and returns the violations as JSON
-/// values. Best-effort: a malformed request yields no violations (the strict policy PARSE in the
-/// live-server layer already deferred anything off-spec).
+/// values. Malformed requests propagate errors so protection cannot silently disappear.
 fn evaluate_guardrail_rules_for_diff(
     diff: &Value,
     rules: &[Value],
@@ -4867,7 +4876,7 @@ fn evaluate_guardrail_rules_for_diff(
     new_filename: &str,
     old_tree_json: &str,
     new_tree_json: &str,
-) -> Vec<Value> {
+) -> Result<Vec<Value>, String> {
     let changes: Vec<Value> = diff
         .get("changes")
         .and_then(Value::as_array)
@@ -4900,12 +4909,11 @@ fn evaluate_guardrail_rules_for_diff(
         "changes": changes,
         "rules": rules,
     });
-    let Ok(request) = serde_json::from_value::<GuardrailEvalRequest>(request_value) else {
-        return Vec::new();
-    };
-    evaluate_guardrail_rules(&request)
+    let request = serde_json::from_value::<GuardrailEvalRequest>(request_value)
+        .map_err(|e| format!("invalid guardrail evaluation request: {e}"))?;
+    evaluate_guardrail_rules_checked(&request)?
         .into_iter()
-        .filter_map(|violation| serde_json::to_value(violation).ok())
+        .map(|violation| serde_json::to_value(violation).map_err(|e| e.to_string()))
         .collect()
 }
 
@@ -5226,7 +5234,7 @@ pub(crate) fn native_wasm_single_diff(
     apply_file_lifecycle_to_diff(&mut diff, lifecycle);
         if let Some(rules) = guardrail_rules {
             let violations = evaluate_guardrail_rules_for_diff(
-                &diff, rules, language, old_filename, new_filename, "null", "null");
+                &diff, rules, language, old_filename, new_filename, "null", "null")?;
             attach_guardrail_violations(&mut diff, violations);
         }
         return Ok(diff);
@@ -5336,7 +5344,7 @@ pub(crate) fn native_wasm_single_diff(
                 new_filename,
                 &old_tree_json,
                 &new_tree_json,
-            );
+            )?;
             attach_guardrail_violations(&mut diff, violations);
         }
     }

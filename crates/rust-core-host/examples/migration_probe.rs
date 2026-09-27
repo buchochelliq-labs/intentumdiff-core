@@ -6,6 +6,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "parse_guardrail_policy" {
+        let result = intentumdiff_rust_core::guardrail_policy::parse_policy(request["source"].as_str().ok_or("source required")?);
+        let output = match result {
+            Ok(value) => serde_json::json!({"result": value}),
+            Err(error) => serde_json::json!({"error": error}),
+        };
+        println!("{}", output);
+        return Ok(());
+    }
     let get = |key| {
         request
             .get(key)
