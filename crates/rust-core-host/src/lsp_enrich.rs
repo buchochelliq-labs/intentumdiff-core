@@ -91,8 +91,9 @@ fn first_name_leaf<'a>(node: &'a Value) -> Option<&'a Value> {
     None
 }
 
-/// `_collect_hover_targets`, flattened to `(result_id, line, col)` triples in walk order.
-pub(crate) fn collect_hover_targets(root: &Value) -> Vec<(String, u32, u32)> {
+/// Collect `(result_id, line, UTF-8 byte column)` triples in pre-order.
+/// Hosts must convert byte columns to their negotiated LSP position encoding.
+pub fn collect_hover_targets(root: &Value) -> Vec<(String, u32, u32)> {
     let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
     let mut targets: Vec<(String, u32, u32)> = Vec::new();
     let mut stack: Vec<&Value> = vec![root];
@@ -118,6 +119,34 @@ pub(crate) fn collect_hover_targets(root: &Value) -> Vec<(String, u32, u32)> {
         }
     }
     targets
+}
+
+/// Prepare LSP hover positions for UTF-16 (the protocol default).
+/// Invalid byte offsets fail explicitly instead of querying a different symbol.
+pub fn collect_utf16_hover_targets(root: &Value, source: &str) -> Result<Vec<(String, u32, u32)>, String> {
+    let mut stack = vec![root];
+    while let Some(node) = stack.pop() {
+        for field in ["start_line", "start_col"] {
+            let value = node.get("position").and_then(|p| p.get(field)).and_then(Value::as_u64)
+                .ok_or_else(|| format!("hover tree requires unsigned {field}"))?;
+            u32::try_from(value).map_err(|_| format!("hover {field} exceeds supported range"))?;
+        }
+        stack.extend(children(node));
+    }
+    let lines: Vec<&str> = source.split('\n').collect();
+    collect_hover_targets(root).into_iter().map(|(id, line, byte_col)| {
+        let source_line = lines.get(line as usize).ok_or_else(|| format!("hover line {line} is outside source"))?;
+        let prefix = source_line.get(..byte_col as usize).ok_or_else(|| format!("hover byte column {byte_col} is not a source character boundary on line {line}"))?;
+        let col = u32::try_from(prefix.encode_utf16().count()).map_err(|_| "hover UTF-16 column overflow".to_owned())?;
+        Ok((id, line, col))
+    }).collect()
+}
+
+pub(crate) fn collect_utf16_hover_targets_json_impl(tree_json: &str, source: &str) -> Result<String, String> {
+    let root: Value = serde_json::from_str(tree_json).map_err(|e| e.to_string())?;
+    let targets: Vec<Value> = collect_utf16_hover_targets(&root, source)?.into_iter()
+        .map(|(id,line,col)| json!({"id":id,"line":line,"col":col})).collect();
+    Ok(json!(targets).to_string())
 }
 
 pub(crate) fn collect_hover_targets_json_impl(tree_json: &str) -> Result<String, String> {
