@@ -52,3 +52,20 @@ mod tests {
         assert_eq!(infer("x", "", Some("M")), FileLifecycle::Modified);
     }
 }
+
+/// Canonical empty source tree, shared by parsing hosts and bindings.
+pub fn empty_tree(language: &str) -> Value {
+    use sha2::{Digest, Sha256};
+    use serde_json::json;
+    let mut hasher = Sha256::new();
+    hasher.update(format!("intentumdiff-empty-tree:{language}").as_bytes());
+    let digest = format!("{:x}", hasher.finalize());
+    json!({
+        "id": "0",
+        "node_type": "source_file",
+        "label": "",
+        "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0},
+        "structural_hash": digest,
+        "children": [],
+    })
+}

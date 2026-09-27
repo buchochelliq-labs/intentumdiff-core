@@ -335,6 +335,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "diff_batch" => {
             crate::diff_batch_impl(arg_str(args, 0, "request_json")?).map(|v| v.to_string())
         }
+        "lsp_collect_utf16_hover_targets" => crate::lsp_enrich::collect_utf16_hover_targets_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "source")?),
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
@@ -378,6 +380,12 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         }
         "build_symbol_table" => {
             Ok(index_engine_lib::build_symbol_table_impl(arg_str(args, 0, "files_json")?))
+        }
+        "reconstruct_patch" => crate::patch_source::reconstruct_json_impl(arg_str(args, 0, "request_json")?),
+        "resolve_references" => {
+            let definitions: Vec<index_engine_lib::SymbolDefinition> = serde_json::from_str(arg_str(args, 0, "definitions_json")?).map_err(|e| e.to_string())?;
+            let references: Vec<index_engine_lib::ReferenceUsage> = serde_json::from_str(arg_str(args, 1, "references_json")?).map_err(|e| e.to_string())?;
+            serde_json::to_string(&index_engine_lib::resolve_references(&definitions, &references)).map_err(|e| e.to_string())
         }
         "build_reference_table" => {
             Ok(index_engine_lib::build_reference_table_impl(arg_str(args, 0, "files_json")?))
@@ -436,6 +444,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                     .to_string()
             }
         }),
+        "empty_semantic_tree" => Ok(crate::lifecycle::empty_tree(arg_str(args, 0, "language")?).to_string()),
+        "complete_routed_review" => value_request(args, crate::routed_review::complete),
         "apply_guardrail_policy" => {
             let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
                 .map_err(|e| format!("request: {e}"))?;
@@ -859,6 +869,43 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn patch_reconstruction_envelopes() {
+        let request = json!({"patch_text":"--- a/x\n+++ b/x\n@@ -1 +1 @@\n-old\n+new\n", "original_content":"old\n"});
+        let out = call("reconstruct_patch",json!([request.to_string()]));
+        assert_eq!(out["ok"],true,"{out}");
+        assert_eq!(out["result"]["new_content"],"new\n");
+        assert_eq!(call("reconstruct_patch",json!(["{}"]))["ok"],false);
+    }
+
+    #[test]
+    fn hover_utf16_envelopes() {
+        let tree = json!({"id":"value","node_type":"variable_name","position":{"start_line":0,"start_col":6},"children":[]}).to_string();
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, "\"é\"; value = 1"])), json!({"ok":true,"result":[{"id":"value","line":0,"col":5}]}));
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, ""]))["ok"],false);
+    }
+
+    #[test]
+    fn reference_resolution_envelopes() {
+        assert_eq!(call("resolve_references", json!(["[]", "[]"])), json!({"ok":true,"result":[]}));
+        assert_eq!(call("resolve_references", json!(["{}", "[]"]))["ok"], false);
+        assert_eq!(call("resolve_references", json!(["[]", "[{}]"]))["ok"], false);
+    }
+
+    #[test]
+    fn routed_review_envelopes() {
+        let empty = call("empty_semantic_tree", json!(["sql"]));
+        assert_eq!(empty["ok"], true);
+        assert_eq!(empty["result"]["children"], json!([]));
+        assert_eq!(empty["result"], crate::lifecycle::empty_tree("sql"));
+        let request = json!({"language":"generic","old_source":"old","new_source":"new",
+            "old_filename":"a.txt","new_filename":"a.txt","finalized":{"changes":[],"change_groups":[]}});
+        let result = call("complete_routed_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["has_semantic_changes"], true);
+        assert_eq!(call("complete_routed_review", json!(["{}"]))["ok"], false);
+    }
 
     #[test]
     fn guardrail_policy_envelopes_preserve_errors_and_results() {
