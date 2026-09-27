@@ -251,3 +251,26 @@ escape. This intentionally removes the old Windows Python case normalization.
 Null/empty patterns and patterns on non-diff tables impose no filename filter.
 Limits must be positive. Only metadata is read; matching streams until the
 requested number of results is reached, without a finite over-fetch window.
+
+### Content detection policy
+
+`content_detection_plan(request_json)` and `content_detection_finish(input_json)`
+delegate to supported Rust `content_detection::{plan, finish}`. The request carries
+loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
+optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+`preferred_plugins` (language to plugin ID). A plan returns eligible source indices
+and a sample ending at the last complete UTF-8 character within 4096 bytes.
+
+Hosts execute those probes and pass `{request, observations}` to finish. Each
+observation has an index and a nullable language (null/empty means a genuine
+decline). Duplicate, missing, ineligible or unsupported claims fail explicitly.
+Probe errors, especially fuel exhaustion, must propagate from the host; they are
+not declines. Generic results always rank last, followed by preferred plugin,
+descending priority, language, grammar ID and plugin ID. Multiple plugins can
+produce separate results for one language. Confidence is reciprocal rank rounded
+to three decimal places with ties to even; it is not a measured probability.
+
+The outcome contains ordered result DTOs and `not_found` for an explicit plugin
+with no valid match. Python only invokes adapters, marshals DTOs and maps this
+no-match outcome to its public exception. This slice does not migrate the existing
+component loader or filename `detect_parser` failure/fallback policy (#108).

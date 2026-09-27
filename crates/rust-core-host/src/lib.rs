@@ -54,6 +54,7 @@ mod config;
 pub mod content_type;
 pub mod ignore_rules;
 pub mod parser_routing;
+pub mod content_detection;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const COMPLETE: &str = "complete";
