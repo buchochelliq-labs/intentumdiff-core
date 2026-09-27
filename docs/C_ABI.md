@@ -213,3 +213,24 @@ rules/paths fail explicitly. Python `DiffIgnore` takes raw text and optional
 `directory_rules` mapping; it retains only host file reads and DTO transport.
 This replaces its old test-oriented pathspec-object constructor. Neither matcher
 infers that a tracked deletion was caused by ignore rules.
+
+## Parser candidate planning
+
+Public `parser_routing::shortlist` accepts discovered `Candidate` descriptors and
+`RoutingQuery`, returning source indices. Explicit plugin identities/aliases take
+precedence over language filters, then filename matching. Unknown filenames leave
+all candidates eligible. Generic is always last, followed by descending declared
+priority and stable identity ties. Filenames accept either path separator and are
+matched case-insensitively. `filename_candidates` omits the no-match fallback.
+C ABI `parser_candidate_shortlist` takes JSON text with `entries` and `query`.
+Empty/duplicate identities are errors. This plans candidates; it does not assert
+successful component loading or capabilities. Python discovery has no declared
+priority and supplies zero, independent of cache warmth. Native manifest routing
+preserves its declared extension winner and now recognizes literal special names.
+Full load/probe decisions, returned-claim validation and content-only ranking
+remain tracked in #108.
+
+The Dockerfile source fixture compares complete changes/groups/semantic flags
+through native and Python APIs. Native omits optional null DTO fields; comparison
+deserializes both through the public SemanticDiff schema without discarding any
+change, node, group or evidence field.
