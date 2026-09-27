@@ -6,6 +6,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "filename_selection" {
+        let input = serde_json::from_value(request["request"].clone())?;
+        let events: Vec<intentumdiff_rust_core::filename_selection::Event> = serde_json::from_value(request["events"].clone())?;
+        let result = intentumdiff_rust_core::filename_selection::next_action(&input, &events);
+        let output = match result { Ok(result) => serde_json::json!({"result":result}), Err(error) => serde_json::json!({"error":error}) };
+        println!("{}", output);
+        return Ok(());
+    }
     if request["handler"] == "content_detection" {
         let input = serde_json::from_value(request["request"].clone())?;
         let observations: Vec<intentumdiff_rust_core::content_detection::Observation> = serde_json::from_value(request["observations"].clone())?;

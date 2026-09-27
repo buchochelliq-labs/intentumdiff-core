@@ -811,6 +811,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         )),
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
+        "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
@@ -886,6 +887,17 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn filename_selection_envelopes() {
+        let request = json!({"entries":[{"id":"py","languages":["python"],"extensions":[".py"]}],"filename":"x.py"});
+        let first = json!({"request":request,"events":[]});
+        let good = call("filename_selection_next", json!([first.to_string()]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"], json!({"kind":"load","index":0}));
+        let invalid = json!({"request":request,"events":[{"kind":"probed","index":0,"language":"python"}]});
+        assert_eq!(call("filename_selection_next", json!([invalid.to_string()]))["ok"], false);
+    }
 
     #[test]
     fn content_detection_envelopes() {
