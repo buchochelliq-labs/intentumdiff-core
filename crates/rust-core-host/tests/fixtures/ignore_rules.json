@@ -1,0 +1,202 @@
+[
+  {
+    "name": "extension_nested",
+    "files": [
+      {
+        "directory": "",
+        "content": "*.log\n"
+      }
+    ],
+    "path": "src/a.log",
+    "expected": true
+  },
+  {
+    "name": "negation",
+    "files": [
+      {
+        "directory": "",
+        "content": "*.log\n!keep.log\n"
+      }
+    ],
+    "path": "src/keep.log",
+    "expected": false
+  },
+  {
+    "name": "root_anchor",
+    "files": [
+      {
+        "directory": "",
+        "content": "/dist/\n"
+      }
+    ],
+    "path": "src/dist/a.py",
+    "expected": false
+  },
+  {
+    "name": "root_anchor_match",
+    "files": [
+      {
+        "directory": "",
+        "content": "/dist/\n"
+      }
+    ],
+    "path": "dist/a.py",
+    "expected": true
+  },
+  {
+    "name": "excluded_parent",
+    "files": [
+      {
+        "directory": "",
+        "content": "build/\n!build/keep.py\n"
+      }
+    ],
+    "path": "build/keep.py",
+    "expected": true
+  },
+  {
+    "name": "reinclude_parent",
+    "files": [
+      {
+        "directory": "",
+        "content": "build/\n!build/\n"
+      }
+    ],
+    "path": "build/keep.py",
+    "expected": false
+  },
+  {
+    "name": "nested_override",
+    "files": [
+      {
+        "directory": "",
+        "content": "*.log\n"
+      },
+      {
+        "directory": "src",
+        "content": "!keep.log\n"
+      }
+    ],
+    "path": "src/keep.log",
+    "expected": false
+  },
+  {
+    "name": "nested_scope",
+    "files": [
+      {
+        "directory": "",
+        "content": ""
+      },
+      {
+        "directory": "src",
+        "content": "*.log\n"
+      }
+    ],
+    "path": "elsewhere/a.log",
+    "expected": false
+  },
+  {
+    "name": "multiple_files",
+    "files": [
+      {
+        "directory": "",
+        "content": ""
+      },
+      {
+        "directory": "src",
+        "content": "*.log\n"
+      },
+      {
+        "directory": "tests",
+        "content": "*.tmp\n"
+      }
+    ],
+    "path": "tests/a.tmp",
+    "expected": true
+  },
+  {
+    "name": "pruned_nested_override",
+    "files": [
+      {
+        "directory": "",
+        "content": "src/\n"
+      },
+      {
+        "directory": "src",
+        "content": "!keep.log\n"
+      }
+    ],
+    "path": "src/keep.log",
+    "expected": true
+  },
+  {
+    "name": "unicode",
+    "files": [
+      {
+        "directory": "",
+        "content": "\u00e9*/\n"
+      }
+    ],
+    "path": "\u00e9clair/a.py",
+    "expected": true
+  },
+  {
+    "name": "case_sensitive",
+    "files": [
+      {
+        "directory": "",
+        "content": "*.LOG\n"
+      }
+    ],
+    "path": "a.log",
+    "expected": false
+  },
+  {
+    "name": "escaped_hash",
+    "files": [
+      {
+        "directory": "",
+        "content": "\\#literal\n"
+      }
+    ],
+    "path": "#literal",
+    "expected": true
+  },
+  {
+    "name": "double_star",
+    "files": [
+      {
+        "directory": "",
+        "content": "**/generated/**\n"
+      }
+    ],
+    "path": "src/generated/a.py",
+    "expected": true
+  },
+  {
+    "name": "directory_not_file",
+    "files": [
+      {
+        "directory": "",
+        "content": "cache/\n"
+      }
+    ],
+    "path": "cache",
+    "expected": false
+  },
+  {
+    "name": "nested_anchor",
+    "files": [
+      {
+        "directory": "",
+        "content": ""
+      },
+      {
+        "directory": "src",
+        "content": "/a.log\n"
+      }
+    ],
+    "path": "src/deep/a.log",
+    "expected": false
+  }
+]

@@ -197,3 +197,19 @@ Filename inference follows the conventional `a/` old and `b/` new header pair; c
 ## Content routing
 
 `content_type::detect_content_type` is a supported native Rust API, also exposed as `detect_content_type` through the C ABI. Rust owns the 8192-byte sampling window and routing decision. This is leading-sample classification, not complete-file UTF-8 validation: an incomplete final code point is tolerated because a caller may supply a truncated sample. Literal U+FFFD is valid text; explicit invalid UTF-8 and NUL classify as binary. Required engine failures propagate in Python. Native Git probes and Python streaming review use this shared detector.
+
+## Ignore matching
+
+Native callers compile `ignore_rules::IgnoreRules::new(&[IgnoreFile])`, then call
+`is_ignored(path, is_dir)`. Each file supplies a repository-relative directory
+(empty for root) and complete raw contents. No filesystem or global Git config is
+consulted. Deeper rule files override parent matches, later lines take precedence,
+and an excluded parent prevents child reinclusion. Matching is case-sensitive;
+paths must be normalized relative POSIX paths, with no traversal/backslashes.
+
+C ABI `match_ignore_rules` takes one JSON string with `files` (directory/content)
+and `paths` (path/optional is_dir), returning booleans in input order. Invalid
+rules/paths fail explicitly. Python `DiffIgnore` takes raw text and optional
+`directory_rules` mapping; it retains only host file reads and DTO transport.
+This replaces its old test-oriented pathspec-object constructor. Neither matcher
+infers that a tracked deletion was caused by ignore rules.

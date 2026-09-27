@@ -33,6 +33,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 diffy = "=0.5.1"
+ignore = "=0.4.33"
 # The canonical AST vocabulary (#9). Pinned to a tag, not a branch: the category and role
 # sets are a CONTRACT for anything derived from them, and a moving dependency would let the
 # vocabulary shift underneath the engine without a visible change here.
