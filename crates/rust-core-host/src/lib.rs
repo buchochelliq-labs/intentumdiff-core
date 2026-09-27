@@ -5043,7 +5043,10 @@ pub fn parse_to_tree(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    let resolved = crate::parser_registry::resolve_parser(path, wasm_dir)
+    let selection_config = if config_json.trim().is_empty() { serde_json::json!({}) } else {
+        serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
+    };
+    let resolved = crate::parser_registry::resolve_parser(path, content, &selection_config, wasm_dir)?
         .ok_or("no bundled parser for this file extension")?;
     let config = RustCoreConfig::from_json(config_json);
 
@@ -6767,6 +6770,9 @@ fn is_semantic(node_type: &str) -> bool {
 }
 
 fn label_for(node: &CstNode) -> String {
+    // A Python module is a structural container, not a source-named leaf.
+    // Emptying it must not manufacture a module("module") -> module("") edit.
+    if node.node_type == "module" { return "module".to_owned(); }
     if matches!(node.node_type.as_str(), "string" | "integer" | "float") && !node.text.is_empty() {
         return node.text.clone();
     }

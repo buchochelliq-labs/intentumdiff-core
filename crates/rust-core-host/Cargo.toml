@@ -79,6 +79,9 @@ tree-sitter-python = "0.25"
 wasmtime = "47.0.3"
 wasmtime-wasi = "47.0.3"
 
+[dev-dependencies]
+tempfile = "3"
+
 [patch.crates-io]
 quote = { path = "../patches/quote" }
 zmij = { path = "../patches/zmij" }
