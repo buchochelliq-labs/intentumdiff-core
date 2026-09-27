@@ -6,6 +6,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "reconstruct_patch" {
+        let result = intentumdiff_rust_core::patch_source::reconstruct(request["patch"].as_str().ok_or("patch")?, request["original"].as_str(), request["filename"].as_str(), request["require_complete"].as_bool().unwrap_or(false));
+        let output = match result { Ok(result) => serde_json::to_value(result)?, Err(error) => serde_json::json!({"error":error}) };
+        println!("{}", output);
+        return Ok(());
+    }
+    if request["handler"] == "hover_targets_utf16" {
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::lsp_enrich::collect_utf16_hover_targets(&request["tree"], request["source"].as_str().ok_or("source")?)?)?);
+        return Ok(());
+    }
+    if request["handler"] == "hover_targets" {
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::lsp_enrich::collect_hover_targets(&request["tree"]))?);
+        return Ok(());
+    }
+    if request["handler"] == "resolve_references" {
+        let definitions: Vec<intentumdiff_rust_core::symbol_index::SymbolDefinition> = serde_json::from_value(request["definitions"].clone())?;
+        let references: Vec<intentumdiff_rust_core::symbol_index::ReferenceUsage> = serde_json::from_value(request["references"].clone())?;
+        let result = intentumdiff_rust_core::symbol_index::resolve_references(&definitions, &references);
+        println!("{}", serde_json::to_string(&result)?);
+        return Ok(());
+    }
+    if request["handler"] == "complete_routed_review" {
+        println!("{}", intentumdiff_rust_core::routed_review::complete(&request["request"])?);
+        return Ok(());
+    }
+    if request["handler"] == "parse_guardrail_policy" {
+        let result = intentumdiff_rust_core::guardrail_policy::parse_policy(request["source"].as_str().ok_or("source required")?);
+        let output = match result {
+            Ok(value) => serde_json::json!({"result": value}),
+            Err(error) => serde_json::json!({"error": error}),
+        };
+        println!("{}", output);
+        return Ok(());
+    }
     let get = |key| {
         request
             .get(key)

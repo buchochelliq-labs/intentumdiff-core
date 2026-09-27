@@ -274,19 +274,6 @@ pub(crate) enum GuardrailPolicyState {
 
 /// The languages protected rules may target (python `GUARDRAIL_CONFIG_LANGUAGES` =
 /// keyed-data | resource-profile) — all served by the native wasm chain, never by the batch.
-const GUARDRAIL_RULE_LANGUAGES: [&str; 11] = [
-    "adf",
-    "databricks",
-    "databricks-workflow",
-    "dbt-config",
-    "dbt-packages",
-    "dbt-yaml",
-    "dockerfile",
-    "hcl",
-    "json",
-    "puppet",
-    "yaml",
-];
 
 fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPolicyState {
     // python apply_guardrails_to_diff: `if not config.guardrails_enabled: return diff`.
@@ -318,121 +305,17 @@ fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPoli
         Ok(raw) => raw,
         Err(e) => return GuardrailPolicyState::Defer(format!("guardrail policy unreadable: {e}")),
     };
-    let doc: Value = match serde_yaml::from_str(&raw) {
-        Ok(doc) => doc,
-        Err(e) => {
-            return GuardrailPolicyState::Defer(format!("guardrail policy unparseable: {e}"))
-        }
-    };
-    let Some(raw_rules) = doc
-        .get("guardrails")
-        .and_then(|g| g.get("protected"))
-        .and_then(Value::as_array)
-    else {
-        return GuardrailPolicyState::NoRules;
-    };
-    if raw_rules.is_empty() {
-        return GuardrailPolicyState::NoRules;
+    match crate::guardrail_policy::parse_policy(&raw) {
+        Ok(rules) if rules.is_empty() => GuardrailPolicyState::NoRules,
+        Ok(rules) => GuardrailPolicyState::Rules(rules),
+        Err(error) => GuardrailPolicyState::Defer(error),
     }
-    // Strict python `_parse_rule` mirror — python RAISES on any off-spec rule, so anything
-    // unexpected defers rather than silently dropping a rule.
-    let mut rules: Vec<Value> = Vec::with_capacity(raw_rules.len());
-    for (index, raw_rule) in raw_rules.iter().enumerate() {
-        let Some(map) = raw_rule.as_object() else {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] must be a mapping"
-            ));
-        };
-        let language = map
-            .get("language")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .trim()
-            .to_lowercase();
-        if !GUARDRAIL_RULE_LANGUAGES.contains(&language.as_str()) {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] targets unsupported language '{language}'"
-            ));
-        }
-        let path =
-            crate::guardrail_normalise_path(map.get("path").and_then(Value::as_str).unwrap_or(""));
-        if path.is_empty() {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] requires path"
-            ));
-        }
-        let severity = map
-            .get("severity")
-            .and_then(Value::as_str)
-            .unwrap_or("important")
-            .to_lowercase();
-        if severity != "important" && severity != "immutable" {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] has unsupported severity '{severity}'"
-            ));
-        }
-        let files: Vec<String> = match map.get("files") {
-            None | Some(Value::Null) => Vec::new(),
-            Some(Value::String(s)) => vec![s.clone()],
-            Some(Value::Array(items)) => items
-                .iter()
-                .map(|item| match item {
-                    Value::String(s) => s.clone(),
-                    other => other.to_string(),
-                })
-                .collect(),
-            Some(_) => {
-                return GuardrailPolicyState::Defer(format!(
-                    "guardrails.protected[{index}].files is invalid"
-                ));
-            }
-        };
-        let rule_id = map
-            .get("id")
-            .and_then(Value::as_str)
-            .filter(|s| !s.is_empty())
-            .map(str::to_owned)
-            .unwrap_or_else(|| format!("guardrail.{}", index + 1));
-        let message = map
-            .get("message")
-            .and_then(Value::as_str)
-            .filter(|s| !s.is_empty())
-            .map(str::to_owned)
-            .unwrap_or_else(|| format!("Protected path {path} changed"));
-        rules.push(json!({
-            "rule_id": rule_id,
-            "severity": severity,
-            "language": language,
-            "path": path,
-            "message": message,
-            "files": files,
-        }));
-    }
-    GuardrailPolicyState::Rules(rules)
 }
 
 /// python `apply_guardrails_to_diff`'s policy-file check: a change to intentumdiff.yaml itself is
 /// an IMMUTABLE violation regardless of rules.
 fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -> Value {
-    let file = if !new_filename.is_empty() {
-        new_filename
-    } else {
-        old_filename
-    };
-    json!({
-        "rule_id": "intentumdiff.policy_file",
-        "severity": "immutable",
-        "file": file,
-        "language": diff.get("language").cloned().unwrap_or_else(|| json!("")),
-        "semantic_path": "intentumdiff.yaml",
-        "node_type": "",
-        "old_node_id": Value::Null,
-        "new_node_id": Value::Null,
-        "position": Value::Null,
-        "old_value": "project policy",
-        "new_value": "project policy",
-        "message": "Project guardrail policy changed",
-    })
+    crate::guardrail_policy::policy_file_violation(diff, old_filename, new_filename)
 }
 
 /// python `LiveServer._process_request_with_source` (non-streaming) — the native single-file

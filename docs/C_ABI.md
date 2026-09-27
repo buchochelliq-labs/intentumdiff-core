@@ -13,6 +13,12 @@ Additional semantic helpers:
 
 | Handler | Positional arguments | Result |
 |---|---|---|
+| `reconstruct_patch` | request JSON string: patch_text, optional original_content/filename, require_complete | old/new content, filename, scope, optional warning |
+| `resolve_references` | definition-array JSON string, usage-array JSON string | usages with unique exact-name definition attached; ambiguity clears resolution |
+| `empty_semantic_tree` | language string | canonical empty source tree (native: `lifecycle::empty_tree`) |
+| `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
+| `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
+| `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
 
@@ -145,3 +151,45 @@ extensible attributes/metadata preserve unknown engine fields. Classification na
 are open strings for forward compatibility. `ReviewOptions::settings` accepts the
 same configuration keys as native live review. Lower-level Rust operations remain
 public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
+
+## Shared guardrail policy
+
+Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
+Hosts discover/read policy files; Rust interprets root `protected` and nested `guardrails.protected`
+forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
+Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
+Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
+It owns invariance suppression, generic/Markdown replacement, group indices, style decisions
+and evidence. Suppression of non-equivalent sources does not manufacture equivalence evidence.
+Partially retained meaningful groups describe only surviving changes; partially invalidated
+relationship classifications are discarded. Explicit non-final index spaces are preserved.
+
+Native Rust uses `symbol_index::{SymbolDefinition, ReferenceUsage, ReferencePosition, resolve_references}`.
+Resolution matches exact qualified names, never chooses arbitrarily between multiple definitions,
+and returns new DTOs without mutating the input usages. Python retains ordinary map lookup and
+DTO transport; it does not decide uniqueness. Malformed ABI arrays return errors.
+
+Native Rust hover selection is available as `lsp_enrich::collect_hover_targets`, shared
+with `lsp_collect_hover_targets`. Returned columns are semantic UTF-8 byte columns.
+Use `lsp_enrich::collect_utf16_hover_targets(tree, source)` or the
+`lsp_collect_utf16_hover_targets` ABI handler (tree JSON string, source string) to
+prepare UTF-16 protocol positions. Invalid source offsets and coordinate overflow
+return explicit errors. Python advertises UTF-16 and uses this converted API.
+Python selection failures must propagate; there is no Python semantic tree walker fallback.
+
+## Patch reconstruction
+
+Rust callers use `patch_source::reconstruct` and receive typed `PatchContent` with
+`ReconstructionScope::{Complete, Excerpt}`. Only one text file is supported. Hunk
+positions, context/deletions, line counts and final-newline boundaries are checked;
+there is no fuzzy relocation. Binary and multi-file patches fail explicitly.
+
+Without an original, ordinary modifications represent only contiguous visible
+content, not a proven complete file. The result labels this as `excerpt` and carries
+a warning. Unknown prefixes/internal gaps are errors; `require_complete=true`
+rejects excerpts. Creation/deletion headers establish the empty opposite side.
+Bindings must preserve this scope; Python exposes `is_partial` and warns on excerpts.
+
+Filename inference follows the conventional `a/` old and `b/` new header pair; creation `b/` and deletion `a/` headers use the same convention. Plain headers naming the same `a/` or `b/` directory preserve it. Single-sided headers can be ambiguous: provide an explicit filename to preserve a literal prefix.

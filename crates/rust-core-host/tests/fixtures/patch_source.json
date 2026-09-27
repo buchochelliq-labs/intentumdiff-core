@@ -1,0 +1,276 @@
+[
+  {
+    "name": "removed_text_mismatch",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "unrelated\n",
+    "error": "mismatch"
+  },
+  {
+    "name": "context_mismatch",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,2 +1,2 @@\n context\n-old\n+new\n",
+    "original": "wrong\nold\n",
+    "error": "mismatch"
+  },
+  {
+    "name": "insert_after_first",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,0 +2 @@\n+new\n",
+    "original": "one\ntwo\n",
+    "expected": {
+      "old_content": "one\ntwo\n",
+      "new_content": "one\nnew\ntwo\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "insert_beginning",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -0,0 +1 @@\n+new\n",
+    "original": "one\n",
+    "expected": {
+      "old_content": "one\n",
+      "new_content": "new\none\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "insert_end",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -2,0 +3 @@\n+new\n",
+    "original": "one\ntwo\n",
+    "expected": {
+      "old_content": "one\ntwo\n",
+      "new_content": "one\ntwo\nnew\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "new_no_final_newline",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n\\ No newline at end of file\n",
+    "original": "old\n",
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "old_no_final_newline",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n\\ No newline at end of file\n+new\n",
+    "original": "old",
+    "expected": {
+      "old_content": "old",
+      "new_content": "new\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "both_no_final_newline",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n\\ No newline at end of file\n+new\n\\ No newline at end of file\n",
+    "original": "old",
+    "expected": {
+      "old_content": "old",
+      "new_content": "new",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "multi_file",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n--- a/y.txt\n+++ b/y.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "error": "single-file"
+  },
+  {
+    "name": "missing_internal_gap",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n@@ -3 +3 @@\n-last\n+LAST\n",
+    "original": null,
+    "error": "original content"
+  },
+  {
+    "name": "missing_prefix",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -3 +3 @@\n-old\n+new\n",
+    "original": null,
+    "error": "original content"
+  },
+  {
+    "name": "removed_header_like_content",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n---old\n+new\n",
+    "original": null,
+    "expected": {
+      "old_content": "--old\n",
+      "new_content": "new\n",
+      "filename": "x.txt",
+      "scope": "excerpt"
+    }
+  },
+  {
+    "name": "deletion_identity",
+    "patch": "--- a/x.py\n+++ /dev/null\n@@ -1 +0,0 @@\n-old\n",
+    "original": null,
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "",
+      "filename": "x.py",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "creation",
+    "patch": "--- /dev/null\n+++ b/x.txt\n@@ -0,0 +1 @@\n+new\n",
+    "original": null,
+    "expected": {
+      "old_content": "",
+      "new_content": "new\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "bad_count",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,2 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "error": "patch"
+  },
+  {
+    "name": "out_of_order",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -3 +3 @@\n-c\n+C\n@@ -1 +1 @@\n-a\n+A\n",
+    "original": "a\nb\nc\n",
+    "error": "patch"
+  },
+  {
+    "name": "overlap",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,2 +1,2 @@\n-a\n+A\n b\n@@ -2,2 +2,2 @@\n-b\n+B\n c\n",
+    "original": "a\nb\nc\n",
+    "error": "patch"
+  },
+  {
+    "name": "beyond_original",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -5 +5 @@\n-old\n+new\n",
+    "original": "old\n",
+    "error": "outside"
+  },
+  {
+    "name": "new_range_mismatch",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,0 +3 @@\n+new\n",
+    "original": "one\ntwo\n",
+    "error": "target"
+  },
+  {
+    "name": "excerpt_is_explicit",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": null,
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new\n",
+      "filename": "x.txt",
+      "scope": "excerpt"
+    }
+  },
+  {
+    "name": "require_complete",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": null,
+    "require_complete": true,
+    "error": "original content"
+  },
+  {
+    "name": "filename_override",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "filename": "other.py",
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new\n",
+      "filename": "other.py",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "timestamp_header",
+    "patch": "--- a/x.txt\t2020-01-01\n+++ b/x.txt\t2020-01-02\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "append_after_unterminated_line",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1,0 +2 @@\n+new\n",
+    "original": "old",
+    "error": "newline"
+  },
+  {
+    "name": "crlf_preserved",
+    "patch": "--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-old\r\n+new\r\n",
+    "original": "old\r\n",
+    "expected": {
+      "old_content": "old\r\n",
+      "new_content": "new\r\n",
+      "filename": "x.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "binary_rejected",
+    "patch": "diff --git a/x.png b/x.png\nindex 1234567..7654321 100644\nBinary files a/x.png and b/x.png differ\n",
+    "original": "",
+    "error": "binary"
+  },
+  {
+    "name": "empty_unknown_is_excerpt",
+    "patch": "",
+    "original": null,
+    "expected": {
+      "old_content": "",
+      "new_content": "",
+      "filename": "unknown",
+      "scope": "excerpt"
+    }
+  },
+  {
+    "name": "empty_require_complete",
+    "patch": "",
+    "original": null,
+    "require_complete": true,
+    "error": "original content"
+  },
+  {
+    "name": "empty_known_is_complete",
+    "patch": "",
+    "original": "unchanged\n",
+    "expected": {
+      "old_content": "unchanged\n",
+      "new_content": "unchanged\n",
+      "filename": "unknown",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "plain_a_directory",
+    "patch": "--- a/foo.txt\n+++ a/foo.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new\n",
+      "filename": "a/foo.txt",
+      "scope": "complete"
+    }
+  },
+  {
+    "name": "plain_b_directory",
+    "patch": "--- b/foo.txt\n+++ b/foo.txt\n@@ -1 +1 @@\n-old\n+new\n",
+    "original": "old\n",
+    "expected": {
+      "old_content": "old\n",
+      "new_content": "new\n",
+      "filename": "b/foo.txt",
+      "scope": "complete"
+    }
+  }
+]

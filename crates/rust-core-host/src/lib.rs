@@ -37,8 +37,13 @@ pub mod compile_context;
 pub mod schema_profiles;
 mod schema_context;
 pub mod host_utils;
+pub mod guardrail_policy;
+pub mod routed_review;
+pub mod patch_source;
+/// Shared typed symbol/reference API for native Rust consumers.
+pub use index_engine_lib as symbol_index;
 pub mod live_server;
-mod lsp_enrich;
+pub mod lsp_enrich;
 pub mod lsp_server_shapes;
 mod parser_registry;
 mod vcs_backend;
@@ -2110,6 +2115,15 @@ fn guardrail_file_matches(rule: &GuardrailRuleInput, old_filename: &str, new_fil
 
 /// python guardrails._evaluate_policy_rules: match a parsed policy's protected paths
 /// against the diff's changes and construct the violations.
+fn evaluate_guardrail_rules_checked(request: &GuardrailEvalRequest) -> Result<Vec<GuardrailViolationOutput>, String> {
+    let relevant = request.rules.iter().any(|rule| rule.language == request.language.to_lowercase()
+        && guardrail_file_matches(rule, &request.old_filename, &request.new_filename));
+    if relevant && (request.old_tree.is_none() || request.new_tree.is_none()) {
+        return Err("guardrail evaluation requires parsed trees for applicable rules".into());
+    }
+    Ok(evaluate_guardrail_rules(request))
+}
+
 fn evaluate_guardrail_rules(request: &GuardrailEvalRequest) -> Vec<GuardrailViolationOutput> {
     let language = request.language.to_lowercase();
     let file = if !request.new_filename.is_empty() {
@@ -4857,8 +4871,7 @@ pub(crate) fn attach_guardrail_violations(diff: &mut Value, new_violations: Vec<
 /// Evaluate protected-path guardrail rules against a served native diff (#100): builds the SAME
 /// eval request the Python glue marshals (`analysis/guardrails._evaluate_policy_rules`) from the
 /// enriched trees + final changes, runs the A1.3 rule engine, and returns the violations as JSON
-/// values. Best-effort: a malformed request yields no violations (the strict policy PARSE in the
-/// live-server layer already deferred anything off-spec).
+/// values. Malformed requests propagate errors so protection cannot silently disappear.
 fn evaluate_guardrail_rules_for_diff(
     diff: &Value,
     rules: &[Value],
@@ -4867,7 +4880,7 @@ fn evaluate_guardrail_rules_for_diff(
     new_filename: &str,
     old_tree_json: &str,
     new_tree_json: &str,
-) -> Vec<Value> {
+) -> Result<Vec<Value>, String> {
     let changes: Vec<Value> = diff
         .get("changes")
         .and_then(Value::as_array)
@@ -4900,12 +4913,11 @@ fn evaluate_guardrail_rules_for_diff(
         "changes": changes,
         "rules": rules,
     });
-    let Ok(request) = serde_json::from_value::<GuardrailEvalRequest>(request_value) else {
-        return Vec::new();
-    };
-    evaluate_guardrail_rules(&request)
+    let request = serde_json::from_value::<GuardrailEvalRequest>(request_value)
+        .map_err(|e| format!("invalid guardrail evaluation request: {e}"))?;
+    evaluate_guardrail_rules_checked(&request)?
         .into_iter()
-        .filter_map(|violation| serde_json::to_value(violation).ok())
+        .map(|violation| serde_json::to_value(violation).map_err(|e| e.to_string()))
         .collect()
 }
 
@@ -4913,18 +4925,7 @@ fn evaluate_guardrail_rules_for_diff(
 /// an EMPTY source side (file add/delete lifecycle) instead of parsing "" — some Wasm parsers
 /// return an in-band error envelope for empty input. Shape + hash recipe match python exactly.
 fn empty_semantic_tree_json(language: &str) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(format!("intentumdiff-empty-tree:{language}").as_bytes());
-    let digest = format!("{:x}", hasher.finalize());
-    json!({
-        "id": "0",
-        "node_type": "source_file",
-        "label": "",
-        "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0},
-        "structural_hash": digest,
-        "children": [],
-    })
-    .to_string()
+    lifecycle::empty_tree(language).to_string()
 }
 
 /// Native generic/markdown-as-text diff (#100): the exact Rust review the differ's routed
@@ -5226,97 +5227,18 @@ pub(crate) fn native_wasm_single_diff(
     apply_file_lifecycle_to_diff(&mut diff, lifecycle);
         if let Some(rules) = guardrail_rules {
             let violations = evaluate_guardrail_rules_for_diff(
-                &diff, rules, language, old_filename, new_filename, "null", "null");
+                &diff, rules, language, old_filename, new_filename, "null", "null")?;
             attach_guardrail_violations(&mut diff, violations);
         }
         return Ok(diff);
     }
 
-    let mut changes = fin
-        .get("changes")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
-    let mut change_groups = fin
-        .get("change_groups")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
-    let mut is_style_only = fin
-        .get("is_style_only")
-        .and_then(Value::as_bool)
-        .unwrap_or(false);
-
-    // Semantic invariances (css color / literal / quote-and-formatting equivalence): the routed
-    // short-circuit runs them on the finalized changes (differ.py:1786). No-op when none fire.
-    if !changes.is_empty() {
-        let inv_request = json!({
-            "mode": "apply",
-            "changes": changes,
-            "old_tree": serde_json::from_str::<Value>(&old_tree_json)
-                .map_err(|exc| format!("old tree json: {exc}"))?,
-            "new_tree": serde_json::from_str::<Value>(&new_tree_json)
-                .map_err(|exc| format!("new tree json: {exc}"))?,
-            "old_source": old_source,
-            "new_source": new_source,
-            "language": language,
-        });
-        let inv = crate::invariance_groups::rust_apply_invariances_value(&inv_request)?;
-        let inv_changes = inv
-            .get("changes")
-            .and_then(Value::as_array)
-            .cloned()
-            .unwrap_or_default();
-        let inv_groups = inv
-            .get("change_groups")
-            .and_then(Value::as_array)
-            .cloned()
-            .unwrap_or_default();
-        if inv_changes.len() != changes.len() || !inv_groups.is_empty() {
-            changes = inv_changes;
-            change_groups.extend(inv_groups);
-            if changes.is_empty() && old_source != new_source {
-                is_style_only = true;
-            }
-        }
-    }
-
-    // Stage-12 style-only resolution (differ.py:1876): zero surviving changes with identical or
-    // whitespace-collapsed tree-equal sources is a style-only diff for every routed language.
-    if changes.is_empty() && !is_style_only {
-        let old_tree: SemanticNode =
-            serde_json::from_str(&old_tree_json).map_err(|exc| format!("old tree: {exc}"))?;
-        let new_tree: SemanticNode =
-            serde_json::from_str(&new_tree_json).map_err(|exc| format!("new tree: {exc}"))?;
-        is_style_only = old_source == new_source
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
-    }
-
-    let has_semantic_changes = !changes.is_empty() && !is_style_only;
-    let mut diff = json!({
-        "old_filename": old_filename,
-        "new_filename": new_filename,
-        "language": language,
-        "changes": changes,
-        "change_groups": change_groups,
-        "has_semantic_changes": has_semantic_changes,
-        "is_style_only": is_style_only,
-        "parse_errors": [],
-        "llm_summary": "",
-        "gitignore_excluded": false,
-        "is_fallback": false,
-        "guardrail_violations": [],
-        "metadata": {
-            "engine_owner": "rust",
-            "semantic_contract": "rust_finalize_review_v1",
-            "rust_core": {
-                "engine": "rust_finalize_review_v1",
-                "stage": "per_stage_finalize_routing_native_live",
-                "used": true,
-            },
-        },
-    });
+    let mut diff = routed_review::complete(&json!({
+        "finalized":fin,"language":language,"old_source":old_source,"new_source":new_source,
+        "old_filename":old_filename,"new_filename":new_filename,
+        "old_tree":serde_json::from_str::<Value>(&old_tree_json).map_err(|e|e.to_string())?,
+        "new_tree":serde_json::from_str::<Value>(&new_tree_json).map_err(|e|e.to_string())?,
+    }))?;
 
     if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
         diff["metadata"]["schema"] = schema_metadata;
@@ -5336,7 +5258,7 @@ pub(crate) fn native_wasm_single_diff(
                 new_filename,
                 &old_tree_json,
                 &new_tree_json,
-            );
+            )?;
             attach_guardrail_violations(&mut diff, violations);
         }
     }
