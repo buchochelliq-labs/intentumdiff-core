@@ -798,6 +798,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         )),
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
+        "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
+        "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
             let data: Vec<u8> = arg_json(args, 0, "data")?;
             serde_json::to_string(&crate::content_type::detect_content_type(&data))
@@ -1278,6 +1280,25 @@ mod tests {
         );
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_object());
+    }
+
+    #[test]
+    fn parser_shortlist_envelope() {
+        let request = json!({"entries":[{"id":"python","languages":["python"],"extensions":[".py"]}],"query":{"filename":"x.py"}}).to_string();
+        let env = call("parser_candidate_shortlist", json!([request]));
+        assert_eq!(env["ok"], true); assert_eq!(env["result"], json!([0]));
+        let invalid = json!({"entries":[{"id":""}],"query":{}}).to_string();
+        assert_eq!(call("parser_candidate_shortlist", json!([invalid]))["ok"], false);
+    }
+
+    #[test]
+    fn ignore_rules_envelope() {
+        let request = json!({"files":[{"directory":"","content":"*.log\n"}],"paths":[{"path":"a.log"},{"path":"a.py"}]}).to_string();
+        let env = call("match_ignore_rules", json!([request]));
+        assert_eq!(env["ok"], true);
+        assert_eq!(env["result"], json!([true, false]));
+        let invalid = json!({"files":[],"paths":[{"path":"../escape"}]}).to_string();
+        assert_eq!(call("match_ignore_rules", json!([invalid]))["ok"], false);
     }
 
     #[test]

@@ -6,6 +6,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "parser_candidate_shortlist" {
+        let entries: Vec<intentumdiff_rust_core::parser_routing::Candidate> = serde_json::from_value(request["entries"].clone())?;
+        let query = serde_json::from_value(request["query"].clone())?;
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::parser_routing::shortlist(&entries, &query)?)?);
+        return Ok(());
+    }
+    if request["handler"] == "match_ignore_rules" {
+        let files: Vec<intentumdiff_rust_core::ignore_rules::IgnoreFile> = serde_json::from_value(request["files"].clone())?;
+        let rules = intentumdiff_rust_core::ignore_rules::IgnoreRules::new(&files)?;
+        println!("{}", rules.is_ignored(request["path"].as_str().ok_or("path")?, request["is_dir"].as_bool().unwrap_or(false))?);
+        return Ok(());
+    }
+    if request["handler"] == "detect_content_type" {
+        let bytes: Vec<u8> = serde_json::from_value(request["bytes"].clone())?;
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::content_type::detect_content_type(&bytes))?);
+        return Ok(());
+    }
     if request["handler"] == "reconstruct_patch" {
         let result = intentumdiff_rust_core::patch_source::reconstruct(request["patch"].as_str().ok_or("patch")?, request["original"].as_str(), request["filename"].as_str(), request["require_complete"].as_bool().unwrap_or(false));
         let output = match result { Ok(result) => serde_json::to_value(result)?, Err(error) => serde_json::json!({"error":error}) };
