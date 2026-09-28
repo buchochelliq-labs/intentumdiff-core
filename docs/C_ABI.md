@@ -302,3 +302,9 @@ Events are bounded to twice the catalogue length and validated against the
 requested action; duplicate/out-of-order events and events after an outcome fail.
 The existing native bundled-manifest resolver has not yet adopted this protocol;
 its integration and broader inventory loading remain tracked in #108.
+
+`parser_availability(name, filename, system, machine)` returns an object with
+`reason` (string or null) and `unavailable` (`[parser, reason]` or null). It delegates
+to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
+both Python discovery and native bundled discovery apply this policy before
+compiling components. The measured PowerShell exclusion is Windows ARM only.
