@@ -1232,42 +1232,31 @@ pub(crate) fn rust_offset_from_line_col(offsets: &[usize], line: u32, col: u32) 
         .map(|line_start| line_start + col as usize)
 }
 
-pub(crate) fn python_formatting_equivalence_group(changes: &[ChangeDraft<'_>]) -> Value {
-    let old_ids: Vec<String> = changes
-        .iter()
-        .filter_map(|change| change.old_node.map(|node| node.id.clone()))
-        .take(8)
-        .collect();
-    let new_ids: Vec<String> = changes
-        .iter()
-        .filter_map(|change| change.new_node.map(|node| node.id.clone()))
-        .take(8)
-        .collect();
-    let old_labels: Vec<String> = changes
-        .iter()
-        .flat_map(|change| node_labels(change.old_node))
-        .filter(|label| !label.is_empty())
-        .take(24)
-        .collect();
-    let new_labels: Vec<String> = changes
-        .iter()
-        .flat_map(|change| node_labels(change.new_node))
-        .filter(|label| !label.is_empty())
-        .take(24)
-        .collect();
-    json!({
-        "kind": "IGNORED_STYLE",
-        "raw_change_indices": [],
-        "old_labels": old_labels,
-        "new_labels": new_labels,
-        "old_node_ids": old_ids,
-        "new_node_ids": new_ids,
-        "confidence": 0.85,
-        "rule_id": "python.formatting.call_wrapping_equivalence",
-        "metadata": {
-            "reason": "Python formatting/call wrapping changed without changing review intent."
-        },
-    })
+/// Style evidence must name unchanged matched calls, never surviving semantic edits.
+pub(crate) fn python_call_layout_groups(
+    matching: &[MatchPair<'_>], old_source: &str, new_source: &str,
+) -> Vec<Value> {
+    matching.iter().filter_map(|pair| {
+        let old = pair.old_node;
+        let new = pair.new_node;
+        if old.node_type != "call" || new.node_type != "call"
+            || old.structural_hash != new.structural_hash { return None; }
+        let (os, oe) = rust_source_span_offsets(old_source, &old.position)?;
+        let (ns, ne) = rust_source_span_offsets(new_source, &new.position)?;
+        let old_text = old_source.get(os..oe)?;
+        let new_text = new_source.get(ns..ne)?;
+        // Exact semantic-tree equality includes literal contents. Different source
+        // spans of the same call then supply layout evidence, including trailing commas.
+        if old_text == new_text { return None; }
+        Some(json!({
+            "kind":"IGNORED_STYLE", "raw_change_indices":[],
+            "old_labels":node_labels(Some(old)), "new_labels":node_labels(Some(new)),
+            "old_node_ids":[old.id], "new_node_ids":[new.id], "confidence":1.0,
+            "rule_id":"python.formatting.call_wrapping_equivalence",
+            "metadata":{"reason":"Matched call has an unchanged semantic tree and changed source layout.",
+                "old_position":old.position, "new_position":new.position, "evidence":"matched_call_source"}
+        }))
+    }).collect()
 }
 
 pub(crate) fn add_compact_superseded_group_for_refactorings(

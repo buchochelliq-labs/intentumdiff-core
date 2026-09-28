@@ -1,0 +1,14 @@
+[
+  {
+    "name": "wrapping with deleted call and real argument edit",
+    "old": "def f():\n    send(\"host\", count=1)\n    print(\"foo\")\n    return use(1)\n",
+    "new": "def f():\n    send(\n        \"host\",\n        count=1,\n    )\n    return use(2)\n",
+    "style": true
+  },
+  {
+    "name": "deletion offset is not formatting",
+    "old": "def f():\n    print(\"foo\")\n    return use(1)\n",
+    "new": "def f():\n    return use(2)\n",
+    "style": false
+  }
+]
