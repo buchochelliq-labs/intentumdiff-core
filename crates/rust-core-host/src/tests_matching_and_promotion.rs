@@ -1149,3 +1149,23 @@ fn reorder_compares_surviving_siblings_not_absolute_positions() {
         }
     }
 }
+
+#[test]
+fn call_layout_evidence_excludes_real_edits_and_deleted_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/call_layout_evidence.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            let groups: Vec<_> = diff["change_groups"].as_array().unwrap().iter()
+                .filter(|g| g["rule_id"] == "python.formatting.call_wrapping_equivalence").collect();
+            assert_eq!(!groups.is_empty(), case["style"].as_bool().unwrap(), "{route}: {diff}");
+            for group in groups {
+                assert_eq!(group["metadata"]["evidence"], "matched_call_source");
+                let labels = group["old_labels"].as_array().unwrap();
+                assert!(labels.contains(&json!("send")));
+                assert!(!labels.contains(&json!("foo")) && !labels.contains(&json!("use")));
+            }
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "DELETION"));
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"));
+        }
+    }
+}

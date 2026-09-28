@@ -1575,6 +1575,7 @@ fn finalize_review_impl(
         new_source,
         &mut finalization,
         language,
+        &matching,
     );
 
     // Language-gated presentation passes, mirroring python `presentation.py`'s
@@ -3419,6 +3420,7 @@ fn diff_python_sources_final_impl(
         new_source,
         &mut review_finalization,
         "python",
+        &matching,
     );
     probe.push_elapsed(
         "rust_python_review_finalization",
@@ -8636,6 +8638,7 @@ fn finalize_python_review_drafts<'a>(
     new_source: &str,
     finalization: &mut PythonReviewFinalization,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
@@ -8722,21 +8725,9 @@ fn finalize_python_review_drafts<'a>(
             "rule_id": "refinement.suppress_low_signal_reorders",
             "metadata": {"suppressed_count": suppressed_reorders},
         }));
-        // The formatting-equivalence relabel is a PYTHON style rule; it carried
-        // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        // A renamed callable can suppress positional shifts while retaining real
-        // body edits. Suppression alone cannot prove formatting equivalence for
-        // those surviving changes or assign their nodes to ignored-style evidence.
-        if language == "python" && !changes.iter().any(|change| {
-            change.refactoring_kind.as_deref() == Some("RENAME_SYMBOL")
-                && change.old_node.map(anchor_is_function).unwrap_or(false)
-        }) {
-            finalization
-                .change_groups
-                .push(python_formatting_equivalence_group(changes));
-        }
     }
     if language == "python" {
+        finalization.change_groups.extend(python_call_layout_groups(matching, old_source, new_source));
         decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
         function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
     }
@@ -8896,6 +8887,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
             new_source,
             &mut finalization,
             language,
+            &matching,
         );
 
         if changes.is_empty() {
