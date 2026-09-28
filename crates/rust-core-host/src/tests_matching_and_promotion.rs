@@ -1155,6 +1155,7 @@ fn call_layout_evidence_excludes_real_edits_and_deleted_calls() {
     let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/call_layout_evidence.json")).unwrap();
     for case in cases.as_array().unwrap() {
         for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MOVE"), "{route}: {diff}");
             let groups: Vec<_> = diff["change_groups"].as_array().unwrap().iter()
                 .filter(|g| g["rule_id"] == "python.formatting.call_wrapping_equivalence").collect();
             assert_eq!(!groups.is_empty(), case["style"].as_bool().unwrap(), "{route}: {diff}");
@@ -1166,6 +1167,23 @@ fn call_layout_evidence_excludes_real_edits_and_deleted_calls() {
             }
             assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "DELETION"));
             assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"));
+        }
+    }
+}
+
+#[test]
+fn argument_lists_follow_their_owning_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/argument_owner_matching.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            let mut actual: Vec<String> = diff["changes"].as_array().unwrap().iter().map(|c|
+                json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]]).to_string()).collect();
+            let mut expected: Vec<String> = case["expected"].as_array().unwrap().iter().map(Value::to_string).collect();
+            actual.sort(); expected.sort();
+            assert_eq!(actual, expected, "{} {route}: {diff}", case["name"]);
+            if !case["expected"].as_array().unwrap().iter().any(|e| e[0] == "MOVE") {
+                assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["description"].as_str().unwrap_or("").contains("moved")), "{route}: {diff}");
+            }
         }
     }
 }
