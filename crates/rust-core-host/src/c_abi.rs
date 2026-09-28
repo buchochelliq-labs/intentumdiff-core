@@ -814,6 +814,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
+        "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
         "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
@@ -1328,6 +1329,15 @@ mod tests {
         );
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_object());
+    }
+
+    #[test]
+    fn parser_availability_envelope() {
+        let result = call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "ARM64"]));
+        assert_eq!(result["ok"], true);
+        assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
+        assert_eq!(result["result"]["unavailable"][0], "powershell");
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
     }
 
     #[test]

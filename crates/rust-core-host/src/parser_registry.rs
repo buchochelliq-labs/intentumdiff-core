@@ -57,11 +57,21 @@ fn load_manifest(wasm_dir: &str) -> Result<Option<Arc<Manifest>>, String> {
 // A component can advertise several language aliases in the manifest. Load and
 // probe it once, retaining every alias for explicit selection and discovery.
 fn catalog(manifest: &Manifest) -> Vec<(Candidate, String)> {
+    catalog_for_platform(manifest, std::env::consts::OS, std::env::consts::ARCH)
+}
+
+fn catalog_for_platform(manifest: &Manifest, system: &str, machine: &str) -> Vec<(Candidate, String)> {
+    // Exclude the component, not just one alias for it.
+    let blocked: std::collections::BTreeSet<_> = manifest.parsers.iter()
+        .filter(|(language, entry)| crate::parser_availability::incompatible_reason(language, system, machine).is_some()
+            || crate::parser_availability::incompatible_reason(&entry.plugin_id, system, machine).is_some())
+        .map(|(_, entry)| &entry.wasm).collect();
     let mut grouped: BTreeMap<String, Candidate> = BTreeMap::new();
     let mut languages: Vec<_> = manifest.parsers.keys().collect();
     languages.sort();
     for language in languages {
         let entry = &manifest.parsers[language];
+        if blocked.contains(&entry.wasm) { continue; }
         let candidate = grouped.entry(entry.wasm.clone()).or_insert_with(|| Candidate {
             id: entry.plugin_id.clone(), ..Default::default()
         });
@@ -213,6 +223,20 @@ mod tests {
         let candidates: Vec<_> = entries.into_iter().map(|(c,_)|c).collect();
         assert_eq!(crate::parser_routing::filename_candidates(&candidates,"Dockerfile").unwrap(), [1]);
     }
+    #[test]
+    fn native_catalog_excludes_windows_arm_powershell_before_loading() {
+        let manifest: Manifest = serde_json::from_value(serde_json::json!({
+            "parsers":{"powershell":{"plugin_id":"powershell","wasm":"powershell_parser.wasm"},
+                "generic":{"plugin_id":"generic","wasm":"generic_parser.wasm"},
+                "alias":{"plugin_id":"alias","wasm":"powershell_parser.wasm"}}, "extension_index":{}
+        })).unwrap();
+        let windows = catalog_for_platform(&manifest, "windows", "aarch64");
+        assert_eq!(windows.len(), 1);
+        assert_eq!(windows[0].0.id, "generic");
+        assert_eq!(catalog_for_platform(&manifest, "macos", "aarch64").len(), 2);
+        assert_eq!(catalog_for_platform(&manifest, "windows", "x86_64").len(), 2);
+    }
+
     #[test]
     fn fuel_traps_are_terminal_but_missing_components_are_not() {
         assert!(HostError::from(wasmtime::Error::new(wasmtime::Trap::OutOfFuel)).terminal);

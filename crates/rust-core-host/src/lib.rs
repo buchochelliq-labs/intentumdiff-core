@@ -54,6 +54,7 @@ mod config;
 pub mod content_type;
 pub mod ignore_rules;
 pub mod parser_routing;
+pub mod parser_availability;
 pub mod content_detection;
 pub mod filename_selection;
 
