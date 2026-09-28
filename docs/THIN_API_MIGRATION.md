@@ -27,3 +27,23 @@ Compile metadata does not execute a compiler or change parsing. Native schema
 resolution is local by default; hosts can supply fetched schema context. Descriptor
 keyed-array hints retain the existing identity-field model, not a new schema validator.
 See C_ABI.md and evidence/thin-api/README.md for contracts and reproducible checks.
+
+## Native parser selection (#108)
+
+The bundled native resolver now drives `filename_selection::next_action`, the
+same public Rust policy that Python drives over the C ABI. Manifest records are
+discovery hints; aliases sharing a component are loaded once, then guest grammar,
+languages, priority and detection results determine selection. Missing components
+can be skipped; runtime traps and probe failures escape as errors. Invalid
+manifests fail explicitly. Single-file review, commit review and standalone parse
+all use this host adapter. Certified Python execution remains available only after
+real component selection and the existing first-party identity check.
+
+Source fixtures cover a Python literal edit, creation/deletion and Dockerfile
+image changes. Python/native tests exercise a misleading manifest candidate that
+actually declines, a missing component, terminal fuel failures, and the resulting
+diffs. Empty Python modules retain their structural label (#122), preventing a
+spurious module-name modification when source is created or emptied.
+
+This does not certify third-party interpret-CST execution or shared trust policy;
+those host/execution concerns remain separate from deterministic selection.

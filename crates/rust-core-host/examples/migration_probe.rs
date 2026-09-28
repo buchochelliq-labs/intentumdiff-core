@@ -6,6 +6,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "native_selection_diff" {
+        let result = intentumdiff_rust_core::live_server::live_diff_contents_impl(
+            request["repo"].as_str().ok_or("repo")?, request["filename"].as_str().ok_or("filename")?,
+            request["old"].as_str().ok_or("old")?, request["new"].as_str().ok_or("new")?,
+            &request.get("config").cloned().unwrap_or_else(|| serde_json::json!({})).to_string(),
+            request["wasm"].as_str().ok_or("wasm")?);
+        match result {
+            Ok(output) => println!("{output}"),
+            Err(error) => println!("{}", serde_json::json!({"error":error})),
+        }
+        return Ok(());
+    }
     if request["handler"] == "filename_selection" {
         let input = serde_json::from_value(request["request"].clone())?;
         let events: Vec<intentumdiff_rust_core::filename_selection::Event> = serde_json::from_value(request["events"].clone())?;

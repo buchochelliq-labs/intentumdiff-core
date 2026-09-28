@@ -1,0 +1,92 @@
+{
+  "name": "custom Python component repeats one edit across meaningful groups",
+  "filename": "example.py",
+  "old": "def answer():\n    return 1\n",
+  "new": "def answer():\n    return 2\n",
+  "manifest_plugin_id": "custom-python",
+  "expected_independent_changes": 1,
+  "observed_changes": 1,
+  "observed_groups": [
+    {
+      "confidence": 0.9,
+      "kind": "MEANINGFUL_CHANGE",
+      "metadata": {
+        "index_space": "final_changes"
+      },
+      "new_labels": [
+        "2"
+      ],
+      "new_node_ids": [
+        "0.0.2.0.0"
+      ],
+      "old_labels": [
+        "1"
+      ],
+      "old_node_ids": [
+        "0.0.2.0.0"
+      ],
+      "raw_change_indices": [
+        0
+      ],
+      "rule_id": "presentation.final_meaningful_group"
+    },
+    {
+      "confidence": 0.86,
+      "kind": "MEANINGFUL_CHANGE",
+      "metadata": {
+        "entity_node_id": "0.0"
+      },
+      "new_labels": [
+        "answer",
+        "2"
+      ],
+      "new_node_ids": [
+        "0.0",
+        "0.0.0",
+        "0.0.1",
+        "0.0.2",
+        "0.0.2.0",
+        "0.0.2.0.0"
+      ],
+      "old_labels": [
+        "answer",
+        "1"
+      ],
+      "old_node_ids": [
+        "0.0",
+        "0.0.0",
+        "0.0.1",
+        "0.0.2",
+        "0.0.2.0",
+        "0.0.2.0.0"
+      ],
+      "raw_change_indices": [
+        0
+      ],
+      "rule_id": "refinement.entity_child_content_changed"
+    },
+    {
+      "confidence": 0.9,
+      "kind": "MEANINGFUL_CHANGE",
+      "metadata": {
+        "entity_type": "function_definition",
+        "new_label": "answer",
+        "old_label": "answer"
+      },
+      "new_labels": [
+        "answer"
+      ],
+      "new_node_ids": [
+        "0.0"
+      ],
+      "old_labels": [
+        "answer"
+      ],
+      "old_node_ids": [
+        "0.0"
+      ],
+      "raw_change_indices": [],
+      "rule_id": "presentation.surface_changed_in_place_entity"
+    }
+  ]
+}

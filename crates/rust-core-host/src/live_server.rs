@@ -372,18 +372,14 @@ fn diff_resolved_sources(
 ) -> Result<String, String> {
     let fallback = |reason: &str| Ok(json!({ "fallback": reason }).to_string());
 
-    // Resolve the parser via the bundled manifest (extension-based). An unknown extension or a
-    // missing manifest -> the Python differ path. Python resolves to the native tree-sitter path
-    // (empty wasm_path); other languages carry their wasm parser path (`lib.rs:3303`).
-    let resolved = match crate::parser_registry::resolve_parser(path, wasm_dir) {
-        Some(r) => r,
-        None => return fallback("no bundled parser for this file extension"),
-    };
-
     let config: Value = if config_json.trim().is_empty() {
         json!({})
     } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
+    };
+    let resolved = match crate::parser_registry::resolve_parser(path, content, &config, wasm_dir)? {
+        Some(r) => r,
+        None => return fallback("no bundled parser accepted this file"),
     };
     // Native guardrails (#100): strictly load the discovered policy's protected rules once.
     // Off-spec/unreadable policies defer (python raises for those on EVERY diff, python files
@@ -538,7 +534,7 @@ pub fn live_handle_review_impl(
         let (old_content, new_content, old_path, new_path, staging) =
             (get(0), get(1), get(2), get(3), get(4));
         let path = if !new_path.is_empty() { new_path.clone() } else { old_path.clone() };
-        let resolved = match crate::parser_registry::resolve_parser(&path, wasm_dir) {
+        let resolved = match crate::parser_registry::resolve_parser(&path, &new_content, &config_value, wasm_dir)? {
             Some(r) => r,
             None => return fallback(&format!("no bundled parser for {path}")),
         };
