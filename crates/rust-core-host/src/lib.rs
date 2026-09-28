@@ -6937,10 +6937,23 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let before_label = matches.len();
     let matches = label_match(&old_index, &new_index, matches);
     diagnostics.label_parent_matches += matches.len().saturating_sub(before_label);
+    // Preserve only call-role correspondences established before bottom-up recovery;
+    // bottom-up pairs may be bootstrapped by harvested leaves and are not proof.
+    let label_pairs: HashMap<&str, &str> = matches.iter()
+        .map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let renamed_call_statements: HashSet<(&str, &str)> = matches.iter().filter_map(|p| {
+        if p.old_node.node_type != "call" || p.old_node.label == p.new_node.label { return None; }
+        let old_parent = effective_parent_node(old_index, &p.old_node.id)?;
+        let new_parent = effective_parent_node(new_index, &p.new_node.id)?;
+        (matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+            && old_parent.node_type == new_parent.node_type
+            && label_pairs.get(old_parent.id.as_str()).copied() == Some(new_parent.id.as_str()))
+            .then_some((old_parent.id.as_str(), new_parent.id.as_str()))
+    }).collect();
     let before_bottom_up = matches.len();
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
-    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches);
+    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
     MatchingReport {
@@ -6961,6 +6974,7 @@ fn prune_cross_statement_leaf_pairs<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
     matches: Vec<MatchPair<'a>>,
+    renamed_call_statements: &HashSet<(&str, &str)>,
 ) -> Vec<MatchPair<'a>> {
     fn enclosing_statement<'b>(index: &TreeIndex<'b>, id: &str) -> Option<&'b SemanticNode> {
         let mut cursor = id;
@@ -7005,6 +7019,9 @@ fn prune_cross_statement_leaf_pairs<'a>(
                 && !pair.new_node.is_leaf()
         })
         .filter(|pair| {
+            if renamed_call_statements.contains(&(pair.old_node.id.as_str(), pair.new_node.id.as_str())) {
+                return false;
+            }
             match (
                 first_callee_label(pair.old_node),
                 first_callee_label(pair.new_node),
@@ -7467,6 +7484,42 @@ fn label_match<'a>(
         if matched_old.contains(old_node.id.as_str()) {
             continue;
         }
+        // A call in a uniquely corresponding structural role may change its callee.
+        // Establish the call before matching its argument-list scaffold.
+        if old_node.node_type == "call" {
+            let partner = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| paired_old_to_new.get(*p))
+                .and_then(|p| new_index.by_id.get(*p));
+            let old_parent = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| old_index.by_id.get(*p));
+            if let (Some(old_parent), Some(new_parent)) = (old_parent, partner) {
+                let old_calls: Vec<_> = old_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                let new_calls: Vec<_> = new_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                if matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+                    && old_parent.node_type == new_parent.node_type
+                    && old_calls.len() == 1 && new_calls.len() == 1
+                    && !matched_new.contains(new_calls[0].id.as_str()) {
+                    let new_node = new_calls[0];
+                    result.push(MatchPair { old_node, new_node });
+                    matched_old.insert(old_node.id.as_str());
+                    matched_new.insert(new_node.id.as_str());
+                    paired_old_to_new.insert(old_node.id.as_str(), new_node.id.as_str());
+                    // A changed invocation target is an identifier update, not evidence
+                    // of a variable rename. Keep it paired in the established call slot.
+                    if let (Some(old_callee), Some(new_callee)) = (old_node.children.first(), new_node.children.first()) {
+                        if old_callee.node_type == "identifier" && new_callee.node_type == "identifier"
+                            && !matched_old.contains(old_callee.id.as_str())
+                            && !matched_new.contains(new_callee.id.as_str()) {
+                            result.push(MatchPair { old_node: old_callee, new_node: new_callee });
+                            matched_old.insert(old_callee.id.as_str());
+                            matched_new.insert(new_callee.id.as_str());
+                            paired_old_to_new.insert(old_callee.id.as_str(), new_callee.id.as_str());
+                        }
+                    }
+                    continue;
+                }
+            }
+        }
         let Some(candidates) =
             new_by_type_label.get_mut(&(old_node.node_type.as_str(), old_node.label.as_str()))
         else {
@@ -7515,6 +7568,8 @@ fn label_match<'a>(
                 !matched_new.contains(candidate.id.as_str())
                     && label_match_parent_compatible(old_node, candidate, old_index, new_index)
                     && generic_anchored(candidate)
+                    && argument_owner_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
+                    && call_role_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
             })
             .min_by_key(|(_, candidate)| {
                 let candidate_parent = new_index.parent.get(candidate.id.as_str()).copied();
@@ -7568,6 +7623,47 @@ fn enclosing_entity_node<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a Sema
         cursor = parent;
     }
     None
+}
+
+/// Approximate calls cannot steal a different statement's call merely by callee name.
+fn call_role_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "call" { return true; }
+    let (Some(old_parent), Some(new_parent)) = (
+        effective_parent_node(old_index, &old_node.id),
+        effective_parent_node(new_index, &new_node.id),
+    ) else { return true; };
+    if let Some(partner) = paired.get(old_parent.id.as_str()) {
+        return *partner == new_parent.id;
+    }
+    if paired.values().any(|id| *id == new_parent.id) { return false; }
+    old_parent.node_type == new_parent.node_type
+}
+
+/// Argument-list labels describe a grammatical role, not movable identity. Approximate
+/// matching must use the owning call's established correspondence; otherwise an earlier
+/// deleted call can steal the surviving call's arguments (issue #131). Exact subtree
+/// matching remains free to recognize genuine unchanged relocated expressions.
+fn argument_owner_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "argument_list" {
+        return true;
+    }
+    match (old_index.parent.get(old_node.id.as_str()), new_index.parent.get(new_node.id.as_str())) {
+        (Some(old_parent), Some(new_parent)) => paired.get(*old_parent) == Some(new_parent),
+        (None, None) => true,
+        _ => false,
+    }
 }
 
 fn label_match_parent_compatible(
@@ -7656,7 +7752,10 @@ fn bottom_up_match<'a>(
             if matched_new.contains(new_node.id.as_str()) {
                 continue;
             }
-            if !bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index) {
+            if !bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index)
+                || !argument_owner_compatible(old_node, new_node, old_index, new_index, &old_to_new)
+                || !call_role_compatible(old_node, new_node, old_index, new_index, &old_to_new)
+            {
                 continue;
             }
             // Scope gate (issue #19, delphi statement scoping): a container may only
@@ -8470,9 +8569,8 @@ fn update_looks_moved(
     new_parent: &HashMap<&str, &str>,
     old_to_new: &HashMap<&str, &SemanticNode>,
 ) -> bool {
-    if pair.old_node.position.start_line != pair.new_node.position.start_line {
-        return true;
-    }
+    // Line offsets shift after sibling insertions/deletions; only changed ownership
+    // supports moved-update wording. Named moved ancestors are annotated separately.
     let Some(old_pid) = old_parent.get(pair.old_node.id.as_str()) else {
         return false;
     };
