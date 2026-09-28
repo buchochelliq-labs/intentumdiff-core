@@ -44,3 +44,20 @@ fn shared_source_judged_corpus() {
         if case["no_style_evidence"] == true { assert!(out["metadata"].get("ignored_style_changes").is_none()); }
     }
 }
+
+#[test]
+fn partial_invariance_filter_preserves_entity_context_only_for_surviving_evidence() {
+    let cases: serde_json::Value = serde_json::from_str(include_str!("fixtures/routed_review.json")).unwrap();
+    let mut request = cases.as_array().unwrap().iter().find(|c| c["name"] == "mixed_meaningful_group").unwrap()["request"].clone();
+    let group = &mut request["finalized"]["change_groups"][0];
+    group["metadata"] = json!({"old_entity_label":"answer", "new_entity_label":"answer"});
+    group["old_labels"] = json!(["answer", "1", "2"]);
+    group["new_labels"] = json!(["answer", "0x1", "3"]);
+    let out = complete(&request).unwrap();
+    let group = out["change_groups"].as_array().unwrap().iter().find(|g| g["kind"] == "MEANINGFUL_CHANGE").unwrap();
+    assert_eq!(group["raw_change_indices"], json!([0]));
+    assert_eq!(group["old_labels"], json!(["answer", "2"]));
+    assert_eq!(group["new_labels"], json!(["answer", "3"]));
+    assert_eq!(group["old_node_ids"], json!(["c"]));
+    assert_eq!(group["new_node_ids"], json!(["d"]));
+}

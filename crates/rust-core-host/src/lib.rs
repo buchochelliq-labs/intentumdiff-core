@@ -1650,13 +1650,7 @@ fn finalize_review_impl(
     let mut ignored_style_changes = finalization.ignored_style_changes;
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&drafts));
-    change_groups.extend(final_meaningful_groups_from_drafts(&drafts));
-    // Entity-anchored grouping (issue #57 abap): "GREET changed" for child modifications
-    // under a same-identity entity whose content changed.
-    change_groups.extend(entity_child_content_groups(&drafts, &old_tree, &new_tree));
-    // Changed-in-place entity surfacing (issue #57 graphql): a matched named entity whose body
-    // changed carries its label into a group even though only descendants appear as changes.
-    change_groups.extend(surface_changed_in_place_entity_groups(&drafts, &matching));
+    change_groups.extend(final_meaningful_groups_from_drafts(&drafts, &matching));
     if let Some((group, ignored)) = formatting_equivalence_group_drafts(&drafts, language) {
         change_groups.push(group);
         ignored_style_changes.push(ignored);
@@ -3502,7 +3496,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
-    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts, &matching));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -3562,6 +3556,33 @@ fn diff_python_sources_final_impl(
     if !review_finalization.ignored_style_changes.is_empty() {
         diff["metadata"]["ignored_style_changes"] =
             Value::Array(review_finalization.ignored_style_changes);
+    }
+    // Certified and component routes share source-level invariance completion.
+    // In a mixed edit, equivalent literal spelling must not remain meaningful
+    // merely because another edit in the same entity changes behavior.
+    let completed = routed_review::complete(&json!({
+        "language":"python", "old_source":old_source, "new_source":new_source,
+        "old_filename":old_filename, "new_filename":new_filename,
+        "old_tree":old_tree, "new_tree":new_tree,
+        "finalized":{"changes":diff["changes"], "change_groups":diff["change_groups"],
+            "is_style_only":diff["is_style_only"],
+            "ignored_style_changes":diff["metadata"]["ignored_style_changes"],
+            "no_surviving_changes":diff["metadata"]["no_surviving_changes"]}
+    }))?;
+    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only"] {
+        diff[key] = completed[key].clone();
+    }
+    for key in ["ignored_style_changes", "no_surviving_changes"] {
+        if let Some(value) = completed["metadata"].get(key) { diff["metadata"][key] = value.clone(); }
+    }
+    // Scope indices also refer to the surviving final change list.
+    let final_changes = diff["changes"].as_array().expect("completed changes");
+    let old_scopes = scope_entries_for_change_values(final_changes, true, &old_index);
+    let new_scopes = scope_entries_for_change_values(final_changes, false, &new_index);
+    if !old_scopes.is_empty() || !new_scopes.is_empty() {
+        diff["metadata"]["scope_trails"] = json!({"old":old_scopes, "new":new_scopes});
+    } else {
+        diff["metadata"].as_object_mut().unwrap().remove("scope_trails");
     }
     apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
     Ok(diff)
@@ -8916,7 +8937,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
-    change_groups.extend(final_meaningful_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes, &matching));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9170,181 +9191,78 @@ use invariance_groups::*;
 /// Every final Rust route owns its meaningful groups. The certified batch returns
 /// directly through the thin Python wrapper, so it cannot rely on Python presentation
 /// to add these groups (especially for body edits next to a callable rename).
-fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
-    changes
-        .iter()
-        .enumerate()
-        .filter(|(_, change)| {
-            matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION")
-        })
-        .map(|(idx, change)| {
-            final_change_group_from_draft(
-                idx,
-                change,
-                "MEANINGFUL_CHANGE",
-                "presentation.final_meaningful_group",
-            )
-        })
-        .collect()
-}
-
-/// python refinement._group_child_modifications_under_entities (issue #57 abap): a MODIFICATION
-/// whose nearest same-identity entity ancestor changed content gets an entity-ANCHORED
-/// MEANINGFUL_CHANGE group (rule refinement.entity_child_content_changed) so the review reads
-/// "GREET changed" with the statement edits beneath it — not a free-floating leaf edit.
-fn entity_child_content_groups(
-    changes: &[ChangeDraft<'_>],
-    old_tree: &SemanticNode,
-    new_tree: &SemanticNode,
+fn final_meaningful_groups_from_drafts(
+    changes: &[ChangeDraft<'_>], matching: &[MatchPair<'_>],
 ) -> Vec<Value> {
-    const ROOT_CONTAINERS: &[&str] = &["module", "document", "program", "source_file"];
-    fn nearest_entity<'a>(
-        id: &str,
-        by_id: &HashMap<&str, &'a SemanticNode>,
-    ) -> Option<&'a SemanticNode> {
-        let mut current = id.to_string();
-        while let Some((parent_id, _)) = current.rsplit_once('.') {
-            if let Some(node) = by_id.get(parent_id).copied() {
-                if is_entity_container_type(node.node_type.to_lowercase().as_str()) {
-                    return Some(node);
+    // Each ordinary edit has one meaningful representation. A nearest matched
+    // entity supplies context, not an extra independently counted semantic item.
+    // MOVE/REFACTORING relationships remain owned by their dedicated groups.
+    let is_entity = |node: &SemanticNode| {
+        !node.label.is_empty() && node.label != node.node_type
+            && (is_entity_container_type(&node.node_type)
+                || node.node_type.ends_with("_definition")
+                || node.node_type.ends_with("_declaration"))
+    };
+    let descendant = |node: Option<&SemanticNode>, parent: &SemanticNode| {
+        node.is_some_and(|node| node.id.strip_prefix(&parent.id).is_some_and(|tail| tail.starts_with('.')))
+    };
+    let eligible: Vec<_> = matching.iter().filter(|pair| {
+        is_entity(pair.old_node) && is_entity(pair.new_node)
+            && pair.old_node.node_type == pair.new_node.node_type
+            && pair.old_node.label == pair.new_node.label
+            && pair.old_node.structural_hash != pair.new_node.structural_hash
+    }).collect();
+    let old_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.old_node.id.as_str(), *pair)).collect();
+    let new_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.new_node.id.as_str(), *pair)).collect();
+    let mut groups = Vec::new();
+    let mut anchors: HashMap<(String, String), usize> = HashMap::new();
+    for (index, change) in changes.iter().enumerate() {
+        if !matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION") { continue; }
+        let mut anchor = None;
+        let (node, owners) = if let Some(node) = change.old_node { (Some(node), &old_owners) }
+            else { (change.new_node, &new_owners) };
+        if let Some(node) = node {
+            let mut id = node.id.as_str();
+            while let Some((parent, _)) = id.rsplit_once('.') {
+                if let Some(pair) = owners.get(parent) {
+                    if change.old_node.is_none_or(|_| descendant(change.old_node, pair.old_node))
+                        && change.new_node.is_none_or(|_| descendant(change.new_node, pair.new_node)) {
+                        anchor = Some(*pair);
+                        break;
+                    }
                 }
+                id = parent;
             }
-            current = parent_id.to_string();
         }
-        None
-    }
-    let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
-    let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
-    let all_labels = |node: Option<&SemanticNode>| -> Vec<String> {
-        let Some(node) = node else { return Vec::new() };
-        std::iter::once(node)
-            .chain(node.descendants())
-            .filter(|n| !n.label.is_empty())
-            .map(|n| n.label.clone())
-            .collect()
-    };
-    let all_ids = |node: &SemanticNode| -> Vec<String> {
-        std::iter::once(node)
-            .chain(node.descendants())
-            .map(|n| n.id.clone())
-            .collect()
-    };
-
-    let mut groups = Vec::new();
-    let mut seen: HashSet<(String, String)> = HashSet::new();
-    for (idx, change) in changes.iter().enumerate() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+        let Some(pair) = anchor else {
+            groups.push(final_change_group_from_draft(index, change, "MEANINGFUL_CHANGE", "presentation.final_meaningful_group"));
             continue;
         };
-        let (Some(old_entity), Some(new_entity)) = (
-            nearest_entity(old_node.id.as_str(), &old_by_id),
-            nearest_entity(new_node.id.as_str(), &new_by_id),
-        ) else {
-            continue;
-        };
-        if ROOT_CONTAINERS.contains(&old_entity.node_type.to_lowercase().as_str())
-            || ROOT_CONTAINERS.contains(&new_entity.node_type.to_lowercase().as_str())
-        {
-            continue;
+        let key = (pair.old_node.id.clone(), pair.new_node.id.clone());
+        let group_index = *anchors.entry(key).or_insert_with(|| {
+            let position = groups.len();
+            groups.push(json!({
+                "kind":"MEANINGFUL_CHANGE", "raw_change_indices":[],
+                "old_labels":[pair.old_node.label], "new_labels":[pair.new_node.label],
+                "old_node_ids":[], "new_node_ids":[], "confidence":0.9,
+                "rule_id":"refinement.entity_child_content_changed",
+                "metadata":{"index_space":"final_changes", "entity_node_id":pair.old_node.id,
+                    "old_entity_node_id":pair.old_node.id, "new_entity_node_id":pair.new_node.id,
+                    "old_entity_label":pair.old_node.label, "new_entity_label":pair.new_node.label,
+                    "entity_type":pair.old_node.node_type}
+            }));
+            position
+        });
+        let group = &mut groups[group_index];
+        group["raw_change_indices"].as_array_mut().unwrap().push(json!(index));
+        for (node, ids, labels) in [(change.old_node,"old_node_ids","old_labels"), (change.new_node,"new_node_ids","new_labels")] {
+            if let Some(node) = node {
+                group[ids].as_array_mut().unwrap().push(json!(node.id));
+                let label = json!(node.label);
+                let values = group[labels].as_array_mut().unwrap();
+                if !node.label.is_empty() && !values.contains(&label) { values.push(label); }
+            }
         }
-        if old_entity.id == old_node.id || new_entity.id == new_node.id {
-            continue;
-        }
-        if old_entity.node_type != new_entity.node_type
-            || old_entity.label != new_entity.label
-            || old_entity.structural_hash == new_entity.structural_hash
-        {
-            continue;
-        }
-        let key = (old_entity.id.clone(), new_entity.id.clone());
-        if !seen.insert(key) {
-            continue;
-        }
-        let mut old_labels = vec![old_entity.label.clone()];
-        old_labels.extend(all_labels(change.old_node));
-        let mut new_labels = vec![new_entity.label.clone()];
-        new_labels.extend(all_labels(change.new_node));
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [idx],
-            "old_labels": old_labels,
-            "new_labels": new_labels,
-            "old_node_ids": all_ids(old_entity),
-            "new_node_ids": all_ids(new_entity),
-            "confidence": 0.86,
-            "rule_id": "refinement.entity_child_content_changed",
-            "metadata": {"entity_node_id": old_entity.id},
-        }));
-    }
-    groups
-}
-
-/// python differ._surface_changed_in_place_entities (issue #57 graphql): a MATCHED named entity
-/// (``type User``, ``query UserCard``, ``fragment UserFields``) whose body changed in place never
-/// appears in the change list itself — only its changed descendants do. Emit a
-/// MEANINGFUL_CHANGE group carrying the ENTITY's label so review UIs surface the container name.
-fn surface_changed_in_place_entity_groups(
-    changes: &[ChangeDraft<'_>],
-    matching: &[MatchPair<'_>],
-) -> Vec<Value> {
-    fn is_named_entity_node(node: &SemanticNode) -> bool {
-        if node.label.is_empty() || node.label == node.node_type {
-            return false;
-        }
-        is_named_entity_type(node.node_type.as_str())
-            || node.node_type.ends_with("_definition")
-            || node.node_type.ends_with("_declaration")
-    }
-    let surfaced_old: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.old_node.map(|n| n.id.as_str()))
-        .collect();
-    let surfaced_new: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.new_node.map(|n| n.id.as_str()))
-        .collect();
-    let mut groups = Vec::new();
-    for pair in matching {
-        if !is_named_entity_node(pair.old_node) || !is_named_entity_node(pair.new_node) {
-            continue;
-        }
-        if surfaced_old.contains(pair.old_node.id.as_str())
-            || surfaced_new.contains(pair.new_node.id.as_str())
-        {
-            continue;
-        }
-        // A descendant appearing in the change list is the reliable "changed in place" signal.
-        let changed = pair
-            .old_node
-            .descendants()
-            .iter()
-            .any(|d| surfaced_old.contains(d.id.as_str()))
-            || pair
-                .new_node
-                .descendants()
-                .iter()
-                .any(|d| surfaced_new.contains(d.id.as_str()));
-        if !changed {
-            continue;
-        }
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [],
-            "old_labels": [pair.old_node.label],
-            "new_labels": [pair.new_node.label],
-            "old_node_ids": [pair.old_node.id],
-            "new_node_ids": [pair.new_node.id],
-            "confidence": 0.9,
-            "rule_id": "presentation.surface_changed_in_place_entity",
-            "metadata": {
-                "entity_type": pair.old_node.node_type,
-                "old_label": pair.old_node.label,
-                "new_label": pair.new_node.label,
-            },
-        }));
     }
     groups
 }
