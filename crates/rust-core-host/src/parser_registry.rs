@@ -336,4 +336,27 @@ mod tests {
         }
     }
 
+    #[cfg(feature = "tier-c-wasm")]
+    #[test]
+    fn custom_python_meaningful_groups_cover_each_edit_once() {
+        let inventory = python_inventory("custom-python");
+        let dir = inventory.path().to_str().unwrap();
+        let cases: Vec<Value> = serde_json::from_str(include_str!("../tests/fixtures/meaningful_group_ownership.json")).unwrap();
+        for case in cases {
+            let old = case["old"].as_str().unwrap();
+            let new = case["new"].as_str().unwrap();
+            let count = case["groups"].as_u64().unwrap() as usize;
+            let result: Value = serde_json::from_str(&crate::live_server::live_diff_contents_impl(
+                dir, "example.py", old, new, "{}", dir).unwrap()).unwrap();
+            let diff = &result["diff"];
+            let groups: Vec<_> = diff["change_groups"].as_array().unwrap().iter()
+                .filter(|g| g["kind"] == "MEANINGFUL_CHANGE").collect();
+            assert_eq!(groups.len(), count, "{diff}");
+            let mut evidence: Vec<_> = groups.iter().flat_map(|g| g["raw_change_indices"].as_array().unwrap().iter()
+                .map(|i| i.as_u64().unwrap())).collect();
+            evidence.sort();
+            assert_eq!(evidence, (0..diff["changes"].as_array().unwrap().len() as u64).collect::<Vec<_>>());
+        }
+    }
+
 }

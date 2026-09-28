@@ -49,7 +49,15 @@ pub fn complete(request: &Value) -> Result<Value, String> {
                         for (field, side, attr) in [("old_labels", "old_node", "label"),
                             ("new_labels", "new_node", "label"), ("old_node_ids", "old_node", "id"),
                             ("new_node_ids", "new_node", "id")] {
-                            group[field] = json!(mapped.iter().filter_map(|i| kept[*i][side][attr].as_str()).collect::<Vec<_>>());
+                            let mut values: Vec<String> = Vec::new();
+                            if attr == "label" {
+                                let key = if side == "old_node" { "old_entity_label" } else { "new_entity_label" };
+                                if let Some(label) = group["metadata"][key].as_str() { values.push(label.to_owned()); }
+                            }
+                            for value in mapped.iter().filter_map(|i| kept[*i][side][attr].as_str()) {
+                                if !values.iter().any(|v| v == value) { values.push(value.to_owned()); }
+                            }
+                            group[field] = json!(values);
                         }
                     }
                     group["raw_change_indices"] = json!(mapped);
