@@ -8150,6 +8150,9 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     }
 
     measure_value_optional(probe.as_deref_mut(), "rust_edit_reorder_generation", || {
+        // Compare order among surviving siblings. Absolute child indices also
+        // shift on insertion/deletion, which is not a reorder of existing code.
+        let mut reordered_by_parent: HashMap<&str, HashSet<&str>> = HashMap::new();
         for pair in matching {
             if move_old_descendants.contains(pair.old_node.id.as_str())
                 || move_old_all_descendants.contains(pair.old_node.id.as_str())
@@ -8176,6 +8179,21 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             let Some(new_siblings) = new_index.children.get(*new_pid) else {
                 continue;
             };
+            let reordered = reordered_by_parent.entry(*old_pid).or_insert_with(|| {
+                let surviving: Vec<_> = old_siblings.iter().filter_map(|id| {
+                    let partner = old_to_new.get(*id)?;
+                    (new_index.parent.get(partner.id.as_str()).copied() == Some(*new_pid))
+                        .then_some((*id, partner.id.as_str()))
+                }).collect();
+                let surviving_new: HashSet<_> = surviving.iter().map(|(_, new)| *new).collect();
+                let new_ranks: HashMap<_, _> = new_siblings.iter().copied()
+                    .filter(|id| surviving_new.contains(id)).enumerate()
+                    .map(|(rank, id)| (id, rank)).collect();
+                surviving.iter().enumerate().filter_map(|(rank, (old, new))| {
+                    (new_ranks.get(new) != Some(&rank)).then_some(*old)
+                }).collect()
+            });
+            if !reordered.contains(pair.old_node.id.as_str()) { continue; }
             let Some(old_index) = old_siblings
                 .iter()
                 .position(|id| *id == pair.old_node.id.as_str())
@@ -8188,7 +8206,7 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             else {
                 continue;
             };
-            if old_index != new_index {
+            {
                 ops.push(EditOp {
                     kind: "REORDER",
                     old_node: Some(pair.old_node),
