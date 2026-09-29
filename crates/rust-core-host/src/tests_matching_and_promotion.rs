@@ -1187,3 +1187,19 @@ fn argument_lists_follow_their_owning_calls() {
         }
     }
 }
+
+#[test]
+fn elixir_sibling_swap_does_not_rewrite_unchanged_definitions() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/elixir_sibling_swap.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let diff: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["source"]["old"].as_str().unwrap(), case["source"]["new"].as_str().unwrap(), "elixir", "{}",
+        ).unwrap()).unwrap();
+        // Unchanged definitions contribute only their module's coarse structural update;
+        // a real edit inside a relocated definition remains exactly that value edit.
+        let actual: Vec<Value> = diff["changes"].as_array().unwrap().iter().map(|c|
+            json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]])).collect();
+        assert_eq!(json!(actual), case["expected"], "{}: {diff}", case["source"]["name"]);
+    }
+}
