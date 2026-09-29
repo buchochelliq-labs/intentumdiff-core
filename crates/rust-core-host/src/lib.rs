@@ -8750,8 +8750,8 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "promote_parameter_renames", promote_parameter_renames_from_signature_changes(changes));
     probed!(changes, "promote_parameter_identifier_renames", promote_parameter_identifier_modification_renames(changes, old_tree, new_tree));
     probed!(changes, "promote_moved_empty_read_condition", promote_moved_empty_read_condition_updates(changes));
-    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes));
-    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language));
+    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes, matching));
+    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language, matching));
     probed!(changes, "promote_unique_domain_string_labels", promote_unique_domain_string_label_updates_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_source_string_literal_updates", promote_source_string_literal_updates_drafts(
         changes, old_tree, new_tree, old_source, new_source,

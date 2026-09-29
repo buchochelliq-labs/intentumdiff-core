@@ -422,6 +422,11 @@ pub(super) fn find_entities_from_roots(
             root.children.iter().map(|c| c.id.as_str()).collect();
         for node in walked(root) {
             let node_type = node.node_type.to_lowercase();
+            if language_lower == "elixir" && node_type == "call"
+                && !node.children.first().is_some_and(|child| child.node_type == "identifier"
+                    && matches!(child.label.as_str(), "def" | "defp" | "defmacro" | "defmacrop" | "defmodule")) {
+                continue;
+            }
             let hinted = ENTITY_HINTS.iter().any(|h| node_type.contains(h));
             let language_scoped = lang_exact.contains(&node_type.as_str());
             let mut exact = ENTITY_EXACT.contains(&node_type.as_str()) || language_scoped;

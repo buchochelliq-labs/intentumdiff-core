@@ -814,7 +814,9 @@ pub(crate) fn source_line(source: &str, line: u32) -> Option<&str> {
     source.lines().nth(line as usize)
 }
 
-pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
+pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>, matching: &[MatchPair<'_>]) {
+    let paired: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let reverse: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let mut additions = Vec::new();
     let refactoring_label_pairs = refactoring_label_pairs(changes);
     for change in changes.iter() {
@@ -835,7 +837,10 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             if !old_descendant.is_leaf() {
                 continue;
             }
-            let exact_new = new_descendants.get(old_descendant.id.as_str()).copied();
+            // Exact subtree ownership survives sibling reordering. Position IDs do not.
+            let partner_id = paired.get(old_descendant.id.as_str()).copied();
+            if partner_id.is_some_and(|id| !new_descendants.contains_key(id)) { continue; }
+            let exact_new = new_descendants.get(partner_id.unwrap_or(old_descendant.id.as_str())).copied();
             // The positional fallback only makes sense for SHAPE-PRESERVING edits: when the
             // two sides have different leaf counts (`return p` -> `return os.path.basename(p)`
             // is 1 leaf vs 4), pairing by index fabricates garbage like p -> os, and the
@@ -851,7 +856,8 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             let Some(new_descendant) = loose_new else {
                 continue;
             };
-            if !new_descendant.is_leaf()
+            if reverse.get(new_descendant.id.as_str()).is_some_and(|id| *id != old_descendant.id.as_str())
+                || !new_descendant.is_leaf()
                 || old_descendant.node_type != new_descendant.node_type
                 || old_descendant.label == new_descendant.label
                 || refactoring_label_pairs
@@ -913,7 +919,10 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
     old_tree: &'a SemanticNode,
     new_tree: &'a SemanticNode,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
+    let matched_old: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let matched_new: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let refactoring_pairs = refactoring_label_pairs(changes);
     let new_by_id = all_descendant_node_refs_by_id(new_tree);
     // Keyed-data identity guard (issue #57 json/yaml): node ids are POSITION paths, so an
@@ -946,7 +955,9 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
         let Some(new_node) = new_by_id.get(old_node.id.as_str()).copied() else {
             continue;
         };
-        if paired_old.contains(old_node.id.as_str()) || paired_new.contains(new_node.id.as_str())
+        if matched_old.get(old_node.id.as_str()).is_some_and(|id| *id != new_node.id.as_str())
+            || matched_new.get(new_node.id.as_str()).is_some_and(|id| *id != old_node.id.as_str())
+            || paired_old.contains(old_node.id.as_str()) || paired_new.contains(new_node.id.as_str())
             || !new_node.is_leaf()
             || old_node.node_type != new_node.node_type
             || old_node.label == new_node.label
