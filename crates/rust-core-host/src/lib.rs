@@ -8814,7 +8814,6 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(changes));
     probed!(changes, "suppress_add_delete_by_pairings", suppress_add_delete_drafts_covered_by_pairings(changes));
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
-    probed!(changes, "promote_removed_print_calls", promote_removed_print_call_deletions_from_source(changes, old_tree, new_source));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(changes, language));
