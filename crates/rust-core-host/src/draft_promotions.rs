@@ -1463,42 +1463,6 @@ pub(crate) fn suppress_deletions_covered_by_literal_modifications(changes: &mut 
         || !change.old_node.is_some_and(|n| covered_old_ids.contains(&n.id)));
 }
 
-pub(crate) fn promote_removed_print_call_deletions_from_source<'a>(
-    changes: &mut Vec<ChangeDraft<'a>>,
-    old_tree: &'a SemanticNode,
-    new_source: &str,
-) {
-    let mut additions = Vec::new();
-    for old_node in std::iter::once(old_tree).chain(old_tree.descendants()) {
-        if old_node.node_type != "expression_statement"
-            || change_has_node_id(changes, "DELETION", Some(old_node.id.as_str()), None)
-        {
-            continue;
-        }
-        let labels = node_labels(Some(old_node));
-        if !labels.iter().any(|label| label.contains("print"))
-            || !labels.iter().any(|label| label.contains("foo"))
-            || !labels.iter().any(|label| label.contains("host"))
-            || new_source.contains("print(\"foo\", host)")
-            || new_source.contains("print('foo', host)")
-        {
-            continue;
-        }
-        additions.push(ChangeDraft {
-            change_type: "DELETION",
-            old_node: Some(old_node),
-            new_node: None,
-            old_index: None,
-            new_index: None,
-            confidence: 1.0,
-            description: format!("Delete {}", format_node_ref(old_node)),
-            refactoring_kind: None,
-            text_diff: None,
-        });
-    }
-    changes.extend(additions);
-}
-
 pub(crate) fn promote_string_concat_to_fstring_modifications<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
     let mut remove_indices = HashSet::new();
     let mut additions = Vec::new();
