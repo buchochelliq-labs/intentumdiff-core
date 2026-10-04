@@ -190,6 +190,31 @@
         assert!(new_tree_json.contains("greet"), "new tree names greet");
     }
 
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn interpret_cst_parser_rejects_missing_filtered_cst() {
+        let wasm = python_wasm_path();
+        let err = run_python_wasm_process_pair(
+            &wasm,
+            "def f():\n    return 1\n",
+            "",
+            "example.py",
+            "def f():\n    return 2\n",
+            "",
+            "example.py",
+            u64::MAX,
+            16 * 1024 * 1024,
+            "python",
+        )
+        .expect_err("interpret-cst parser must fail closed without filtered CST");
+
+        assert!(
+            err.contains("interpret-cst parser requires filtered CST input"),
+            "unexpected error: {err}"
+        );
+    }
+
     fn module_with_nodes(children: Vec<SemanticNode>) -> SemanticNode {
         SemanticNode {
             id: "0".to_owned(),
