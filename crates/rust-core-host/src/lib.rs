@@ -5572,14 +5572,11 @@ fn run_python_wasm_process_pair_with_cached_component(
         parser_mode,
         parser_plugin::exports::intentdiff::plugin::parser::ParserMode::FullParse
     );
-    if !full_parse
-        && (old_filtered_cst.trim().is_empty() || new_filtered_cst.trim().is_empty())
-    {
-        return Err(
-            "interpret-cst parser requires filtered CST input; source-only native execution is unsupported"
-                .to_owned(),
-        );
-    }
+    validate_parser_input_requirements(
+        full_parse,
+        old_filtered_cst,
+        new_filtered_cst,
+    )?;
     if !unlimited {
         measure_optional(
             probe.as_deref_mut(),
@@ -5623,6 +5620,22 @@ fn run_python_wasm_process_pair_with_cached_component(
     if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("new parser output", &new_tree, max_output_bytes)?;
     Ok((old_tree, new_tree))
+}
+
+fn validate_parser_input_requirements(
+    full_parse: bool,
+    old_filtered_cst: &str,
+    new_filtered_cst: &str,
+) -> Result<(), String> {
+    if !full_parse
+        && (old_filtered_cst.trim().is_empty() || new_filtered_cst.trim().is_empty())
+    {
+        return Err(
+            "interpret-cst parser requires filtered CST input; source-only native execution is unsupported"
+                .to_owned(),
+        );
+    }
+    Ok(())
 }
 
 fn measure_optional<T, F>(
