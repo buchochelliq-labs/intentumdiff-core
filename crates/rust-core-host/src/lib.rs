@@ -7736,10 +7736,26 @@ fn bottom_up_match<'a>(
         .iter()
         .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
         .collect();
+    let trace_match = std::env::var("INTENTUMDIFF_TRACE_MATCH").is_ok();
     for old_node in unmatched_old {
         let Some(candidates) = new_by_type.get(old_node.node_type.as_str()) else {
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match] {} '{}' — NO CANDIDATES of type {}",
+                    old_node.id, old_node.label, old_node.node_type
+                );
+            }
             continue;
         };
+        if trace_match && !old_node.label.is_empty() {
+            eprintln!(
+                "[match] {} '{}' ({}) — {} candidate(s)",
+                old_node.id,
+                old_node.label,
+                old_node.node_type,
+                candidates.len()
+            );
+        }
         let old_desc_count = old_index
             .subtree_sizes
             .get(old_node.id.as_str())
@@ -7752,10 +7768,29 @@ fn bottom_up_match<'a>(
             if matched_new.contains(new_node.id.as_str()) {
                 continue;
             }
-            if !bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index)
-                || !argument_owner_compatible(old_node, new_node, old_index, new_index, &old_to_new)
-                || !call_role_compatible(old_node, new_node, old_index, new_index, &old_to_new)
-            {
+            let base_compatible =
+                bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index);
+            let argument_compatible =
+                argument_owner_compatible(old_node, new_node, old_index, new_index, &old_to_new);
+            let call_compatible =
+                call_role_compatible(old_node, new_node, old_index, new_index, &old_to_new);
+            if trace_match && !old_node.label.is_empty() {
+                let named = is_named_entity_type(old_node.node_type.as_str());
+                let parent_ok = !named
+                    || label_match_parent_compatible(old_node, new_node, old_index, new_index);
+                let label_ok = !named || old_node.label == new_node.label;
+                eprintln!(
+                    "[match]     vs '{}' — gate {} (named={} label_eq={} parent_ok={} argument_ok={} call_ok={})",
+                    new_node.label,
+                    if base_compatible && argument_compatible && call_compatible { "PASS" } else { "REJECT" },
+                    named,
+                    label_ok,
+                    parent_ok,
+                    argument_compatible,
+                    call_compatible
+                );
+            }
+            if !base_compatible || !argument_compatible || !call_compatible {
                 continue;
             }
             // Scope gate (issue #19, delphi statement scoping): a container may only
@@ -7787,6 +7822,12 @@ fn bottom_up_match<'a>(
                 old_node.node_type.as_str(),
                 new_node.node_type.as_str(),
             );
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match]     vs '{}' — dice {:.3} (need > {:.3})",
+                    new_node.label, score, best_score
+                );
+            }
             if score > best_score {
                 best_score = score;
                 best_match = Some(new_node);
