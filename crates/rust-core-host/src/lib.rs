@@ -5572,6 +5572,14 @@ fn run_python_wasm_process_pair_with_cached_component(
         parser_mode,
         parser_plugin::exports::intentdiff::plugin::parser::ParserMode::FullParse
     );
+    if !full_parse
+        && (old_filtered_cst.trim().is_empty() || new_filtered_cst.trim().is_empty())
+    {
+        return Err(
+            "interpret-cst parser requires filtered CST input; source-only native execution is unsupported"
+                .to_owned(),
+        );
+    }
     if !unlimited {
         measure_optional(
             probe.as_deref_mut(),
