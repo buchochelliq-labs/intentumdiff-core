@@ -6,6 +6,61 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
     let request: Value = serde_json::from_str(&input)?;
+    if request["handler"] == "native_selection_diff" {
+        let result = intentumdiff_rust_core::live_server::live_diff_contents_impl(
+            request["repo"].as_str().ok_or("repo")?, request["filename"].as_str().ok_or("filename")?,
+            request["old"].as_str().ok_or("old")?, request["new"].as_str().ok_or("new")?,
+            &request.get("config").cloned().unwrap_or_else(|| serde_json::json!({})).to_string(),
+            request["wasm"].as_str().ok_or("wasm")?);
+        match result {
+            Ok(output) => println!("{output}"),
+            Err(error) => println!("{}", serde_json::json!({"error":error})),
+        }
+        return Ok(());
+    }
+    if request["handler"] == "filename_selection" {
+        let input = serde_json::from_value(request["request"].clone())?;
+        let events: Vec<intentumdiff_rust_core::filename_selection::Event> = serde_json::from_value(request["events"].clone())?;
+        let result = intentumdiff_rust_core::filename_selection::next_action(&input, &events);
+        let output = match result { Ok(result) => serde_json::json!({"result":result}), Err(error) => serde_json::json!({"error":error}) };
+        println!("{}", output);
+        return Ok(());
+    }
+    if request["handler"] == "content_detection" {
+        let input = serde_json::from_value(request["request"].clone())?;
+        let observations: Vec<intentumdiff_rust_core::content_detection::Observation> = serde_json::from_value(request["observations"].clone())?;
+        let result = intentumdiff_rust_core::content_detection::finish(&input, &observations);
+        let output = match result {
+            Ok(result) => serde_json::json!({"result":result}),
+            Err(error) => serde_json::json!({"error":error}),
+        };
+        println!("{}", output);
+        return Ok(());
+    }
+    if request["handler"] == "cache_list_entries_filtered" {
+        let q = &request["query"];
+        let store = intentumdiff_rust_core::cache_store::SqliteStore::open(request["path"].as_str().ok_or("path")?, 30, 500).map_err(|e| format!("{e:?}"))?;
+        let output = store.list_entries_filtered("diff_cache", q["language"].as_str(), q["since"].as_i64(), q["before"].as_i64(), q["min_size"].as_i64(), q["max_size"].as_i64(), q["limit"].as_i64().unwrap_or(50), q["file_glob"].as_str()).map_err(|e| format!("{e:?}"))?;
+        println!("{output}");
+        return Ok(());
+    }
+    if request["handler"] == "parser_candidate_shortlist" {
+        let entries: Vec<intentumdiff_rust_core::parser_routing::Candidate> = serde_json::from_value(request["entries"].clone())?;
+        let query = serde_json::from_value(request["query"].clone())?;
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::parser_routing::shortlist(&entries, &query)?)?);
+        return Ok(());
+    }
+    if request["handler"] == "match_ignore_rules" {
+        let files: Vec<intentumdiff_rust_core::ignore_rules::IgnoreFile> = serde_json::from_value(request["files"].clone())?;
+        let rules = intentumdiff_rust_core::ignore_rules::IgnoreRules::new(&files)?;
+        println!("{}", rules.is_ignored(request["path"].as_str().ok_or("path")?, request["is_dir"].as_bool().unwrap_or(false))?);
+        return Ok(());
+    }
+    if request["handler"] == "detect_content_type" {
+        let bytes: Vec<u8> = serde_json::from_value(request["bytes"].clone())?;
+        println!("{}", serde_json::to_string(&intentumdiff_rust_core::content_type::detect_content_type(&bytes))?);
+        return Ok(());
+    }
     if request["handler"] == "reconstruct_patch" {
         let result = intentumdiff_rust_core::patch_source::reconstruct(request["patch"].as_str().ok_or("patch")?, request["original"].as_str(), request["filename"].as_str(), request["require_complete"].as_bool().unwrap_or(false));
         let output = match result { Ok(result) => serde_json::to_value(result)?, Err(error) => serde_json::json!({"error":error}) };

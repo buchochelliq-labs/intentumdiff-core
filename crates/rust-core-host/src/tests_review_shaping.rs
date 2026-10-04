@@ -396,7 +396,7 @@ use crate::*;
             addition_draft(&new_tree.children[0].children[0]),
         ];
         let mut finalization = PythonReviewFinalization::default();
-        finalize_python_review_drafts(&mut changes, &old_tree, &new_tree, "a", "b", &mut finalization, "python");
+        finalize_python_review_drafts(&mut changes, &old_tree, &new_tree, "a", "b", &mut finalization, "python", &[]);
 
         let surviving: Vec<&str> = changes.iter().map(|change| change.change_type).collect();
         assert!(

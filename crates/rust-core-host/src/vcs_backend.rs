@@ -72,10 +72,10 @@ fn git_change_type(code: char) -> Option<&'static str> {
     }
 }
 
-/// git: a NUL byte in a blob's content marks it binary (the Python backend heuristic).
+/// Route Git blobs with the same content detector used by public APIs.
 fn git_blob_is_binary(repo_path: &str, spec: &str) -> bool {
     match run_vcs("git", repo_path, &["cat-file", "blob", spec]) {
-        Ok(data) => data[..data.len().min(8192)].contains(&0),
+        Ok(data) => !crate::content_type::detect_content_type(&data).is_text,
         Err(_) => false,
     }
 }
@@ -450,7 +450,7 @@ pub(crate) fn vcs_backend_working_tree_changes_impl(
                     git_blob_is_binary(repo_path, &format!("{git_ref}:{old_path}"))
                 } else {
                     std::fs::read(std::path::Path::new(&root).join(&new_path))
-                        .map(|d| d[..d.len().min(8192)].contains(&0))
+                        .map(|d| !crate::content_type::detect_content_type(&d).is_text)
                         .unwrap_or(false)
                 };
                 if is_binary {

@@ -626,6 +626,19 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_i64(args, 9, "limit")?,
             arg_opt_bool(args, 10, "with_glob")?,
         )),
+        "cache_list_entries_filtered" => store_json(crate::cache_registry::list_entries_filtered(
+            arg_str(args, 0, "path")?,
+            arg_i64(args, 1, "ttl_days")?,
+            arg_i64(args, 2, "max_mb")?,
+            arg_str(args, 3, "table")?,
+            arg_opt_str(args, 4, "language")?,
+            arg_opt_json(args, 5, "since")?,
+            arg_opt_json(args, 6, "before")?,
+            arg_opt_json(args, 7, "min_size")?,
+            arg_opt_json(args, 8, "max_size")?,
+            arg_i64(args, 9, "limit")?,
+            arg_opt_str(args, 10, "file_glob")?,
+        )),
         "cache_get_entry_metadata" => store_opt(crate::cache_registry::get_entry_metadata(
             arg_str(args, 0, "path")?,
             arg_i64(args, 1, "ttl_days")?,
@@ -798,6 +811,12 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         )),
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
+        "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
+        "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
+        "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
+        "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
+        "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
+        "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
             let data: Vec<u8> = arg_json(args, 0, "data")?;
             serde_json::to_string(&crate::content_type::detect_content_type(&data))
@@ -869,6 +888,29 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn filename_selection_envelopes() {
+        let request = json!({"entries":[{"id":"py","languages":["python"],"extensions":[".py"]}],"filename":"x.py"});
+        let first = json!({"request":request,"events":[]});
+        let good = call("filename_selection_next", json!([first.to_string()]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"], json!({"kind":"load","index":0}));
+        let invalid = json!({"request":request,"events":[{"kind":"probed","index":0,"language":"python"}]});
+        assert_eq!(call("filename_selection_next", json!([invalid.to_string()]))["ok"], false);
+    }
+
+    #[test]
+    fn content_detection_envelopes() {
+        let request = json!({"entries":[{"plugin_id":"py","grammar_id":"py","languages":["python"],"priority":1}],"content":"def f(): pass"});
+        let plan = call("content_detection_plan", json!([request.to_string()]));
+        assert_eq!(plan["ok"], true);
+        assert_eq!(plan["result"]["indices"], json!([0]));
+        let good = json!({"request":request,"observations":[{"index":0,"language":"python"}]});
+        assert_eq!(call("content_detection_finish", json!([good.to_string()]))["result"]["results"][0]["language"], "python");
+        let bad = json!({"request":request,"observations":[{"index":0,"language":"ruby"}]});
+        assert_eq!(call("content_detection_finish", json!([bad.to_string()]))["ok"], false);
+    }
 
     #[test]
     fn patch_reconstruction_envelopes() {
@@ -1130,6 +1172,15 @@ mod tests {
         let stats = call("cache_stats", json!([path, 30, 500]));
         assert_eq!(stats["result"]["diff_cache"]["count"], 1);
 
+        let filtered = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "b.py"]));
+        assert_eq!(filtered["ok"], true);
+        assert_eq!(filtered["result"][0]["key"], "k");
+        let missing = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "*.rs"]));
+        assert_eq!(missing["result"], json!([]));
+        let invalid = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, "*"]));
+        assert_eq!(invalid["ok"], false);
+        assert_eq!(invalid["error_type"], "value_error");
+
         // A bad-limit list is a value_error (the store's ValueError parity).
         let bad = call("cache_list_entries", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, false]));
         assert_eq!(bad["ok"], false);
@@ -1278,6 +1329,34 @@ mod tests {
         );
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_object());
+    }
+
+    #[test]
+    fn parser_availability_envelope() {
+        let result = call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "ARM64"]));
+        assert_eq!(result["ok"], true);
+        assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
+        assert_eq!(result["result"]["unavailable"][0], "powershell");
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
+    }
+
+    #[test]
+    fn parser_shortlist_envelope() {
+        let request = json!({"entries":[{"id":"python","languages":["python"],"extensions":[".py"]}],"query":{"filename":"x.py"}}).to_string();
+        let env = call("parser_candidate_shortlist", json!([request]));
+        assert_eq!(env["ok"], true); assert_eq!(env["result"], json!([0]));
+        let invalid = json!({"entries":[{"id":""}],"query":{}}).to_string();
+        assert_eq!(call("parser_candidate_shortlist", json!([invalid]))["ok"], false);
+    }
+
+    #[test]
+    fn ignore_rules_envelope() {
+        let request = json!({"files":[{"directory":"","content":"*.log\n"}],"paths":[{"path":"a.log"},{"path":"a.py"}]}).to_string();
+        let env = call("match_ignore_rules", json!([request]));
+        assert_eq!(env["ok"], true);
+        assert_eq!(env["result"], json!([true, false]));
+        let invalid = json!({"files":[],"paths":[{"path":"../escape"}]}).to_string();
+        assert_eq!(call("match_ignore_rules", json!([invalid]))["ok"], false);
     }
 
     #[test]

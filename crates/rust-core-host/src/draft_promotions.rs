@@ -814,7 +814,9 @@ pub(crate) fn source_line(source: &str, line: u32) -> Option<&str> {
     source.lines().nth(line as usize)
 }
 
-pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
+pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>, matching: &[MatchPair<'_>]) {
+    let paired: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let reverse: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let mut additions = Vec::new();
     let refactoring_label_pairs = refactoring_label_pairs(changes);
     for change in changes.iter() {
@@ -835,7 +837,10 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             if !old_descendant.is_leaf() {
                 continue;
             }
-            let exact_new = new_descendants.get(old_descendant.id.as_str()).copied();
+            // Exact subtree ownership survives sibling reordering. Position IDs do not.
+            let partner_id = paired.get(old_descendant.id.as_str()).copied();
+            if partner_id.is_some_and(|id| !new_descendants.contains_key(id)) { continue; }
+            let exact_new = new_descendants.get(partner_id.unwrap_or(old_descendant.id.as_str())).copied();
             // The positional fallback only makes sense for SHAPE-PRESERVING edits: when the
             // two sides have different leaf counts (`return p` -> `return os.path.basename(p)`
             // is 1 leaf vs 4), pairing by index fabricates garbage like p -> os, and the
@@ -851,7 +856,8 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             let Some(new_descendant) = loose_new else {
                 continue;
             };
-            if !new_descendant.is_leaf()
+            if reverse.get(new_descendant.id.as_str()).is_some_and(|id| *id != old_descendant.id.as_str())
+                || !new_descendant.is_leaf()
                 || old_descendant.node_type != new_descendant.node_type
                 || old_descendant.label == new_descendant.label
                 || refactoring_label_pairs
@@ -913,7 +919,10 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
     old_tree: &'a SemanticNode,
     new_tree: &'a SemanticNode,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
+    let matched_old: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let matched_new: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let refactoring_pairs = refactoring_label_pairs(changes);
     let new_by_id = all_descendant_node_refs_by_id(new_tree);
     // Keyed-data identity guard (issue #57 json/yaml): node ids are POSITION paths, so an
@@ -932,6 +941,12 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
     };
     let old_refs_by_id = semantic_node_refs_by_id_with_root(old_tree);
     let new_refs_by_id = semantic_node_refs_by_id_with_root(new_tree);
+    // Existing paired edits own their endpoints. Positional fallback must not reuse
+    // a surviving call's edited argument for a leaf in a deleted preceding call.
+    let paired_old: HashSet<&str> = changes.iter().filter(|c| c.new_node.is_some())
+        .filter_map(|c| c.old_node.map(|n| n.id.as_str())).collect();
+    let paired_new: HashSet<&str> = changes.iter().filter(|c| c.old_node.is_some())
+        .filter_map(|c| c.new_node.map(|n| n.id.as_str())).collect();
     let mut additions = Vec::new();
     for old_node in old_tree.descendants() {
         if !old_node.is_leaf() || !matches!(old_node.node_type.as_str(), "string" | "integer") {
@@ -940,7 +955,10 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
         let Some(new_node) = new_by_id.get(old_node.id.as_str()).copied() else {
             continue;
         };
-        if !new_node.is_leaf()
+        if matched_old.get(old_node.id.as_str()).is_some_and(|id| *id != new_node.id.as_str())
+            || matched_new.get(new_node.id.as_str()).is_some_and(|id| *id != old_node.id.as_str())
+            || paired_old.contains(old_node.id.as_str()) || paired_new.contains(new_node.id.as_str())
+            || !new_node.is_leaf()
             || old_node.node_type != new_node.node_type
             || old_node.label == new_node.label
             || refactoring_pairs.contains(&(old_node.label.clone(), new_node.label.clone()))
@@ -1433,46 +1451,16 @@ pub(crate) fn suppress_add_delete_drafts_covered_by_pairings(changes: &mut Vec<C
 }
 
 pub(crate) fn suppress_deletions_covered_by_literal_modifications(changes: &mut Vec<ChangeDraft<'_>>) {
-    let mut covered_old_labels = HashSet::new();
-    for change in changes.iter() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let Some(old_node) = change.old_node else {
-            continue;
-        };
-        if !matches!(old_node.node_type.as_str(), "string" | "integer" | "float") {
-            continue;
-        }
-        covered_old_labels.insert(old_node.label.clone());
-        if let Some(decoded) = decode_simple_python_string(&old_node.label) {
-            covered_old_labels.insert(decoded);
-        }
-    }
-    if covered_old_labels.is_empty() {
-        return;
-    }
-    changes.retain(|change| {
-        if change.change_type != "DELETION" {
-            return true;
-        }
-        let Some(old_node) = change.old_node else {
-            return true;
-        };
-        // Never swallow the deletion of a whole named entity via label containment: a deleted
-        // function whose body merely CONTAINS a covered literal (e.g. `return 1` when some
-        // unrelated integer modification covers "1") is real removed code, not literal-edit
-        // residue (issue #31 — removed code became invisible to review).
-        if is_named_entity_type(old_node.node_type.as_str()) {
-            return true;
-        }
-        let labels = node_labels(Some(old_node));
-        !labels.iter().any(|label| {
-            covered_old_labels
-                .iter()
-                .any(|covered| !covered.is_empty() && (label == covered || label.contains(covered)))
-        })
-    });
+    let covered_old_ids: HashSet<String> = changes.iter()
+        .filter(|c| c.change_type == "MODIFICATION")
+        .filter_map(|c| c.old_node)
+        .filter(|n| matches!(n.node_type.as_str(), "string" | "integer" | "float"))
+        .map(|n| n.id.clone()).collect();
+    // Literal values are not identity: deleting print(1) remains meaningful when a
+    // different call changes 1 to 2. Only the actual edited literal is covered;
+    // an enclosing statement can contain additional code that really was deleted.
+    changes.retain(|change| change.change_type != "DELETION"
+        || !change.old_node.is_some_and(|n| covered_old_ids.contains(&n.id)));
 }
 
 pub(crate) fn promote_removed_print_call_deletions_from_source<'a>(

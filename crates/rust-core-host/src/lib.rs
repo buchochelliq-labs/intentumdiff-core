@@ -51,7 +51,12 @@ mod cache_keys;
 pub mod cache_store;
 pub mod cache_registry;
 mod config;
-mod content_type;
+pub mod content_type;
+pub mod ignore_rules;
+pub mod parser_routing;
+pub mod parser_availability;
+pub mod content_detection;
+pub mod filename_selection;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const COMPLETE: &str = "complete";
@@ -1570,6 +1575,7 @@ fn finalize_review_impl(
         new_source,
         &mut finalization,
         language,
+        &matching,
     );
 
     // Language-gated presentation passes, mirroring python `presentation.py`'s
@@ -1645,13 +1651,7 @@ fn finalize_review_impl(
     let mut ignored_style_changes = finalization.ignored_style_changes;
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&drafts));
-    change_groups.extend(final_meaningful_groups_from_drafts(&drafts));
-    // Entity-anchored grouping (issue #57 abap): "GREET changed" for child modifications
-    // under a same-identity entity whose content changed.
-    change_groups.extend(entity_child_content_groups(&drafts, &old_tree, &new_tree));
-    // Changed-in-place entity surfacing (issue #57 graphql): a matched named entity whose body
-    // changed carries its label into a group even though only descendants appear as changes.
-    change_groups.extend(surface_changed_in_place_entity_groups(&drafts, &matching));
+    change_groups.extend(final_meaningful_groups_from_drafts(&drafts, &matching));
     if let Some((group, ignored)) = formatting_equivalence_group_drafts(&drafts, language) {
         change_groups.push(group);
         ignored_style_changes.push(ignored);
@@ -3420,6 +3420,7 @@ fn diff_python_sources_final_impl(
         new_source,
         &mut review_finalization,
         "python",
+        &matching,
     );
     probe.push_elapsed(
         "rust_python_review_finalization",
@@ -3497,7 +3498,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
-    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts, &matching));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -3557,6 +3558,33 @@ fn diff_python_sources_final_impl(
     if !review_finalization.ignored_style_changes.is_empty() {
         diff["metadata"]["ignored_style_changes"] =
             Value::Array(review_finalization.ignored_style_changes);
+    }
+    // Certified and component routes share source-level invariance completion.
+    // In a mixed edit, equivalent literal spelling must not remain meaningful
+    // merely because another edit in the same entity changes behavior.
+    let completed = routed_review::complete(&json!({
+        "language":"python", "old_source":old_source, "new_source":new_source,
+        "old_filename":old_filename, "new_filename":new_filename,
+        "old_tree":old_tree, "new_tree":new_tree,
+        "finalized":{"changes":diff["changes"], "change_groups":diff["change_groups"],
+            "is_style_only":diff["is_style_only"],
+            "ignored_style_changes":diff["metadata"]["ignored_style_changes"],
+            "no_surviving_changes":diff["metadata"]["no_surviving_changes"]}
+    }))?;
+    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only"] {
+        diff[key] = completed[key].clone();
+    }
+    for key in ["ignored_style_changes", "no_surviving_changes"] {
+        if let Some(value) = completed["metadata"].get(key) { diff["metadata"][key] = value.clone(); }
+    }
+    // Scope indices also refer to the surviving final change list.
+    let final_changes = diff["changes"].as_array().expect("completed changes");
+    let old_scopes = scope_entries_for_change_values(final_changes, true, &old_index);
+    let new_scopes = scope_entries_for_change_values(final_changes, false, &new_index);
+    if !old_scopes.is_empty() || !new_scopes.is_empty() {
+        diff["metadata"]["scope_trails"] = json!({"old":old_scopes, "new":new_scopes});
+    } else {
+        diff["metadata"].as_object_mut().unwrap().remove("scope_trails");
     }
     apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
     Ok(diff)
@@ -5039,7 +5067,10 @@ pub fn parse_to_tree(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    let resolved = crate::parser_registry::resolve_parser(path, wasm_dir)
+    let selection_config = if config_json.trim().is_empty() { serde_json::json!({}) } else {
+        serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
+    };
+    let resolved = crate::parser_registry::resolve_parser(path, content, &selection_config, wasm_dir)?
         .ok_or("no bundled parser for this file extension")?;
     let config = RustCoreConfig::from_json(config_json);
 
@@ -6763,6 +6794,9 @@ fn is_semantic(node_type: &str) -> bool {
 }
 
 fn label_for(node: &CstNode) -> String {
+    // A Python module is a structural container, not a source-named leaf.
+    // Emptying it must not manufacture a module("module") -> module("") edit.
+    if node.node_type == "module" { return "module".to_owned(); }
     if matches!(node.node_type.as_str(), "string" | "integer" | "float") && !node.text.is_empty() {
         return node.text.clone();
     }
@@ -6903,10 +6937,23 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let before_label = matches.len();
     let matches = label_match(&old_index, &new_index, matches);
     diagnostics.label_parent_matches += matches.len().saturating_sub(before_label);
+    // Preserve only call-role correspondences established before bottom-up recovery;
+    // bottom-up pairs may be bootstrapped by harvested leaves and are not proof.
+    let label_pairs: HashMap<&str, &str> = matches.iter()
+        .map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let renamed_call_statements: HashSet<(&str, &str)> = matches.iter().filter_map(|p| {
+        if p.old_node.node_type != "call" || p.old_node.label == p.new_node.label { return None; }
+        let old_parent = effective_parent_node(old_index, &p.old_node.id)?;
+        let new_parent = effective_parent_node(new_index, &p.new_node.id)?;
+        (matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+            && old_parent.node_type == new_parent.node_type
+            && label_pairs.get(old_parent.id.as_str()).copied() == Some(new_parent.id.as_str()))
+            .then_some((old_parent.id.as_str(), new_parent.id.as_str()))
+    }).collect();
     let before_bottom_up = matches.len();
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
-    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches);
+    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
     MatchingReport {
@@ -6927,6 +6974,7 @@ fn prune_cross_statement_leaf_pairs<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
     matches: Vec<MatchPair<'a>>,
+    renamed_call_statements: &HashSet<(&str, &str)>,
 ) -> Vec<MatchPair<'a>> {
     fn enclosing_statement<'b>(index: &TreeIndex<'b>, id: &str) -> Option<&'b SemanticNode> {
         let mut cursor = id;
@@ -6971,6 +7019,9 @@ fn prune_cross_statement_leaf_pairs<'a>(
                 && !pair.new_node.is_leaf()
         })
         .filter(|pair| {
+            if renamed_call_statements.contains(&(pair.old_node.id.as_str(), pair.new_node.id.as_str())) {
+                return false;
+            }
             match (
                 first_callee_label(pair.old_node),
                 first_callee_label(pair.new_node),
@@ -7433,6 +7484,42 @@ fn label_match<'a>(
         if matched_old.contains(old_node.id.as_str()) {
             continue;
         }
+        // A call in a uniquely corresponding structural role may change its callee.
+        // Establish the call before matching its argument-list scaffold.
+        if old_node.node_type == "call" {
+            let partner = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| paired_old_to_new.get(*p))
+                .and_then(|p| new_index.by_id.get(*p));
+            let old_parent = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| old_index.by_id.get(*p));
+            if let (Some(old_parent), Some(new_parent)) = (old_parent, partner) {
+                let old_calls: Vec<_> = old_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                let new_calls: Vec<_> = new_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                if matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+                    && old_parent.node_type == new_parent.node_type
+                    && old_calls.len() == 1 && new_calls.len() == 1
+                    && !matched_new.contains(new_calls[0].id.as_str()) {
+                    let new_node = new_calls[0];
+                    result.push(MatchPair { old_node, new_node });
+                    matched_old.insert(old_node.id.as_str());
+                    matched_new.insert(new_node.id.as_str());
+                    paired_old_to_new.insert(old_node.id.as_str(), new_node.id.as_str());
+                    // A changed invocation target is an identifier update, not evidence
+                    // of a variable rename. Keep it paired in the established call slot.
+                    if let (Some(old_callee), Some(new_callee)) = (old_node.children.first(), new_node.children.first()) {
+                        if old_callee.node_type == "identifier" && new_callee.node_type == "identifier"
+                            && !matched_old.contains(old_callee.id.as_str())
+                            && !matched_new.contains(new_callee.id.as_str()) {
+                            result.push(MatchPair { old_node: old_callee, new_node: new_callee });
+                            matched_old.insert(old_callee.id.as_str());
+                            matched_new.insert(new_callee.id.as_str());
+                            paired_old_to_new.insert(old_callee.id.as_str(), new_callee.id.as_str());
+                        }
+                    }
+                    continue;
+                }
+            }
+        }
         let Some(candidates) =
             new_by_type_label.get_mut(&(old_node.node_type.as_str(), old_node.label.as_str()))
         else {
@@ -7481,6 +7568,8 @@ fn label_match<'a>(
                 !matched_new.contains(candidate.id.as_str())
                     && label_match_parent_compatible(old_node, candidate, old_index, new_index)
                     && generic_anchored(candidate)
+                    && argument_owner_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
+                    && call_role_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
             })
             .min_by_key(|(_, candidate)| {
                 let candidate_parent = new_index.parent.get(candidate.id.as_str()).copied();
@@ -7534,6 +7623,47 @@ fn enclosing_entity_node<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a Sema
         cursor = parent;
     }
     None
+}
+
+/// Approximate calls cannot steal a different statement's call merely by callee name.
+fn call_role_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "call" { return true; }
+    let (Some(old_parent), Some(new_parent)) = (
+        effective_parent_node(old_index, &old_node.id),
+        effective_parent_node(new_index, &new_node.id),
+    ) else { return true; };
+    if let Some(partner) = paired.get(old_parent.id.as_str()) {
+        return *partner == new_parent.id;
+    }
+    if paired.values().any(|id| *id == new_parent.id) { return false; }
+    old_parent.node_type == new_parent.node_type
+}
+
+/// Argument-list labels describe a grammatical role, not movable identity. Approximate
+/// matching must use the owning call's established correspondence; otherwise an earlier
+/// deleted call can steal the surviving call's arguments (issue #131). Exact subtree
+/// matching remains free to recognize genuine unchanged relocated expressions.
+fn argument_owner_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "argument_list" {
+        return true;
+    }
+    match (old_index.parent.get(old_node.id.as_str()), new_index.parent.get(new_node.id.as_str())) {
+        (Some(old_parent), Some(new_parent)) => paired.get(*old_parent) == Some(new_parent),
+        (None, None) => true,
+        _ => false,
+    }
 }
 
 fn label_match_parent_compatible(
@@ -7606,23 +7736,6 @@ fn bottom_up_match<'a>(
         .iter()
         .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
         .collect();
-    // Why this exists: the bottom-up matcher decides whether two nodes are "the same" and
-    // then says nothing about how. When a diff is wrong, reading this function tells you what
-    // it COULD do, not what it DID - and those differ. Five attempts at intentumdiff-python#45
-    // were made from code reading alone; three reached confident wrong conclusions that the
-    // first actual measurement refuted in a single run.
-    //
-    // The measurement that settled it looked like this:
-    //
-    //     [match] 0.0 'calc' (function_definition) - 1 candidate(s)
-    //     [match]     vs 'compute' - gate REJECT (named=true label_eq=false parent_ok=true)
-    //
-    // i.e. the pair WAS a candidate, scope passed, the label inequality alone rejected it, and
-    // no similarity score was ever computed - which retired every threshold hypothesis at once.
-    //
-    // Off unless INTENTUMDIFF_TRACE_MATCH is set, and it writes to stderr, so a normal run is
-    // byte-identical. Reading the env var once per call rather than per candidate keeps it off
-    // the hot path.
     let trace_match = std::env::var("INTENTUMDIFF_TRACE_MATCH").is_ok();
     for old_node in unmatched_old {
         let Some(candidates) = new_by_type.get(old_node.node_type.as_str()) else {
@@ -7655,23 +7768,29 @@ fn bottom_up_match<'a>(
             if matched_new.contains(new_node.id.as_str()) {
                 continue;
             }
-            let compatible =
+            let base_compatible =
                 bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index);
+            let argument_compatible =
+                argument_owner_compatible(old_node, new_node, old_index, new_index, &old_to_new);
+            let call_compatible =
+                call_role_compatible(old_node, new_node, old_index, new_index, &old_to_new);
             if trace_match && !old_node.label.is_empty() {
                 let named = is_named_entity_type(old_node.node_type.as_str());
                 let parent_ok = !named
                     || label_match_parent_compatible(old_node, new_node, old_index, new_index);
                 let label_ok = !named || old_node.label == new_node.label;
                 eprintln!(
-                    "[match]     vs '{}' — gate {} (named={} label_eq={} parent_ok={})",
+                    "[match]     vs '{}' — gate {} (named={} label_eq={} parent_ok={} argument_ok={} call_ok={})",
                     new_node.label,
-                    if compatible { "PASS" } else { "REJECT" },
+                    if base_compatible && argument_compatible && call_compatible { "PASS" } else { "REJECT" },
                     named,
                     label_ok,
-                    parent_ok
+                    parent_ok,
+                    argument_compatible,
+                    call_compatible
                 );
             }
-            if !compatible {
+            if !base_compatible || !argument_compatible || !call_compatible {
                 continue;
             }
             // Scope gate (issue #19, delphi statement scoping): a container may only
@@ -8173,6 +8292,9 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     }
 
     measure_value_optional(probe.as_deref_mut(), "rust_edit_reorder_generation", || {
+        // Compare order among surviving siblings. Absolute child indices also
+        // shift on insertion/deletion, which is not a reorder of existing code.
+        let mut reordered_by_parent: HashMap<&str, HashSet<&str>> = HashMap::new();
         for pair in matching {
             if move_old_descendants.contains(pair.old_node.id.as_str())
                 || move_old_all_descendants.contains(pair.old_node.id.as_str())
@@ -8199,6 +8321,21 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             let Some(new_siblings) = new_index.children.get(*new_pid) else {
                 continue;
             };
+            let reordered = reordered_by_parent.entry(*old_pid).or_insert_with(|| {
+                let surviving: Vec<_> = old_siblings.iter().filter_map(|id| {
+                    let partner = old_to_new.get(*id)?;
+                    (new_index.parent.get(partner.id.as_str()).copied() == Some(*new_pid))
+                        .then_some((*id, partner.id.as_str()))
+                }).collect();
+                let surviving_new: HashSet<_> = surviving.iter().map(|(_, new)| *new).collect();
+                let new_ranks: HashMap<_, _> = new_siblings.iter().copied()
+                    .filter(|id| surviving_new.contains(id)).enumerate()
+                    .map(|(rank, id)| (id, rank)).collect();
+                surviving.iter().enumerate().filter_map(|(rank, (old, new))| {
+                    (new_ranks.get(new) != Some(&rank)).then_some(*old)
+                }).collect()
+            });
+            if !reordered.contains(pair.old_node.id.as_str()) { continue; }
             let Some(old_index) = old_siblings
                 .iter()
                 .position(|id| *id == pair.old_node.id.as_str())
@@ -8211,7 +8348,7 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             else {
                 continue;
             };
-            if old_index != new_index {
+            {
                 ops.push(EditOp {
                     kind: "REORDER",
                     old_node: Some(pair.old_node),
@@ -8473,9 +8610,8 @@ fn update_looks_moved(
     new_parent: &HashMap<&str, &str>,
     old_to_new: &HashMap<&str, &SemanticNode>,
 ) -> bool {
-    if pair.old_node.position.start_line != pair.new_node.position.start_line {
-        return true;
-    }
+    // Line offsets shift after sibling insertions/deletions; only changed ownership
+    // supports moved-update wording. Named moved ancestors are annotated separately.
     let Some(old_pid) = old_parent.get(pair.old_node.id.as_str()) else {
         return false;
     };
@@ -8641,6 +8777,7 @@ fn finalize_python_review_drafts<'a>(
     new_source: &str,
     finalization: &mut PythonReviewFinalization,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
@@ -8654,8 +8791,8 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "promote_parameter_renames", promote_parameter_renames_from_signature_changes(changes));
     probed!(changes, "promote_parameter_identifier_renames", promote_parameter_identifier_modification_renames(changes, old_tree, new_tree));
     probed!(changes, "promote_moved_empty_read_condition", promote_moved_empty_read_condition_updates(changes));
-    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes));
-    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language));
+    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes, matching));
+    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language, matching));
     probed!(changes, "promote_unique_domain_string_labels", promote_unique_domain_string_label_updates_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_source_string_literal_updates", promote_source_string_literal_updates_drafts(
         changes, old_tree, new_tree, old_source, new_source,
@@ -8727,21 +8864,9 @@ fn finalize_python_review_drafts<'a>(
             "rule_id": "refinement.suppress_low_signal_reorders",
             "metadata": {"suppressed_count": suppressed_reorders},
         }));
-        // The formatting-equivalence relabel is a PYTHON style rule; it carried
-        // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        // A renamed callable can suppress positional shifts while retaining real
-        // body edits. Suppression alone cannot prove formatting equivalence for
-        // those surviving changes or assign their nodes to ignored-style evidence.
-        if language == "python" && !changes.iter().any(|change| {
-            change.refactoring_kind.as_deref() == Some("RENAME_SYMBOL")
-                && change.old_node.map(anchor_is_function).unwrap_or(false)
-        }) {
-            finalization
-                .change_groups
-                .push(python_formatting_equivalence_group(changes));
-        }
     }
     if language == "python" {
+        finalization.change_groups.extend(python_call_layout_groups(matching, old_source, new_source));
         decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
         function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
     }
@@ -8901,6 +9026,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
             new_source,
             &mut finalization,
             language,
+            &matching,
         );
 
         if changes.is_empty() {
@@ -8960,7 +9086,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
-    change_groups.extend(final_meaningful_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes, &matching));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9214,181 +9340,78 @@ use invariance_groups::*;
 /// Every final Rust route owns its meaningful groups. The certified batch returns
 /// directly through the thin Python wrapper, so it cannot rely on Python presentation
 /// to add these groups (especially for body edits next to a callable rename).
-fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
-    changes
-        .iter()
-        .enumerate()
-        .filter(|(_, change)| {
-            matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION")
-        })
-        .map(|(idx, change)| {
-            final_change_group_from_draft(
-                idx,
-                change,
-                "MEANINGFUL_CHANGE",
-                "presentation.final_meaningful_group",
-            )
-        })
-        .collect()
-}
-
-/// python refinement._group_child_modifications_under_entities (issue #57 abap): a MODIFICATION
-/// whose nearest same-identity entity ancestor changed content gets an entity-ANCHORED
-/// MEANINGFUL_CHANGE group (rule refinement.entity_child_content_changed) so the review reads
-/// "GREET changed" with the statement edits beneath it — not a free-floating leaf edit.
-fn entity_child_content_groups(
-    changes: &[ChangeDraft<'_>],
-    old_tree: &SemanticNode,
-    new_tree: &SemanticNode,
+fn final_meaningful_groups_from_drafts(
+    changes: &[ChangeDraft<'_>], matching: &[MatchPair<'_>],
 ) -> Vec<Value> {
-    const ROOT_CONTAINERS: &[&str] = &["module", "document", "program", "source_file"];
-    fn nearest_entity<'a>(
-        id: &str,
-        by_id: &HashMap<&str, &'a SemanticNode>,
-    ) -> Option<&'a SemanticNode> {
-        let mut current = id.to_string();
-        while let Some((parent_id, _)) = current.rsplit_once('.') {
-            if let Some(node) = by_id.get(parent_id).copied() {
-                if is_entity_container_type(node.node_type.to_lowercase().as_str()) {
-                    return Some(node);
+    // Each ordinary edit has one meaningful representation. A nearest matched
+    // entity supplies context, not an extra independently counted semantic item.
+    // MOVE/REFACTORING relationships remain owned by their dedicated groups.
+    let is_entity = |node: &SemanticNode| {
+        !node.label.is_empty() && node.label != node.node_type
+            && (is_entity_container_type(&node.node_type)
+                || node.node_type.ends_with("_definition")
+                || node.node_type.ends_with("_declaration"))
+    };
+    let descendant = |node: Option<&SemanticNode>, parent: &SemanticNode| {
+        node.is_some_and(|node| node.id.strip_prefix(&parent.id).is_some_and(|tail| tail.starts_with('.')))
+    };
+    let eligible: Vec<_> = matching.iter().filter(|pair| {
+        is_entity(pair.old_node) && is_entity(pair.new_node)
+            && pair.old_node.node_type == pair.new_node.node_type
+            && pair.old_node.label == pair.new_node.label
+            && pair.old_node.structural_hash != pair.new_node.structural_hash
+    }).collect();
+    let old_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.old_node.id.as_str(), *pair)).collect();
+    let new_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.new_node.id.as_str(), *pair)).collect();
+    let mut groups = Vec::new();
+    let mut anchors: HashMap<(String, String), usize> = HashMap::new();
+    for (index, change) in changes.iter().enumerate() {
+        if !matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION") { continue; }
+        let mut anchor = None;
+        let (node, owners) = if let Some(node) = change.old_node { (Some(node), &old_owners) }
+            else { (change.new_node, &new_owners) };
+        if let Some(node) = node {
+            let mut id = node.id.as_str();
+            while let Some((parent, _)) = id.rsplit_once('.') {
+                if let Some(pair) = owners.get(parent) {
+                    if change.old_node.is_none_or(|_| descendant(change.old_node, pair.old_node))
+                        && change.new_node.is_none_or(|_| descendant(change.new_node, pair.new_node)) {
+                        anchor = Some(*pair);
+                        break;
+                    }
                 }
+                id = parent;
             }
-            current = parent_id.to_string();
         }
-        None
-    }
-    let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
-    let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
-    let all_labels = |node: Option<&SemanticNode>| -> Vec<String> {
-        let Some(node) = node else { return Vec::new() };
-        std::iter::once(node)
-            .chain(node.descendants())
-            .filter(|n| !n.label.is_empty())
-            .map(|n| n.label.clone())
-            .collect()
-    };
-    let all_ids = |node: &SemanticNode| -> Vec<String> {
-        std::iter::once(node)
-            .chain(node.descendants())
-            .map(|n| n.id.clone())
-            .collect()
-    };
-
-    let mut groups = Vec::new();
-    let mut seen: HashSet<(String, String)> = HashSet::new();
-    for (idx, change) in changes.iter().enumerate() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+        let Some(pair) = anchor else {
+            groups.push(final_change_group_from_draft(index, change, "MEANINGFUL_CHANGE", "presentation.final_meaningful_group"));
             continue;
         };
-        let (Some(old_entity), Some(new_entity)) = (
-            nearest_entity(old_node.id.as_str(), &old_by_id),
-            nearest_entity(new_node.id.as_str(), &new_by_id),
-        ) else {
-            continue;
-        };
-        if ROOT_CONTAINERS.contains(&old_entity.node_type.to_lowercase().as_str())
-            || ROOT_CONTAINERS.contains(&new_entity.node_type.to_lowercase().as_str())
-        {
-            continue;
+        let key = (pair.old_node.id.clone(), pair.new_node.id.clone());
+        let group_index = *anchors.entry(key).or_insert_with(|| {
+            let position = groups.len();
+            groups.push(json!({
+                "kind":"MEANINGFUL_CHANGE", "raw_change_indices":[],
+                "old_labels":[pair.old_node.label], "new_labels":[pair.new_node.label],
+                "old_node_ids":[], "new_node_ids":[], "confidence":0.9,
+                "rule_id":"refinement.entity_child_content_changed",
+                "metadata":{"index_space":"final_changes", "entity_node_id":pair.old_node.id,
+                    "old_entity_node_id":pair.old_node.id, "new_entity_node_id":pair.new_node.id,
+                    "old_entity_label":pair.old_node.label, "new_entity_label":pair.new_node.label,
+                    "entity_type":pair.old_node.node_type}
+            }));
+            position
+        });
+        let group = &mut groups[group_index];
+        group["raw_change_indices"].as_array_mut().unwrap().push(json!(index));
+        for (node, ids, labels) in [(change.old_node,"old_node_ids","old_labels"), (change.new_node,"new_node_ids","new_labels")] {
+            if let Some(node) = node {
+                group[ids].as_array_mut().unwrap().push(json!(node.id));
+                let label = json!(node.label);
+                let values = group[labels].as_array_mut().unwrap();
+                if !node.label.is_empty() && !values.contains(&label) { values.push(label); }
+            }
         }
-        if old_entity.id == old_node.id || new_entity.id == new_node.id {
-            continue;
-        }
-        if old_entity.node_type != new_entity.node_type
-            || old_entity.label != new_entity.label
-            || old_entity.structural_hash == new_entity.structural_hash
-        {
-            continue;
-        }
-        let key = (old_entity.id.clone(), new_entity.id.clone());
-        if !seen.insert(key) {
-            continue;
-        }
-        let mut old_labels = vec![old_entity.label.clone()];
-        old_labels.extend(all_labels(change.old_node));
-        let mut new_labels = vec![new_entity.label.clone()];
-        new_labels.extend(all_labels(change.new_node));
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [idx],
-            "old_labels": old_labels,
-            "new_labels": new_labels,
-            "old_node_ids": all_ids(old_entity),
-            "new_node_ids": all_ids(new_entity),
-            "confidence": 0.86,
-            "rule_id": "refinement.entity_child_content_changed",
-            "metadata": {"entity_node_id": old_entity.id},
-        }));
-    }
-    groups
-}
-
-/// python differ._surface_changed_in_place_entities (issue #57 graphql): a MATCHED named entity
-/// (``type User``, ``query UserCard``, ``fragment UserFields``) whose body changed in place never
-/// appears in the change list itself — only its changed descendants do. Emit a
-/// MEANINGFUL_CHANGE group carrying the ENTITY's label so review UIs surface the container name.
-fn surface_changed_in_place_entity_groups(
-    changes: &[ChangeDraft<'_>],
-    matching: &[MatchPair<'_>],
-) -> Vec<Value> {
-    fn is_named_entity_node(node: &SemanticNode) -> bool {
-        if node.label.is_empty() || node.label == node.node_type {
-            return false;
-        }
-        is_named_entity_type(node.node_type.as_str())
-            || node.node_type.ends_with("_definition")
-            || node.node_type.ends_with("_declaration")
-    }
-    let surfaced_old: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.old_node.map(|n| n.id.as_str()))
-        .collect();
-    let surfaced_new: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.new_node.map(|n| n.id.as_str()))
-        .collect();
-    let mut groups = Vec::new();
-    for pair in matching {
-        if !is_named_entity_node(pair.old_node) || !is_named_entity_node(pair.new_node) {
-            continue;
-        }
-        if surfaced_old.contains(pair.old_node.id.as_str())
-            || surfaced_new.contains(pair.new_node.id.as_str())
-        {
-            continue;
-        }
-        // A descendant appearing in the change list is the reliable "changed in place" signal.
-        let changed = pair
-            .old_node
-            .descendants()
-            .iter()
-            .any(|d| surfaced_old.contains(d.id.as_str()))
-            || pair
-                .new_node
-                .descendants()
-                .iter()
-                .any(|d| surfaced_new.contains(d.id.as_str()));
-        if !changed {
-            continue;
-        }
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [],
-            "old_labels": [pair.old_node.label],
-            "new_labels": [pair.new_node.label],
-            "old_node_ids": [pair.old_node.id],
-            "new_node_ids": [pair.new_node.id],
-            "confidence": 0.9,
-            "rule_id": "presentation.surface_changed_in_place_entity",
-            "metadata": {
-                "entity_type": pair.old_node.node_type,
-                "old_label": pair.old_node.label,
-                "new_label": pair.new_node.label,
-            },
-        }));
     }
     groups
 }

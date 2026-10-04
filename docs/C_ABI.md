@@ -193,3 +193,118 @@ rejects excerpts. Creation/deletion headers establish the empty opposite side.
 Bindings must preserve this scope; Python exposes `is_partial` and warns on excerpts.
 
 Filename inference follows the conventional `a/` old and `b/` new header pair; creation `b/` and deletion `a/` headers use the same convention. Plain headers naming the same `a/` or `b/` directory preserve it. Single-sided headers can be ambiguous: provide an explicit filename to preserve a literal prefix.
+
+## Content routing
+
+`content_type::detect_content_type` is a supported native Rust API, also exposed as `detect_content_type` through the C ABI. Rust owns the 8192-byte sampling window and routing decision. This is leading-sample classification, not complete-file UTF-8 validation: an incomplete final code point is tolerated because a caller may supply a truncated sample. Literal U+FFFD is valid text; explicit invalid UTF-8 and NUL classify as binary. Required engine failures propagate in Python. Native Git probes and Python streaming review use this shared detector.
+
+## Ignore matching
+
+Native callers compile `ignore_rules::IgnoreRules::new(&[IgnoreFile])`, then call
+`is_ignored(path, is_dir)`. Each file supplies a repository-relative directory
+(empty for root) and complete raw contents. No filesystem or global Git config is
+consulted. Deeper rule files override parent matches, later lines take precedence,
+and an excluded parent prevents child reinclusion. Matching is case-sensitive;
+paths must be normalized relative POSIX paths, with no traversal/backslashes.
+
+C ABI `match_ignore_rules` takes one JSON string with `files` (directory/content)
+and `paths` (path/optional is_dir), returning booleans in input order. Invalid
+rules/paths fail explicitly. Python `DiffIgnore` takes raw text and optional
+`directory_rules` mapping; it retains only host file reads and DTO transport.
+This replaces its old test-oriented pathspec-object constructor. Neither matcher
+infers that a tracked deletion was caused by ignore rules.
+
+## Parser candidate planning
+
+Public `parser_routing::shortlist` accepts discovered `Candidate` descriptors and
+`RoutingQuery`, returning source indices. Explicit plugin identities/aliases take
+precedence over language filters, then filename matching. Unknown filenames leave
+all candidates eligible. Generic is always last, followed by descending declared
+priority and stable identity ties. Filenames accept either path separator and are
+matched case-insensitively. `filename_candidates` omits the no-match fallback.
+C ABI `parser_candidate_shortlist` takes JSON text with `entries` and `query`.
+Empty/duplicate identities are errors. This plans candidates; it does not assert
+successful component loading or capabilities. Python discovery has no declared
+priority and supplies zero, independent of cache warmth. Native manifest routing
+preserves its declared extension winner and now recognizes literal special names.
+Full load/probe decisions, returned-claim validation and content-only ranking
+remain tracked in #108.
+
+The Dockerfile source fixture compares complete changes/groups/semantic flags
+through native and Python APIs. Native omits optional null DTO fields; comparison
+deserializes both through the public SemanticDiff schema without discarding any
+change, node, group or evidence field.
+
+### Cache metadata filtering
+
+`cache_list_entries_filtered(path, ttl_days, max_mb, table, language, since,
+before, min_size, max_size, limit, file_glob)` delegates to the public Rust
+`cache_store::SqliteStore::list_entries_filtered` (also available through
+`cache_registry`). The existing `cache_list_entries` boolean-window operation
+remains available for compatibility; new bindings should use the filtered form.
+
+Rust applies language/time/size filters, then matches either old or new diff
+filename, then limits the result. Rows are ordered by `created_at DESC, key ASC`.
+Globs use case-sensitive fnmatch syntax on every platform: `*`, `?`, character
+classes and negation; separators are ordinary characters and backslash is not an
+escape. This intentionally removes the old Windows Python case normalization.
+Null/empty patterns and patterns on non-diff tables impose no filename filter.
+Limits must be positive. Only metadata is read; matching streams until the
+requested number of results is reached, without a finite over-fetch window.
+
+### Content detection policy
+
+`content_detection_plan(request_json)` and `content_detection_finish(input_json)`
+delegate to supported Rust `content_detection::{plan, finish}`. The request carries
+loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
+optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+`preferred_plugins` (language to plugin ID). A plan returns eligible source indices
+and a sample ending at the last complete UTF-8 character within 4096 bytes.
+
+Hosts execute those probes and pass `{request, observations}` to finish. Each
+observation has an index and a nullable language (null/empty means a genuine
+decline). Duplicate, missing, ineligible or unsupported claims fail explicitly.
+Probe errors, especially fuel exhaustion, must propagate from the host; they are
+not declines. Generic results always rank last, followed by preferred plugin,
+descending priority, language, grammar ID and plugin ID. Multiple plugins can
+produce separate results for one language. Confidence is reciprocal rank rounded
+to three decimal places with ties to even; it is not a measured probability.
+
+The outcome contains ordered result DTOs and `not_found` for an explicit plugin
+with no valid match. Python only invokes adapters, marshals DTOs and maps this
+no-match outcome to its public exception. This slice does not migrate the existing
+component loader or filename `detect_parser` failure/fallback policy (#108).
+
+### Filename selection actions
+
+`filename_selection_next({request, events})` accepts a JSON string and delegates
+to public Rust `filename_selection::next_action`. Request fields are catalogue
+`entries` (the candidate-planner DTO), `filename`, `content`, optional
+`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+Actions are tagged `load`, `probe`, `selected`, `not_found`, or `failure`.
+Hosts append exactly the requested `loaded`/`load_failed` or
+`probed`/`probe_failed` event and replay. Loaded metadata includes grammar ID,
+languages and priority. Failure actions identify the original host exception by
+its event index. Probe samples are complete UTF-8 prefixes of at most 2048 bytes.
+
+Hints precede filename candidates, other specific parsers, then generic. Strict
+hints and explicit plugin requests never cross their boundary. The existing
+non-explicit catalogue-hint alias of a generic component remains supported.
+Metadata for all candidates in the current phase is loaded before ranking by
+loaded priority and stable catalogue identity. A fuel/security denial during
+that phase is terminal even when another candidate might succeed. Later phases
+are not loaded after success. Ordinary load failures can fall through; probe
+failures and undeclared claims cannot. Hosts must mark security/fuel load errors
+terminal; Python uses typed exceptions, including `PluginSecurityError`, a
+backward-compatible `PluginLoadError` subtype.
+
+Events are bounded to twice the catalogue length and validated against the
+requested action; duplicate/out-of-order events and events after an outcome fail.
+The existing native bundled-manifest resolver has not yet adopted this protocol;
+its integration and broader inventory loading remain tracked in #108.
+
+`parser_availability(name, filename, system, machine)` returns an object with
+`reason` (string or null) and `unavailable` (`[parser, reason]` or null). It delegates
+to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
+both Python discovery and native bundled discovery apply this policy before
+compiling components. The measured PowerShell exclusion is Windows ARM only.

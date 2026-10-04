@@ -1,0 +1,738 @@
+[
+  {
+    "name": "generic-last",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "generic",
+          "grammar_id": "generic",
+          "languages": [
+            "generic"
+          ],
+          "priority": 999
+        },
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "preferred_plugins": {
+        "generic": "generic"
+      }
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "generic"
+      },
+      {
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "results": [
+        {
+          "language": "python",
+          "grammar_id": "specific",
+          "confidence": 1.0
+        },
+        {
+          "language": "generic",
+          "grammar_id": "generic",
+          "confidence": 0.5
+        }
+      ],
+      "not_found": null
+    }
+  },
+  {
+    "name": "preferred-specific",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "high",
+          "grammar_id": "high",
+          "languages": [
+            "python"
+          ],
+          "priority": 500
+        },
+        {
+          "plugin_id": "low",
+          "grammar_id": "low",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "preferred_plugins": {
+        "python": "low"
+      }
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      },
+      {
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "results": [
+        {
+          "language": "python",
+          "grammar_id": "low",
+          "confidence": 1.0
+        },
+        {
+          "language": "python",
+          "grammar_id": "high",
+          "confidence": 0.5
+        }
+      ],
+      "not_found": null
+    }
+  },
+  {
+    "name": "grammar-tie",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "z",
+          "grammar_id": "z",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "a",
+          "grammar_id": "a",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      },
+      {
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "results": [
+        {
+          "language": "python",
+          "grammar_id": "a",
+          "confidence": 1.0
+        },
+        {
+          "language": "python",
+          "grammar_id": "z",
+          "confidence": 0.5
+        }
+      ],
+      "not_found": null
+    }
+  },
+  {
+    "name": "undeclared",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "ruby"
+      }
+    ],
+    "error": "undeclared language"
+  },
+  {
+    "name": "outside-filter",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "multi",
+          "grammar_id": "multi",
+          "languages": [
+            "python",
+            "ruby"
+          ],
+          "priority": 100
+        }
+      ],
+      "content": "def example(): pass",
+      "candidates": [
+        "python"
+      ]
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "ruby"
+      }
+    ],
+    "error": "outside requested candidates"
+  },
+  {
+    "name": "explicit-decline",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "plugin_id": "specific"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": ""
+      }
+    ],
+    "expected": {
+      "results": [],
+      "not_found": "specific"
+    }
+  },
+  {
+    "name": "decline",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": null
+      }
+    ],
+    "expected": {
+      "results": [],
+      "not_found": null
+    }
+  },
+  {
+    "name": "duplicate-identity",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        },
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      },
+      {
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "error": "nonempty and unique"
+  },
+  {
+    "name": "empty-identity",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "",
+          "grammar_id": "",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      }
+    ],
+    "error": "nonempty and unique"
+  },
+  {
+    "name": "incomplete",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [],
+    "error": "incomplete"
+  },
+  {
+    "name": "ineligible",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "allowed_plugins": []
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      }
+    ],
+    "error": "ineligible"
+  },
+  {
+    "name": "missing-explicit",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "plugin_id": "absent"
+    },
+    "observations": [],
+    "expected": {
+      "results": [],
+      "not_found": "absent"
+    }
+  },
+  {
+    "name": "confidence-ties-even",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "p00",
+          "grammar_id": "p00",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p01",
+          "grammar_id": "p01",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p02",
+          "grammar_id": "p02",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p03",
+          "grammar_id": "p03",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p04",
+          "grammar_id": "p04",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p05",
+          "grammar_id": "p05",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p06",
+          "grammar_id": "p06",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p07",
+          "grammar_id": "p07",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p08",
+          "grammar_id": "p08",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p09",
+          "grammar_id": "p09",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p10",
+          "grammar_id": "p10",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p11",
+          "grammar_id": "p11",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p12",
+          "grammar_id": "p12",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p13",
+          "grammar_id": "p13",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p14",
+          "grammar_id": "p14",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        },
+        {
+          "plugin_id": "p15",
+          "grammar_id": "p15",
+          "languages": [
+            "python"
+          ],
+          "priority": 100
+        }
+      ],
+      "content": "def example(): pass"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      },
+      {
+        "index": 1,
+        "language": "python"
+      },
+      {
+        "index": 2,
+        "language": "python"
+      },
+      {
+        "index": 3,
+        "language": "python"
+      },
+      {
+        "index": 4,
+        "language": "python"
+      },
+      {
+        "index": 5,
+        "language": "python"
+      },
+      {
+        "index": 6,
+        "language": "python"
+      },
+      {
+        "index": 7,
+        "language": "python"
+      },
+      {
+        "index": 8,
+        "language": "python"
+      },
+      {
+        "index": 9,
+        "language": "python"
+      },
+      {
+        "index": 10,
+        "language": "python"
+      },
+      {
+        "index": 11,
+        "language": "python"
+      },
+      {
+        "index": 12,
+        "language": "python"
+      },
+      {
+        "index": 13,
+        "language": "python"
+      },
+      {
+        "index": 14,
+        "language": "python"
+      },
+      {
+        "index": 15,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "results": [
+        {
+          "language": "python",
+          "grammar_id": "p00",
+          "confidence": 1.0
+        },
+        {
+          "language": "python",
+          "grammar_id": "p01",
+          "confidence": 0.5
+        },
+        {
+          "language": "python",
+          "grammar_id": "p02",
+          "confidence": 0.333
+        },
+        {
+          "language": "python",
+          "grammar_id": "p03",
+          "confidence": 0.25
+        },
+        {
+          "language": "python",
+          "grammar_id": "p04",
+          "confidence": 0.2
+        },
+        {
+          "language": "python",
+          "grammar_id": "p05",
+          "confidence": 0.167
+        },
+        {
+          "language": "python",
+          "grammar_id": "p06",
+          "confidence": 0.143
+        },
+        {
+          "language": "python",
+          "grammar_id": "p07",
+          "confidence": 0.125
+        },
+        {
+          "language": "python",
+          "grammar_id": "p08",
+          "confidence": 0.111
+        },
+        {
+          "language": "python",
+          "grammar_id": "p09",
+          "confidence": 0.1
+        },
+        {
+          "language": "python",
+          "grammar_id": "p10",
+          "confidence": 0.091
+        },
+        {
+          "language": "python",
+          "grammar_id": "p11",
+          "confidence": 0.083
+        },
+        {
+          "language": "python",
+          "grammar_id": "p12",
+          "confidence": 0.077
+        },
+        {
+          "language": "python",
+          "grammar_id": "p13",
+          "confidence": 0.071
+        },
+        {
+          "language": "python",
+          "grammar_id": "p14",
+          "confidence": 0.067
+        },
+        {
+          "language": "python",
+          "grammar_id": "p15",
+          "confidence": 0.062
+        }
+      ],
+      "not_found": null
+    }
+  },
+  {
+    "name": "explicit-allowed",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "plugin_id": "specific"
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "results": [
+        {
+          "language": "python",
+          "grammar_id": "specific",
+          "confidence": 1.0
+        }
+      ],
+      "not_found": null
+    }
+  },
+  {
+    "name": "duplicate-observation",
+    "request": {
+      "entries": [
+        {
+          "plugin_id": "generic",
+          "grammar_id": "generic",
+          "languages": [
+            "generic"
+          ],
+          "priority": 999
+        },
+        {
+          "plugin_id": "specific",
+          "grammar_id": "specific",
+          "languages": [
+            "python"
+          ],
+          "priority": 1
+        }
+      ],
+      "content": "def example(): pass",
+      "preferred_plugins": {
+        "generic": "generic"
+      }
+    },
+    "observations": [
+      {
+        "index": 0,
+        "language": "generic"
+      },
+      {
+        "index": 0,
+        "language": "generic"
+      }
+    ],
+    "error": "duplicate index"
+  }
+]

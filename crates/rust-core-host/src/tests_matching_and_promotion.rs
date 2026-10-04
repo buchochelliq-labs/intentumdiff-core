@@ -1104,3 +1104,102 @@ fn user_xml_dialect_predicate_and_coordinate_key() {
     .expect("spec parses");
     assert!(!xml_tree_matches_user_dialect(&unpredicated, &tree));
 }
+
+#[test]
+fn inserted_statement_does_not_reorder_existing_abap_statement() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/reorder_insertion.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["old"].as_str().unwrap(), case["new"].as_str().unwrap(),
+            "abap", "{}",
+        ).unwrap()).unwrap();
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["change_type"] == "ADDITION"), "{result}");
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"), "{result}");
+        assert!(!changes.iter().any(|c| c["change_type"] == "REORDER" || c["change_type"] == "MOVE"), "{result}");
+    }
+}
+
+#[test]
+fn reorder_compares_surviving_siblings_not_absolute_positions() {
+    for (old_labels, new_labels, reordered) in [
+        (vec!["a", "b"], vec!["x", "a", "b"], false),
+        (vec!["x", "a", "b"], vec!["a", "b"], false),
+        (vec!["a", "b"], vec!["b", "a"], true),
+        (vec!["a", "b"], vec!["x", "b", "a"], true),
+    ] {
+        let make = |labels: &[&str]| node("0", "block", "block", labels.iter().enumerate()
+            .map(|(i, label)| node(&format!("0.{i}"), "statement", label, vec![])).collect());
+        let old = make(&old_labels);
+        let new = make(&new_labels);
+        let mut pairs = vec![MatchPair { old_node: &old, new_node: &new }];
+        for old_node in &old.children {
+            if let Some(new_node) = new.children.iter().find(|n| n.label == old_node.label) {
+                pairs.push(MatchPair { old_node, new_node });
+            }
+        }
+        let script = generate_edit_script_with_diagnostics_indexed(
+            &TreeIndex::new(&old), &TreeIndex::new(&new), &pairs, None);
+        let reorders: Vec<_> = script.ops.iter().filter(|op| op.kind == "REORDER").collect();
+        assert_eq!(!reorders.is_empty(), reordered, "{old_labels:?} -> {new_labels:?}");
+        if new_labels == ["x", "b", "a"] {
+            // B has the same absolute index but changed its order relative to A.
+            assert!(reorders.iter().any(|op| op.old_node.unwrap().label == "b"));
+        }
+    }
+}
+
+#[test]
+fn call_layout_evidence_excludes_real_edits_and_deleted_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/call_layout_evidence.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MOVE"), "{route}: {diff}");
+            let groups: Vec<_> = diff["change_groups"].as_array().unwrap().iter()
+                .filter(|g| g["rule_id"] == "python.formatting.call_wrapping_equivalence").collect();
+            assert_eq!(!groups.is_empty(), case["style"].as_bool().unwrap(), "{route}: {diff}");
+            for group in groups {
+                assert_eq!(group["metadata"]["evidence"], "matched_call_source");
+                let labels = group["old_labels"].as_array().unwrap();
+                assert!(labels.contains(&json!("send")));
+                assert!(!labels.contains(&json!("foo")) && !labels.contains(&json!("use")));
+            }
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "DELETION"));
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"));
+        }
+    }
+}
+
+#[test]
+fn argument_lists_follow_their_owning_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/argument_owner_matching.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            let mut actual: Vec<String> = diff["changes"].as_array().unwrap().iter().map(|c|
+                json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]]).to_string()).collect();
+            let mut expected: Vec<String> = case["expected"].as_array().unwrap().iter().map(Value::to_string).collect();
+            actual.sort(); expected.sort();
+            assert_eq!(actual, expected, "{} {route}: {diff}", case["name"]);
+            if !case["expected"].as_array().unwrap().iter().any(|e| e[0] == "MOVE") {
+                assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["description"].as_str().unwrap_or("").contains("moved")), "{route}: {diff}");
+            }
+        }
+    }
+}
+
+#[test]
+fn elixir_sibling_swap_does_not_rewrite_unchanged_definitions() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/elixir_sibling_swap.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let diff: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["source"]["old"].as_str().unwrap(), case["source"]["new"].as_str().unwrap(), "elixir", "{}",
+        ).unwrap()).unwrap();
+        // Unchanged definitions contribute only their module's coarse structural update;
+        // a real edit inside a relocated definition remains exactly that value edit.
+        let actual: Vec<Value> = diff["changes"].as_array().unwrap().iter().map(|c|
+            json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]])).collect();
+        assert_eq!(json!(actual), case["expected"], "{}: {diff}", case["source"]["name"]);
+    }
+}

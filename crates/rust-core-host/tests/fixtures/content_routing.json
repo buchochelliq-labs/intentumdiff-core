@@ -1,0 +1,104 @@
+[
+  {
+    "name": "ascii",
+    "bytes": [
+      100,
+      101,
+      102,
+      32,
+      102,
+      40,
+      41,
+      58,
+      10,
+      32,
+      32,
+      32,
+      32,
+      114,
+      101,
+      116,
+      117,
+      114,
+      110,
+      32,
+      49,
+      10
+    ],
+    "is_text": true
+  },
+  {
+    "name": "unicode",
+    "bytes": [
+      195,
+      169,
+      240,
+      159,
+      152,
+      128,
+      10
+    ],
+    "is_text": true
+  },
+  {
+    "name": "literal_replacement",
+    "bytes": [
+      239,
+      191,
+      189,
+      239,
+      191,
+      189,
+      239,
+      191,
+      189
+    ],
+    "is_text": true
+  },
+  {
+    "name": "nul",
+    "bytes": [
+      120,
+      0,
+      121
+    ],
+    "is_text": false
+  },
+  {
+    "name": "invalid_utf8",
+    "bytes": [
+      97,
+      255,
+      98
+    ],
+    "is_text": false
+  },
+  {
+    "name": "png",
+    "bytes": [
+      137,
+      80,
+      78,
+      71,
+      13,
+      10,
+      26,
+      10
+    ],
+    "is_text": false
+  },
+  {
+    "name": "empty",
+    "bytes": [],
+    "is_text": true
+  },
+  {
+    "name": "truncated_utf8",
+    "bytes": [
+      97,
+      240,
+      159
+    ],
+    "is_text": true
+  }
+]

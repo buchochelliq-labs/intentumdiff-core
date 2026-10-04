@@ -1,0 +1,3758 @@
+[
+  {
+    "source": {
+      "name": "original Elixir swap",
+      "old": "defmodule Greeter do\n  def greet(name) do\n    \"Hello, \" <> name\n  end\n\n  def farewell(name) do\n    \"Goodbye, \" <> name\n  end\n\n  def shout(phrase) do\n    String.upcase(phrase)\n  end\nend\n",
+      "new": "defmodule Greeter do\n  def farewell(name) do\n    \"Goodbye, \" <> name\n  end\n\n  def greet(name) do\n    \"Hello, \" <> name\n  end\n\n  def shout(phrase) do\n    String.upcase(phrase)\n  end\nend\n",
+      "filename": "code.ex",
+      "language": "elixir"
+    },
+    "old_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 13,
+        "end_col": 0
+      },
+      "structural_hash": "f54caf03bf235db6f94edc0c814aac56021ce59932a42c013c0e46542160b710",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "Greeter",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 12,
+            "end_col": 3
+          },
+          "structural_hash": "a9c6ec08435e5df25c6402d2e97f17a8742c31b1a56382731c7390341ed2b3f9",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "da06b16346158c908b26015bf2ec139ad7e41c52942c472c619b060c02c6ae9e",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "Greeter",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 17
+                  },
+                  "structural_hash": "3095bd1a2910212b7711c91a8e6c78299ca92bf9324fa0c3acd59a88e90f5181",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 12,
+                "end_col": 3
+              },
+              "structural_hash": "f1bc2abdacefc12d3872d515e0c3f65c801d6ca6e4a1eb5e1cdb8a57b0429c83",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "greet",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 3,
+                    "end_col": 5
+                  },
+                  "structural_hash": "213076d921bcfd9ce2dec7385514efcb1473bd49802ece496778bb8f52fa995a",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 17
+                      },
+                      "structural_hash": "ea4a806270b10c5a3c202ee0950ee2a1819e3aaf1ce22f789e084294b4b25ed0",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "greet",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 17
+                          },
+                          "structural_hash": "5236212bfb53a0cbccaf6e9a9a448f201ae69b73c5411519bf82d4d277abe5a4",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "greet",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 11
+                              },
+                              "structural_hash": "c45caa0b8d5e714bff0ce6b641be87a68f30b5405c5a3d35ed80233a56f95db5",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 11,
+                                "end_line": 1,
+                                "end_col": 17
+                              },
+                              "structural_hash": "26cfe943403f354022cb633ea535e608a5ce1afb7dc32453ed907a7344607cd1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "name",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 12,
+                                    "end_line": 1,
+                                    "end_col": 16
+                                  },
+                                  "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 18,
+                        "end_line": 3,
+                        "end_col": 5
+                      },
+                      "structural_hash": "84b39e0a64de6cbd9a1ea02af2cb7ee4c566e945a76401feb17bffedcebf8438",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.2.0",
+                          "node_type": "binary_operator",
+                          "label": "binary_operator",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 4,
+                            "end_line": 2,
+                            "end_col": 21
+                          },
+                          "structural_hash": "519fd9ad831d40ecc8b9293890bfea2fbf5c608b2fa4cd58c24c88f7be5b270b",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.2.0.0",
+                              "node_type": "string",
+                              "label": "\"Hello, \"",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 4,
+                                "end_line": 2,
+                                "end_col": 13
+                              },
+                              "structural_hash": "f198b62b1224874c0d66048d3558d3c6c92376f25b32a56863b3ff63111297ca",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.2.0.1",
+                              "node_type": "identifier",
+                              "label": "name",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 17,
+                                "end_line": 2,
+                                "end_col": 21
+                              },
+                              "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "farewell",
+                  "position": {
+                    "start_line": 5,
+                    "start_col": 2,
+                    "end_line": 7,
+                    "end_col": 5
+                  },
+                  "structural_hash": "4b8512878c0b9fbbde7558d87c62ba638e8e2a17f2aa97363dd217ef7620af6f",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 2,
+                        "end_line": 5,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 6,
+                        "end_line": 5,
+                        "end_col": 20
+                      },
+                      "structural_hash": "e5d03d23139a8b4909a0d10c0e7b87f082845a98be2cdf55c86001ced033de8e",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "farewell",
+                          "position": {
+                            "start_line": 5,
+                            "start_col": 6,
+                            "end_line": 5,
+                            "end_col": 20
+                          },
+                          "structural_hash": "9727c64f356a60c56cb461ba23fbc82155643e2a37dd1d5f86894e6db099d9e5",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "farewell",
+                              "position": {
+                                "start_line": 5,
+                                "start_col": 6,
+                                "end_line": 5,
+                                "end_col": 14
+                              },
+                              "structural_hash": "d4207e02d060db3739323b18df1b399d1543c265a33b84a3094978b5c74181fd",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 5,
+                                "start_col": 14,
+                                "end_line": 5,
+                                "end_col": 20
+                              },
+                              "structural_hash": "26cfe943403f354022cb633ea535e608a5ce1afb7dc32453ed907a7344607cd1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "name",
+                                  "position": {
+                                    "start_line": 5,
+                                    "start_col": 15,
+                                    "end_line": 5,
+                                    "end_col": 19
+                                  },
+                                  "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 21,
+                        "end_line": 7,
+                        "end_col": 5
+                      },
+                      "structural_hash": "ed4cc8f49a60031a6ff958a1d96585c0c3beca9672b420d7ffaf2dd6b455e244",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.2.0",
+                          "node_type": "binary_operator",
+                          "label": "binary_operator",
+                          "position": {
+                            "start_line": 6,
+                            "start_col": 4,
+                            "end_line": 6,
+                            "end_col": 23
+                          },
+                          "structural_hash": "35d09e29a7396db1be7dd5ad086b55a5c5a1a8f89998d073629eee6e08ee1abf",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.2.0.0",
+                              "node_type": "string",
+                              "label": "\"Goodbye, \"",
+                              "position": {
+                                "start_line": 6,
+                                "start_col": 4,
+                                "end_line": 6,
+                                "end_col": 15
+                              },
+                              "structural_hash": "f0eba702da6a94a8ebe546625d4861d868da5cfe17b8fa836da6a269d714ed90",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.2.0.1",
+                              "node_type": "identifier",
+                              "label": "name",
+                              "position": {
+                                "start_line": 6,
+                                "start_col": 19,
+                                "end_line": 6,
+                                "end_col": 23
+                              },
+                              "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.2",
+                  "node_type": "call",
+                  "label": "shout",
+                  "position": {
+                    "start_line": 9,
+                    "start_col": 2,
+                    "end_line": 11,
+                    "end_col": 5
+                  },
+                  "structural_hash": "b3c368110dee43df32f626db08aa39f85d7577748764b9ebdcabcd5be5e7c0c2",
+                  "children": [
+                    {
+                      "id": "0.0.2.2.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 2,
+                        "end_line": 9,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.2.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 6,
+                        "end_line": 9,
+                        "end_col": 19
+                      },
+                      "structural_hash": "cb5d85deb5d9042dc30b771f2e3a8a98f8fa22157bfc7753983a4674786ef3a3",
+                      "children": [
+                        {
+                          "id": "0.0.2.2.1.0",
+                          "node_type": "call",
+                          "label": "shout",
+                          "position": {
+                            "start_line": 9,
+                            "start_col": 6,
+                            "end_line": 9,
+                            "end_col": 19
+                          },
+                          "structural_hash": "648599d22d036a8b181588a40a93b66b164183dbc45261fd9c090fac072e1091",
+                          "children": [
+                            {
+                              "id": "0.0.2.2.1.0.0",
+                              "node_type": "identifier",
+                              "label": "shout",
+                              "position": {
+                                "start_line": 9,
+                                "start_col": 6,
+                                "end_line": 9,
+                                "end_col": 11
+                              },
+                              "structural_hash": "08b6345b10843e08a423bca5803d280f3e35ad7f69df880acc2909e006670845",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.2.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 9,
+                                "start_col": 11,
+                                "end_line": 9,
+                                "end_col": 19
+                              },
+                              "structural_hash": "fc0c76d66f1042766bf727acf0ebadf3c01e71f9799b3131cd1c0406af37e355",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "phrase",
+                                  "position": {
+                                    "start_line": 9,
+                                    "start_col": 12,
+                                    "end_line": 9,
+                                    "end_col": 18
+                                  },
+                                  "structural_hash": "0c0c8550a60fc8ca155ae9b881b1b2670aa00c50439c538a2a34dfc7303f4c56",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.2.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 20,
+                        "end_line": 11,
+                        "end_col": 5
+                      },
+                      "structural_hash": "65b1a8ca9788230d0cdb588024b610c0d65bc1008e18583a82c6a1ac444c64cd",
+                      "children": [
+                        {
+                          "id": "0.0.2.2.2.0",
+                          "node_type": "call",
+                          "label": "call",
+                          "position": {
+                            "start_line": 10,
+                            "start_col": 4,
+                            "end_line": 10,
+                            "end_col": 25
+                          },
+                          "structural_hash": "b908726308d663aaf221c7bb5e93b819bfae096fcb172b93940c6c32424632c2",
+                          "children": [
+                            {
+                              "id": "0.0.2.2.2.0.0",
+                              "node_type": "dot",
+                              "label": "dot",
+                              "position": {
+                                "start_line": 10,
+                                "start_col": 4,
+                                "end_line": 10,
+                                "end_col": 17
+                              },
+                              "structural_hash": "d141773ff61aed6bc11d3b689f707cf31148813a86ca6c0e66c892f592f9e2a1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.2.0.0.0",
+                                  "node_type": "alias",
+                                  "label": "String",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 4,
+                                    "end_line": 10,
+                                    "end_col": 10
+                                  },
+                                  "structural_hash": "e79085b48fd0cc5ae92396605f7868c4f1ea4601836942e7be7496f6a9aac179",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                },
+                                {
+                                  "id": "0.0.2.2.2.0.0.1",
+                                  "node_type": "identifier",
+                                  "label": "upcase",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 11,
+                                    "end_line": 10,
+                                    "end_col": 17
+                                  },
+                                  "structural_hash": "8b0c36dfbd1c9393fb8f01d7198041800276b88b8da2705f4dc023b4ca4215e3",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.2.2.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 10,
+                                "start_col": 17,
+                                "end_line": 10,
+                                "end_col": 25
+                              },
+                              "structural_hash": "fc0c76d66f1042766bf727acf0ebadf3c01e71f9799b3131cd1c0406af37e355",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.2.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "phrase",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 18,
+                                    "end_line": 10,
+                                    "end_col": 24
+                                  },
+                                  "structural_hash": "0c0c8550a60fc8ca155ae9b881b1b2670aa00c50439c538a2a34dfc7303f4c56",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "new_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 13,
+        "end_col": 0
+      },
+      "structural_hash": "8dfb21106e48253f5da483d0d5a327decc030923c58123f4f06f75f234cccf46",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "Greeter",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 12,
+            "end_col": 3
+          },
+          "structural_hash": "9c2edfe95bced08340557631811c93cf143deadf9ebb7968f7ccb1ad66b8cd08",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "da06b16346158c908b26015bf2ec139ad7e41c52942c472c619b060c02c6ae9e",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "Greeter",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 17
+                  },
+                  "structural_hash": "3095bd1a2910212b7711c91a8e6c78299ca92bf9324fa0c3acd59a88e90f5181",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 12,
+                "end_col": 3
+              },
+              "structural_hash": "a4350f1c8590ef6408c2e028e430defff10044593b88e6cb73ecb9b517b69f99",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "farewell",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 3,
+                    "end_col": 5
+                  },
+                  "structural_hash": "4b8512878c0b9fbbde7558d87c62ba638e8e2a17f2aa97363dd217ef7620af6f",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 20
+                      },
+                      "structural_hash": "e5d03d23139a8b4909a0d10c0e7b87f082845a98be2cdf55c86001ced033de8e",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "farewell",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 20
+                          },
+                          "structural_hash": "9727c64f356a60c56cb461ba23fbc82155643e2a37dd1d5f86894e6db099d9e5",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "farewell",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 14
+                              },
+                              "structural_hash": "d4207e02d060db3739323b18df1b399d1543c265a33b84a3094978b5c74181fd",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 14,
+                                "end_line": 1,
+                                "end_col": 20
+                              },
+                              "structural_hash": "26cfe943403f354022cb633ea535e608a5ce1afb7dc32453ed907a7344607cd1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "name",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 15,
+                                    "end_line": 1,
+                                    "end_col": 19
+                                  },
+                                  "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 21,
+                        "end_line": 3,
+                        "end_col": 5
+                      },
+                      "structural_hash": "ed4cc8f49a60031a6ff958a1d96585c0c3beca9672b420d7ffaf2dd6b455e244",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.2.0",
+                          "node_type": "binary_operator",
+                          "label": "binary_operator",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 4,
+                            "end_line": 2,
+                            "end_col": 23
+                          },
+                          "structural_hash": "35d09e29a7396db1be7dd5ad086b55a5c5a1a8f89998d073629eee6e08ee1abf",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.2.0.0",
+                              "node_type": "string",
+                              "label": "\"Goodbye, \"",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 4,
+                                "end_line": 2,
+                                "end_col": 15
+                              },
+                              "structural_hash": "f0eba702da6a94a8ebe546625d4861d868da5cfe17b8fa836da6a269d714ed90",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.2.0.1",
+                              "node_type": "identifier",
+                              "label": "name",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 19,
+                                "end_line": 2,
+                                "end_col": 23
+                              },
+                              "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "greet",
+                  "position": {
+                    "start_line": 5,
+                    "start_col": 2,
+                    "end_line": 7,
+                    "end_col": 5
+                  },
+                  "structural_hash": "213076d921bcfd9ce2dec7385514efcb1473bd49802ece496778bb8f52fa995a",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 2,
+                        "end_line": 5,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 6,
+                        "end_line": 5,
+                        "end_col": 17
+                      },
+                      "structural_hash": "ea4a806270b10c5a3c202ee0950ee2a1819e3aaf1ce22f789e084294b4b25ed0",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "greet",
+                          "position": {
+                            "start_line": 5,
+                            "start_col": 6,
+                            "end_line": 5,
+                            "end_col": 17
+                          },
+                          "structural_hash": "5236212bfb53a0cbccaf6e9a9a448f201ae69b73c5411519bf82d4d277abe5a4",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "greet",
+                              "position": {
+                                "start_line": 5,
+                                "start_col": 6,
+                                "end_line": 5,
+                                "end_col": 11
+                              },
+                              "structural_hash": "c45caa0b8d5e714bff0ce6b641be87a68f30b5405c5a3d35ed80233a56f95db5",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 5,
+                                "start_col": 11,
+                                "end_line": 5,
+                                "end_col": 17
+                              },
+                              "structural_hash": "26cfe943403f354022cb633ea535e608a5ce1afb7dc32453ed907a7344607cd1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "name",
+                                  "position": {
+                                    "start_line": 5,
+                                    "start_col": 12,
+                                    "end_line": 5,
+                                    "end_col": 16
+                                  },
+                                  "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 5,
+                        "start_col": 18,
+                        "end_line": 7,
+                        "end_col": 5
+                      },
+                      "structural_hash": "84b39e0a64de6cbd9a1ea02af2cb7ee4c566e945a76401feb17bffedcebf8438",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.2.0",
+                          "node_type": "binary_operator",
+                          "label": "binary_operator",
+                          "position": {
+                            "start_line": 6,
+                            "start_col": 4,
+                            "end_line": 6,
+                            "end_col": 21
+                          },
+                          "structural_hash": "519fd9ad831d40ecc8b9293890bfea2fbf5c608b2fa4cd58c24c88f7be5b270b",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.2.0.0",
+                              "node_type": "string",
+                              "label": "\"Hello, \"",
+                              "position": {
+                                "start_line": 6,
+                                "start_col": 4,
+                                "end_line": 6,
+                                "end_col": 13
+                              },
+                              "structural_hash": "f198b62b1224874c0d66048d3558d3c6c92376f25b32a56863b3ff63111297ca",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.2.0.1",
+                              "node_type": "identifier",
+                              "label": "name",
+                              "position": {
+                                "start_line": 6,
+                                "start_col": 17,
+                                "end_line": 6,
+                                "end_col": 21
+                              },
+                              "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.2",
+                  "node_type": "call",
+                  "label": "shout",
+                  "position": {
+                    "start_line": 9,
+                    "start_col": 2,
+                    "end_line": 11,
+                    "end_col": 5
+                  },
+                  "structural_hash": "b3c368110dee43df32f626db08aa39f85d7577748764b9ebdcabcd5be5e7c0c2",
+                  "children": [
+                    {
+                      "id": "0.0.2.2.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 2,
+                        "end_line": 9,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.2.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 6,
+                        "end_line": 9,
+                        "end_col": 19
+                      },
+                      "structural_hash": "cb5d85deb5d9042dc30b771f2e3a8a98f8fa22157bfc7753983a4674786ef3a3",
+                      "children": [
+                        {
+                          "id": "0.0.2.2.1.0",
+                          "node_type": "call",
+                          "label": "shout",
+                          "position": {
+                            "start_line": 9,
+                            "start_col": 6,
+                            "end_line": 9,
+                            "end_col": 19
+                          },
+                          "structural_hash": "648599d22d036a8b181588a40a93b66b164183dbc45261fd9c090fac072e1091",
+                          "children": [
+                            {
+                              "id": "0.0.2.2.1.0.0",
+                              "node_type": "identifier",
+                              "label": "shout",
+                              "position": {
+                                "start_line": 9,
+                                "start_col": 6,
+                                "end_line": 9,
+                                "end_col": 11
+                              },
+                              "structural_hash": "08b6345b10843e08a423bca5803d280f3e35ad7f69df880acc2909e006670845",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.2.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 9,
+                                "start_col": 11,
+                                "end_line": 9,
+                                "end_col": 19
+                              },
+                              "structural_hash": "fc0c76d66f1042766bf727acf0ebadf3c01e71f9799b3131cd1c0406af37e355",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "phrase",
+                                  "position": {
+                                    "start_line": 9,
+                                    "start_col": 12,
+                                    "end_line": 9,
+                                    "end_col": 18
+                                  },
+                                  "structural_hash": "0c0c8550a60fc8ca155ae9b881b1b2670aa00c50439c538a2a34dfc7303f4c56",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.2.2",
+                      "node_type": "do_block",
+                      "label": "do_block",
+                      "position": {
+                        "start_line": 9,
+                        "start_col": 20,
+                        "end_line": 11,
+                        "end_col": 5
+                      },
+                      "structural_hash": "65b1a8ca9788230d0cdb588024b610c0d65bc1008e18583a82c6a1ac444c64cd",
+                      "children": [
+                        {
+                          "id": "0.0.2.2.2.0",
+                          "node_type": "call",
+                          "label": "call",
+                          "position": {
+                            "start_line": 10,
+                            "start_col": 4,
+                            "end_line": 10,
+                            "end_col": 25
+                          },
+                          "structural_hash": "b908726308d663aaf221c7bb5e93b819bfae096fcb172b93940c6c32424632c2",
+                          "children": [
+                            {
+                              "id": "0.0.2.2.2.0.0",
+                              "node_type": "dot",
+                              "label": "dot",
+                              "position": {
+                                "start_line": 10,
+                                "start_col": 4,
+                                "end_line": 10,
+                                "end_col": 17
+                              },
+                              "structural_hash": "d141773ff61aed6bc11d3b689f707cf31148813a86ca6c0e66c892f592f9e2a1",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.2.0.0.0",
+                                  "node_type": "alias",
+                                  "label": "String",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 4,
+                                    "end_line": 10,
+                                    "end_col": 10
+                                  },
+                                  "structural_hash": "e79085b48fd0cc5ae92396605f7868c4f1ea4601836942e7be7496f6a9aac179",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                },
+                                {
+                                  "id": "0.0.2.2.2.0.0.1",
+                                  "node_type": "identifier",
+                                  "label": "upcase",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 11,
+                                    "end_line": 10,
+                                    "end_col": 17
+                                  },
+                                  "structural_hash": "8b0c36dfbd1c9393fb8f01d7198041800276b88b8da2705f4dc023b4ca4215e3",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.2.2.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 10,
+                                "start_col": 17,
+                                "end_line": 10,
+                                "end_col": 25
+                              },
+                              "structural_hash": "fc0c76d66f1042766bf727acf0ebadf3c01e71f9799b3131cd1c0406af37e355",
+                              "children": [
+                                {
+                                  "id": "0.0.2.2.2.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "phrase",
+                                  "position": {
+                                    "start_line": 10,
+                                    "start_col": 18,
+                                    "end_line": 10,
+                                    "end_col": 24
+                                  },
+                                  "structural_hash": "0c0c8550a60fc8ca155ae9b881b1b2670aa00c50439c538a2a34dfc7303f4c56",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "Greeter",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "expected": [
+      [
+        "MODIFICATION",
+        "call",
+        "Greeter",
+        "call",
+        "Greeter"
+      ]
+    ],
+    "parser_commit": "9687df99046ba44e19150738977345f6e6c70fb1",
+    "parser_sha256": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf"
+  },
+  {
+    "source": {
+      "name": "swap with real value edit",
+      "old": "defmodule G do\n  def a(x), do: x + 1\n  def b(x), do: x + 2\nend\n",
+      "new": "defmodule G do\n  def b(x), do: x + 2\n  def a(x), do: x + 3\nend\n",
+      "filename": "code.ex",
+      "language": "elixir"
+    },
+    "old_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 4,
+        "end_col": 0
+      },
+      "structural_hash": "aa6ff2572e41032374b68fdfa162a1242066f0c27d150b70c90b5517d2320091",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "G",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 3,
+            "end_col": 3
+          },
+          "structural_hash": "4ea861e787aef060a59289dd4c0eb8f040065bcad41c473415425dfe9bd52bf2",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "8609586508835e80ca61154889190f12e86b86568484fe0557602a20575d08ef",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "G",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 11
+                  },
+                  "structural_hash": "33fae721c971503fc20c46fed5c30a495f7bae9623f38ed10b44fead3d52c141",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 12,
+                "end_line": 3,
+                "end_col": 3
+              },
+              "structural_hash": "e8d9ed8487993ab2e0dda97dafbbd1c91dba5d0d4b182a965cffaa0d598b7306",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "a",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 1,
+                    "end_col": 21
+                  },
+                  "structural_hash": "6e9885d18391014224d30b7cc7f34842f8c29eb2e2f5adc11aa8159a550756ad",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 21
+                      },
+                      "structural_hash": "cdf1551d8bbd423ba22645b1fd04969728b0346c70a375e8c3b6de8eec8b2ba7",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "a",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 10
+                          },
+                          "structural_hash": "7f274d43067a7541e581e4c096ca639ffb164accd1266d81cd5452f314b610ad",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "a",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 7
+                              },
+                              "structural_hash": "56f446809dfaa9d999d29f3e4e8355aa26132419431c6d74ca062a657f07ba64",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 7,
+                                "end_line": 1,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 8,
+                                    "end_line": 1,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.0.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 12,
+                            "end_line": 1,
+                            "end_col": 21
+                          },
+                          "structural_hash": "a4fa7f45315737ee87198a2ad94ae56050452b177dbfd4c9fe62812547c322b9",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 12,
+                                "end_line": 1,
+                                "end_col": 21
+                              },
+                              "structural_hash": "35c6287acbc4e71aad688981ff9247b3771c92072c889467185f1adf6dd03bbd",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 16,
+                                    "end_line": 1,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "60e73dce6d40096ba93c593652d5829ec3179777a6cc40981c43b5bcd157778f",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 16,
+                                        "end_line": 1,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "1",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 20,
+                                        "end_line": 1,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "8dbb15068c0d6cfe818440d2b2f27982588b5b94394fb531050be60401e97ef7",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "b",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 2,
+                    "end_line": 2,
+                    "end_col": 21
+                  },
+                  "structural_hash": "fd779ef0acd0b15e83a3dd44b75f449bf9ddb5cca2590b514346f621a4cdac30",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 2,
+                        "end_line": 2,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 6,
+                        "end_line": 2,
+                        "end_col": 21
+                      },
+                      "structural_hash": "6085d426816ba5f5f096e48062bc38c2a87103e4cfe194d0e5a2e0127b775ef2",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "b",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 6,
+                            "end_line": 2,
+                            "end_col": 10
+                          },
+                          "structural_hash": "706cda7f73d05fcaf769d7ffabb84c12787649fe422082bc1766f4d131ecad04",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "b",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 6,
+                                "end_line": 2,
+                                "end_col": 7
+                              },
+                              "structural_hash": "c6f6e7c77cdc954497224f96ee443fa576d9f35c2fd177fbc2a1a8580fa4a8a0",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 7,
+                                "end_line": 2,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 8,
+                                    "end_line": 2,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.1.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 12,
+                            "end_line": 2,
+                            "end_col": 21
+                          },
+                          "structural_hash": "3911b2e980ad033b328d4e0bc0d32abc7572c921c43dfe111ef91c108008143c",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 12,
+                                "end_line": 2,
+                                "end_col": 21
+                              },
+                              "structural_hash": "cea81638267dd40238e4e8080008ce386d4c5311591f98b99f5f0c1ce4198155",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 16,
+                                    "end_line": 2,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "1f1624c8dd4d1aab713251d4ae14ec9deb769dd359e3be7ad5f25bc2aefc9789",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 16,
+                                        "end_line": 2,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "2",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 20,
+                                        "end_line": 2,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "750be787d00b6f25d153add106061a9505d123ee8810312e2b50a5a45ca7496f",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "new_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 4,
+        "end_col": 0
+      },
+      "structural_hash": "f63a5ff99fa0ad057c94ea8a090beb2bd8a3222c22453ce002c9fc3409ca77c2",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "G",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 3,
+            "end_col": 3
+          },
+          "structural_hash": "cc9504f3315c3c487d3aafc3690b8235c637549c580a6ba5466ac31201a4ffbc",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "8609586508835e80ca61154889190f12e86b86568484fe0557602a20575d08ef",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "G",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 11
+                  },
+                  "structural_hash": "33fae721c971503fc20c46fed5c30a495f7bae9623f38ed10b44fead3d52c141",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 12,
+                "end_line": 3,
+                "end_col": 3
+              },
+              "structural_hash": "6f0172aa1664bc1c84006f5065338db9935b61c6d7ad82f55a0390775c48d257",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "b",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 1,
+                    "end_col": 21
+                  },
+                  "structural_hash": "fd779ef0acd0b15e83a3dd44b75f449bf9ddb5cca2590b514346f621a4cdac30",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 21
+                      },
+                      "structural_hash": "6085d426816ba5f5f096e48062bc38c2a87103e4cfe194d0e5a2e0127b775ef2",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "b",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 10
+                          },
+                          "structural_hash": "706cda7f73d05fcaf769d7ffabb84c12787649fe422082bc1766f4d131ecad04",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "b",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 7
+                              },
+                              "structural_hash": "c6f6e7c77cdc954497224f96ee443fa576d9f35c2fd177fbc2a1a8580fa4a8a0",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 7,
+                                "end_line": 1,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 8,
+                                    "end_line": 1,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.0.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 12,
+                            "end_line": 1,
+                            "end_col": 21
+                          },
+                          "structural_hash": "3911b2e980ad033b328d4e0bc0d32abc7572c921c43dfe111ef91c108008143c",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 12,
+                                "end_line": 1,
+                                "end_col": 21
+                              },
+                              "structural_hash": "cea81638267dd40238e4e8080008ce386d4c5311591f98b99f5f0c1ce4198155",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 16,
+                                    "end_line": 1,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "1f1624c8dd4d1aab713251d4ae14ec9deb769dd359e3be7ad5f25bc2aefc9789",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 16,
+                                        "end_line": 1,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "2",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 20,
+                                        "end_line": 1,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "750be787d00b6f25d153add106061a9505d123ee8810312e2b50a5a45ca7496f",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "a",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 2,
+                    "end_line": 2,
+                    "end_col": 21
+                  },
+                  "structural_hash": "8f33d3bb5eeca5a31cb41b86ecb36311e306dcfff0765310e16a127b30b825ca",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 2,
+                        "end_line": 2,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 6,
+                        "end_line": 2,
+                        "end_col": 21
+                      },
+                      "structural_hash": "89acff5bea54756bf76d1c3776b84f4989a054d30071250ec981e50ce6ecedb6",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "a",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 6,
+                            "end_line": 2,
+                            "end_col": 10
+                          },
+                          "structural_hash": "7f274d43067a7541e581e4c096ca639ffb164accd1266d81cd5452f314b610ad",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "a",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 6,
+                                "end_line": 2,
+                                "end_col": 7
+                              },
+                              "structural_hash": "56f446809dfaa9d999d29f3e4e8355aa26132419431c6d74ca062a657f07ba64",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 7,
+                                "end_line": 2,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 8,
+                                    "end_line": 2,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.1.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 12,
+                            "end_line": 2,
+                            "end_col": 21
+                          },
+                          "structural_hash": "271d3083db43afad464cb7b7a7790fecc1efd48099809fb7283698f772365874",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 12,
+                                "end_line": 2,
+                                "end_col": 21
+                              },
+                              "structural_hash": "d8145fa63a685d534af4df250d863adc8a5bf3e2d5dea570bd3a0f3e168e5e5c",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 16,
+                                    "end_line": 2,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "74e89092253e76c115a3bf39876ec27b01f8dfb61334fb143ffbc18c3ffeb3df",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 16,
+                                        "end_line": 2,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "3",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 20,
+                                        "end_line": 2,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "7c8551c6046ca2884b2293048657afc700074170d44499fcaef305cd01c2081d",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "expected": [
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "3"
+      ]
+    ],
+    "parser_commit": "9687df99046ba44e19150738977345f6e6c70fb1",
+    "parser_sha256": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf"
+  },
+  {
+    "source": {
+      "name": "minimal Elixir swap",
+      "old": "defmodule G do\n  def a(x), do: x + 1\n  def b(x), do: x + 2\nend\n",
+      "new": "defmodule G do\n  def b(x), do: x + 2\n  def a(x), do: x + 1\nend\n",
+      "filename": "code.ex",
+      "language": "elixir"
+    },
+    "old_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 4,
+        "end_col": 0
+      },
+      "structural_hash": "aa6ff2572e41032374b68fdfa162a1242066f0c27d150b70c90b5517d2320091",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "G",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 3,
+            "end_col": 3
+          },
+          "structural_hash": "4ea861e787aef060a59289dd4c0eb8f040065bcad41c473415425dfe9bd52bf2",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "8609586508835e80ca61154889190f12e86b86568484fe0557602a20575d08ef",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "G",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 11
+                  },
+                  "structural_hash": "33fae721c971503fc20c46fed5c30a495f7bae9623f38ed10b44fead3d52c141",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 12,
+                "end_line": 3,
+                "end_col": 3
+              },
+              "structural_hash": "e8d9ed8487993ab2e0dda97dafbbd1c91dba5d0d4b182a965cffaa0d598b7306",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "a",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 1,
+                    "end_col": 21
+                  },
+                  "structural_hash": "6e9885d18391014224d30b7cc7f34842f8c29eb2e2f5adc11aa8159a550756ad",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 21
+                      },
+                      "structural_hash": "cdf1551d8bbd423ba22645b1fd04969728b0346c70a375e8c3b6de8eec8b2ba7",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "a",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 10
+                          },
+                          "structural_hash": "7f274d43067a7541e581e4c096ca639ffb164accd1266d81cd5452f314b610ad",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "a",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 7
+                              },
+                              "structural_hash": "56f446809dfaa9d999d29f3e4e8355aa26132419431c6d74ca062a657f07ba64",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 7,
+                                "end_line": 1,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 8,
+                                    "end_line": 1,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.0.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 12,
+                            "end_line": 1,
+                            "end_col": 21
+                          },
+                          "structural_hash": "a4fa7f45315737ee87198a2ad94ae56050452b177dbfd4c9fe62812547c322b9",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 12,
+                                "end_line": 1,
+                                "end_col": 21
+                              },
+                              "structural_hash": "35c6287acbc4e71aad688981ff9247b3771c92072c889467185f1adf6dd03bbd",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 16,
+                                    "end_line": 1,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "60e73dce6d40096ba93c593652d5829ec3179777a6cc40981c43b5bcd157778f",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 16,
+                                        "end_line": 1,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "1",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 20,
+                                        "end_line": 1,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "8dbb15068c0d6cfe818440d2b2f27982588b5b94394fb531050be60401e97ef7",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "b",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 2,
+                    "end_line": 2,
+                    "end_col": 21
+                  },
+                  "structural_hash": "fd779ef0acd0b15e83a3dd44b75f449bf9ddb5cca2590b514346f621a4cdac30",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 2,
+                        "end_line": 2,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 6,
+                        "end_line": 2,
+                        "end_col": 21
+                      },
+                      "structural_hash": "6085d426816ba5f5f096e48062bc38c2a87103e4cfe194d0e5a2e0127b775ef2",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "b",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 6,
+                            "end_line": 2,
+                            "end_col": 10
+                          },
+                          "structural_hash": "706cda7f73d05fcaf769d7ffabb84c12787649fe422082bc1766f4d131ecad04",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "b",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 6,
+                                "end_line": 2,
+                                "end_col": 7
+                              },
+                              "structural_hash": "c6f6e7c77cdc954497224f96ee443fa576d9f35c2fd177fbc2a1a8580fa4a8a0",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 7,
+                                "end_line": 2,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 8,
+                                    "end_line": 2,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.1.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 12,
+                            "end_line": 2,
+                            "end_col": 21
+                          },
+                          "structural_hash": "3911b2e980ad033b328d4e0bc0d32abc7572c921c43dfe111ef91c108008143c",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 12,
+                                "end_line": 2,
+                                "end_col": 21
+                              },
+                              "structural_hash": "cea81638267dd40238e4e8080008ce386d4c5311591f98b99f5f0c1ce4198155",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 16,
+                                    "end_line": 2,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "1f1624c8dd4d1aab713251d4ae14ec9deb769dd359e3be7ad5f25bc2aefc9789",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 16,
+                                        "end_line": 2,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "2",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 20,
+                                        "end_line": 2,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "750be787d00b6f25d153add106061a9505d123ee8810312e2b50a5a45ca7496f",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "new_tree": {
+      "id": "0",
+      "node_type": "source",
+      "label": "source",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 4,
+        "end_col": 0
+      },
+      "structural_hash": "40b50f8f9a58652eeb356ca93452a045c82c2510c279134ed7931169230c39bd",
+      "children": [
+        {
+          "id": "0.0",
+          "node_type": "call",
+          "label": "G",
+          "position": {
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 3,
+            "end_col": 3
+          },
+          "structural_hash": "4dde9dfeecbd7bc5aec6ed2697ca5ccb47bb19d09ca5c95170dbea2414315dd0",
+          "children": [
+            {
+              "id": "0.0.0",
+              "node_type": "identifier",
+              "label": "defmodule",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "a3880adc43a693a6288d17d17130839047fe83bdf800c436cc7540d210215bbb",
+              "children": [],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.1",
+              "node_type": "arguments",
+              "label": "arguments",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "8609586508835e80ca61154889190f12e86b86568484fe0557602a20575d08ef",
+              "children": [
+                {
+                  "id": "0.0.1.0",
+                  "node_type": "alias",
+                  "label": "G",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 11
+                  },
+                  "structural_hash": "33fae721c971503fc20c46fed5c30a495f7bae9623f38ed10b44fead3d52c141",
+                  "children": [],
+                  "parent_type": null,
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            },
+            {
+              "id": "0.0.2",
+              "node_type": "do_block",
+              "label": "do_block",
+              "position": {
+                "start_line": 0,
+                "start_col": 12,
+                "end_line": 3,
+                "end_col": 3
+              },
+              "structural_hash": "839f472889c754b41083ee44459552010b37870baf80e31a29ae7a8c815a2991",
+              "children": [
+                {
+                  "id": "0.0.2.0",
+                  "node_type": "call",
+                  "label": "b",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 2,
+                    "end_line": 1,
+                    "end_col": 21
+                  },
+                  "structural_hash": "fd779ef0acd0b15e83a3dd44b75f449bf9ddb5cca2590b514346f621a4cdac30",
+                  "children": [
+                    {
+                      "id": "0.0.2.0.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 2,
+                        "end_line": 1,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.0.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 1,
+                        "start_col": 6,
+                        "end_line": 1,
+                        "end_col": 21
+                      },
+                      "structural_hash": "6085d426816ba5f5f096e48062bc38c2a87103e4cfe194d0e5a2e0127b775ef2",
+                      "children": [
+                        {
+                          "id": "0.0.2.0.1.0",
+                          "node_type": "call",
+                          "label": "b",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 6,
+                            "end_line": 1,
+                            "end_col": 10
+                          },
+                          "structural_hash": "706cda7f73d05fcaf769d7ffabb84c12787649fe422082bc1766f4d131ecad04",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.0.0",
+                              "node_type": "identifier",
+                              "label": "b",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 6,
+                                "end_line": 1,
+                                "end_col": 7
+                              },
+                              "structural_hash": "c6f6e7c77cdc954497224f96ee443fa576d9f35c2fd177fbc2a1a8580fa4a8a0",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.0.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 7,
+                                "end_line": 1,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 8,
+                                    "end_line": 1,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.0.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 1,
+                            "start_col": 12,
+                            "end_line": 1,
+                            "end_col": 21
+                          },
+                          "structural_hash": "3911b2e980ad033b328d4e0bc0d32abc7572c921c43dfe111ef91c108008143c",
+                          "children": [
+                            {
+                              "id": "0.0.2.0.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 1,
+                                "start_col": 12,
+                                "end_line": 1,
+                                "end_col": 21
+                              },
+                              "structural_hash": "cea81638267dd40238e4e8080008ce386d4c5311591f98b99f5f0c1ce4198155",
+                              "children": [
+                                {
+                                  "id": "0.0.2.0.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 1,
+                                    "start_col": 16,
+                                    "end_line": 1,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "1f1624c8dd4d1aab713251d4ae14ec9deb769dd359e3be7ad5f25bc2aefc9789",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 16,
+                                        "end_line": 1,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.0.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "2",
+                                      "position": {
+                                        "start_line": 1,
+                                        "start_col": 20,
+                                        "end_line": 1,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "750be787d00b6f25d153add106061a9505d123ee8810312e2b50a5a45ca7496f",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                },
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "call",
+                  "label": "a",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 2,
+                    "end_line": 2,
+                    "end_col": 21
+                  },
+                  "structural_hash": "6e9885d18391014224d30b7cc7f34842f8c29eb2e2f5adc11aa8159a550756ad",
+                  "children": [
+                    {
+                      "id": "0.0.2.1.0",
+                      "node_type": "identifier",
+                      "label": "def",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 2,
+                        "end_line": 2,
+                        "end_col": 5
+                      },
+                      "structural_hash": "2fd2c79a4beaecbe730924b7bde8d6f2a66b605ce63a2ffd2e4d0fb563281b95",
+                      "children": [],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    },
+                    {
+                      "id": "0.0.2.1.1",
+                      "node_type": "arguments",
+                      "label": "arguments",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 6,
+                        "end_line": 2,
+                        "end_col": 21
+                      },
+                      "structural_hash": "cdf1551d8bbd423ba22645b1fd04969728b0346c70a375e8c3b6de8eec8b2ba7",
+                      "children": [
+                        {
+                          "id": "0.0.2.1.1.0",
+                          "node_type": "call",
+                          "label": "a",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 6,
+                            "end_line": 2,
+                            "end_col": 10
+                          },
+                          "structural_hash": "7f274d43067a7541e581e4c096ca639ffb164accd1266d81cd5452f314b610ad",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.0.0",
+                              "node_type": "identifier",
+                              "label": "a",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 6,
+                                "end_line": 2,
+                                "end_col": 7
+                              },
+                              "structural_hash": "56f446809dfaa9d999d29f3e4e8355aa26132419431c6d74ca062a657f07ba64",
+                              "children": [],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            },
+                            {
+                              "id": "0.0.2.1.1.0.1",
+                              "node_type": "arguments",
+                              "label": "arguments",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 7,
+                                "end_line": 2,
+                                "end_col": 10
+                              },
+                              "structural_hash": "ff8758e11d8cb3e0af30c26272369a90d8e270509519dc0078bc4cb815a81715",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.0.1.0",
+                                  "node_type": "identifier",
+                                  "label": "x",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 8,
+                                    "end_line": 2,
+                                    "end_col": 9
+                                  },
+                                  "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                  "children": [],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": null
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        },
+                        {
+                          "id": "0.0.2.1.1.1",
+                          "node_type": "keywords",
+                          "label": "keywords",
+                          "position": {
+                            "start_line": 2,
+                            "start_col": 12,
+                            "end_line": 2,
+                            "end_col": 21
+                          },
+                          "structural_hash": "a4fa7f45315737ee87198a2ad94ae56050452b177dbfd4c9fe62812547c322b9",
+                          "children": [
+                            {
+                              "id": "0.0.2.1.1.1.0",
+                              "node_type": "pair",
+                              "label": "pair",
+                              "position": {
+                                "start_line": 2,
+                                "start_col": 12,
+                                "end_line": 2,
+                                "end_col": 21
+                              },
+                              "structural_hash": "35c6287acbc4e71aad688981ff9247b3771c92072c889467185f1adf6dd03bbd",
+                              "children": [
+                                {
+                                  "id": "0.0.2.1.1.1.0.1",
+                                  "node_type": "binary_operator",
+                                  "label": "binary_operator",
+                                  "position": {
+                                    "start_line": 2,
+                                    "start_col": 16,
+                                    "end_line": 2,
+                                    "end_col": 21
+                                  },
+                                  "structural_hash": "60e73dce6d40096ba93c593652d5829ec3179777a6cc40981c43b5bcd157778f",
+                                  "children": [
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.0",
+                                      "node_type": "identifier",
+                                      "label": "x",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 16,
+                                        "end_line": 2,
+                                        "end_col": 17
+                                      },
+                                      "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    },
+                                    {
+                                      "id": "0.0.2.1.1.1.0.1.1",
+                                      "node_type": "integer",
+                                      "label": "1",
+                                      "position": {
+                                        "start_line": 2,
+                                        "start_col": 20,
+                                        "end_line": 2,
+                                        "end_col": 21
+                                      },
+                                      "structural_hash": "8dbb15068c0d6cfe818440d2b2f27982588b5b94394fb531050be60401e97ef7",
+                                      "children": [],
+                                      "parent_type": null,
+                                      "type_info": null,
+                                      "facts": null
+                                    }
+                                  ],
+                                  "parent_type": null,
+                                  "type_info": null,
+                                  "facts": null
+                                }
+                              ],
+                              "parent_type": null,
+                              "type_info": null,
+                              "facts": {
+                                "facts_trace": null,
+                                "param_count": null,
+                                "returns": null,
+                                "return_kind": null,
+                                "body": null,
+                                "side_effects": null,
+                                "has_conditional": null,
+                                "has_loop": null,
+                                "has_error_handling": null,
+                                "throws": null,
+                                "early_exit_count": null,
+                                "negated_condition_count": null,
+                                "has_guard_clause": null,
+                                "mutates": null,
+                                "constructs": null,
+                                "has_computation": null,
+                                "control_shape": null,
+                                "behavior_category": null,
+                                "is_async": null,
+                                "is_generator": null,
+                                "decorator_count": null,
+                                "method_count": null,
+                                "field_count": null,
+                                "base_count": null,
+                                "is_enum": null,
+                                "is_exception": null,
+                                "is_property": null,
+                                "is_staticmethod": null,
+                                "is_classmethod": null,
+                                "is_abstract": null,
+                                "is_cached": null,
+                                "is_dataclass": null,
+                                "default_count": null,
+                                "keyword_only_count": null,
+                                "has_variadic": null,
+                                "has_kwargs": null,
+                                "call_count": null,
+                                "recursive": null
+                              }
+                            }
+                          ],
+                          "parent_type": null,
+                          "type_info": null,
+                          "facts": null
+                        }
+                      ],
+                      "parent_type": null,
+                      "type_info": null,
+                      "facts": null
+                    }
+                  ],
+                  "parent_type": "G",
+                  "type_info": null,
+                  "facts": null
+                }
+              ],
+              "parent_type": null,
+              "type_info": null,
+              "facts": null
+            }
+          ],
+          "parent_type": null,
+          "type_info": null,
+          "facts": null
+        }
+      ],
+      "parent_type": null,
+      "type_info": null,
+      "facts": null
+    },
+    "expected": [
+      [
+        "MODIFICATION",
+        "call",
+        "G",
+        "call",
+        "G"
+      ]
+    ],
+    "parser_commit": "9687df99046ba44e19150738977345f6e6c70fb1",
+    "parser_sha256": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf"
+  }
+]
