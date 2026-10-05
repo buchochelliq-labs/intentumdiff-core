@@ -1,14 +1,15 @@
 // Extracted verbatim from lib.rs (issue #85, lib.rs split round 2).
 use crate::*;
 
+const MAX_LCS_CELLS: usize = 4_000_000;
+
 /// LCS-based opcodes over comparable items. Returns None when the quadratic
-/// table would be too large (caller falls back to the Python path).
+/// table would be too large (the caller must decline or return an error).
 pub(crate) fn lcs_opcodes<T: PartialEq>(
     old: &[T],
     new: &[T],
 ) -> Option<Vec<(TextOp, usize, usize, usize, usize)>> {
-    const MAX_CELLS: usize = 4_000_000;
-    if old.len().saturating_mul(new.len()) > MAX_CELLS {
+    if old.len().saturating_mul(new.len()) > MAX_LCS_CELLS {
         return None;
     }
     let cols = new.len() + 1;
@@ -229,21 +230,73 @@ pub(crate) fn generic_text_addition_value(line: &str, line_no: usize) -> Option<
 }
 
 pub(crate) fn generic_text_changes_value(old_source: &str, new_source: &str) -> Option<Vec<Value>> {
+    generic_text_changes_excluding(old_source, new_source, &HashSet::new(), &HashSet::new())
+}
+
+/// Remove only proved section moves before aligning the remaining lines. Keep
+/// stationary sections as anchors: removing them could hide unrelated value swaps.
+/// The Markdown presentation pass restores the moved sections afterwards.
+pub(crate) fn generic_markdown_changes_value(
+    old_source: &str,
+    new_source: &str,
+) -> Option<Vec<Value>> {
     let old_lines: Vec<&str> = old_source.lines().collect();
     let new_lines: Vec<&str> = new_source.lines().collect();
-    let ops = lcs_opcodes(&old_lines, &new_lines)?;
+    if old_lines.len().saturating_mul(new_lines.len()) > MAX_LCS_CELLS {
+        return None;
+    }
+    let review: Value =
+        serde_json::from_str(&markdown_section_review_impl(old_source, new_source)).ok()?;
+    let mut relocated_old = HashSet::new();
+    let mut relocated_new = HashSet::new();
+    for moved in review["moves"].as_array()? {
+        let old_pos = &moved["old_node"]["position"];
+        let new_pos = &moved["new_node"]["position"];
+        let a = old_pos["start_line"].as_u64()? as usize;
+        let b = old_pos["end_line"].as_u64()? as usize;
+        let c = new_pos["start_line"].as_u64()? as usize;
+        let d = new_pos["end_line"].as_u64()? as usize;
+        // Section hashes normalize outer whitespace. This alignment correction
+        // requires exact raw lines so it cannot consume additional style edits.
+        if old_lines.get(a..=b)? == new_lines.get(c..=d)? {
+            relocated_old.extend(a..=b);
+            relocated_new.extend(c..=d);
+        }
+    }
+    generic_text_changes_excluding(old_source, new_source, &relocated_old, &relocated_new)
+}
+
+fn generic_text_changes_excluding(
+    old_source: &str,
+    new_source: &str,
+    relocated_old: &HashSet<usize>,
+    relocated_new: &HashSet<usize>,
+) -> Option<Vec<Value>> {
+    let old_lines: Vec<_> = old_source
+        .lines()
+        .enumerate()
+        .filter(|(i, _)| !relocated_old.contains(i))
+        .collect();
+    let new_lines: Vec<_> = new_source
+        .lines()
+        .enumerate()
+        .filter(|(i, _)| !relocated_new.contains(i))
+        .collect();
+    let old_text: Vec<_> = old_lines.iter().map(|(_, line)| *line).collect();
+    let new_text: Vec<_> = new_lines.iter().map(|(_, line)| *line).collect();
+    let ops = lcs_opcodes(&old_text, &new_text)?;
     let mut changes: Vec<Value> = Vec::new();
     for (op, old_start, old_end, new_start, new_end) in ops {
         match op {
             TextOp::Equal => {}
             TextOp::Insert => {
-                for (offset, line) in new_lines[new_start..new_end].iter().enumerate() {
-                    changes.extend(generic_text_addition_value(line, new_start + offset));
+                for &(line_no, line) in &new_lines[new_start..new_end] {
+                    changes.extend(generic_text_addition_value(line, line_no));
                 }
             }
             TextOp::Delete => {
-                for (offset, line) in old_lines[old_start..old_end].iter().enumerate() {
-                    changes.extend(generic_text_deletion_value(line, old_start + offset));
+                for &(line_no, line) in &old_lines[old_start..old_end] {
+                    changes.extend(generic_text_deletion_value(line, line_no));
                 }
             }
             TextOp::Replace => {
@@ -251,15 +304,13 @@ pub(crate) fn generic_text_changes_value(old_source: &str, new_source: &str) -> 
                 let new_block = &new_lines[new_start..new_end];
                 let paired = old_block.len().min(new_block.len());
                 for offset in 0..paired {
-                    let old_line = old_block[offset];
-                    let new_line = new_block[offset];
+                    let (old_no, old_line) = old_block[offset];
+                    let (new_no, new_line) = new_block[offset];
                     if old_line == new_line {
                         continue;
                     }
                     // One changed text line = ONE line-level MODIFICATION; the char
                     // detail lives in text_diff for inline rendering.
-                    let old_no = old_start + offset;
-                    let new_no = new_start + offset;
                     changes.push(serde_json::json!({
                         "change_type": "MODIFICATION",
                         "old_node": generic_text_node_json(
@@ -274,11 +325,11 @@ pub(crate) fn generic_text_changes_value(old_source: &str, new_source: &str) -> 
                         "text_diff": inline_char_diff(old_line, new_line),
                     }));
                 }
-                for (offset, line) in old_block[paired..].iter().enumerate() {
-                    changes.extend(generic_text_deletion_value(line, old_start + paired + offset));
+                for &(line_no, line) in &old_block[paired..] {
+                    changes.extend(generic_text_deletion_value(line, line_no));
                 }
-                for (offset, line) in new_block[paired..].iter().enumerate() {
-                    changes.extend(generic_text_addition_value(line, new_start + paired + offset));
+                for &(line_no, line) in &new_block[paired..] {
+                    changes.extend(generic_text_addition_value(line, line_no));
                 }
             }
         }
@@ -378,3 +429,90 @@ pub(crate) fn generic_text_review_impl(
 // discrimination (a swap is ONE move, issues #12/#32/#15) and heading RENAMES
 // by unique body hash. Python keeps only the change-list filtering.
 // ---------------------------------------------------------------------------
+
+#[cfg(test)]
+mod relocation_regressions {
+
+    #[test]
+    fn duplicate_heading_moves_do_not_consume_unchanged_bodies() {
+        for (old, new) in [
+            (
+                "# A\none\n# B\ntwo\n# A\nthree\n",
+                "# B\ntwo\n# A\none\n# A\nchanged\n",
+            ),
+            (
+                "# A\none\n# A\nthree\n# B\ntwo\n",
+                "# B\ntwo\n# A\none\n# A\nchanged\n",
+            ),
+        ] {
+            let diff = crate::api::review_text(old, new, "doc.md", "doc.md").unwrap();
+            let labels: Vec<&str> = diff
+                .changes
+                .iter()
+                .flat_map(|c| {
+                    [c.old_node.as_ref(), c.new_node.as_ref()]
+                        .into_iter()
+                        .flatten()
+                        .map(|n| n.label.as_str())
+                })
+                .collect();
+            let edit = diff
+                .changes
+                .iter()
+                .find(|c| c.change_type == "MODIFICATION")
+                .expect("body modification");
+            assert_eq!(edit.old_node.as_ref().unwrap().label, "three");
+            assert_eq!(edit.new_node.as_ref().unwrap().label, "changed");
+            assert_eq!(edit.new_node.as_ref().unwrap().position.start_line, 5);
+            assert_eq!(
+                diff.changes
+                    .iter()
+                    .filter(|c| c.change_type == "MOVE")
+                    .count(),
+                1
+            );
+            assert!(
+                !labels.contains(&"one"),
+                "unchanged body reported as edited: {diff:?}"
+            );
+            assert!(
+                labels.contains(&"three") && labels.contains(&"changed"),
+                "body edit lost: {diff:?}"
+            );
+            assert!(diff.has_semantic_changes && !diff.is_style_only);
+        }
+    }
+    #[test]
+    fn stable_context_value_swaps_remain_modifications() {
+        let old = "A\nred\nB\nC\nblue\n";
+        let new = "A\nblue\nB\nC\nred\n";
+        for filename in ["doc.md", "doc.txt"] {
+            let diff = crate::api::review_text(old, new, filename, filename).unwrap();
+            assert_eq!(diff.changes.len(), 2, "{diff:?}");
+            assert!(diff.changes.iter().all(|c| c.change_type == "MODIFICATION"));
+            assert!(diff.has_semantic_changes && !diff.is_style_only);
+        }
+    }
+
+    #[test]
+    fn deleting_duplicate_section_preserves_occurrence_count() {
+        let diff =
+            crate::api::review_text("# A\nsame\n# A\nsame\n", "# A\nsame\n", "doc.md", "doc.md")
+                .unwrap();
+        assert_eq!(diff.changes.len(), 2, "{diff:?}");
+        assert!(diff.changes.iter().all(|c| c.change_type == "DELETION"));
+    }
+    #[test]
+    fn stationary_sections_remain_alignment_anchors() {
+        let diff = crate::api::review_text(
+            "red\n# Fixed\nfixed\n# Changed\nblue\n",
+            "blue\n# Fixed\nfixed\n# Changed\nred\n",
+            "doc.md",
+            "doc.md",
+        )
+        .unwrap();
+        assert_eq!(diff.changes.len(), 2, "{diff:?}");
+        assert!(diff.changes.iter().all(|c| c.change_type == "MODIFICATION"));
+        assert!(diff.has_semantic_changes && !diff.is_style_only);
+    }
+}
