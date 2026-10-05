@@ -4974,8 +4974,15 @@ fn native_generic_text_diff(
     old_filename: &str,
     new_filename: &str,
 ) -> Result<Value, String> {
-    let changes = generic_text_changes_value(old_source, new_source)
-        .ok_or_else(|| "generic text review declined (input too large)".to_owned())?;
+    let markdown = [old_filename, new_filename].iter().any(|name| {
+        let lower = name.to_lowercase();
+        lower.ends_with(".md") || lower.ends_with(".markdown")
+    });
+    let changes = if markdown {
+        text_review_generic::generic_markdown_changes_value(old_source, new_source)
+    } else {
+        generic_text_changes_value(old_source, new_source)
+    }.ok_or_else(|| "generic text review declined (input too large)".to_owned())?;
     let mut change_groups: Vec<Value> = Vec::new();
     let mut metadata = json!({
         "engine_owner": "rust",

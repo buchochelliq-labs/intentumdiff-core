@@ -29,7 +29,9 @@
     "required_labels": [
       "three",
       "changed"
-    ]
+    ],
+    "exact_changes": 2,
+    "moves": 1
   },
   {
     "id": "duplicate_bodies",
@@ -126,5 +128,27 @@
       5,
       5
     ]
+  },
+  {
+    "id": "adjacent_duplicate_headings",
+    "old": "# A\none\n# A\nthree\n# B\ntwo\n",
+    "new": "# B\ntwo\n# A\none\n# A\nchanged\n",
+    "required_labels": [
+      "three",
+      "changed"
+    ],
+    "exact_changes": 2,
+    "moves": 1
+  },
+  {
+    "id": "value-swap-stable-context",
+    "old": "A\nred\nB\nC\nblue\n",
+    "new": "A\nblue\nB\nC\nred\n",
+    "required_labels": [
+      "red",
+      "blue"
+    ],
+    "exact_changes": 2,
+    "moves": 0
   }
 ]
