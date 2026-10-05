@@ -10397,3 +10397,7 @@ mod tests;
 mod test_wrappers;
 #[cfg(test)]
 pub(crate) use test_wrappers::*;
+
+#[cfg(all(test, feature = "host-utils-guest"))]
+#[path = "host_utils_guest_tests.rs"]
+mod host_utils_guest_tests;

@@ -18,6 +18,8 @@ license = "MIT"
 [features]
 default = ["tier-c-wasm"]
 tier-c-wasm = []
+# Test-only component imports; CI builds the guest before enabling this gate.
+host-utils-guest = []
 
 [lib]
 name = "intentumdiff_rust_core"
