@@ -33,3 +33,29 @@ fn sample_is_utf8_safe() {
         assert_eq!(next_action(&request,&[event]).unwrap(),Action::Probe{index:0,sample:"a".repeat(2047)});
     }
 }
+
+#[test]
+fn deletion_probes_old_content_but_edits_prefer_new_content() {
+    for (old, new, expected) in [("old schema", "", "old schema"),
+        ("old schema", "new schema", "new schema"), ("old schema", " ", " "), ("", "", "")] {
+        let request: Request = serde_json::from_value(serde_json::json!({
+            "entries":[{"id":"schema","languages":["schema"],"extensions":[".json"]}],
+            "filename":"pipeline.json", "content":new, "old_content":old,
+            "language_hint":null,"plugin_id":null,"strict":false,"allowed_plugins":null
+        })).unwrap();
+        let event = Event::Loaded { index:0, grammar_id:"schema".into(), languages:vec!["schema".into()], priority:1 };
+        assert_eq!(next_action(&request, &[event]).unwrap(), Action::Probe { index:0, sample:expected.into() });
+    }
+}
+
+#[test]
+fn deletion_probe_truncates_old_source_at_utf8_boundary() {
+    let old = format!("{}😀tail", "a".repeat(2047));
+    let request: Request = serde_json::from_value(json!({
+        "entries":[{"id":"schema","languages":["schema"],"extensions":[".json"]}],
+        "filename":"pipeline.json", "content":"", "old_content":old,
+        "language_hint":null,"plugin_id":null,"allowed_plugins":null
+    })).unwrap();
+    let event = Event::Loaded { index:0, grammar_id:"schema".into(), languages:vec!["schema".into()], priority:1 };
+    assert_eq!(next_action(&request, &[event]).unwrap(), Action::Probe { index:0, sample:"a".repeat(2047) });
+}
