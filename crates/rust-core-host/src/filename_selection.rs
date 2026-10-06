@@ -8,6 +8,8 @@ pub struct Request {
     pub entries: Vec<Candidate>,
     pub filename: String,
     #[serde(default)] pub content: String,
+    /// Previous source for deletion-time capability probing; new content wins when present.
+    #[serde(default)] pub old_content: String,
     pub language_hint: Option<String>,
     pub plugin_id: Option<String>,
     #[serde(default)] pub strict: bool,
@@ -72,9 +74,10 @@ pub fn next_action(request: &Request, events: &[Event]) -> Result<Action, String
     let mut failed = BTreeSet::new();
     let mut probed = BTreeSet::new();
     let mut deferred_generic = BTreeSet::new();
-    let mut end = request.content.len().min(2048);
-    while !request.content.is_char_boundary(end) { end -= 1; }
-    let sample = &request.content[..end];
+    let content = if request.content.is_empty() { &request.old_content } else { &request.content };
+    let mut end = content.len().min(2048);
+    while !content.is_char_boundary(end) { end -= 1; }
+    let sample = &content[..end];
     let last_phase = phases.len().saturating_sub(1);
     for (phase, (hint_phase, mut indices)) in phases.into_iter().enumerate() {
         if phase == last_phase && request.plugin_id.is_none() {

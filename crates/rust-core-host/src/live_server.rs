@@ -377,7 +377,7 @@ fn diff_resolved_sources(
     } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
     };
-    let resolved = match crate::parser_registry::resolve_parser(path, content, &config, wasm_dir)? {
+    let resolved = match crate::parser_registry::resolve_parser_for_sources(path, old_source, content, &config, wasm_dir)? {
         Some(r) => r,
         None => return fallback("no bundled parser accepted this file"),
     };
@@ -534,7 +534,7 @@ pub fn live_handle_review_impl(
         let (old_content, new_content, old_path, new_path, staging) =
             (get(0), get(1), get(2), get(3), get(4));
         let path = if !new_path.is_empty() { new_path.clone() } else { old_path.clone() };
-        let resolved = match crate::parser_registry::resolve_parser(&path, &new_content, &config_value, wasm_dir)? {
+        let resolved = match crate::parser_registry::resolve_parser_for_sources(&path, &old_content, &new_content, &config_value, wasm_dir)? {
             Some(r) => r,
             None => return fallback(&format!("no bundled parser for {path}")),
         };

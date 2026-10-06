@@ -149,11 +149,17 @@ impl ComponentProbe {
 pub(crate) fn resolve_parser(path: &str, content: &str, config: &Value, wasm_dir: &str)
     -> Result<Option<ResolvedParser>, String>
 {
+    resolve_parser_for_sources(path, "", content, config, wasm_dir)
+}
+
+pub(crate) fn resolve_parser_for_sources(path: &str, old_content: &str, content: &str, config: &Value, wasm_dir: &str)
+    -> Result<Option<ResolvedParser>, String>
+{
     let Some(manifest) = load_manifest(wasm_dir)? else { return Ok(None); };
     let catalog = catalog(&manifest);
     let request = Request {
         entries: catalog.iter().map(|(candidate, _)| candidate.clone()).collect(),
-        filename: path.into(), content: content.into(),
+        filename: path.into(), content: content.into(), old_content: old_content.into(),
         language_hint: config.get("language_hint").and_then(Value::as_str).map(str::to_owned),
         plugin_id: config.get("plugin_id").and_then(Value::as_str).map(str::to_owned),
         strict: config.get("strict_plugins").and_then(Value::as_bool).unwrap_or(false),
