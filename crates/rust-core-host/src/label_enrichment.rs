@@ -434,61 +434,82 @@ pub(crate) fn path_is_generic_label(label: &str, node_type: &str) -> bool {
         )
 }
 
-/// python path_profiles._style_items_from_source: line-parse a rule body into
-/// (type, label, value) items; `@include`/`@extend`; nested `{`; scss `&` replaced
-/// by the parent selector.
-pub(crate) fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<(String, String, String)> {
+// Style enrichment uses parser byte columns. Keep the exact slice and offsets
+// while deriving nodes; a parent's start is not a child's source location.
+fn style_source_slice(lines: &[&str], node: &SemanticNode) -> String {
+    let p = &node.position;
+    let Some(first) = lines.get(p.start_line as usize) else { return String::new() };
+    if p.start_line == p.end_line {
+        return first.get(p.start_col as usize..p.end_col as usize).unwrap_or("").to_string();
+    }
+    let Some(start) = first.get(p.start_col as usize..) else { return String::new() };
+    let mut parts = vec![start];
+    for line in p.start_line + 1..p.end_line {
+        let Some(text) = lines.get(line as usize) else { return String::new() };
+        parts.push(text);
+    }
+    let Some(end) = lines.get(p.end_line as usize).and_then(|line| line.get(..p.end_col as usize)) else { return String::new() };
+    parts.push(end);
+    parts.join("\n")
+}
+
+fn style_position(node: &SemanticNode, snippet: &str, range: std::ops::Range<usize>) -> NodePosition {
+    let point = |offset: usize| {
+        let prefix = &snippet[..offset];
+        let line = prefix.bytes().filter(|&b| b == b'\n').count() as u32;
+        let col = prefix.rfind('\n').map_or(node.position.start_col as usize + offset, |i| offset - i - 1);
+        (node.position.start_line + line, col as u32)
+    };
+    let (start_line, start_col) = point(range.start);
+    let (end_line, end_col) = point(range.end);
+    NodePosition { start_line, start_col, end_line, end_col }
+}
+
+struct StyleItem {
+    kind: String,
+    label: String,
+    value: String,
+    span: std::ops::Range<usize>,
+    value_span: std::ops::Range<usize>,
+}
+
+fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<StyleItem> {
     let body = match (snippet.find('{'), snippet.rfind('}')) {
         (Some(open), Some(close)) if close > open => &snippet[open + 1..close],
         _ => return Vec::new(),
     };
+    let range = |text: &str| {
+        let start = text.as_ptr() as usize - snippet.as_ptr() as usize;
+        start..start + text.len()
+    };
     let mut result = Vec::new();
+    let mut push = |kind: &str, label: String, value: &str, span: &str| {
+        result.push(StyleItem {
+            kind: kind.to_string(), label, value: value.to_string(), span: range(span),
+            value_span: if value.is_empty() { 0..0 } else { range(value) },
+        });
+    };
     for raw_line in body.lines() {
         let line = raw_line.trim();
-        if line.is_empty() || line == "}" {
-            continue;
-        }
+        if line.is_empty() || line == "}" { continue; }
         if let Some(rest) = line.strip_prefix("@include") {
-            let name = rest
-                .trim()
-                .split('(')
-                .next()
-                .unwrap_or("")
-                .trim_end_matches(';')
-                .trim();
-            if !name.is_empty() {
-                result.push(("include_statement".to_string(), name.to_string(), String::new()));
-            }
+            let name = rest.trim().split('(').next().unwrap_or("").trim_end_matches(';').trim();
+            if !name.is_empty() { push("include_statement", name.into(), "", line); }
             continue;
         }
         if let Some(rest) = line.strip_prefix("@extend") {
             let name = rest.trim().trim_end_matches(';').trim();
-            if !name.is_empty() {
-                result.push(("extend_statement".to_string(), name.to_string(), String::new()));
-            }
+            if !name.is_empty() { push("extend_statement", name.into(), "", line); }
             continue;
         }
         if let Some(brace) = line.find('{') {
             let selector = line[..brace].trim().replace('&', parent_selector);
-            if !selector.is_empty() {
-                result.push(("rule_set".to_string(), compact_ws(&selector), String::new()));
-            }
-            let nested_body = &line[brace + 1..];
-            if let Some(colon) = nested_body.find(':') {
-                let nested_property = nested_body[..colon].trim();
-                let nested_value = nested_body[colon + 1..]
-                    .split('}')
-                    .next()
-                    .unwrap_or("")
-                    .trim_end_matches(';')
-                    .trim();
-                if !nested_property.is_empty() {
-                    result.push((
-                        "declaration".to_string(),
-                        nested_property.to_string(),
-                        nested_value.to_string(),
-                    ));
-                }
+            if !selector.is_empty() { push("rule_set", compact_ws(&selector), "", line); }
+            let nested = line[brace + 1..].split('}').next().unwrap_or("").trim();
+            if let Some(colon) = nested.find(':') {
+                let name = nested[..colon].trim();
+                let value = nested[colon + 1..].trim_end_matches(';').trim();
+                if !name.is_empty() { push("declaration", name.into(), value, nested); }
             }
             continue;
         }
@@ -496,13 +517,7 @@ pub(crate) fn style_items_from_source(snippet: &str, parent_selector: &str) -> V
             if let Some(colon) = line.find(':') {
                 let name = line[..colon].trim();
                 let value = line[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() {
-                    result.push((
-                        "declaration".to_string(),
-                        name.to_string(),
-                        value.to_string(),
-                    ));
-                }
+                if !name.is_empty() { push("declaration", name.into(), value, line); }
             }
         }
     }
@@ -518,7 +533,7 @@ pub(crate) fn enrich_style_children(
 ) -> Vec<SemanticNode> {
     let node_type = node.node_type.to_lowercase();
     if matches!(node_type.as_str(), "declaration" | "variable_declaration") {
-        let snippet = path_source_slice(source_lines, node);
+        let snippet = style_source_slice(source_lines, node);
         let value = match snippet.find(':') {
             Some(colon) => snippet[colon + 1..].trim().trim_end_matches(';').trim().to_string(),
             None => String::new(),
@@ -528,11 +543,14 @@ pub(crate) fn enrich_style_children(
         {
             return children;
         }
+        let value_start = snippet.find(':').unwrap() + 1;
+        let value_start = value_start + snippet[value_start..].len() - snippet[value_start..].trim_start().len();
+        let value_position = style_position(node, &snippet, value_start..value_start + value.len());
         children.push(path_synthetic_node(
             format!("{}.path_value", node.id),
             "property_value",
             value,
-            path_synthetic_position(node),
+            value_position,
             Vec::new(),
         ));
         return children;
@@ -544,29 +562,29 @@ pub(crate) fn enrich_style_children(
         .iter()
         .map(|c| (c.node_type.clone(), c.label.clone()))
         .collect();
-    let snippet = path_source_slice(source_lines, node);
-    for (index, (item_type, item_label, item_value)) in
+    let snippet = style_source_slice(source_lines, node);
+    for (index, item) in
         style_items_from_source(&snippet, label).into_iter().enumerate()
     {
-        if existing.contains(&(item_type.clone(), item_label.clone())) {
+        if existing.contains(&(item.kind.clone(), item.label.clone())) {
             continue;
         }
-        let item_children = if item_value.is_empty() {
+        let item_children = if item.value.is_empty() {
             Vec::new()
         } else {
             vec![path_synthetic_node(
                 format!("{}.path_{}.value", node.id, index),
                 "property_value",
-                item_value,
-                path_synthetic_position(node),
+                item.value,
+                style_position(node, &snippet, item.value_span),
                 Vec::new(),
             )]
         };
         children.push(path_synthetic_node(
             format!("{}.path_{}", node.id, index),
-            &item_type,
-            item_label,
-            path_synthetic_position(node),
+            &item.kind,
+            item.label,
+            style_position(node, &snippet, item.span),
             item_children,
         ));
     }
@@ -1248,4 +1266,35 @@ pub(crate) fn enrich_query_profile_labels_node(
     updated.label = label;
     updated.children = children;
     (updated, true)
+}
+
+#[cfg(test)]
+mod style_span_tests {
+    use super::*;
+
+    #[test]
+    fn style_children_point_to_declarations_values_and_nested_selectors() {
+        let source = ".button {\n  color: white;\n  padding: 8px 16px;\n  @include base;\n  &:hover { color: blue; }\n}";
+        let node = path_synthetic_node("0.0".into(), "rule_set", ".button".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 5, end_col: 1 }, vec![]);
+        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button");
+        let color = &children[0];
+        assert_eq!((color.position.start_line, color.position.start_col), (1, 2));
+        assert_eq!((color.position.end_line, color.position.end_col), (1, 15));
+        let value = &color.children[0];
+        assert_eq!((value.position.start_line, value.position.start_col, value.position.end_col), (1, 9, 14));
+        assert_eq!((children[2].position.start_line, children[2].position.start_col), (3, 2));
+        assert_eq!((children[3].position.start_line, children[3].position.start_col), (4, 2));
+        assert_eq!((children[4].position.start_line, children[4].position.start_col), (4, 12));
+    }
+
+    #[test]
+    fn style_value_span_uses_utf8_bytes_and_declaration_offset() {
+        let source = "é $name: café;";
+        let node = path_synthetic_node("0.0".into(), "declaration", "$name".into(),
+            NodePosition { start_line: 0, start_col: 3, end_line: 0, end_col: source.len() as u32 }, vec![]);
+        let children = enrich_style_children(&node, &[source], vec![], "$name");
+        assert_eq!(children[0].label, "café");
+        assert_eq!((children[0].position.start_col, children[0].position.end_col), (10, 15));
+    }
 }
