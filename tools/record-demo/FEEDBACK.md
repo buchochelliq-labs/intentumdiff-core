@@ -43,3 +43,25 @@ These are API/documentation observations, not confirmed rendering defects.
 Windows/ConPTY recording, macOS recording, screen-reader accessibility, long-running
 captures, and comprehensive Unicode rendering have not been certified by these checks.
 No rs-rich performance or cross-platform rendering claims are made from one Linux capture.
+
+## Tables/panels adoption — 6 October 2026
+
+The shared Rust presentation path now exercises `Panel`, `Table`, literal `Text`,
+explicit widths and colour selection with rs-rich 0.0.9. They produce readable
+change summaries and preserve bracketed source text without interpreting markup.
+Using styled spans via `Text::append` reliably colours change types and headings.
+The 40-column regression wraps descriptions and preserves guardrail values `0`
+and `false`; non-colour output has no ANSI escapes.
+
+rs-rich-record 0.0.3 successfully recorded the actual native CLI as a PTY and
+exported a five-second MP4, GIF, PNG, SVG and text grid. Its clean environment is
+useful for reproducibility, but it intentionally drops arbitrary parent variables
+such as `INTENTUMDIFF_WASM_DIR`; the recorder recipe must provision the runtime's
+normal adjacent `wasm/` directory or configure the child explicitly. Documenting
+that behavior next to `Options::bin_dir` would prevent confusing parser failures.
+
+The PNG renderer shows the table/panel lines, but rounded box corners appear less
+complete than in the text grid. A small visual regression covering rounded and
+heavy box-drawing junctions with the embedded font would help distinguish glyph
+coverage from terminal layout. This is a scoped observation from an actual capture,
+not a claim that every terminal renders those corners incorrectly.

@@ -477,40 +477,12 @@ fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(),
         return Ok(());
     }
 
-    // Parked-rich plain summary: change count + one line per change. The full rich presentation
-    // lands later via `gold`.
-    let changes = diff.get("changes").and_then(|v| v.as_array());
-    let engine = diff
-        .get("metadata")
-        .and_then(|m| m.get("rust_core"))
-        .and_then(|r| r.get("engine"))
-        .and_then(|v| v.as_str())
-        .unwrap_or("native");
-    match changes {
-        Some(changes) => {
-            println!("{} change(s) [engine: {engine}]", changes.len());
-            for change in changes {
-                let change_type = change.get("change_type").and_then(|v| v.as_str()).unwrap_or("?");
-                // `description` is the human "what" ("Update integer('1') -> integer('2')"); fall
-                // back to a node label when a change carries no description.
-                let label = change
-                    .get("description")
-                    .or_else(|| change.get("new_label"))
-                    .or_else(|| change.get("label"))
-                    .and_then(|v| v.as_str())
-                    .or_else(|| {
-                        change
-                            .get("new_node")
-                            .or_else(|| change.get("old_node"))
-                            .and_then(|n| n.get("label"))
-                            .and_then(|v| v.as_str())
-                    })
-                    .unwrap_or("");
-                println!("  {change_type:<14} {label}");
-            }
-        }
-        None => println!("0 change(s) [engine: {engine}]"),
-    }
+    let width = rich::Console::new().width().clamp(16, 300);
+    let color = std::io::stdout().is_terminal() && std::env::var_os("NO_COLOR").is_none();
+    let rendered = intentumdiff_rust_core::cli_presentation::render_cli_review_impl(
+        &json!({"diff": diff, "width": width, "color": color}).to_string(),
+    )?;
+    print!("{rendered}");
     Ok(())
 }
 
