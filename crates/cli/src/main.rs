@@ -3,6 +3,7 @@
 //! functions + the ungated cache/analytics stores in-process. This replaces the Python
 //! `intentumdiff` console script; commands are added slice by slice (cache first).
 
+use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
@@ -953,7 +954,15 @@ fn main() -> ExitCode {
     match run(Cli::parse()) {
         Ok(()) => ExitCode::SUCCESS,
         Err(message) => {
-            eprintln!("error: {message}");
+            if std::io::stderr().is_terminal() {
+                let console = rich::Console::builder().force_terminal(true).build();
+                let mut text = rich::Text::new("");
+                text.append("error: ", Some("bold red".into()));
+                text.append(&message, None);
+                eprintln!("{}", console.render_to_string(&text));
+            } else {
+                eprintln!("error: {message}");
+            }
             ExitCode::FAILURE
         }
     }
