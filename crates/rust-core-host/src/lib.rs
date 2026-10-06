@@ -1449,14 +1449,23 @@ fn finalize_review_impl(
         return Ok(json!({"used": false, "reason": "tree_too_large"}).to_string());
     }
 
-    // File-lifecycle degenerate case (issue #57 payoff, empty-tree tier): an empty root on
-    // one side is a file add/delete, not a tree edit. The gumtree matcher would pair the two
-    // roots structurally and emit a bogus root MODIFICATION; the contract shape downstream
-    // lifecycle handling expects is the python-parity DELETION(old root) + ADDITION(new root)
-    // pair, which _apply_file_lifecycle_to_diff then interprets via file_lifecycle metadata.
-    if old_tree.children.is_empty() != new_tree.children.is_empty() {
-        let drafts = vec![
-            ChangeDraft {
+    // Source absence, not child count, determines a lifecycle boundary. Leaf trees
+    // may represent populated files. Never expose the empty placeholder as a change.
+    if old_source.is_empty() != new_source.is_empty() {
+        let drafts = if old_source.is_empty() {
+            vec![ChangeDraft {
+                change_type: "ADDITION",
+                old_node: None,
+                new_node: Some(&new_tree),
+                old_index: None,
+                new_index: None,
+                confidence: 1.0,
+                description: format!("Insert -> {}({:?})", new_tree.node_type, new_tree.label),
+                refactoring_kind: None,
+                text_diff: None,
+            }]
+        } else {
+            vec![ChangeDraft {
                 change_type: "DELETION",
                 old_node: Some(&old_tree),
                 new_node: None,
@@ -1466,22 +1475,8 @@ fn finalize_review_impl(
                 description: format!("Delete {}({:?})", old_tree.node_type, old_tree.label),
                 refactoring_kind: None,
                 text_diff: None,
-            },
-            ChangeDraft {
-                change_type: "ADDITION",
-                old_node: None,
-                new_node: Some(&new_tree),
-                old_index: None,
-                new_index: None,
-                confidence: 1.0,
-                description: format!(
-                    "Insert -> {}({:?})",
-                    new_tree.node_type, new_tree.label
-                ),
-                refactoring_kind: None,
-                text_diff: None,
-            },
-        ];
+            }]
+        };
         let serialized = serialize_change_drafts(&drafts);
         return Ok(json!({
             "used": true,

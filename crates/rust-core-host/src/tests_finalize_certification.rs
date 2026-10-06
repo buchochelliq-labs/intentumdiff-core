@@ -838,11 +838,7 @@ use crate::*;
         );
     }
     #[test]
-    fn finalize_review_empty_root_is_lifecycle_delete_add_pair() {
-        // Issue #57 payoff (empty-tree tier): an empty root on one side is a file
-        // add/delete. The matcher would pair the roots structurally and emit a bogus
-        // root MODIFICATION; the contract shape is DELETION(old root) + ADDITION(new
-        // root), python-parity, interpreted downstream via file_lifecycle metadata.
+    fn finalize_review_empty_source_only_reports_the_populated_side() {
         let empty = module_with_nodes(Vec::new());
         let full = module_with_nodes(vec![node(
             "0.0",
@@ -867,6 +863,29 @@ use crate::*;
             .iter()
             .map(|c| c["change_type"].as_str().unwrap())
             .collect();
-        assert_eq!(kinds, vec!["DELETION", "ADDITION"], "lifecycle pair: {kinds:?}");
+        assert_eq!(kinds, vec!["ADDITION"], "source additions: {kinds:?}");
+        assert!(data["changes"][0]["old_node"].is_null());
+        let cleared: Value = serde_json::from_str(&finalize_review_json(
+            &serde_json::to_string(&full).unwrap(),
+            &serde_json::to_string(&empty).unwrap(),
+            "func hello() {}", "", "go", "{}",
+        ).unwrap()).unwrap();
+        assert_eq!(cleared["changes"].as_array().unwrap().len(), 1);
+        assert_eq!(cleared["changes"][0]["change_type"], "DELETION");
+        assert!(cleared["changes"][0]["new_node"].is_null());
+        let unchanged: Value = serde_json::from_str(&finalize_review_json(
+            &serde_json::to_string(&empty).unwrap(),
+            &serde_json::to_string(&empty).unwrap(), "", "", "go", "{}",
+        ).unwrap()).unwrap();
+        assert!(unchanged["changes"].as_array().unwrap().is_empty());
+        // A populated leaf has no children, but clearing it is still a real deletion.
+        let leaf = node("0", "identifier", "hello", Vec::new());
+        let leaf_clear: Value = serde_json::from_str(&finalize_review_json(
+            &serde_json::to_string(&leaf).unwrap(),
+            &serde_json::to_string(&empty).unwrap(), "hello", "", "go", "{}",
+        ).unwrap()).unwrap();
+        assert_eq!(leaf_clear["changes"].as_array().unwrap().len(), 1);
+        assert_eq!(leaf_clear["changes"][0]["change_type"], "DELETION");
+        assert_eq!(leaf_clear["changes"][0]["old_node"]["label"], "hello");
         assert_eq!(data["is_style_only"], false);
     }
