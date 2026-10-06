@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         &recording,
         &PathBuf::from(&args[1]),
         "demo",
-        record::Formats::ALL,
+        recording.formats(record::Formats::ALL),
         &Fonts::embedded(),
         &options.theme,
         None,
