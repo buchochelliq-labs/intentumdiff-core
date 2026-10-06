@@ -280,7 +280,14 @@ component loader or filename `detect_parser` failure/fallback policy (#108).
 `filename_selection_next({request, events})` accepts a JSON string and delegates
 to public Rust `filename_selection::next_action`. Request fields are catalogue
 `entries` (the candidate-planner DTO), `filename`, `content`, optional
+`old_content` (defaults to an empty string), optional
 `language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+For comparisons, hosts send the new source in `content` and previous source in
+`old_content`. Rust probes the new source whenever it is nonempty (including
+whitespace); only an exactly empty new source uses `old_content`. Single-source
+callers may omit `old_content`. Bindings must not choose between the sources.
+Hosts may bound each transported head to 2048 Unicode characters; Rust still
+applies the authoritative UTF-8-safe 2048-byte bound below.
 Actions are tagged `load`, `probe`, `selected`, `not_found`, or `failure`.
 Hosts append exactly the requested `loaded`/`load_failed` or
 `probed`/`probe_failed` event and replay. Loaded metadata includes grammar ID,
