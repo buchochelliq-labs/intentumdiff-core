@@ -46,13 +46,14 @@ pub fn detect_content_type(head: &[u8]) -> ContentType {
         return ContentType { mime: "inode/x-empty".into(), extension: String::new(), category: "empty".into(), is_text: true };
     }
 
-    // 1. `infer` — fast magic-byte match for common binary formats.
+    // 1. `infer` recognizes both binary signatures and source text signatures.
     if let Some(kind) = infer::get(head) {
+        let is_text = recognized_text(kind.mime_type(), head);
         return ContentType {
             mime: kind.mime_type().to_string(),
             extension: kind.extension().to_string(),
-            category: category_from_infer(kind.matcher_type()),
-            is_text: false,
+            category: if is_text { "text".into() } else { category_from_infer(kind.matcher_type()) },
+            is_text,
         };
     }
 
@@ -62,11 +63,12 @@ pub fn detect_content_type(head: &[u8]) -> ContentType {
         return ContentType::text();
     }
     if fmt != file_format::FileFormat::ArbitraryBinaryData {
+        let is_text = recognized_text(fmt.media_type(), head);
         return ContentType {
             mime: fmt.media_type().to_string(),
             extension: fmt.extension().to_string(),
-            category: category_from_file_format(fmt.kind()),
-            is_text: false,
+            category: if is_text { "text".into() } else { category_from_file_format(fmt.kind()) },
+            is_text,
         };
     }
 
@@ -76,6 +78,14 @@ pub fn detect_content_type(head: &[u8]) -> ContentType {
     } else {
         ContentType::binary_unknown()
     }
+}
+
+/// Recognizing a MIME type must not exclude source from Git review. PostScript
+/// is a supported source language although sniffers classify its MIME as an
+/// application/archive. Keep known binary signatures authoritative (even an
+/// ASCII-compatible PDF/GIF header) and reject NUL/invalid UTF-8 text payloads.
+fn recognized_text(mime: &str, head: &[u8]) -> bool {
+    (mime.starts_with("text/") || mime == "application/postscript") && looks_like_text(head)
 }
 
 /// A leading slice is text when it has no NUL byte and is valid UTF-8 (allowing a
@@ -178,5 +188,32 @@ mod tests {
         // "é" is 0xC3 0xA9; drop the final byte to simulate a truncated window.
         let ct = detect_content_type(b"caf\xc3");
         assert!(ct.is_text);
+    }
+
+    #[test]
+    fn recognized_source_formats_still_route_to_text() {
+        for source in [
+            "#!/bin/bash\necho hello\n",
+            "<!DOCTYPE html>\n<html><title>Hello</title></html>\n",
+            "<?xml version=\"1.0\"?><root>Hello</root>\n",
+            "<script>let name = 'World';</script>\n<h1>{name}</h1>\n",
+            "(module (func (result i32) i32.const 1))\n",
+            "%!PS\n/Helvetica findfont 12 scalefont setfont\n(Hello) show\nshowpage\n",
+        ] {
+            let ct = detect_content_type(source.as_bytes());
+            assert!(ct.is_text, "source was excluded: {ct:?}");
+            assert_eq!(ct.category, "text");
+        }
+    }
+
+    #[test]
+    fn recognized_text_must_still_pass_byte_safety_checks() {
+        for source in [b"#!/bin/bash\necho\x00bad".as_slice(), b"<html>\xff</html>", b"%!PS\n\x00"] {
+            assert!(!detect_content_type(source).is_text);
+        }
+        // ASCII-compatible binary signatures must not become source text.
+        for source in [b"%PDF-1.7\n".as_slice(), b"GIF89a", b"PK\x03\x04", b"\0asm\x01\0\0\0"] {
+            assert!(!detect_content_type(source).is_text);
+        }
     }
 }
