@@ -531,15 +531,9 @@ fn edit_matrix_every_corpus_language_has_a_dispatch() {
             }
         }
         absent.sort();
-        // PINNED PRODUCT GAP (not a test-only concern): these languages have no manifest entry, so
-        // `parse_to_tree`, `live_diff_contents_impl` and the NATIVE LIVE-SERVER cannot resolve a
-        // parser for them and fall back. Regenerating via scripts/gen_parser_manifest.py is the
-        // fix; the harness works around it with the hard-coded table above.
-        assert_eq!(
-            absent,
-            vec!["cmake", "databricks", "gomod", "ini", "make", "proto", "toml", "wast"],
-            "the set of corpus languages missing from parser_manifest.json changed"
-        );
+        // Every enabled corpus language must be discoverable by public native hosts.
+        // Do not institutionalise historical omissions as the expected catalogue.
+        assert!(absent.is_empty(), "corpus languages missing from parser_manifest.json: {absent:?}");
     }
 }
 
