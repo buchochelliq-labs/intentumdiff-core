@@ -34,6 +34,7 @@ crate-type = ["cdylib", "rlib"]
 # reached parity (the whole suite passes over the C ABI). The engine compute was always pyo3-free.
 
 [dependencies]
+rs-rich = { version = "=0.0.9", default-features = false }
 diffy = "=0.5.1"
 ignore = "=0.4.33"
 # The canonical AST vocabulary (#9). Pinned to a tag, not a branch: the category and role

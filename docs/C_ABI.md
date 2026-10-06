@@ -315,3 +315,17 @@ its integration and broader inventory loading remain tracked in #108.
 to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
 both Python discovery and native bundled discovery apply this policy before
 compiling components. The measured PowerShell exclusion is Windows ARM only.
+
+
+### Human CLI presentation (Rust-owned)
+
+`render_cli_review(request_json: str) -> str` formats an already-authoritative
+`SemanticDiff` DTO using crates.io `rs-rich` 0.0.9. The public Rust entry point is
+`cli_presentation::render_cli_review_impl`. The request contains `diff`, `width`
+(16–300 columns), and `color` (boolean); hosts determine terminal width, honor
+`NO_COLOR`, and choose stdout/stderr. The returned string includes its final newline.
+No source parsing or semantic decisions occur here. Missing required diff flags or
+malformed inputs return errors, never an empty success. Human summaries, guardrails,
+change tables and explicit source-fallback warnings share this implementation;
+JSON/patch/HTML/LLM/SARIF exports do not pass through it. Strings are literal text,
+not rich markup, and terminal controls are escaped.

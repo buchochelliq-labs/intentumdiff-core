@@ -250,6 +250,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
     // FileNotFoundError the git readers raise).
     let outcome: Result<String, String> = (|| match name {
         "version" => Ok(crate::VERSION.to_owned()),
+        "render_cli_review" => crate::cli_presentation::render_cli_review_impl(arg_str(args,0,"request_json")?),
         "review_text" => crate::review_text(arg_str(args,0,"old_source")?,arg_str(args,1,"new_source")?,
             arg_str(args,2,"old_filename")?,arg_str(args,3,"new_filename")?).map(|v|v.to_string()),
         "reconcile_markdown" => serde_json::to_string(&crate::markdown_review::reconcile(
@@ -888,6 +889,19 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn cli_presentation_envelopes() {
+        let request = json!({"width": 80, "color": false, "diff": {
+            "changes": [], "has_semantic_changes": false,
+            "is_style_only": true, "is_fallback": false
+        }});
+        let result = call("render_cli_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true);
+        assert!(result["result"].as_str().unwrap().contains("Style-only change"));
+        assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
+        assert_eq!(call("render_cli_review", json!([]))["ok"], false);
+    }
 
     #[test]
     fn filename_selection_envelopes() {
