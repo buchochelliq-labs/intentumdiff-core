@@ -14,6 +14,7 @@ struct Request {
 #[derive(Deserialize)]
 struct Diff {
     changes: Vec<Change>,
+    #[serde(default)] change_groups: Vec<Value>,
     has_semantic_changes: bool,
     is_style_only: bool,
     is_fallback: bool,
@@ -86,7 +87,8 @@ pub fn render_cli_review_impl(request_json: &str) -> Result<String, String> {
     }
     let (title, state, style) = if diff.is_fallback {
         ("Source fallback", "Semantic equivalence unknown; source changes require review.", "yellow")
-    } else if diff.is_style_only {
+    } else if diff.is_style_only && (!diff.changes.is_empty()
+        || diff.change_groups.iter().any(|group| group["kind"] == "IGNORED_STYLE")) {
         ("Style-only change", "Formatting changed; no semantic differences were found.", "yellow")
     } else if !diff.has_semantic_changes && diff.changes.is_empty() {
         ("No changes detected", "No semantic differences were found.", "green")
@@ -133,6 +135,21 @@ mod tests {
         "changes":[{"change_type":"MODIFICATION","description":"Update [red]name[/red] to 中文"}],
         "has_semantic_changes":true,"is_style_only":false,"is_fallback":false,
         "old_filename":"before.py","new_filename":"after.py","language":"python"}}) }
+    #[test]
+    fn unchanged_is_not_reported_as_formatting_changed() {
+        let mut input = request();
+        input["diff"]["changes"] = json!([]);
+        input["diff"]["has_semantic_changes"] = json!(false);
+        input["diff"]["is_style_only"] = json!(true);
+        let output = render_cli_review_impl(&input.to_string()).unwrap();
+        assert!(output.contains("No changes detected"), "{output}");
+        assert!(!output.contains("Formatting changed"), "{output}");
+        input["diff"]["change_groups"] = json!([{"kind":"IGNORED_STYLE"}]);
+        let styled = render_cli_review_impl(&input.to_string()).unwrap();
+        assert!(styled.contains("Style-only change"), "{styled}");
+        assert!(styled.contains("Formatting changed"), "{styled}");
+    }
+
     #[test]
     fn literal_plain_and_colored_content() {
         let mut input = request();
