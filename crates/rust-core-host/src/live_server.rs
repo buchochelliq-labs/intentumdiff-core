@@ -54,6 +54,33 @@ pub fn live_capabilities_impl() -> String {
     .to_string()
 }
 
+/// Capabilities of the synchronous native transport. Python retains its streaming contract.
+pub fn live_native_capabilities_impl() -> String {
+    let mut capabilities: Value = serde_json::from_str(&live_capabilities_impl())
+        .expect("canonical capabilities are valid JSON");
+    for feature in ["stream", "review_streaming", "edit_deltas"] {
+        capabilities[feature] = json!(false);
+    }
+    capabilities.to_string()
+}
+
+#[cfg(test)]
+mod native_capability_tests {
+    use super::*;
+
+    #[test]
+    fn native_flags_match_transport_without_changing_python_capabilities() {
+        let native: Value = serde_json::from_str(&live_native_capabilities_impl()).unwrap();
+        let mut expected: Value = serde_json::from_str(&live_capabilities_impl()).unwrap();
+        for feature in ["stream", "review_streaming", "edit_deltas"] {
+            assert_eq!(expected[feature], true);
+            assert_eq!(native[feature], false);
+            expected[feature] = json!(false);
+        }
+        assert_eq!(native, expected);
+    }
+}
+
 /// The repo-relative path security guard (mirrors python `_normalise_request_path`): reject
 /// absolute paths, `..` traversal, and any drive/URI-scheme (`:`), returning the backslash-
 /// normalised path. Returns `Ok(normalised)` or `Err((code, message))`.
