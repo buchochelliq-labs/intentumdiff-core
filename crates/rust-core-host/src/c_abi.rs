@@ -892,13 +892,22 @@ mod tests {
 
     #[test]
     fn cli_presentation_envelopes() {
-        let request = json!({"width": 80, "color": false, "diff": {
+        let mut request = json!({"width": 80, "color": false, "diff": {
             "changes": [], "has_semantic_changes": false,
             "is_style_only": true, "is_fallback": false
         }});
         let result = call("render_cli_review", json!([request.to_string()]));
         assert_eq!(result["ok"], true);
-        assert!(result["result"].as_str().unwrap().contains("Style-only change"));
+        let unchanged = result["result"].as_str().unwrap();
+        assert!(unchanged.contains("No changes detected"));
+        assert!(!unchanged.contains("Formatting changed"));
+
+        request["diff"]["change_groups"] = json!([{"kind": "IGNORED_STYLE"}]);
+        let result = call("render_cli_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true);
+        let style_only = result["result"].as_str().unwrap();
+        assert!(style_only.contains("Style-only change"));
+        assert!(style_only.contains("Formatting changed"));
         assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
         assert_eq!(call("render_cli_review", json!([]))["ok"], false);
     }
