@@ -511,6 +511,17 @@ fn diff_resolved_sources(
 /// empty (they are the union of the per-file violations, which are empty whenever the native path
 /// serves — it defers on any in-effect policy). *config_json* = `self._differ._config`. *wasm_dir*
 /// = the package wasm dir (see `live_handle_diff_json`).
+fn normalize_review_fuel(config: &mut Value) -> Result<(bool, u64), String> {
+    if !config.is_object() { return Err("review config must be a JSON object".to_owned()); }
+    // Use the same alias precedence, defaults and negative-value semantics as
+    // execution, so metadata and the effective parser configuration agree.
+    let effective = crate::RustCoreConfig::from_json(&config.to_string()).plugin_fuel;
+    let capped = effective == u64::MAX;
+    let review_fuel = if capped { 100_000_000 } else { effective };
+    config["plugin_fuel"] = json!(review_fuel);
+    Ok((capped, review_fuel))
+}
+
 pub fn live_handle_review_impl(
     repo_path: &str,
     old_ref: &str,
@@ -526,11 +537,17 @@ pub fn live_handle_review_impl(
         Ok(f) => f,
         Err(reason) => return fallback(&reason),
     };
-    let config_value: Value = if config_json.trim().is_empty() {
+    let mut config_value: Value = if config_json.trim().is_empty() {
         json!({})
     } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
     };
+    // The live review contract caps unlimited interactive configuration for Git
+    // reviews, while direct diffs retain unlimited execution.
+    let (review_fuel_capped, review_plugin_fuel) = normalize_review_fuel(&mut config_value)?;
+    let review_config_json = config_value.to_string();
+    let config_json = review_config_json.as_str();
+    let review_metadata = json!({"review_fuel_capped":review_fuel_capped,"review_plugin_fuel":review_plugin_fuel});
     // Native guardrails (#100): load once for the whole commit; off-spec policies defer (python
     // raises for those on every file); rules are evaluated per non-Python file below.
     let guardrail_rules: Option<Vec<Value>> =
@@ -600,7 +617,7 @@ pub fn live_handle_review_impl(
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
     // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let cross_file_changes = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir);
+    let (cross_file_changes, mut index_telemetry) = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir);
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).
@@ -625,7 +642,16 @@ pub fn live_handle_review_impl(
                         Some(bytes) => match serde_json::from_slice::<Value>(&bytes) {
                             Ok(mut commit_diff) => {
                                 commit_diff["cross_file_changes"] = cross_file_changes.clone();
-                                Ok(json!({ "commit_diff": commit_diff }).to_string())
+                                if let Some(diffs) = commit_diff["file_diffs"].as_array_mut() {
+                                    for diff in diffs {
+                                        let key = (diff["old_filename"].as_str().unwrap_or("").to_owned(),
+                                            diff["new_filename"].as_str().unwrap_or("").to_owned());
+                                        if let Some(calls) = index_telemetry.remove(&key) {
+                                            crate::attach_native_parser_telemetry(diff, calls);
+                                        }
+                                    }
+                                }
+                                Ok(json!({ "commit_diff": commit_diff, "metadata": review_metadata }).to_string())
                             }
                             Err(e) => fallback(&format!("commit payload parse: {e}")),
                         },
@@ -711,6 +737,9 @@ pub fn live_handle_review_impl(
         if !f.staging.is_empty() {
             diff["staging_status"] = json!(f.staging);
         }
+        if let Some(calls) = index_telemetry.remove(&(f.old_path.clone(), f.new_path.clone())) {
+            crate::attach_native_parser_telemetry(&mut diff, calls);
+        }
         file_diffs.push(diff);
     }
 
@@ -732,7 +761,7 @@ pub fn live_handle_review_impl(
         "guardrail_violations": commit_guardrails,
         "parse_errors": [],
     });
-    Ok(json!({ "commit_diff": commit_diff }).to_string())
+    Ok(json!({ "commit_diff": commit_diff, "metadata": review_metadata }).to_string())
 }
 
 // ---------------------------------------------------------------------------
@@ -1000,6 +1029,26 @@ fn resolve_for_containment(path: &std::path::Path) -> std::path::PathBuf {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn review_fuel_normalization_matches_execution_aliases_and_negative_values() {
+        for mut config in [json!([]), json!(true), json!("x"), json!(null), json!(7)] {
+            assert_eq!(normalize_review_fuel(&mut config).unwrap_err(), "review config must be a JSON object");
+        }
+        for (mut config, capped, expected) in [
+            (json!({"plugin_fuel":-1}), true, 100_000_000),
+            (json!({"pluginFuel":-1}), true, 100_000_000),
+            (json!({"pluginFuel":-2}), true, 100_000_000),
+            (json!({"plugin_fuel":-20}), true, 100_000_000),
+            (json!({"plugin_fuel":123,"pluginFuel":-1}), false, 123),
+            (json!({"plugin_fuel":-1,"pluginFuel":123}), true, 100_000_000),
+            (json!({"pluginFuel":200_000_000}), false, 200_000_000),
+            (json!({}), false, 10_000_000),
+        ] {
+            assert_eq!(normalize_review_fuel(&mut config).unwrap(), (capped, expected));
+            assert_eq!(crate::RustCoreConfig::from_json(&config.to_string()).plugin_fuel, expected);
+        }
+    }
+
     use super::*;
 
     fn parse(req: &str) -> Value {

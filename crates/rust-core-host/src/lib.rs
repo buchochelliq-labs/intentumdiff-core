@@ -2848,6 +2848,7 @@ struct ParserComponentLookup {
 }
 
 struct WasmProcessPair {
+    calls: Vec<Value>,
     old_tree: String,
     new_tree: String,
     cache_hit: bool,
@@ -4661,8 +4662,8 @@ fn count_cst_nodes(node: &CstNode) -> usize {
 }
 
 fn fuel_budget(floor: u64, candidate: u64) -> u64 {
-    if floor == u64::MAX {
-        u64::MAX
+    if floor == u64::MAX || floor < 1_000_000 {
+        floor
     } else {
         floor.max(candidate)
     }
@@ -5163,13 +5164,14 @@ pub(crate) fn native_wasm_single_diff(
         config.plugin_fuel,
         20_000_000 + (old_source.len() + new_source.len()) as u64 * 20_000,
     );
+    let mut parser_calls = Vec::new();
     let (old_tree_json, new_tree_json) = if old_source.is_empty() && new_source.is_empty() {
         (
             empty_semantic_tree_json(language),
             empty_semantic_tree_json(language),
         )
     } else if old_source.is_empty() {
-        let (_, new_tree) = run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             new_source,
             "",
@@ -5181,9 +5183,10 @@ pub(crate) fn native_wasm_single_diff(
             config.max_plugin_output_bytes,
             language,
         )?;
-        (empty_semantic_tree_json(language), new_tree)
+        parser_calls = pair.calls;
+        (empty_semantic_tree_json(language), pair.new_tree)
     } else if new_source.is_empty() {
-        let (old_tree, _) = run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             old_source,
             "",
@@ -5195,9 +5198,10 @@ pub(crate) fn native_wasm_single_diff(
             config.max_plugin_output_bytes,
             language,
         )?;
-        (old_tree, empty_semantic_tree_json(language))
+        parser_calls = pair.calls;
+        (pair.old_tree, empty_semantic_tree_json(language))
     } else {
-        run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             old_source,
             "",
@@ -5208,8 +5212,12 @@ pub(crate) fn native_wasm_single_diff(
             adaptive_fuel,
             config.max_plugin_output_bytes,
             language,
-        )?
+        )?;
+        parser_calls = pair.calls;
+        (pair.old_tree, pair.new_tree)
     };
+
+    for call in &mut parser_calls { call["plugin"] = json!(parser_wasm_path); }
 
     // Stage 4-7 literal-label enrichment (differ.py:1604) BEFORE the profile pass: string
     // literals carry their decoded VALUE as label — keyed enrichment + guardrail semantic paths
@@ -5264,6 +5272,7 @@ pub(crate) fn native_wasm_single_diff(
                 &diff, rules, language, old_filename, new_filename, "null", "null")?;
             attach_guardrail_violations(&mut diff, violations);
         }
+        attach_native_parser_telemetry(&mut diff, parser_calls);
         return Ok(diff);
     }
 
@@ -5296,7 +5305,62 @@ pub(crate) fn native_wasm_single_diff(
             attach_guardrail_violations(&mut diff, violations);
         }
     }
+    attach_native_parser_telemetry(&mut diff, parser_calls);
     Ok(diff)
+}
+
+pub(crate) fn attach_native_parser_telemetry(diff: &mut Value, calls: Vec<Value>) {
+    let metadata = diff["metadata"].as_object_mut().expect("engine diff metadata");
+    let telemetry = metadata.entry("engine_telemetry").or_insert_with(|| json!({"schema_version":1,"calls":[]}));
+    let existing = telemetry["calls"].as_array_mut().expect("engine telemetry calls");
+    existing.extend(calls);
+    let hotspots = native_fuel_hotspots(existing);
+    telemetry["fuel_hotspots"] = hotspots;
+}
+
+// Preserve the established Python policy: classify each (plugin, function) using
+// peak call fuel and summed input sizes. Keep actual per-call records untouched.
+fn native_fuel_hotspots(calls: &[Value]) -> Value {
+    let mut groups: std::collections::BTreeMap<(String, String), Value> = std::collections::BTreeMap::new();
+    for call in calls {
+        let key = (call["plugin"].as_str().unwrap_or("").to_owned(), call["function"].as_str().unwrap_or("").to_owned());
+        let group = groups.entry(key).or_insert_with(|| {
+            let mut value = call.clone();
+            value["fuel_consumed"] = json!(0);
+            value["input_bytes"] = json!(0);
+            value["input_lines"] = json!(0);
+            value["max_fuel_used_percent"] = Value::Null;
+            value
+        });
+        group["fuel_consumed"] = json!(group["fuel_consumed"].as_u64().unwrap_or(0).max(call["fuel_consumed"].as_u64().unwrap_or(0)));
+        for field in ["input_bytes", "input_lines"] {
+            group[field] = json!(group[field].as_u64().unwrap_or(0).saturating_add(call[field].as_u64().unwrap_or(0)));
+        }
+        if let Some(percent) = call["max_fuel_used_percent"].as_f64() {
+            group["max_fuel_used_percent"] = json!(group["max_fuel_used_percent"].as_f64().unwrap_or(0.0).max(percent));
+        }
+    }
+    let mut groups: Vec<_> = groups.into_values().collect();
+    groups.sort_by_key(|call| std::cmp::Reverse(call["fuel_consumed"].as_u64().unwrap_or(0)));
+    json!(groups.iter().filter_map(|call| {
+        let used = call["fuel_consumed"].as_u64()?;
+        if used == 0 { return None; }
+        let per_kb = used as f64 / (call["input_bytes"].as_u64().unwrap_or(0) as f64 / 1024.0).max(1.0);
+        let per_line = used as f64 / call["input_lines"].as_u64().unwrap_or(0).max(1) as f64;
+        let mut exceeded = Vec::new();
+        if used > 30_000_000 { exceeded.push("absolute"); }
+        if per_kb > 22_000_000.0 { exceeded.push("per_kb"); }
+        if per_line > 1_500_000.0 { exceeded.push("per_line"); }
+        if !exceeded.iter().any(|item| *item != "absolute") { return None; }
+        Some(json!({"plugin":call["plugin"], "function":call["function"],
+            "language":call["language"], "filename":call["filename"],
+            "fuel_consumed":used, "fuel_budget":call["fuel_budget"],
+            "fuel_used_percent":call["max_fuel_used_percent"],
+            "input_bytes":call["input_bytes"], "input_lines":call["input_lines"],
+            "fuel_per_kb":(per_kb * 1000.0).round()/1000.0,
+            "fuel_per_line":(per_line * 1000.0).round()/1000.0,
+            "thresholds_exceeded":exceeded}))
+    }).collect::<Vec<_>>())
 }
 
 /// Build the trivia-stripped CST JSON for a Python source, as the interpret-cst Python parser
@@ -5324,9 +5388,10 @@ pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> Value {
+) -> (Value, HashMap<(String, String), Vec<Value>>) {
+    let mut telemetry = HashMap::new();
     if wasm_dir.is_empty() {
-        return json!([]); // the bundled Python parser is required for Python symbol trees
+        return (json!([]), telemetry); // the bundled Python parser is required for Python symbol trees
     }
     let config = RustCoreConfig::from_json(config_json);
     let python_wasm_path = Path::new(wasm_dir)
@@ -5384,7 +5449,7 @@ pub(crate) fn compute_commit_cross_file_changes(
         } else {
             (String::new(), String::new())
         };
-        if let Ok((old_tree, new_tree)) = run_python_wasm_process_pair(
+        if let Ok(mut pair) = run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5396,6 +5461,9 @@ pub(crate) fn compute_commit_cross_file_changes(
             config.max_plugin_output_bytes,
             language,
         ) {
+            for call in &mut pair.calls { call["plugin"] = json!(parser_path); call["purpose"] = json!("symbol_index"); }
+            telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
+            let (old_tree, new_tree) = (pair.old_tree, pair.new_tree);
             if both || old_parse.is_some() {
                 if let Ok(tree) = serde_json::from_str::<Value>(&old_tree) {
                     old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
@@ -5410,12 +5478,13 @@ pub(crate) fn compute_commit_cross_file_changes(
     }
     let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
     let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    match serde_json::from_str::<Value>(&index_engine_lib::diff_symbol_tables_impl(
+    let changes = match serde_json::from_str::<Value>(&index_engine_lib::diff_symbol_tables_impl(
         &old_table, &new_table,
     )) {
         Ok(v) if v.is_array() => v,
         _ => json!([]),
-    }
+    };
+    (changes, telemetry)
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -5433,7 +5502,7 @@ pub(crate) fn run_python_wasm_process_pair_detailed(
     let unlimited = fuel == u64::MAX;
     let lookup = cached_parser_component(wasm_path, !unlimited)?;
     let cached = lookup.cached;
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &cached,
         old_source,
         old_filtered_cst,
@@ -5447,6 +5516,7 @@ pub(crate) fn run_python_wasm_process_pair_detailed(
         None,
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5471,7 +5541,7 @@ fn run_python_wasm_process_pair_detailed_profiled(
         cached_parser_component(wasm_path, !unlimited)
     })?;
     let cached = lookup.cached;
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &cached,
         old_source,
         old_filtered_cst,
@@ -5485,6 +5555,7 @@ fn run_python_wasm_process_pair_detailed_profiled(
         Some(probe),
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5504,7 +5575,7 @@ fn run_python_wasm_process_pair_preloaded_profiled(
     max_output_bytes: usize,
     probe: &mut PhaseProbe,
 ) -> Result<WasmProcessPair, String> {
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &lookup.cached,
         old_source,
         old_filtered_cst,
@@ -5518,6 +5589,7 @@ fn run_python_wasm_process_pair_preloaded_profiled(
         Some(probe),
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5537,7 +5609,7 @@ fn run_python_wasm_process_pair_with_cached_component(
     max_output_bytes: usize,
     language: &str,
     mut probe: Option<&mut PhaseProbe>,
-) -> Result<(String, String), String> {
+) -> Result<(String, String, Vec<Value>), String> {
     let unlimited = fuel == u64::MAX;
     let linker: Linker<ParserHostState> =
         measure_optional(probe.as_deref_mut(), "rust_wasm_linker_setup", || {
@@ -5601,11 +5673,14 @@ fn run_python_wasm_process_pair_with_cached_component(
     } else {
         new_filtered_cst
     };
+    let old_started = std::time::Instant::now();
     let old_tree = measure_optional(probe.as_deref_mut(), "rust_wasm_process_old", || {
         parser
             .call_process(&mut store, old_input, language, old_filename)
             .map_err(|exc| format!("call parser process for old source: {exc:#}"))
     })?;
+    let old_elapsed_ms = old_started.elapsed().as_secs_f64() * 1000.0;
+    let old_remaining = if unlimited { None } else { Some(store.get_fuel().map_err(|e| format!("read old parser fuel: {e}"))?) };
     if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("old parser output", &old_tree, max_output_bytes)?;
     if !unlimited {
@@ -5615,14 +5690,29 @@ fn run_python_wasm_process_pair_with_cached_component(
                 .map_err(|exc| format!("reset wasm fuel: {exc}"))
         })?;
     }
+    let new_started = std::time::Instant::now();
     let new_tree = measure_optional(probe.as_deref_mut(), "rust_wasm_process_new", || {
         parser
             .call_process(&mut store, new_input, language, new_filename)
             .map_err(|exc| format!("call parser process for new source: {exc:#}"))
     })?;
+    let new_elapsed_ms = new_started.elapsed().as_secs_f64() * 1000.0;
+    let new_remaining = if unlimited { None } else { Some(store.get_fuel().map_err(|e| format!("read new parser fuel: {e}"))?) };
     if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("new parser output", &new_tree, max_output_bytes)?;
-    Ok((old_tree, new_tree))
+    let calls = [(old_input, old_filename, old_remaining, old_elapsed_ms),
+                 (new_input, new_filename, new_remaining, new_elapsed_ms)].into_iter()
+        .map(|(input, filename, remaining, elapsed_ms)| {
+            let consumed = remaining.map(|remaining| fuel - remaining);
+            json!({"function":"process", "engine_owner":"rust", "engine":"rust_wasmtime_plugin_host",
+                "provenance":"sandboxed_wasm_plugin", "trusted":false, "language":language,
+                "filename":filename, "call_count":1, "elapsed_ms":elapsed_ms, "statuses":{"ok":1},
+                "fuel_budget":if unlimited { None } else { Some(fuel) },
+                "fuel_consumed":consumed, "total_fuel_consumed":consumed,
+                "max_fuel_used_percent":consumed.map(|used| if fuel == 0 { 0.0 } else { used as f64 / fuel as f64 * 100.0 }),
+                "input_bytes":input.len(), "input_lines":input.lines().count()})
+        }).collect();
+    Ok((old_tree, new_tree, calls))
 }
 
 fn validate_parser_input_requirements(
@@ -10404,3 +10494,79 @@ pub(crate) use test_wrappers::*;
 #[cfg(all(test, feature = "host-utils-guest"))]
 #[path = "host_utils_guest_tests.rs"]
 mod host_utils_guest_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+mod native_parser_telemetry_tests {
+    use super::*;
+
+    #[test]
+    fn hotspot_policy_preserves_thresholds_aggregation_and_unlimited() {
+        let make = |fuel: Value, bytes, lines| json!({"plugin":"parser.wasm","function":"process","fuel_consumed":fuel,"fuel_budget":100000000,"max_fuel_used_percent":35.0,"input_bytes":bytes,"input_lines":lines,"language":"typescript","filename":"main.ts"});
+        assert_eq!(native_fuel_hotspots(&[make(json!(1_500_000), 1024, 1)]), json!([]));
+        let hot = native_fuel_hotspots(&[make(json!(35_000_000), 512, 24)]);
+        assert_eq!(hot[0]["thresholds_exceeded"], json!(["absolute","per_kb"]));
+        assert_eq!(hot[0]["filename"], "main.ts");
+        assert_eq!(native_fuel_hotspots(&[make(json!(40_000_000), 100000, 100)]), json!([]));
+        assert_eq!(native_fuel_hotspots(&[make(Value::Null, 512, 1)]), json!([]));
+        // Peak fuel / summed sizes, not total fuel / one call's input.
+        assert_eq!(native_fuel_hotspots(&[make(json!(22_000_001), 1024, 20), make(json!(22_000_001), 1024, 20)]), json!([]));
+        assert_eq!(fuel_budget(999_999, 100_000_000), 999_999);
+        assert_eq!(fuel_budget(1_000_000, 100_000_000), 100_000_000);
+        assert_eq!(fuel_budget(u64::MAX, 100_000_000), u64::MAX);
+    }
+
+    #[test]
+    fn real_parser_fuel_survives_native_review_and_source_fallback() {
+        let wasm = PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components"));
+        for (language, component, filename, old, new) in [
+            ("javascript", "js_ts_parser.wasm", "edit.js", "const n = 1;", "const n = 2;"),
+            ("json", "json_parser.wasm", "settings.json", "{\"n\":1}", "{\"n\":2}"),
+            ("javascript", "js_ts_parser.wasm", "broken.js", "function f(", "function g("),
+        ] {
+            let parser = wasm.join(component);
+            let diff = native_wasm_single_diff(language, parser.to_str().unwrap(), old, new, filename, filename, "{}", None).unwrap();
+            assert!(!diff["changes"].as_array().unwrap().is_empty(), "{diff}");
+            if filename == "broken.js" { assert_eq!(diff["is_fallback"], true); }
+            let process: Vec<_> = diff["metadata"]["engine_telemetry"]["calls"].as_array().unwrap()
+                .iter().filter(|call| call["function"] == "process").collect();
+            assert_eq!(process.len(), 2);
+            for (call, source) in process.iter().zip([old, new]) {
+                let used = call["fuel_consumed"].as_u64().unwrap();
+                let budget = call["fuel_budget"].as_u64().unwrap();
+                assert!(used > 0 && used < budget, "{call}");
+                assert_eq!(call["total_fuel_consumed"], used);
+                assert_eq!(call["call_count"], 1);
+                assert_eq!(call["engine_owner"], "rust");
+                assert_eq!(call["function"], "process");
+                assert_eq!(call["input_bytes"], source.len());
+                assert_eq!(call["input_lines"], source.lines().count());
+                assert_eq!(call["filename"], filename);
+                assert_eq!(call["language"], language);
+                assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
+            }
+        }
+    }
+
+    #[test]
+    fn unlimited_parser_fuel_is_unknown_not_zero() {
+        let wasm = PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components"));
+        let parser = wasm.join("json_parser.wasm");
+        let bounded = native_wasm_single_diff("json", parser.to_str().unwrap(), "{\"n\":1}", "{\"n\":2}",
+            "a.json", "a.json", r#"{"plugin_fuel":200000000}"#, None).unwrap();
+        for call in bounded["metadata"]["engine_telemetry"]["calls"].as_array().unwrap() {
+            assert_eq!(call["fuel_budget"], 200000000);
+            assert!(call["fuel_consumed"].as_u64().unwrap() > 0);
+        }
+        let diff = native_wasm_single_diff("json", parser.to_str().unwrap(), "{\"n\":1}", "{\"n\":2}",
+            "a.json", "a.json", r#"{"plugin_fuel":-1}"#, None).unwrap();
+        let calls = diff["metadata"]["engine_telemetry"]["calls"].as_array().unwrap();
+        assert_eq!(calls.len(), 2);
+        for call in calls {
+            assert!(call["fuel_consumed"].is_null());
+            assert!(call["total_fuel_consumed"].is_null());
+            assert!(call["fuel_budget"].is_null());
+            assert!(call["max_fuel_used_percent"].is_null());
+            assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
+        }
+    }
+}
