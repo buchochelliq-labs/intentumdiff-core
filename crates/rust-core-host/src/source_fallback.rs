@@ -49,7 +49,7 @@ pub(crate) fn source_fallback_diff_impl(old: &str, new: &str, old_filename: &str
             "new_node":if new_end>prefix {node(new,prefix,new_end,"source.new")} else {Value::Null},
             "description":"Source changed; semantic equivalence is unknown (source fallback)","confidence":0.5}));
     }
-    let mut diff = crate::semantic_diff_payload(old_filename,new_filename,changes,changed,"COMPLETE",json!({"engine":"rust_source_fallback_v1", "python_parser_backend":"source_comparison", "wasm_boundary":"not_applicable"}));
+    let mut diff = crate::semantic_diff_payload(old_filename,new_filename,changes,changed,crate::COMPLETE,json!({"engine":"rust_source_fallback_v1", "certification":"rust_source_fallback_v1", "trust_tier":"first_party_core_builder", "python_parser_backend":"source_comparison", "wasm_boundary":"not_applicable"}));
     diff["language"] = json!(language);
     diff["is_fallback"] = json!(true);
     diff["metadata"]["rust_core"]["supported_language"] = json!(language);
@@ -61,4 +61,78 @@ pub(crate) fn source_fallback_diff_impl(old: &str, new: &str, old_filename: &str
     if reason == "parse_errors" { diff["parse_errors"] = json!(["Incomplete or invalid syntax; source changes preserved without a semantic interpretation"]); }
     if changed { diff["change_groups"] = json!([{"kind":"MEANINGFUL_CHANGE","raw_change_indices":[0],"confidence":0.5,"rule_id":"source.incomplete_review","metadata":{"semantic_equivalence":"unknown"}}]); }
     Ok(diff)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn incomplete_python_commit_preserves_unknown_source_evidence() {
+        for new in ["def g(", "def f("] {
+            let request = json!({"schema_version":1,"mode":"commit_json",
+                "old_ref":"HEAD","new_ref":"","python_parser_backend":"native",
+                "config":{},"parallel":false,"files":[{"old_source":"def f(","new_source":new,
+                "old_filename":"edit.py","new_filename":"edit.py","language":"python",
+                "parser_plugin_id":"python","parser_wasm_path":""}]});
+            let (control, payload) = crate::diff_batch_commit_json_impl(&request.to_string()).unwrap();
+            assert_eq!(control["status"], crate::COMPLETE);
+            let commit: Value = serde_json::from_slice(&payload.unwrap()).unwrap();
+            let diff = &commit["file_diffs"][0];
+            assert_eq!(diff["is_fallback"], true);
+            assert_eq!(diff["is_style_only"], false);
+            assert_eq!(diff["metadata"]["rust_core"]["status"], crate::COMPLETE);
+            assert_eq!(diff["metadata"]["semantic_contract"], "rust_source_fallback_v1");
+            assert!(!diff["parse_errors"].as_array().unwrap().is_empty());
+            assert_eq!(diff["changes"].as_array().unwrap().len(), usize::from(new != "def f("));
+            if new != "def f(" {
+                assert_eq!(diff["changes"][0]["old_node"]["label"], "f");
+                assert_eq!(diff["changes"][0]["new_node"]["label"], "g");
+                assert_eq!(diff["changes"][0]["new_node"]["position"]["start_col"], 4);
+                assert_eq!(diff["change_groups"][0]["metadata"]["semantic_equivalence"], "unknown");
+            }
+        }
+    }
+
+    #[test]
+    fn source_fallback_certification_remains_fail_closed() {
+        for (old, new) in [("", "def f("), ("def f(", "")] {
+            let diff = source_fallback_diff_impl(old, new, "edit.py", "edit.py", "python", "parse_errors").unwrap();
+            crate::validate_certified_semantic_diff(&diff).unwrap();
+        }
+        let diff = source_fallback_diff_impl("def f(", "def g(", "edit.py", "edit.py", "python", "parse_errors").unwrap();
+        crate::validate_certified_semantic_diff(&diff).unwrap();
+        for (pointer, value) in [
+            ("/metadata/rust_core/status", json!("COMPLETE")),
+            ("/metadata/rust_core/details/certification", json!("unknown")),
+            ("/metadata/rust_core/details/certification", json!(crate::PYTHON_NATIVE_V4KB_CERTIFICATION)),
+            ("/metadata/rust_core/details/certification", Value::Null),
+            ("/metadata/fallback_reason", json!("")),
+            ("/changes/0/new_node", Value::Null),
+            ("/metadata/rust_core/details/trust_tier", json!("untrusted")),
+            ("/metadata/semantic_contract", json!("unknown")),
+            ("/is_fallback", json!(false)),
+            ("/is_style_only", json!(true)),
+            ("/metadata/source_ranges/new_end_byte", json!(0)),
+            ("/metadata/source_ranges/new_end_byte", json!(4)),
+            ("/metadata/source_ranges/new_start_byte", json!(3)),
+            ("/change_groups/0/kind", json!("REFACTORING")),
+            ("/change_groups/0/kind", json!("STYLE_ONLY")),
+            ("/change_groups/0/rule_id", json!("unknown")),
+            ("/parse_errors", json!([])),
+            ("/change_groups/0/metadata/semantic_equivalence", json!("equivalent")),
+            ("/changes/0/new_node/position/end_col", json!(0)),
+            ("/changes/0/new_node/position", Value::Null),
+            ("/changes/0/new_node/node_type", json!("function_definition")),
+            ("/changes/0/change_type", json!("REFACTORING")),
+        ] {
+            let mut invalid = diff.clone();
+            *invalid.pointer_mut(pointer).unwrap() = value;
+            assert!(crate::validate_certified_semantic_diff(&invalid).is_err(), "accepted {pointer}: {invalid}");
+        }
+        let mut unchanged = source_fallback_diff_impl("def f(", "def f(", "edit.py", "edit.py", "python", "parse_errors").unwrap();
+        crate::validate_certified_semantic_diff(&unchanged).unwrap();
+        unchanged["change_groups"] = diff["change_groups"].clone();
+        assert!(crate::validate_certified_semantic_diff(&unchanged).is_err());
+    }
 }

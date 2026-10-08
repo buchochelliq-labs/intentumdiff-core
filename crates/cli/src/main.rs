@@ -456,7 +456,10 @@ fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
 
 /// Diff two in-memory contents via the native all-language engine (`live_diff_contents`, which
 /// resolves the parser from *filename*'s extension against the bundled manifest).
-fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(), String> {
+fn run_diff(
+    filename: &str, old: &str, new: &str, opts: &DiffOpts,
+    input_paths: Option<(&Path, &Path)>,
+) -> Result<(), String> {
     let wasm_dir = resolve_wasm_dir(opts.wasm_dir.as_deref());
     let raw = intentumdiff_rust_core::live_server::live_diff_contents_impl(
         ".", filename, old, new, "{}", &wasm_dir,
@@ -470,10 +473,16 @@ fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(),
             "the native engine did not produce a diff for {filename:?}: {reason}"
         ));
     }
-    let diff = result.get("diff").unwrap_or(&result);
+    let mut diff = result.get("diff").cloned().unwrap_or(result);
+    // The content API compares versions of one logical file. File mode retains
+    // the two paths supplied by the caller for both JSON and terminal provenance.
+    if let Some((old_path, new_path)) = input_paths {
+        diff["old_filename"] = json!(old_path.to_string_lossy());
+        diff["new_filename"] = json!(new_path.to_string_lossy());
+    }
 
     if opts.json {
-        println!("{}", serde_json::to_string_pretty(diff).map_err(|e| e.to_string())?);
+        println!("{}", serde_json::to_string_pretty(&diff).map_err(|e| e.to_string())?);
         return Ok(());
     }
 
@@ -887,9 +896,9 @@ fn run(cli: Cli) -> Result<(), String> {
             // Language is detected from the new file's name (its extension).
             let filename = new.file_name().map(|f| f.to_string_lossy().into_owned())
                 .unwrap_or_else(|| "file".to_string());
-            run_diff(&filename, &old_content, &new_content, &opts)
+            run_diff(&filename, &old_content, &new_content, &opts, Some((&old, &new)))
         }
-        Command::String { old, new, filename, opts } => run_diff(&filename, &old, &new, &opts),
+        Command::String { old, new, filename, opts } => run_diff(&filename, &old, &new, &opts, None),
         Command::Git { repo, file, old, new, staged, unpushed, opts } => {
             run_git(&repo, file.as_deref(), old.as_deref(), &new, staged, unpushed, &opts)
         }
