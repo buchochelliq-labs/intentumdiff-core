@@ -5,8 +5,8 @@ components out of a staging dir. In the monorepo that dir is checked out beside 
 crate; in this extracted repo the components live in the sibling
 `intentumdiff-<lang>-parser` repos, which publish each build as a `parser-wasm` artifact.
 
-This script pulls the components named on the command line from those repos' latest
-successful CI runs and stages them under --out, so the workflow can point
+This script pulls the components named on the command line from the immutable registry's
+pinned successful CI builds and stages them under --out, so the workflow can point
 `INTENTUMDIFF_TEST_WASM_DIR` at it and run the FULL gate instead of
 `cargo test --no-default-features`.
 
@@ -48,7 +48,8 @@ API = "https://api.github.com"
 # Keep this list in step with the harness's INCREMENT_LANGUAGES. It is not cosmetic: the
 # harness FAILS when a mapped component is absent, deliberately, because the alternative
 # is a language silently dropping out of the matrix while the suite still reports green.
-TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm"]
+# JSON is also required by the native parser fuel telemetry regressions.
+TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json"]
 
 
 class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
@@ -195,6 +196,8 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 # changed, and the fix is a registry PR through the vet gate — not a bypass here.
 
 REGISTRY_REPO = "intentumdiff-registry"
+# Same vetted component inventory as the Python/native release candidate.
+REGISTRY_REF = "59d7c91fa4e466b4130628202e6a126792b6f9d7"
 
 
 def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -210,7 +213,7 @@ def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
         sys.exit("registry verification needs PyYAML (pip install pyyaml), or pass --no-verify")
 
     raw = _get(
-        f"{API}/repos/{ORG}/{REGISTRY_REPO}/contents/registry.yaml",
+        f"{API}/repos/{ORG}/{REGISTRY_REPO}/contents/registry.yaml?ref={REGISTRY_REF}",
         token,
         accept="application/vnd.github.raw",
     )
