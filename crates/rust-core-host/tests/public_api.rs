@@ -42,9 +42,17 @@ fn source_review_preserves_manifest_engine_error() {
 fn source_review_with_options_keeps_literal_edit() -> Result<(), ReviewError> {
     use intentumdiff_rust_core::api::{review_sources, ReviewOptions};
     let root = tempfile::tempdir().unwrap();
-    let parsers = std::path::PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("provision parser components"));
+    let staged = std::path::PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("provision parser components"));
+    // CI stages raw components, not a distributable parser inventory. Build the
+    // inventory explicitly so this test exercises real component discovery.
+    let parsers = tempfile::tempdir().unwrap();
+    std::fs::copy(staged.join("python_parser.wasm"), parsers.path().join("python_parser.wasm")).unwrap();
+    std::fs::write(parsers.path().join("parser_manifest.json"), serde_json::json!({
+        "parsers": {"python": {"plugin_id": "python", "wasm": "python_parser.wasm", "extensions": [".py"]}},
+        "extension_index": {".py": "python"}
+    }).to_string()).unwrap();
     let options = ReviewOptions { detect_refactorings: Some(false), guardrails_enabled: Some(false), ..Default::default() };
-    let review = review_sources(root.path(), &parsers, "a.py", "def total(x):\n    return x + 1\n", "def total(x):\n    return x + 2\n", &options)?;
+    let review = review_sources(root.path(), parsers.path(), "a.py", "def total(x):\n    return x + 1\n", "def total(x):\n    return x + 2\n", &options)?;
     assert!(review.has_semantic_changes);
     assert!(!review.is_style_only);
     assert_eq!(review.changes.len(), 1);
