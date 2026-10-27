@@ -82,7 +82,7 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
 fn duplicate_catalogue_ids_are_rejected_as_duplicates() {
     // Both entries must be otherwise valid: a bad evaluator must not mask
     // a missing duplicate-ID check.
-    let raw = "version: 1\\nrules: [{id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}, {id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}]";
+    let raw = "version: 1\nrules: [{id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}, {id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}]";
     assert_eq!(validate(raw).unwrap_err(), "duplicate rule id: duplicate");
 }
 
