@@ -80,14 +80,17 @@ pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> S
     if start_line >= source_lines.len() {
         return String::new();
     }
+    // Tree-sitter columns are UTF-8 BYTE offsets, not Unicode scalar indexes.
+    // Slicing by chars shifted every nested markup node after a non-ASCII
+    // character and silently lost meaningful XML text modifications.
     let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let chars: Vec<char> = line.chars().collect();
-        let from = from.unwrap_or(0).min(chars.len());
-        let to = to.unwrap_or(chars.len()).min(chars.len());
+        let from = from.unwrap_or(0).min(line.len());
+        let to = to.unwrap_or(line.len()).min(line.len());
         if from >= to {
             return String::new();
         }
-        chars[from..to].iter().collect()
+        // Invalid byte boundaries are not recoverable by char-index guessing.
+        line.get(from..to).unwrap_or("").to_string()
     };
     let end_line = pos.end_line as usize;
     if start_line == end_line {
@@ -1344,6 +1347,29 @@ mod markup_text_span_tests {
             (text.position.start_line, text.position.start_col,
              text.position.end_line, text.position.end_col),
             (1, 4, 1, 9),
+        );
+    }
+
+    #[test]
+    fn markup_after_unicode_prefix_keeps_meaningful_source_span() {
+        let source = "<root>é<value>1</value></root>";
+        let start = source.find("<value>").expect("nested value");
+        let end = start + "<value>1</value>".len();
+        let node = path_synthetic_node(
+            "0.0.0".into(), "element", "value".into(),
+            NodePosition {
+                start_line: 0, start_col: start as u32,
+                end_line: 0, end_col: end as u32,
+            }, vec![],
+        );
+        assert_eq!(path_source_slice(&[source], &node), "<value>1</value>");
+        let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "1");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (0, 15, 0, 16),
         );
     }
 
