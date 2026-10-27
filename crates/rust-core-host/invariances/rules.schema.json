@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://intentumdiff.local/schemas/invariances/rules.schema.json",
+  "title": "IntentumDiff Invariance Rules",
+  "description": "Declarative invariance rule catalogue and runtime rule definitions for IntentumDiff.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "rules"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "$defs": {
+    "changeGroupKind": {
+      "type": "string",
+      "enum": [
+        "MOVED_CODE",
+        "REFACTORING",
+        "MEANINGFUL_CHANGE",
+        "IGNORED_STYLE",
+        "NOISE_SUPPRESSED"
+      ]
+    },
+    "equivalenceKind": {
+      "type": "string",
+      "enum": [
+        "syntactic_trivia",
+        "grammar_equivalence",
+        "canonical_value_equivalence",
+        "unordered_collection_equivalence",
+        "contextual_equivalence",
+        "refactoring_equivalence"
+      ]
+    },
+    "evaluator": {
+      "type": "string",
+      "enum": [
+        "css_color_equivalence",
+        "formatting_suppression_evidence",
+        "integer_literal_equivalence",
+        "style_only_shortcut_evidence",
+        "string_literal_equivalence"
+      ]
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "abap",
+        "adf",
+        "asciidoc",
+        "asm",
+        "assemblyscript",
+        "astro",
+        "bash",
+        "c",
+        "clojure",
+        "cpp",
+        "csharp",
+        "css",
+        "dart",
+        "databricks-workflow",
+        "dax",
+        "delphi",
+        "dockerfile",
+        "elixir",
+        "generic",
+        "gitignore",
+        "go",
+        "graphql",
+        "groovy",
+        "haskell",
+        "hcl",
+        "html",
+        "java",
+        "javascript",
+        "json",
+        "kotlin",
+        "latex",
+        "lua",
+        "m",
+        "markdown",
+        "ini",
+        "gomod",
+        "make",
+        "cmake",
+        "proto",
+        "toml",
+        "mdx",
+        "odin",
+        "ocaml",
+        "perl",
+        "php",
+        "plsql",
+        "po",
+        "postscript",
+        "powershell",
+        "puppet",
+        "python",
+        "qsharp",
+        "r",
+        "reasonml",
+        "ruby",
+        "rust",
+        "sas",
+        "scala",
+        "scss",
+        "sql",
+        "squirrel",
+        "svelte",
+        "swift",
+        "tsx",
+        "tsql",
+        "typescript",
+        "vbnet",
+        "vue",
+        "wat",
+        "xml",
+        "yaml",
+        "zig"
+      ]
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["green", "amber", "red"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "parser_normalization",
+        "matcher_scoring",
+        "post_diff_refinement",
+        "group_emission"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["implemented", "catalog"]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "example": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "languages",
+        "status",
+        "evaluator",
+        "group_kind",
+        "enabled",
+        "risk",
+        "equivalence_kind",
+        "explanation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9_.-]+$"
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/language"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "evaluator": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/evaluator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "node_types": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "group_kind": {
+          "$ref": "#/$defs/changeGroupKind"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "risk": {
+          "$ref": "#/$defs/risk"
+        },
+        "equivalence_kind": {
+          "$ref": "#/$defs/equivalenceKind"
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/example"
+          }
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "guarantee": {
+          "type": "string",
+          "minLength": 1
+        },
+        "guards": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "source_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "implemented"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "evaluator": {
+                "$ref": "#/$defs/evaluator"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "catalog"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "evaluator": {
+                "type": "null"
+              },
+              "enabled": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
