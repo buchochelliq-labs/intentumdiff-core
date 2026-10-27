@@ -69,6 +69,13 @@ rules:
   - xml
   - yaml
   - zig
+  - asciidoc
+  - gitignore
+  - graphql
+  - latex
+  - ocaml
+  - po
+  - reasonml
   evaluator: style_only_shortcut_evidence
   group_kind: IGNORED_STYLE
   enabled: true
@@ -121,29 +128,34 @@ rules:
     new: '255'
     canonical: int(255)
 - id: core.number_literal.canonical_value.safe
-  status: implemented
+  status: catalog
   languages:
   - json
   - javascript
   - typescript
   - tsx
-  evaluator: number_literal_equivalence
   node_types:
   - number
   - numeric_literal
   - integer
   - float
   group_kind: IGNORED_STYLE
-  enabled: true
+  enabled: false
   risk: green
   equivalence_kind: canonical_value_equivalence
   stage: post_diff_refinement
   guarantee: spec-defined
-  explanation: Both number literal spellings parse to the same IEEE-754 double value.
+  explanation: >-
+    Candidate f64 equivalence rule; the native literal dispatcher currently runs
+    integer and string evaluators only. This rule is not executable.
+  notes: >-
+    Examples describe the proposed rule, not certified native behaviour.
+    Parser normalization may already equate some spellings independently; that
+    does not establish a bit-identical f64 evaluator or its signed-zero guards.
   guards:
-  - Only exact bit-identical f64 values are enabled; NaN payloads, infinities, and signed-zero mismatches
-    are not hidden.
-  - The evaluator records both original spellings and the shared canonical value.
+  - A future evaluator must require bit-identical f64 values and must not hide NaN payloads,
+    infinities, or signed-zero mismatches.
+  - A future evaluator must record both original spellings and the shared canonical value.
   source_refs:
   - https://www.rfc-editor.org/rfc/rfc8259#section-6
   - https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type
@@ -303,19 +315,19 @@ rules:
 
 - id: catalog.parser_only_languages
   # NOT an evaluator: the explicit classification of languages that ship a parser
-  # but have NO invariance rules yet (issue #55). The catalog-coverage contract
+  # but have no language-specific invariance evaluators yet (issue #55). The catalog-coverage contract
   # (test_builtin_catalog_covers_every_registered_parser_language) reads this so
   # every language is deliberately classified — adding a language means either
-  # giving it real rules or consciously listing it here.
+  # giving it specialized rules or consciously listing it here.
   enabled: false
   status: catalog
   explanation: >-
-    Classification only — these languages ship a parser but have no invariance
-    evaluators yet. Listed so the catalog-coverage contract proves every language
-    is deliberately classified.
+    Classification only — these languages ship a parser but have no language-specific
+    invariance evaluators yet. Shared parser-proven source-equivalence evidence
+    can still be emitted. Listed so every language is deliberately classified.
   notes: >-
     Issue #55 pruned 14 dead dormant rules; this entry is the surviving explicit
-    exemption list. Move a language OUT by giving it real evaluator-backed rules.
+    classification list. Move a language OUT by giving it specialized evaluator-backed rules.
   source_refs:
   - https://github.com/buchochelliq-labs/intentumdiff/issues/55
   languages:
