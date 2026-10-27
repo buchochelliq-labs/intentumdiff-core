@@ -210,15 +210,19 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
                 let region_start = j;
                 let mut k = j;
                 let mut ok = false;
+                let mut quote: Option<char> = None;
                 while k < chars.len() {
                     match chars[k] {
-                        '>' => {
+                        '"' | '\'' if quote.is_none() => quote = Some(chars[k]),
+                        c if quote == Some(c) => quote = None,
+                        '>' if quote.is_none() => {
                             ok = true;
                             break;
                         }
-                        '<' => break,
-                        _ => k += 1,
+                        '<' if quote.is_none() => break,
+                        _ => {}
                     }
+                    k += 1;
                 }
                 if ok {
                     let mut region: String = chars[region_start..k].iter().collect();
@@ -288,45 +292,52 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
     result
 }
 
+/// End of a markup opening tag, ignoring > within single or double quoted
+/// attributes. Offsets are UTF-8 bytes, matching Tree-sitter coordinates.
+fn markup_opening_tag_end(snippet: &str) -> Option<usize> {
+    let mut quote: Option<char> = None;
+    for (offset, ch) in snippet.char_indices() {
+        match ch {
+            '"' | '\'' if quote.is_none() => quote = Some(ch),
+            c if quote == Some(c) => quote = None,
+            '>' if quote.is_none() => return Some(offset + 1),
+            '<' if offset > 0 && quote.is_none() => return None,
+            _ => {}
+        }
+    }
+    None
+}
+
 /// python path_profiles._direct_markup_text: fullmatch `<tag ...> text </tag>` (text has
 /// no '<') or the CDATA variant; whitespace-compacted. Case-insensitive tag comparison.
+/// Use source-byte offsets throughout: Unicode case folding can change byte length.
 pub(crate) fn direct_markup_text(snippet: &str, tag_label: &str) -> String {
     let text = snippet.trim();
-    let lower = text.to_lowercase();
-    let tag = tag_label.to_lowercase();
-    let Some(rest) = lower.strip_prefix('<') else {
+    let Some(open_len) = markup_opening_tag_end(text) else {
         return String::new();
     };
-    let ws_trimmed = rest.len() - rest.trim_start().len();
-    let rest_trim = rest.trim_start();
-    let Some(after_tag) = rest_trim.strip_prefix(tag.as_str()) else {
+    let Some(opening) = text.get(1..open_len - 1) else {
         return String::new();
     };
-    let gt_rel = match after_tag.find('>') {
-        Some(idx)
-            if idx == 0 || after_tag[..idx].starts_with(|c: char| c.is_whitespace()) =>
-        {
-            idx
-        }
-        _ => return String::new(),
-    };
-    if after_tag[..gt_rel].contains('<') {
+    let opening = opening.trim_start();
+    let name_len = opening.find(char::is_whitespace).unwrap_or(opening.len());
+    let name = &opening[..name_len];
+    if name.to_lowercase() != tag_label.to_lowercase() || opening[name_len..].contains('<') {
         return String::new();
     }
-    let open_len = 1 + ws_trimmed + tag.len() + gt_rel + 1;
+
     let body_and_close = &text[open_len..];
-    let lower_body = &lower[open_len..];
-    let close_start = match lower_body.rfind("</") {
-        Some(idx) => idx,
-        None => return String::new(),
-    };
-    let closing = lower_body[close_start + 2..].trim_start();
-    let Some(after_close_tag) = closing.strip_prefix(tag.as_str()) else {
+    let Some(close_start) = body_and_close.rfind("</") else {
         return String::new();
     };
-    if after_close_tag.trim() != ">" {
+    let closing = body_and_close[close_start + 2..].trim_start();
+    let Some(closing_name) = closing.strip_suffix('>') else {
+        return String::new();
+    };
+    if closing_name.trim().to_lowercase() != tag_label.to_lowercase() {
         return String::new();
     }
+
     let content = body_and_close[..close_start].trim();
     if content.is_empty() {
         return String::new();
@@ -728,7 +739,7 @@ pub(crate) fn enrich_markup_attributes(
 /// The label may be whitespace-normalized or XML-entity-decoded, so searching
 /// for the final label would lose the original evidence range.
 fn markup_text_position(node: &SemanticNode, snippet: &str) -> Option<NodePosition> {
-    let open_end = snippet.find('>')? + 1;
+    let open_end = markup_opening_tag_end(snippet)?;
     let close_start = snippet.rfind("</")?;
     if close_start <= open_end {
         return None;
@@ -1371,6 +1382,41 @@ mod markup_text_span_tests {
              text.position.end_line, text.position.end_col),
             (0, 15, 0, 16),
         );
+    }
+
+    #[test]
+    fn quoted_gt_in_attribute_preserves_text_and_attribute_evidence() {
+        // Both are legal XML opening tags; the delimiter is the unquoted '>'.
+        // The non-ASCII capital dotted I also expands when lowercased, so
+        // calculating offsets from a lowercased copy corrupts UTF-8 spans.
+        for (source, value, attribute) in [
+            ("<value note=\"x>y\">1</value>", "1", "x>y"),
+            ("<value note=\"İ>y\">2</value>", "2", "İ>y"),
+            ("<value note='x>y'>3</value>", "3", "x>y"),
+        ] {
+            assert_eq!(direct_markup_text(source, "value"), value);
+            assert_eq!(
+                attributes_from_opening_tag(source),
+                vec![("note".to_string(), attribute.to_string())]
+            );
+            let node = path_synthetic_node(
+                "0.0".into(), "element", "value".into(),
+                NodePosition {
+                    start_line: 0, start_col: 0,
+                    end_line: 0, end_col: source.len() as u32,
+                },
+                vec![],
+            );
+            let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+            let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+            let expected_start = source.find(&format!(">{value}<")).unwrap() + 1;
+            assert_eq!(text.label, value);
+            assert_eq!(
+                (text.position.start_line, text.position.start_col,
+                 text.position.end_line, text.position.end_col),
+                (0, expected_start as u32, 0, (expected_start + value.len()) as u32),
+            );
+        }
     }
 
     #[test]
