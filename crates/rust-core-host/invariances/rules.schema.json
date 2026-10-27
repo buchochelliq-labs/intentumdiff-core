@@ -175,11 +175,7 @@
         "id",
         "languages",
         "status",
-        "evaluator",
-        "group_kind",
         "enabled",
-        "risk",
-        "equivalence_kind",
         "explanation"
       ],
       "properties": {
@@ -264,6 +260,7 @@
             ]
           },
           "then": {
+            "required": ["evaluator", "group_kind", "risk", "equivalence_kind"],
             "properties": {
               "evaluator": {
                 "$ref": "#/$defs/evaluator"
