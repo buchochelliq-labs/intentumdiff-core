@@ -35,8 +35,18 @@ fn validate(raw: &str) -> Result<Vec<Value>, String> {
         if status == "catalog" && enabled {
             return Err(format!("{id}: catalogue-only rule cannot execute"));
         }
-        if status == "implemented" && rule.get("evaluator").and_then(Value::as_str).is_none() {
-            return Err(format!("{id}: implemented rule missing evaluator"));
+        if status == "implemented" {
+            let evaluator = rule.get("evaluator").and_then(Value::as_str)
+                .ok_or(format!("{id}: implemented rule missing evaluator"))?;
+            const KNOWN: &[&str] = &[
+                "css_color_equivalence", "formatting_suppression_evidence",
+                "integer_literal_equivalence", "number_literal_equivalence",
+                "parser_normalization", "style_only_shortcut_evidence",
+                "string_literal_equivalence",
+            ];
+            if !KNOWN.contains(&evaluator) {
+                return Err(format!("{id}: unknown evaluator: {evaluator}"));
+            }
         }
     }
     Ok(rules.clone())
@@ -60,6 +70,7 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
         "version: 1\nrules: [{id: a, languages: [python], enabled: true, status: catalog}]",
         "version: 1\nrules: [{id: a, languages: [python], enabled: false, status: unknown}]",
         "version: 1\nrules: [{id: a, languages: [], enabled: true, status: implemented, evaluator: x}]",
+        "version: 1\nrules: [{id: a, languages: [python], enabled: true, status: implemented, evaluator: unknown}]",
     ] {
         assert!(validate(invalid).is_err(), "incorrectly accepted: {invalid}");
     }
