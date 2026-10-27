@@ -9,6 +9,7 @@ const SCHEMA: &str = include_str!("../invariances/rules.schema.json");
 
 fn validate(raw: &str) -> Result<Vec<Value>, String> {
     let doc: Value = serde_yaml::from_str(raw).map_err(|e| e.to_string())?;
+    let schema: Value = serde_json::from_str(SCHEMA).map_err(|e| e.to_string())?;
     if doc.get("version").and_then(Value::as_u64) != Some(1) {
         return Err("unsupported invariance catalogue version".into());
     }
@@ -26,6 +27,18 @@ fn validate(raw: &str) -> Result<Vec<Value>, String> {
         if languages.iter().any(|v| v.as_str().is_none_or(str::is_empty)) {
             return Err(format!("{id}: invalid language"));
         }
+        let mut seen_languages = HashSet::new();
+        for language in languages {
+            if !schema["$defs"]["language"]["enum"].as_array()
+                .ok_or("schema language enum missing")?.contains(language)
+                || !seen_languages.insert(language.as_str().unwrap())
+            {
+                return Err(format!("{id}: unknown or duplicate language: {language}"));
+            }
+        }
+        if rule.get("explanation").and_then(Value::as_str).is_none_or(str::is_empty) {
+            return Err(format!("{id}: missing explanation"));
+        }
         let enabled = rule.get("enabled").and_then(Value::as_bool)
             .ok_or(format!("{id}: enabled must be boolean"))?;
         let status = rule.get("status").and_then(Value::as_str)
@@ -37,17 +50,22 @@ fn validate(raw: &str) -> Result<Vec<Value>, String> {
             return Err(format!("{id}: catalogue-only rule cannot execute"));
         }
         if status == "implemented" {
-            let evaluator = rule.get("evaluator").and_then(Value::as_str)
+            let _evaluator = rule.get("evaluator").and_then(Value::as_str)
                 .ok_or(format!("{id}: implemented rule missing evaluator"))?;
-            const KNOWN: &[&str] = &[
-                "css_color_equivalence", "formatting_suppression_evidence",
-                "integer_literal_equivalence", "number_literal_equivalence",
-                "parser_normalization", "style_only_shortcut_evidence",
-                "string_literal_equivalence",
-            ];
-            if !KNOWN.contains(&evaluator) {
-                return Err(format!("{id}: unknown evaluator: {evaluator}"));
+            for (key, definition) in [
+                ("evaluator", "evaluator"),
+                ("group_kind", "changeGroupKind"),
+                ("risk", "risk"),
+                ("equivalence_kind", "equivalenceKind"),
+            ] {
+                let value = rule.get(key).ok_or(format!("{id}: missing {key}"))?;
+                let allowed = schema["$defs"][definition]["enum"].as_array()
+                    .ok_or(format!("schema {definition} enum missing"))?;
+                if !allowed.contains(value) {
+                    return Err(format!("{id}: invalid {key}: {value}"));
+                }
             }
+
         }
     }
     Ok(rules.clone())
@@ -67,11 +85,11 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
     for invalid in [
         "version: 2\nrules: []",
         "version: 1\nrules: [",
-        "version: 1\nrules: [{id: a, languages: [python], enabled: true, status: catalog}]",
-        "version: 1\nrules: [{id: a, languages: [python], enabled: false, status: catalog, evaluator: integer_literal_equivalence}]",
-        "version: 1\nrules: [{id: a, languages: [python], enabled: false, status: unknown}]",
-        "version: 1\nrules: [{id: a, languages: [], enabled: true, status: implemented, evaluator: x}]",
-        "version: 1\nrules: [{id: a, languages: [python], enabled: true, status: implemented, evaluator: unknown}]",
+        "version: 1\nrules: [{id: a, explanation: valid, languages: [python], enabled: true, status: catalog}]",
+        "version: 1\nrules: [{id: a, explanation: valid, languages: [python], enabled: false, status: catalog, evaluator: integer_literal_equivalence}]",
+        "version: 1\nrules: [{id: a, explanation: valid, languages: [python], enabled: false, status: unknown}]",
+        "version: 1\nrules: [{id: a, explanation: valid, languages: [], enabled: true, status: implemented, evaluator: x}]",
+        "version: 1\nrules: [{id: a, explanation: valid, languages: [python], enabled: true, status: implemented, evaluator: unknown}]",
     ] {
         assert!(validate(invalid).is_err(), "incorrectly accepted: {invalid}");
     }
@@ -82,7 +100,7 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
 fn duplicate_catalogue_ids_are_rejected_as_duplicates() {
     // Both entries must be otherwise valid: a bad evaluator must not mask
     // a missing duplicate-ID check.
-    let raw = "version: 1\nrules: [{id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}, {id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}]";
+    let raw = "version: 1\nrules: [{id: duplicate, explanation: valid, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}, {id: duplicate, explanation: valid, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}]";
     assert_eq!(validate(raw).unwrap_err(), "duplicate rule id: duplicate");
 }
 
@@ -121,5 +139,34 @@ fn pinned_json_schema_matches_catalogue_contracts() {
             assert_eq!(rule["enabled"], false, "{id}: catalog-only entry must be disabled");
             assert!(rule.get("evaluator").is_none_or(Value::is_null), "{id}: catalog-only entry has evaluator");
         }
+    }
+}
+
+#[test]
+fn catalogue_rejects_unknown_or_duplicate_languages() {
+    for languages in [serde_json::json!(["not-a-language"]), serde_json::json!(["python", "python"])] {
+        let mut doc: Value = serde_yaml::from_str(CATALOGUE).unwrap();
+        doc["rules"][0]["languages"] = languages;
+        assert!(validate(&serde_yaml::to_string(&doc).unwrap()).is_err());
+    }
+}
+
+#[test]
+fn implemented_metadata_is_required_and_constrained() {
+    for key in ["evaluator", "group_kind", "risk", "equivalence_kind", "explanation"] {
+        for invalid in [None, Some(Value::Null), Some(serde_json::json!(42)), Some(serde_json::json!(""))] {
+            let mut doc: Value = serde_yaml::from_str(CATALOGUE).unwrap();
+            let rule = doc["rules"][0].as_object_mut().unwrap();
+            match invalid {
+                Some(value) => { rule.insert(key.into(), value); }
+                None => { rule.remove(key); }
+            }
+            assert!(validate(&serde_yaml::to_string(&doc).unwrap()).is_err(), "accepted malformed {key}");
+        }
+    }
+    for key in ["evaluator", "group_kind", "risk", "equivalence_kind"] {
+        let mut doc: Value = serde_yaml::from_str(CATALOGUE).unwrap();
+        doc["rules"][0][key] = serde_json::json!("not-in-schema");
+        assert!(validate(&serde_yaml::to_string(&doc).unwrap()).is_err(), "accepted unknown {key}");
     }
 }
