@@ -67,7 +67,6 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
     for invalid in [
         "version: 2\nrules: []",
         "version: 1\nrules: [",
-        "version: 1\nrules: [{id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: x}, {id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: x}]",
         "version: 1\nrules: [{id: a, languages: [python], enabled: true, status: catalog}]",
         "version: 1\nrules: [{id: a, languages: [python], enabled: false, status: catalog, evaluator: integer_literal_equivalence}]",
         "version: 1\nrules: [{id: a, languages: [python], enabled: false, status: unknown}]",
@@ -78,6 +77,15 @@ fn malformed_disabled_and_unknown_catalogue_inputs_fail_closed() {
     }
 }
  
+
+#[test]
+fn duplicate_catalogue_ids_are_rejected_as_duplicates() {
+    // Both entries must be otherwise valid: a bad evaluator must not mask
+    // a missing duplicate-ID check.
+    let raw = "version: 1\\nrules: [{id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}, {id: duplicate, languages: [python], enabled: true, status: implemented, evaluator: integer_literal_equivalence, group_kind: IGNORED_STYLE, risk: green, equivalence_kind: canonical_value_equivalence}]";
+    assert_eq!(validate(raw).unwrap_err(), "duplicate rule id: duplicate");
+}
+
 #[test]
 fn pinned_json_schema_matches_catalogue_contracts() {
     let schema: Value = serde_json::from_str(SCHEMA).expect("valid invariance catalogue JSON schema");
