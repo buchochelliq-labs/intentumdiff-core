@@ -720,6 +720,39 @@ pub(crate) fn enrich_markup_attributes(
     result
 }
 
+/// Locate the *source bytes* for a synthetic markup text child, rather than
+/// attributing the text mutation to a zero-width span at the element's start.
+/// The label may be whitespace-normalized or XML-entity-decoded, so searching
+/// for the final label would lose the original evidence range.
+fn markup_text_position(node: &SemanticNode, snippet: &str) -> Option<NodePosition> {
+    let open_end = snippet.find('>')? + 1;
+    let close_start = snippet.rfind("</")?;
+    if close_start <= open_end {
+        return None;
+    }
+    let raw = snippet.get(open_end..close_start)?;
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    let mut start = open_end + raw.len() - raw.trim_start().len();
+    let mut end = start + trimmed.len();
+    if trimmed.starts_with("<![CDATA[") && trimmed.ends_with("]]>") {
+        // Point at the actual CDATA content, not the <![CDATA[ delimiters.
+        start += "<![CDATA[".len();
+        end = end.checked_sub("]]>".len())?;
+        let inner = snippet.get(start..end)?;
+        start += inner.len() - inner.trim_start().len();
+        end -= inner.len() - inner.trim_end().len();
+    }
+    if start >= end {
+        return None;
+    }
+    // style_position is byte-based and translates multiline offsets to
+    // parser coordinates. It is appropriate for markup source slices too.
+    Some(style_position(node, snippet, start..end))
+}
+
 /// python path_profiles._enrich_markup_children: attributes + a synthetic `text` child
 /// so text-value changes surface as element-level MODIFICATIONs (xml decodes entities).
 pub(crate) fn enrich_markup_children(
@@ -753,7 +786,12 @@ pub(crate) fn enrich_markup_children(
         format!("{}.path_text", node.id),
         "text",
         text,
-        path_synthetic_position(node),
+        markup_text_position(node, &snippet).unwrap_or(NodePosition {
+            start_line: node.position.start_line,
+            start_col: node.position.start_col,
+            end_line: node.position.end_line,
+            end_col: node.position.end_col,
+        }),
         Vec::new(),
     ));
     children
@@ -1266,6 +1304,74 @@ pub(crate) fn enrich_query_profile_labels_node(
     updated.label = label;
     updated.children = children;
     (updated, true)
+}
+
+#[cfg(test)]
+mod markup_text_span_tests {
+    use super::*;
+
+    #[test]
+    fn nested_xml_text_points_to_the_value_not_the_opening_tag() {
+        let source = "<root><value>1</value></root>";
+        let node = path_synthetic_node(
+            "0.0.0".into(), "element", "value".into(),
+            NodePosition { start_line: 0, start_col: 6, end_line: 0, end_col: 22 },
+            vec![],
+        );
+        let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "1");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (0, 13, 0, 14),
+        );
+    }
+
+    #[test]
+    fn multiline_xml_text_uses_source_line_and_indentation() {
+        let source = "<value>\n    alpha\n</value>";
+        let node = path_synthetic_node(
+            "0.0".into(), "element", "value".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 2, end_col: 8 },
+            vec![],
+        );
+        let lines: Vec<&str> = source.lines().collect();
+        let children = enrich_markup_children(&node, &lines, vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "alpha");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (1, 4, 1, 9),
+        );
+    }
+
+    #[test]
+    fn xml_entities_and_cdata_preserve_original_byte_ranges() {
+        for (source, label, start, end) in [
+            ("<value>A&amp;B</value>", "A&B", 7, 14),
+            ("<value><![CDATA[  one  ]]></value>", "one", 18, 21),
+            ("<value>café</value>", "café", 7, 12),
+        ] {
+            let node = path_synthetic_node(
+                "0.0".into(), "element", "value".into(),
+                NodePosition {
+                    start_line: 0, start_col: 0,
+                    end_line: 0, end_col: source.len() as u32,
+                },
+                vec![],
+            );
+            let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+            let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+            assert_eq!(text.label, label);
+            assert_eq!(
+                (text.position.start_line, text.position.start_col,
+                 text.position.end_line, text.position.end_col),
+                (0, start, 0, end),
+            );
+        }
+    }
 }
 
 #[cfg(test)]
