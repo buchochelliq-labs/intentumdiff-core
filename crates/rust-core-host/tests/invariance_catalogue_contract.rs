@@ -170,3 +170,30 @@ fn implemented_metadata_is_required_and_constrained() {
         assert!(validate(&serde_yaml::to_string(&doc).unwrap()).is_err(), "accepted unknown {key}");
     }
 }
+
+#[test]
+fn shared_style_evidence_covers_every_catalogued_language() {
+    // rust_build_style_only_evidence emits shared source evidence without a
+    // language restriction once the caller has proved tree equivalence.
+    let rules = validate(CATALOGUE).unwrap();
+    let shared = rules.iter().find(|rule|
+        rule["id"] == "generic.style_only_shortcut.source_equivalence").unwrap();
+    let schema: Value = serde_json::from_str(SCHEMA).unwrap();
+    let actual: HashSet<&str> = shared["languages"].as_array().unwrap().iter()
+        .map(|value| value.as_str().unwrap()).collect();
+    let expected: HashSet<&str> = schema["$defs"]["language"]["enum"].as_array().unwrap().iter()
+        .map(|value| value.as_str().unwrap()).collect();
+    assert_eq!(actual, expected);
+}
+
+#[test]
+fn unimplemented_f64_evaluator_is_not_advertised_as_executable() {
+    // Native literal dispatch currently runs integer/string equivalence only.
+    // Parser-normalized spellings are not proof of this distinct f64 evaluator.
+    let rules = validate(CATALOGUE).unwrap();
+    let numeric = rules.iter().find(|rule|
+        rule["id"] == "core.number_literal.canonical_value.safe").unwrap();
+    assert_eq!(numeric["status"], "catalog");
+    assert_eq!(numeric["enabled"], false);
+    assert!(numeric.get("evaluator").is_none_or(Value::is_null));
+}
