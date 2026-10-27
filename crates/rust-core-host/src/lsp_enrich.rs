@@ -159,6 +159,41 @@ pub(crate) fn collect_hover_targets_json_impl(tree_json: &str) -> Result<String,
     Ok(Value::Array(triples).to_string())
 }
 
+/// Attach host-observed LSP type metadata to a parsed tree, retaining all other
+/// node fields. This structural operation is owned by Rust; the Python host
+/// only fetches hover results and marshals the id-to-type DTO.
+fn attach_type_map_node(
+    node: &mut Value,
+    types: &std::collections::BTreeMap<String, String>,
+) -> Result<(), String> {
+    let object = node.as_object_mut().ok_or("semantic tree node must be an object")?;
+    let id = object.get("id").and_then(Value::as_str)
+        .ok_or("semantic tree node must have a string id")?.to_owned();
+    if let Some(type_info) = types.get(&id) {
+        object.insert("type_info".to_owned(), Value::String(type_info.clone()));
+    }
+    let children = object.get_mut("children").and_then(Value::as_array_mut)
+        .ok_or("semantic tree node must contain a children array")?;
+    for child in children {
+        attach_type_map_node(child, types)?;
+    }
+    Ok(())
+}
+
+/// Pure-Rust C ABI contract for applying external LSP type-map DTOs.
+/// Missing/invalid tree or type-map data errors instead of silent enrichment loss.
+pub(crate) fn attach_type_map_json_impl(
+    tree_json: &str,
+    type_map_json: &str,
+) -> Result<String, String> {
+    let mut tree: Value = serde_json::from_str(tree_json)
+        .map_err(|e| format!("invalid semantic tree JSON: {e}"))?;
+    let types: std::collections::BTreeMap<String, String> = serde_json::from_str(type_map_json)
+        .map_err(|e| format!("invalid LSP type map JSON: {e}"))?;
+    attach_type_map_node(&mut tree, &types)?;
+    serde_json::to_string(&tree).map_err(|e| format!("cannot serialize enriched tree: {e}"))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -177,6 +212,45 @@ mod tests {
             "position": {"start_line": 0, "start_col": 0, "end_line": 9, "end_col": 0},
             "structural_hash": "h", "children": children,
         })
+    }
+
+    #[test]
+    fn type_map_attachment_preserves_tree_and_nested_duplicate_ids() {
+        let tree = parent("root", "module", vec![
+            leaf("dup", "identifier", 0, 0),
+            parent("nested", "block", vec![
+                leaf("dup", "identifier", 1, 0),
+                leaf("untouched", "identifier", 1, 4),
+            ]),
+        ]);
+        let payload = attach_type_map_json_impl(
+            &tree.to_string(),
+            r#"{"dup":"str | None","missing":"never used","root":"module"}"#,
+        ).unwrap();
+        let updated: Value = serde_json::from_str(&payload).unwrap();
+        assert_eq!(updated["type_info"], "module");
+        assert_eq!(updated["children"][0]["type_info"], "str | None");
+        assert_eq!(updated["children"][1]["children"][0]["type_info"], "str | None");
+        assert_eq!(updated["children"][1]["children"][1].get("type_info"), None);
+        assert_eq!(updated["children"][0]["position"], tree["children"][0]["position"]);
+        assert_eq!(updated["children"][1]["children"][1], tree["children"][1]["children"][1]);
+    }
+
+    #[test]
+    fn type_map_attachment_accepts_empty_map_without_mutation() {
+        let tree = parent("root", "module", vec![leaf("v", "identifier", 0, 0)]);
+        let payload = attach_type_map_json_impl(&tree.to_string(), "{}").unwrap();
+        assert_eq!(serde_json::from_str::<Value>(&payload).unwrap(), tree);
+    }
+
+    #[test]
+    fn type_map_attachment_rejects_invalid_payloads() {
+        let tree = parent("root", "module", vec![]);
+        assert!(attach_type_map_json_impl(&tree.to_string(), r#"{"root":null}"#).is_err());
+        assert!(attach_type_map_json_impl(&tree.to_string(), "[]").is_err());
+        assert!(attach_type_map_json_impl("not-json", "{}").is_err());
+        assert!(attach_type_map_json_impl(r#"{"id":"root","children":[123]}"#, "{}").is_err());
+        assert!(attach_type_map_json_impl(r#"{"id":"root"}"#, "{}").is_err());
     }
 
     #[test]
