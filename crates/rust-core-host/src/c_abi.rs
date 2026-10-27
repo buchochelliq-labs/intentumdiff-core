@@ -1154,6 +1154,24 @@ mod tests {
     }
 
     #[test]
+    fn lsp_type_map_attachment_dispatches_over_c_abi_and_fails_closed() {
+        let tree = r#"{"id":"root","node_type":"module","children":[
+            {"id":"a","node_type":"identifier","children":[]},
+            {"id":"b","node_type":"identifier","children":[]}]}"#;
+        let good = call("lsp_attach_type_map", json!([tree, r#"{"a":"int"}"#]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"]["children"][0]["type_info"], "int");
+        assert!(good["result"]["children"][1].get("type_info").is_none());
+
+        let missing = call("lsp_attach_type_map", json!([tree]));
+        assert_eq!(missing["ok"], false);
+        let malformed = call("lsp_attach_type_map", json!([tree, r#"{"a":null}"#]));
+        assert_eq!(malformed["ok"], false);
+        let bad_tree = call("lsp_attach_type_map", json!(["{}", "{}"]));
+        assert_eq!(bad_tree["ok"], false);
+    }
+
+    #[test]
     fn config_handlers_take_optional_args() {
         // No args (both None) -> engine defaults, valid JSON config.
         let env = call("load_project_diff_config", json!([]));
