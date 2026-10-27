@@ -1268,6 +1268,20 @@ mod tests {
     }
 
     #[test]
+    fn invariance_catalogue_is_read_only_over_public_abi() {
+        let env = call("apply_invariances", json!([r#"{"mode":"catalogue"}"#]));
+        assert_eq!(env["ok"], true, "{env}");
+        assert_eq!(env["result"]["version"], 1);
+        assert_eq!(env["result"]["rules"].as_array().unwrap().len(), 10);
+        assert!(env["result"]["rules"].as_array().unwrap().iter().any(|rule|
+            rule["id"] == "catalog.parser_only_languages" && rule["enabled"] == false
+        ));
+        // Existing semantic operations are unchanged; unknown modes must fail loudly.
+        let rejected = call("apply_invariances", json!([r#"{"mode":"invalid"}"#]));
+        assert_eq!(rejected["ok"], false);
+    }
+
+    #[test]
     fn diff_family_dispatches_over_the_abi() {
         let tree = r#"{"id":"m","node_type":"module","label":"m",
             "position":{"start_line":0,"start_col":0,"end_line":9,"end_col":0},
