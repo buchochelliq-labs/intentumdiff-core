@@ -13,7 +13,62 @@ pub(crate) fn rust_apply_invariances_value(request: &Value) -> Result<Value, Str
         "apply" => rust_apply_review_invariances(request),
         "style_only" => rust_build_style_only_evidence(request),
         "zero_change_literal" => rust_build_zero_change_literal_evidence(request),
+        "catalogue" => rust_invariance_catalogue_metadata(),
         other => Err(format!("unknown invariance mode: {other}")),
+    }
+}
+
+/// Read-only, versioned catalogue metadata exposed through the existing invariance
+/// C ABI operation. This intentionally does not drive any suppression decision:
+/// moving evaluators to catalogue-controlled dispatch is a separate gated change.
+fn rust_invariance_catalogue_metadata() -> Result<Value, String> {
+    let document: Value = serde_yaml::from_str(include_str!("../invariances/rules.yaml"))
+        .map_err(|e| format!("embedded invariance catalogue: {e}"))?;
+    if document.get("version").and_then(Value::as_u64) != Some(1) {
+        return Err("unsupported embedded invariance catalogue version".to_owned());
+    }
+    let rules = document.get("rules").and_then(Value::as_array)
+        .ok_or_else(|| "embedded invariance catalogue lacks rules".to_owned())?;
+    let mut ids = std::collections::HashSet::new();
+    for rule in rules {
+        let id = rule.get("id").and_then(Value::as_str)
+            .filter(|s| !s.is_empty())
+            .ok_or_else(|| "invariance rule has no ID".to_owned())?;
+        if !ids.insert(id) {
+            return Err(format!("duplicate invariance rule: {id}"));
+        }
+        let status = rule.get("status").and_then(Value::as_str)
+            .ok_or_else(|| format!("{id}: missing status"))?;
+        let enabled = rule.get("enabled").and_then(Value::as_bool)
+            .ok_or_else(|| format!("{id}: missing enabled flag"))?;
+        let languages = rule.get("languages").and_then(Value::as_array)
+            .filter(|x| !x.is_empty())
+            .ok_or_else(|| format!("{id}: no applicable languages"))?;
+        if languages.iter().any(|x| x.as_str().is_none_or(str::is_empty)) {
+            return Err(format!("{id}: invalid language"));
+        }
+        match status {
+            "catalog" if !enabled && rule.get("evaluator").is_none_or(Value::is_null) => {},
+            "implemented" if rule.get("evaluator").and_then(Value::as_str).is_some() => {},
+            _ => return Err(format!("{id}: invalid status/evaluator/enablement")),
+        }
+    }
+    Ok(document)
+}
+
+#[cfg(test)]
+mod embedded_catalogue_tests {
+    use super::*;
+    #[test]
+    fn read_only_catalogue_mode_has_no_diff_or_style_side_effects() {
+        let metadata = rust_apply_invariances_value(&json!({"mode":"catalogue"}))
+            .expect("pinned invariance metadata");
+        assert_eq!(metadata["version"], 1);
+        assert_eq!(metadata["rules"].as_array().unwrap().len(), 10);
+        assert!(metadata["rules"].as_array().unwrap().iter()
+            .any(|rule| rule["id"] == "catalog.parser_only_languages"
+                && rule["enabled"] == false));
+        assert!(rust_apply_invariances_value(&json!({"mode":"not-a-mode"})).is_err());
     }
 }
 
