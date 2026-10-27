@@ -5,7 +5,10 @@
   "description": "Declarative invariance rule catalogue and runtime rule definitions for IntentumDiff.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "rules"],
+  "required": [
+    "version",
+    "rules"
+  ],
   "properties": {
     "version": {
       "type": "integer",
@@ -46,8 +49,10 @@
         "css_color_equivalence",
         "formatting_suppression_evidence",
         "integer_literal_equivalence",
-        "style_only_shortcut_evidence",
-        "string_literal_equivalence"
+        "number_literal_equivalence",
+        "parser_normalization",
+        "string_literal_equivalence",
+        "style_only_shortcut_evidence"
       ]
     },
     "language": {
@@ -129,7 +134,11 @@
     },
     "risk": {
       "type": "string",
-      "enum": ["green", "amber", "red"]
+      "enum": [
+        "green",
+        "amber",
+        "red"
+      ]
     },
     "stage": {
       "type": "string",
@@ -142,7 +151,10 @@
     },
     "status": {
       "type": "string",
-      "enum": ["implemented", "catalog"]
+      "enum": [
+        "implemented",
+        "catalog"
+      ]
     },
     "stringArray": {
       "type": "array",
@@ -247,7 +259,9 @@
                 "const": "implemented"
               }
             },
-            "required": ["status"]
+            "required": [
+              "status"
+            ]
           },
           "then": {
             "properties": {
@@ -264,7 +278,9 @@
                 "const": "catalog"
               }
             },
-            "required": ["status"]
+            "required": [
+              "status"
+            ]
           },
           "then": {
             "properties": {
