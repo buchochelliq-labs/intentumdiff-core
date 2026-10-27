@@ -1,0 +1,349 @@
+# yaml-language-server: $schema=./rules.schema.json
+version: 1
+rules:
+- id: generic.style_only_shortcut.source_equivalence
+  status: implemented
+  languages:
+  - abap
+  - adf
+  - asm
+  - assemblyscript
+  - astro
+  - bash
+  - c
+  - clojure
+  - cmake
+  - cpp
+  - csharp
+  - css
+  - dart
+  - databricks-workflow
+  - dax
+  - delphi
+  - dockerfile
+  - elixir
+  - generic
+  - go
+  - gomod
+  - groovy
+  - haskell
+  - hcl
+  - html
+  - java
+  - javascript
+  - json
+  - kotlin
+  - lua
+  - m
+  - make
+  - markdown
+  - mdx
+  - odin
+  - perl
+  - php
+  - plsql
+  - postscript
+  - proto
+  - powershell
+  - puppet
+  - python
+  - qsharp
+  - r
+  - ruby
+  - rust
+  - sas
+  - scala
+  - scss
+  - sql
+  - ini
+  - toml
+  - squirrel
+  - svelte
+  - swift
+  - tsx
+  - tsql
+  - typescript
+  - vbnet
+  - vue
+  - wat
+  - xml
+  - yaml
+  - zig
+  evaluator: style_only_shortcut_evidence
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: syntactic_trivia
+  stage: parser_normalization
+  guarantee: parser-proven
+  explanation: The parser-normalized tree is unchanged after trivia filtering, so source-only layout or
+    comment edits were ignored while preserving source-span evidence.
+  guards:
+  - Only fires after host-side filtered CST structural hashes are identical.
+  - Does not run parser plugins or attach semantic node IDs on the fast path.
+  - Does not apply when any semantic tree change survives to review output.
+  notes: Runtime evidence rule for the fast style-only shortcut; source spans are used because semantic
+    nodes are not constructed on this path.
+- id: core.integer_literal.canonical_value.safe
+  status: implemented
+  languages:
+  - python
+  - javascript
+  - typescript
+  - tsx
+  - csharp
+  evaluator: integer_literal_equivalence
+  node_types:
+  - integer
+  - integer_literal
+  - numeric_literal
+  - number
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: green
+  equivalence_kind: canonical_value_equivalence
+  stage: post_diff_refinement
+  guarantee: spec-defined
+  explanation: Both integer literal spellings parse to the same exact integer value.
+  guards:
+  - Only exact integer leaves are enabled; floats, decimals, BigInt suffixes, type suffixes, and overflow-sensitive
+    contexts are not hidden.
+  - The evaluator records both original spellings and the shared canonical integer value.
+  source_refs:
+  - https://docs.python.org/3/reference/lexical_analysis.html
+  - https://tc39.es/ecma262/
+  - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure
+  examples:
+  - old: '1_000'
+    new: '1000'
+    canonical: int(1000)
+  - old: '0xff'
+    new: '255'
+    canonical: int(255)
+- id: core.number_literal.canonical_value.safe
+  status: implemented
+  languages:
+  - json
+  - javascript
+  - typescript
+  - tsx
+  evaluator: number_literal_equivalence
+  node_types:
+  - number
+  - numeric_literal
+  - integer
+  - float
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: green
+  equivalence_kind: canonical_value_equivalence
+  stage: post_diff_refinement
+  guarantee: spec-defined
+  explanation: Both number literal spellings parse to the same IEEE-754 double value.
+  guards:
+  - Only exact bit-identical f64 values are enabled; NaN payloads, infinities, and signed-zero mismatches
+    are not hidden.
+  - The evaluator records both original spellings and the shared canonical value.
+  source_refs:
+  - https://www.rfc-editor.org/rfc/rfc8259#section-6
+  - https://tc39.es/ecma262/#sec-ecmascript-language-types-number-type
+  examples:
+  - old: 1e3
+    new: '1000'
+    canonical: f64(1000.0)
+  - old: '1.0'
+    new: '1'
+    canonical: f64(1.0)
+- id: core.string_literal.decoded_value.safe
+  status: implemented
+  languages:
+  - python
+  - javascript
+  - typescript
+  - tsx
+  - csharp
+  evaluator: string_literal_equivalence
+  node_types:
+  - string
+  - string_literal
+  - character_literal
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: canonical_value_equivalence
+  stage: post_diff_refinement
+  guarantee: spec-defined-with-guards
+  explanation: Both string literal spellings decode to the same plain string value.
+  guards:
+  - Only plain non-interpolated string leaves are enabled.
+  - Raw strings, byte strings, regex literals, templates, f-strings, verbatim strings, and source-map-sensitive
+    constructs remain visible.
+  source_refs:
+  - https://docs.python.org/3/reference/lexical_analysis.html
+  - https://tc39.es/ecma262/
+  - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure
+  examples:
+  - old: '''semanticdiff.com'''
+    new: '"semanticdiff.com"'
+    canonical: string(semanticdiff.com)
+- id: python.formatting.call_wrapping_equivalence
+  status: implemented
+  languages:
+  - python
+  evaluator: formatting_suppression_evidence
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: syntactic_trivia
+  stage: group_emission
+  guarantee: parser-defined-with-guards
+  explanation: Formatting-only Python call wrapping and stable wrapper churn were ignored because the
+    review-level semantic changes are already represented by more precise changes.
+  guards:
+  - Only emits evidence from already-suppressed stable wrapper, reorder, or parent-child noise.
+  - Does not hide surviving meaningful literal, identifier, call, deletion, or refactoring changes.
+  source_refs:
+  - https://docs.python.org/3/reference/lexical_analysis.html
+- id: javascript.formatting.call_argument_wrapping_equivalence
+  status: implemented
+  languages:
+  - javascript
+  - typescript
+  - tsx
+  evaluator: formatting_suppression_evidence
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: syntactic_trivia
+  stage: group_emission
+  guarantee: parser-defined-with-guards
+  explanation: Formatting-only JavaScript call and argument wrapping were ignored because the review-level
+    semantic changes are already represented by more precise changes.
+  guards:
+  - Only emits evidence from already-suppressed stable wrapper, reorder, or parent-child noise.
+  - Does not hide surviving meaningful literal, API, call, deletion, or refactoring changes.
+  source_refs:
+  - https://tc39.es/ecma262/
+- id: csharp.formatting.initializer_query_output_wrapping_equivalence
+  status: implemented
+  languages:
+  - csharp
+  evaluator: formatting_suppression_evidence
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: syntactic_trivia
+  stage: group_emission
+  guarantee: parser-defined-with-guards
+  explanation: Formatting-only C# initializer, LINQ query, and output-call wrapper churn was ignored because
+    the review-level semantic changes are already represented by more precise changes.
+  guards:
+  - Only emits evidence from already-suppressed stable wrapper, reorder, or parent-child noise.
+  - Does not hide surviving meaningful numeric, ordering, format-string, deletion, or refactoring changes.
+  source_refs:
+  - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure
+- id: css.color.canonical_equivalence
+  status: implemented
+  languages:
+  - css
+  evaluator: css_color_equivalence
+  node_types:
+  - color_value
+  - plain_value
+  - identifier
+  - hash_color
+  - rule_set
+  - declaration
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: green
+  equivalence_kind: canonical_value_equivalence
+  stage: post_diff_refinement
+  guarantee: spec-defined
+  explanation: Both CSS color spellings resolve to the same canonical sRGB color.
+  guards:
+  - Only exact named, hex, and simple rgb() sRGB cases are enabled in the current evaluator.
+  - Do not hide CSS variables, currentColor, system colors, relative colors, color-mix(), cascade-dependent
+    values, or lossy color-space conversions.
+  source_refs:
+  - https://www.w3.org/TR/css-color-4/
+  - https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model/CSS_value_serialization
+  - https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
+  examples:
+  - old: blue
+    new: '#0000ff'
+    canonical: srgb(0,0,255,1)
+  - old: '#00f'
+    new: rgb(0 0 255)
+    canonical: srgb(0,0,255,1)
+- id: markup.attribute_order_and_boolean_equivalence
+  status: implemented
+  languages:
+  - html
+  - xml
+  evaluator: parser_normalization
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: amber
+  equivalence_kind: unordered_collection_equivalence
+  stage: parser_normalization
+  guarantee: spec-defined-with-guards
+  explanation: Markup attribute order, XML attribute order, HTML boolean attribute spelling, and entity
+    spelling are normalised at parse time so equivalent forms produce identical semantic trees.
+  guards:
+  - Namespace declarations (xmlns / xmlns:*) are consumed during QName resolution and stripped from the
+    attribute set.
+  - Do not hide spread attributes, framework directives, duplicate attributes, child order, preformatted
+    text, or binding syntax.
+  - HTML class token order is only amber because source spelling and exact attribute selectors may observe
+    it.
+  source_refs:
+  - https://www.w3.org/TR/2004/REC-xml-infoset-20040204/
+  - https://html.spec.whatwg.org/dev/common-microsyntaxes.html
+
+- id: catalog.parser_only_languages
+  # NOT an evaluator: the explicit classification of languages that ship a parser
+  # but have NO invariance rules yet (issue #55). The catalog-coverage contract
+  # (test_builtin_catalog_covers_every_registered_parser_language) reads this so
+  # every language is deliberately classified — adding a language means either
+  # giving it real rules or consciously listing it here.
+  enabled: false
+  status: catalog
+  explanation: >-
+    Classification only — these languages ship a parser but have no invariance
+    evaluators yet. Listed so the catalog-coverage contract proves every language
+    is deliberately classified.
+  notes: >-
+    Issue #55 pruned 14 dead dormant rules; this entry is the surviving explicit
+    exemption list. Move a language OUT by giving it real evaluator-backed rules.
+  source_refs:
+  - https://github.com/buchochelliq-labs/intentumdiff/issues/55
+  languages:
+  - asciidoc
+  - gitignore
+  - graphql
+  - latex
+  - ocaml
+  - po
+  - reasonml
+
+# ── FUTURE CANDIDATES (issue #55) ──────────────────────────────────────────
+# Pruned dormant rules (were enabled: false, never evaluated). Full definitions
+# live in git history; re-add with an EVALUATOR + per-language tests, never as
+# dead configuration. The shell/config family should stay out entirely — the #46
+# campaign showed hiding shell/config changes is the disease, not a feature.
+# - generic.trivia.parser_discarded_equivalence
+# - generic.parentheses.unnecessary_grouping
+# - generic.integer_literal.canonical_value
+# - generic.string_escape.decoded_value
+# - python.keyword_argument_reorder.guarded
+# - ecmascript.literal_and_jsx_text_equivalence
+# - static_typed.trivia_literal_equivalence
+# - dynamic_language.literal_equivalence
+# - shell_and_config.trivia_equivalence
+# - sql.keyword_case_and_whitespace
+# - analytics_languages.presentation_equivalence
+# - css.length_time_angle.canonical_equivalence
+# - data.json_object_member_order
+# - data.yaml_representation_equivalence
+# - low_level_and_legacy.parser_only_catalog
