@@ -341,6 +341,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
+        "lsp_attach_type_map" => crate::lsp_enrich::attach_type_map_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
