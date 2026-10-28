@@ -4707,6 +4707,22 @@ fn cached_parser_component(
     wasm_path: &str,
     metered: bool,
 ) -> Result<ParserComponentLookup, String> {
+    // The manifest inventory is not a compiler safety boundary: callers may
+    // load a component directly. Check the *exact bytes* before a cache hit
+    // or Wasmtime compilation, and compile those same bytes to avoid a
+    // check/open race on Windows ARM64.
+    let guarded_bytes = if parser_availability::guarded_powershell_component(
+        Path::new(wasm_path), std::env::consts::OS, std::env::consts::ARCH
+    ) {
+        let bytes = std::fs::read(wasm_path)
+            .map_err(|e| format!("read guarded parser component {wasm_path}: {e}"))?;
+        parser_availability::verify_staged_powershell_bytes(
+            Path::new(wasm_path), &bytes, std::env::consts::OS, std::env::consts::ARCH
+        )?;
+        Some(bytes)
+    } else {
+        None
+    };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
     let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
     {
@@ -4726,8 +4742,10 @@ fn cached_parser_component(
     cfg.consume_fuel(metered);
     cfg.wasm_memory64(false);
     let engine = Engine::new(&cfg).map_err(|exc| format!("create wasmtime engine: {exc}"))?;
-    let component = Component::from_file(&engine, wasm_path)
-        .map_err(|exc| format!("load parser component: {exc}"))?;
+    let component = match &guarded_bytes {
+        Some(bytes) => Component::new(&engine, bytes.as_slice()),
+        None => Component::from_file(&engine, wasm_path),
+    }.map_err(|exc| format!("load parser component: {exc}"))?;
     let cached = Arc::new(CachedParserComponent { engine, component });
     let mut guard = cache
         .lock()
