@@ -60,8 +60,14 @@ pub fn incompatible_reason_with_digest(
 /// Recognise the standard PowerShell Wasm artifact before invoking Wasmtime.
 /// This guard is a last line of defence if a host bypasses parser discovery.
 fn is_powershell_component_filename(filename: &str) -> bool {
-    filename.rsplit(['/', '\\']).next()
-        .is_some_and(|basename| basename.eq_ignore_ascii_case("powershell_parser.wasm"))
+    // CI publishes the prefixed name; provisioning strips the prefix. Guard
+    // *both* representations or a direct native loader can bypass the block.
+    filename.rsplit(['/', '\\']).next().is_some_and(|basename| {
+        matches!(basename.to_ascii_lowercase().as_str(),
+            "powershell_parser.wasm"
+            | "intentdiff_powershell_parser.wasm"
+            | "intentumdiff_powershell_parser.wasm")
+    })
 }
 
 pub(crate) fn guarded_powershell_component(path: &Path, system: &str, machine: &str) -> bool {
@@ -231,6 +237,17 @@ mod tests {
     fn native_wasmtime_guard_rejects_unverified_bytes_before_compilation() {
         let standard = Path::new("powershell_parser.wasm");
         assert!(guarded_powershell_component(standard, "windows", "aarch64"));
+        for path in [
+            "intentdiff_powershell_parser.wasm",
+            "intentumdiff_powershell_parser.wasm",
+            r"subdir\INTENTUMDIFF_POWERSHELL_PARSER.WASM",
+        ] {
+            assert!(guarded_powershell_component(Path::new(path), "windows", "arm64"), "{path}");
+            let refused: Value = serde_json::from_str(&component_availability_json_impl(
+                path, "windows", "ARM64", UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256
+            )).unwrap();
+            assert!(refused["reason"].is_string(), "{path} bypassed metered safety guard");
+        }
         let rejected = verify_staged_powershell_bytes(
             standard, b"not the vetted PowerShell Wasm", "windows", "aarch64"
         ).unwrap_err();
