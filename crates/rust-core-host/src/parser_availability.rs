@@ -239,10 +239,18 @@ mod tests {
             r"subdir\INTENTUMDIFF_POWERSHELL_PARSER.WASM",
         ] {
             assert!(guarded_powershell_component(Path::new(path), "windows", "arm64"), "{path}");
-            let refused: Value = serde_json::from_str(&component_availability_json_impl(
+            // Every recognized artifact filename accepts only the exact
+            // metered-host-vetted digest; missing or altered digests fail closed.
+            let allowed: Value = serde_json::from_str(&component_availability_json_impl(
                 path, "windows", "ARM64", METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256
             )).unwrap();
-            assert!(refused["reason"].is_string(), "{path} bypassed metered safety guard");
+            assert!(allowed["reason"].is_null(), "{path} rejected vetted metered bytes");
+            for unverified in ["", "0000"] {
+                let refused: Value = serde_json::from_str(&component_availability_json_impl(
+                    path, "windows", "ARM64", unverified
+                )).unwrap();
+                assert!(refused["reason"].is_string(), "{path} bypassed metered safety guard for {unverified:?}");
+            }
         }
         let rejected = verify_staged_powershell_bytes(
             standard, b"not the vetted PowerShell Wasm", "windows", "aarch64"
