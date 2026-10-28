@@ -70,7 +70,7 @@ jobs:
         # provisioning existed; with INTENTUMDIFF_TEST_WASM_DIR staged it is the full
         # 203-test gate, matching the monorepo.
         if: env.HAS_SPLIT_TOKEN == 'true'
-        run: cargo test --features host-utils-guest
+        run: cargo test --locked --features host-utils-guest
         working-directory: crates/rust-core-host
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
@@ -83,7 +83,7 @@ jobs:
         if: env.HAS_SPLIT_TOKEN != 'true'
         run: |
           echo "::notice::Fork PR - SPLIT_REPO_TOKEN unavailable, so the 25 Tier-C tests are skipped. A maintainer run will exercise the full gate."
-          cargo test --no-default-features --features host-utils-guest
+          cargo test --locked --no-default-features --features host-utils-guest
         working-directory: crates/rust-core-host
 
   cli:
