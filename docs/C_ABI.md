@@ -332,6 +332,17 @@ metadata as proof of bytes. Other OS/architecture availability is unchanged.
 This Rust policy is a migration gate pending broader core #183 preflight
 and final native/C ABI/Python semantic acceptance.
 
+`parser_component_availability(wasm_filename, system, machine, component_sha256)`
+is the raw-component loader guard. On Windows ARM64, a request for the standard
+`powershell_parser.wasm` component with an empty digest returns a Rust-owned
+restriction. A thin host can then hash the **actual bytes** and repeat the
+operation; only the vetted PowerShell artifact is allowed. Unrelated components
+have a null `reason`, so no whole-catalogue hashing is needed. A missing C ABI
+operation must **fail closed** rather than return a false success. The native
+Wasmtime loader checks the exact bytes and compiles those same bytes, preventing
+a check/reopen race on this guarded component. Other Wasm compiler aborts remain
+in scope of core #183 and are not certified by this special-case guard.
+
 
 ### Human CLI presentation (Rust-owned)
 
