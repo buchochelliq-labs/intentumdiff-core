@@ -1,0 +1,57 @@
+# Temporary branch-local lockfile transfer. This workflow deletes itself in the commit.
+# It runs only for the exact same-repository 0.0.2 candidate branch.
+name: RC Wasmtime 48.0.7 lockfile transfer (one-time)
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+    paths:
+      - ".github/workflows/rc-wasmtime-lock-sync.yml"
+permissions: {}
+jobs:
+  transfer:
+    if: github.repository == 'buchochelliq-labs/intentumdiff-core' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'fix/0.0.2-arm64-powershell-digest-policy'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: true
+      - name: Transfer independently tested 48.0.7 lockfile and self-remove
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          test "$HEAD_REF" = "fix/0.0.2-arm64-powershell-digest-policy"
+          zipfile="$RUNNER_TEMP/wasmtime-48-lock.zip"
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/artifacts/12824593329/zip" > "$zipfile"
+          unzip -p "$zipfile" Cargo.lock > "$RUNNER_TEMP/Cargo.lock"
+          printf '%s  %s\n' '9954b0ac8353864b5c703078c308953c6ff270ad146cf99f40b2c25ac9cef0f8' "$RUNNER_TEMP/Cargo.lock" | sha256sum --check --status
+          cp "$RUNNER_TEMP/Cargo.lock" crates/rust-core-host/Cargo.lock
+          python3 - <<'PY'
+          from pathlib import Path
+          manifest = Path("crates/rust-core-host/Cargo.toml")
+          content = manifest.read_text()
+          for dep in ("wasmtime", "wasmtime-wasi"):
+              old = f'{dep} = "47.0.3"'
+              assert content.count(old) == 1, old
+              content = content.replace(old, f'{dep} = "48.0.7"')
+          manifest.write_text(content)
+          lock = Path("crates/rust-core-host/Cargo.lock").read_text()
+          for dep in ("wasmtime", "wasmtime-wasi"):
+              assert f'name = "{dep}"\nversion = "48.0.7"' in lock, dep
+          assert 'version = "47.0.3"' not in lock
+          PY
+          git rm -- .github/workflows/rc-wasmtime-lock-sync.yml
+          git add crates/rust-core-host/Cargo.toml crates/rust-core-host/Cargo.lock
+          git diff --cached --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "build(0.0.2): pin validated patched Wasmtime 48.0.7 with exact tested lock"
+          git push origin "HEAD:${HEAD_REF}"
