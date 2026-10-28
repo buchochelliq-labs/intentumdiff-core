@@ -123,7 +123,7 @@ jobs:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/cli-wasm
 
   wasmtime48_compat:
-    name: Patched Wasmtime 48.0.3 Rust API compatibility (diagnostic)
+    name: Patched Wasmtime 48.0.7 Rust API compatibility (diagnostic)
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -138,9 +138,10 @@ jobs:
         run: |
           set -euo pipefail
           # Never change the committed 47.0.3 Cargo manifest/lock here.
-          # This job probes the native Rust C ABI against a security-patched
-          # Wasmtime that compiled the exact PowerShell artifact with fuel on
-          # Windows ARM64 (parser #5 CI #40696554003).
+          # The prior 48.0.3 diagnostic passed, but 2026-10-19 Wasmtime
+          # advisories identify an ARM64 br_table sandbox escape and a
+          # component-model stream panic before 48.0.7. Re-test on 48.0.7.
+          # This is diagnostic, not shipped dependency approval.
           python3 - <<'PY'
           from pathlib import Path
           manifest = Path("crates/rust-core-host/Cargo.toml")
@@ -148,7 +149,7 @@ jobs:
           for crate in ("wasmtime", "wasmtime-wasi"):
               before = f'{crate} = "47.0.3"'
               assert original.count(before) == 1, f"unexpected original {crate} pin"
-              original = original.replace(before, f'{crate} = "=48.0.3"')
+              original = original.replace(before, f'{crate} = "=48.0.7"')
           manifest.write_text(original, encoding="utf-8")
           PY
           cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
