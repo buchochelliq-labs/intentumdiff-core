@@ -314,7 +314,23 @@ its integration and broader inventory loading remain tracked in #108.
 `reason` (string or null) and `unavailable` (`[parser, reason]` or null). It delegates
 to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
 both Python discovery and native bundled discovery apply this policy before
-compiling components. The measured PowerShell exclusion is Windows ARM only.
+compiling components. This legacy four-argument operation always rejects
+PowerShell on Windows ARM64, because it cannot know which Wasm bytes will load.
+
+`parser_availability_with_digest(name, filename, system, machine, component_sha256)`
+is the compatible **new** operation for a host that has staged a component.
+The host performs permitted I/O to compute the lowercase or uppercase SHA-256
+of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
+policy and returns the same `reason`/`unavailable` shape. Only the component
+built and tested on Windows ARM64 in PowerShell parser PR #5
+(SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
+may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
+digests **fail closed**, and earlier four-argument clients remain excluded.
+The digest is not a substitute for registry trust verification: hosts must
+check the signed/pinned source and checksum and must not rely on untrusted
+metadata as proof of bytes. Other OS/architecture availability is unchanged.
+This Rust policy is a migration gate pending broader core #183 preflight
+and final native/C ABI/Python semantic acceptance.
 
 
 ### Human CLI presentation (Rust-owned)
