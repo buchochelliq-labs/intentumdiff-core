@@ -1,9 +1,10 @@
 //! Shared host capability exclusions, applied before compiling components.
 //!
-//! The old PowerShell Wasm aborts Wasmtime/Cranelift on Windows ARM64.
-//! A specific rebuilt component is proven to compile on that platform. Trust
-//! its *bytes*, not a parser name, a moving git ref, or the host platform alone.
-//! Callers must hash the actual staged bytes before the component is loaded.
+//! Metered Wasmtime 47.0.3 compilation of the currently pinned PowerShell
+//! component aborts Cranelift on Windows ARM64 even though the unmetered CLI
+//! compiled it. No digest is currently certified safe with metering on that
+//! platform. Deny the known candidate *before* instantiating the Wasm compiler;
+//! do not disable fuel as a workaround or manufacture successful results.
 use serde_json::{json, Value};
 use sha2::Digest;
 use std::path::Path;
@@ -207,13 +208,13 @@ mod tests {
 
     #[test]
     fn component_loader_probe_and_digest_follow_shared_rust_policy() {
-        let verified = UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let unmetered = UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
         let probe: Value = serde_json::from_str(&component_availability_json_impl(
             "powershell_parser.wasm", "windows", "ARM64", ""
         )).unwrap();
         assert!(probe["reason"].is_string());
         let known_unmetered: Value = serde_json::from_str(&component_availability_json_impl(
-            r"plugins\powershell_parser.wasm", "windows", "ARM64", verified
+            r"plugins\powershell_parser.wasm", "windows", "ARM64", unmetered
         )).unwrap();
         assert!(known_unmetered["reason"].as_str().unwrap().contains("fuel"));
         let forbidden: Value = serde_json::from_str(&component_availability_json_impl(
