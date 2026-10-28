@@ -53,10 +53,29 @@ pub fn incompatible_reason_with_digest(
 
 /// Recognise the standard PowerShell Wasm artifact before invoking Wasmtime.
 /// This guard is a last line of defence if a host bypasses parser discovery.
+fn is_powershell_component_filename(filename: &str) -> bool {
+    filename.rsplit(['/', '\\']).next()
+        .is_some_and(|basename| basename.eq_ignore_ascii_case("powershell_parser.wasm"))
+}
+
 pub(crate) fn guarded_powershell_component(path: &Path, system: &str, machine: &str) -> bool {
     incompatible_reason("powershell", system, machine).is_some()
-        && path.file_name().and_then(|part| part.to_str())
-            .is_some_and(|name| name.eq_ignore_ascii_case("powershell_parser.wasm"))
+        && is_powershell_component_filename(&path.to_string_lossy())
+}
+
+/// Rust-owned pre-compilation policy for raw Wasm loader clients. An empty
+/// digest is a probe: it flags a restricted component without hashing every
+/// unrelated Wasm plugin. The host hashes actual bytes and calls again.
+pub fn component_availability_json_impl(
+    wasm_filename: &str,
+    system: &str,
+    machine: &str,
+    component_sha256: &str,
+) -> String {
+    let reason = is_powershell_component_filename(wasm_filename)
+        .then(|| incompatible_reason_with_digest("powershell", system, machine, component_sha256))
+        .flatten();
+    json!({"reason": reason}).to_string()
 }
 
 /// Check the bytes that will actually be compiled. Do not hash one file read
@@ -178,6 +197,27 @@ mod tests {
         for (os, arch) in [("Darwin","arm64"),("Linux","aarch64"),("Windows","x86_64")] {
             assert!(incompatible_reason_with_digest("powershell", os, arch, "").is_none());
         }
+    }
+
+    #[test]
+    fn component_loader_probe_and_digest_follow_shared_rust_policy() {
+        let verified = VERIFIED_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let probe: Value = serde_json::from_str(&component_availability_json_impl(
+            "powershell_parser.wasm", "windows", "ARM64", ""
+        )).unwrap();
+        assert!(probe["reason"].is_string());
+        let allowed: Value = serde_json::from_str(&component_availability_json_impl(
+            r"plugins\powershell_parser.wasm", "windows", "ARM64", verified
+        )).unwrap();
+        assert!(allowed["reason"].is_null());
+        let forbidden: Value = serde_json::from_str(&component_availability_json_impl(
+            "powershell_parser.wasm", "windows", "aarch64", "0000"
+        )).unwrap();
+        assert!(forbidden["reason"].is_string());
+        let unrelated: Value = serde_json::from_str(&component_availability_json_impl(
+            "python_parser.wasm", "windows", "ARM64", ""
+        )).unwrap();
+        assert!(unrelated["reason"].is_null());
     }
 
     #[test]
