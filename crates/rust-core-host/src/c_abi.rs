@@ -1363,11 +1363,13 @@ mod tests {
         assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
         assert_eq!(result["result"]["unavailable"][0], "powershell");
         assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
-        let verified = crate::parser_availability::VERIFIED_POWERSHELL_WINDOWS_ARM64_SHA256;
-        let allow = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", verified]));
-        assert_eq!(allow["ok"], true);
-        assert!(allow["result"]["reason"].is_null());
-        assert!(allow["result"]["unavailable"].is_null());
+        // The known candidate only compiles without fuel; Rust must reject it
+        // on Windows ARM64 until metered host compilation is verified.
+        let unmetered_only = crate::parser_availability::UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let denied_candidate = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", unmetered_only]));
+        assert_eq!(denied_candidate["ok"], true);
+        assert!(denied_candidate["result"]["reason"].as_str().unwrap().contains("fuel"));
+        assert_eq!(denied_candidate["result"]["unavailable"][0], "powershell");
         let deny = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", ""]));
         assert_eq!(deny["ok"], true);
         assert_eq!(deny["result"]["unavailable"][0], "powershell");
@@ -1380,8 +1382,8 @@ mod tests {
         assert_eq!(call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["ok"], false);
         let protected = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", ""]));
         assert_eq!(protected["result"]["reason"].is_string(), true);
-        let allowed_component = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", verified]));
-        assert!(allowed_component["result"]["reason"].is_null());
+        let denied_component = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", unmetered_only]));
+        assert!(denied_component["result"]["reason"].as_str().unwrap().contains("fuel"));
         let non_powershell = call("parser_component_availability", json!(["python_parser.wasm", "Windows", "arm64", ""]));
         assert!(non_powershell["result"]["reason"].is_null());
         assert_eq!(call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64"]))["ok"], false);
