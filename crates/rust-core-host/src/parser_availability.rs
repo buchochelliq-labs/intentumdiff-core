@@ -5,6 +5,8 @@
 //! its *bytes*, not a parser name, a moving git ref, or the host platform alone.
 //! Callers must hash the actual staged bytes before the component is loaded.
 use serde_json::{json, Value};
+use sha2::Digest;
+use std::path::Path;
 
 const LEGACY_ARM64_REASON: &str =
     "cranelift cannot emit one of its functions on Windows/aarch64 ('function too large'); loading it aborts the process";
@@ -47,6 +49,32 @@ pub fn incompatible_reason_with_digest(
     } else {
         Some(UNVERIFIED_ARM64_REASON)
     }
+}
+
+/// Recognise the standard PowerShell Wasm artifact before invoking Wasmtime.
+/// This guard is a last line of defence if a host bypasses parser discovery.
+pub(crate) fn guarded_powershell_component(path: &Path, system: &str, machine: &str) -> bool {
+    incompatible_reason("powershell", system, machine).is_some()
+        && path.file_name().and_then(|part| part.to_str())
+            .is_some_and(|name| name.eq_ignore_ascii_case("powershell_parser.wasm"))
+}
+
+/// Check the bytes that will actually be compiled. Do not hash one file read
+/// and then reopen the path for compilation: the component may have changed.
+pub(crate) fn verify_staged_powershell_bytes(
+    path: &Path,
+    bytes: &[u8],
+    system: &str,
+    machine: &str,
+) -> Result<(), String> {
+    if !guarded_powershell_component(path, system, machine) {
+        return Ok(());
+    }
+    let digest = hex::encode(sha2::Sha256::digest(bytes));
+    if let Some(reason) = incompatible_reason_with_digest("powershell", system, machine, &digest) {
+        return Err(format!("refusing unsafe PowerShell component {}: {reason}", path.display()));
+    }
+    Ok(())
 }
 
 fn is_powershell_filename(filename: &str) -> bool {
@@ -150,6 +178,21 @@ mod tests {
         for (os, arch) in [("Darwin","arm64"),("Linux","aarch64"),("Windows","x86_64")] {
             assert!(incompatible_reason_with_digest("powershell", os, arch, "").is_none());
         }
+    }
+
+    #[test]
+    fn native_wasmtime_guard_rejects_unverified_bytes_before_compilation() {
+        let standard = Path::new("powershell_parser.wasm");
+        assert!(guarded_powershell_component(standard, "windows", "aarch64"));
+        let rejected = verify_staged_powershell_bytes(
+            standard, b"not the vetted PowerShell Wasm", "windows", "aarch64"
+        ).unwrap_err();
+        assert!(rejected.contains("refusing unsafe PowerShell component"), "{rejected}");
+        assert!(!guarded_powershell_component(standard, "windows", "x86_64"));
+        assert!(verify_staged_powershell_bytes(
+            standard, b"not the vetted PowerShell Wasm", "Darwin", "arm64"
+        ).is_ok());
+        assert!(!guarded_powershell_component(Path::new("python_parser.wasm"), "windows", "aarch64"));
     }
 
     #[test]
