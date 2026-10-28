@@ -280,7 +280,7 @@ mod tests {
             (file == "powershell_parser.wasm").then(|| expected.to_owned())
         });
         assert_eq!(accepted.len(), 2, "the exactly vetted metered digest should permit PowerShell and its aliases");
-        assert!(accepted.iter().any(|(candidate, _)| candidate.id == "powershell" && candidate.languages.contains(&"alias".to_owned())));
+        assert!(accepted.iter().any(|(candidate, _)| candidate.languages.contains(&"powershell".to_owned()) && candidate.languages.contains(&"alias".to_owned())), "the vetted component must retain both the PowerShell entry and its alias");
         assert!(accepted.iter().any(|(candidate, _)| candidate.id == "generic"));
         let blocked = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |_| Some("bad".into()));
         assert_eq!(blocked.len(), 1);
