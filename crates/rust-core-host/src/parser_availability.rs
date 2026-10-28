@@ -1,10 +1,11 @@
 //! Shared host capability exclusions, applied before compiling components.
 //!
-//! Metered Wasmtime 47.0.3 compilation of the currently pinned PowerShell
-//! component aborts Cranelift on Windows ARM64 even though the unmetered CLI
-//! compiled it. No digest is currently certified safe with metering on that
-//! platform. Deny the known candidate *before* instantiating the Wasm compiler;
-//! do not disable fuel as a workaround or manufacture successful results.
+//! Wasmtime 47.0.3 Cranelift aborted on this PowerShell component when fuel
+//! metering was enabled on Windows ARM64. Patched Wasmtime 48.0.7 compiles the
+//! exact component with fuel metering on real Windows ARM64 (parser CI
+//! #40707156445); Rust API compatibility passed separately (core CI
+//! #40709266345). Only the vetted SHA-256 is admitted on this platform.
+//! Unknown bytes and legacy four-argument callers continue to fail closed.
 use serde_json::{json, Value};
 use sha2::Digest;
 use std::path::Path;
@@ -13,15 +14,11 @@ const LEGACY_ARM64_REASON: &str =
     "cranelift cannot emit one of its functions on Windows/aarch64 ('function too large'); loading it aborts the process";
 const UNVERIFIED_ARM64_REASON: &str =
     "PowerShell Wasm component is not verified under metered Wasmtime on Windows ARM64; refusing to compile a component that may abort the process";
-const UNMETERED_ONLY_ARM64_REASON: &str =
-    "PowerShell Wasm compiled without fuel, but Wasmtime 47.0.3 Cranelift panics with fuel metering enabled on Windows ARM64; refusing the CLI-only vetted component";
-
-/// Provenance of the *unmetered-only* PowerShell parser from PR #5 (9b8bd6d8).
-/// The official CLI compiled these bytes, but production-like Rust host CI
-/// #40683114538 and #40683768275 reproduced a fatal Cranelift panic with
-/// Config::consume_fuel(true), across all tested Cranelift opt levels.
-/// This digest MUST NOT authorize execution until metered compilation is fixed.
-pub const UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256: &str =
+/// Exact parser payload built by PowerShell parser PR #5 and vetted in
+/// Windows ARM64 Wasmtime 48.0.7 host CI #40707156445, with fuel enabled.
+/// The same bytes are unsafe under 47.0.3; Cargo.toml and Cargo.lock must
+/// both pin patched 48.0.7 before the policy below permits this digest.
+pub const METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256: &str =
     "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15";
 
 fn is_windows_arm64(system: &str, machine: &str) -> bool {
@@ -36,11 +33,10 @@ pub fn incompatible_reason(name: &str, system: &str, machine: &str) -> Option<&'
         .then_some(LEGACY_ARM64_REASON)
 }
 
-/// Shared Rust policy for an actual staged component's SHA-256. A digest
-/// proven only with fuel disabled is insufficient: the full Rust/Python host
-/// uses metering, and the known candidate aborts Cranelift on Windows ARM64.
-/// Until an independently host-verified replacement is certified, deny all
-/// PowerShell components on that platform. Other platforms are unchanged.
+/// Shared Rust policy for the actual staged bytes' SHA-256. This policy is
+/// compiled only with the patched 48.0.7 Rust host; legacy callers without
+/// a verified digest remain blocked on Windows ARM64. Other platforms remain
+/// unchanged. Host I/O must hash and compile the SAME byte buffer.
 pub fn incompatible_reason_with_digest(
     name: &str,
     system: &str,
@@ -50,8 +46,8 @@ pub fn incompatible_reason_with_digest(
     if name != "powershell" || !is_windows_arm64(system, machine) {
         return None;
     }
-    if component_sha256.eq_ignore_ascii_case(UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256) {
-        Some(UNMETERED_ONLY_ARM64_REASON)
+    if component_sha256.eq_ignore_ascii_case(METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256) {
+        None
     } else {
         Some(UNVERIFIED_ARM64_REASON)
     }
@@ -75,9 +71,9 @@ pub(crate) fn guarded_powershell_component(path: &Path, system: &str, machine: &
         && is_powershell_component_filename(&path.to_string_lossy())
 }
 
-/// Rust-owned pre-compilation policy for raw Wasm loader clients. A known
-/// unmetered-only digest is still rejected to avoid an uncaught compiler panic.
-/// The host must never skip fuel metering to accept that component.
+/// Rust-owned pre-compilation policy for raw Wasm loader clients.
+/// Only the vetted digest is allowed with the pinned patched host.
+/// Fuel metering remains required; no fallback is authorized.
 pub fn component_availability_json_impl(
     wasm_filename: &str,
     system: &str,
@@ -149,7 +145,7 @@ pub fn availability_json_impl(name: &str, filename: &str, system: &str, machine:
 
 /// C ABI consumer contract. The SHA-256 is computed from the actual staged
 /// Wasm bytes by the host (host I/O) and evaluated only by this Rust policy.
-/// This does not authorize any known unsafe Windows ARM64 metered component.
+/// No unknown Windows ARM64 PowerShell component is authorized.
 pub fn availability_json_with_digest_impl(
     name: &str,
     filename: &str,
@@ -187,21 +183,21 @@ mod tests {
     }
 
     #[test]
-    fn unmetered_only_digest_cannot_lift_the_windows_arm64_restriction() {
-        let good = UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
+    fn only_metered_verified_digest_lifts_digest_aware_restriction() {
+        let good = METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
         let legacy = "db4db1515d13b3f452057d0a6c3c659ae9b3b484ef3cb572c7a19d670981c30a";
         for machine in ["ARM64", "aarch64", "AArch64"] {
-            assert!(incompatible_reason_with_digest("powershell", "Windows", machine, good).is_some());
+            assert!(incompatible_reason_with_digest("powershell", "Windows", machine, good).is_none());
             assert_eq!(
                 incompatible_reason_with_digest("powershell", "Windows", machine, &good.to_ascii_uppercase()),
-                Some(UNMETERED_ONLY_ARM64_REASON)
+                None
             );
             for digest in ["", legacy, "0", "29a7be79"] {
                 assert!(incompatible_reason_with_digest("powershell", "Windows", machine, digest).is_some(),
                     "{digest} should not bypass the ARM64 guard");
             }
             assert!(incompatible_reason_with_digest("python", "Windows", machine, "").is_none());
-            assert!(unavailable_for_filename_with_digest("DEPLOY.PS1", "Windows", machine, good).is_some());
+            assert!(unavailable_for_filename_with_digest("DEPLOY.PS1", "Windows", machine, good).is_none());
             assert!(unavailable_for_filename_with_digest("deploy.ps1", "Windows", machine, legacy).is_some());
             assert!(unavailable_for_filename_with_digest("x.py", "Windows", machine, legacy).is_none());
             // Older C ABI consumers cannot prove their component's identity.
@@ -214,15 +210,15 @@ mod tests {
 
     #[test]
     fn component_loader_probe_and_digest_follow_shared_rust_policy() {
-        let unmetered = UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let vetted = METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
         let probe: Value = serde_json::from_str(&component_availability_json_impl(
             "powershell_parser.wasm", "windows", "ARM64", ""
         )).unwrap();
         assert!(probe["reason"].is_string());
-        let known_unmetered: Value = serde_json::from_str(&component_availability_json_impl(
-            r"plugins\powershell_parser.wasm", "windows", "ARM64", unmetered
+        let known_vetted: Value = serde_json::from_str(&component_availability_json_impl(
+            r"plugins\powershell_parser.wasm", "windows", "ARM64", vetted
         )).unwrap();
-        assert!(known_unmetered["reason"].as_str().unwrap().contains("fuel"));
+        assert!(known_vetted["reason"].is_null());
         let forbidden: Value = serde_json::from_str(&component_availability_json_impl(
             "powershell_parser.wasm", "windows", "aarch64", "0000"
         )).unwrap();
@@ -244,7 +240,7 @@ mod tests {
         ] {
             assert!(guarded_powershell_component(Path::new(path), "windows", "arm64"), "{path}");
             let refused: Value = serde_json::from_str(&component_availability_json_impl(
-                path, "windows", "ARM64", UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256
+                path, "windows", "ARM64", METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256
             )).unwrap();
             assert!(refused["reason"].is_string(), "{path} bypassed metered safety guard");
         }
@@ -261,11 +257,11 @@ mod tests {
 
     #[test]
     fn digest_availability_json_fail_closed_and_no_false_exclusions() {
-        let good = UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
-        let known_unmetered: Value =
+        let good = METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let known_vetted: Value =
             serde_json::from_str(&availability_json_with_digest_impl("powershell", "src/deploy.ps1", "Windows", "ARM64", good)).unwrap();
-        assert!(known_unmetered["reason"].as_str().unwrap().contains("fuel metering"));
-        assert_eq!(known_unmetered["unavailable"][0], "powershell");
+        assert!(known_vetted["reason"].is_null());
+        assert!(known_vetted["unavailable"].is_null());
         let rejected: Value =
             serde_json::from_str(&availability_json_with_digest_impl("powershell", "src/deploy.ps1", "Windows", "ARM64", "")).unwrap();
         assert!(rejected["reason"].as_str().unwrap().contains("not verified"));

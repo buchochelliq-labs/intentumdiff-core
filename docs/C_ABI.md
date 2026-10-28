@@ -322,7 +322,8 @@ is the compatible **new** operation for a host that has staged a component.
 The host performs permitted I/O to compute the lowercase or uppercase SHA-256
 of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
 policy and returns the same `reason`/`unavailable` shape. Only the component
-built and tested on Windows ARM64 in PowerShell parser PR #5
+built and tested with fuel-enabled Wasmtime 48.0.7 on Windows ARM64 in
+PowerShell parser PR #5 (CI #40707156445; Core Rust API CI #40709266345)
 (SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
 may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
 digests **fail closed**, and earlier four-argument clients remain excluded.
@@ -336,7 +337,8 @@ and final native/C ABI/Python semantic acceptance.
 is the raw-component loader guard. On Windows ARM64, a request for the standard
 `powershell_parser.wasm` component with an empty digest returns a Rust-owned
 restriction. A thin host can then hash the **actual bytes** and repeat the
-operation; only the vetted PowerShell artifact is allowed. Unrelated components
+operation; only the vetted PowerShell artifact on pinned Wasmtime 48.0.7
+is allowed. Unrelated components
 have a null `reason`, so no whole-catalogue hashing is needed. A missing C ABI
 operation must **fail closed** rather than return a false success. The native
 Wasmtime loader checks the exact bytes and compiles those same bytes, preventing

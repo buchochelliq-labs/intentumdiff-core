@@ -122,8 +122,8 @@ jobs:
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/cli-wasm
 
-  wasmtime48_compat:
-    name: Patched Wasmtime 48.0.7 Rust API compatibility (diagnostic)
+  wasmtime48_pinned:
+    name: Production Wasmtime 48.0.7 locked security and Rust API gate
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -134,34 +134,27 @@ jobs:
         uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
         with:
           toolchain: 1.95.0
-      - name: Compile and test Rust host with patched runtime (not release approval)
+      - name: Verify patched runtime pins and tested resolved lock
         run: |
           set -euo pipefail
-          # Never change the committed 47.0.3 Cargo manifest/lock here.
-          # The prior 48.0.3 diagnostic passed, but 2026-10-19 Wasmtime
-          # advisories identify an ARM64 br_table sandbox escape and a
-          # component-model stream panic before 48.0.7. Re-test on 48.0.7.
-          # This is diagnostic, not shipped dependency approval.
           python3 - <<'PY'
+          import hashlib
+          import tomllib
           from pathlib import Path
-          manifest = Path("crates/rust-core-host/Cargo.toml")
-          original = manifest.read_text(encoding="utf-8")
-          for crate in ("wasmtime", "wasmtime-wasi"):
-              before = f'{crate} = "47.0.3"'
-              assert original.count(before) == 1, f"unexpected original {crate} pin"
-              original = original.replace(before, f'{crate} = "=48.0.7"')
-          manifest.write_text(original, encoding="utf-8")
+          base = Path("crates/rust-core-host")
+          manifest = tomllib.loads((base / "Cargo.toml").read_text())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert manifest["dependencies"][name] == "48.0.7", name
+          raw_lock = (base / "Cargo.lock").read_bytes()
+          expected_sha = "9954b0ac8353864b5c703078c308953c6ff270ad146cf99f40b2c25ac9cef0f8"
+          assert hashlib.sha256(raw_lock).hexdigest() == expected_sha, "lockfile changed from the independently tested 48.0.7 graph"
+          lock = tomllib.loads(raw_lock.decode())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert [p["version"] for p in lock["package"] if p["name"] == name] == ["48.0.7"], name
+          assert all(p["version"] != "47.0.3" for p in lock["package"] if p["name"].startswith("wasmtime")), "vulnerable old Wasmtime package remains"
           PY
-          cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
-          cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --locked
-          echo "::notice::Temporary patched-runtime native tests passed. Do not release before exact locked dependency migration, ARM64 metered CI, pinned all-74 acceptance, installed wheel/VSIX and independent Python thin-wrapper audit."
-      - name: Retain exact resolved 48.0.7 lockfile for reviewed production migration
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: rust-core-host-wasmtime-48.0.7-lock
-          retention-days: 7
-          if-no-files-found: error
-          path: crates/rust-core-host/Cargo.lock
+          cargo test --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
+          echo "::notice::Production 48.0.7 Rust host security and API gate passed; cross-platform 74-language source judgement, wheel/VSIX and independent Python thin-wrapper audit remain mandatory."
 
   components:
     name: Wasm components build (index engine + renderers)

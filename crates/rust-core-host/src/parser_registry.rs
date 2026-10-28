@@ -266,7 +266,7 @@ mod tests {
     }
 
     #[test]
-    fn native_catalog_denies_unmetered_only_digest_on_windows_arm64() {
+    fn native_catalog_allows_only_vetted_metered_digest_on_windows_arm64() {
         let manifest: Manifest = serde_json::from_value(serde_json::json!({
             "parsers": {
                 "powershell": {"plugin_id": "powershell", "wasm": "powershell_parser.wasm"},
@@ -275,12 +275,13 @@ mod tests {
             },
             "extension_index": {}
         })).unwrap();
-        let expected = crate::parser_availability::UNMETERED_ONLY_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let expected = crate::parser_availability::METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
         let accepted = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |file| {
             (file == "powershell_parser.wasm").then(|| expected.to_owned())
         });
-        assert_eq!(accepted.len(), 1, "the CLI-only digest is unsafe with metered Wasmtime");
-        assert_eq!(accepted[0].0.id, "generic", "PowerShell and its aliases must be denied before Wasmtime compilation");
+        assert_eq!(accepted.len(), 2, "the exactly vetted metered digest should permit PowerShell and its aliases");
+        assert!(accepted.iter().any(|(candidate, _)| candidate.id == "powershell" && candidate.languages.contains(&"alias".to_owned())));
+        assert!(accepted.iter().any(|(candidate, _)| candidate.id == "generic"));
         let blocked = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |_| Some("bad".into()));
         assert_eq!(blocked.len(), 1);
         assert_eq!(blocked[0].0.id, "generic");
