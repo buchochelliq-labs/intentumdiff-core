@@ -816,6 +816,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
+        "parser_availability_with_digest" => Ok(crate::parser_availability::availability_json_with_digest_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?, arg_str(args, 4, "component_sha256")?)),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
         "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
@@ -1361,6 +1362,21 @@ mod tests {
         assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
         assert_eq!(result["result"]["unavailable"][0], "powershell");
         assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
+        let verified = crate::parser_availability::VERIFIED_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let allow = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", verified]));
+        assert_eq!(allow["ok"], true);
+        assert!(allow["result"]["reason"].is_null());
+        assert!(allow["result"]["unavailable"].is_null());
+        let deny = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", ""]));
+        assert_eq!(deny["ok"], true);
+        assert_eq!(deny["result"]["unavailable"][0], "powershell");
+        let legacy_sha = "db4db1515d13b3f452057d0a6c3c659ae9b3b484ef3cb572c7a19d670981c30a";
+        let old = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", legacy_sha]));
+        assert_eq!(old["result"]["unavailable"][0], "powershell");
+        // Original four-argument API retains a strict refusal for unknown bytes.
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["result"]["reason"].is_string());
+        // Partial arguments never manufacture an 'allowed' result.
+        assert_eq!(call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["ok"], false);
     }
 
     #[test]
