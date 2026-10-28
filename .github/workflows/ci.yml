@@ -122,6 +122,38 @@ jobs:
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/cli-wasm
 
+  wasmtime48_compat:
+    name: Patched Wasmtime 48.0.3 Rust API compatibility (diagnostic)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install pinned Rust
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        with:
+          toolchain: 1.95.0
+      - name: Compile and test Rust host with patched runtime (not release approval)
+        run: |
+          set -euo pipefail
+          # Never change the committed 47.0.3 Cargo manifest/lock here.
+          # This job probes the native Rust C ABI against a security-patched
+          # Wasmtime that compiled the exact PowerShell artifact with fuel on
+          # Windows ARM64 (parser #5 CI #40696554003).
+          python3 - <<'PY'
+          from pathlib import Path
+          manifest = Path("crates/rust-core-host/Cargo.toml")
+          original = manifest.read_text(encoding="utf-8")
+          for crate in ("wasmtime", "wasmtime-wasi"):
+              before = f'{crate} = "47.0.3"'
+              assert original.count(before) == 1, f"unexpected original {crate} pin"
+              original = original.replace(before, f'{crate} = "=48.0.3"')
+          manifest.write_text(original, encoding="utf-8")
+          PY
+          cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
+          echo "::notice::Temporary patched-runtime native tests passed. Do not release before exact locked dependency migration, ARM64 metered CI, pinned all-74 acceptance, installed wheel/VSIX and independent Python thin-wrapper audit."
+
   components:
     name: Wasm components build (index engine + renderers)
     runs-on: ubuntu-latest
