@@ -153,7 +153,15 @@ jobs:
           manifest.write_text(original, encoding="utf-8")
           PY
           cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
+          cargo test --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --locked
           echo "::notice::Temporary patched-runtime native tests passed. Do not release before exact locked dependency migration, ARM64 metered CI, pinned all-74 acceptance, installed wheel/VSIX and independent Python thin-wrapper audit."
+      - name: Retain exact resolved 48.0.7 lockfile for reviewed production migration
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rust-core-host-wasmtime-48.0.7-lock
+          retention-days: 7
+          if-no-files-found: error
+          path: crates/rust-core-host/Cargo.lock
 
   components:
     name: Wasm components build (index engine + renderers)
