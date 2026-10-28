@@ -817,6 +817,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
         "parser_availability_with_digest" => Ok(crate::parser_availability::availability_json_with_digest_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?, arg_str(args, 4, "component_sha256")?)),
+        "parser_component_availability" => Ok(crate::parser_availability::component_availability_json_impl(arg_str(args, 0, "wasm_filename")?, arg_str(args, 1, "system")?, arg_str(args, 2, "machine")?, arg_str(args, 3, "component_sha256")?)),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
         "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
@@ -1377,6 +1378,13 @@ mod tests {
         assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["result"]["reason"].is_string());
         // Partial arguments never manufacture an 'allowed' result.
         assert_eq!(call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["ok"], false);
+        let protected = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", ""]));
+        assert_eq!(protected["result"]["reason"].is_string(), true);
+        let allowed_component = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", verified]));
+        assert!(allowed_component["result"]["reason"].is_null());
+        let non_powershell = call("parser_component_availability", json!(["python_parser.wasm", "Windows", "arm64", ""]));
+        assert!(non_powershell["result"]["reason"].is_null());
+        assert_eq!(call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64"]))["ok"], false);
     }
 
     #[test]
