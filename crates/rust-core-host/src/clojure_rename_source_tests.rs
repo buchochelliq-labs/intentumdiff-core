@@ -74,8 +74,21 @@ fn continued_add_form_parameter_renames_are_two_scoped_refactorings() {
 
 #[test]
 fn gallery_add_renames_remain_scoped_next_to_greet_arity_and_multiply_addition() {
-    let old = "(defn greet [name]\\n  (println (str \\"Hello, \\" name)))\\n\\n(defn add [a b]\\n  (+ a b))\\n";
-    let new = "(defn greet\\n  ([name] (greet name \\"!\\"))\\n  ([name suffix]\\n   (println (str \\"Hello, \\" name suffix))))\\n\\n(defn add [x y] (+ x y))\\n\\n(defn multiply [x y] (* x y))\\n";
+    let old = r#"(defn greet [name]
+  (println (str "Hello, " name)))
+
+(defn add [a b]
+  (+ a b))
+"#;
+    let new = r#"(defn greet
+  ([name] (greet name "!"))
+  ([name suffix]
+   (println (str "Hello, " name suffix))))
+
+(defn add [x y] (+ x y))
+
+(defn multiply [x y] (* x y))
+"#;
     let diff = review(old, new);
     assert_eq!(diff["has_semantic_changes"], true, "{diff:#}");
     let changes = diff["changes"].as_array().expect("changes");
