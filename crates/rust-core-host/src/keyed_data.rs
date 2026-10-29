@@ -267,16 +267,6 @@ pub(crate) fn js_style_group_from_suppression(
     if !matches!(language, "javascript" | "typescript" | "tsx") {
         return None;
     }
-    #[cfg(test)]
-    if std::env::var_os("INTENTUMDIFF_TEST_WASM_DIR").is_some()
-        && before.iter().any(|(_, _, _, old, new)| old.iter().chain(new).any(|s| s == "Alice" || s == "AliceX"))
-    {
-        let surviving_drafts: Vec<_> = changes.iter().map(|c| (
-            c.change_type, c.old_node.map(|n| n.id.as_str()),
-            c.new_node.map(|n| n.id.as_str())
-        )).collect();
-        eprintln!("JS_SUPPRESSION_TRACE {language} raw={before:?} surviving={surviving_drafts:?}");
-    }
     let surviving: HashSet<(String, Option<String>, Option<String>)> = changes
         .iter()
         .map(|c| {
@@ -310,30 +300,44 @@ pub(crate) fn js_style_group_from_suppression(
         {
             continue;
         }
-        // An ancestor draft replaced by a precise *semantic* descendant edit is
-        // refinement, not evidence of a formatting-only change. This occurs for
-        // TSX string_fragment edits such as Alice -> AliceX: the parent string
-        // and return-statement MODIFICATION drafts disappear because the same
-        // edit survives as a more precise descendant. Do not fabricate an
-        // IGNORED_STYLE group for that discarded semantic scaffold.
-        // Both sides must descend from this SAME draft, using a dot boundary:
-        // 0.1 is not an ancestor of 0.10.
-        if change_type == "MODIFICATION" {
-            if let (Some(old_parent), Some(new_parent)) =
-                (old_id.as_deref(), new_id.as_deref())
-            {
-                let represented_by_precise_edit = changes.iter().any(|change| {
-                    let (Some(old), Some(new)) = (change.old_node, change.new_node) else {
-                        return false;
-                    };
-                    change.change_type == "MODIFICATION"
-                        && old.id.strip_prefix(old_parent).is_some_and(|tail| tail.starts_with('.'))
-                        && new.id.strip_prefix(new_parent).is_some_and(|tail| tail.starts_with('.'))
-                });
-                if represented_by_precise_edit {
-                    continue;
-                }
+        // Discarded raw parent edits are *not* evidence of formatting when a
+        // surviving paired semantic descendant represents the same change.
+        // Rust's raw script may spell a modified string as DELETE old wrapper
+        // + ADD new wrapper, as well as a parent MODIFICATION; all three are
+        // refinement, not ignored style. The one-sided rule is deliberately
+        // restricted to single-label literal wrappers: do not erase a broader
+        // removed/added container with independent semantic content.
+        let represented_by_precise_edit = changes.iter().any(|change| {
+            let (Some(precise_old), Some(precise_new)) =
+                (change.old_node, change.new_node) else {
+                    return false;
+                };
+            if change.change_type != "MODIFICATION" {
+                return false;
             }
+            let descendant_of = |id: &str, parent: &str| {
+                id.strip_prefix(parent).is_some_and(|tail| tail.starts_with('.'))
+            };
+            match (change_type.as_str(), old_id.as_deref(), new_id.as_deref()) {
+                ("MODIFICATION", Some(old_parent), Some(new_parent)) => {
+                    descendant_of(&precise_old.id, old_parent)
+                        && descendant_of(&precise_new.id, new_parent)
+                }
+                ("DELETION", Some(old_parent), None) => {
+                    !olabels.is_empty()
+                        && olabels.iter().all(|label| label == &precise_old.label)
+                        && descendant_of(&precise_old.id, old_parent)
+                }
+                ("ADDITION", None, Some(new_parent)) => {
+                    !nlabels.is_empty()
+                        && nlabels.iter().all(|label| label == &precise_new.label)
+                        && descendant_of(&precise_new.id, new_parent)
+                }
+                _ => false,
+            }
+        });
+        if represented_by_precise_edit {
+            continue;
         }
         old_labels.extend(olabels.iter().cloned());
         new_labels.extend(nlabels.iter().cloned());

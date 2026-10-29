@@ -62,6 +62,37 @@ fn ancestor_coverage_requires_both_sides_of_the_same_surviving_edit() {
         "unrelated old/new endpoints cannot certify parent refinement");
 }
 
+#[test]
+fn deleted_and_added_literal_wrapper_drafts_are_semantic_refinement_not_style() {
+    let old = leaf("0.1.3.0.0.1.1.0", "Alice");
+    let new = leaf("0.1.3.0.0.1.1.0", "AliceX");
+    let changes = vec![modification(&old, &new)];
+    let before = vec![
+        ("DELETION".to_owned(), Some("0.1.3.0.0.1.1".to_owned()), None,
+         vec!["Alice".to_owned(), "Alice".to_owned()], vec![]),
+        ("ADDITION".to_owned(), None, Some("0.1.3.0.0.1.1".to_owned()),
+         vec![], vec!["AliceX".to_owned(), "AliceX".to_owned()]),
+        raw_parent("0.1.3.0", "0.1.3.0"),
+    ];
+    for language in ["javascript", "typescript", "tsx"] {
+        assert!(js_style_group_from_suppression(&before, &changes, language).is_none(),
+            "{language}: raw delete/add wrapper + paired literal edit is not formatting");
+    }
+}
+
+#[test]
+fn one_sided_parent_with_independent_content_is_not_mistaken_for_literal_wrapper() {
+    let old = leaf("0.1.3.0.0.1.1.0", "Alice");
+    let new = leaf("0.1.3.0.0.1.1.0", "AliceX");
+    let changes = vec![modification(&old, &new)];
+    let before = vec![(
+        "DELETION".to_owned(), Some("0.1.3.0.0.1.1".to_owned()), None,
+        vec!["Alice".to_owned(), "other content".to_owned()], vec![]
+    )];
+    assert!(js_style_group_from_suppression(&before, &changes, "tsx").is_some(),
+        "a broader container with unrelated content is not wholly represented");
+}
+
 #[cfg(feature = "tier-c-wasm")]
 mod native {
     use super::*;
