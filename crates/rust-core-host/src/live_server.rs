@@ -699,7 +699,8 @@ pub fn live_handle_review_impl(
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
     // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let (cross_file_changes, mut index_telemetry) = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir);
+    let (cross_file_changes, mut index_telemetry) =
+        crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).

@@ -5399,17 +5399,20 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// sides parse to trees the SAME way `differ.parse` does — Python through the bundled Wasm parser
 /// in interpret-cst mode (fed the trivia-stripped CST), other languages through their full-parse
 /// Wasm parser — so the symbol tables (and thus the cross-file changes) match the differ's. Builds
-/// the two symbol tables and diffs them. Best-effort: any parse/build failure just omits that file
-/// (or yields an empty list), never raises. *files* are the same commit-batch file objects the
+/// the two symbol tables and diffs them. Every required parse/index failure aborts the
+/// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> (Value, HashMap<(String, String), Vec<Value>>) {
+) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
     let mut telemetry = HashMap::new();
+    if files.is_empty() {
+        return Ok((json!([]), telemetry));
+    }
     if wasm_dir.is_empty() {
-        return (json!([]), telemetry); // the bundled Python parser is required for Python symbol trees
+        return Err("commit symbol indexing requires the verified parser bundle".to_owned());
     }
     let config = RustCoreConfig::from_json(config_json);
     let python_wasm_path = Path::new(wasm_dir)
@@ -5461,13 +5464,15 @@ pub(crate) fn compute_commit_cross_file_changes(
         }
         let (old_side_cst, new_side_cst) = if wasm_path.is_empty() {
             (
-                python_wasm_filtered_cst(parse_old_src).unwrap_or_default(),
-                python_wasm_filtered_cst(parse_new_src).unwrap_or_default(),
+                python_wasm_filtered_cst(parse_old_src)
+                    .map_err(|reason| format!("symbol-index CST for {old_p}: {reason}"))?,
+                python_wasm_filtered_cst(parse_new_src)
+                    .map_err(|reason| format!("symbol-index CST for {new_p}: {reason}"))?,
             )
         } else {
             (String::new(), String::new())
         };
-        if let Ok(mut pair) = run_python_wasm_process_pair_detailed(
+        let mut pair = run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5478,31 +5483,45 @@ pub(crate) fn compute_commit_cross_file_changes(
             fuel,
             config.max_plugin_output_bytes,
             language,
-        ) {
-            for call in &mut pair.calls { call["plugin"] = json!(parser_path); call["purpose"] = json!("symbol_index"); }
-            telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
-            let (old_tree, new_tree) = (pair.old_tree, pair.new_tree);
-            if both || old_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&old_tree) {
-                    old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
-                }
+        ).map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        for call in &mut pair.calls {
+            call["plugin"] = json!(parser_path);
+            call["purpose"] = json!("symbol_index");
+        }
+        telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
+        if both || old_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.old_tree)
+                .map_err(|reason| format!("symbol-index invalid old tree for {old_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed old tree for {old_p}"));
             }
-            if both || new_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&new_tree) {
-                    new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
-                }
+            old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
+        }
+        if both || new_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.new_tree)
+                .map_err(|reason| format!("symbol-index invalid new tree for {new_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed new tree for {new_p}"));
             }
+            new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
         }
     }
     let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
     let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    let changes = match serde_json::from_str::<Value>(&index_engine_lib::diff_symbol_tables_impl(
-        &old_table, &new_table,
-    )) {
-        Ok(v) if v.is_array() => v,
-        _ => json!([]),
-    };
-    (changes, telemetry)
+    for (side, table) in [("old", &old_table), ("new", &new_table)] {
+        let value: Value = serde_json::from_str(table)
+            .map_err(|reason| format!("symbol-index {side} table is invalid: {reason}"))?;
+        if !value.is_object() || value.get("error").is_some() {
+            return Err(format!("symbol-index {side} table construction failed: {value}"));
+        }
+    }
+    let changes: Value = serde_json::from_str(
+        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
+    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
+    if !changes.is_array() {
+        return Err(format!("symbol-index diff did not return changes: {changes}"));
+    }
+    Ok((changes, telemetry))
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -10597,5 +10616,38 @@ mod native_parser_telemetry_tests {
             assert!(call["max_fuel_used_percent"].is_null());
             assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
         }
+    }
+}
+
+#[cfg(test)]
+mod native_commit_index_fail_closed_tests {
+    use super::*;
+
+    #[test]
+    fn native_commit_requires_parser_bundle_for_indexing() {
+        let changed = vec![json!({
+            "old_source": "def f():\n    return 1\n",
+            "new_source": "def f():\n    return 2\n",
+            "old_filename": "changed.py", "new_filename": "changed.py",
+            "language": "python", "parser_wasm_path": ""
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "").unwrap_err();
+        assert!(error.contains("parser bundle"), "{error}");
+        assert!(compute_commit_cross_file_changes(&[], "{}", "").unwrap().0.as_array().unwrap().is_empty());
+    }
+
+    #[test]
+    fn native_commit_does_not_suppress_second_pass_parser_failure() {
+        let changed = vec![json!({
+            "old_source": "function f() { return 1; }",
+            "new_source": "function f() { return 2; }",
+            "old_filename": "broken.js", "new_filename": "broken.js",
+            "language": "javascript",
+            "parser_wasm_path": "/__intentumdiff_missing__/parser.wasm"
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "/__intentumdiff_missing__")
+            .unwrap_err();
+        assert!(error.contains("broken.js"), "{error}");
+        assert!(error.contains("symbol-index parser"), "{error}");
     }
 }
