@@ -184,6 +184,11 @@ fn reader_quoted_symbols_and_case_constants_are_not_bound_references() {
         ("var quote", "(defn f [a] #'a)\n", "(defn f [x] #'x)\n"),
         ("case constant", "(defn f [a] (case a a 1 0))\n",
                          "(defn f [x] (case x x 1 0))\n"),
+        // The namespace does not turn unevaluated case constants into
+        // parameter references. A pure binder rename would change behavior.
+        ("qualified core case constant",
+         "(defn f [a] (clojure.core/case a a 1 0))\n",
+         "(defn f [x] (clojure.core/case x x 1 0))\n"),
     ];
     for (scenario, old, new) in scenarios {
         let diff = review(old, new);
