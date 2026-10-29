@@ -172,3 +172,27 @@ fn quoted_symbol_data_change_must_not_be_absorbed_into_parameter_rename() {
     assert!(diff["change_groups"].as_array().unwrap().iter()
         .all(|group| group["kind"] != "IGNORED_STYLE"), "{diff:#}");
 }
+
+#[test]
+fn reader_quoted_symbols_and_case_constants_are_not_bound_references() {
+    // The Clojure parser uses quoting_lit/syn_quoting_lit/var_quoting_lit.
+    // The quoted symbol / case constant changes even if the formal binder
+    // is also renamed; a pure RENAME_VARIABLE would hide real semantics.
+    let scenarios = [
+        ("apostrophe", "(defn f [a] 'a)\n", "(defn f [x] 'x)\n"),
+        ("syntax quote", "(defn f [a] `a)\n", "(defn f [x] `x)\n"),
+        ("var quote", "(defn f [a] #'a)\n", "(defn f [x] #'x)\n"),
+        ("case constant", "(defn f [a] (case a a 1 0))\n",
+                         "(defn f [x] (case x x 1 0))\n"),
+    ];
+    for (scenario, old, new) in scenarios {
+        let diff = review(old, new);
+        assert_eq!(diff["has_semantic_changes"], true, "{scenario}: {diff:#}");
+        let changes = diff["changes"].as_array().expect("changed nodes");
+        assert!(changes.iter().any(|c| c["refactoring_kind"] != "RENAME_VARIABLE"),
+            "{scenario}: literal data must not disappear into binder-only rename: {diff:#}");
+        assert!(diff["change_groups"].as_array().unwrap().iter()
+            .all(|group| group["kind"] != "IGNORED_STYLE"),
+            "{scenario}: changed literal data is not formatting: {diff:#}");
+    }
+}
