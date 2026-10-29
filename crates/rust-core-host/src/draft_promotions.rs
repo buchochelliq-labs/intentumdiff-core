@@ -297,7 +297,14 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
             READER_QUOTES.contains(&node.node_type.as_str())
                 || (node.node_type == "list_lit"
                     && node.children.iter().find(|child| child.node_type == "sym_lit")
-                        .is_some_and(|head| SPECIAL_QUOTES.contains(&head.label.as_str())))
+                        .is_some_and(|head| {
+                            SPECIAL_QUOTES.contains(&head.label.as_str())
+                                // A qualified or aliased `case` still treats its test
+                                // constants as literal data, never binder references.
+                                // Conservatively decline promotion for any such head.
+                                || head.label.rsplit_once('/')
+                                    .is_some_and(|(_, symbol)| matches!(symbol, "case" | "case*"))
+                        }))
         })
     }
 
