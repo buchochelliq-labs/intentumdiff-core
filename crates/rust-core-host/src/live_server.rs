@@ -1589,3 +1589,7 @@ pub(crate) fn live_handle_diff_json(
 ) -> Result<String, String> {
     live_handle_diff_impl(repo_path, path, git_ref, content, config_json, wasm_dir)
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "live_review_completeness_source_tests.rs"]
+mod live_review_completeness_source_tests;
