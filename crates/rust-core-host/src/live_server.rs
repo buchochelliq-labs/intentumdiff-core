@@ -350,28 +350,41 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
 // a semantic diff, even when the engine can represent unparsed source (#17).
 // Preserve the existing `fallback` envelope so host bindings cannot mistake
 // a declined computation for a successfully verified change.
-fn certified_live_diff_response(diff: Value) -> String {
+fn live_diff_parse_incomplete_reason(diff: &Value) -> Option<String> {
     let parse_errors = diff.get("parse_errors").and_then(Value::as_array);
     if diff.get("is_fallback").and_then(Value::as_bool) == Some(false)
         && parse_errors.is_some_and(Vec::is_empty)
+        && diff.get("changes").and_then(Value::as_array).is_some()
     {
-        return json!({ "diff": diff }).to_string();
+        return None;
     }
-    let reason = parse_errors
-        .and_then(|items| items.first())
-        .map(|error| {
-            error
-                .as_str()
-                .or_else(|| error.get("message").and_then(Value::as_str))
-                .map(str::to_owned)
-                .unwrap_or_else(|| error.to_string())
-        })
-        .unwrap_or_else(|| "Rust returned an uncertified or malformed parse result".to_owned());
+    Some(
+        parse_errors
+            .and_then(|items| items.first())
+            .map(|error| {
+                error
+                    .as_str()
+                    .or_else(|| error.get("message").and_then(Value::as_str))
+                    .map(str::to_owned)
+                    .unwrap_or_else(|| error.to_string())
+            })
+            .unwrap_or_else(|| "Rust returned an uncertified or malformed parse result".to_owned()),
+    )
+}
+
+fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     json!({
-        "fallback": reason,
+        "fallback": format!("{path}: {reason}"),
         "fallback_code": "native_parse_incomplete"
     })
     .to_string()
+}
+
+fn certified_live_diff_response(diff: Value) -> String {
+    match live_diff_parse_incomplete_reason(&diff) {
+        Some(reason) => live_incomplete_file_response("source", &reason),
+        None => json!({ "diff": diff }).to_string(),
+    }
 }
 
 #[cfg(test)]
@@ -385,6 +398,7 @@ mod live_parse_completeness_tests {
             json!({"is_fallback": false, "parse_errors": ["syntax error"]}),
             json!({"is_fallback": false, "parse_errors": [{"message": "bad token"}]}),
             json!({"is_fallback": false, "parse_errors": "not an array"}),
+            json!({"is_fallback": false, "parse_errors": [], "changes": {}}),
             json!({"is_fallback": false}),
             json!({"parse_errors": []}),
             json!({"is_fallback": "false", "parse_errors": []}),
@@ -709,6 +723,32 @@ pub fn live_handle_review_impl(
                         // The commit payload is plain UTF-8 JSON (Python: `bytes(commit_payload)`).
                         Some(bytes) => match serde_json::from_slice::<Value>(&bytes) {
                             Ok(mut commit_diff) => {
+                                // A "complete" batch control is insufficient if any
+                                // serialized per-file DTO is missing or uncertified.
+                                // Check every source before advertising commit success.
+                                if !commit_diff.get("parse_errors")
+                                    .and_then(Value::as_array).is_some_and(Vec::is_empty)
+                                {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "commit parse diagnostics are incomplete",
+                                    ));
+                                }
+                                let Some(diffs) = commit_diff.get("file_diffs")
+                                    .and_then(Value::as_array) else {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit missing file_diffs array",
+                                    ));
+                                };
+                                if diffs.len() != review_files.len() {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit dropped or added source files",
+                                    ));
+                                }
+                                for (file, diff) in review_files.iter().zip(diffs.iter()) {
+                                    if let Some(reason) = live_diff_parse_incomplete_reason(diff) {
+                                        return Ok(live_incomplete_file_response(&file.path, &reason));
+                                    }
+                                }
                                 commit_diff["cross_file_changes"] = cross_file_changes.clone();
                                 if let Some(diffs) = commit_diff["file_diffs"].as_array_mut() {
                                     for diff in diffs {
@@ -793,6 +833,12 @@ pub fn live_handle_review_impl(
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
         };
+        // An incomplete/malformed per-file parse declines the ENTIRE commit,
+        // preserving the file and parser cause rather than manufacturing
+        // commit-level parse_errors: [] (#193). The native transport is a relay.
+        if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
+            return Ok(live_incomplete_file_response(&f.path, &reason));
+        }
         // python apply_guardrails_to_diff's policy-file check: an edit to intentumdiff.yaml itself.
         if guardrails_enabled
             && is_guardrail_policy_filename(&f.path)
