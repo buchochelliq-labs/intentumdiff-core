@@ -9011,6 +9011,10 @@ fn finalize_python_review_drafts<'a>(
         new_source,
         finalization,
     );
+    // A positional Clojure binder permutation is a source-level signature edit,
+    // not a proven rename or ignored formatting. Run after all suppression.
+    probed!(changes, "preserve_clojure_ordered_parameter_permutations",
+        preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
     sort_candidate_drafts(changes);
 }
 
