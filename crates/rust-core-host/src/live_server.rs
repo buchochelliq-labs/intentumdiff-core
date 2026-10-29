@@ -380,9 +380,9 @@ fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     .to_string()
 }
 
-fn certified_live_diff_response(diff: Value) -> String {
+fn certified_live_diff_response(diff: Value, path: &str) -> String {
     match live_diff_parse_incomplete_reason(&diff) {
-        Some(reason) => live_incomplete_file_response("source", &reason),
+        Some(reason) => live_incomplete_file_response(path, &reason),
         None => json!({ "diff": diff }).to_string(),
     }
 }
@@ -403,7 +403,7 @@ mod live_parse_completeness_tests {
             json!({"parse_errors": []}),
             json!({"is_fallback": "false", "parse_errors": []}),
         ] {
-            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff))
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff, "example.py"))
                 .expect("valid structured response");
             assert!(actual.get("diff").is_none(), "{actual}");
             assert_eq!(actual["fallback_code"], "native_parse_incomplete", "{actual}");
@@ -419,7 +419,7 @@ mod live_parse_completeness_tests {
                 "parse_errors": [],
                 "changes": changes
             });
-            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone()))
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone(), "example.py"))
                 .expect("valid response");
             assert_eq!(actual["diff"], diff);
             assert!(actual.get("fallback").is_none(), "{actual}");
@@ -529,7 +529,7 @@ fn diff_resolved_sources(
                     let violation = policy_file_violation(&diff, path, path);
                     crate::attach_guardrail_violations(&mut diff, vec![violation]);
                 }
-                Ok(certified_live_diff_response(diff))
+                Ok(certified_live_diff_response(diff, path))
             }
             Err(reason) => fallback(&reason),
         };
@@ -560,7 +560,7 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(certified_live_diff_response(diff)),
+                    Some(diff) => Ok(certified_live_diff_response(diff, path)),
                     None => fallback("batch item missing diff"),
                 }
             }
