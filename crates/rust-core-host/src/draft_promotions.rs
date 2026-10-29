@@ -215,6 +215,183 @@ pub(crate) fn node_id_in_subtree(node: &SemanticNode, ids: &HashSet<String>) -> 
             .any(|child| node_id_in_subtree(child, ids))
 }
 
+/// Clojure's real parser emits `list_lit` named defn forms, `vec_lit`
+/// parameter scopes, and `sym_lit` binders/references. Generic Python-like
+/// `identifier` promotion cannot recognise those and reports each binder and
+/// body use as DELETE+ADD (Core #192). This is a Rust-only, proof-gated repair:
+/// a continued unique named defn, identical syntax tree modulo a bijective
+/// fresh parameter rename, and actual old/new deleted/added binder endpoints.
+/// Never infer from arbitrary list/symbol nodes, permutations, capture,
+/// destructuring, multi-arity definitions or shadowing binders.
+pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+    language: &str,
+) {
+    if language != "clojure" {
+        return;
+    }
+
+    fn is_named_defn(node: &SemanticNode) -> bool {
+        node.node_type == "list_lit"
+            && !node.label.is_empty()
+            && node.children.iter().find(|child| child.node_type == "sym_lit")
+                .is_some_and(|head| matches!(head.label.as_str(), "defn" | "defn-"))
+    }
+
+    fn simple_params(form: &SemanticNode) -> Option<Vec<&SemanticNode>> {
+        let vectors: Vec<_> = form.children.iter()
+            .filter(|child| child.node_type == "vec_lit").collect();
+        if vectors.len() != 1 {
+            return None;
+        }
+        let params: Vec<_> = vectors[0].children.iter().collect();
+        if params.is_empty() || params.iter().any(|param| {
+            param.node_type != "sym_lit" || param.label.is_empty()
+                || param.label == "&" || param.label.contains('/')
+                || param.label.contains(':') || param.label.contains('.')
+        }) {
+            return None;
+        }
+        Some(params)
+    }
+
+    fn has_shadowing_binder(form: &SemanticNode) -> bool {
+        const SHADOWING: &[&str] = &[
+            "let", "let*", "letfn", "fn", "fn*", "loop", "loop*",
+            "binding", "for", "doseq", "if-let", "when-let",
+            "if-some", "when-some", "with-open", "as->", "catch",
+            "defn", "defn-",
+        ];
+        form.descendants().iter().any(|node| {
+            node.node_type == "list_lit"
+                && node.children.iter().find(|child| child.node_type == "sym_lit")
+                    .is_some_and(|head| SHADOWING.contains(&head.label.as_str()))
+        })
+    }
+
+    fn equal_modulo_renames(
+        old: &SemanticNode, new: &SemanticNode, renames: &HashMap<String, String>,
+    ) -> bool {
+        if old.node_type != new.node_type || old.children.len() != new.children.len() {
+            return false;
+        }
+        let expected = if old.node_type == "sym_lit" {
+            renames.get(old.label.as_str()).map(String::as_str)
+                .unwrap_or(old.label.as_str())
+        } else {
+            old.label.as_str()
+        };
+        expected == new.label
+            && old.children.iter().zip(new.children.iter())
+                .all(|(a, b)| equal_modulo_renames(a, b, renames))
+    }
+
+    let old_defs: Vec<&SemanticNode> = old_tree.children.iter()
+        .filter(|node| is_named_defn(node)).collect();
+    let new_defs: Vec<&SemanticNode> = new_tree.children.iter()
+        .filter(|node| is_named_defn(node)).collect();
+    let mut covered_old: HashSet<String> = HashSet::new();
+    let mut covered_new: HashSet<String> = HashSet::new();
+    let mut promoted: Vec<ChangeDraft<'a>> = Vec::new();
+
+    for old_form in &old_defs {
+        // Duplicate defns or overloaded declarations are ambiguous: fail closed.
+        if old_defs.iter().filter(|candidate| candidate.label == old_form.label).count() != 1 {
+            continue;
+        }
+        let candidates: Vec<_> = new_defs.iter()
+            .filter(|candidate| candidate.label == old_form.label).collect();
+        if candidates.len() != 1 {
+            continue;
+        }
+        let new_form = *candidates[0];
+        if has_shadowing_binder(old_form) || has_shadowing_binder(new_form) {
+            continue;
+        }
+        let (Some(old_params), Some(new_params)) =
+            (simple_params(old_form), simple_params(new_form))
+        else {
+            continue;
+        };
+        if old_params.len() != new_params.len() {
+            continue;
+        }
+        let old_names: HashSet<&str> = old_params.iter().map(|n| n.label.as_str()).collect();
+        let new_names: HashSet<&str> = new_params.iter().map(|n| n.label.as_str()).collect();
+        if old_names.len() != old_params.len() || new_names.len() != new_params.len() {
+            continue;
+        }
+
+        let mut mapping: HashMap<String, String> = HashMap::new();
+        let mut pairs: Vec<(&SemanticNode, &SemanticNode)> = Vec::new();
+        let mut valid = true;
+        for (old, new) in old_params.iter().zip(new_params.iter()) {
+            if old.label == new.label {
+                continue;
+            }
+            // No permutation/capture: target must not be an old binder, and
+            // must not already occur free in the old function's body.
+            if old_names.contains(new.label.as_str())
+                || new_names.contains(old.label.as_str())
+                || old_form.descendants().iter().any(|node| {
+                    node.node_type == "sym_lit" && node.label == new.label
+                })
+            {
+                valid = false;
+                break;
+            }
+            mapping.insert(old.label.clone(), new.label.clone());
+            pairs.push((old, new));
+        }
+        if !valid || pairs.is_empty()
+            || !equal_modulo_renames(old_form, new_form, &mapping)
+        {
+            continue;
+        }
+        // Do not invent new reviews: require the actual parser/matcher to
+        // expose both sides of every old/new parameter change.
+        if !pairs.iter().all(|(old, new)| {
+            changes.iter().any(|c| c.change_type == "DELETION"
+                && c.old_node.is_some_and(|n| n.id == old.id))
+                && changes.iter().any(|c| c.change_type == "ADDITION"
+                    && c.new_node.is_some_and(|n| n.id == new.id))
+        }) {
+            continue;
+        }
+
+        covered_old.insert(old_form.id.clone());
+        covered_old.extend(old_form.descendants().iter().map(|n| n.id.clone()));
+        covered_new.insert(new_form.id.clone());
+        covered_new.extend(new_form.descendants().iter().map(|n| n.id.clone()));
+        for (old, new) in pairs {
+            promoted.push(ChangeDraft {
+                change_type: "REFACTORING",
+                old_node: Some(old),
+                new_node: Some(new),
+                old_index: None,
+                new_index: None,
+                confidence: 1.0,
+                description: format!("Rename variable '{}' -> '{}'", old.label, new.label),
+                refactoring_kind: Some("RENAME_VARIABLE"),
+                text_diff: None,
+            });
+        }
+    }
+    if promoted.is_empty() {
+        return;
+    }
+    // Safe only because EVERY node of each continued defn matched one-to-one
+    // structurally modulo the exact binder map. Other functions' edits survive.
+    changes.retain(|change| match change.change_type {
+        "DELETION" => !change.old_node.is_some_and(|node| covered_old.contains(node.id.as_str())),
+        "ADDITION" => !change.new_node.is_some_and(|node| covered_new.contains(node.id.as_str())),
+        _ => true,
+    });
+    changes.extend(promoted);
+}
+
 pub(crate) fn promote_parameter_identifier_modification_renames<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
     old_tree: &'a SemanticNode,
