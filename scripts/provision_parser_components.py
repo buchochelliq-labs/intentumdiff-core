@@ -49,7 +49,8 @@ API = "https://api.github.com"
 # harness FAILS when a mapped component is absent, deliberately, because the alternative
 # is a language silently dropping out of the matrix while the suite still reports green.
 # JSON is also required by the native parser fuel telemetry regressions.
-TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json"]
+# Source-judged Core #192 tests require actual parser bytes, never synthetic CSTs.
+TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json", "clojure"]
 
 
 class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
