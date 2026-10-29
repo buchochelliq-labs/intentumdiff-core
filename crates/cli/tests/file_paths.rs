@@ -38,7 +38,7 @@ fn file_diff_preserves_both_input_paths_in_json_and_rich_output() {
     for (old, new) in [
         ("def f():\n    return 1\n", "def f():\n    return 1\n"),
         ("def f():\n    return 1\n", "def f():\n    return 2\n"),
-        ("def f(", "def g("),
+        ("def f(x):\n    return x\n", "def g(x):\n    return x\n"),
     ] {
         std::fs::write(root.join("before/sample.py"), old).unwrap();
         std::fs::write(root.join("after/sample.py"), new).unwrap();
