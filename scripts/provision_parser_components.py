@@ -50,7 +50,7 @@ API = "https://api.github.com"
 # is a language silently dropping out of the matrix while the suite still reports green.
 # JSON is also required by the native parser fuel telemetry regressions.
 # Source-judged Core #192 tests require actual parser bytes, never synthetic CSTs.
-TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json", "clojure"]
+TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json", "clojure", "assemblyscript"]
 
 
 class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
@@ -198,7 +198,7 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 
 REGISTRY_REPO = "intentumdiff-registry"
 # Same vetted component inventory as the Python/native release candidate.
-REGISTRY_REF = "59d7c91fa4e466b4130628202e6a126792b6f9d7"
+REGISTRY_REF = "cabcb9e78bd888d08d5c2250d7e8bd3065f2c7b9"
 
 
 def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
