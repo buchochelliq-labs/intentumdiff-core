@@ -278,11 +278,20 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
     // promotion for quoted/reader-macro forms; retain the raw semantic edits.
     fn has_quoted_data(form: &SemanticNode) -> bool {
         const READER_QUOTES: &[&str] = &[
+            // Actual node types emitted by the pinned tree-sitter-clojure
+            // grammar, not just the older parser's childless whitelist.
+            "quoting_lit", "syn_quoting_lit", "unquoting_lit",
+            "unquote_splicing_lit", "var_quoting_lit",
+            // Retain compatibility with alternate/legacy CST shapes.
             "quote_lit", "syn_quote_lit", "unquote_lit",
-            "unquote_splicing_lit", "var_lit",
+            "var_lit",
         ];
         const SPECIAL_QUOTES: &[&str] = &[
             "quote", "syntax-quote", "unquote", "unquote-splicing", "var",
+            // Clojure case test constants are *unevaluated literal data*,
+            // even when written as ordinary unquoted symbols. Renaming a
+            // binder cannot rewrite them as if they were bound references.
+            "case", "case*",
         ];
         form.descendants().iter().any(|node| {
             READER_QUOTES.contains(&node.node_type.as_str())
