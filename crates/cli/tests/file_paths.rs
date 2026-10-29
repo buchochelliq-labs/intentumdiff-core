@@ -71,5 +71,31 @@ fn file_diff_preserves_both_input_paths_in_json_and_rich_output() {
             }
         }
     }
+    // Invalid parser input is not a successful semantic diff. Preserve this
+    // negative control separately from the valid path-rendering assertions.
+    std::fs::write(root.join("before/sample.py"), "def f(").unwrap();
+    std::fs::write(root.join("after/sample.py"), "def g(").unwrap();
+    let invalid = Command::new(env!("CARGO_BIN_EXE_intentumdiff"))
+        .current_dir(&root)
+        .env("NO_COLOR", "1")
+        .args([
+            "file", "before/sample.py", "after/sample.py", "--wasm-dir", &wasm, "--json",
+        ])
+        .output()
+        .expect("spawn actual native CLI with malformed Python");
+    let stderr = String::from_utf8_lossy(&invalid.stderr);
+    assert!(
+        !invalid.status.success(),
+        "CLI must fail closed for invalid Python: {}",
+        String::from_utf8_lossy(&invalid.stdout)
+    );
+    assert!(
+        stderr.contains("Incomplete or invalid syntax"),
+        "missing Rust-owned parse diagnostic: {stderr}"
+    );
+    assert!(
+        !String::from_utf8_lossy(&invalid.stdout).contains("\\"changes\\""),
+        "malformed source must not produce a successful semantic diff"
+    );
     std::fs::remove_dir_all(root).unwrap();
 }
