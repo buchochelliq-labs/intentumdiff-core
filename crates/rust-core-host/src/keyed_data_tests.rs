@@ -69,11 +69,35 @@ mod native {
     fn review(old: &str, new: &str, filename: &str) -> Value {
         let wasm = std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
             .expect("the full gate requires checksum-verified parser components");
+        // The Tier-C provisioner stages registry-verified Wasm, not the runtime
+        // parser_manifest.json. Native live-diff selection is deliberately
+        // fail-closed without that manifest, so build a minimal test-only
+        // manifest pointing at the EXACT staged JS/TS component bytes.
+        let staged = std::path::Path::new(&wasm).join("js_ts_parser.wasm");
+        assert!(staged.is_file(), "verified JS/TS Wasm missing: {}", staged.display());
+        let fixture = tempfile::tempdir().expect("isolated native parser fixture");
+        std::fs::copy(&staged, fixture.path().join("js_ts_parser.wasm"))
+            .expect("copy verified JS/TS parser into fixture");
+        std::fs::write(
+            fixture.path().join("parser_manifest.json"),
+            json!({
+                "schema_version": 1,
+                "parsers": {
+                    "javascript": {"plugin_id":"javascript", "wasm":"js_ts_parser.wasm", "extensions":[".js"]},
+                    "typescript": {"plugin_id":"typescript", "wasm":"js_ts_parser.wasm", "extensions":[".ts"]},
+                    "tsx": {"plugin_id":"tsx", "wasm":"js_ts_parser.wasm", "extensions":[".tsx"]}
+                },
+                "extension_index": {".js":"javascript", ".ts":"typescript", ".tsx":"tsx"}
+            }).to_string(),
+        ).expect("write minimal native parser manifest");
+        let fixture_path = fixture.path().to_str().expect("UTF-8 fixture path");
         let result = crate::live_server::live_diff_contents_impl(
-            env!("CARGO_MANIFEST_DIR"), filename, old, new, "{}", &wasm,
+            env!("CARGO_MANIFEST_DIR"), filename, old, new, "{}", fixture_path,
         ).expect("native source review must succeed");
         let response: Value = serde_json::from_str(&result).expect("native JSON response");
-        let diff = response.get("diff").expect("native diff envelope").clone();
+        let diff = response.get("diff").unwrap_or_else(|| {
+            panic!("native must not decline a verified JS/TS component: {response:#}")
+        }).clone();
         assert_eq!(diff["is_fallback"], false);
         assert_eq!(diff["parse_errors"], json!([]));
         diff
