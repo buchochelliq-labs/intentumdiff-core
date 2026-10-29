@@ -1,0 +1,95 @@
+//! Source-judged Clojure parameter rename regression (#192).
+//! This intentionally requires actual registry-verified parser Wasm; source/positions
+//! are independently specified, not generated from an already-wrong engine result.
+use crate::*;
+use serde_json::{json, Value};
+
+fn review(old: &str, new: &str) -> Value {
+    let staged_dir = std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+        .expect("full CI must provision trusted Clojure Wasm");
+    let staged = std::path::Path::new(&staged_dir).join("clojure_parser.wasm");
+    assert!(staged.is_file(), "registry-pinned Clojure component absent: {}", staged.display());
+    let fixture = tempfile::tempdir().expect("isolated parser staging");
+    std::fs::copy(staged, fixture.path().join("clojure_parser.wasm"))
+        .expect("copy exact verified parser bytes");
+    std::fs::write(
+        fixture.path().join("parser_manifest.json"),
+        json!({
+            "schema_version": 1,
+            "parsers": {
+                "clojure": {
+                    "plugin_id": "clojure",
+                    "wasm": "clojure_parser.wasm",
+                    "extensions": [".clj"]
+                }
+            },
+            "extension_index": {".clj": "clojure"}
+        }).to_string(),
+    ).expect("test-only manifest for already-pinned component");
+    let raw = crate::live_server::live_diff_contents_impl(
+        env!("CARGO_MANIFEST_DIR"), "code.clj", old, new, "{}",
+        fixture.path().to_str().expect("UTF-8 fixture path")
+    ).expect("native review");
+    let response: Value = serde_json::from_str(&raw).expect("valid native response");
+    let diff = response.get("diff").unwrap_or_else(||
+        panic!("Clojure review unexpectedly declined: {response:#}")
+    ).clone();
+    assert_eq!(diff["language"], "clojure");
+    assert_eq!(diff["is_fallback"], false);
+    assert_eq!(diff["is_style_only"], false);
+    assert_eq!(diff["parse_errors"], json!([]));
+    diff
+}
+
+#[test]
+fn continued_add_form_parameter_renames_are_two_scoped_refactorings() {
+    let old = "(defn add [a b]\n  (+ a b))\n";
+    let new = "(defn add [x y]\n  (+ x y))\n";
+    let diff = review(old, new);
+    assert_eq!(diff["has_semantic_changes"], true);
+    let changes = diff["changes"].as_array().expect("changes array");
+    assert_eq!(changes.len(), 2, "no whole-form or body-reference add/delete churn: {diff:#}");
+    for (old_label, new_label, old_col, new_col) in
+        [("a", "x", 11, 11), ("b", "y", 13, 13)]
+    {
+        let matches: Vec<&Value> = changes.iter().filter(|change| {
+            change["change_type"] == "REFACTORING"
+                && change["refactoring_kind"] == "RENAME_VARIABLE"
+                && change["old_node"]["label"] == old_label
+                && change["new_node"]["label"] == new_label
+        }).collect();
+        assert_eq!(matches.len(), 1, "expected one source-scoped {old_label}->{new_label}: {diff:#}");
+        let c = matches[0];
+        for (side, col) in [("old_node", old_col), ("new_node", new_col)] {
+            assert_eq!(c[side]["node_type"], "sym_lit");
+            assert_eq!(c[side]["position"], json!({
+                "start_line": 0, "start_col": col,
+                "end_line": 0, "end_col": col + 1
+            }));
+        }
+    }
+    assert!(diff["change_groups"].as_array().unwrap().iter()
+        .all(|g| g["kind"] != "IGNORED_STYLE"), "no false style-only reduction: {diff:#}");
+}
+
+#[test]
+fn swapping_parameters_is_not_a_source_proven_rename() {
+    let old = "(defn add [a b]\n  (+ a b))\n";
+    let new = "(defn add [b a]\n  (+ b a))\n";
+    let diff = review(old, new);
+    assert_eq!(diff["has_semantic_changes"], true);
+    assert!(diff["changes"].as_array().unwrap().iter()
+        .all(|c| c["refactoring_kind"] != "RENAME_VARIABLE"),
+        "a permutation is not a fresh variable rename: {diff:#}");
+}
+
+#[test]
+fn renamed_parameters_with_changed_computation_keep_operator_edit() {
+    let old = "(defn add [a b]\n  (+ a b))\n";
+    let new = "(defn add [x y]\n  (- x y))\n";
+    let diff = review(old, new);
+    assert_eq!(diff["has_semantic_changes"], true);
+    assert!(diff["changes"].as_array().unwrap().iter().any(|c| {
+        c["refactoring_kind"] != "RENAME_VARIABLE"
+    }), "a changed + to - calculation must not disappear as a mere rename: {diff:#}");
+}
