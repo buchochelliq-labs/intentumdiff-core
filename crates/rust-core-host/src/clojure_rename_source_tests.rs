@@ -155,3 +155,20 @@ fn renamed_parameters_with_changed_computation_keep_operator_edit() {
         c["refactoring_kind"] != "RENAME_VARIABLE"
     }), "a changed + to - calculation must not disappear as a mere rename: {diff:#}");
 }
+
+#[test]
+fn quoted_symbol_data_change_must_not_be_absorbed_into_parameter_rename() {
+    // `quote` returns a symbol as DATA. Renaming the binder cannot justify
+    // rewriting that literal. Both the binding and quoted value changed.
+    let old = "(defn f [a] (quote a))\n";
+    let new = "(defn f [x] (quote x))\n";
+    let diff = review(old, new);
+    let changes = diff["changes"].as_array().expect("changes array");
+    assert!(diff["has_semantic_changes"] == true, "{diff:#}");
+    assert!(
+        changes.iter().any(|change| change["refactoring_kind"] != "RENAME_VARIABLE"),
+        "quoted data changed independently; do not report only binder rename: {diff:#}"
+    );
+    assert!(diff["change_groups"].as_array().unwrap().iter()
+        .all(|group| group["kind"] != "IGNORED_STYLE"), "{diff:#}");
+}
