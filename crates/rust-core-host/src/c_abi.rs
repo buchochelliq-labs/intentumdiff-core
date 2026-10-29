@@ -341,6 +341,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
+        "lsp_attach_type_map" => crate::lsp_enrich::attach_type_map_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
@@ -1151,6 +1153,24 @@ mod tests {
         let env = call("lsp_collect_hover_targets", json!([tree]));
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_array());
+    }
+
+    #[test]
+    fn lsp_type_map_attachment_dispatches_over_c_abi_and_fails_closed() {
+        let tree = r#"{"id":"root","node_type":"module","children":[
+            {"id":"a","node_type":"identifier","children":[]},
+            {"id":"b","node_type":"identifier","children":[]}]}"#;
+        let good = call("lsp_attach_type_map", json!([tree, r#"{"a":"int"}"#]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"]["children"][0]["type_info"], "int");
+        assert!(good["result"]["children"][1].get("type_info").is_none());
+
+        let missing = call("lsp_attach_type_map", json!([tree]));
+        assert_eq!(missing["ok"], false);
+        let malformed = call("lsp_attach_type_map", json!([tree, r#"{"a":null}"#]));
+        assert_eq!(malformed["ok"], false);
+        let bad_tree = call("lsp_attach_type_map", json!(["{}", "{}"]));
+        assert_eq!(bad_tree["ok"], false);
     }
 
     #[test]
