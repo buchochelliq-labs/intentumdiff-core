@@ -73,6 +73,40 @@ fn continued_add_form_parameter_renames_are_two_scoped_refactorings() {
 }
 
 #[test]
+fn gallery_add_renames_remain_scoped_next_to_greet_arity_and_multiply_addition() {
+    let old = "(defn greet [name]\\n  (println (str \\"Hello, \\" name)))\\n\\n(defn add [a b]\\n  (+ a b))\\n";
+    let new = "(defn greet\\n  ([name] (greet name \\"!\\"))\\n  ([name suffix]\\n   (println (str \\"Hello, \\" name suffix))))\\n\\n(defn add [x y] (+ x y))\\n\\n(defn multiply [x y] (* x y))\\n";
+    let diff = review(old, new);
+    assert_eq!(diff["has_semantic_changes"], true, "{diff:#}");
+    let changes = diff["changes"].as_array().expect("changes");
+    for (before, after, col) in [("a", "x", 11), ("b", "y", 13)] {
+        let matching: Vec<_> = changes.iter().filter(|c| {
+            c["change_type"] == "REFACTORING"
+                && c["refactoring_kind"] == "RENAME_VARIABLE"
+                && c["old_node"]["label"] == before
+                && c["new_node"]["label"] == after
+                && c["old_node"]["position"] == json!({
+                    "start_line": 3, "start_col": col, "end_line": 3, "end_col": col + 1
+                })
+                && c["new_node"]["position"] == json!({
+                    "start_line": 5, "start_col": col, "end_line": 5, "end_col": col + 1
+                })
+        }).collect();
+        assert_eq!(matching.len(), 1, "exact gallery scoped rename {before}->{after}: {diff:#}");
+    }
+    assert_eq!(changes.iter().filter(|c| c["change_type"] == "ADDITION"
+        && c["new_node"]["label"] == "multiply").count(), 1,
+        "new multiply must be one named callable addition: {diff:#}");
+    assert!(!changes.iter().any(|c| {
+        (c["change_type"] == "ADDITION" && c["new_node"]["label"] == "add")
+            || (c["change_type"] == "DELETION" && c["old_node"]["label"] == "add")
+    }), "continued add cannot be replaced by whole-function deletion/addition: {diff:#}");
+    assert!(diff["change_groups"].as_array().unwrap().iter()
+        .all(|g| g["kind"] != "IGNORED_STYLE"),
+        "renames and new functions are not formatting: {diff:#}");
+}
+
+#[test]
 fn swapping_parameters_is_not_a_source_proven_rename() {
     let old = "(defn add [a b]\n  (+ a b))\n";
     let new = "(defn add [b a]\n  (+ b a))\n";
