@@ -380,11 +380,28 @@ fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     .to_string()
 }
 
-fn certified_live_diff_response(diff: Value, path: &str) -> String {
-    match live_diff_parse_incomplete_reason(&diff) {
-        Some(reason) => live_incomplete_file_response(path, &reason),
-        None => json!({ "diff": diff }).to_string(),
+fn certified_live_diff_response(mut diff: Value, path: &str) -> String {
+    if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
+        return live_incomplete_file_response(path, &reason);
     }
+    // Native, C ABI and Python must not disagree about the provenance of a
+    // certified result. This is Rust-owned metadata, not a host-inferred claim.
+    // Preserve all existing metadata; never rewrite a contradictory owner.
+    let metadata = &mut diff["metadata"];
+    if metadata.is_null() {
+        *metadata = json!({});
+    }
+    if !metadata.is_object() {
+        return live_incomplete_file_response(path, "invalid Rust diff metadata");
+    }
+    if let Some(owner) = metadata.get("engine_owner") {
+        if owner.as_str() != Some("rust") {
+            return live_incomplete_file_response(path, "contradictory diff engine ownership");
+        }
+    } else {
+        metadata["engine_owner"] = json!("rust");
+    }
+    json!({ "diff": diff }).to_string()
 }
 
 #[cfg(test)]
@@ -421,8 +438,35 @@ mod live_parse_completeness_tests {
             });
             let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone(), "example.py"))
                 .expect("valid response");
-            assert_eq!(actual["diff"], diff);
+            let mut expected = diff;
+            expected["metadata"] = json!({"engine_owner": "rust"});
+            assert_eq!(actual["diff"], expected);
             assert!(actual.get("fallback").is_none(), "{actual}");
+        }
+    }
+
+    #[test]
+    fn preserves_rust_metadata_but_rejects_false_or_malformed_provenance() {
+        let base = json!({"is_fallback": false, "parse_errors": [], "changes": []});
+        let mut complete = base.clone();
+        complete["metadata"] = json!({"engine_owner": "rust", "source": "native"});
+        let accepted: Value = serde_json::from_str(
+            &certified_live_diff_response(complete.clone(), "example.py")
+        ).unwrap();
+        assert_eq!(accepted["diff"], complete);
+
+        for metadata in [
+            json!({"engine_owner": "python"}),
+            json!({"engine_owner": false}),
+            json!("invalid metadata"),
+        ] {
+            let mut invalid = base.clone();
+            invalid["metadata"] = metadata;
+            let declined: Value = serde_json::from_str(
+                &certified_live_diff_response(invalid, "example.py")
+            ).unwrap();
+            assert!(declined.get("diff").is_none(), "{declined}");
+            assert_eq!(declined["fallback_code"], "native_parse_incomplete");
         }
     }
 }
@@ -436,8 +480,9 @@ mod live_parse_completeness_tests {
 /// runs the native non-Python chain (`native_wasm_single_diff`: wasm-parse -> finalize ->
 /// invariances -> assemble, mirroring the differ's routed `_diff_single`). Either path returns
 /// `{"fallback": <reason>}` for an uncovered case (unresolved extension, uncertified batch item,
-/// off-spec guardrail policy, finalize declined) so the Python differ path runs
-/// unchanged. *config_json* is `self._differ._config` marshalled by the caller. Returns
+/// off-spec guardrail policy, finalize declined). These declines are not
+/// certified semantic results and the Python live transport must fail closed.
+/// *config_json* is `self._differ._config` marshalled by the caller. Returns
 /// `{"diff": <SemanticDiff>}` on a served result, else `{"fallback": <reason>}`.
 pub fn live_handle_diff_impl(
     repo_path: &str,
