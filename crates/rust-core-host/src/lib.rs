@@ -9011,7 +9011,12 @@ fn finalize_python_review_drafts<'a>(
         new_source,
         finalization,
     );
-    // A changed AssemblyScript operator and its operand edits belong to one\n    // continuing binary-expression change; do not present them as orphan edits.\n    probed!(changes, "promote_assemblyscript_operator_expression_changes",\n        assemblyscript_operators::promote_assemblyscript_operator_expression_changes(\n            changes, old_tree, new_tree, language));\n    // A positional Clojure binder permutation is a source-level signature edit,
+    // A changed AssemblyScript operator and its operand edits belong to one
+    // continuing binary-expression change; do not present them as orphan edits.
+    probed!(changes, "promote_assemblyscript_operator_expression_changes",
+        assemblyscript_operators::promote_assemblyscript_operator_expression_changes(
+            changes, old_tree, new_tree, language));
+    // A positional Clojure binder permutation is a source-level signature edit,
     // not a proven rename or ignored formatting. Run after all suppression.
     probed!(changes, "preserve_clojure_ordered_parameter_permutations",
         preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));

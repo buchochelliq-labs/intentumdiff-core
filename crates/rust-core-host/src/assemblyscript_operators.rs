@@ -46,13 +46,6 @@ pub(crate) fn promote_assemblyscript_operator_expression_changes<'a>(
             && !node.label.is_empty() && node.label != "(anonymous)"
     }).collect();
 
-    #[cfg(test)]
-    eprintln!("[assemblyscript-diagnostic] functions old={:?} new={:?}; drafts={:?}",
-        old_functions.iter().map(|n| (&n.id, &n.label)).collect::<Vec<_>>(),
-        new_functions.iter().map(|n| (&n.id, &n.label)).collect::<Vec<_>>(),
-        changes.iter().map(|c| (c.change_type,
-            c.old_node.map(|n| (&n.id, &n.node_type)),
-            c.new_node.map(|n| (&n.id, &n.node_type)))).collect::<Vec<_>>());
     for old_function in &old_functions {
         if old_functions.iter().filter(|f| f.label == old_function.label).count() != 1 {
             continue;
@@ -98,11 +91,6 @@ pub(crate) fn promote_assemblyscript_operator_expression_changes<'a>(
                 change.change_type == "ADDITION"
                     && change.new_node.is_some_and(|n| n.id == new_operator.id)
             });
-            #[cfg(test)]
-            eprintln!("[assemblyscript-diagnostic] old function={} new function={} oldexpr={} newexpr={} operator={}->{} deleted={} added={}",
-                old_function.label, new_function.label,
-                old_expression.id, new_expression.id,
-                old_operator.node_type, new_operator.node_type, deleted, added);
             if !deleted || !added {
                 continue;
             }
