@@ -392,6 +392,92 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
     changes.extend(promoted);
 }
 
+/// Clojure positional binders are not an unordered set: [a b] -> [b a]
+/// changes the function's argument contract even if a matcher discards all of
+/// the raw symbol churn. This pass runs *after* normal refinement so it only
+/// recovers otherwise missing edits; it never classifies permutations as renames.
+/// It is limited to unique, simple, named defn forms with the exact same set of
+/// distinct parameter symbols. Other symbol lists and destructuring are excluded.
+pub(crate) fn preserve_clojure_ordered_parameter_permutations<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+    language: &str,
+) {
+    if language != "clojure" {
+        return;
+    }
+    fn params(form: &SemanticNode) -> Option<&SemanticNode> {
+        if form.node_type != "list_lit" || form.label.is_empty()
+            || !form.children.iter().find(|child| child.node_type == "sym_lit")
+                .is_some_and(|head| matches!(head.label.as_str(), "defn" | "defn-"))
+        {
+            return None;
+        }
+        let mut vectors = form.children.iter().filter(|node| node.node_type == "vec_lit");
+        let vector = vectors.next()?;
+        if vectors.next().is_some() || vector.children.len() < 2
+            || vector.children.iter().any(|child| child.node_type != "sym_lit"
+                || child.label.is_empty() || child.label == "&"
+                || child.label.contains(['/', ':', '.']))
+        {
+            return None;
+        }
+        let unique: HashSet<&str> = vector.children.iter().map(|c| c.label.as_str()).collect();
+        if unique.len() != vector.children.len() {
+            return None;
+        }
+        Some(vector)
+    }
+    let old_defs: Vec<_> = old_tree.children.iter().filter(|form| params(form).is_some()).collect();
+    let new_defs: Vec<_> = new_tree.children.iter().filter(|form| params(form).is_some()).collect();
+    for old_form in &old_defs {
+        // Ambiguous duplicate definitions cannot establish the same callable.
+        if old_defs.iter().filter(|form| form.label == old_form.label).count() != 1 {
+            continue;
+        }
+        let candidates: Vec<_> = new_defs.iter().filter(|form| form.label == old_form.label).collect();
+        if candidates.len() != 1 {
+            continue;
+        }
+        let new_form = candidates[0];
+        let (Some(old_vec), Some(new_vec)) = (params(old_form), params(new_form)) else {
+            continue;
+        };
+        let old_names: Vec<&str> = old_vec.children.iter().map(|n| n.label.as_str()).collect();
+        let new_names: Vec<&str> = new_vec.children.iter().map(|n| n.label.as_str()).collect();
+        if old_names == new_names || old_names.len() != new_names.len()
+            || old_names.iter().copied().collect::<HashSet<_>>()
+                != new_names.iter().copied().collect::<HashSet<_>>()
+        {
+            continue;
+        }
+        let belongs_to = |node: &SemanticNode, vector: &SemanticNode| {
+            node.id == vector.id || node.id.strip_prefix(&vector.id)
+                .is_some_and(|tail| tail.starts_with('.'))
+        };
+        // An existing semantic edit of the parameter vector already carries
+        // the intent. Only recover a permutation when it was wholly lost.
+        if changes.iter().any(|change| {
+            change.old_node.is_some_and(|node| belongs_to(node, old_vec))
+                || change.new_node.is_some_and(|node| belongs_to(node, new_vec))
+        }) {
+            continue;
+        }
+        changes.push(ChangeDraft {
+            change_type: "MODIFICATION",
+            old_node: Some(old_vec),
+            new_node: Some(new_vec),
+            old_index: None,
+            new_index: None,
+            confidence: 1.0,
+            description: format!("Reorder formal parameters of '{}'", old_form.label),
+            refactoring_kind: None,
+            text_diff: None,
+        });
+    }
+}
+
 pub(crate) fn promote_parameter_identifier_modification_renames<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
     old_tree: &'a SemanticNode,
