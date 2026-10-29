@@ -419,7 +419,8 @@ pub(crate) fn preserve_clojure_ordered_parameter_permutations<'a>(
         if vectors.next().is_some() || vector.children.len() < 2
             || vector.children.iter().any(|child| child.node_type != "sym_lit"
                 || child.label.is_empty() || child.label == "&"
-                || child.label.contains(['/', ':', '.']))
+                || child.label.contains('/') || child.label.contains(':')
+                || child.label.contains('.'))
         {
             return None;
         }
