@@ -77,10 +77,25 @@ fn swapping_parameters_is_not_a_source_proven_rename() {
     let old = "(defn add [a b]\n  (+ a b))\n";
     let new = "(defn add [b a]\n  (+ b a))\n";
     let diff = review(old, new);
-    assert_eq!(diff["has_semantic_changes"], true);
-    assert!(diff["changes"].as_array().unwrap().iter()
-        .all(|c| c["refactoring_kind"] != "RENAME_VARIABLE"),
+    assert_eq!(diff["has_semantic_changes"], true, "{diff:#}");
+    let changes = diff["changes"].as_array().expect("changes");
+    let vector_edits: Vec<_> = changes.iter().filter(|c| {
+        c["change_type"] == "MODIFICATION"
+            && c["old_node"]["node_type"] == "vec_lit"
+            && c["new_node"]["node_type"] == "vec_lit"
+    }).collect();
+    assert_eq!(vector_edits.len(), 1,
+        "the ordered formal parameter vector must be a real modification: {diff:#}");
+    for side in ["old_node", "new_node"] {
+        assert_eq!(vector_edits[0][side]["position"], json!({
+            "start_line": 0, "start_col": 10, "end_line": 0, "end_col": 15
+        }), "exact byte span of [a b]/[b a]: {diff:#}");
+    }
+    assert!(changes.iter().all(|c| c["refactoring_kind"] != "RENAME_VARIABLE"),
         "a permutation is not a fresh variable rename: {diff:#}");
+    assert!(diff["change_groups"].as_array().unwrap().iter()
+        .all(|g| g["kind"] != "IGNORED_STYLE"),
+        "parameter permutations must not be hidden as style: {diff:#}");
 }
 
 #[test]
