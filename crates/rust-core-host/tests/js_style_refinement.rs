@@ -6,11 +6,36 @@ use serde_json::{json, Value};
 fn review(old: &str, new: &str) -> Value {
     let wasm = std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
         .expect("the full gate requires checksum-verified parser components");
+    // Tier-C provisioning supplies SHA-256-verified guest bytes, but not the
+    // production package's parser_manifest.json. The live Rust entry point is
+    // deliberately fail-closed without that manifest. Isolate a minimal,
+    // explicit JS manifest in a temporary directory; never weaken selection
+    // or fall back to a different parser when the staged component is missing.
+    let staged = std::path::Path::new(&wasm).join("js_ts_parser.wasm");
+    assert!(staged.is_file(), "verified Tier-C JS/TS component is missing: {}", staged.display());
+    let temp = tempfile::tempdir().expect("isolated native parser test directory");
+    std::fs::copy(&staged, temp.path().join("js_ts_parser.wasm"))
+        .expect("copy exactly the staged, checksum-verified JS/TS component");
+    let manifest = json!({
+        "parsers": {
+            "javascript": {
+                "extensions": [".js"],
+                "plugin_id": "javascript",
+                "wasm": "js_ts_parser.wasm"
+            }
+        },
+        "extension_index": {".js": "javascript"}
+    });
+    std::fs::write(temp.path().join("parser_manifest.json"), manifest.to_string())
+        .expect("stage production-format parser manifest");
     let result = intentumdiff_rust_core::live_server::live_diff_contents_impl(
-        env!("CARGO_MANIFEST_DIR"), "example.js", old, new, "{}", &wasm,
+        env!("CARGO_MANIFEST_DIR"), "example.js", old, new, "{}",
+        &temp.path().to_string_lossy(),
     ).expect("native source review must succeed");
     let response: Value = serde_json::from_str(&result).expect("native JSON response");
-    let diff = response.get("diff").expect("native diff envelope").clone();
+    let diff = response.get("diff").unwrap_or_else(|| {
+        panic!("native parser returned no diff (fail-closed selection or engine error): {response:#}")
+    }).clone();
     assert_eq!(diff["is_fallback"], false);
     assert_eq!(diff["parse_errors"], json!([]));
     diff
