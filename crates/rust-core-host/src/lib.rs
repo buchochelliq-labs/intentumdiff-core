@@ -8914,6 +8914,7 @@ fn finalize_python_review_drafts<'a>(
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
     probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes));
+    probed!(changes, "promote_clojure_defn_parameter_renames", promote_clojure_defn_parameter_renames(changes, old_tree, new_tree, language));
     probed!(changes, "promote_python_signature_changes", promote_python_signature_changes_from_sources(
         changes, old_tree, new_tree, old_source, new_source,
     ));
