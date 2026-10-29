@@ -560,7 +560,7 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(certified_live_diff_response(diff, path)),
+                    Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
                     None => fallback("batch item missing diff"),
                 }
             }
