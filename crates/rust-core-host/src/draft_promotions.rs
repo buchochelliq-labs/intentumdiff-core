@@ -271,6 +271,27 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
         })
     }
 
+    // Clojure quote forms carry symbols as DATA, not references to function
+    // parameters. Applying the rename map within (quote a), 'a or syntax
+    // quoting can turn a real literal change into a false pure refactoring.
+    // Until reference scopes are resolved by Rust, decline the whole
+    // promotion for quoted/reader-macro forms; retain the raw semantic edits.
+    fn has_quoted_data(form: &SemanticNode) -> bool {
+        const READER_QUOTES: &[&str] = &[
+            "quote_lit", "syn_quote_lit", "unquote_lit",
+            "unquote_splicing_lit", "var_lit",
+        ];
+        const SPECIAL_QUOTES: &[&str] = &[
+            "quote", "syntax-quote", "unquote", "unquote-splicing", "var",
+        ];
+        form.descendants().iter().any(|node| {
+            READER_QUOTES.contains(&node.node_type.as_str())
+                || (node.node_type == "list_lit"
+                    && node.children.iter().find(|child| child.node_type == "sym_lit")
+                        .is_some_and(|head| SPECIAL_QUOTES.contains(&head.label.as_str())))
+        })
+    }
+
     fn equal_modulo_renames(
         old: &SemanticNode, new: &SemanticNode, renames: &HashMap<String, String>,
     ) -> bool {
@@ -307,7 +328,9 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
             continue;
         }
         let new_form = *candidates[0];
-        if has_shadowing_binder(old_form) || has_shadowing_binder(new_form) {
+        if has_shadowing_binder(old_form) || has_shadowing_binder(new_form)
+            || has_quoted_data(old_form) || has_quoted_data(new_form)
+        {
             continue;
         }
         let (Some(old_params), Some(new_params)) =
