@@ -267,6 +267,16 @@ pub(crate) fn js_style_group_from_suppression(
     if !matches!(language, "javascript" | "typescript" | "tsx") {
         return None;
     }
+    #[cfg(test)]
+    if std::env::var_os("INTENTUMDIFF_TEST_WASM_DIR").is_some()
+        && before.iter().any(|(_, _, _, old, new)| old.iter().chain(new).any(|s| s == "Alice" || s == "AliceX"))
+    {
+        let surviving_drafts: Vec<_> = changes.iter().map(|c| (
+            c.change_type, c.old_node.map(|n| n.id.as_str()),
+            c.new_node.map(|n| n.id.as_str())
+        )).collect();
+        eprintln!("JS_SUPPRESSION_TRACE {language} raw={before:?} surviving={surviving_drafts:?}");
+    }
     let surviving: HashSet<(String, Option<String>, Option<String>)> = changes
         .iter()
         .map(|c| {
