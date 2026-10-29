@@ -45,7 +45,11 @@ def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_pat
     payload = b'test component bytes'
     digest = hashlib.sha256(payload).hexdigest()
     calls = []
-    slugs = ['python', 'go', 'js-ts', 'ini', 'asm', 'json']
+    # Exercise the exact default component inventory, including newly required
+    # source-judged parser guests. A stale test list must not mask missing pins.
+    slugs = list(stage.__globals__['TIER_C_COMPONENTS'])
+    assert {'python', 'go', 'js-ts', 'ini', 'asm', 'json', 'clojure'} <= set(slugs)
+    assert len(slugs) == len(set(slugs))
     pins = {f"{slug.replace('-', '_')}_parser.wasm": digest for slug in slugs}
     refs = {f'intentumdiff-{slug}-parser': f'pinned-{slug}' for slug in slugs}
     monkeypatch.setenv('GH_TOKEN', 'test-token')
