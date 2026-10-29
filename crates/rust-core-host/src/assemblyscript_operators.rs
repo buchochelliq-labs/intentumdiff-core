@@ -91,7 +91,20 @@ pub(crate) fn promote_assemblyscript_operator_expression_changes<'a>(
                 change.change_type == "ADDITION"
                     && change.new_node.is_some_and(|n| n.id == new_operator.id)
             });
-            if !deleted || !added {
+            // The generic matcher can already pair an operator-only edit as a
+            // single leaf MODIFICATION. Preserve that source evidence too:
+            // requiring only DELETE+ADD silently left the `*` -> `**` leaf
+            // instead of the continuing expression (Core #191).
+            let modified_operator = changes.iter().any(|change| {
+                change.change_type == "MODIFICATION"
+                    && change.old_node.is_some_and(|n| {
+                        n.id == old_operator.id && n.node_type == old_operator.node_type
+                    })
+                    && change.new_node.is_some_and(|n| {
+                        n.id == new_operator.id && n.node_type == new_operator.node_type
+                    })
+            });
+            if !(deleted && added) && !modified_operator {
                 continue;
             }
             // A nested refactoring/move is independent evidence and must survive;
