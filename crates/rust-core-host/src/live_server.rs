@@ -380,28 +380,34 @@ fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     .to_string()
 }
 
-fn certified_live_diff_response(mut diff: Value, path: &str) -> String {
+fn certify_live_diff_value(mut diff: Value) -> Result<Value, String> {
     if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
-        return live_incomplete_file_response(path, &reason);
+        return Err(reason);
     }
-    // Native, C ABI and Python must not disagree about the provenance of a
-    // certified result. This is Rust-owned metadata, not a host-inferred claim.
-    // Preserve all existing metadata; never rewrite a contradictory owner.
+    // Both direct and commit-wide native paths must publish the same ownership
+    // contract, from Rust itself. Never overwrite a contradictory provenance.
     let metadata = &mut diff["metadata"];
     if metadata.is_null() {
         *metadata = json!({});
     }
     if !metadata.is_object() {
-        return live_incomplete_file_response(path, "invalid Rust diff metadata");
+        return Err("invalid Rust diff metadata".to_owned());
     }
     if let Some(owner) = metadata.get("engine_owner") {
         if owner.as_str() != Some("rust") {
-            return live_incomplete_file_response(path, "contradictory diff engine ownership");
+            return Err("contradictory diff engine ownership".to_owned());
         }
     } else {
         metadata["engine_owner"] = json!("rust");
     }
-    json!({ "diff": diff }).to_string()
+    Ok(diff)
+}
+
+fn certified_live_diff_response(diff: Value, path: &str) -> String {
+    match certify_live_diff_value(diff) {
+        Ok(certified) => json!({ "diff": certified }).to_string(),
+        Err(reason) => live_incomplete_file_response(path, &reason),
+    }
 }
 
 #[cfg(test)]
@@ -443,6 +449,24 @@ mod live_parse_completeness_tests {
             assert_eq!(actual["diff"], expected);
             assert!(actual.get("fallback").is_none(), "{actual}");
         }
+    }
+
+    #[test]
+    fn commit_file_certification_stamps_owner_without_modifying_changes_or_spans() {
+        let diff = json!({
+            "old_filename": "app.ts",
+            "new_filename": "app.ts",
+            "is_fallback": false,
+            "parse_errors": [],
+            "changes": [{"change_type": "MODIFICATION", "old_position": {"start_byte": 1}}],
+            "metadata": {"source": "wasm"}
+        });
+        let certified = certify_live_diff_value(diff.clone()).expect("certified commit item");
+        assert_eq!(certified["metadata"]["engine_owner"], "rust");
+        assert_eq!(certified["metadata"]["source"], "wasm");
+        assert_eq!(certified["changes"], diff["changes"]);
+        assert_eq!(certified["old_filename"], diff["old_filename"]);
+        assert_eq!(certified["new_filename"], diff["new_filename"]);
     }
 
     #[test]
@@ -779,8 +803,8 @@ pub fn live_handle_review_impl(
                                         "commit", "commit parse diagnostics are incomplete",
                                     ));
                                 }
-                                let Some(diffs) = commit_diff.get("file_diffs")
-                                    .and_then(Value::as_array) else {
+                                let Some(diffs) = commit_diff.get_mut("file_diffs")
+                                    .and_then(Value::as_array_mut) else {
                                     return Ok(live_incomplete_file_response(
                                         "commit", "certified commit missing file_diffs array",
                                     ));
@@ -790,9 +814,10 @@ pub fn live_handle_review_impl(
                                         "commit", "certified commit dropped or added source files",
                                     ));
                                 }
-                                for (file, diff) in review_files.iter().zip(diffs.iter()) {
-                                    if let Some(reason) = live_diff_parse_incomplete_reason(diff) {
-                                        return Ok(live_incomplete_file_response(&file.path, &reason));
+                                for (file, diff) in review_files.iter().zip(diffs.iter_mut()) {
+                                    match certify_live_diff_value(diff.clone()) {
+                                        Ok(certified) => *diff = certified,
+                                        Err(reason) => return Ok(live_incomplete_file_response(&file.path, &reason)),
                                     }
                                 }
                                 commit_diff["cross_file_changes"] = cross_file_changes.clone();
@@ -882,9 +907,10 @@ pub fn live_handle_review_impl(
         // An incomplete/malformed per-file parse declines the ENTIRE commit,
         // preserving the file and parser cause rather than manufacturing
         // commit-level parse_errors: [] (#193). The native transport is a relay.
-        if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
-            return Ok(live_incomplete_file_response(&f.path, &reason));
-        }
+        diff = match certify_live_diff_value(diff) {
+            Ok(certified) => certified,
+            Err(reason) => return Ok(live_incomplete_file_response(&f.path, &reason)),
+        };
         // python apply_guardrails_to_diff's policy-file check: an edit to intentumdiff.yaml itself.
         if guardrails_enabled
             && is_guardrail_policy_filename(&f.path)
