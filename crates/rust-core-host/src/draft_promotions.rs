@@ -2022,3 +2022,7 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     *changes = result;
     (suppressed, promoted_indices)
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "clojure_rename_source_tests.rs"]
+mod clojure_rename_source_tests;
