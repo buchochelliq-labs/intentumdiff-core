@@ -94,7 +94,7 @@ fn file_diff_preserves_both_input_paths_in_json_and_rich_output() {
         "missing Rust-owned parse diagnostic: {stderr}"
     );
     assert!(
-        !String::from_utf8_lossy(&invalid.stdout).contains("\\"changes\\""),
+        !String::from_utf8_lossy(&invalid.stdout).contains("\"changes\""),
         "malformed source must not produce a successful semantic diff"
     );
     std::fs::remove_dir_all(root).unwrap();
