@@ -345,6 +345,74 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
     crate::guardrail_policy::policy_file_violation(diff, old_filename, new_filename)
 }
 
+// Core owns the completeness policy for every caller (native stdio, C ABI and
+// Python host). A fallback tree or incomplete parse diagnostics are not proof of
+// a semantic diff, even when the engine can represent unparsed source (#17).
+// Preserve the existing `fallback` envelope so host bindings cannot mistake
+// a declined computation for a successfully verified change.
+fn certified_live_diff_response(diff: Value) -> String {
+    let parse_errors = diff.get("parse_errors").and_then(Value::as_array);
+    if diff.get("is_fallback").and_then(Value::as_bool) == Some(false)
+        && parse_errors.is_some_and(Vec::is_empty)
+    {
+        return json!({ "diff": diff }).to_string();
+    }
+    let reason = parse_errors
+        .and_then(|items| items.first())
+        .map(|error| {
+            error
+                .as_str()
+                .or_else(|| error.get("message").and_then(Value::as_str))
+                .map(str::to_owned)
+                .unwrap_or_else(|| error.to_string())
+        })
+        .unwrap_or_else(|| "Rust returned an uncertified or malformed parse result".to_owned());
+    json!({
+        "fallback": reason,
+        "fallback_code": "native_parse_incomplete"
+    })
+    .to_string()
+}
+
+#[cfg(test)]
+mod live_parse_completeness_tests {
+    use super::*;
+
+    #[test]
+    fn declines_fallbacks_parse_errors_and_malformed_completeness_fields() {
+        for diff in [
+            json!({"is_fallback": true, "parse_errors": []}),
+            json!({"is_fallback": false, "parse_errors": ["syntax error"]}),
+            json!({"is_fallback": false, "parse_errors": [{"message": "bad token"}]}),
+            json!({"is_fallback": false, "parse_errors": "not an array"}),
+            json!({"is_fallback": false}),
+            json!({"parse_errors": []}),
+            json!({"is_fallback": "false", "parse_errors": []}),
+        ] {
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff))
+                .expect("valid structured response");
+            assert!(actual.get("diff").is_none(), "{actual}");
+            assert_eq!(actual["fallback_code"], "native_parse_incomplete", "{actual}");
+            assert!(actual["fallback"].as_str().is_some_and(|s| !s.is_empty()), "{actual}");
+        }
+    }
+
+    #[test]
+    fn certifies_complete_and_empty_valid_semantic_diffs_without_inventing_changes() {
+        for changes in [json!([]), json!([{"change_type": "MODIFICATION"}])] {
+            let diff = json!({
+                "is_fallback": false,
+                "parse_errors": [],
+                "changes": changes
+            });
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone()))
+                .expect("valid response");
+            assert_eq!(actual["diff"], diff);
+            assert!(actual.get("fallback").is_none(), "{actual}");
+        }
+    }
+}
+
 /// python `LiveServer._process_request_with_source` (non-streaming) — the native single-file
 /// diff handler (#100, A2.5 Phase A1). Reads the "old" side (blob@ref), takes the live *content*
 /// as the "new" side, and runs the certified native batch (`diff_batch_impl`) for Python.
@@ -447,7 +515,7 @@ fn diff_resolved_sources(
                     let violation = policy_file_violation(&diff, path, path);
                     crate::attach_guardrail_violations(&mut diff, vec![violation]);
                 }
-                Ok(json!({ "diff": diff }).to_string())
+                Ok(certified_live_diff_response(diff))
             }
             Err(reason) => fallback(&reason),
         };
@@ -478,7 +546,7 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(json!({ "diff": diff }).to_string()),
+                    Some(diff) => Ok(certified_live_diff_response(diff)),
                     None => fallback("batch item missing diff"),
                 }
             }
