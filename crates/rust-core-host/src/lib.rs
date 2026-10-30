@@ -2517,6 +2517,9 @@ struct TreeIndex<'a> {
     parent: HashMap<&'a str, &'a str>,
     by_id: HashMap<&'a str, &'a SemanticNode>,
     children: HashMap<&'a str, Vec<&'a str>>,
+    // Pre-index child ordinals once. Matching duplicate leaves must not
+    // rescan every sibling list for every candidate (quadratic-to-cubic).
+    sibling_slot: HashMap<&'a str, usize>,
     heights: HashMap<&'a str, usize>,
     subtree_sizes: HashMap<&'a str, usize>,
     named_entities: Vec<&'a SemanticNode>,
@@ -2529,6 +2532,7 @@ impl<'a> TreeIndex<'a> {
             parent: HashMap::new(),
             by_id: HashMap::new(),
             children: HashMap::new(),
+            sibling_slot: HashMap::new(),
             heights: HashMap::new(),
             subtree_sizes: HashMap::new(),
             named_entities: Vec::new(),
@@ -2557,7 +2561,8 @@ impl<'a> TreeIndex<'a> {
         }
         let mut height = 0usize;
         let mut subtree_size = 1usize;
-        for child in &node.children {
+        for (slot, child) in node.children.iter().enumerate() {
+            self.sibling_slot.insert(child.id.as_str(), slot);
             let child_size = self.push_node(child, Some(node.id.as_str()));
             subtree_size += child_size;
             height = height.max(self.heights.get(child.id.as_str()).copied().unwrap_or(0) + 1);
@@ -7264,10 +7269,10 @@ fn same_parent_leaf_slot_distance(
         return usize::MAX;
     }
     match (
-        old_parent.children.iter().position(|child| child.id == old_node.id),
-        new_parent.children.iter().position(|child| child.id == candidate.id),
+        old_index.sibling_slot.get(old_node.id.as_str()),
+        new_index.sibling_slot.get(candidate.id.as_str()),
     ) {
-        (Some(old_slot), Some(new_slot)) => old_slot.abs_diff(new_slot),
+        (Some(old_slot), Some(new_slot)) => old_slot.abs_diff(*new_slot),
         _ => usize::MAX,
     }
 }
