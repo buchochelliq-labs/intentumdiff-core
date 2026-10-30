@@ -1237,7 +1237,7 @@ fn same_line_duplicate_go_literals_prefer_actual_source_column() {
     let new_index = TreeIndex::new(&new);
     for (stage, pairs) in [
         ("label_match", label_match(&old_index, &new_index, vec![])),
-        ("top_down", top_down_match_with_existing(&old_index, &new_index, 1, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
     ] {
         let unchanged = pairs.iter()
             .find(|pair| pair.old_node.id == "0.0.1")
