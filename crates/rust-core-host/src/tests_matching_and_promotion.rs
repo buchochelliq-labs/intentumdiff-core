@@ -1203,3 +1203,50 @@ fn elixir_sibling_swap_does_not_rewrite_unchanged_definitions() {
         assert_eq!(json!(actual), case["expected"], "{}: {diff}", case["source"]["name"]);
     }
 }
+
+
+#[test]
+fn same_line_duplicate_go_literals_prefer_actual_source_column() {
+    // Source: "\tfmt.Println(add(3, 4))" at zero-based row 13.
+    // The first argument changes 3 -> 4 at byte col 17; the second
+    // argument 4 remains unchanged at col 20. Hash/label-only matching
+    // must not steal that unchanged second argument for the first slot.
+    fn literal(id: &str, label: &str, col: u32) -> SemanticNode {
+        let mut node = node(id, "int_literal", label, vec![]);
+        node.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + 1,
+        };
+        node
+    }
+    fn tree(first: &str, call_hash: &str, root_hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            literal("0.0.0", first, 17),
+            literal("0.0.1", "4", 20),
+        ]);
+        call.structural_hash = call_hash.into();
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = root_hash.into();
+        root
+    }
+    let old = tree("3", "old-call", "old-root");
+    let new = tree("4", "new-call", "new-root");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 1, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: unchanged old 4 must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: matching duplicated 4 at byte col 17 instead of unchanged col 20");
+        assert_eq!(unchanged.new_node.position.start_col, 20, "{stage}");
+        assert!(pairs.iter().all(|pair|
+            !(pair.old_node.id == "0.0.1" && pair.new_node.id == "0.0.0")),
+            "{stage}: duplicate literal must not steal edited span");
+    }
+}
