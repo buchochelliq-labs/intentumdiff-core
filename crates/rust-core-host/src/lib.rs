@@ -7229,6 +7229,49 @@ fn prune_cross_statement_leaf_pairs<'a>(
         .collect()
 }
 
+// If duplicate literal leaves occupy the same grammatical parent, source byte
+// columns can shift after an earlier edit. Prefer the corresponding child slot
+// before absolute column distance; fall back to columns for unrelated parents.
+// Scope to leaf nodes so moved/reordered structural subtrees retain their
+// existing structural and positional matching policy.
+fn same_parent_leaf_slot_distance(
+    old_node: &SemanticNode,
+    candidate: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+) -> usize {
+    if !old_node.is_leaf() || !candidate.is_leaf()
+        || old_node.node_type != candidate.node_type || old_node.label != candidate.label
+    {
+        return usize::MAX;
+    }
+    let (Some(old_parent_id), Some(new_parent_id)) = (
+        old_index.parent.get(old_node.id.as_str()),
+        new_index.parent.get(candidate.id.as_str()),
+    ) else {
+        return usize::MAX;
+    };
+    let (Some(old_parent), Some(new_parent)) = (
+        old_index.by_id.get(*old_parent_id),
+        new_index.by_id.get(*new_parent_id),
+    ) else {
+        return usize::MAX;
+    };
+    if old_parent.id != new_parent.id
+        || old_parent.node_type != new_parent.node_type
+        || old_parent.label != new_parent.label
+    {
+        return usize::MAX;
+    }
+    match (
+        old_parent.children.iter().position(|child| child.id == old_node.id),
+        new_parent.children.iter().position(|child| child.id == candidate.id),
+    ) {
+        (Some(old_slot), Some(new_slot)) => old_slot.abs_diff(new_slot),
+        _ => usize::MAX,
+    }
+}
+
 fn top_down_match_with_existing<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
@@ -7290,6 +7333,7 @@ fn top_down_match_with_existing<'a>(
                 (
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
                         .abs(),
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index),
                     (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
@@ -7732,6 +7776,7 @@ fn label_match<'a>(
                     if parent_consistent { 0u8 } else { 1u8 },
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
                         .abs(),
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index),
                     (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
