@@ -7335,10 +7335,20 @@ fn top_down_match_with_existing<'a>(
             .copied()
             .filter(|candidate| !matched_new.contains(candidate.id.as_str()))
             .min_by_key(|candidate| {
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                // Deleting an earlier argument shifts surviving ordinal slots.
+                // A source-coordinate-exact leaf under the same parent must
+                // remain paired before ordinal slot ranking; if an earlier edit
+                // changes columns, the slot remains the tie-breaker instead.
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
                         .abs(),
-                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
                     (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
@@ -7777,11 +7787,17 @@ fn label_match<'a>(
                 let candidate_parent = new_index.parent.get(candidate.id.as_str()).copied();
                 let parent_consistent =
                     matches!((old_parent_partner, candidate_parent), (Some(p), Some(c)) if p == c);
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     if parent_consistent { 0u8 } else { 1u8 },
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
                         .abs(),
-                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
                     (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
