@@ -7290,6 +7290,8 @@ fn top_down_match_with_existing<'a>(
                 (
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
                         .abs(),
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
+                        .abs(),
                     candidate.id.as_str(),
                 )
             })
@@ -7729,6 +7731,8 @@ fn label_match<'a>(
                 (
                     if parent_consistent { 0u8 } else { 1u8 },
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
+                        .abs(),
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
                 )
