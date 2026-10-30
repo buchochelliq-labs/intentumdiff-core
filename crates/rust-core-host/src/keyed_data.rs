@@ -300,6 +300,45 @@ pub(crate) fn js_style_group_from_suppression(
         {
             continue;
         }
+        // Discarded raw parent edits are *not* evidence of formatting when a
+        // surviving paired semantic descendant represents the same change.
+        // Rust's raw script may spell a modified string as DELETE old wrapper
+        // + ADD new wrapper, as well as a parent MODIFICATION; all three are
+        // refinement, not ignored style. The one-sided rule is deliberately
+        // restricted to single-label literal wrappers: do not erase a broader
+        // removed/added container with independent semantic content.
+        let represented_by_precise_edit = changes.iter().any(|change| {
+            let (Some(precise_old), Some(precise_new)) =
+                (change.old_node, change.new_node) else {
+                    return false;
+                };
+            if change.change_type != "MODIFICATION" {
+                return false;
+            }
+            let descendant_of = |id: &str, parent: &str| {
+                id.strip_prefix(parent).is_some_and(|tail| tail.starts_with('.'))
+            };
+            match (change_type.as_str(), old_id.as_deref(), new_id.as_deref()) {
+                ("MODIFICATION", Some(old_parent), Some(new_parent)) => {
+                    descendant_of(&precise_old.id, old_parent)
+                        && descendant_of(&precise_new.id, new_parent)
+                }
+                ("DELETION", Some(old_parent), None) => {
+                    !olabels.is_empty()
+                        && olabels.iter().all(|label| label == &precise_old.label)
+                        && descendant_of(&precise_old.id, old_parent)
+                }
+                ("ADDITION", None, Some(new_parent)) => {
+                    !nlabels.is_empty()
+                        && nlabels.iter().all(|label| label == &precise_new.label)
+                        && descendant_of(&precise_new.id, new_parent)
+                }
+                _ => false,
+            }
+        });
+        if represented_by_precise_edit {
+            continue;
+        }
         old_labels.extend(olabels.iter().cloned());
         new_labels.extend(nlabels.iter().cloned());
         old_ids.extend(old_id.iter().cloned());
@@ -699,3 +738,7 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
 // added JOIN doesn't positionally shift the FROM relation into a bogus MOVE, and unchanged
 // SELECT fields never churn. The DAX half is deliberately NOT ported: dax is already routed and
 // green without it — adding keys would change its behavior for no contract.
+
+#[cfg(test)]
+#[path = "keyed_data_tests.rs"]
+mod tests;

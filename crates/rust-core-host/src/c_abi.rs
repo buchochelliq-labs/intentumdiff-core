@@ -341,6 +341,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
+        "lsp_attach_type_map" => crate::lsp_enrich::attach_type_map_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
@@ -816,6 +818,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
+        "parser_availability_with_digest" => Ok(crate::parser_availability::availability_json_with_digest_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?, arg_str(args, 4, "component_sha256")?)),
+        "parser_component_availability" => Ok(crate::parser_availability::component_availability_json_impl(arg_str(args, 0, "wasm_filename")?, arg_str(args, 1, "system")?, arg_str(args, 2, "machine")?, arg_str(args, 3, "component_sha256")?)),
         "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
         "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
@@ -1152,6 +1156,24 @@ mod tests {
     }
 
     #[test]
+    fn lsp_type_map_attachment_dispatches_over_c_abi_and_fails_closed() {
+        let tree = r#"{"id":"root","node_type":"module","children":[
+            {"id":"a","node_type":"identifier","children":[]},
+            {"id":"b","node_type":"identifier","children":[]}]}"#;
+        let good = call("lsp_attach_type_map", json!([tree, r#"{"a":"int"}"#]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"]["children"][0]["type_info"], "int");
+        assert!(good["result"]["children"][1].get("type_info").is_none());
+
+        let missing = call("lsp_attach_type_map", json!([tree]));
+        assert_eq!(missing["ok"], false);
+        let malformed = call("lsp_attach_type_map", json!([tree, r#"{"a":null}"#]));
+        assert_eq!(malformed["ok"], false);
+        let bad_tree = call("lsp_attach_type_map", json!(["{}", "{}"]));
+        assert_eq!(bad_tree["ok"], false);
+    }
+
+    #[test]
     fn config_handlers_take_optional_args() {
         // No args (both None) -> engine defaults, valid JSON config.
         let env = call("load_project_diff_config", json!([]));
@@ -1361,6 +1383,30 @@ mod tests {
         assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
         assert_eq!(result["result"]["unavailable"][0], "powershell");
         assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
+        // Exact vetted PowerShell bytes are accepted only by the digest-aware
+        // API under pinned metered Wasmtime 48.0.7. Unknown bytes still fail closed.
+        let vetted = crate::parser_availability::METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let candidate = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", vetted]));
+        assert_eq!(candidate["ok"], true);
+        assert!(candidate["result"]["reason"].is_null());
+        assert!(candidate["result"]["unavailable"].is_null());
+        let deny = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", ""]));
+        assert_eq!(deny["ok"], true);
+        assert_eq!(deny["result"]["unavailable"][0], "powershell");
+        let legacy_sha = "db4db1515d13b3f452057d0a6c3c659ae9b3b484ef3cb572c7a19d670981c30a";
+        let old = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", legacy_sha]));
+        assert_eq!(old["result"]["unavailable"][0], "powershell");
+        // Original four-argument API retains a strict refusal for unknown bytes.
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["result"]["reason"].is_string());
+        // Partial arguments never manufacture an 'allowed' result.
+        assert_eq!(call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["ok"], false);
+        let protected = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", ""]));
+        assert_eq!(protected["result"]["reason"].is_string(), true);
+        let vetted_component = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", vetted]));
+        assert!(vetted_component["result"]["reason"].is_null());
+        let non_powershell = call("parser_component_availability", json!(["python_parser.wasm", "Windows", "arm64", ""]));
+        assert!(non_powershell["result"]["reason"].is_null());
+        assert_eq!(call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64"]))["ok"], false);
     }
 
     #[test]

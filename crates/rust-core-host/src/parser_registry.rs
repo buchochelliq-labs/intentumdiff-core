@@ -7,6 +7,7 @@ use std::path::Path;
 use std::sync::{Arc, Mutex, OnceLock};
 
 use serde::Deserialize;
+use sha2::Digest;
 use serde_json::Value;
 use crate::filename_selection::{Action, Event, Request};
 use crate::parser_routing::Candidate;
@@ -56,15 +57,36 @@ fn load_manifest(wasm_dir: &str) -> Result<Option<Arc<Manifest>>, String> {
 
 // A component can advertise several language aliases in the manifest. Load and
 // probe it once, retaining every alias for explicit selection and discovery.
-fn catalog(manifest: &Manifest) -> Vec<(Candidate, String)> {
-    catalog_for_platform(manifest, std::env::consts::OS, std::env::consts::ARCH)
+fn catalog(manifest: &Manifest, wasm_dir: &str) -> Vec<(Candidate, String)> {
+    // Native selection must inspect the actual provisioned component bytes.
+    // A manifest ref or parser alias is not proof of Windows ARM64 compatibility.
+    catalog_for_platform_with_digest(manifest, std::env::consts::OS, std::env::consts::ARCH, |wasm| {
+        let bytes = std::fs::read(Path::new(wasm_dir).join(wasm)).ok()?;
+        Some(hex::encode(sha2::Sha256::digest(&bytes)))
+    })
 }
 
+#[cfg(test)]
 fn catalog_for_platform(manifest: &Manifest, system: &str, machine: &str) -> Vec<(Candidate, String)> {
-    // Exclude the component, not just one alias for it.
+    catalog_for_platform_with_digest(manifest, system, machine, |_| None)
+}
+
+fn catalog_for_platform_with_digest(
+    manifest: &Manifest,
+    system: &str,
+    machine: &str,
+    mut digest_for: impl FnMut(&str) -> Option<String>,
+) -> Vec<(Candidate, String)> {
+    // Exclude the *component*, including its aliases, unless its exact staged
+    // bytes satisfy the Rust-owned platform policy. Missing bytes fail closed.
     let blocked: std::collections::BTreeSet<_> = manifest.parsers.iter()
-        .filter(|(language, entry)| crate::parser_availability::incompatible_reason(language, system, machine).is_some()
-            || crate::parser_availability::incompatible_reason(&entry.plugin_id, system, machine).is_some())
+        .filter(|(language, entry)| {
+            let restricted = crate::parser_availability::incompatible_reason(language, system, machine).is_some()
+                || crate::parser_availability::incompatible_reason(&entry.plugin_id, system, machine).is_some();
+            if !restricted { return false; }
+            let digest = digest_for(&entry.wasm).unwrap_or_default();
+            crate::parser_availability::incompatible_reason_with_digest("powershell", system, machine, &digest).is_some()
+        })
         .map(|(_, entry)| &entry.wasm).collect();
     let mut grouped: BTreeMap<String, Candidate> = BTreeMap::new();
     let mut languages: Vec<_> = manifest.parsers.keys().collect();
@@ -156,7 +178,7 @@ pub(crate) fn resolve_parser_for_sources(path: &str, old_content: &str, content:
     -> Result<Option<ResolvedParser>, String>
 {
     let Some(manifest) = load_manifest(wasm_dir)? else { return Ok(None); };
-    let catalog = catalog(&manifest);
+    let catalog = catalog(&manifest, wasm_dir);
     let request = Request {
         entries: catalog.iter().map(|(candidate, _)| candidate.clone()).collect(),
         filename: path.into(), content: content.into(), old_content: old_content.into(),
@@ -220,7 +242,7 @@ mod tests {
                 "dockerfile":{"plugin_id":"dockerfile","wasm":"docker.wasm","extensions":["Dockerfile"]}},
             "extension_index": {".h":"cpp"}
         })).unwrap();
-        let entries = catalog(&manifest);
+        let entries = catalog_for_platform(&manifest, "linux", "x86_64");
         assert_eq!(entries.len(), 2);
         assert_eq!(entries[0].0.languages, ["c", "cpp"]);
         assert!(entries[0].0.aliases.contains(&"cpp".into()));
@@ -241,6 +263,30 @@ mod tests {
         assert_eq!(windows[0].0.id, "generic");
         assert_eq!(catalog_for_platform(&manifest, "macos", "aarch64").len(), 2);
         assert_eq!(catalog_for_platform(&manifest, "windows", "x86_64").len(), 2);
+    }
+
+    #[test]
+    fn native_catalog_allows_only_vetted_metered_digest_on_windows_arm64() {
+        let manifest: Manifest = serde_json::from_value(serde_json::json!({
+            "parsers": {
+                "powershell": {"plugin_id": "powershell", "wasm": "powershell_parser.wasm"},
+                "alias": {"plugin_id": "alias", "wasm": "powershell_parser.wasm"},
+                "generic": {"plugin_id": "generic", "wasm": "generic_parser.wasm"}
+            },
+            "extension_index": {}
+        })).unwrap();
+        let expected = crate::parser_availability::METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let accepted = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |file| {
+            (file == "powershell_parser.wasm").then(|| expected.to_owned())
+        });
+        assert_eq!(accepted.len(), 2, "the exactly vetted metered digest should permit PowerShell and its aliases");
+        assert!(accepted.iter().any(|(candidate, _)| candidate.languages.contains(&"powershell".to_owned()) && candidate.languages.contains(&"alias".to_owned())), "the vetted component must retain both the PowerShell entry and its alias");
+        assert!(accepted.iter().any(|(candidate, _)| candidate.id == "generic"));
+        let blocked = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |_| Some("bad".into()));
+        assert_eq!(blocked.len(), 1);
+        assert_eq!(blocked[0].0.id, "generic");
+        let missing = catalog_for_platform_with_digest(&manifest, "windows", "aarch64", |_| None);
+        assert_eq!(missing.len(), 1, "missing staged bytes cannot lift an exclusion");
     }
 
     #[test]

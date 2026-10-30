@@ -70,7 +70,7 @@ jobs:
         # provisioning existed; with INTENTUMDIFF_TEST_WASM_DIR staged it is the full
         # 203-test gate, matching the monorepo.
         if: env.HAS_SPLIT_TOKEN == 'true'
-        run: cargo test --features host-utils-guest
+        run: cargo test --locked --features host-utils-guest
         working-directory: crates/rust-core-host
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
@@ -83,7 +83,7 @@ jobs:
         if: env.HAS_SPLIT_TOKEN != 'true'
         run: |
           echo "::notice::Fork PR - SPLIT_REPO_TOKEN unavailable, so the 25 Tier-C tests are skipped. A maintainer run will exercise the full gate."
-          cargo test --no-default-features --features host-utils-guest
+          cargo test --locked --no-default-features --features host-utils-guest
         working-directory: crates/rust-core-host
 
   cli:
@@ -121,6 +121,40 @@ jobs:
         working-directory: crates/cli
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/cli-wasm
+
+  wasmtime48_pinned:
+    name: Production Wasmtime 48.0.7 locked security and Rust API gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install pinned Rust
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        with:
+          toolchain: 1.95.0
+      - name: Verify patched runtime pins and tested resolved lock
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import tomllib
+          from pathlib import Path
+          base = Path("crates/rust-core-host")
+          manifest = tomllib.loads((base / "Cargo.toml").read_text())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert manifest["dependencies"][name] == "48.0.7", name
+          raw_lock = (base / "Cargo.lock").read_bytes()
+          expected_sha = "9954b0ac8353864b5c703078c308953c6ff270ad146cf99f40b2c25ac9cef0f8"
+          assert hashlib.sha256(raw_lock).hexdigest() == expected_sha, "lockfile changed from the independently tested 48.0.7 graph"
+          lock = tomllib.loads(raw_lock.decode())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert [p["version"] for p in lock["package"] if p["name"] == name] == ["48.0.7"], name
+          assert all(p["version"] != "47.0.3" for p in lock["package"] if p["name"].startswith("wasmtime")), "vulnerable old Wasmtime package remains"
+          PY
+          cargo test --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
+          echo "::notice::Production 48.0.7 Rust host security and API gate passed; cross-platform 74-language source judgement, wheel/VSIX and independent Python thin-wrapper audit remain mandatory."
 
   components:
     name: Wasm components build (index engine + renderers)

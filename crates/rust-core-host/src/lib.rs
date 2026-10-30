@@ -2517,6 +2517,9 @@ struct TreeIndex<'a> {
     parent: HashMap<&'a str, &'a str>,
     by_id: HashMap<&'a str, &'a SemanticNode>,
     children: HashMap<&'a str, Vec<&'a str>>,
+    // Pre-index child ordinals once. Matching duplicate leaves must not
+    // rescan every sibling list for every candidate (quadratic-to-cubic).
+    sibling_slot: HashMap<&'a str, usize>,
     heights: HashMap<&'a str, usize>,
     subtree_sizes: HashMap<&'a str, usize>,
     named_entities: Vec<&'a SemanticNode>,
@@ -2529,6 +2532,7 @@ impl<'a> TreeIndex<'a> {
             parent: HashMap::new(),
             by_id: HashMap::new(),
             children: HashMap::new(),
+            sibling_slot: HashMap::new(),
             heights: HashMap::new(),
             subtree_sizes: HashMap::new(),
             named_entities: Vec::new(),
@@ -2557,7 +2561,8 @@ impl<'a> TreeIndex<'a> {
         }
         let mut height = 0usize;
         let mut subtree_size = 1usize;
-        for child in &node.children {
+        for (slot, child) in node.children.iter().enumerate() {
+            self.sibling_slot.insert(child.id.as_str(), slot);
             let child_size = self.push_node(child, Some(node.id.as_str()));
             subtree_size += child_size;
             height = height.max(self.heights.get(child.id.as_str()).copied().unwrap_or(0) + 1);
@@ -4707,6 +4712,22 @@ fn cached_parser_component(
     wasm_path: &str,
     metered: bool,
 ) -> Result<ParserComponentLookup, String> {
+    // The manifest inventory is not a compiler safety boundary: callers may
+    // load a component directly. Check the *exact bytes* before a cache hit
+    // or Wasmtime compilation, and compile those same bytes to avoid a
+    // check/open race on Windows ARM64.
+    let guarded_bytes = if parser_availability::guarded_powershell_component(
+        Path::new(wasm_path), std::env::consts::OS, std::env::consts::ARCH
+    ) {
+        let bytes = std::fs::read(wasm_path)
+            .map_err(|e| format!("read guarded parser component {wasm_path}: {e}"))?;
+        parser_availability::verify_staged_powershell_bytes(
+            Path::new(wasm_path), &bytes, std::env::consts::OS, std::env::consts::ARCH
+        )?;
+        Some(bytes)
+    } else {
+        None
+    };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
     let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
     {
@@ -4726,8 +4747,10 @@ fn cached_parser_component(
     cfg.consume_fuel(metered);
     cfg.wasm_memory64(false);
     let engine = Engine::new(&cfg).map_err(|exc| format!("create wasmtime engine: {exc}"))?;
-    let component = Component::from_file(&engine, wasm_path)
-        .map_err(|exc| format!("load parser component: {exc}"))?;
+    let component = match &guarded_bytes {
+        Some(bytes) => Component::new(&engine, bytes.as_slice()),
+        None => Component::from_file(&engine, wasm_path),
+    }.map_err(|exc| format!("load parser component: {exc}"))?;
     let cached = Arc::new(CachedParserComponent { engine, component });
     let mut guard = cache
         .lock()
@@ -5381,17 +5404,20 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// sides parse to trees the SAME way `differ.parse` does — Python through the bundled Wasm parser
 /// in interpret-cst mode (fed the trivia-stripped CST), other languages through their full-parse
 /// Wasm parser — so the symbol tables (and thus the cross-file changes) match the differ's. Builds
-/// the two symbol tables and diffs them. Best-effort: any parse/build failure just omits that file
-/// (or yields an empty list), never raises. *files* are the same commit-batch file objects the
+/// the two symbol tables and diffs them. Every required parse/index failure aborts the
+/// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> (Value, HashMap<(String, String), Vec<Value>>) {
+) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
     let mut telemetry = HashMap::new();
+    if files.is_empty() {
+        return Ok((json!([]), telemetry));
+    }
     if wasm_dir.is_empty() {
-        return (json!([]), telemetry); // the bundled Python parser is required for Python symbol trees
+        return Err("commit symbol indexing requires the verified parser bundle".to_owned());
     }
     let config = RustCoreConfig::from_json(config_json);
     let python_wasm_path = Path::new(wasm_dir)
@@ -5443,13 +5469,15 @@ pub(crate) fn compute_commit_cross_file_changes(
         }
         let (old_side_cst, new_side_cst) = if wasm_path.is_empty() {
             (
-                python_wasm_filtered_cst(parse_old_src).unwrap_or_default(),
-                python_wasm_filtered_cst(parse_new_src).unwrap_or_default(),
+                python_wasm_filtered_cst(parse_old_src)
+                    .map_err(|reason| format!("symbol-index CST for {old_p}: {reason}"))?,
+                python_wasm_filtered_cst(parse_new_src)
+                    .map_err(|reason| format!("symbol-index CST for {new_p}: {reason}"))?,
             )
         } else {
             (String::new(), String::new())
         };
-        if let Ok(mut pair) = run_python_wasm_process_pair_detailed(
+        let mut pair = run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5460,31 +5488,45 @@ pub(crate) fn compute_commit_cross_file_changes(
             fuel,
             config.max_plugin_output_bytes,
             language,
-        ) {
-            for call in &mut pair.calls { call["plugin"] = json!(parser_path); call["purpose"] = json!("symbol_index"); }
-            telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
-            let (old_tree, new_tree) = (pair.old_tree, pair.new_tree);
-            if both || old_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&old_tree) {
-                    old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
-                }
+        ).map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        for call in &mut pair.calls {
+            call["plugin"] = json!(parser_path);
+            call["purpose"] = json!("symbol_index");
+        }
+        telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
+        if both || old_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.old_tree)
+                .map_err(|reason| format!("symbol-index invalid old tree for {old_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed old tree for {old_p}"));
             }
-            if both || new_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&new_tree) {
-                    new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
-                }
+            old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
+        }
+        if both || new_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.new_tree)
+                .map_err(|reason| format!("symbol-index invalid new tree for {new_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed new tree for {new_p}"));
             }
+            new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
         }
     }
     let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
     let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    let changes = match serde_json::from_str::<Value>(&index_engine_lib::diff_symbol_tables_impl(
-        &old_table, &new_table,
-    )) {
-        Ok(v) if v.is_array() => v,
-        _ => json!([]),
-    };
-    (changes, telemetry)
+    for (side, table) in [("old", &old_table), ("new", &new_table)] {
+        let value: Value = serde_json::from_str(table)
+            .map_err(|reason| format!("symbol-index {side} table is invalid: {reason}"))?;
+        if !value.is_object() || value.get("error").is_some() {
+            return Err(format!("symbol-index {side} table construction failed: {value}"));
+        }
+    }
+    let changes: Value = serde_json::from_str(
+        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
+    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
+    if !changes.is_array() {
+        return Err(format!("symbol-index diff did not return changes: {changes}"));
+    }
+    Ok((changes, telemetry))
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -7192,6 +7234,49 @@ fn prune_cross_statement_leaf_pairs<'a>(
         .collect()
 }
 
+// If duplicate literal leaves occupy the same grammatical parent, source byte
+// columns can shift after an earlier edit. Prefer the corresponding child slot
+// before absolute column distance; fall back to columns for unrelated parents.
+// Scope to leaf nodes so moved/reordered structural subtrees retain their
+// existing structural and positional matching policy.
+fn same_parent_leaf_slot_distance(
+    old_node: &SemanticNode,
+    candidate: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+) -> usize {
+    if !old_node.is_leaf() || !candidate.is_leaf()
+        || old_node.node_type != candidate.node_type || old_node.label != candidate.label
+    {
+        return usize::MAX;
+    }
+    let (Some(old_parent_id), Some(new_parent_id)) = (
+        old_index.parent.get(old_node.id.as_str()),
+        new_index.parent.get(candidate.id.as_str()),
+    ) else {
+        return usize::MAX;
+    };
+    let (Some(old_parent), Some(new_parent)) = (
+        old_index.by_id.get(*old_parent_id),
+        new_index.by_id.get(*new_parent_id),
+    ) else {
+        return usize::MAX;
+    };
+    if old_parent.id != new_parent.id
+        || old_parent.node_type != new_parent.node_type
+        || old_parent.label != new_parent.label
+    {
+        return usize::MAX;
+    }
+    match (
+        old_index.sibling_slot.get(old_node.id.as_str()),
+        new_index.sibling_slot.get(candidate.id.as_str()),
+    ) {
+        (Some(old_slot), Some(new_slot)) => old_slot.abs_diff(*new_slot),
+        _ => usize::MAX,
+    }
+}
+
 fn top_down_match_with_existing<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
@@ -7250,8 +7335,21 @@ fn top_down_match_with_existing<'a>(
             .copied()
             .filter(|candidate| !matched_new.contains(candidate.id.as_str()))
             .min_by_key(|candidate| {
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                // Deleting an earlier argument shifts surviving ordinal slots.
+                // A source-coordinate-exact leaf under the same parent must
+                // remain paired before ordinal slot ranking; if an earlier edit
+                // changes columns, the slot remains the tie-breaker instead.
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
+                        .abs(),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
                 )
@@ -7689,9 +7787,18 @@ fn label_match<'a>(
                 let candidate_parent = new_index.parent.get(candidate.id.as_str()).copied();
                 let parent_consistent =
                     matches!((old_parent_partner, candidate_parent), (Some(p), Some(c)) if p == c);
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     if parent_consistent { 0u8 } else { 1u8 },
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
+                        .abs(),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
                 )
@@ -8896,6 +9003,7 @@ fn finalize_python_review_drafts<'a>(
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
     probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes));
+    probed!(changes, "promote_clojure_defn_parameter_renames", promote_clojure_defn_parameter_renames(changes, old_tree, new_tree, language));
     probed!(changes, "promote_python_signature_changes", promote_python_signature_changes_from_sources(
         changes, old_tree, new_tree, old_source, new_source,
     ));
@@ -8992,9 +9100,19 @@ fn finalize_python_review_drafts<'a>(
         new_source,
         finalization,
     );
+    // A changed AssemblyScript operator and its operand edits belong to one
+    // continuing binary-expression change; do not present them as orphan edits.
+    probed!(changes, "promote_assemblyscript_operator_expression_changes",
+        assemblyscript_operators::promote_assemblyscript_operator_expression_changes(
+            changes, old_tree, new_tree, language));
+    // A positional Clojure binder permutation is a source-level signature edit,
+    // not a proven rename or ignored formatting. Run after all suppression.
+    probed!(changes, "preserve_clojure_ordered_parameter_permutations",
+        preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
     sort_candidate_drafts(changes);
 }
 
+mod assemblyscript_operators;
 mod draft_promotions;
 mod decorator_order;
 mod function_extraction;
@@ -10370,6 +10488,9 @@ fn semantic_diff_payload(
         "llm_summary": "",
         "gitignore_excluded": false,
         "is_fallback": false,
+        // Rust explicitly certifies the (possibly empty) guardrail inventory.
+        // Python must not manufacture it through DTO defaults (#202).
+        "guardrail_violations": [],
         "metadata": metadata,
     })
 }
@@ -10568,5 +10689,38 @@ mod native_parser_telemetry_tests {
             assert!(call["max_fuel_used_percent"].is_null());
             assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
         }
+    }
+}
+
+#[cfg(test)]
+mod native_commit_index_fail_closed_tests {
+    use super::*;
+
+    #[test]
+    fn native_commit_requires_parser_bundle_for_indexing() {
+        let changed = vec![json!({
+            "old_source": "def f():\n    return 1\n",
+            "new_source": "def f():\n    return 2\n",
+            "old_filename": "changed.py", "new_filename": "changed.py",
+            "language": "python", "parser_wasm_path": ""
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "").unwrap_err();
+        assert!(error.contains("parser bundle"), "{error}");
+        assert!(compute_commit_cross_file_changes(&[], "{}", "").unwrap().0.as_array().unwrap().is_empty());
+    }
+
+    #[test]
+    fn native_commit_does_not_suppress_second_pass_parser_failure() {
+        let changed = vec![json!({
+            "old_source": "function f() { return 1; }",
+            "new_source": "function f() { return 2; }",
+            "old_filename": "broken.js", "new_filename": "broken.js",
+            "language": "javascript",
+            "parser_wasm_path": "/__intentumdiff_missing__/parser.wasm"
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "/__intentumdiff_missing__")
+            .unwrap_err();
+        assert!(error.contains("broken.js"), "{error}");
+        assert!(error.contains("symbol-index parser"), "{error}");
     }
 }
