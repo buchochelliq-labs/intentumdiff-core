@@ -10418,6 +10418,9 @@ fn semantic_diff_payload(
         "llm_summary": "",
         "gitignore_excluded": false,
         "is_fallback": false,
+        // Rust explicitly certifies the (possibly empty) guardrail inventory.
+        // Python must not manufacture it through DTO defaults (#202).
+        "guardrail_violations": [],
         "metadata": metadata,
     })
 }
