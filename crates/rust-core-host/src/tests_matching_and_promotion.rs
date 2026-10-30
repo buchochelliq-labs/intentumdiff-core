@@ -1250,3 +1250,56 @@ fn same_line_duplicate_go_literals_prefer_actual_source_column() {
             "{stage}: duplicate literal must not steal edited span");
     }
 }
+
+
+#[test]
+fn shifted_go_duplicate_literal_keeps_unchanged_argument_slot() {
+    // Two independent source edits on the same line: the earlier identifier
+    // shortens and the last argument changes 3 -> 4. The existing middle 4
+    // must not be paired to the newly edited final 4 merely because its
+    // absolute byte column is now nearer the old middle argument.
+    let old_source = "add(longName, 4, 3)";
+    let new_source = "add(x, 4, 4)";
+    assert_eq!(old_source.find(", 4").unwrap() + 2, 14);
+    assert_eq!(new_source.find(", 4").unwrap() + 2, 7);
+    assert_eq!(new_source.rfind(", 4").unwrap() + 2, 10);
+
+    fn leaf(id: &str, kind: &str, label: &str, col: u32) -> SemanticNode {
+        let mut result = node(id, kind, label, vec![]);
+        result.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + label.len() as u32,
+        };
+        result
+    }
+    fn tree(prior: &str, middle_col: u32, last: &str, last_col: u32, hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            leaf("0.0.0", "identifier", prior, 4),
+            leaf("0.0.1", "int_literal", "4", middle_col),
+            leaf("0.0.2", "int_literal", last, last_col),
+        ]);
+        call.structural_hash = format!("{hash}-call");
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = format!("{hash}-root");
+        root
+    }
+    let old = tree("longName", 14, "3", 17, "old");
+    let new = tree("x", 7, "4", 10, "new");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: old middle literal must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: preceding width change must not steal the unchanged middle argument");
+        assert_eq!(unchanged.new_node.position.start_col, 7, "{stage}");
+        assert!(pairs.iter().all(|pair| !(pair.old_node.id == "0.0.1"
+            && pair.new_node.id == "0.0.2")), "{stage}: edited last 4 must remain distinct");
+    }
+}
