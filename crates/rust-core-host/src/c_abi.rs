@@ -343,6 +343,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         }
         "lsp_attach_type_map" => crate::lsp_enrich::attach_type_map_json_impl(
             arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
+        "lsp_utf16_range" => crate::lsp_server_shapes::utf16_lsp_range_json_impl(
+            arg_str(args, 0, "node_json")?, arg_str(args, 1, "source")?),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
@@ -1171,6 +1173,26 @@ mod tests {
         assert_eq!(malformed["ok"], false);
         let bad_tree = call("lsp_attach_type_map", json!(["{}", "{}"]));
         assert_eq!(bad_tree["ok"], false);
+    }
+
+
+    #[test]
+    fn lsp_utf16_range_dispatch_is_source_aware_and_fail_closed() {
+        let node = json!({"position": {
+            "start_line": 0, "start_col": 0, "end_line": 0, "end_col": 5,
+        }}).to_string();
+        let accepted = call("lsp_utf16_range", json!([node, "été\n"]));
+        assert_eq!(accepted["ok"], true);
+        assert_eq!(accepted["result"]["end"]["character"], 3);
+
+        let missing_source = call("lsp_utf16_range", json!([node]));
+        assert_eq!(missing_source["ok"], false);
+        let inside_codepoint = json!({"position": {
+            "start_line": 0, "start_col": 1, "end_line": 0, "end_col": 5,
+        }}).to_string();
+        let invalid = call("lsp_utf16_range", json!([inside_codepoint, "été\n"]));
+        assert_eq!(invalid["ok"], false);
+        assert_eq!(invalid["error_type"], "value_error");
     }
 
     #[test]
