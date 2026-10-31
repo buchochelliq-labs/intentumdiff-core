@@ -1450,6 +1450,20 @@ fn finalize_review_impl(
         return Ok(json!({"used": false, "reason": "tree_too_large"}).to_string());
     }
 
+    // Enrich facts and resource labels before lifecycle serialization. Additions and
+    // deletions return early below, but must expose the same Rust-authored NodeFacts as
+    // ordinary edits and as the public Python route (Core #203).
+    // Resource-profile label enrichment (issue #39): fill resource/parameter identity labels
+    // from semantic children before matching so keys + review labels are stable. Only changes
+    // labels (not ids/structural_hash). No-op for non-resource languages.
+    if resource_profile_language(language) {
+        enrich_resource_profile_labels(&mut old_tree, language);
+        enrich_resource_profile_labels(&mut new_tree, language);
+    }
+    // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
+    enrich_tree_facts(&mut old_tree);
+    enrich_tree_facts(&mut new_tree);
+
     // Source absence, not child count, determines a lifecycle boundary. Leaf trees
     // may represent populated files. Never expose the empty placeholder as a change.
     if old_source.is_empty() != new_source.is_empty() {
@@ -1491,17 +1505,6 @@ fn finalize_review_impl(
         })
         .to_string());
     }
-
-    // Resource-profile label enrichment (issue #39): fill resource/parameter identity labels
-    // from semantic children before matching so keys + review labels are stable. Only changes
-    // labels (not ids/structural_hash). No-op for non-resource languages.
-    if resource_profile_language(language) {
-        enrich_resource_profile_labels(&mut old_tree, language);
-        enrich_resource_profile_labels(&mut new_tree, language);
-    }
-    // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
-    enrich_tree_facts(&mut old_tree);
-    enrich_tree_facts(&mut new_tree);
 
     if config.collect_trace {
         finalize_trace_start();
