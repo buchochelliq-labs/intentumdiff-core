@@ -836,7 +836,22 @@ pub(crate) fn enrich_mdx_children(
     if !(fence.starts_with("```") || fence.starts_with("~~~")) {
         return children;
     }
-    let Some(inner) = source_lines.get(opening + 1..closing) else {
+    // An unclosed Markdown/MDX fence can end at the last *body* row. Only
+    // exclude end_line if the row is actually a closing delimiter with the
+    // same marker and at least as many fence characters as the opening.
+    // Otherwise keep that last content line and its source-byte evidence.
+    let marker = fence.as_bytes()[0];
+    let width = fence.bytes().take_while(|byte| *byte == marker).count();
+    let has_closing_fence = source_lines.get(closing).is_some_and(|line| {
+        let trimmed = line.trim();
+        trimmed.len() >= width && trimmed.bytes().all(|byte| byte == marker)
+    });
+    let body_end = if has_closing_fence {
+        closing
+    } else {
+        closing.saturating_add(1)
+    };
+    let Some(inner) = source_lines.get(opening + 1..body_end) else {
         return children;
     };
     let body = inner.iter().map(|line| line.trim_end())
@@ -1524,5 +1539,59 @@ mod mdx_code_body_source_span_tests {
         let lines = ["```bash", "   ", "```"];
         let node = fenced_node(&lines);
         assert!(enrich_mdx_children(&node, &lines, vec![]).is_empty());
+    }
+}
+
+
+#[cfg(test)]
+mod mdx_unclosed_fence_regression_tests {
+    use super::*;
+
+    fn code_content(source: &str, end_line: u32) -> SemanticNode {
+        let lines: Vec<&str> = source.lines().collect();
+        let node = path_synthetic_node(
+            "0.0".into(), "code_block", String::new(),
+            NodePosition {
+                start_line: 0, start_col: 0,
+                end_line, end_col: lines[end_line as usize].len() as u32,
+            },
+            vec![],
+        );
+        enrich_mdx_children(&node, &lines, vec![])
+            .into_iter().find(|child| child.node_type == "code_content")
+            .expect("MDX body must survive enrichment")
+    }
+
+    #[test]
+    fn unclosed_single_line_body_at_eof_is_not_discarded() {
+        let body = code_content("```bash\necho hello", 1);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 0, 1, 10),
+        );
+    }
+
+    #[test]
+    fn unclosed_multiline_body_preserves_final_line_and_utf8_byte_spans() {
+        let body = code_content("```sh\n  echo hello\n  echo café", 2);
+        assert_eq!(body.label, "echo hello\n  echo café");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 2, 12),
+        );
+    }
+
+    #[test]
+    fn closed_fence_still_excludes_matching_delimiter_line() {
+        let body = code_content("````sh\n  echo hello\n````", 2);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 1, 12),
+        );
     }
 }
