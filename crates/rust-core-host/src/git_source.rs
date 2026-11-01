@@ -609,7 +609,7 @@ mod tests {
         let Some(dir) = temp_repo("app.py", "value = 1\n") else { return };
         let path = dir.to_str().unwrap();
         // The index contains bytes that cannot be represented by a String.
-        std::fs::write(dir.join("app.py"), b"value = \\xff\n").unwrap();
+        std::fs::write(dir.join("app.py"), b"value = \xff\n").unwrap();
         git_in(&dir, &["add", "app.py"]).expect("stage invalid UTF-8");
 
         let staged_error = changed_sources_json(path, "HEAD", ":staged").unwrap_err();
