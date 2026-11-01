@@ -39,6 +39,10 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
+      - name: Test pinned parser artifact discovery
+        run: |
+          pip install pytest pyyaml
+          python -m pytest tests/tooling -q
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
         # live in the sibling intentumdiff-<lang>-parser repos. Pull the three they name
