@@ -25,6 +25,31 @@ fn invalid_policy_never_becomes_no_rules() {
 }
 
 #[test]
+fn rejects_malformed_filename_filters_without_silently_weakening_guardrails() {
+    // A YAML scalar in an array must not be serialized into a filename
+    // pattern: a successful but ineffective policy is a fail-open result.
+    for source in [
+        "protected: [{language: json, path: version, files: [42]}]",
+        "protected: [{language: json, path: version, files: [false]}]",
+        "protected: [{language: json, path: version, files: [null]}]",
+        "protected: [{language: json, path: version, files: ['']}]",
+        "protected: [{language: json, path: version, files: ['  ']}]",
+        "protected: [{language: json, path: version, files: ''}]",
+        "protected: [{language: json, path: version, files: '  '}]",
+        "protected: [{language: json, path: version, files: [config.json, 42]}]",
+    ] {
+        let error = parse_policy(source).unwrap_err();
+        assert!(error.contains(".files"), "{source}: {error}");
+    }
+
+    let rules = parse_policy(
+        "protected: [{language: json, path: version, files: [config.json, '*.yaml']}]"
+    ).unwrap();
+    assert_eq!(rules.len(), 1);
+    assert_eq!(rules[0]["files"], serde_json::json!(["config.json", "*.yaml"]));
+}
+
+#[test]
 fn empty_policy_is_successful_empty_rules() {
     for source in ["", "{}", "protected: null", "guardrails: {protected: []}"] {
         assert!(parse_policy(source).unwrap().is_empty());
