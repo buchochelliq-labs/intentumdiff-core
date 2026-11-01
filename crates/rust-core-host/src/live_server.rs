@@ -1681,11 +1681,31 @@ mod tests {
 
     #[test]
     fn native_diff_falls_back_without_manifest() {
-        // With no wasm_dir/manifest, resolution fails -> fallback so the Python differ path runs.
+        if !have_git() {
+            return;
+        }
+        // A missing repository is an I/O failure, not a reason to manufacture
+        // a fallback result. The strict Git baseline gate must run first.
+        let missing_repo = live_handle_diff_json(
+            "/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "",
+        );
+        assert!(missing_repo.is_err(), "a missing Git repository must fail closed");
+
+        // Missing parser assets are a legitimate *post-baseline* fallback.
+        // Exercise that path in a real committed repo to keep the two states distinct.
+        let repo = asset_repo("fallback-no-manifest");
         let v: Value = serde_json::from_str(
-            &live_handle_diff_json("/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "").unwrap(),
+            &live_handle_diff_json(
+                &repo.to_string_lossy(),
+                "src/app.ts",
+                "HEAD",
+                "x = 1",
+                "{}",
+                "",
+            )
+            .expect("valid Git source permits parser resolution"),
         )
-        .unwrap();
+        .expect("fallback response is JSON");
         assert!(v.get("fallback").is_some(), "no manifest must fall back: {v}");
         assert!(v.get("diff").is_none());
     }
