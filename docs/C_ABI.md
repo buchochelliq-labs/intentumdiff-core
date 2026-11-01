@@ -314,7 +314,36 @@ its integration and broader inventory loading remain tracked in #108.
 `reason` (string or null) and `unavailable` (`[parser, reason]` or null). It delegates
 to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
 both Python discovery and native bundled discovery apply this policy before
-compiling components. The measured PowerShell exclusion is Windows ARM only.
+compiling components. This legacy four-argument operation always rejects
+PowerShell on Windows ARM64, because it cannot know which Wasm bytes will load.
+
+`parser_availability_with_digest(name, filename, system, machine, component_sha256)`
+is the compatible **new** operation for a host that has staged a component.
+The host performs permitted I/O to compute the lowercase or uppercase SHA-256
+of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
+policy and returns the same `reason`/`unavailable` shape. Only the component
+built and tested with fuel-enabled Wasmtime 48.0.7 on Windows ARM64 in
+PowerShell parser PR #5 (CI #40707156445; Core Rust API CI #40709266345)
+(SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
+may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
+digests **fail closed**, and earlier four-argument clients remain excluded.
+The digest is not a substitute for registry trust verification: hosts must
+check the signed/pinned source and checksum and must not rely on untrusted
+metadata as proof of bytes. Other OS/architecture availability is unchanged.
+This Rust policy is a migration gate pending broader core #183 preflight
+and final native/C ABI/Python semantic acceptance.
+
+`parser_component_availability(wasm_filename, system, machine, component_sha256)`
+is the raw-component loader guard. On Windows ARM64, a request for the standard
+`powershell_parser.wasm` component with an empty digest returns a Rust-owned
+restriction. A thin host can then hash the **actual bytes** and repeat the
+operation; only the vetted PowerShell artifact on pinned Wasmtime 48.0.7
+is allowed. Unrelated components
+have a null `reason`, so no whole-catalogue hashing is needed. A missing C ABI
+operation must **fail closed** rather than return a false success. The native
+Wasmtime loader checks the exact bytes and compiles those same bytes, preventing
+a check/reopen race on this guarded component. Other Wasm compiler aborts remain
+in scope of core #183 and are not certified by this special-case guard.
 
 
 ### Human CLI presentation (Rust-owned)

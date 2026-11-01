@@ -36,7 +36,7 @@ def test_registry_document_is_fetched_at_candidate_commit(monkeypatch):
         return b'plugins:\n  intentumdiff-json-parser:\n    ref: pinned\n    wasm_checksums:\n      json_parser.wasm: digest\n'
     monkeypatch.setitem(load.__globals__, '_get', get)
     assert load('test-token') == ({'json_parser.wasm': 'digest'}, {'intentumdiff-json-parser': 'pinned'})
-    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=59d7c91fa4e466b4130628202e6a126792b6f9d7']
+    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=cabcb9e78bd888d08d5c2250d7e8bd3065f2c7b9']
 
 
 def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_path):
@@ -45,7 +45,11 @@ def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_pat
     payload = b'test component bytes'
     digest = hashlib.sha256(payload).hexdigest()
     calls = []
-    slugs = ['python', 'go', 'js-ts', 'ini', 'asm', 'json']
+    # Exercise the exact default component inventory, including newly required
+    # source-judged parser guests. A stale test list must not mask missing pins.
+    slugs = list(stage.__globals__['TIER_C_COMPONENTS'])
+    assert {'python', 'go', 'js-ts', 'ini', 'asm', 'json', 'clojure', 'assemblyscript'} <= set(slugs)
+    assert len(slugs) == len(set(slugs))
     pins = {f"{slug.replace('-', '_')}_parser.wasm": digest for slug in slugs}
     refs = {f'intentumdiff-{slug}-parser': f'pinned-{slug}' for slug in slugs}
     monkeypatch.setenv('GH_TOKEN', 'test-token')

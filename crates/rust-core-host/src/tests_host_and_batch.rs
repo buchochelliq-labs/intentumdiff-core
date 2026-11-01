@@ -255,6 +255,9 @@ use crate::*;
         assert_eq!(payload["status"], COMPLETE);
         assert_eq!(payload["engine"], BATCH_ENGINE);
         assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        // A complete Rust response must own the guardrail array, including an empty one.
+        // The Python DTO adapter is required to reject an omitted inventory.
+        assert_eq!(payload["diffs"][0]["diff"]["guardrail_violations"], json!([]));
         assert_eq!(
             payload["diffs"][0]["diff"]["metadata"]["rust_core"]["engine"],
             BATCH_ENGINE
@@ -340,6 +343,9 @@ use crate::*;
         assert_eq!(payload["status"], COMPLETE);
         assert_eq!(payload["engine"], BATCH_ENGINE);
         assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        // A complete Rust response must own the guardrail array, including an empty one.
+        // The Python DTO adapter is required to reject an omitted inventory.
+        assert_eq!(payload["diffs"][0]["diff"]["guardrail_violations"], json!([]));
         assert_eq!(
             payload["diffs"][0]["diff"]["metadata"]["rust_core"]["status"],
             COMPLETE

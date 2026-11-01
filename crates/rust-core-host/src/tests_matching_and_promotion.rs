@@ -1203,3 +1203,172 @@ fn elixir_sibling_swap_does_not_rewrite_unchanged_definitions() {
         assert_eq!(json!(actual), case["expected"], "{}: {diff}", case["source"]["name"]);
     }
 }
+
+
+#[test]
+fn same_line_duplicate_go_literals_prefer_actual_source_column() {
+    // Source: "\tfmt.Println(add(3, 4))" at zero-based row 13.
+    // The first argument changes 3 -> 4 at byte col 17; the second
+    // argument 4 remains unchanged at col 20. Hash/label-only matching
+    // must not steal that unchanged second argument for the first slot.
+    fn literal(id: &str, label: &str, col: u32) -> SemanticNode {
+        let mut node = node(id, "int_literal", label, vec![]);
+        node.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + 1,
+        };
+        node
+    }
+    fn tree(first: &str, call_hash: &str, root_hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            literal("0.0.0", first, 17),
+            literal("0.0.1", "4", 20),
+        ]);
+        call.structural_hash = call_hash.into();
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = root_hash.into();
+        root
+    }
+    let old = tree("3", "old-call", "old-root");
+    let new = tree("4", "new-call", "new-root");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: unchanged old 4 must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: matching duplicated 4 at byte col 17 instead of unchanged col 20");
+        assert_eq!(unchanged.new_node.position.start_col, 20, "{stage}");
+        assert!(pairs.iter().all(|pair|
+            !(pair.old_node.id == "0.0.1" && pair.new_node.id == "0.0.0")),
+            "{stage}: duplicate literal must not steal edited span");
+    }
+}
+
+
+#[test]
+fn shifted_go_duplicate_literal_keeps_unchanged_argument_slot() {
+    // Two independent source edits on the same line: the earlier identifier
+    // shortens and the last argument changes 3 -> 4. The existing middle 4
+    // must not be paired to the newly edited final 4 merely because its
+    // absolute byte column is now nearer the old middle argument.
+    let old_source = "add(longName, 4, 3)";
+    let new_source = "add(x, 4, 4)";
+    assert_eq!(old_source.find(", 4").unwrap() + 2, 14);
+    assert_eq!(new_source.find(", 4").unwrap() + 2, 7);
+    assert_eq!(new_source.rfind(", 4").unwrap() + 2, 10);
+
+    fn leaf(id: &str, kind: &str, label: &str, col: u32) -> SemanticNode {
+        let mut result = node(id, kind, label, vec![]);
+        result.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + label.len() as u32,
+        };
+        result
+    }
+    fn tree(prior: &str, middle_col: u32, last: &str, last_col: u32, hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            leaf("0.0.0", "identifier", prior, 4),
+            leaf("0.0.1", "int_literal", "4", middle_col),
+            leaf("0.0.2", "int_literal", last, last_col),
+        ]);
+        call.structural_hash = format!("{hash}-call");
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = format!("{hash}-root");
+        root
+    }
+    let old = tree("longName", 14, "3", 17, "old");
+    let new = tree("x", 7, "4", 10, "new");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: old middle literal must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: preceding width change must not steal the unchanged middle argument");
+        assert_eq!(unchanged.new_node.position.start_col, 7, "{stage}");
+        assert!(pairs.iter().all(|pair| !(pair.old_node.id == "0.0.1"
+            && pair.new_node.id == "0.0.2")), "{stage}: edited last 4 must remain distinct");
+    }
+}
+
+#[test]
+fn deleting_preceding_go_argument_preserves_unchanged_duplicate_source_position() {
+    // The deleted first argument shifts the child slot of the unchanged 4
+    // from 1 to 0, while its actual line and UTF-8 byte column remain
+    // identical. The last argument changes 3 -> 4, creating a duplicate
+    // which MUST NOT steal the existing literal from its real source.
+    let old_source = "add(x,\n    4, 3)";
+    let new_source = "add(\n    4, 4)";
+    assert!(old_source.contains("\n    4, 3"));
+    assert!(new_source.contains("\n    4, 4"));
+    fn literal(id: &str, kind: &str, label: &str, line: u32, col: u32) -> SemanticNode {
+        let mut result = node(id, kind, label, vec![]);
+        result.position = NodePosition {
+            start_line: line,
+            start_col: col,
+            end_line: line,
+            end_col: col + label.len() as u32,
+        };
+        result
+    }
+    fn tree(with_first: bool, final_value: &str, hash: &str) -> SemanticNode {
+        let mut children = Vec::new();
+        if with_first {
+            children.push(literal("0.0.0", "identifier", "x", 0, 4));
+        }
+        let unchanged_id = if with_first { "0.0.1" } else { "0.0.0" };
+        let changed_id = if with_first { "0.0.2" } else { "0.0.1" };
+        children.push(literal(unchanged_id, "int_literal", "4", 1, 4));
+        children.push(literal(changed_id, "int_literal", final_value, 1, 7));
+        let mut call = node("0.0", "call_expression", "add", children);
+        call.structural_hash = format!("{hash}-call");
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = format!("{hash}-root");
+        root
+    }
+    let old = tree(true, "3", "old");
+    let new = tree(false, "4", "new");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    assert_eq!(old_index.sibling_slot.get("0.0.1"), Some(&1));
+    assert_eq!(new_index.sibling_slot.get("0.0.0"), Some(&0));
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: unchanged old 4 must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.0",
+            "{stage}: slot shift must not reassign original 4 to edited final 4");
+        assert_eq!(unchanged.new_node.position.start_col, 4, "{stage}");
+        assert!(pairs.iter().all(|pair| !(pair.old_node.id == "0.0.1"
+            && pair.new_node.id == "0.0.1")), "{stage}: edited final 4 must stay distinct");
+    }
+}
+
+#[test]
+fn duplicate_sibling_slots_are_indexed_once_for_candidate_ranking() {
+    let children = (0..512usize)
+        .map(|i| node(&format!("0.{i}"), "int_literal", "4", vec![]))
+        .collect();
+    let root = node("0", "argument_list", "args", children);
+    let index = TreeIndex::new(&root);
+    for (i, child) in root.children.iter().enumerate() {
+        assert_eq!(index.sibling_slot.get(child.id.as_str()), Some(&i));
+    }
+}
+

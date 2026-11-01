@@ -345,6 +345,156 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
     crate::guardrail_policy::policy_file_violation(diff, old_filename, new_filename)
 }
 
+// Core owns the completeness policy for every caller (native stdio, C ABI and
+// Python host). A fallback tree or incomplete parse diagnostics are not proof of
+// a semantic diff, even when the engine can represent unparsed source (#17).
+// Preserve the existing `fallback` envelope so host bindings cannot mistake
+// a declined computation for a successfully verified change.
+fn live_diff_parse_incomplete_reason(diff: &Value) -> Option<String> {
+    let parse_errors = diff.get("parse_errors").and_then(Value::as_array);
+    if diff.get("is_fallback").and_then(Value::as_bool) == Some(false)
+        && parse_errors.is_some_and(Vec::is_empty)
+        && diff.get("changes").and_then(Value::as_array).is_some()
+    {
+        return None;
+    }
+    Some(
+        parse_errors
+            .and_then(|items| items.first())
+            .map(|error| {
+                error
+                    .as_str()
+                    .or_else(|| error.get("message").and_then(Value::as_str))
+                    .map(str::to_owned)
+                    .unwrap_or_else(|| error.to_string())
+            })
+            .unwrap_or_else(|| "Rust returned an uncertified or malformed parse result".to_owned()),
+    )
+}
+
+fn live_incomplete_file_response(path: &str, reason: &str) -> String {
+    json!({
+        "fallback": format!("{path}: {reason}"),
+        "fallback_code": "native_parse_incomplete"
+    })
+    .to_string()
+}
+
+fn certify_live_diff_value(mut diff: Value) -> Result<Value, String> {
+    if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
+        return Err(reason);
+    }
+    // Both direct and commit-wide native paths must publish the same ownership
+    // contract, from Rust itself. Never overwrite a contradictory provenance.
+    let metadata = &mut diff["metadata"];
+    if metadata.is_null() {
+        *metadata = json!({});
+    }
+    if !metadata.is_object() {
+        return Err("invalid Rust diff metadata".to_owned());
+    }
+    if let Some(owner) = metadata.get("engine_owner") {
+        if owner.as_str() != Some("rust") {
+            return Err("contradictory diff engine ownership".to_owned());
+        }
+    } else {
+        metadata["engine_owner"] = json!("rust");
+    }
+    Ok(diff)
+}
+
+fn certified_live_diff_response(diff: Value, path: &str) -> String {
+    match certify_live_diff_value(diff) {
+        Ok(certified) => json!({ "diff": certified }).to_string(),
+        Err(reason) => live_incomplete_file_response(path, &reason),
+    }
+}
+
+#[cfg(test)]
+mod live_parse_completeness_tests {
+    use super::*;
+
+    #[test]
+    fn declines_fallbacks_parse_errors_and_malformed_completeness_fields() {
+        for diff in [
+            json!({"is_fallback": true, "parse_errors": []}),
+            json!({"is_fallback": false, "parse_errors": ["syntax error"]}),
+            json!({"is_fallback": false, "parse_errors": [{"message": "bad token"}]}),
+            json!({"is_fallback": false, "parse_errors": "not an array"}),
+            json!({"is_fallback": false, "parse_errors": [], "changes": {}}),
+            json!({"is_fallback": false}),
+            json!({"parse_errors": []}),
+            json!({"is_fallback": "false", "parse_errors": []}),
+        ] {
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff, "example.py"))
+                .expect("valid structured response");
+            assert!(actual.get("diff").is_none(), "{actual}");
+            assert_eq!(actual["fallback_code"], "native_parse_incomplete", "{actual}");
+            assert!(actual["fallback"].as_str().is_some_and(|s| !s.is_empty()), "{actual}");
+        }
+    }
+
+    #[test]
+    fn certifies_complete_and_empty_valid_semantic_diffs_without_inventing_changes() {
+        for changes in [json!([]), json!([{"change_type": "MODIFICATION"}])] {
+            let diff = json!({
+                "is_fallback": false,
+                "parse_errors": [],
+                "changes": changes
+            });
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone(), "example.py"))
+                .expect("valid response");
+            let mut expected = diff;
+            expected["metadata"] = json!({"engine_owner": "rust"});
+            assert_eq!(actual["diff"], expected);
+            assert!(actual.get("fallback").is_none(), "{actual}");
+        }
+    }
+
+    #[test]
+    fn commit_file_certification_stamps_owner_without_modifying_changes_or_spans() {
+        let diff = json!({
+            "old_filename": "app.ts",
+            "new_filename": "app.ts",
+            "is_fallback": false,
+            "parse_errors": [],
+            "changes": [{"change_type": "MODIFICATION", "old_position": {"start_byte": 1}}],
+            "metadata": {"source": "wasm"}
+        });
+        let certified = certify_live_diff_value(diff.clone()).expect("certified commit item");
+        assert_eq!(certified["metadata"]["engine_owner"], "rust");
+        assert_eq!(certified["metadata"]["source"], "wasm");
+        assert_eq!(certified["changes"], diff["changes"]);
+        assert_eq!(certified["old_filename"], diff["old_filename"]);
+        assert_eq!(certified["new_filename"], diff["new_filename"]);
+    }
+
+    #[test]
+    fn preserves_rust_metadata_but_rejects_false_or_malformed_provenance() {
+        let base = json!({"is_fallback": false, "parse_errors": [], "changes": []});
+        let mut complete = base.clone();
+        complete["metadata"] = json!({"engine_owner": "rust", "source": "native"});
+        let accepted: Value = serde_json::from_str(
+            &certified_live_diff_response(complete.clone(), "example.py")
+        ).unwrap();
+        assert_eq!(accepted["diff"], complete);
+
+        for metadata in [
+            json!({"engine_owner": "python"}),
+            json!({"engine_owner": false}),
+            json!("invalid metadata"),
+        ] {
+            let mut invalid = base.clone();
+            invalid["metadata"] = metadata;
+            let declined: Value = serde_json::from_str(
+                &certified_live_diff_response(invalid, "example.py")
+            ).unwrap();
+            assert!(declined.get("diff").is_none(), "{declined}");
+            assert_eq!(declined["fallback_code"], "native_parse_incomplete");
+        }
+    }
+}
+
 /// python `LiveServer._process_request_with_source` (non-streaming) — the native single-file
 /// diff handler (#100, A2.5 Phase A1). Reads the "old" side (blob@ref), takes the live *content*
 /// as the "new" side, and runs the certified native batch (`diff_batch_impl`) for Python.
@@ -354,8 +504,9 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
 /// runs the native non-Python chain (`native_wasm_single_diff`: wasm-parse -> finalize ->
 /// invariances -> assemble, mirroring the differ's routed `_diff_single`). Either path returns
 /// `{"fallback": <reason>}` for an uncovered case (unresolved extension, uncertified batch item,
-/// off-spec guardrail policy, finalize declined) so the Python differ path runs
-/// unchanged. *config_json* is `self._differ._config` marshalled by the caller. Returns
+/// off-spec guardrail policy, finalize declined). These declines are not
+/// certified semantic results and the Python live transport must fail closed.
+/// *config_json* is `self._differ._config` marshalled by the caller. Returns
 /// `{"diff": <SemanticDiff>}` on a served result, else `{"fallback": <reason>}`.
 pub fn live_handle_diff_impl(
     repo_path: &str,
@@ -447,7 +598,7 @@ fn diff_resolved_sources(
                     let violation = policy_file_violation(&diff, path, path);
                     crate::attach_guardrail_violations(&mut diff, vec![violation]);
                 }
-                Ok(json!({ "diff": diff }).to_string())
+                Ok(certified_live_diff_response(diff, path))
             }
             Err(reason) => fallback(&reason),
         };
@@ -478,7 +629,7 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(json!({ "diff": diff }).to_string()),
+                    Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
                     None => fallback("batch item missing diff"),
                 }
             }
@@ -617,7 +768,8 @@ pub fn live_handle_review_impl(
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
     // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let (cross_file_changes, mut index_telemetry) = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir);
+    let (cross_file_changes, mut index_telemetry) =
+        crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).
@@ -641,6 +793,33 @@ pub fn live_handle_review_impl(
                         // The commit payload is plain UTF-8 JSON (Python: `bytes(commit_payload)`).
                         Some(bytes) => match serde_json::from_slice::<Value>(&bytes) {
                             Ok(mut commit_diff) => {
+                                // A "complete" batch control is insufficient if any
+                                // serialized per-file DTO is missing or uncertified.
+                                // Check every source before advertising commit success.
+                                if !commit_diff.get("parse_errors")
+                                    .and_then(Value::as_array).is_some_and(Vec::is_empty)
+                                {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "commit parse diagnostics are incomplete",
+                                    ));
+                                }
+                                let Some(diffs) = commit_diff.get_mut("file_diffs")
+                                    .and_then(Value::as_array_mut) else {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit missing file_diffs array",
+                                    ));
+                                };
+                                if diffs.len() != review_files.len() {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit dropped or added source files",
+                                    ));
+                                }
+                                for (file, diff) in review_files.iter().zip(diffs.iter_mut()) {
+                                    match certify_live_diff_value(diff.clone()) {
+                                        Ok(certified) => *diff = certified,
+                                        Err(reason) => return Ok(live_incomplete_file_response(&file.path, &reason)),
+                                    }
+                                }
                                 commit_diff["cross_file_changes"] = cross_file_changes.clone();
                                 if let Some(diffs) = commit_diff["file_diffs"].as_array_mut() {
                                     for diff in diffs {
@@ -724,6 +903,13 @@ pub fn live_handle_review_impl(
                 // Name the file: an anonymous per-file error cost a whole debugging round.
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
+        };
+        // An incomplete/malformed per-file parse declines the ENTIRE commit,
+        // preserving the file and parser cause rather than manufacturing
+        // commit-level parse_errors: [] (#193). The native transport is a relay.
+        diff = match certify_live_diff_value(diff) {
+            Ok(certified) => certified,
+            Err(reason) => return Ok(live_incomplete_file_response(&f.path, &reason)),
         };
         // python apply_guardrails_to_diff's policy-file check: an edit to intentumdiff.yaml itself.
         if guardrails_enabled
@@ -1475,3 +1661,7 @@ pub(crate) fn live_handle_diff_json(
 ) -> Result<String, String> {
     live_handle_diff_impl(repo_path, path, git_ref, content, config_json, wasm_dir)
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "live_review_completeness_source_tests.rs"]
+mod live_review_completeness_source_tests;
