@@ -201,3 +201,27 @@ fn reader_quoted_symbols_and_case_constants_are_not_bound_references() {
             "{scenario}: changed literal data is not formatting: {diff:#}");
     }
 }
+
+
+#[test]
+fn java_interop_member_names_are_not_parameter_references() {
+    // In (. receiver member), receiver is a bound expression but member
+    // identifies a Java method/field. Renaming the binder cannot justify
+    // treating the member-name change as a pure refactoring.
+    for (scenario, old, new) in [
+        ("dot method", "(defn f [getX] (. getX getX))\n",
+                       "(defn f [getY] (. getY getY))\n"),
+        ("nested dot", "(defn f [getX] (.. getX getX))\n",
+                        "(defn f [getY] (.. getY getY))\n"),
+    ] {
+        let diff = review(old, new);
+        assert_eq!(diff["has_semantic_changes"], true, "{scenario}: {diff:#}");
+        let changes = diff["changes"].as_array().expect("source-judged edits");
+        assert!(changes.iter().any(|change| {
+            change["refactoring_kind"] != "RENAME_VARIABLE"
+        }), "{scenario}: Java member-name edit hidden by binder promotion: {diff:#}");
+        assert!(diff["change_groups"].as_array().unwrap().iter()
+            .all(|group| group["kind"] != "IGNORED_STYLE"),
+            "{scenario}: changed method binding cannot be style-only: {diff:#}");
+    }
+}
