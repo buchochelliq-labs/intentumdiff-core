@@ -102,7 +102,11 @@ pub(crate) fn read_live_git_blob_strict(
     path: &str,
     git_ref: &str,
 ) -> Result<Option<Vec<u8>>, String> {
-    if path.is_empty() || path.contains(['\n', '\r', '\0']) {
+    if path.is_empty()
+        || path.contains('\n')
+        || path.contains('\r')
+        || path.contains('\0')
+    {
         return Err("invalid live Git baseline path".to_owned());
     }
     validate_arg(git_ref, "git ref")?;
