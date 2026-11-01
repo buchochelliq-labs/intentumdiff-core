@@ -25,7 +25,61 @@ const TEXT_CHANGE_TYPES: [char; 5] = ['A', 'D', 'M', 'R', 'C'];
 /// Run a git command and return its stdout trimmed to a `String` (for rev-parse etc.).
 fn run_git_line<const N: usize>(repo_path: &str, args: [&str; N]) -> Result<String, String> {
     let out = run_git(repo_path, args, None)?;
-    Ok(String::from_utf8_lossy(&out).trim().to_owned())
+    String::from_utf8(out)
+        .map(|text| text.trim().to_owned())
+        .map_err(|e| format!("invalid UTF-8 in Git metadata: {e}"))
+}
+
+/// Read one Git object specification without conflating a missing blob with a
+/// failed Git invocation. In --batch mode, a missing spec has an explicit
+/// "SPEC missing" record; process failures and malformed records remain errors.
+fn read_blob_spec_bytes(repo_path: &str, spec: &str) -> Result<Option<Vec<u8>>, String> {
+    if spec.bytes().any(|byte| matches!(byte, b'\n' | b'\r' | b'\0')) {
+        return Err("git blob spec contains a newline or NUL".to_owned());
+    }
+    let request = format!("{spec}\n");
+    let output = run_git(repo_path, ["cat-file", "--batch"], Some(request.as_bytes()))?;
+    let header_end = output
+        .iter()
+        .position(|byte| *byte == b'\n')
+        .ok_or_else(|| format!("missing git cat-file batch header for {spec:?}"))?;
+    let header = std::str::from_utf8(&output[..header_end])
+        .map_err(|e| format!("invalid git cat-file batch header for {spec:?}: {e}"))?;
+    let payload = &output[header_end + 1..];
+
+    if header == format!("{spec} missing") {
+        if !payload.is_empty() {
+            return Err(format!("unexpected payload for missing Git blob {spec:?}"));
+        }
+        return Ok(None);
+    }
+
+    let mut parts = header.split_ascii_whitespace();
+    let object_id = parts
+        .next()
+        .ok_or_else(|| format!("missing object ID for Git blob {spec:?}"))?;
+    let kind = parts
+        .next()
+        .ok_or_else(|| format!("missing object type for Git blob {spec:?}"))?;
+    let size = parts
+        .next()
+        .ok_or_else(|| format!("missing size for Git blob {spec:?}"))?
+        .parse::<usize>()
+        .map_err(|e| format!("invalid size for Git blob {spec:?}: {e}"))?;
+    if parts.next().is_some()
+        || kind != "blob"
+        || !matches!(object_id.len(), 40 | 64)
+        || !object_id.bytes().all(|byte| byte.is_ascii_hexdigit())
+    {
+        return Err(format!("unexpected Git blob header for {spec:?}: {header:?}"));
+    }
+    let expected_len = size
+        .checked_add(1)
+        .ok_or_else(|| format!("Git blob size overflow for {spec:?}"))?;
+    if payload.len() != expected_len || payload[size] != b'\n' {
+        return Err(format!("incomplete Git blob payload for {spec:?}"));
+    }
+    Ok(Some(payload[..size].to_vec()))
 }
 
 /// python `repo.commit(ref)`: resolve *git_ref* to a full commit sha (peeling tags).
@@ -43,7 +97,7 @@ pub(crate) fn resolve_commit(repo_path: &str, git_ref: &str) -> Result<String, S
 }
 
 /// python `commit.tree[path]` + `blob.data_stream.read()`: read a file from a commit
-/// tree as a lossy-UTF-8 string. `Ok(None)` = the path is absent in that commit (the
+/// tree as exact UTF-8. `Ok(None)` = the path is absent in that commit (the
 /// caller raises FileNotFoundError), distinguishing "missing" from an empty file.
 pub(crate) fn read_blob_at_rev(
     repo_path: &str,
@@ -53,15 +107,12 @@ pub(crate) fn read_blob_at_rev(
     if file_path.contains('\n') || file_path.contains('\r') || file_path.contains('\0') {
         return Err("git blob path contains a newline or NUL".to_owned());
     }
-    // `rev` here is a resolved sha from resolve_commit (never option-like); the spec
-    // `<rev>:<path>` is a single argv entry, so no shell / injection surface.
-    let spec = format!("{rev}:{file_path}");
-    match run_git(repo_path, ["cat-file", "blob", &spec], None) {
-        Ok(bytes) => Ok(Some(String::from_utf8_lossy(&bytes).into_owned())),
-        // A cat-file failure on an already-resolved rev means the path is not in the
-        // tree — GitPython surfaces this as KeyError -> FileNotFoundError.
-        Err(_) => Ok(None),
-    }
+    read_blob_bytes_at_rev(repo_path, rev, file_path)?
+        .map(|bytes| {
+            String::from_utf8(bytes)
+                .map_err(|e| format!("invalid UTF-8 in Git blob {rev}:{file_path}: {e}"))
+        })
+        .transpose()
 }
 
 /// python `repo.working_dir`: the absolute working-tree root. Errors when *repo_path*
@@ -145,9 +196,17 @@ pub(crate) fn working_tree_source_content_impl(
         .ok_or_else(|| {
             GitReadError::NotFound(format!("{file_path:?} not found in working tree at {top}"))
         })?;
-    let bytes = std::fs::read(&disk)
-        .map_err(|e| GitReadError::NotFound(format!("read working-tree file: {e}")))?;
-    let new_content = String::from_utf8_lossy(&bytes).into_owned();
+    let bytes = std::fs::read(&disk).map_err(|e| {
+        if e.kind() == std::io::ErrorKind::NotFound {
+            GitReadError::NotFound(format!("working-tree file disappeared {file_path:?}: {e}"))
+        } else {
+            GitReadError::Invalid(format!("read working-tree file {file_path:?}: {e}"))
+        }
+    })?;
+    let new_content = String::from_utf8(bytes)
+        .map_err(|e| GitReadError::Invalid(format!(
+            "invalid UTF-8 in working-tree file {file_path:?}: {e}"
+        )))?;
     serde_json::to_string(&ContentPair { old_content, new_content })
         .map_err(|e| GitReadError::Invalid(format!("serialize working-tree content: {e}")))
 }
@@ -160,8 +219,8 @@ pub(crate) fn working_tree_source_content_impl(
 /// For commit-to-commit diffs `staging_status` is always `None`.
 type ChangedRow = (String, String, String, String, Option<String>);
 
-/// Read a blob at *rev*:*path* as RAW bytes (for magic-byte content routing, where the
-/// lossy String would hide binary markers). `Ok(None)` = the path is absent in that tree.
+/// Read a blob at *rev*:*path* as RAW bytes for binary routing. `Ok(None)`
+/// means the path is actually absent, never that Git failed.
 fn read_blob_bytes_at_rev(
     repo_path: &str,
     rev: &str,
@@ -170,22 +229,33 @@ fn read_blob_bytes_at_rev(
     if file_path.contains('\n') || file_path.contains('\r') || file_path.contains('\0') {
         return Err("git blob path contains a newline or NUL".to_owned());
     }
-    match run_git(repo_path, ["cat-file", "blob", &format!("{rev}:{file_path}")], None) {
-        Ok(bytes) => Ok(Some(bytes)),
-        Err(_) => Ok(None),
-    }
+    read_blob_spec_bytes(repo_path, &format!("{rev}:{file_path}"))
 }
 
-/// Read the INDEX (staged) version of *path* — `git cat-file blob :<path>` — as a lossy
-/// UTF-8 string. `Ok(None)` = not present in the index.
-fn read_index_blob(repo_path: &str, file_path: &str) -> Result<Option<String>, String> {
+/// Read the INDEX (staged) version of *path* as raw bytes so binary files
+/// can be excluded before strict decoding. `Ok(None)` = absent in the index.
+fn read_index_blob(repo_path: &str, file_path: &str) -> Result<Option<Vec<u8>>, String> {
     if file_path.contains('\n') || file_path.contains('\r') || file_path.contains('\0') {
         return Err("git index path contains a newline or NUL".to_owned());
     }
-    match run_git(repo_path, ["cat-file", "blob", &format!(":{file_path}")], None) {
-        Ok(bytes) => Ok(Some(String::from_utf8_lossy(&bytes).into_owned())),
-        Err(_) => Ok(None),
+    read_blob_spec_bytes(repo_path, &format!(":{file_path}"))
+}
+
+/// Convert a magic-byte-classified source to exact text, never replacing invalid
+/// bytes. Opaque unknown content with no NUL is not sufficient evidence of
+/// intentional binary input: a corrupt source must not silently disappear.
+fn decode_changed_source(bytes: &[u8], path: &str) -> Result<Option<String>, String> {
+    let kind = detect_content_type(bytes);
+    if !kind.is_text {
+        if kind.mime == "application/octet-stream" && !bytes.contains(&0) {
+            std::str::from_utf8(bytes)
+                .map_err(|e| format!("invalid UTF-8 in Git source {path:?}: {e}"))?;
+        }
+        return Ok(None);
     }
+    std::str::from_utf8(bytes)
+        .map(|text| Some(text.to_owned()))
+        .map_err(|e| format!("invalid UTF-8 in Git source {path:?}: {e}"))
 }
 
 /// Shared `git diff --name-status -z <old> <new>` walk: read each side's blob (empty for
@@ -205,19 +275,27 @@ fn diff_sources_between(
         if !TEXT_CHANGE_TYPES.contains(&c) {
             continue;
         }
-        let old_content = if c == 'A' {
-            String::new()
+        let old_bytes = if c == 'A' {
+            Vec::new()
         } else {
-            read_blob_at_rev(repo_path, old_sha, &old_path)?.unwrap_or_default()
+            read_blob_bytes_at_rev(repo_path, old_sha, &old_path)?
+                .ok_or_else(|| format!("changed path {old_path:?} missing at {old_sha}"))?
         };
-        let new_content = if c == 'D' {
-            String::new()
+        let new_bytes = if c == 'D' {
+            Vec::new()
         } else {
-            read_blob_at_rev(repo_path, new_sha, &new_path)?.unwrap_or_default()
+            read_blob_bytes_at_rev(repo_path, new_sha, &new_path)?
+                .ok_or_else(|| format!("changed path {new_path:?} missing at {new_sha}"))?
         };
-        if old_content.contains('\0') || new_content.contains('\0') {
+        // Preserve the existing commit-to-commit NUL binary exclusion, but
+        // reject invalid UTF-8 rather than generating replacement characters.
+        if old_bytes.contains(&0) || new_bytes.contains(&0) {
             continue;
         }
+        let old_content = String::from_utf8(old_bytes)
+            .map_err(|e| format!("invalid UTF-8 in Git blob {old_path:?}: {e}"))?;
+        let new_content = String::from_utf8(new_bytes)
+            .map_err(|e| format!("invalid UTF-8 in Git blob {new_path:?}: {e}"))?;
         rows.push((old_content, new_content, old_path, new_path, staging.map(str::to_owned)));
     }
     Ok(rows)
@@ -235,11 +313,18 @@ fn working_tree_sources(repo_path: &str, old_ref: &str) -> Result<Vec<ChangedRow
     // Files staged relative to old (the index diff) — used only for the staging label.
     let staged_out =
         run_git(repo_path, ["diff", "--cached", "--name-only", "-z", &old_sha], None)?;
+    if !staged_out.is_empty() && !staged_out.ends_with(&[0]) {
+        return Err("incomplete staged-path inventory: missing NUL".to_owned());
+    }
     let staged: HashSet<String> = staged_out
         .split(|&b| b == 0)
         .filter(|s| !s.is_empty())
-        .map(|s| String::from_utf8_lossy(s).into_owned())
-        .collect();
+        .map(|path| {
+            std::str::from_utf8(path)
+                .map(str::to_owned)
+                .map_err(|e| format!("invalid UTF-8 in staged path: {e}"))
+        })
+        .collect::<Result<_, _>>()?;
 
     // Working-tree diff (old commit vs the working tree — staged + unstaged combined).
     let diff_out = run_git(repo_path, ["diff", "--name-status", "-z", &old_sha], None)?;
@@ -253,50 +338,46 @@ fn working_tree_sources(repo_path: &str, old_ref: &str) -> Result<Vec<ChangedRow
         let old_bytes = if c == 'A' {
             Vec::new()
         } else {
-            read_blob_bytes_at_rev(repo_path, &old_sha, &old_path)?.unwrap_or_default()
+            read_blob_bytes_at_rev(repo_path, &old_sha, &old_path)?
+                .ok_or_else(|| format!("changed path {old_path:?} missing at {old_sha}"))?
         };
         let new_bytes = if c == 'D' {
             Vec::new()
         } else {
-            match safe_working_tree_path_rust(root, &new_path)? {
-                Some(p) => std::fs::read(&p).unwrap_or_default(),
-                None => Vec::new(),
-            }
+            let disk = safe_working_tree_path_rust(root, &new_path)?
+                .ok_or_else(|| format!("changed working-tree path {new_path:?} disappeared"))?;
+            std::fs::read(&disk)
+                .map_err(|e| format!("read changed working-tree file {new_path:?}: {e}"))?
         };
         // Magic-byte routing on BOTH sides (a modified PNG must never reach the parser).
-        if !detect_content_type(&old_bytes).is_text || !detect_content_type(&new_bytes).is_text {
+        // Unknown opaque source bytes without NUL must fail closed, not disappear.
+        let old_content = decode_changed_source(&old_bytes, &old_path)?;
+        let new_content = decode_changed_source(&new_bytes, &new_path)?;
+        let (Some(old_content), Some(new_content)) = (old_content, new_content) else {
             continue;
-        }
+        };
         let staging = if staged.contains(&new_path) { "staged" } else { "unstaged" };
-        rows.push((
-            String::from_utf8_lossy(&old_bytes).into_owned(),
-            String::from_utf8_lossy(&new_bytes).into_owned(),
-            old_path,
-            new_path,
-            Some(staging.to_owned()),
-        ));
+        rows.push((old_content, new_content, old_path, new_path, Some(staging.to_owned())));
     }
 
     // Untracked files → additions.
     let untracked_out =
         run_git(repo_path, ["ls-files", "--others", "--exclude-standard", "-z"], None)?;
+    if !untracked_out.is_empty() && !untracked_out.ends_with(&[0]) {
+        return Err("incomplete untracked-path inventory: missing NUL".to_owned());
+    }
     for path_bytes in untracked_out.split(|&b| b == 0).filter(|s| !s.is_empty()) {
-        let path = String::from_utf8_lossy(path_bytes).into_owned();
-        let disk = match safe_working_tree_path_rust(root, &path)? {
-            Some(p) => p,
-            None => continue,
-        };
-        let bytes = std::fs::read(&disk).unwrap_or_default();
-        if !detect_content_type(&bytes).is_text {
+        let path = std::str::from_utf8(path_bytes)
+            .map_err(|e| format!("invalid UTF-8 in untracked path: {e}"))?
+            .to_owned();
+        let disk = safe_working_tree_path_rust(root, &path)?
+            .ok_or_else(|| format!("untracked path {path:?} disappeared"))?;
+        let bytes = std::fs::read(&disk)
+            .map_err(|e| format!("read untracked source {path:?}: {e}"))?;
+        let Some(content) = decode_changed_source(&bytes, &path)? else {
             continue;
-        }
-        rows.push((
-            String::new(),
-            String::from_utf8_lossy(&bytes).into_owned(),
-            path.clone(),
-            path,
-            Some("untracked".to_owned()),
-        ));
+        };
+        rows.push((String::new(), content, path.clone(), path, Some("untracked".to_owned())));
     }
     Ok(rows)
 }
@@ -314,19 +395,26 @@ fn staged_sources(repo_path: &str, old_ref: &str) -> Result<Vec<ChangedRow>, Str
         if !TEXT_CHANGE_TYPES.contains(&c) {
             continue;
         }
-        let old_content = if c == 'A' {
-            String::new()
+        let old_bytes = if c == 'A' {
+            Vec::new()
         } else {
-            read_blob_at_rev(repo_path, &old_sha, &old_path)?.unwrap_or_default()
+            read_blob_bytes_at_rev(repo_path, &old_sha, &old_path)?
+                .ok_or_else(|| format!("staged old path {old_path:?} missing at {old_sha}"))?
         };
-        let new_content = if c == 'D' {
-            String::new()
+        let new_bytes = if c == 'D' {
+            Vec::new()
         } else {
-            read_index_blob(repo_path, &new_path)?.unwrap_or_default()
+            read_index_blob(repo_path, &new_path)?
+                .ok_or_else(|| format!("staged new path {new_path:?} missing in index"))?
         };
-        if old_content.contains('\0') || new_content.contains('\0') {
+        // Preserve NUL-binary exclusion before decoding staged bytes.
+        if old_bytes.contains(&0) || new_bytes.contains(&0) {
             continue;
         }
+        let old_content = String::from_utf8(old_bytes)
+            .map_err(|e| format!("invalid UTF-8 in staged old source {old_path:?}: {e}"))?;
+        let new_content = String::from_utf8(new_bytes)
+            .map_err(|e| format!("invalid UTF-8 in staged new source {new_path:?}: {e}"))?;
         rows.push((old_content, new_content, old_path, new_path, Some("staged".to_owned())));
     }
     Ok(rows)
@@ -342,12 +430,18 @@ fn unpushed_sources(repo_path: &str) -> Result<Vec<ChangedRow>, String> {
     };
     let upstream = run_git(repo_path, ["rev-parse", "--verify", "--quiet", "@{u}"], None)
         .map_err(|_| no_upstream())?;
-    let upstream_sha = String::from_utf8_lossy(&upstream).trim().to_owned();
+    let upstream_sha = String::from_utf8(upstream)
+        .map_err(|e| format!("invalid UTF-8 in upstream Git ref: {e}"))?
+        .trim()
+        .to_owned();
     if upstream_sha.is_empty() {
         return Err(no_upstream());
     }
     let head = run_git(repo_path, ["rev-parse", "--verify", "HEAD"], None)?;
-    let head_sha = String::from_utf8_lossy(&head).trim().to_owned();
+    let head_sha = String::from_utf8(head)
+        .map_err(|e| format!("invalid UTF-8 in HEAD Git ref: {e}"))?
+        .trim()
+        .to_owned();
     diff_sources_between(repo_path, &upstream_sha, &head_sha, Some("unpushed"))
 }
 
@@ -507,6 +601,47 @@ mod tests {
         assert!(json.contains("app.py") && json.contains("unstaged"), "{json}");
         assert!(json.contains("new_mod.py") && json.contains("untracked"), "{json}");
         assert!(json.contains("x = 2") && json.contains("y = 1"), "{json}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn git_source_rejects_invalid_committed_and_staged_utf8() {
+        let Some(dir) = temp_repo("app.py", "value = 1\n") else { return };
+        let path = dir.to_str().unwrap();
+        // The index contains bytes that cannot be represented by a String.
+        std::fs::write(dir.join("app.py"), b"value = \\xff\n").unwrap();
+        git_in(&dir, &["add", "app.py"]).expect("stage invalid UTF-8");
+
+        let staged_error = changed_sources_json(path, "HEAD", ":staged").unwrap_err();
+        assert!(staged_error.contains("invalid UTF-8"), "{staged_error}");
+        let tree_error = changed_sources_json(path, "HEAD", "").unwrap_err();
+        assert!(tree_error.contains("invalid UTF-8"), "{tree_error}");
+
+        git_in(&dir, &["commit", "-m", "raw bytes"]).expect("commit invalid source");
+        let sha = resolve_commit(path, "HEAD").expect("resolve raw commit");
+        let committed_error = read_blob_at_rev(path, &sha, "app.py").unwrap_err();
+        assert!(committed_error.contains("invalid UTF-8"), "{committed_error}");
+        assert!(git_source_content_impl(path, "app.py", "HEAD", "HEAD").is_err());
+        let commit_error = changed_commit_sources_json(path, "HEAD~1", "HEAD").unwrap_err();
+        assert!(commit_error.contains("invalid UTF-8"), "{commit_error}");
+
+        // Missing object remains distinct from invalid content and Git failure.
+        assert!(read_blob_at_rev(path, &sha, "not-there.py").unwrap().is_none());
+        assert!(read_blob_at_rev("/nonexistent", &sha, "app.py").is_err());
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn git_source_preserves_valid_multibyte_utf8() {
+        let Some(dir) = temp_repo("app.py", "value = 'é'\n") else { return };
+        let path = dir.to_str().unwrap();
+        let sha = resolve_commit(path, "HEAD").unwrap();
+        let content = read_blob_at_rev(path, &sha, "app.py").unwrap().unwrap();
+        assert_eq!(content, "value = 'é'\n");
+        let source_json = git_source_content_impl(path, "app.py", "HEAD", "HEAD")
+            .ok()
+            .expect("valid UTF-8 is available");
+        assert!(source_json.contains("é"), "{source_json}");
         let _ = std::fs::remove_dir_all(&dir);
     }
 
