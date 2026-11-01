@@ -516,11 +516,72 @@ pub fn live_handle_diff_impl(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    // old side = blob@ref ("" when absent, matching LiveBufferSource); new side = live buffer.
-    let old_source = crate::vcs_backend::read_blob("git", repo_path, path, git_ref)
-        .map(|b| String::from_utf8_lossy(&b).into_owned())
-        .unwrap_or_default();
+    // A proved absent path at a valid commit is a legitimate addition. Invalid
+    // Git refs, read failures and invalid UTF-8 must never become an empty or
+    // replacement-character baseline before Rust computes source spans (#207).
+    let old_source = match crate::vcs_backend::read_live_git_blob_strict(
+        repo_path, path, git_ref,
+    )? {
+        Some(bytes) => String::from_utf8(bytes)
+            .map_err(|e| format!("invalid UTF-8 in live Git baseline {path:?}: {e}"))?,
+        None => String::new(),
+    };
     diff_resolved_sources(repo_path, path, &old_source, content, config_json, wasm_dir)
+}
+
+#[cfg(test)]
+mod strict_live_git_baseline_tests {
+    use super::*;
+    use std::process::Command;
+
+    fn git(root: &std::path::Path, args: &[&str]) {
+        let output = Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(args)
+            .output()
+            .expect("git executable required for Rust Git-source acceptance");
+        assert!(
+            output.status.success(),
+            "git {args:?}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
+    fn live_git_baselines_are_byte_exact_and_missing_refs_fail_closed() {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let root = repo.path();
+        git(root, &["init", "--quiet"]);
+        git(root, &["config", "user.name", "IntentumDiff CI"]);
+        git(root, &["config", "user.email", "ci@example.invalid"]);
+        std::fs::write(root.join("good.py"), "value = 'é'\n").unwrap();
+        std::fs::write(root.join("bad.py"), b"value = \xff\n").unwrap();
+        git(root, &["add", "."]);
+        git(root, &["commit", "-m", "strict source acceptance"]);
+        let path = root.to_str().expect("utf8 temporary test path");
+
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "good.py", "HEAD").unwrap(),
+            Some("value = 'é'\n".as_bytes().to_vec())
+        );
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "missing.py", "HEAD").unwrap(),
+            None
+        );
+        let raw = crate::vcs_backend::read_live_git_blob_strict(path, "bad.py", "HEAD")
+            .unwrap()
+            .expect("committed bad source exists");
+        assert_eq!(raw, b"value = \xff\n");
+
+        let invalid = live_handle_diff_impl(path, "bad.py", "HEAD", "value = 1\n", "{}", "");
+        assert!(invalid.unwrap_err().contains("invalid UTF-8 in live Git baseline"));
+
+        let bad_ref = live_handle_diff_impl(
+            path, "good.py", "not-a-real-ref", "value = 2\n", "{}", "",
+        );
+        assert!(bad_ref.is_err(), "an invalid ref cannot become an empty baseline");
+    }
 }
 
 /// Content-vs-content diff with the SAME resolution/guardrail/branch behaviour as the live
@@ -1620,11 +1681,31 @@ mod tests {
 
     #[test]
     fn native_diff_falls_back_without_manifest() {
-        // With no wasm_dir/manifest, resolution fails -> fallback so the Python differ path runs.
+        if !have_git() {
+            return;
+        }
+        // A missing repository is an I/O failure, not a reason to manufacture
+        // a fallback result. The strict Git baseline gate must run first.
+        let missing_repo = live_handle_diff_json(
+            "/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "",
+        );
+        assert!(missing_repo.is_err(), "a missing Git repository must fail closed");
+
+        // Missing parser assets are a legitimate *post-baseline* fallback.
+        // Exercise that path in a real committed repo to keep the two states distinct.
+        let repo = asset_repo("fallback-no-manifest");
         let v: Value = serde_json::from_str(
-            &live_handle_diff_json("/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "").unwrap(),
+            &live_handle_diff_json(
+                &repo.to_string_lossy(),
+                "src/app.ts",
+                "HEAD",
+                "x = 1",
+                "{}",
+                "",
+            )
+            .expect("valid Git source permits parser resolution"),
         )
-        .unwrap();
+        .expect("fallback response is JSON");
         assert!(v.get("fallback").is_some(), "no manifest must fall back: {v}");
         assert!(v.get("diff").is_none());
     }

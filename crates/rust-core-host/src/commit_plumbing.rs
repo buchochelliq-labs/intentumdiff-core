@@ -39,11 +39,18 @@ pub(crate) fn collect_working_tree_python_files_rust(
         ["diff", "--cached", "--name-only", "-z", old_ref],
         None,
     )?;
+    if !staged_output.is_empty() && !staged_output.ends_with(&[0]) {
+        return Err("incomplete staged Git inventory: missing NUL".to_owned());
+    }
     let staged_paths: HashSet<String> = staged_output
         .split(|byte| *byte == 0)
         .filter(|token| !token.is_empty())
-        .map(|token| String::from_utf8_lossy(token).to_string())
-        .collect();
+        .map(|token| {
+            std::str::from_utf8(token)
+                .map(str::to_owned)
+                .map_err(|e| format!("invalid UTF-8 in staged Git path: {e}"))
+        })
+        .collect::<Result<_, _>>()?;
     let old_paths: Vec<&str> = entries
         .iter()
         .filter(|(code, _, _)| *code != "A")
@@ -57,23 +64,24 @@ pub(crate) fn collect_working_tree_python_files_rust(
         let old_source = if code == "A" {
             String::new()
         } else {
-            old_contents.get(&old_path).cloned().unwrap_or_default()
+            old_contents
+                .get(&old_path)
+                .cloned()
+                .ok_or_else(|| format!("expected Git baseline {old_path:?} is missing"))?
         };
         let new_source = if code == "D" {
             String::new()
         } else {
-            match safe_working_tree_path_rust(root, &new_path)? {
-                Some(path) => {
-                    let len = fs::metadata(&path)
-                        .map_err(|exc| format!("metadata working-tree file: {exc}"))?
-                        .len() as usize;
-                    if len > max_source_bytes {
-                        return Err(format!("working-tree file exceeds byte limit: {new_path}"));
-                    }
-                    fs::read_to_string(path).unwrap_or_default()
-                }
-                None => String::new(),
+            let path = safe_working_tree_path_rust(root, &new_path)?
+                .ok_or_else(|| format!("changed working-tree path {new_path:?} disappeared"))?;
+            let len = fs::metadata(&path)
+                .map_err(|exc| format!("metadata working-tree file {new_path:?}: {exc}"))?
+                .len() as usize;
+            if len > max_source_bytes {
+                return Err(format!("working-tree file exceeds byte limit: {new_path}"));
             }
+            fs::read_to_string(&path)
+                .map_err(|exc| format!("read UTF-8 working-tree source {new_path:?}: {exc}"))?
         };
         let staging_status = if staged_paths.contains(&old_path) || staged_paths.contains(&new_path)
         {
@@ -126,39 +134,53 @@ pub(crate) fn run_git<const N: usize>(
 }
 
 pub(crate) fn parse_name_status_z(data: &[u8]) -> Result<Vec<(String, String, String)>, String> {
-    let tokens: Vec<&[u8]> = data
+    if data.is_empty() {
+        return Ok(Vec::new());
+    }
+    if !data.ends_with(&[0]) {
+        return Err("incomplete git name-status -z inventory: missing NUL".to_owned());
+    }
+    // Do not filter empty tokens: a missing filename/status is malformed input,
+    // and collapsing tokens can change which source file receives a status.
+    let tokens: Vec<&[u8]> = data[..data.len() - 1]
         .split(|byte| *byte == 0)
-        .filter(|token| !token.is_empty())
         .collect();
     let mut entries = Vec::new();
     let mut index = 0;
     while index < tokens.len() {
-        let status = String::from_utf8_lossy(tokens[index]).to_string();
+        let status = std::str::from_utf8(tokens[index])
+            .map_err(|e| format!("invalid UTF-8 in Git status: {e}"))?;
         index += 1;
-        let code = status.chars().next().unwrap_or_default().to_string();
-        if !matches!(code.as_str(), "A" | "D" | "M" | "R" | "C") {
-            if index < tokens.len() {
-                index += 1;
-            }
-            continue;
+        let code = status.chars().next().unwrap_or_default();
+        let valid = matches!(status, "A" | "D" | "M")
+            || (matches!(code, 'R' | 'C')
+                && status.len() > 1
+                && status[1..].bytes().all(|byte| byte.is_ascii_digit()));
+        if !valid {
+            return Err(format!("unsupported or malformed Git change status {status:?}"));
         }
-        let (old_path, new_path) = if matches!(code.as_str(), "R" | "C") {
-            if index + 1 >= tokens.len() {
-                return Err("malformed git name-status rename entry".to_owned());
+        let count = if matches!(code, 'R' | 'C') { 2 } else { 1 };
+        if index + count > tokens.len() {
+            return Err(format!("truncated Git name-status record {status:?}"));
+        }
+        let old_path = std::str::from_utf8(tokens[index])
+            .map_err(|e| format!("invalid UTF-8 in Git changed path: {e}"))?;
+        if old_path.is_empty() {
+            return Err("empty Git changed path".to_owned());
+        }
+        index += 1;
+        let new_path = if count == 2 {
+            let path = std::str::from_utf8(tokens[index])
+                .map_err(|e| format!("invalid UTF-8 in Git renamed path: {e}"))?;
+            if path.is_empty() {
+                return Err("empty Git renamed path".to_owned());
             }
-            let old_path = String::from_utf8_lossy(tokens[index]).to_string();
-            let new_path = String::from_utf8_lossy(tokens[index + 1]).to_string();
-            index += 2;
-            (old_path, new_path)
-        } else {
-            if index >= tokens.len() {
-                return Err("malformed git name-status entry".to_owned());
-            }
-            let path = String::from_utf8_lossy(tokens[index]).to_string();
             index += 1;
-            (path.clone(), path)
+            path
+        } else {
+            old_path
         };
-        entries.push((code, old_path, new_path));
+        entries.push((code.to_string(), old_path.to_owned(), new_path.to_owned()));
     }
     Ok(entries)
 }
@@ -179,8 +201,8 @@ pub(crate) fn read_commit_paths_batch_rust(
     let mut unique_paths = Vec::new();
     let mut seen = HashSet::new();
     for path in paths {
-        if path.contains('\n') || path.contains('\r') {
-            return Err("git cat-file path contains a newline".to_owned());
+        if path.contains('\n') || path.contains('\r') || path.contains('\0') {
+            return Err("git cat-file path contains a newline or NUL".to_owned());
         }
         if seen.insert(*path) {
             unique_paths.push(*path);
@@ -192,39 +214,52 @@ pub(crate) fn read_commit_paths_batch_rust(
     let mut pos = 0;
     for path in unique_paths {
         let Some(relative_end) = output[pos..].iter().position(|byte| *byte == b'\n') else {
-            return Err("malformed git cat-file batch output".to_owned());
+            return Err(format!("incomplete Git cat-file header for {path:?}"));
         };
         let header_end = pos + relative_end;
-        let header = &output[pos..header_end];
+        let header = std::str::from_utf8(&output[pos..header_end])
+            .map_err(|e| format!("invalid Git batch header for {path:?}: {e}"))?;
         pos = header_end + 1;
-        if header.ends_with(b" missing") {
-            result.insert(path.to_owned(), String::new());
-            continue;
+
+        if header == format!("{old_ref}:{path} missing") {
+            return Err(format!("expected Git baseline {path:?} is missing at {old_ref}"));
         }
-        let header_text = String::from_utf8_lossy(header);
-        let mut parts = header_text.split_whitespace();
-        let _object = parts.next();
-        let _kind = parts.next();
-        let size = parts
+
+        let mut fields = header.split_ascii_whitespace();
+        let object_id = fields
             .next()
-            .ok_or_else(|| "malformed git cat-file batch header".to_owned())?
+            .ok_or_else(|| format!("missing Git object ID for {path:?}"))?;
+        let kind = fields
+            .next()
+            .ok_or_else(|| format!("missing Git object type for {path:?}"))?;
+        let size = fields
+            .next()
+            .ok_or_else(|| format!("missing Git object size for {path:?}"))?
             .parse::<usize>()
-            .map_err(|_| "malformed git cat-file batch size".to_owned())?;
+            .map_err(|e| format!("invalid Git blob size for {path:?}: {e}"))?;
+        if fields.next().is_some()
+            || kind != "blob"
+            || !matches!(object_id.len(), 40 | 64)
+            || !object_id.bytes().all(|byte| byte.is_ascii_hexdigit())
+        {
+            return Err(format!("unexpected Git batch header for {path:?}: {header:?}"));
+        }
         if size > max_source_bytes {
             return Err(format!("git blob exceeds byte limit: {path}"));
         }
-        if pos + size > output.len() {
-            return Err("truncated git cat-file batch content".to_owned());
+        let end = pos
+            .checked_add(size)
+            .ok_or_else(|| format!("Git blob size overflow for {path:?}"))?;
+        if output.get(end) != Some(&b'\n') {
+            return Err(format!("incomplete Git blob record for {path:?}"));
         }
-        let content = &output[pos..pos + size];
-        pos += size;
-        if output.get(pos) == Some(&b'\n') {
-            pos += 1;
-        }
-        result.insert(
-            path.to_owned(),
-            String::from_utf8_lossy(content).to_string(),
-        );
+        let text = std::str::from_utf8(&output[pos..end])
+            .map_err(|e| format!("invalid UTF-8 in committed Git source {path:?}: {e}"))?;
+        pos = end + 1;
+        result.insert(path.to_owned(), text.to_owned());
+    }
+    if pos != output.len() {
+        return Err("extra unrequested Git cat-file batch records".to_owned());
     }
     Ok(result)
 }
@@ -654,4 +689,66 @@ pub(crate) fn commit_json_control(
         "phase_timings": probe.phases.clone(),
         "batch_metadata": batch_metadata,
     })
+}
+
+
+#[cfg(test)]
+mod strict_git_inventory_tests {
+    use super::*;
+    use std::process::Command;
+
+    #[test]
+    fn rejects_truncated_or_lossy_git_status_records() {
+        assert!(parse_name_status_z(b"").unwrap().is_empty());
+        assert_eq!(
+            parse_name_status_z(b"M\0a.py\0").unwrap(),
+            vec![("M".to_owned(), "a.py".to_owned(), "a.py".to_owned())]
+        );
+        assert!(parse_name_status_z(b"M\0a.py").is_err());
+        assert!(parse_name_status_z(b"M\0\0").is_err());
+        assert!(parse_name_status_z(b"M\0bad_\xff.py\0").is_err());
+        assert!(parse_name_status_z(b"T\0a.py\0").is_err());
+        assert_eq!(
+            parse_name_status_z("R100\0old.py\0café.py\0".as_bytes()).unwrap(),
+            vec![("R".to_owned(), "old.py".to_owned(), "café.py".to_owned())]
+        );
+    }
+
+    fn git(repo: &Path, args: &[&str]) {
+        let output = Command::new("git").arg("-C").arg(repo).args(args)
+            .output().expect("Git must be installed for source-integrity regressions");
+        assert!(output.status.success(), "git {args:?}: {:?}",
+                String::from_utf8_lossy(&output.stderr));
+    }
+
+    #[test]
+    fn certified_commit_collection_never_invents_empty_sources() {
+        let repo = tempfile::tempdir().expect("temp Git repo");
+        let root = repo.path();
+        git(root, &["init", "--quiet"]);
+        git(root, &["config", "user.name", "Integrity Test"]);
+        git(root, &["config", "user.email", "integrity@example.invalid"]);
+        fs::write(root.join("app.py"), "msg = 'é'\n").unwrap();
+        git(root, &["add", "."]);
+        git(root, &["commit", "-m", "valid baseline"]);
+        let path = root.to_str().unwrap();
+        // Readable multibyte content is preserved exactly.
+        fs::write(root.join("app.py"), "msg = 'été'\n").unwrap();
+        let files = collect_working_tree_python_files_rust(path, "HEAD", 1024).unwrap();
+        assert_eq!(files.len(), 1);
+        assert_eq!(files[0]["old_source"], "msg = 'é'\n");
+        assert_eq!(files[0]["new_source"], "msg = 'été'\n");
+
+        // Invalid working-tree bytes must not be replaced or made empty.
+        fs::write(root.join("app.py"), b"msg = \xff\n").unwrap();
+        let err = collect_working_tree_python_files_rust(path, "HEAD", 1024).unwrap_err();
+        assert!(err.contains("read UTF-8 working-tree source"), "{err}");
+
+        // Invalid committed baseline bytes must not become certified source.
+        git(root, &["add", "."]);
+        git(root, &["commit", "-m", "invalid committed source"]);
+        fs::write(root.join("app.py"), "msg = 'recovered'\n").unwrap();
+        let err = collect_working_tree_python_files_rust(path, "HEAD", 1024).unwrap_err();
+        assert!(err.contains("invalid UTF-8 in committed Git source"), "{err}");
+    }
 }

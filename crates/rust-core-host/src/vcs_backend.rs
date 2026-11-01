@@ -93,6 +93,76 @@ pub(crate) fn read_blob(vcs: &str, repo_path: &str, path: &str, git_ref: &str) -
     .ok()
 }
 
+/// Strict raw Git baseline reader for the native live-diff handler (#207).
+///
+/// A genuinely absent path at a *validated* commit is an addition (None).
+/// Git/repository/ref/transport failures are errors, never an empty baseline.
+pub(crate) fn read_live_git_blob_strict(
+    repo_path: &str,
+    path: &str,
+    git_ref: &str,
+) -> Result<Option<Vec<u8>>, String> {
+    if path.is_empty()
+        || path.contains('\n')
+        || path.contains('\r')
+        || path.contains('\0')
+    {
+        return Err("invalid live Git baseline path".to_owned());
+    }
+    validate_arg(git_ref, "git ref")?;
+    if git_ref.is_empty() {
+        return Err("empty live Git ref".to_owned());
+    }
+
+    // Resolve the ref first: cat-file failures must not conflate a bad ref,
+    // unavailable repository, or spawn error with a path absent from a tree.
+    let spec = format!("{git_ref}^{{commit}}");
+    let commit_stdout = run_vcs("git", repo_path, &["rev-parse", "--verify", &spec])?;
+    let commit = std::str::from_utf8(&commit_stdout)
+        .map_err(|e| format!("invalid Git ref response encoding: {e}"))?
+        .trim();
+    if commit.is_empty() {
+        return Err("Git returned an empty commit id".to_owned());
+    }
+
+    // A literal pathspec proves the path absent without swallowing cat-file
+    // errors. -r permits files nested at arbitrary depth.
+    let literal_path = format!(":(literal){path}");
+    let listing = run_vcs(
+        "git",
+        repo_path,
+        &["ls-tree", "-r", "-z", "--full-tree", commit, "--", &literal_path],
+    )?;
+    if listing.is_empty() {
+        return Ok(None);
+    }
+    if !listing.ends_with(&[0]) {
+        return Err("incomplete Git ls-tree response for live baseline".to_owned());
+    }
+    let mut found = false;
+    for record in listing.split(|&byte| byte == 0).filter(|entry| !entry.is_empty()) {
+        let tab = record.iter().position(|&byte| byte == b'\t')
+            .ok_or_else(|| "malformed Git ls-tree record for live baseline".to_owned())?;
+        let metadata = &record[..tab];
+        let name = &record[tab + 1..];
+        if name != path.as_bytes() {
+            return Err("unexpected Git ls-tree path for live baseline".to_owned());
+        }
+        if metadata.split(|&byte| byte == b' ').nth(1) != Some(&b"blob"[..]) {
+            return Err("live Git baseline path is not a blob".to_owned());
+        }
+        if found {
+            return Err("duplicate live Git baseline path".to_owned());
+        }
+        found = true;
+    }
+    if !found {
+        return Err("Git ls-tree omitted the requested live baseline path".to_owned());
+    }
+    let blob_spec = format!("{commit}:{path}");
+    run_vcs("git", repo_path, &["cat-file", "blob", &blob_spec]).map(Some)
+}
+
 fn changed_file(path: String, change_type: &str) -> ChangedFile {
     ChangedFile {
         old_path: if change_type == "added" { None } else { Some(path.clone()) },
