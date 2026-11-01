@@ -68,14 +68,22 @@ pub fn parse_policy(source: &str) -> Result<Vec<Value>, String> {
         }
         let files: Vec<String> = match map.get("files") {
             None | Some(Value::Null) => Vec::new(),
-            Some(Value::String(s)) => vec![s.clone()],
+            Some(Value::String(s)) if !s.trim().is_empty() => vec![s.clone()],
+            Some(Value::String(_)) => {
+                return Err(format!(
+                    "guardrails.protected[{index}].files must be a nonempty string"
+                ));
+            }
             Some(Value::Array(items)) => items
                 .iter()
-                .map(|item| match item {
-                    Value::String(s) => s.clone(),
-                    other => other.to_string(),
+                .enumerate()
+                .map(|(file_index, item)| match item {
+                    Value::String(s) if !s.trim().is_empty() => Ok(s.clone()),
+                    _ => Err(format!(
+                        "guardrails.protected[{index}].files[{file_index}] must be a nonempty string"
+                    )),
                 })
-                .collect(),
+                .collect::<Result<Vec<_>, String>>()?,
             Some(_) => {
                 return Err(format!(
                     "guardrails.protected[{index}].files is invalid"
