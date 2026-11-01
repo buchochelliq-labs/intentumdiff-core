@@ -529,6 +529,61 @@ pub fn live_handle_diff_impl(
     diff_resolved_sources(repo_path, path, &old_source, content, config_json, wasm_dir)
 }
 
+#[cfg(test)]
+mod strict_live_git_baseline_tests {
+    use super::*;
+    use std::process::Command;
+
+    fn git(root: &std::path::Path, args: &[&str]) {
+        let output = Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(args)
+            .output()
+            .expect("git executable required for Rust Git-source acceptance");
+        assert!(
+            output.status.success(),
+            "git {args:?}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
+    fn live_git_baselines_are_byte_exact_and_missing_refs_fail_closed() {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let root = repo.path();
+        git(root, &["init", "--quiet"]);
+        git(root, &["config", "user.name", "IntentumDiff CI"]);
+        git(root, &["config", "user.email", "ci@example.invalid"]);
+        std::fs::write(root.join("good.py"), "value = 'é'\n").unwrap();
+        std::fs::write(root.join("bad.py"), b"value = \xff\n").unwrap();
+        git(root, &["add", "."]);
+        git(root, &["commit", "-m", "strict source acceptance"]);
+        let path = root.to_str().expect("utf8 temporary test path");
+
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "good.py", "HEAD").unwrap(),
+            Some("value = 'é'\n".as_bytes().to_vec())
+        );
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "missing.py", "HEAD").unwrap(),
+            None
+        );
+        let raw = crate::vcs_backend::read_live_git_blob_strict(path, "bad.py", "HEAD")
+            .unwrap()
+            .expect("committed bad source exists");
+        assert_eq!(raw, b"value = \xff\n");
+
+        let invalid = live_handle_diff_impl(path, "bad.py", "HEAD", "value = 1\n", "{}", "");
+        assert!(invalid.unwrap_err().contains("invalid UTF-8 in live Git baseline"));
+
+        let bad_ref = live_handle_diff_impl(
+            path, "good.py", "not-a-real-ref", "value = 2\n", "{}", "",
+        );
+        assert!(bad_ref.is_err(), "an invalid ref cannot become an empty baseline");
+    }
+}
+
 /// Content-vs-content diff with the SAME resolution/guardrail/branch behaviour as the live
 /// diff handler, minus the git read — the native LSP server's `intentumdiff/semanticDiff`
 /// two-file mode (#100 S3; the Python server serves it via `StringSource` + the differ).
