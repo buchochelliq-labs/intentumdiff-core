@@ -129,6 +129,22 @@ pub fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &st
     })
 }
 
+/// Match policy filename rules against actual file identity, not a caller's
+/// public display alias. FileSource's filename contract is the basename.
+fn guardrail_target_filename(request: &Value, key: &str, display_name: &str) -> Result<String, String> {
+    match request.get(key) {
+        None => Ok(display_name.to_owned()),
+        Some(Value::String(path)) if !path.is_empty() => {
+            let basename = path.rsplit(['/', '\\']).next().unwrap_or("");
+            if basename.is_empty() {
+                return Err(format!("{key} must name a file"));
+            }
+            Ok(basename.to_owned())
+        }
+        _ => Err(format!("{key} must be a nonempty physical filename")),
+    }
+}
+
 /// Apply shared guardrail meaning to a complete review DTO.
 pub fn apply_policy(request: &Value) -> Result<Value, String> {
     let mut diff = request.get("diff").filter(|v| v.is_object()).cloned()
@@ -136,18 +152,28 @@ pub fn apply_policy(request: &Value) -> Result<Value, String> {
     if request.get("enabled").and_then(Value::as_bool) == Some(false) { return Ok(diff); }
     let old_filename = diff.get("old_filename").and_then(Value::as_str).unwrap_or("").to_owned();
     let new_filename = diff.get("new_filename").and_then(Value::as_str).unwrap_or("").to_owned();
+    let guardrail_old_filename = guardrail_target_filename(request, "guardrail_old_filename", &old_filename)?;
+    let guardrail_new_filename = guardrail_target_filename(request, "guardrail_new_filename", &new_filename)?;
     let old_source = request.get("old_source").and_then(Value::as_str).unwrap_or("");
     let new_source = request.get("new_source").and_then(Value::as_str).unwrap_or("");
     let rules = request.get("rules").and_then(Value::as_array).ok_or("guardrail rules must be an array")?;
     let mut violations = crate::evaluate_guardrail_rules_for_diff(
         &diff, rules, diff.get("language").and_then(Value::as_str).unwrap_or(""),
-        &old_filename, &new_filename,
+        &guardrail_old_filename, &guardrail_new_filename,
         &request.get("old_tree").unwrap_or(&Value::Null).to_string(),
         &request.get("new_tree").unwrap_or(&Value::Null).to_string(),
     )?;
+    // Only matching uses physical names. Keep public display labels and the
+    // violation's display-file field unchanged.
+    if request.get("guardrail_old_filename").is_some() || request.get("guardrail_new_filename").is_some() {
+        let display_file = if new_filename.is_empty() { &old_filename } else { &new_filename };
+        for violation in &mut violations {
+            violation["file"] = json!(display_file);
+        }
+    }
     let is_policy = |name: &str| name.rsplit(['/', '\\']).next()
         .is_some_and(|name| name.eq_ignore_ascii_case("intentumdiff.yaml"));
-    if old_source != new_source && (is_policy(&old_filename) || is_policy(&new_filename)) {
+    if old_source != new_source && (is_policy(&guardrail_old_filename) || is_policy(&guardrail_new_filename)) {
         violations.insert(0, policy_file_violation(&diff, &old_filename, &new_filename));
     }
     crate::attach_guardrail_violations(&mut diff, violations);
