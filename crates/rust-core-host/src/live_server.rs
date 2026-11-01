@@ -516,10 +516,16 @@ pub fn live_handle_diff_impl(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    // old side = blob@ref ("" when absent, matching LiveBufferSource); new side = live buffer.
-    let old_source = crate::vcs_backend::read_blob("git", repo_path, path, git_ref)
-        .map(|b| String::from_utf8_lossy(&b).into_owned())
-        .unwrap_or_default();
+    // A proved absent path at a valid commit is a legitimate addition. Invalid
+    // Git refs, read failures and invalid UTF-8 must never become an empty or
+    // replacement-character baseline before Rust computes source spans (#207).
+    let old_source = match crate::vcs_backend::read_live_git_blob_strict(
+        repo_path, path, git_ref,
+    )? {
+        Some(bytes) => String::from_utf8(bytes)
+            .map_err(|e| format!("invalid UTF-8 in live Git baseline {path:?}: {e}"))?,
+        None => String::new(),
+    };
     diff_resolved_sources(repo_path, path, &old_source, content, config_json, wasm_dir)
 }
 
