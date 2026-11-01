@@ -299,6 +299,11 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
                     && node.children.iter().find(|child| child.node_type == "sym_lit")
                         .is_some_and(|head| {
                             SPECIAL_QUOTES.contains(&head.label.as_str())
+                                // Java interop contains literal member names, not
+                                // bound references: (. object member), (.. ...),
+                                // shorthand (.member object), and doto clauses.
+                                || head.label.starts_with('.')
+                                || head.label == "doto"
                                 // A qualified or aliased `case` still treats its test
                                 // constants as literal data, never binder references.
                                 // Conservatively decline promotion for any such head.
@@ -2329,3 +2334,64 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "clojure_rename_source_tests.rs"]
 mod clojure_rename_source_tests;
+
+#[cfg(test)]
+mod clojure_interop_rename_tests {
+    use super::*;
+
+    fn node(id: &str, kind: &str, label: &str, children: Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode {
+            id: id.into(), node_type: kind.into(), label: label.into(), children,
+            position: NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            structural_hash: id.into(), parent_type: None, type_info: None, facts: None,
+        }
+    }
+
+    fn tree(binder: &str, head: &str, member: &str) -> SemanticNode {
+        node("root", "source", "", vec![node("def", "list_lit", "f", vec![
+            node("keyword", "sym_lit", "defn", vec![]),
+            node("name", "sym_lit", "f", vec![]),
+            node("params", "vec_lit", "", vec![node("binder", "sym_lit", binder, vec![])]),
+            node("body", "list_lit", "", vec![
+                node("head", "sym_lit", head, vec![]),
+                node("object", "sym_lit", binder, vec![]),
+                node("member", "sym_lit", member, vec![]),
+            ]),
+        ])])
+    }
+
+    fn edits<'a>(old: &'a SemanticNode, new: &'a SemanticNode) -> Vec<ChangeDraft<'a>> {
+        let mut edits = vec![];
+        for id in ["binder", "object", "member"] {
+            for (kind, tree) in [("DELETION", old), ("ADDITION", new)] {
+                let node = tree.descendants().into_iter().find(|n| n.id == id).unwrap();
+                edits.push(ChangeDraft { change_type: kind,
+                    old_node: if kind == "DELETION" { Some(node) } else { None },
+                    new_node: if kind == "ADDITION" { Some(node) } else { None },
+                    old_index: None, new_index: None, confidence: 1.0,
+                    description: String::new(), refactoring_kind: None, text_diff: None });
+            }
+        }
+        edits
+    }
+
+    #[test]
+    fn java_member_edits_survive_parameter_rename_promotion() {
+        let old = tree("getX", ".", "getX");
+        let new = tree("getY", ".", "getY");
+        let mut changes = edits(&old, &new);
+        promote_clojure_defn_parameter_renames(&mut changes, &old, &new, "clojure");
+        assert_eq!(changes.len(), 6, "member-name changes must not be consumed");
+        assert!(changes.iter().all(|c| c.refactoring_kind != Some("RENAME_VARIABLE")));
+    }
+
+    #[test]
+    fn ordinary_bound_references_still_promote() {
+        let old = tree("a", "+", "a");
+        let new = tree("x", "+", "x");
+        let mut changes = edits(&old, &new);
+        promote_clojure_defn_parameter_renames(&mut changes, &old, &new, "clojure");
+        assert_eq!(changes.len(), 1);
+        assert_eq!(changes[0].refactoring_kind, Some("RENAME_VARIABLE"));
+    }
+}

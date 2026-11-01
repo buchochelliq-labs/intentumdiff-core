@@ -836,21 +836,16 @@ pub(crate) fn enrich_mdx_children(
     if !(fence.starts_with("```") || fence.starts_with("~~~")) {
         return children;
     }
-    // An unclosed Markdown/MDX fence can end at the last *body* row. Only
-    // exclude end_line if the row is actually a closing delimiter with the
-    // same marker and at least as many fence characters as the opening.
-    // Otherwise keep that last content line and its source-byte evidence.
-    let marker = fence.as_bytes()[0];
-    let width = fence.bytes().take_while(|byte| *byte == marker).count();
-    let has_closing_fence = source_lines.get(closing).is_some_and(|line| {
-        let trimmed = line.trim();
-        trimmed.len() >= width && trimmed.bytes().all(|byte| byte == marker)
+    // An unterminated fence ends on its final content row. Exclude that
+    // row only if it is a matching closing delimiter, not arbitrary code.
+    let delimiter = fence.as_bytes()[0];
+    let width = fence.bytes().take_while(|byte| *byte == delimiter).count();
+    let has_closing_fence = closing > opening && source_lines.get(closing).is_some_and(|line| {
+        let candidate = line.trim();
+        let closing_width = candidate.bytes().take_while(|byte| *byte == delimiter).count();
+        closing_width >= width && candidate[closing_width..].is_empty()
     });
-    let body_end = if has_closing_fence {
-        closing
-    } else {
-        closing.saturating_add(1)
-    };
+    let body_end = if has_closing_fence { closing } else { closing.saturating_add(1) };
     let Some(inner) = source_lines.get(opening + 1..body_end) else {
         return children;
     };
@@ -1535,13 +1530,41 @@ mod mdx_code_body_source_span_tests {
     }
 
     #[test]
+    fn unclosed_code_fences_retain_final_content_and_utf8_span() {
+        for lines in [
+            vec!["```bash", "echo hello"],
+            vec!["~~~bash", "echo first", "  echo café"],
+            vec!["````bash", "echo first", "```"],
+            vec!["```bash", "echo first", "~~~"],
+            vec!["```bash", "echo first", "```not a closing fence"],
+        ] {
+            let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+            assert_eq!(children.len(), 1, "{lines:?}");
+            let body = &children[0];
+            assert_eq!(body.label, lines[1..].join("\n"));
+            assert_eq!(body.position.start_line, 1);
+            assert_eq!(body.position.start_col, 0);
+            assert_eq!(body.position.end_line, (lines.len() - 1) as u32);
+            assert_eq!(body.position.end_col, lines.last().unwrap().len() as u32);
+        }
+    }
+
+    #[test]
+    fn matching_longer_closing_fence_is_excluded_from_content() {
+        let lines = ["~~~bash", "echo hello", "  ~~~~  "];
+        let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        assert_eq!(children[0].label, "echo hello");
+        assert_eq!(children[0].position.end_line, 1);
+    }
+
+    #[test]
     fn empty_code_fence_cannot_manufacture_content_evidence() {
         let lines = ["```bash", "   ", "```"];
         let node = fenced_node(&lines);
         assert!(enrich_mdx_children(&node, &lines, vec![]).is_empty());
     }
 }
-
 
 #[cfg(test)]
 mod mdx_unclosed_fence_regression_tests {

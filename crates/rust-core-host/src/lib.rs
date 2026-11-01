@@ -5410,6 +5410,52 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// the two symbol tables and diffs them. Every required parse/index failure aborts the
 /// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
+// A symbol named "error" is valid source data: only the typed table schema
+// distinguishes it from the index engine's string-valued error envelope.
+fn validate_symbol_index_table(table: &str, side: &str) -> Result<(), String> {
+    let _: HashMap<String, Vec<index_engine_lib::SymbolDefinition>> =
+        serde_json::from_str(table)
+            .map_err(|reason| format!("symbol-index {side} table construction failed: {reason}"))?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod symbol_index_error_name_tests {
+    use super::*;
+
+    #[test]
+    fn function_named_error_is_a_valid_symbol_not_an_error_envelope() {
+        let files = json!([{
+            "filename": "module.py",
+            "language": "python",
+            "tree": {
+                "id": "0",
+                "node_type": "module",
+                "label": "",
+                "position": {"start_line": 0, "start_col": 0, "end_line": 1, "end_col": 0},
+                "children": [{
+                    "id": "0.0",
+                    "node_type": "function_definition",
+                    "label": "error",
+                    "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 12},
+                    "children": []
+                }]
+            }
+        }]);
+        let table = index_engine_lib::build_symbol_table_impl(&files.to_string());
+        assert!(validate_symbol_index_table(&table, "new").is_ok(), "{table}");
+        let parsed: Value = serde_json::from_str(&table).unwrap();
+        assert_eq!(parsed["error"][0]["qualified_name"], "error");
+    }
+
+    #[test]
+    fn string_error_envelopes_and_malformed_definition_rows_fail_closed() {
+        assert!(validate_symbol_index_table(r#"{"error":"cannot index"}"#, "old").is_err());
+        assert!(validate_symbol_index_table(r#"{"error":[{"wrong":true}]}"#, "new").is_err());
+        assert!(validate_symbol_index_table(r#"[]"#, "new").is_err());
+    }
+}
+
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
@@ -5517,11 +5563,7 @@ pub(crate) fn compute_commit_cross_file_changes(
     let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
     let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
     for (side, table) in [("old", &old_table), ("new", &new_table)] {
-        let value: Value = serde_json::from_str(table)
-            .map_err(|reason| format!("symbol-index {side} table is invalid: {reason}"))?;
-        if !value.is_object() || value.get("error").is_some() {
-            return Err(format!("symbol-index {side} table construction failed: {value}"));
-        }
+        validate_symbol_index_table(table, side)?;
     }
     let changes: Value = serde_json::from_str(
         &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
