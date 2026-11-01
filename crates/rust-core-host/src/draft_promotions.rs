@@ -299,6 +299,12 @@ pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
                     && node.children.iter().find(|child| child.node_type == "sym_lit")
                         .is_some_and(|head| {
                             SPECIAL_QUOTES.contains(&head.label.as_str())
+                                // Java interop dot forms treat the member identifier
+                                // as a literal method/field name, not a reference to
+                                // a similarly named local binder. Until Rust resolves
+                                // those positions, decline pure-rename promotion.
+                                || head.label == "." || head.label == ".."
+                                || head.label.starts_with('.')
                                 // A qualified or aliased `case` still treats its test
                                 // constants as literal data, never binder references.
                                 // Conservatively decline promotion for any such head.
