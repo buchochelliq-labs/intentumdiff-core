@@ -51,7 +51,7 @@ fn source_review_with_options_keeps_literal_edit() -> Result<(), ReviewError> {
         "parsers": {"python": {"plugin_id": "python", "wasm": "python_parser.wasm", "extensions": [".py"]}},
         "extension_index": {".py": "python"}
     }).to_string()).unwrap();
-    let options = ReviewOptions { detect_refactorings: Some(false), guardrails_enabled: Some(false), ..Default::default() };
+    let options = ReviewOptions { detect_refactorings: Some(true), guardrails_enabled: Some(false), ..Default::default() };
     let review = review_sources(root.path(), parsers.path(), "a.py", "def total(x):\n    return x + 1\n", "def total(x):\n    return x + 2\n", &options)?;
     assert!(review.has_semantic_changes);
     assert!(!review.is_style_only);
@@ -61,4 +61,23 @@ fn source_review_with_options_keeps_literal_edit() -> Result<(), ReviewError> {
     assert_eq!(change.old_node.as_ref().unwrap().label, "1");
     assert_eq!(change.new_node.as_ref().unwrap().label, "2");
     Ok(())
+}
+
+#[test]
+fn source_review_rejects_unsupported_refactoring_override() {
+    use intentumdiff_rust_core::api::{review_sources, ReviewOptions};
+    let root = tempfile::tempdir().unwrap();
+    let options = ReviewOptions {
+        detect_refactorings: Some(false),
+        ..Default::default()
+    };
+    // Invalid configuration must be reported even before parser discovery.
+    let error = review_sources(
+        root.path(), root.path(), "a.py", "x = 1", "x = 2", &options,
+    ).unwrap_err();
+    assert!(
+        matches!(error, ReviewError::Engine(ref reason)
+            if reason.contains("detect_refactorings") && reason.contains("unsupported")),
+        "{error}"
+    );
 }
