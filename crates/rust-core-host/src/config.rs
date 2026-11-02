@@ -7,7 +7,7 @@
 
 use std::collections::HashSet;
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 const INTENTUMDIFF_CONFIG_FILENAME: &str = "intentumdiff.yaml";
 
@@ -23,49 +23,51 @@ const DIFF_CONFIG_KEYS: &[&str] = &[
     "strict_plugins",
 ];
 
-/// python `config.find_intentumdiff_config`: the nearest `intentumdiff.yaml` from
-/// *start_path* (and cwd) upward, or an explicit path when it exists.
-pub(crate) fn find_config_path(start_path: Option<&str>, explicit_path: Option<&str>) -> Option<PathBuf> {
+/// Find the nearest project config from one physical origin only. A caller that
+/// supplies a source/repository path must never inherit an unrelated process cwd.
+pub(crate) fn find_config_path(
+    start_path: Option<&str>,
+    explicit_path: Option<&str>,
+) -> Result<Option<PathBuf>, String> {
+    // Preserve the existing public contract: a missing explicit file is absent.
     if let Some(ep) = explicit_path {
-        let p = PathBuf::from(ep);
-        return p.exists().then_some(p);
+        let path = PathBuf::from(ep);
+        return Ok(path.exists().then_some(path));
     }
+    let cwd = env::current_dir()
+        .map_err(|error| format!("cannot determine cwd for project configuration: {error}"))?;
+    find_config_path_from(start_path, &cwd)
+}
 
-    let cwd = env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
-    let mut starts: Vec<PathBuf> = Vec::new();
-    if let Some(sp) = start_path {
-        if !sp.is_empty() && !sp.starts_with('<') {
-            let raw = PathBuf::from(sp);
-            let start = if raw.is_dir() {
-                raw
-            } else {
-                raw.parent()
-                    .filter(|parent| !parent.as_os_str().is_empty())
-                    .map(PathBuf::from)
-                    .unwrap_or_else(|| cwd.clone())
-            };
-            starts.push(start);
+// Keeping cwd injected makes isolation tests deterministic without global chdir.
+fn find_config_path_from(start_path: Option<&str>, cwd: &Path) -> Result<Option<PathBuf>, String> {
+    let start = if let Some(sp) = start_path.filter(|path| !path.is_empty() && !path.starts_with('<')) {
+        let raw = PathBuf::from(sp);
+        let absolute = if raw.is_absolute() { raw } else { cwd.join(raw) };
+        if absolute.is_dir() {
+            absolute
+        } else {
+            absolute.parent().map(PathBuf::from).ok_or_else(|| {
+                format!("cannot locate parent for project configuration source {}", absolute.display())
+            })?
+        }
+    } else {
+        // No physical source/synthetic source: cwd is intentionally the origin.
+        cwd.to_path_buf()
+    };
+
+    // Canonicalization failure is an I/O error, never permission to take
+    // configuration from whichever unrelated directory happens to be cwd.
+    let current = start.canonicalize().map_err(|error| {
+        format!("cannot resolve project configuration search root {}: {error}", start.display())
+    })?;
+    for directory in current.ancestors() {
+        let candidate = directory.join(INTENTUMDIFF_CONFIG_FILENAME);
+        if candidate.exists() {
+            return Ok(Some(candidate));
         }
     }
-    starts.push(cwd.clone());
-
-    let mut seen: HashSet<PathBuf> = HashSet::new();
-    for start in starts {
-        // python uses Path.resolve() (falling back to cwd on OSError); canonicalize is
-        // the closest equivalent, with the same cwd fallback when the path is missing.
-        let current = start.canonicalize().unwrap_or_else(|_| cwd.clone());
-        for directory in current.ancestors() {
-            let directory = directory.to_path_buf();
-            if !seen.insert(directory.clone()) {
-                continue;
-            }
-            let candidate = directory.join(INTENTUMDIFF_CONFIG_FILENAME);
-            if candidate.exists() {
-                return Some(candidate);
-            }
-        }
-    }
-    None
+    Ok(None)
 }
 
 /// python `config.load_project_diff_config`: find + parse + validate the `config`
@@ -75,7 +77,7 @@ pub(crate) fn load_config_section(
     start_path: Option<&str>,
     explicit_path: Option<&str>,
 ) -> Result<String, String> {
-    let path = match find_config_path(start_path, explicit_path) {
+    let path = match find_config_path(start_path, explicit_path)? {
         Some(p) => p,
         None => return Ok("{}".to_string()),
     };
@@ -232,6 +234,44 @@ mod tests {
         assert_eq!(load_config_section(None, Some(f.as_str())).unwrap(), "{}");
         let empty = TempYaml::new("");
         assert_eq!(load_config_section(None, Some(empty.as_str())).unwrap(), "{}");
+    }
+
+    #[test]
+    fn physical_source_never_inherits_unrelated_cwd_config() {
+        let n = COUNTER.fetch_add(1, Ordering::SeqCst);
+        let root = env::temp_dir().join(format!("idf_cfg_scope_{}_{}", std::process::id(), n));
+        let selected = root.join("selected");
+        let foreign = root.join("foreign");
+        std::fs::create_dir_all(&selected).unwrap();
+        std::fs::create_dir_all(&foreign).unwrap();
+        let source = selected.join("sample.rs");
+        std::fs::write(&source, "fn sample() {}\n").unwrap();
+        let foreign_policy = foreign.join(INTENTUMDIFF_CONFIG_FILENAME);
+        std::fs::write(&foreign_policy, "config:\n  min_similarity: 0.9\n").unwrap();
+
+        let found = find_config_path_from(Some(source.to_str().unwrap()), &foreign).unwrap();
+        assert_ne!(found, Some(foreign_policy), "selected source inherited foreign cwd config");
+
+        let selected_policy = selected.join(INTENTUMDIFF_CONFIG_FILENAME);
+        std::fs::write(&selected_policy, "config:\n  min_similarity: 0.2\n").unwrap();
+        let found = find_config_path_from(Some(source.to_str().unwrap()), &foreign).unwrap();
+        assert_eq!(found, Some(selected_policy));
+        std::fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn unresolvable_physical_root_is_error_not_cwd_fallback() {
+        let n = COUNTER.fetch_add(1, Ordering::SeqCst);
+        let root = env::temp_dir().join(format!("idf_cfg_missing_{}_{}", std::process::id(), n));
+        let foreign = root.join("foreign");
+        std::fs::create_dir_all(&foreign).unwrap();
+        std::fs::write(foreign.join(INTENTUMDIFF_CONFIG_FILENAME), "config: {}\n").unwrap();
+
+        // The parent is missing: canonicalize must fail instead of searching foreign.
+        let source = root.join("missing-parent").join("inner").join("file.rs");
+        let error = find_config_path_from(Some(source.to_str().unwrap()), &foreign).unwrap_err();
+        assert!(error.contains("cannot resolve project configuration search root"), "{error}");
+        std::fs::remove_dir_all(root).unwrap();
     }
 
     #[test]

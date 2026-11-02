@@ -363,12 +363,13 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 0, "start_path")?,
             arg_opt_str(args, 1, "explicit_path")?,
         ),
-        "find_intentumdiff_config_path" => Ok(json!(crate::config::find_config_path(
-            arg_opt_str(args, 0, "start_path")?,
-            arg_opt_str(args, 1, "explicit_path")?,
-        )
-        .map(|p| p.display().to_string()))
-        .to_string()),
+        "find_intentumdiff_config_path" => {
+            let path = crate::config::find_config_path(
+                arg_opt_str(args, 0, "start_path")?,
+                arg_opt_str(args, 1, "explicit_path")?,
+            )?;
+            Ok(json!(path.map(|p| p.display().to_string())).to_string())
+        },
         "git_repo_toplevel" => {
             crate::git_source::repo_toplevel(arg_str(args, 0, "repo_path")?)
         }
@@ -1242,6 +1243,27 @@ mod tests {
         let env = call("load_project_diff_config", json!([42]));
         assert_eq!(env["ok"], false);
         assert!(env["error"].as_str().unwrap().contains("start_path"));
+    }
+
+    #[test]
+    fn config_handlers_reject_unresolvable_physical_origin() {
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let source = std::env::temp_dir()
+            .join(format!("idf_cfg_absent_{}_{}", std::process::id(), nonce))
+            .join("missing-parent")
+            .join("file.py");
+        for handler in ["load_project_diff_config", "find_intentumdiff_config_path"] {
+            let env = call(handler, json!([source.to_str().unwrap(), null]));
+            assert_eq!(env["ok"], false, "{handler}: {env}");
+            assert_eq!(env["error_type"], "value_error");
+            assert!(
+                env["error"].as_str().unwrap().contains("cannot resolve project configuration search root"),
+                "{handler}: {env}"
+            );
+        }
     }
 
     #[test]
