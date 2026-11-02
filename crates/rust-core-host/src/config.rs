@@ -255,7 +255,7 @@ mod tests {
         let selected_policy = selected.join(INTENTUMDIFF_CONFIG_FILENAME);
         std::fs::write(&selected_policy, "config:\n  min_similarity: 0.2\n").unwrap();
         let found = find_config_path_from(Some(source.to_str().unwrap()), &foreign).unwrap();
-        assert_eq!(found, Some(selected_policy));
+        assert_eq!(found, Some(selected_policy.canonicalize().unwrap()));
         std::fs::remove_dir_all(root).unwrap();
     }
 
