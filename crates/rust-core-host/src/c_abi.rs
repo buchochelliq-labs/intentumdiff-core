@@ -1295,7 +1295,7 @@ mod tests {
         assert_eq!(discovered["ok"], true, "{discovered}");
         assert_eq!(
             discovered["result"].as_str().unwrap(),
-            policy.canonicalize().ok().as_deref().unwrap_or(&policy).to_str().unwrap()
+            root.canonicalize().unwrap().join("intentumdiff.yaml").to_str().unwrap()
         );
         for args in [
             json!([source.to_str().unwrap(), null]),
