@@ -32,7 +32,7 @@ pub(crate) fn find_config_path(
     // Preserve the existing public contract: a missing explicit file is absent.
     if let Some(ep) = explicit_path {
         let path = PathBuf::from(ep);
-        return Ok(path.exists().then_some(path));
+        return Ok(config_entry_present(&path)?.then_some(path));
     }
     let cwd = env::current_dir()
         .map_err(|error| format!("cannot determine cwd for project configuration: {error}"))?;
@@ -63,11 +63,24 @@ fn find_config_path_from(start_path: Option<&str>, cwd: &Path) -> Result<Option<
     })?;
     for directory in current.ancestors() {
         let candidate = directory.join(INTENTUMDIFF_CONFIG_FILENAME);
-        if candidate.exists() {
+        if config_entry_present(&candidate)? {
             return Ok(Some(candidate));
         }
     }
     Ok(None)
+}
+
+/// An explicitly present but unreadable config (including a dangling symlink)
+/// must fail closed, never silently turn into the default empty configuration.
+fn config_entry_present(path: &Path) -> Result<bool, String> {
+    match std::fs::symlink_metadata(path) {
+        Ok(_) => Ok(true),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(false),
+        Err(error) => Err(format!(
+            "cannot inspect project configuration {}: {error}",
+            path.display()
+        )),
+    }
 }
 
 /// python `config.load_project_diff_config`: find + parse + validate the `config`
@@ -271,6 +284,36 @@ mod tests {
         let source = root.join("missing-parent").join("inner").join("file.rs");
         let error = find_config_path_from(Some(source.to_str().unwrap()), &foreign).unwrap_err();
         assert!(error.contains("cannot resolve project configuration search root"), "{error}");
+        std::fs::remove_dir_all(root).unwrap();
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn dangling_project_config_symlink_is_present_but_fails_closed() {
+        use std::os::unix::fs::symlink;
+
+        let n = COUNTER.fetch_add(1, Ordering::SeqCst);
+        let root = env::temp_dir().join(format!(
+            "idf_cfg_dangling_{}_{}", std::process::id(), n
+        ));
+        let selected = root.join("selected");
+        std::fs::create_dir_all(&selected).unwrap();
+        let source = selected.join("sample.rs");
+        std::fs::write(&source, "fn sample() {}\n").unwrap();
+        let policy = selected.join(INTENTUMDIFF_CONFIG_FILENAME);
+        symlink(selected.join("missing-target.yaml"), &policy).unwrap();
+
+        // Path::exists() follows the dangling symlink and returned false,
+        // previously manufacturing a missing-policy success at both entrypoints.
+        assert!(!policy.exists());
+        assert!(policy.symlink_metadata().is_ok());
+        let found = find_config_path_from(Some(source.to_str().unwrap()), &root).unwrap();
+        assert_eq!(found, Some(selected.canonicalize().unwrap().join(INTENTUMDIFF_CONFIG_FILENAME)));
+
+        let explicit_error = load_config_section(None, Some(policy.to_str().unwrap())).unwrap_err();
+        assert!(explicit_error.contains(INTENTUMDIFF_CONFIG_FILENAME), "{explicit_error}");
+        let discovered_error = load_config_section(Some(source.to_str().unwrap()), None).unwrap_err();
+        assert!(discovered_error.contains(INTENTUMDIFF_CONFIG_FILENAME), "{discovered_error}");
         std::fs::remove_dir_all(root).unwrap();
     }
 
