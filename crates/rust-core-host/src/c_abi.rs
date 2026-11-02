@@ -1266,6 +1266,52 @@ mod tests {
         }
     }
 
+    #[cfg(unix)]
+    #[test]
+    fn config_abi_dangling_policy_link_never_becomes_empty_success() {
+        use std::os::unix::fs::symlink;
+
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!(
+            "idf_cabi_dangling_cfg_{}_{}", std::process::id(), nonce
+        ));
+        std::fs::create_dir_all(&root).unwrap();
+        let source = root.join("sample.py");
+        std::fs::write(&source, "value = 1\n").unwrap();
+        let policy = root.join("intentumdiff.yaml");
+        symlink(root.join("missing-target.yaml"), &policy).unwrap();
+        assert!(!policy.exists());
+        assert!(policy.symlink_metadata().is_ok());
+
+        // Discovery reports a present entry, even though the target cannot
+        // be opened; the load handler must then propagate a typed error.
+        let discovered = call(
+            "find_intentumdiff_config_path",
+            json!([source.to_str().unwrap(), null]),
+        );
+        assert_eq!(discovered["ok"], true, "{discovered}");
+        assert_eq!(
+            discovered["result"].as_str().unwrap(),
+            policy.canonicalize().ok().as_deref().unwrap_or(&policy).to_str().unwrap()
+        );
+        for args in [
+            json!([source.to_str().unwrap(), null]),
+            json!([null, policy.to_str().unwrap()]),
+        ] {
+            let env = call("load_project_diff_config", args);
+            assert_eq!(env["ok"], false, "{env}");
+            assert_eq!(env["error_type"], "value_error", "{env}");
+            assert!(
+                env["error"].as_str().unwrap().contains("intentumdiff.yaml"),
+                "{env}"
+            );
+        }
+        std::fs::remove_dir_all(root).unwrap();
+    }
+
     #[test]
     fn stateless_disk_cache_dispatches_over_the_abi() {
         let dir = std::env::temp_dir().join(format!("idf_cabi_cache_{}", std::process::id()));
