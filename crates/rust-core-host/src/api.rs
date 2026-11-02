@@ -81,6 +81,8 @@ pub struct Review {
 }
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ReviewOptions {
+    /// Compatibility setting: None or Some(true) uses existing behavior.
+    /// Some(false) is unsupported and returns a configuration error in 0.0.2.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detect_refactorings: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
