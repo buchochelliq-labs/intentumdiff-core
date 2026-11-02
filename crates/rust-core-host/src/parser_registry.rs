@@ -177,6 +177,7 @@ pub(crate) fn resolve_parser(path: &str, content: &str, config: &Value, wasm_dir
 pub(crate) fn resolve_parser_for_sources(path: &str, old_content: &str, content: &str, config: &Value, wasm_dir: &str)
     -> Result<Option<ResolvedParser>, String>
 {
+    let fuel = crate::RustCoreConfig::from_json(&config.to_string())?.plugin_fuel;
     let Some(manifest) = load_manifest(wasm_dir)? else { return Ok(None); };
     let catalog = catalog(&manifest, wasm_dir);
     let request = Request {
@@ -189,7 +190,6 @@ pub(crate) fn resolve_parser_for_sources(path: &str, old_content: &str, content:
             .map(|v| serde_json::from_value(v.clone())).transpose()
             .map_err(|e| format!("invalid allowed_plugins: {e}"))?,
     };
-    let fuel = crate::RustCoreConfig::from_json(&config.to_string()).plugin_fuel;
     let mut events = Vec::new();
     let mut loaded = HashMap::new();
     let mut errors = HashMap::new();

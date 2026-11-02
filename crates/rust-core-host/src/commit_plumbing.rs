@@ -322,6 +322,7 @@ pub(crate) fn commit_json_from_request_files_direct(
                                     &preloads,
                                     python_parser_backend,
                                     config.profile_phases,
+                                    config.fallback_to_token_diff,
                                 )
                             })
                             .collect()
@@ -339,6 +340,7 @@ pub(crate) fn commit_json_from_request_files_direct(
                                 &preloads,
                                 python_parser_backend,
                                 config.profile_phases,
+                                config.fallback_to_token_diff,
                             )
                         })
                         .collect())
@@ -356,6 +358,7 @@ pub(crate) fn commit_json_from_request_files_direct(
                             &preloads,
                             python_parser_backend,
                             config.profile_phases,
+                            config.fallback_to_token_diff,
                         )
                     })
                     .collect())
