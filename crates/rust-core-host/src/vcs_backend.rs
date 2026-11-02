@@ -248,6 +248,90 @@ fn validate_p4_depot_path(path: &str) -> Result<(), String> {
     Ok(())
 }
 
+/// Resolve a depot identity through the active client view; never infer a local
+/// directory by stripping a depot prefix. Tagged bytes retain exact UTF-8 paths.
+pub(crate) fn p4_policy_path_impl(root: &str, depot: &str) -> Result<String, String> {
+    validate_arg(depot, "depot path")?;
+    validate_p4_depot_path(depot)?;
+    if !depot.starts_with("//") || depot.contains('*') || depot.contains("...") {
+        return Err("policy mapping requires one exact depot file".into());
+    }
+    let output = run_vcs("p4", root, &["-ztag", "where", depot])?;
+    p4_policy_path_from_output(root, depot, &output)
+}
+
+fn p4_policy_path_from_output(root: &str, depot: &str, output: &[u8]) -> Result<String, String> {
+    use std::collections::BTreeMap;
+    let text = std::str::from_utf8(output).map_err(|e| format!("p4 where UTF-8: {e}"))?;
+    let mut records = Vec::new();
+    let mut record = BTreeMap::new();
+    for line in text.lines().chain(std::iter::once("")) {
+        if line.is_empty() {
+            if !record.is_empty() {
+                records.push(std::mem::take(&mut record));
+            }
+            continue;
+        }
+        let line = line.strip_prefix("... ").ok_or("malformed p4 where tagged output")?;
+        let (key, value) = line.split_once(' ').unwrap_or((line, ""));
+        if record.insert(key, value).is_some() {
+            return Err("duplicate p4 where field".into());
+        }
+    }
+    let mut mapped = None;
+    for record in records {
+        let identity = record.get("depotFile").copied().ok_or("p4 where missing depotFile")?;
+        if identity.trim_start_matches('-') != depot {
+            return Err("p4 where returned a different depot identity".into());
+        }
+        if record.keys().any(|key| !matches!(*key, "depotFile" | "clientFile" | "path" | "unmap")) {
+            return Err("unexpected p4 where record".into());
+        }
+        // A remapped client view can emit exclusion records before its final
+        // positive mapping. They must never supply a policy location.
+        if record.contains_key("unmap") || identity.starts_with('-') {
+            if mapped.is_some() { return Err("exclusion follows positive p4 mapping".into()); }
+            continue;
+        }
+        let local = record.get("path").copied().ok_or("p4 where missing local path")?;
+        if mapped.replace(local).is_some() {
+            return Err("ambiguous p4 where mapping".into());
+        }
+    }
+    contained_policy_path(root, mapped.ok_or("depot file is not mapped in this client")?)
+}
+
+fn contained_policy_path(root: &str, local: &str) -> Result<String, String> {
+    use std::path::{Component, Path};
+    let root = Path::new(root).canonicalize().map_err(|e| format!("client root: {e}"))?;
+    let local = Path::new(local);
+    if !local.is_absolute() || local.components().any(|c| matches!(c, Component::ParentDir)) {
+        return Err("p4 policy path must be absolute without traversal".into());
+    }
+    let leaf = local.file_name().ok_or("p4 policy path has no filename")?;
+    let mut parent = local.parent().ok_or("p4 policy path has no parent")?.to_path_buf();
+    let mut missing = Vec::new();
+    let resolved = loop {
+        match std::fs::symlink_metadata(&parent) {
+            Ok(_) => break parent.canonicalize().map_err(|e| format!("policy parent: {e}"))?,
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+                missing.push(parent.file_name().ok_or("missing policy ancestor")?.to_os_string());
+                if !parent.pop() { return Err("missing policy ancestor".into()); }
+            }
+            Err(e) => return Err(format!("policy parent: {e}")),
+        }
+    };
+    let mut resolved = resolved;
+    for part in missing.into_iter().rev() { resolved.push(part); }
+    if !resolved.starts_with(&root) {
+        return Err("mapped policy parent escapes client root".into());
+    }
+    // The file may be historical/deleted or currently a symlink. Discovery
+    // starts at its parent, so deliberately do not dereference the leaf.
+    resolved.push(leaf);
+    resolved.into_os_string().into_string().map_err(|_| "policy path is not UTF-8".into())
+}
+
 /// p4 ref guard: changelist number / label / keyword only — no filespec metacharacters
 /// (mirrors python `_validate_p4_ref`).
 fn validate_p4_ref(value: &str) -> Result<(), String> {
@@ -709,6 +793,42 @@ mod tests {
         assert!(rows.iter().any(|r| r.change_type == "modified" && r.new_path.as_deref() == Some("//depot/main/a.py")));
         assert!(rows.iter().any(|r| r.change_type == "added" && r.new_path.as_deref() == Some("//depot/main/b.py")));
         assert!(rows.iter().any(|r| r.change_type == "renamed" && r.new_path.as_deref() == Some("//depot/main/c.py")));
+    }
+
+    #[test]
+    fn p4_policy_paths_use_authoritative_mapping_and_fail_closed() {
+        let root = tempfile::tempdir().unwrap();
+        let root_path = root.path().to_str().unwrap();
+        let depot = "//depot/app/config.json";
+        let local = root.path().canonicalize().unwrap().join("remapped").join("config.json");
+        let row = format!("... depotFile {depot}\n... clientFile //client/remapped/config.json\n... path {}\n\n", local.display());
+        assert_eq!(p4_policy_path_from_output(root_path, depot, row.as_bytes()).unwrap(), local.to_str().unwrap());
+        let excluded = format!("... depotFile {depot}\n... unmap \n\n");
+        assert!(p4_policy_path_from_output(root_path, depot, excluded.as_bytes()).is_err());
+        assert_eq!(p4_policy_path_from_output(root_path, depot, format!("{excluded}{row}").as_bytes()).unwrap(), local.to_str().unwrap());
+        for bad in ["".to_owned(), "not tagged\n".to_owned(), row.replace(depot, "//other/file"),
+                    format!("{row}{row}"), format!("{row}{excluded}"),
+                    format!("... depotFile {depot}\n\n"),
+                    format!("... depotFile {depot}\n... path relative.json\n\n")] {
+            assert!(p4_policy_path_from_output(root_path, depot, bad.as_bytes()).is_err(), "{bad}");
+        }
+        assert!(p4_policy_path_from_output(root_path, depot, b"\xff").is_err());
+        let outside = tempfile::tempdir().unwrap();
+        assert!(contained_policy_path(root_path, outside.path().join("config.json").to_str().unwrap()).is_err());
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn p4_policy_paths_resolve_parents_but_not_historical_leaf() {
+        let root = tempfile::tempdir().unwrap();
+        let outside = tempfile::tempdir().unwrap();
+        let root_path = root.path().to_str().unwrap();
+        let leaf = root.path().canonicalize().unwrap().join("config.json");
+        std::os::unix::fs::symlink(outside.path().join("config.json"), &leaf).unwrap();
+        assert_eq!(contained_policy_path(root_path, leaf.to_str().unwrap()).unwrap(), leaf.to_str().unwrap());
+        let parent = root.path().join("escape");
+        std::os::unix::fs::symlink(outside.path(), &parent).unwrap();
+        assert!(contained_policy_path(root_path, parent.join("config.json").to_str().unwrap()).is_err());
     }
 
     #[test]

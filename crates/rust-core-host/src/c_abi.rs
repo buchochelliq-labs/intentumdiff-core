@@ -489,6 +489,9 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             serde_json::to_string(&tree).map_err(|e| format!("serialize tree: {e}"))
         }
         // VCS backend read ops (git/hg/svn/p4) — delegate to the newly-factored ungated impls.
+        "p4_policy_path" => crate::vcs_backend::p4_policy_path_impl(
+            arg_str(args, 0, "client_root")?, arg_str(args, 1, "depot_path")?,
+        ).map(|path| json!({ "path": path }).to_string()),
         "vcs_backend_resolve_root" => crate::vcs_backend::vcs_backend_resolve_root_impl(
             arg_str(args, 0, "vcs")?,
             arg_str(args, 1, "repo_path")?,
@@ -1737,6 +1740,9 @@ mod tests {
 
     #[test]
     fn vcs_backend_ops_dispatch_over_the_abi() {
+        let env = call("p4_policy_path", json!(["/repo", "//depot/... "]));
+        assert_eq!(env["ok"], false);
+        assert!(env["error"].as_str().unwrap().contains("exact depot file"));
         // An unknown VCS is a clean error envelope from the ported impl (no git/hg/svn/p4 needed).
         let env = call("vcs_backend_resolve_root", json!(["mercurialish", "/repo"]));
         assert_eq!(env["ok"], false);
