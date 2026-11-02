@@ -2393,6 +2393,26 @@ impl RustCoreConfig {
             serde_json::from_str(raw).map_err(|error| format!("invalid diff config JSON: {error}"))?
         };
         let fields = value.as_object().ok_or("diff config must be a JSON object")?;
+        // Compatibility-only options retain their historical defaults. Their
+        // overrides are not implemented; accepting them would silently lie to
+        // native and binding callers. Validate both spellings independently so
+        // a default value cannot mask an unsupported alias.
+        for (keys, default) in [
+            (["ignore_style", "ignoreStyle"], json!(true)),
+            (["detect_refactorings", "detectRefactorings"], json!(true)),
+            (["leaf_text_diff", "leafTextDiff"], json!(true)),
+            (["approx_move_threshold", "approxMoveThreshold"], json!(0.4)),
+            (["extra_trivia_types", "extraTriviaTypes"], json!([])),
+        ] {
+            for key in keys {
+                if fields.get(key).is_some_and(|value| value != &default) {
+                    return Err(format!(
+                        "diff config {key} override is unsupported; omit it or use {default}"
+                    ));
+                }
+            }
+        }
+
         for key in ["min_height", "minHeight", "max_nodes", "maxNodes",
                     "max_cst_bytes", "maxCstBytes", "max_plugin_output_bytes", "maxPluginOutputBytes"] {
             if let Some(value) = fields.get(key) {

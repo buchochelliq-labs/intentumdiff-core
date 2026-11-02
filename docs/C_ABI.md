@@ -358,3 +358,16 @@ malformed inputs return errors, never an empty success. Human summaries, guardra
 change tables and explicit source-fallback warnings share this implementation;
 JSON/patch/HTML/LLM/SARIF exports do not pass through it. Strings are literal text,
 not rich markup, and terminal controls are escaped.
+
+
+### Compatibility-only diff configuration (0.0.2)
+
+The shared Rust diff configuration accepts the following compatibility fields only at
+their existing defaults: `ignore_style=true`, `detect_refactorings=true`,
+`leaf_text_diff=true`, `approx_move_threshold=0.4`, and `extra_trivia_types=[]`.
+Omitting them preserves current engine behavior. Non-default values and wrong JSON
+types produce a configuration error instead of being silently ignored. The camel-case
+spellings are checked too; a default in one spelling cannot hide an override in another.
+These fields do not yet provide configurable semantics. Possible support is tracked
+in #220–#224; the contract inventory is #214. Bindings forward values and errors;
+they must not implement substitute behavior.

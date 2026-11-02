@@ -424,6 +424,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             "rust_core_semantic_tree_v3",
         ),
         "diff_python_semantic_tree" => {
+            crate::RustCoreConfig::from_json(arg_str(args, 5, "config_json")?)?;
             let language = arg_str(args, 4, "language")?;
             if !language.eq_ignore_ascii_case("python") {
                 Ok(json!({
@@ -444,7 +445,9 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                 )
             }
         }
-        "diff_python_sources_stage11" => Ok(match crate::diff_python_sources_stage11_impl(
+        "diff_python_sources_stage11" => {
+            crate::RustCoreConfig::from_json(arg_str(args, 5, "config_json")?)?;
+            Ok(match crate::diff_python_sources_stage11_impl(
             arg_str(args, 0, "old_source")?,
             arg_str(args, 1, "new_source")?,
             arg_str(args, 2, "old_filename")?,
@@ -457,7 +460,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                 json!({"status": crate::SCAFFOLD, "engine": crate::V3_ENGINE, "reason": exc})
                     .to_string()
             }
-        }),
+        })
+        },
         "empty_semantic_tree" => Ok(crate::lifecycle::empty_tree(arg_str(args, 0, "language")?).to_string()),
         "complete_routed_review" => value_request(args, crate::routed_review::complete),
         "apply_guardrail_policy" => {
@@ -1548,6 +1552,58 @@ mod tests {
         assert_eq!(env["result"], json!([true, false]));
         let invalid = json!({"files":[],"paths":[{"path":"../escape"}]}).to_string();
         assert_eq!(call("match_ignore_rules", json!([invalid]))["ok"], false);
+    }
+
+
+    #[test]
+    fn unsupported_diff_options_fail_instead_of_being_ignored() {
+        let tree = r#"{"id":"m","node_type":"module","label":"m",
+            "position":{"start_line":0,"start_col":0,"end_line":0,"end_col":1},
+            "structural_hash":"h","children":[]}"#;
+        for (key, value) in [
+            ("ignore_style", json!(false)), ("ignoreStyle", json!(false)),
+            ("detect_refactorings", json!(false)), ("detectRefactorings", json!(false)),
+            ("leaf_text_diff", json!(false)), ("leafTextDiff", json!(false)),
+            ("approx_move_threshold", json!(0.8)), ("approxMoveThreshold", json!(0.8)),
+            ("extra_trivia_types", json!(["identifier"])), ("extraTriviaTypes", json!(["identifier"])),
+            ("ignore_style", json!("true")), ("approx_move_threshold", json!(null)),
+            ("extra_trivia_types", json!("")),
+        ] {
+            let config = json!({key: value});
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config.to_string()]));
+            assert_eq!(result["ok"], false, "{key}: {result}");
+            assert_eq!(result["error_type"], "value_error", "{result}");
+            assert!(result["error"].as_str().unwrap().contains(key), "{result}");
+            let declined = call("diff_python_semantic_tree",
+                json!([tree, tree, "a.go", "a.go", "go", config.to_string()]));
+            assert_eq!(declined["ok"], false, "{declined}");
+            let legacy = call("diff_python_sources_stage11",
+                json!(["a", "b", "a.py", "a.py", "", config.to_string()]));
+            assert_eq!(legacy["ok"], false, "{legacy}");
+            assert!(legacy["error"].as_str().unwrap().contains(key), "{legacy}");
+            // Empty work and unsupported-language early exits must enforce the same contract.
+            for handler in ["diff_batch", "diff_batch_commit_json"] {
+                let request = json!({"files": [], "config": config}).to_string();
+                let result = call(handler, json!([request]));
+                assert_eq!(result["ok"], false, "{handler}: {result}");
+                assert!(result["error"].as_str().unwrap().contains(key), "{result}");
+            }
+            let request = json!({"language": "js", "config": config}).to_string();
+            assert_eq!(call("finalize_stage11", json!([request]))["ok"], false);
+        }
+        for config in [
+            json!({}),
+            json!({"ignore_style":true,"detect_refactorings":true,"leaf_text_diff":true,
+                "approx_move_threshold":0.4,"extra_trivia_types":[]}),
+            json!({"ignoreStyle":true,"detectRefactorings":true,"leafTextDiff":true,
+                "approxMoveThreshold":0.4,"extraTriviaTypes":[]}),
+        ] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config.to_string()]));
+            assert_eq!(result["ok"], true, "{result}");
+        }
+        // A default snake-case value must not hide an unsupported alias.
+        let config = r#"{"ignore_style":true,"ignoreStyle":false}"#;
+        assert_eq!(call("finalize_review", json!([tree,tree,"a","b","python",config]))["ok"], false);
     }
 
     #[test]
