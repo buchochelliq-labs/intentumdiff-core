@@ -824,53 +824,58 @@ pub(crate) fn enrich_mdx_children(
     if children.iter().any(|c| c.node_type == "code_content") {
         return children;
     }
-    let snippet = path_source_slice(source_lines, node);
-    let mut body = {
-        let lines: Vec<&str> = snippet.lines().collect();
-        if lines.len() >= 2 && lines[0].trim_start().starts_with("```") {
-            let inner: &[&str] = if lines[lines.len() - 1].trim_start().starts_with("```") {
-                &lines[1..lines.len() - 1]
-            } else {
-                &lines[1..]
-            };
-            inner
-                .iter()
-                .map(|l| l.trim_end())
-                .collect::<Vec<_>>()
-                .join("\n")
-                .trim()
-                .to_string()
-        } else {
-            String::new()
-        }
+    // Rust owns both the MDX code-body label and its source coordinates. A
+    // synthetic (opening_fence_row, 0)-(same_row, 0) extent incorrectly claimed
+    // the body had no source bytes; route equality cannot certify that (#206).
+    let opening = node.position.start_line as usize;
+    let closing = node.position.end_line as usize;
+    let Some(opening_line) = source_lines.get(opening) else {
+        return children;
     };
-    if body.is_empty() {
-        let start_line = node.position.start_line as usize;
-        if start_line < source_lines.len()
-            && source_lines[start_line].trim_start().starts_with("```")
-        {
-            let mut collected: Vec<String> = Vec::new();
-            for line in &source_lines[start_line + 1..] {
-                if line.trim_start().starts_with("```") {
-                    break;
-                }
-                collected.push(line.trim_end().to_string());
-            }
-            body = collected.join("\n").trim().to_string();
-        }
+    let fence = opening_line.trim_start();
+    if !(fence.starts_with("```") || fence.starts_with("~~~")) {
+        return children;
     }
+    // An unterminated fence ends on its final content row. Exclude that
+    // row only if it is a matching closing delimiter, not arbitrary code.
+    let delimiter = fence.as_bytes()[0];
+    let width = fence.bytes().take_while(|byte| *byte == delimiter).count();
+    let has_closing_fence = closing > opening && source_lines.get(closing).is_some_and(|line| {
+        let candidate = line.trim();
+        let closing_width = candidate.bytes().take_while(|byte| *byte == delimiter).count();
+        closing_width >= width && candidate[closing_width..].is_empty()
+    });
+    let body_end = if has_closing_fence { closing } else { closing.saturating_add(1) };
+    let Some(inner) = source_lines.get(opening + 1..body_end) else {
+        return children;
+    };
+    let body = inner.iter().map(|line| line.trim_end())
+        .collect::<Vec<_>>().join("\n").trim().to_string();
     if body.is_empty() {
         return children;
     }
+    let Some(first) = inner.iter().position(|line| !line.trim().is_empty()) else {
+        return children;
+    };
+    let Some(last) = inner.iter().rposition(|line| !line.trim().is_empty()) else {
+        return children;
+    };
+    let position = NodePosition {
+        start_line: (opening + 1 + first) as u32,
+        start_col: (inner[first].len() - inner[first].trim_start().len()) as u32,
+        end_line: (opening + 1 + last) as u32,
+        end_col: inner[last].trim_end().len() as u32,
+    };
     children.push(path_synthetic_node(
         format!("{}.path_code", node.id),
         "code_content",
         body,
-        path_synthetic_position(node),
+        position,
         Vec::new(),
     ));
     children
 }
+
 
 /// python path_profiles.enrich_path_profile_labels (issue #57 profile-enrichment port):
 /// recover css/scss selector + declaration labels, html/xml tag/attribute labels with
@@ -1474,5 +1479,142 @@ mod style_span_tests {
         let children = enrich_style_children(&node, &[source], vec![], "$name");
         assert_eq!(children[0].label, "café");
         assert_eq!((children[0].position.start_col, children[0].position.end_col), (10, 15));
+    }
+}
+
+#[cfg(test)]
+mod mdx_code_body_source_span_tests {
+    use super::*;
+
+    fn fenced_node(lines: &[&str]) -> SemanticNode {
+        path_synthetic_node(
+            "0.0".into(), "code_block", "bash".into(),
+            NodePosition {
+                start_line: 0, start_col: 0,
+                end_line: (lines.len() - 1) as u32,
+                end_col: lines.last().map_or(0, |line| line.len() as u32),
+            },
+            vec![],
+        )
+    }
+
+    #[test]
+    fn code_content_is_anchored_to_actual_body_bytes_not_opening_fence() {
+        let lines = ["```bash", "npm install my-package", "```"];
+        let node = fenced_node(&lines);
+        let children = enrich_mdx_children(&node, &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        let body = &children[0];
+        assert_eq!(body.node_type, "code_content");
+        assert_eq!(body.label, "npm install my-package");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 0, 1, lines[1].len() as u32),
+        );
+    }
+
+    #[test]
+    fn code_content_multiline_utf8_span_tracks_original_indentation() {
+        let lines = ["```bash", "  echo café", "    echo 😀", "```"];
+        let node = fenced_node(&lines);
+        let children = enrich_mdx_children(&node, &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        let body = &children[0];
+        assert_eq!(body.label, "echo café\n    echo 😀");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 2, lines[2].len() as u32),
+        );
+    }
+
+    #[test]
+    fn unclosed_code_fences_retain_final_content_and_utf8_span() {
+        for lines in [
+            vec!["```bash", "echo hello"],
+            vec!["~~~bash", "echo first", "  echo café"],
+            vec!["````bash", "echo first", "```"],
+            vec!["```bash", "echo first", "~~~"],
+            vec!["```bash", "echo first", "```not a closing fence"],
+        ] {
+            let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+            assert_eq!(children.len(), 1, "{lines:?}");
+            let body = &children[0];
+            assert_eq!(body.label, lines[1..].join("\n"));
+            assert_eq!(body.position.start_line, 1);
+            assert_eq!(body.position.start_col, 0);
+            assert_eq!(body.position.end_line, (lines.len() - 1) as u32);
+            assert_eq!(body.position.end_col, lines.last().unwrap().len() as u32);
+        }
+    }
+
+    #[test]
+    fn matching_longer_closing_fence_is_excluded_from_content() {
+        let lines = ["~~~bash", "echo hello", "  ~~~~  "];
+        let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        assert_eq!(children[0].label, "echo hello");
+        assert_eq!(children[0].position.end_line, 1);
+    }
+
+    #[test]
+    fn empty_code_fence_cannot_manufacture_content_evidence() {
+        let lines = ["```bash", "   ", "```"];
+        let node = fenced_node(&lines);
+        assert!(enrich_mdx_children(&node, &lines, vec![]).is_empty());
+    }
+}
+
+#[cfg(test)]
+mod mdx_unclosed_fence_regression_tests {
+    use super::*;
+
+    fn code_content(source: &str, end_line: u32) -> SemanticNode {
+        let lines: Vec<&str> = source.lines().collect();
+        let node = path_synthetic_node(
+            "0.0".into(), "code_block", String::new(),
+            NodePosition {
+                start_line: 0, start_col: 0,
+                end_line, end_col: lines[end_line as usize].len() as u32,
+            },
+            vec![],
+        );
+        enrich_mdx_children(&node, &lines, vec![])
+            .into_iter().find(|child| child.node_type == "code_content")
+            .expect("MDX body must survive enrichment")
+    }
+
+    #[test]
+    fn unclosed_single_line_body_at_eof_is_not_discarded() {
+        let body = code_content("```bash\necho hello", 1);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 0, 1, 10),
+        );
+    }
+
+    #[test]
+    fn unclosed_multiline_body_preserves_final_line_and_utf8_byte_spans() {
+        let body = code_content("```sh\n  echo hello\n  echo café", 2);
+        assert_eq!(body.label, "echo hello\n  echo café");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 2, 12),
+        );
+    }
+
+    #[test]
+    fn closed_fence_still_excludes_matching_delimiter_line() {
+        let body = code_content("````sh\n  echo hello\n````", 2);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 1, 12),
+        );
     }
 }

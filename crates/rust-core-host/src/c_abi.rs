@@ -345,6 +345,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
         "lsp_utf16_range" => crate::lsp_server_shapes::utf16_lsp_range_json_impl(
             arg_str(args, 0, "node_json")?, arg_str(args, 1, "source")?),
+        "lsp_server_codelens_utf16" => crate::lsp_server_shapes::codelens_utf16_json_impl(
+            arg_str(args, 0, "diff_json")?,
+            arg_str(args, 1, "old_source")?,
+            arg_str(args, 2, "new_source")?,
+        ),
+        "lsp_server_diagnostics_utf16" => crate::lsp_server_shapes::diagnostics_utf16_json_impl(
+            arg_str(args, 0, "diff_json")?, arg_str(args, 1, "new_source")?,
+        ),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
@@ -1155,6 +1163,30 @@ mod tests {
         let env = call("lsp_collect_hover_targets", json!([tree]));
         assert_eq!(env["ok"], true);
         assert!(env["result"].is_array());
+    }
+
+
+    #[test]
+    fn lsp_source_aware_shapes_dispatch_and_check_required_sources() {
+        let n = json!({"position":{"start_line":0,"start_col":0,
+            "end_line":0,"end_col":5}});
+        let diagnostics = json!({"changes":[{"change_type":"STYLE_ONLY","new_node":n}],
+            "parse_errors":[]}).to_string();
+        let good = call("lsp_server_diagnostics_utf16", json!([diagnostics, "été\n"]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"][0]["range"]["end"]["character"], 3);
+        let missing = call("lsp_server_diagnostics_utf16", json!([diagnostics]));
+        assert_eq!(missing["ok"], false);
+
+        let before = json!({"position":{"start_line":0,"start_col":0,
+            "end_line":0,"end_col":4}});
+        let move_diff = json!({"changes":[{"change_type":"MOVE",
+            "new_node":null,"old_node":before}]}).to_string();
+        let lens = call("lsp_server_codelens_utf16", json!([move_diff,"🦣\n","été\n"]));
+        assert_eq!(lens["ok"], true);
+        assert_eq!(lens["result"][0]["range"]["end"]["character"], 2);
+        let bad = call("lsp_server_codelens_utf16", json!([move_diff,"a\n","été\n"]));
+        assert_eq!(bad["ok"], false);
     }
 
     #[test]
