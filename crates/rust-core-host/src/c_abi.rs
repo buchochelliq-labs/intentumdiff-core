@@ -1451,6 +1451,49 @@ mod tests {
     }
 
     #[test]
+    fn invalid_diff_configuration_never_becomes_default_success() {
+        let tree = r#"{"id":"m","node_type":"module","label":"m",
+            "position":{"start_line":0,"start_col":0,"end_line":0,"end_col":1},
+            "structural_hash":"h","children":[]}"#;
+        for config in ["{broken", "[]", "null", "true", r#"{"min_height":"2"}"#,
+            r#"{"max_nodes":-1}"#, r#"{"min_similarity":2}"#,
+            r#"{"collect_trace":"false"}"#, r#"{"pluginFuel":null}"#] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config]));
+            assert_eq!(result["ok"], false, "invalid config {config}: {result}");
+            assert!(result["error"].as_str().unwrap().contains("config"));
+        }
+        for config in ["{}", "", "  ", r#"{"minHeight":2,"minSimilarity":0.5,"collect_trace":false}"#] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config]));
+            assert_eq!(result["ok"], true, "valid config {config}: {result}");
+        }
+        // Unsupported-language declines still reject malformed configuration.
+        let request = json!({"language":"js", "config":[]}).to_string();
+        assert_eq!(call("finalize_stage11", json!([request]))["ok"], false);
+        // Missing parser manifests must not hide malformed live-review settings.
+        let result = call("live_diff_contents", json!([".", "x.py", "a=1", "a=2", "[]", ""]));
+        assert_eq!(result["ok"], false, "{result}");
+        assert!(result["error"].as_str().unwrap().contains("config"));
+        // Reusing the validated fallback flag must preserve valid unchanged batches.
+        for parallel in [false, true] {
+            let file = json!({"old_filename":"x.py","new_filename":"x.py", "language":"python",
+                "old_source":"x=1", "new_source":"x=1"});
+            let request = json!({"files":[file.clone(),file], "python_parser_backend":"native",
+                "parallel":parallel, "config":{"fallback_to_token_diff":false}}).to_string();
+            let result = call("diff_batch", json!([request]));
+            assert_eq!(result["ok"], true, "{result}");
+            assert_eq!(result["result"]["status"], "complete", "{result}");
+        }
+        // An empty batch cannot bypass validation and manufacture empty success.
+        for config in [json!([]), Value::Null, json!({"maxNodes":"bad"})] {
+            let request = json!({"files":[],"config":config}).to_string();
+            for handler in ["diff_batch", "diff_batch_commit_json"] {
+                let result = call(handler, json!([request]));
+                assert_eq!(result["ok"], false, "{handler}: {result}");
+            }
+        }
+    }
+
+    #[test]
     fn review_and_enrichment_seams_dispatch() {
         let tree = r#"{"id":"m","node_type":"module","label":"m",
             "position":{"start_line":0,"start_col":0,"end_line":9,"end_col":0},

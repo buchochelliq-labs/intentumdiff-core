@@ -173,7 +173,7 @@ pub(crate) fn diff_python_cst_impl(
     new_filename: &str,
     config_json: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old CST JSON", old_filtered_cst_json, config.max_cst_bytes)?;
     check_byte_limit("new CST JSON", new_filtered_cst_json, config.max_cst_bytes)?;
     let old_cst: CstNode =
@@ -260,7 +260,7 @@ fn diff_semantic_tree_impl(
     config_json: &str,
     engine_label: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     let mut old_tree: SemanticNode = serde_json::from_str(old_tree_json)
         .map_err(|exc| format!("old SemanticNode JSON: {exc}"))?;
     let mut new_tree: SemanticNode = serde_json::from_str(new_tree_json)
@@ -1426,7 +1426,7 @@ fn finalize_review_impl(
     language: &str,
     config_json: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     let mut old_tree: SemanticNode =
         serde_json::from_str(old_tree_json).map_err(|exc| format!("old tree: {exc}"))?;
     let mut new_tree: SemanticNode =
@@ -2381,9 +2381,41 @@ struct RustCoreConfig {
 }
 
 impl RustCoreConfig {
-    fn from_json(raw: &str) -> Self {
-        let value: Value = serde_json::from_str(raw).unwrap_or(Value::Null);
-        Self {
+    fn from_json(raw: &str) -> Result<Self, String> {
+        // Empty config is the existing parse_to_tree default shorthand. Once
+        // supplied, every known field must be typed; malformed input is not {}.
+        let value: Value = if raw.trim().is_empty() {
+            json!({})
+        } else {
+            serde_json::from_str(raw).map_err(|error| format!("invalid diff config JSON: {error}"))?
+        };
+        let fields = value.as_object().ok_or("diff config must be a JSON object")?;
+        for key in ["min_height", "minHeight", "max_nodes", "maxNodes",
+                    "max_cst_bytes", "maxCstBytes", "max_plugin_output_bytes", "maxPluginOutputBytes"] {
+            if let Some(value) = fields.get(key) {
+                if value.as_u64().and_then(|n| usize::try_from(n).ok()).is_none() {
+                    return Err(format!("diff config {key} must be a non-negative platform-sized integer"));
+                }
+            }
+        }
+        for key in ["min_similarity", "minSimilarity"] {
+            if let Some(value) = fields.get(key) {
+                if !value.as_f64().is_some_and(|n| n.is_finite() && (0.0..=1.0).contains(&n)) {
+                    return Err(format!("diff config {key} must be a number between 0 and 1"));
+                }
+            }
+        }
+        for key in ["plugin_fuel", "pluginFuel"] {
+            if fields.get(key).is_some_and(|value| value.as_i64().is_none()) {
+                return Err(format!("diff config {key} must be a signed integer"));
+            }
+        }
+        for key in ["profile_phases", "profilePhases", "collect_trace", "fallback_to_token_diff"] {
+            if fields.get(key).is_some_and(|value| !value.is_boolean()) {
+                return Err(format!("diff config {key} must be a boolean"));
+            }
+        }
+        Ok(Self {
             min_height: value
                 .get("min_height")
                 .or_else(|| value.get("minHeight"))
@@ -2426,7 +2458,7 @@ impl RustCoreConfig {
                 .or_else(|| value.get("profilePhases"))
                 .and_then(Value::as_bool)
                 .unwrap_or(true),
-        }
+        })
     }
 }
 
@@ -2922,7 +2954,7 @@ fn diff_python_sources_stage11_impl(
         return Err(format!("parser wasm path not found: {parser_wasm_path}"));
     }
 
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
     let mut probe = PhaseProbe::default();
@@ -3079,7 +3111,7 @@ fn diff_python_sources_final_impl(
         return Err(format!("parser wasm path not found: {parser_wasm_path}"));
     }
 
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
     let mut probe = PhaseProbe::default();
@@ -3635,7 +3667,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let metered = config.plugin_fuel != u64::MAX;
     let preloads = Arc::new(probe.measure("rust_wasm_batch_component_preload", || {
@@ -3683,6 +3715,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                                 &preloads,
                                 &python_parser_backend,
                                 config.profile_phases,
+                                config.fallback_to_token_diff,
                             )
                         })
                         .collect()
@@ -3700,6 +3733,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                             &preloads,
                             &python_parser_backend,
                             config.profile_phases,
+                            config.fallback_to_token_diff,
                         )
                     })
                     .collect())
@@ -3717,6 +3751,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                         &preloads,
                         &python_parser_backend,
                         config.profile_phases,
+                        config.fallback_to_token_diff,
                     )
                 })
                 .collect())
@@ -3870,7 +3905,7 @@ pub(crate) fn diff_batch_commit_json_impl(
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let python_parser_backend = python_parser_backend_from_request(&request)?;
     if python_parser_backend != PYTHON_PARSER_BACKEND_NATIVE {
@@ -3903,7 +3938,7 @@ pub(crate) fn diff_working_tree_python_commit_json_impl(
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let python_parser_backend = python_parser_backend_from_request(&request)?;
     if python_parser_backend != PYTHON_PARSER_BACKEND_NATIVE {
@@ -4154,6 +4189,7 @@ fn diff_batch_file_item(
     candidate_mode: bool,
     preloads: &BatchComponentPreloads,
     python_parser_backend: &str,
+    fallback_to_token_diff: bool,
 ) -> BatchItemResult {
     let old_filename = value_str(file, "old_filename", "oldFilename").unwrap_or("old.py");
     let new_filename = value_str(file, "new_filename", "newFilename").unwrap_or(old_filename);
@@ -4181,7 +4217,7 @@ fn diff_batch_file_item(
     let file_lifecycle = infer_file_lifecycle_from_file(file);
 
     if old_source == new_source {
-        if RustCoreConfig::from_json(config_json).fallback_to_token_diff {
+        if fallback_to_token_diff {
             let incomplete = source_fallback::parse_errors_present_impl(old_source, "{}", "python")
                 .and_then(|errors| if errors == "true" {
                     source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors").map(Some)
@@ -4374,6 +4410,7 @@ fn timed_diff_batch_file_item(
     preloads: &BatchComponentPreloads,
     python_parser_backend: &str,
     timing_enabled: bool,
+    fallback_to_token_diff: bool,
 ) -> BatchItemResult {
     if !timing_enabled {
         return diff_batch_file_item(
@@ -4383,6 +4420,7 @@ fn timed_diff_batch_file_item(
             candidate_mode,
             preloads,
             python_parser_backend,
+            fallback_to_token_diff,
         );
     }
     let started = Instant::now();
@@ -4393,6 +4431,7 @@ fn timed_diff_batch_file_item(
         candidate_mode,
         preloads,
         python_parser_backend,
+        fallback_to_token_diff,
     );
     let duration_ms = started.elapsed().as_secs_f64() * 1000.0;
     result.duration_ms = duration_ms;
@@ -5094,12 +5133,12 @@ pub fn parse_to_tree(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
+    let config = RustCoreConfig::from_json(config_json)?;
     let selection_config = if config_json.trim().is_empty() { serde_json::json!({}) } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
     };
     let resolved = crate::parser_registry::resolve_parser(path, content, &selection_config, wasm_dir)?
         .ok_or("no bundled parser for this file extension")?;
-    let config = RustCoreConfig::from_json(config_json);
 
     let tree_json: String = if content.is_empty() {
         empty_semantic_tree_json(&resolved.language)
@@ -5160,6 +5199,7 @@ pub(crate) fn native_wasm_single_diff(
     config_json: &str,
     guardrail_rules: Option<&[Value]>,
 ) -> Result<Value, String> {
+    let config = RustCoreConfig::from_json(config_json)?;
     // generic: the differ's routed branch REPLACES parser-token churn wholesale with the Rust
     // text review's line/char spans (normalize_generic_text_for_review is pure delegation to
     // text_review_generic.rs) — so serve the SAME Rust review directly, skipping the throwaway
@@ -5169,7 +5209,6 @@ pub(crate) fn native_wasm_single_diff(
     }
     // NB: guardrails are handled by the caller (`live_handle_diff_json` falls back when a
     // guardrail policy is in effect), so this pure-engine path never attaches violations.
-    let config = RustCoreConfig::from_json(config_json);
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
 
@@ -5458,6 +5497,7 @@ pub(crate) fn compute_commit_cross_file_changes(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
+    let config = RustCoreConfig::from_json(config_json)?;
     let mut telemetry = HashMap::new();
     if files.is_empty() {
         return Ok((json!([]), telemetry));
@@ -5465,7 +5505,6 @@ pub(crate) fn compute_commit_cross_file_changes(
     if wasm_dir.is_empty() {
         return Err("commit symbol indexing requires the verified parser bundle".to_owned());
     }
-    let config = RustCoreConfig::from_json(config_json);
     let python_wasm_path = Path::new(wasm_dir)
         .join("python_parser.wasm")
         .to_string_lossy()
@@ -9194,6 +9233,11 @@ fn longest_increasing_subsequence_positions(sequence: &[usize]) -> HashSet<usize
 }
 
 fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
+    let config_json = request
+        .get("config")
+        .map(Value::to_string)
+        .unwrap_or_else(|| "{}".to_owned());
+    let config = RustCoreConfig::from_json(&config_json)?;
     let language = request
         .get("language")
         .and_then(Value::as_str)
@@ -9208,11 +9252,6 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
         }));
     }
 
-    let config_json = request
-        .get("config")
-        .map(Value::to_string)
-        .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
     let old_source = request
         .get("old_source")
         .and_then(Value::as_str)

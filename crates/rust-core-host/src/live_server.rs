@@ -666,7 +666,7 @@ fn normalize_review_fuel(config: &mut Value) -> Result<(bool, u64), String> {
     if !config.is_object() { return Err("review config must be a JSON object".to_owned()); }
     // Use the same alias precedence, defaults and negative-value semantics as
     // execution, so metadata and the effective parser configuration agree.
-    let effective = crate::RustCoreConfig::from_json(&config.to_string()).plugin_fuel;
+    let effective = crate::RustCoreConfig::from_json(&config.to_string())?.plugin_fuel;
     let capped = effective == u64::MAX;
     let review_fuel = if capped { 100_000_000 } else { effective };
     config["plugin_fuel"] = json!(review_fuel);
@@ -1231,7 +1231,7 @@ mod tests {
             (json!({}), false, 10_000_000),
         ] {
             assert_eq!(normalize_review_fuel(&mut config).unwrap(), (capped, expected));
-            assert_eq!(crate::RustCoreConfig::from_json(&config.to_string()).plugin_fuel, expected);
+            assert_eq!(crate::RustCoreConfig::from_json(&config.to_string()).unwrap().plugin_fuel, expected);
         }
     }
 
