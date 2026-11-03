@@ -598,6 +598,23 @@ pub fn live_diff_contents_impl(
     diff_resolved_sources(repo_path, path, old_content, new_content, config_json, wasm_dir)
 }
 
+/// A style-only Python diff assembled by the routed review (`routed_review::complete`), so the
+/// native server returns the same DTO and `generic.style_only_shortcut` evidence as the wheel.
+/// Only called after the batch proved style equivalence (`STYLE_ONLY_NOT_CERTIFIED`).
+fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -> Result<Value, String> {
+    if old_source == new_source {
+        return Err("style-only decline on identical sources".to_owned());
+    }
+    crate::routed_review::complete(&json!({
+        "language": "python",
+        "old_source": old_source,
+        "new_source": new_source,
+        "old_filename": path,
+        "new_filename": path,
+        "finalized": {"changes": [], "change_groups": [], "ignored_style_changes": [], "is_style_only": true},
+    }))
+}
+
 /// The shared compute tail: resolve the parser, load the guardrail policy, and serve via
 /// the native wasm chain (non-Python) or the certified batch (Python). Returns the
 /// `{"diff"}` / `{"fallback"}` JSON both public entry points emit.
@@ -692,6 +709,19 @@ fn diff_resolved_sources(
                 match item.get("diff") {
                     Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
                     None => fallback("batch item missing diff"),
+                }
+            }
+            // live-server#24: the batch declines style-only files after PROVING the
+            // trivia-filtered CSTs hash equal (operator-aware since core#229). Serve that proof
+            // as the same style-only review the routed path returns, with Core's style
+            // evidence, instead of turning every comment/format edit into an error.
+            Some(item)
+                if item.get("reason").and_then(Value::as_str)
+                    == Some(crate::STYLE_ONLY_NOT_CERTIFIED) =>
+            {
+                match python_style_only_live_diff(old_source, content, path) {
+                    Ok(diff) => Ok(certified_live_diff_response(diff, path)),
+                    Err(reason) => fallback(&reason),
                 }
             }
             Some(item) => fallback(
@@ -1746,3 +1776,50 @@ pub(crate) fn live_handle_diff_json(
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "live_review_completeness_source_tests.rs"]
 mod live_review_completeness_source_tests;
+
+#[cfg(test)]
+mod style_only_python_live_tests {
+    //! live-server#24: a proven style-only Python edit is served as style-only, not declined;
+    //! an operator change (core#229) is still a semantic change on the same route.
+    use super::*;
+
+    fn wasm_dir() -> String {
+        std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+            .expect("set INTENTUMDIFF_TEST_WASM_DIR to the verified parser components")
+    }
+
+    fn live(old: &str, new: &str) -> Value {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let out = live_diff_contents_impl(
+            repo.path().to_str().unwrap(), "a.py", old, new, "{}", &wasm_dir(),
+        )
+        .expect("live diff");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_comment_and_whitespace_edits_are_served_as_style_only() {
+        let base = "def f(a, b):\n    return a + b\n";
+        for new in ["def f(a, b):\n    # sum\n    return a + b\n", "def f(a, b):\n    return a  +  b\n"] {
+            let r = live(base, new);
+            let diff = r.get("diff").unwrap_or_else(|| panic!("style-only edit was declined: {r}"));
+            assert_eq!(diff["is_style_only"], true, "{r}");
+            assert_eq!(diff["has_semantic_changes"], false, "{r}");
+            assert!(diff["changes"].as_array().unwrap().is_empty(), "{r}");
+            assert!(
+                diff["change_groups"].as_array().unwrap().iter().any(|g| g["kind"] == "IGNORED_STYLE"),
+                "style-only result must carry IGNORED_STYLE evidence: {r}"
+            );
+        }
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_operator_change_is_not_served_as_style_only() {
+        let r = live("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n");
+        let diff = r.get("diff").unwrap_or_else(|| panic!("operator change declined: {r}"));
+        assert_eq!(diff["is_style_only"], false, "{r}");
+        assert_eq!(diff["has_semantic_changes"], true, "{r}");
+    }
+}

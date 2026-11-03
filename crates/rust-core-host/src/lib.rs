@@ -1,5 +1,11 @@
 mod source_fallback;
 mod operator_tokens;
+
+/// Batch decline reason when the trivia-filtered CSTs hash equal (a style-only edit). The
+/// certified batch leaves style-only presentation to the caller; the native live server serves
+/// it through the routed review assembly (live-server#24).
+pub(crate) const STYLE_ONLY_NOT_CERTIFIED: &str =
+    "style-only changed file is not certified for Rust product path";
 pub mod cli_presentation;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
@@ -3223,7 +3229,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
@@ -3313,7 +3319,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
