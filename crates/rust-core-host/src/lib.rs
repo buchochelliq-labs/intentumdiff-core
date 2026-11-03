@@ -7283,6 +7283,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
     let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
+    let matches = prune_cross_entity_operator_pairs(&old_index, &new_index, matches);
     let matches = operator_tokens::bind_operator_leaves(matches);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
@@ -8012,6 +8013,61 @@ fn enclosing_entity_node<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a Sema
     while let Some(parent) = index.parent.get(cursor) {
         if let Some(node) = index.by_id.get(*parent) {
             if is_named_entity_type(node.node_type.as_str()) {
+                return Some(node);
+            }
+        }
+        cursor = parent;
+    }
+    None
+}
+
+/// An operator expression paired across DIFFERENT enclosing entities (greet's `"Hi" <> name`
+/// with add's `x + y`) is a structural harvest, not a correspondence. It was invisible while
+/// both sides were labelled alike; once operators are carried (#229) it fabricates operator
+/// Updates. Drop operator-bearing pairs whose anchors (see `operator_pair_anchor`) are matched
+/// to different partners.
+fn prune_cross_entity_operator_pairs<'a>(
+    old_index: &TreeIndex<'a>,
+    new_index: &TreeIndex<'a>,
+    matches: Vec<MatchPair<'a>>,
+) -> Vec<MatchPair<'a>> {
+    let paired: HashMap<&str, &str> = matches
+        .iter()
+        .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
+        .collect();
+    matches
+        .into_iter()
+        .filter(|pair| {
+            if !operator_tokens::is_operator_bearing(&pair.old_node.node_type)
+                || !operator_tokens::is_operator_bearing(&pair.new_node.node_type)
+            {
+                return true;
+            }
+            match (
+                operator_pair_anchor(old_index, &pair.old_node.id),
+                operator_pair_anchor(new_index, &pair.new_node.id),
+            ) {
+                // Drop only when the old anchor is matched to a DIFFERENT new anchor; an
+                // unmatched anchor (deleted or relocated container) keeps the pair.
+                (Some(old_anchor), Some(new_anchor)) => paired
+                    .get(old_anchor.id.as_str())
+                    .is_none_or(|partner| *partner == new_anchor.id.as_str()),
+                _ => true,
+            }
+        })
+        .collect()
+}
+
+/// The container an operator expression belongs to: the enclosing named entity, else the
+/// nearest labelled container (elixir `def`s are `call('greet')`, not named entities).
+fn operator_pair_anchor<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a SemanticNode> {
+    if let Some(entity) = enclosing_entity_node(index, id) {
+        return Some(entity);
+    }
+    let mut cursor = id;
+    while let Some(parent) = index.parent.get(cursor) {
+        if let Some(node) = index.by_id.get(*parent) {
+            if !node.children.is_empty() && !node.label.is_empty() && node.label != node.node_type {
                 return Some(node);
             }
         }
