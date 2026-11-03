@@ -99,6 +99,9 @@ pub(crate) fn promote_expression_extractions<'a>(
             match n.node_type.as_str() {
                 "identifier" => property || names.contains(&n.label.as_str()),
                 "integer" | "float" => true,
+                // Operator leaves (#229) are part of the expression's text, which the
+                // extraction already compares exactly.
+                crate::operator_tokens::OPERATOR_NODE_TYPE => true,
                 "attribute" => {
                     n.children.len() == 2
                         && supported(&n.children[0], names, false)

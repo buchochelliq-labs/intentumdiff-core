@@ -6862,19 +6862,25 @@ fn convert_cst_with_hash_memo(
         None
     };
     let child_parent_class = own_class.as_deref().or(parent_class);
-    let children: Vec<SemanticNode> = node
-        .children
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, child)| {
-            convert_cst_with_hash_memo(
-                child,
-                &format!("{id_prefix}.{idx}"),
-                child_parent_class,
-                hash_memo,
-            )
-        })
-        .collect();
+    // Operator leaves (#229) are named `<parent>.op<k>` and do not take a sibling slot, so every
+    // other child keeps the id it had before operators were carried - and the same id the
+    // Wasm route's source recovery produces (native/Wasm candidate parity).
+    let mut children: Vec<SemanticNode> = Vec::with_capacity(node.children.len());
+    let (mut idx, mut op_idx) = (0usize, 0usize);
+    for child in &node.children {
+        let child_id = if child.node_type == operator_tokens::OPERATOR_NODE_TYPE {
+            op_idx += 1;
+            format!("{id_prefix}.op{}", op_idx - 1)
+        } else {
+            idx += 1;
+            format!("{id_prefix}.{}", idx - 1)
+        };
+        if let Some(converted) =
+            convert_cst_with_hash_memo(child, &child_id, child_parent_class, hash_memo)
+        {
+            children.push(converted);
+        }
+    }
     if !is_semantic(&node.node_type)
         && children.is_empty()
         && node.node_type != operator_tokens::OPERATOR_NODE_TYPE

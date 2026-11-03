@@ -323,7 +323,7 @@ fn gap_operator_leaves(
     }
     spans.sort_unstable();
     let mut tokens: Vec<(usize, String)> = Vec::new();
-    let mut gap = |from: usize, to: usize, tokens: &mut Vec<(usize, String)>| {
+    let gap = |from: usize, to: usize, tokens: &mut Vec<(usize, String)>| {
         let mut found = Vec::new();
         located_operator_tokens_in_gap(&source[from..to], language, &mut found);
         tokens.extend(found.into_iter().map(|(offset, token)| (from + offset, token)));
