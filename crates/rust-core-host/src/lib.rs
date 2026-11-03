@@ -4668,7 +4668,14 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     }
     // Same defect class as `async` above, for every operator (#229): read the anonymous tokens
     // of operator-bearing nodes so `a + b` -> `a - b` is a semantic change, not style.
-    let operator = if operator_tokens::is_operator_bearing(&node_type) {
+    // Python's `async for` and `async with` change behaviour, not formatting.
+    // tree-sitter represents `async` as an anonymous leaf, which the named-child
+    // serializer otherwise discards. Preserve it in the semantic hash.
+    let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement")
+        && node.child(0).is_some_and(|child| child.kind() == "async")
+    {
+        "async".to_owned()
+    } else if operator_tokens::is_operator_bearing(&node_type) {
         let mut op_cursor = node.walk();
         node.children(&mut op_cursor)
             .filter(|child| !child.is_named() && operator_tokens::is_operator_token(child.kind()))

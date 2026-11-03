@@ -598,12 +598,54 @@ pub fn live_diff_contents_impl(
     diff_resolved_sources(repo_path, path, old_content, new_content, config_json, wasm_dir)
 }
 
+/// Independently require the entire Python token stream to match before serving
+/// a style-only result. Named-only CSTs can omit anonymous operators/keywords:
+/// even if the CST hashes match, `async for` -> `for` must not be certified.
+/// Every leaf token (including anonymous punctuation and keywords) is preserved;
+/// only tree-sitter-confirmed comments are trivia. Invalid parses fail closed.
+fn python_significant_tokens(source: &str) -> Result<Vec<(String, String)>, String> {
+    fn collect(
+        node: tree_sitter::Node<'_>,
+        bytes: &[u8],
+        out: &mut Vec<(String, String)>,
+    ) -> Result<(), String> {
+        if node.kind() == "comment" {
+            return Ok(());
+        }
+        if node.is_missing() || node.is_error() {
+            return Err("Python syntax is not sufficiently parsed for style-only proof".to_owned());
+        }
+        if node.child_count() == 0 {
+            let token = node.utf8_text(bytes)
+                .map_err(|error| format!("Python token is not UTF-8: {error}"))?;
+            out.push((node.kind().to_owned(), token.to_owned()));
+            return Ok(());
+        }
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor) {
+            collect(child, bytes, out)?;
+        }
+        Ok(())
+    }
+
+    let tree = crate::parse_python_tree(source)?;
+    if tree.root_node().has_error() {
+        return Err("Python syntax contains errors; style-only equivalence unproven".to_owned());
+    }
+    let mut tokens = Vec::new();
+    collect(tree.root_node(), source.as_bytes(), &mut tokens)?;
+    Ok(tokens)
+}
+
 /// A style-only Python diff assembled by the routed review (`routed_review::complete`), so the
 /// native server returns the same DTO and `generic.style_only_shortcut` evidence as the wheel.
 /// Only called after the batch proved style equivalence (`STYLE_ONLY_NOT_CERTIFIED`).
 fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -> Result<Value, String> {
     if old_source == new_source {
         return Err("style-only decline on identical sources".to_owned());
+    }
+    if python_significant_tokens(old_source)? != python_significant_tokens(new_source)? {
+        return Err("Python syntax tokens differ; style-only equivalence unproven".to_owned());
     }
     crate::routed_review::complete(&json!({
         "language": "python",
@@ -1783,15 +1825,29 @@ mod style_only_python_live_tests {
     //! an operator change (core#229) is still a semantic change on the same route.
     use super::*;
 
-    fn wasm_dir() -> String {
-        std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
-            .expect("set INTENTUMDIFF_TEST_WASM_DIR to the verified parser components")
-    }
-
     fn live(old: &str, new: &str) -> Value {
         let repo = tempfile::tempdir().expect("temporary repo");
+        let staged = std::path::PathBuf::from(
+            std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+                .expect("set INTENTUMDIFF_TEST_WASM_DIR to the verified parser components")
+        );
+        // CI stages verified parser bytes, not a product runtime catalog.
+        // Prove discovery against the REAL staged guest by supplying only a
+        // local manifest; no synthetic guest, no replacement semantics.
+        let dir = tempfile::tempdir().expect("temporary verified parser catalog");
+        std::fs::copy(staged.join("python_parser.wasm"), dir.path().join("python_parser.wasm"))
+            .expect("verified staged Python parser component");
+        std::fs::write(dir.path().join("parser_manifest.json"), serde_json::json!({
+            "parsers": {"python": {
+                "plugin_id": "python",
+                "wasm": "python_parser.wasm",
+                "extensions": [".py", ".pyi"]
+            }},
+            "extension_index": {".py": "python", ".pyi": "python"}
+        }).to_string()).expect("test parser catalog");
         let out = live_diff_contents_impl(
-            repo.path().to_str().unwrap(), "a.py", old, new, "{}", &wasm_dir(),
+            repo.path().to_str().unwrap(), "a.py", old, new, "{}",
+            dir.path().to_str().unwrap(),
         )
         .expect("live diff");
         serde_json::from_str(&out).unwrap()
@@ -1812,6 +1868,32 @@ mod style_only_python_live_tests {
                 "style-only result must carry IGNORED_STYLE evidence: {r}"
             );
         }
+    }
+
+    #[test]
+    fn python_trivia_proof_preserves_anonymous_semantic_tokens() {
+        let base = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let bare = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let awith = "async def f(cm):\n    async with cm:\n        pass\n";
+        let with_ = "async def f(cm):\n    with cm:\n        pass\n";
+        let style = "async def f(xs):\n    # iteration\n    async for x in xs:\n        print( x )\n";
+        assert_eq!(python_significant_tokens(base).unwrap(), python_significant_tokens(style).unwrap());
+        assert_ne!(python_significant_tokens(base).unwrap(), python_significant_tokens(bare).unwrap());
+        assert_ne!(python_significant_tokens(awith).unwrap(), python_significant_tokens(with_).unwrap());
+        assert_ne!(
+            python_significant_tokens("def f(a,b):\n return a + b\n").unwrap(),
+            python_significant_tokens("def f(a,b):\n return a - b\n").unwrap()
+        );
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm")]
+    fn python_async_iteration_change_is_not_served_as_style_only() {
+        let old = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let new = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let r = live(old, new);
+        assert_ne!(r.get("diff").and_then(|d| d.get("is_style_only")), Some(&json!(true)),
+            "async iteration change must never be certified as style-only: {r}");
     }
 
     #[test]
