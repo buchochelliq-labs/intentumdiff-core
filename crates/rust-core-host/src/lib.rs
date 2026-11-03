@@ -4639,11 +4639,31 @@ fn serialize_tree_json(tree: &tree_sitter::Tree, source: &str) -> Result<String,
 fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNode, String> {
     let start = node.start_position();
     let end = node.end_position();
+    // Operator tokens (#229) are anonymous in tree-sitter, so `named_children` drops them and
+    // `a + b` / `a - b` serialized identically. Keep them as `operator` leaves in source order:
+    // the operator is structure, and the parent's label (identity for rename and profile
+    // passes) stays exactly as it was.
+    let operator_bearing = operator_tokens::is_operator_bearing(node.kind());
     let mut cursor = node.walk();
-    let children: Vec<CstNode> = node
-        .named_children(&mut cursor)
-        .map(|child| serialize_ts_node(child, source))
-        .collect::<Result<Vec<_>, _>>()?;
+    let mut children: Vec<CstNode> = Vec::new();
+    for child in node.children(&mut cursor) {
+        if child.is_named() {
+            children.push(serialize_ts_node(child, source)?);
+        } else if operator_bearing && operator_tokens::is_operator_token(child.kind()) {
+            let (s, e) = (child.start_position(), child.end_position());
+            children.push(CstNode {
+                node_type: operator_tokens::OPERATOR_NODE_TYPE.to_owned(),
+                named: false,
+                text: child.kind().to_owned(),
+                operator: String::new(),
+                start_line: s.row as u32,
+                start_col: s.column as u32,
+                end_line: e.row as u32,
+                end_col: e.column as u32,
+                children: Vec::new(),
+            });
+        }
+    }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
     let text = if keep_text {
         node.utf8_text(source)
@@ -4666,22 +4686,14 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     {
         node_type = "async_function_def".to_owned();
     }
-    // Same defect class as `async` above, for every operator (#229): read the anonymous tokens
-    // of operator-bearing nodes so `a + b` -> `a - b` is a semantic change, not style.
     // Python's `async for` and `async with` change behaviour, not formatting.
     // tree-sitter represents `async` as an anonymous leaf, which the named-child
     // serializer otherwise discards. Preserve it in the semantic hash.
+    // (Operators are carried as `operator` leaf children above, not here.)
     let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement")
         && node.child(0).is_some_and(|child| child.kind() == "async")
     {
         "async".to_owned()
-    } else if operator_tokens::is_operator_bearing(&node_type) {
-        let mut op_cursor = node.walk();
-        node.children(&mut op_cursor)
-            .filter(|child| !child.is_named() && operator_tokens::is_operator_token(child.kind()))
-            .map(|child| child.kind().to_owned())
-            .collect::<Vec<_>>()
-            .join(" ")
     } else {
         String::new()
     };
@@ -6863,7 +6875,10 @@ fn convert_cst_with_hash_memo(
             )
         })
         .collect();
-    if !is_semantic(&node.node_type) && children.is_empty() {
+    if !is_semantic(&node.node_type)
+        && children.is_empty()
+        && node.node_type != operator_tokens::OPERATOR_NODE_TYPE
+    {
         return None;
     }
     let parent_type = if matches!(
