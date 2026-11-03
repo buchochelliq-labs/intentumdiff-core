@@ -702,7 +702,9 @@ pub(crate) fn suppress_dart_signature_body_scaffold_churn_drafts(
     }
     removed_ops.sort();
     added_ops.sort();
-    let operators_unchanged = removed_ops == added_ops;
+    // Compare operators only when both sides have candidates here; when an earlier pass already
+    // settled one side, this pass has nothing to compare and keeps the pre-#229 behaviour.
+    let operators_unchanged = removed_ops.is_empty() || added_ops.is_empty() || removed_ops == added_ops;
 
     let mut old_labels = Vec::new();
     let mut new_labels = Vec::new();

@@ -8432,6 +8432,16 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             if old_to_new.contains_key(node.id.as_str()) {
                 continue;
             }
+            // An operator leaf (#229) under an unmatched parent is covered by the parent's own
+            // edit (or its suppression); only a matched parent makes it an independent change.
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && old_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !old_to_new.contains_key(*parent))
+            {
+                continue;
+            }
             if move_old_descendants.contains(node.id.as_str())
                 || pruned_old_deletes.contains(node.id.as_str())
             {
@@ -8451,6 +8461,14 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     measure_value_optional(probe.as_deref_mut(), "rust_edit_add_generation", || {
         for node in &new_index.nodes {
             if matched_new.contains_key(node.id.as_str()) {
+                continue;
+            }
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && new_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !matched_new.contains_key(*parent))
+            {
                 continue;
             }
             if move_new_descendants.contains(node.id.as_str())
