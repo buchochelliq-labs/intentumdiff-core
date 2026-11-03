@@ -65,6 +65,18 @@ pub(crate) fn is_operator_bearing(node_type: &str) -> bool {
     PARTS.iter().any(|part| t.contains(part)) && !t.contains("declarat") && !t.contains("definition")
 }
 
+/// Keywords that select a loop's iteration protocol: `for await (x of xs)` iterates
+/// asynchronously, `for (k in o)` walks keys and `for (k of o)` values. tree-sitter keeps them as
+/// anonymous tokens of a node that is not operator-bearing, so the Wasm CST drops them and the
+/// toggles hashed equal (certified style-only). They are recovered as `operator` leaves exactly
+/// like operators; only these keywords are kept on such nodes.
+pub(crate) fn protocol_keywords(node_type: &str) -> &'static [&'static str] {
+    match node_type {
+        "for_in_statement" => &["await", "in", "of"],
+        _ => &[],
+    }
+}
+
 const WORD_OPERATORS: &[&str] = &[
     "and", "or", "not", "is", "in", "instanceof", "typeof", "xor", "mod", "div", "rem", "band",
     "bor", "bxor", "bnot", "bsl", "bsr", "andalso", "orelse", "notin", "isnot",
@@ -162,13 +174,18 @@ fn comment_spans(gap: &str, language: &str) -> Vec<(usize, usize)> {
 #[cfg(test)]
 pub(crate) fn operator_tokens_in_gap(gap: &str, language: &str, out: &mut Vec<String>) {
     let mut located = Vec::new();
-    located_operator_tokens_in_gap(gap, language, &mut located);
+    located_operator_tokens_in_gap(gap, language, &[], &mut located);
     out.extend(located.into_iter().map(|(_, token)| token));
 }
 
 /// As `operator_tokens_in_gap`, with each token's byte offset within *gap*. Comments are
 /// blanked (same length) rather than removed, so offsets stay true to the source.
-fn located_operator_tokens_in_gap(gap: &str, language: &str, out: &mut Vec<(usize, String)>) {
+fn located_operator_tokens_in_gap(
+    gap: &str,
+    language: &str,
+    keywords: &[&str],
+    out: &mut Vec<(usize, String)>,
+) {
     let cleaned = blank_comments(gap, language);
     let mut chars = cleaned.char_indices().peekable();
     while let Some((start, ch)) = chars.next() {
@@ -192,7 +209,7 @@ fn located_operator_tokens_in_gap(gap: &str, language: &str, out: &mut Vec<(usiz
                 chars.next();
             }
             let word = &cleaned[start..end];
-            if WORD_OPERATORS.contains(&word) {
+            if WORD_OPERATORS.contains(&word) || keywords.contains(&word) {
                 out.push((start, word.to_owned()));
             }
         }
@@ -265,8 +282,10 @@ fn recover_node(
     // guest that emits them, or a second pass) is left alone.
     let has_operator_child = node.children.iter().any(|c| c.node_type == OPERATOR_NODE_TYPE);
     let mut added = false;
-    if is_operator_bearing(&node.node_type) && !node.children.is_empty() && !has_operator_child {
-        if let Some(leaves) = gap_operator_leaves(node, source, starts, language) {
+    let operator_bearing = is_operator_bearing(&node.node_type);
+    let keywords = protocol_keywords(&node.node_type);
+    if (operator_bearing || !keywords.is_empty()) && !node.children.is_empty() && !has_operator_child {
+        if let Some(leaves) = gap_operator_leaves(node, source, starts, language, operator_bearing, keywords) {
             for leaf in leaves {
                 node.children.push(leaf);
             }
@@ -338,6 +357,8 @@ fn gap_operator_leaves(
     source: &str,
     starts: &[usize],
     language: &str,
+    operators: bool,
+    keywords: &[&str],
 ) -> Option<Vec<crate::SemanticNode>> {
     let pos = &node.position;
     let start = byte_offset(starts, source, pos.start_line, pos.start_col)?;
@@ -359,8 +380,13 @@ fn gap_operator_leaves(
     let mut tokens: Vec<(usize, String)> = Vec::new();
     let gap = |from: usize, to: usize, tokens: &mut Vec<(usize, String)>| {
         let mut found = Vec::new();
-        located_operator_tokens_in_gap(&source[from..to], language, &mut found);
-        tokens.extend(found.into_iter().map(|(offset, token)| (from + offset, token)));
+        located_operator_tokens_in_gap(&source[from..to], language, keywords, &mut found);
+        tokens.extend(
+            found
+                .into_iter()
+                .filter(|(_, token)| operators || keywords.contains(&token.as_str()))
+                .map(|(offset, token)| (from + offset, token)),
+        );
     };
     let mut cursor = start;
     for (s, e) in spans {
@@ -466,3 +492,7 @@ mod tests {
         }
     }
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "iteration_keyword_source_tests.rs"]
+mod iteration_keyword_source_tests;

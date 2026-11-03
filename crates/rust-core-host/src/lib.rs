@@ -4690,7 +4690,8 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     // tree-sitter represents `async` as an anonymous leaf, which the named-child
     // serializer otherwise discards. Preserve it in the semantic hash.
     // (Operators are carried as `operator` leaf children above, not here.)
-    let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement")
+    // The comprehension clause (`[x async for x in xs]`) is the same protocol switch.
+    let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement" | "for_in_clause")
         && node.child(0).is_some_and(|child| child.kind() == "async")
     {
         "async".to_owned()
