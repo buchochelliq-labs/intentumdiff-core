@@ -466,3 +466,7 @@ mod tests {
         }
     }
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "iteration_keyword_source_tests.rs"]
+mod iteration_keyword_source_tests;

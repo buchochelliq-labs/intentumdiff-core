@@ -127,6 +127,9 @@ fn python_operator_change_is_a_semantic_modification_on_every_route() {
         ("x = 1\nx += 2\n", "x = 1\nx -= 2\n"),
         // Matched parent gaining an operator leaf: must surface, not be skipped as covered.
         ("def f(a, b):\n    return a is b\n", "def f(a, b):\n    return a is not b\n"),
+        // `async` on a comprehension clause is the iteration protocol, not layout.
+        ("async def f(xs):\n    return [x async for x in xs]\n",
+         "async def f(xs):\n    return [x for x in xs]\n"),
     ];
     for (old, new) in cases {
         for (route, result) in rename_review_routes(old, new) {
