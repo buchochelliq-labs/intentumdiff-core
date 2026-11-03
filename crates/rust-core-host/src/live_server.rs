@@ -598,6 +598,65 @@ pub fn live_diff_contents_impl(
     diff_resolved_sources(repo_path, path, old_content, new_content, config_json, wasm_dir)
 }
 
+/// Independently require the entire Python token stream to match before serving
+/// a style-only result. Named-only CSTs can omit anonymous operators/keywords:
+/// even if the CST hashes match, `async for` -> `for` must not be certified.
+/// Every leaf token (including anonymous punctuation and keywords) is preserved;
+/// only tree-sitter-confirmed comments are trivia. Invalid parses fail closed.
+fn python_significant_tokens(source: &str) -> Result<Vec<(String, String)>, String> {
+    fn collect(
+        node: tree_sitter::Node<'_>,
+        bytes: &[u8],
+        out: &mut Vec<(String, String)>,
+    ) -> Result<(), String> {
+        if node.kind() == "comment" {
+            return Ok(());
+        }
+        if node.is_missing() || node.is_error() {
+            return Err("Python syntax is not sufficiently parsed for style-only proof".to_owned());
+        }
+        if node.child_count() == 0 {
+            let token = node.utf8_text(bytes)
+                .map_err(|error| format!("Python token is not UTF-8: {error}"))?;
+            out.push((node.kind().to_owned(), token.to_owned()));
+            return Ok(());
+        }
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor) {
+            collect(child, bytes, out)?;
+        }
+        Ok(())
+    }
+
+    let tree = crate::parse_python_tree(source)?;
+    if tree.root_node().has_error() {
+        return Err("Python syntax contains errors; style-only equivalence unproven".to_owned());
+    }
+    let mut tokens = Vec::new();
+    collect(tree.root_node(), source.as_bytes(), &mut tokens)?;
+    Ok(tokens)
+}
+
+/// A style-only Python diff assembled by the routed review (`routed_review::complete`), so the
+/// native server returns the same DTO and `generic.style_only_shortcut` evidence as the wheel.
+/// Only called after the batch proved style equivalence (`STYLE_ONLY_NOT_CERTIFIED`).
+fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -> Result<Value, String> {
+    if old_source == new_source {
+        return Err("style-only decline on identical sources".to_owned());
+    }
+    if python_significant_tokens(old_source)? != python_significant_tokens(new_source)? {
+        return Err("Python syntax tokens differ; style-only equivalence unproven".to_owned());
+    }
+    crate::routed_review::complete(&json!({
+        "language": "python",
+        "old_source": old_source,
+        "new_source": new_source,
+        "old_filename": path,
+        "new_filename": path,
+        "finalized": {"changes": [], "change_groups": [], "ignored_style_changes": [], "is_style_only": true},
+    }))
+}
+
 /// The shared compute tail: resolve the parser, load the guardrail policy, and serve via
 /// the native wasm chain (non-Python) or the certified batch (Python). Returns the
 /// `{"diff"}` / `{"fallback"}` JSON both public entry points emit.
@@ -692,6 +751,19 @@ fn diff_resolved_sources(
                 match item.get("diff") {
                     Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
                     None => fallback("batch item missing diff"),
+                }
+            }
+            // live-server#24: the batch declines style-only files after PROVING the
+            // trivia-filtered CSTs hash equal (operator-aware since core#229). Serve that proof
+            // as the same style-only review the routed path returns, with Core's style
+            // evidence, instead of turning every comment/format edit into an error.
+            Some(item)
+                if item.get("reason").and_then(Value::as_str)
+                    == Some(crate::STYLE_ONLY_NOT_CERTIFIED) =>
+            {
+                match python_style_only_live_diff(old_source, content, path) {
+                    Ok(diff) => Ok(certified_live_diff_response(diff, path)),
+                    Err(reason) => fallback(&reason),
                 }
             }
             Some(item) => fallback(
@@ -1746,3 +1818,90 @@ pub(crate) fn live_handle_diff_json(
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "live_review_completeness_source_tests.rs"]
 mod live_review_completeness_source_tests;
+
+#[cfg(test)]
+mod style_only_python_live_tests {
+    //! live-server#24: a proven style-only Python edit is served as style-only, not declined;
+    //! an operator change (core#229) is still a semantic change on the same route.
+    use super::*;
+
+    fn live(old: &str, new: &str) -> Value {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let staged = std::path::PathBuf::from(
+            std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+                .expect("set INTENTUMDIFF_TEST_WASM_DIR to the verified parser components")
+        );
+        // CI stages verified parser bytes, not a product runtime catalog.
+        // Prove discovery against the REAL staged guest by supplying only a
+        // local manifest; no synthetic guest, no replacement semantics.
+        let dir = tempfile::tempdir().expect("temporary verified parser catalog");
+        std::fs::copy(staged.join("python_parser.wasm"), dir.path().join("python_parser.wasm"))
+            .expect("verified staged Python parser component");
+        std::fs::write(dir.path().join("parser_manifest.json"), serde_json::json!({
+            "parsers": {"python": {
+                "plugin_id": "python",
+                "wasm": "python_parser.wasm",
+                "extensions": [".py", ".pyi"]
+            }},
+            "extension_index": {".py": "python", ".pyi": "python"}
+        }).to_string()).expect("test parser catalog");
+        let out = live_diff_contents_impl(
+            repo.path().to_str().unwrap(), "a.py", old, new, "{}",
+            dir.path().to_str().unwrap(),
+        )
+        .expect("live diff");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_comment_and_whitespace_edits_are_served_as_style_only() {
+        let base = "def f(a, b):\n    return a + b\n";
+        for new in ["def f(a, b):\n    # sum\n    return a + b\n", "def f(a, b):\n    return a  +  b\n"] {
+            let r = live(base, new);
+            let diff = r.get("diff").unwrap_or_else(|| panic!("style-only edit was declined: {r}"));
+            assert_eq!(diff["is_style_only"], true, "{r}");
+            assert_eq!(diff["has_semantic_changes"], false, "{r}");
+            assert!(diff["changes"].as_array().unwrap().is_empty(), "{r}");
+            assert!(
+                diff["change_groups"].as_array().unwrap().iter().any(|g| g["kind"] == "IGNORED_STYLE"),
+                "style-only result must carry IGNORED_STYLE evidence: {r}"
+            );
+        }
+    }
+
+    #[test]
+    fn python_trivia_proof_preserves_anonymous_semantic_tokens() {
+        let base = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let bare = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let awith = "async def f(cm):\n    async with cm:\n        pass\n";
+        let with_ = "async def f(cm):\n    with cm:\n        pass\n";
+        let style = "async def f(xs):\n    # iteration\n    async for x in xs:\n        print( x )\n";
+        assert_eq!(python_significant_tokens(base).unwrap(), python_significant_tokens(style).unwrap());
+        assert_ne!(python_significant_tokens(base).unwrap(), python_significant_tokens(bare).unwrap());
+        assert_ne!(python_significant_tokens(awith).unwrap(), python_significant_tokens(with_).unwrap());
+        assert_ne!(
+            python_significant_tokens("def f(a,b):\n return a + b\n").unwrap(),
+            python_significant_tokens("def f(a,b):\n return a - b\n").unwrap()
+        );
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm")]
+    fn python_async_iteration_change_is_not_served_as_style_only() {
+        let old = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let new = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let r = live(old, new);
+        assert_ne!(r.get("diff").and_then(|d| d.get("is_style_only")), Some(&json!(true)),
+            "async iteration change must never be certified as style-only: {r}");
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_operator_change_is_not_served_as_style_only() {
+        let r = live("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n");
+        let diff = r.get("diff").unwrap_or_else(|| panic!("operator change declined: {r}"));
+        assert_eq!(diff["is_style_only"], false, "{r}");
+        assert_eq!(diff["has_semantic_changes"], true, "{r}");
+    }
+}

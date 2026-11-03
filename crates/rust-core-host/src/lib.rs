@@ -1,4 +1,11 @@
 mod source_fallback;
+mod operator_tokens;
+
+/// Batch decline reason when the trivia-filtered CSTs hash equal (a style-only edit). The
+/// certified batch leaves style-only presentation to the caller; the native live server serves
+/// it through the routed review assembly (live-server#24).
+pub(crate) const STYLE_ONLY_NOT_CERTIFIED: &str =
+    "style-only changed file is not certified for Rust product path";
 pub mod cli_presentation;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
@@ -1433,6 +1440,11 @@ fn finalize_review_impl(
         serde_json::from_str(new_tree_json).map_err(|exc| format!("new tree: {exc}"))?;
     validate_unique_ids(&old_tree).map_err(|exc| format!("old tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new tree: {exc}"))?;
+    // #229 option A: parser components drop anonymous operator tokens, so recover them from
+    // the source between each operator node's children before any hash comparison or matching.
+    // Idempotent for trees whose labels already carry the operator. Retire with core#230.
+    operator_tokens::recover_operator_tokens(&mut old_tree, old_source, language);
+    operator_tokens::recover_operator_tokens(&mut new_tree, new_source, language);
 
     if config.fallback_to_token_diff && (
         source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
@@ -2512,6 +2524,10 @@ struct CstNode {
     end_col: u32,
     #[serde(default)]
     children: Vec<CstNode>,
+    /// Operator tokens of an operator-bearing node (#229). tree-sitter keeps them as anonymous
+    /// children, which `named_children` drops; without this `a + b` and `a - b` hash equal.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    operator: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -3213,7 +3229,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
@@ -3303,7 +3319,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
@@ -4650,10 +4666,30 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     {
         node_type = "async_function_def".to_owned();
     }
+    // Same defect class as `async` above, for every operator (#229): read the anonymous tokens
+    // of operator-bearing nodes so `a + b` -> `a - b` is a semantic change, not style.
+    // Python's `async for` and `async with` change behaviour, not formatting.
+    // tree-sitter represents `async` as an anonymous leaf, which the named-child
+    // serializer otherwise discards. Preserve it in the semantic hash.
+    let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement")
+        && node.child(0).is_some_and(|child| child.kind() == "async")
+    {
+        "async".to_owned()
+    } else if operator_tokens::is_operator_bearing(&node_type) {
+        let mut op_cursor = node.walk();
+        node.children(&mut op_cursor)
+            .filter(|child| !child.is_named() && operator_tokens::is_operator_token(child.kind()))
+            .map(|child| child.kind().to_owned())
+            .collect::<Vec<_>>()
+            .join(" ")
+    } else {
+        String::new()
+    };
     Ok(CstNode {
         node_type,
         named: node.is_named(),
         text,
+        operator,
         start_line: start.row as u32,
         start_col: start.column as u32,
         end_line: end.row as u32,
@@ -7054,6 +7090,10 @@ fn is_semantic(node_type: &str) -> bool {
 }
 
 fn label_for(node: &CstNode) -> String {
+    operator_tokens::label_with_operator(&base_label_for(node), &node.operator)
+}
+
+fn base_label_for(node: &CstNode) -> String {
     // A Python module is a structural container, not a source-named leaf.
     // Emptying it must not manufacture a module("module") -> module("") edit.
     if node.node_type == "module" { return "module".to_owned(); }
@@ -7088,6 +7128,10 @@ fn structural_hash_cst_with_memo(node: &CstNode, memo: &mut HashMap<usize, Strin
         hasher.update(node.text.as_bytes());
     } else {
         hasher.update(node.node_type.as_bytes());
+        if !node.operator.is_empty() {
+            hasher.update(b"|op:");
+            hasher.update(node.operator.as_bytes());
+        }
         for child in &node.children {
             hasher.update(b"|");
             hasher.update(structural_hash_cst_with_memo(child, memo).as_bytes());

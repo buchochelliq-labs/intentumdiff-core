@@ -116,6 +116,41 @@ fn extraction_requires_exact_expression_arguments_and_context() {
 }
 
 #[test]
+fn python_operator_change_is_a_semantic_modification_on_every_route() {
+    // Oracle (Core #229): changing only an operator changes behaviour. Both the batch
+    // product route and the routed finalize_review route must report it as a semantic
+    // change - never `is_style_only`, never an empty change list.
+    let cases = [
+        ("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n"),
+        ("def f(a, b):\n    return a < b\n", "def f(a, b):\n    return a > b\n"),
+        ("def f(a, b):\n    return a and b\n", "def f(a, b):\n    return a or b\n"),
+        ("x = 1\nx += 2\n", "x = 1\nx -= 2\n"),
+    ];
+    for (old, new) in cases {
+        for (route, result) in rename_review_routes(old, new) {
+            assert_ne!(result["is_style_only"], true, "{route} {old:?}->{new:?}: {result}");
+            // `has_semantic_changes` belongs to the final diff (batch route); the routed
+            // finalize payload carries changes + groups only.
+            if route == "batch" {
+                assert_eq!(result["has_semantic_changes"], true, "{route} {old:?}->{new:?}: {result}");
+            }
+            assert!(
+                result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"),
+                "{route} {old:?}->{new:?}: operator change is not a MODIFICATION: {result}"
+            );
+            assert!(
+                !result["changes"].as_array().unwrap().is_empty(),
+                "{route} {old:?}->{new:?}: no changes reported: {result}"
+            );
+            assert!(
+                !result["change_groups"].as_array().unwrap().iter().any(|g| g["kind"] == "IGNORED_STYLE"),
+                "{route} {old:?}->{new:?}: operator change filed as IGNORED_STYLE: {result}"
+            );
+        }
+    }
+}
+
+#[test]
 fn renamed_function_with_body_edit_preserves_both_intents() {
     for (_, result) in rename_review_routes("def calc(x):\n    return x + 1\n", "def compute(x):\n    return x + 2\n") {
         assert_function_rename(&result, "calc", "compute");
