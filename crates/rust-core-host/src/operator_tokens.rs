@@ -48,6 +48,13 @@ pub(crate) fn is_operator_bearing(node_type: &str) -> bool {
         "compound_assignment",
     ];
     let t = node_type.to_ascii_lowercase();
+    // Shell `variable_assignment` is a keyed NAME=VALUE unit: its label already carries
+    // the full right-hand side. Recovering `=` or punctuation from `${1:-World}` as an
+    // operator alters that identity and breaks pairing of changed Bash assignments (#234).
+    // Compound/augmented assignment expressions still need their real operator tokens.
+    if t == "variable_assignment" {
+        return false;
+    }
     // `operator_assignment` (ruby) and friends contain "assignment"; type-level syntax such as
     // zig's `error_union_type` contains none of these parts.
     PARTS.iter().any(|part| t.contains(part)) && !t.contains("declarat") && !t.contains("definition")
@@ -319,9 +326,43 @@ mod tests {
             assert!(is_operator_bearing(t), "{t}");
         }
         for t in ["variable_declarator", "let_declaration", "function_definition", "identifier",
-            "error_union_type", "call_expression", "return_statement"] {
+            "error_union_type", "call_expression", "return_statement", "variable_assignment"] {
             assert!(!is_operator_bearing(t), "{t}");
         }
+    }
+
+    #[test]
+    fn bash_parameter_expansion_does_not_mutate_assignment_identity() {
+        // #234: `NAME=$1` -> `NAME=${1:-World}` is one existing assignment
+        // modification. Recovery must not append `=` to a pre-labelled assignment,
+        // or interpret expansion punctuation as a changed assignment operator.
+        let source = "NAME=${1:-World}";
+        let mut tree: crate::SemanticNode = serde_json::from_value(serde_json::json!({
+            "id": "0",
+            "node_type": "variable_assignment",
+            "label": source,
+            "position": {
+                "start_line": 0, "start_col": 0,
+                "end_line": 0, "end_col": source.len()
+            },
+            "structural_hash": "known-assignment-hash",
+            "children": [{
+                "id": "0.0",
+                "node_type": "expansion",
+                "label": "${1:-World}",
+                "position": {
+                    "start_line": 0, "start_col": 5,
+                    "end_line": 0, "end_col": source.len()
+                },
+                "structural_hash": "known-expansion-hash",
+                "children": []
+            }]
+        })).expect("valid Bash semantic node");
+        recover_operator_tokens(&mut tree, source, "bash");
+        assert_eq!(tree.label, source);
+        assert_eq!(tree.structural_hash, "known-assignment-hash");
+        assert!(is_operator_bearing("compound_assignment_expr"));
+        assert!(is_operator_bearing("augmented_assignment_expression"));
     }
 
     #[test]
