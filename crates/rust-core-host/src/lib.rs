@@ -4639,11 +4639,31 @@ fn serialize_tree_json(tree: &tree_sitter::Tree, source: &str) -> Result<String,
 fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNode, String> {
     let start = node.start_position();
     let end = node.end_position();
+    // Operator tokens (#229) are anonymous in tree-sitter, so `named_children` drops them and
+    // `a + b` / `a - b` serialized identically. Keep them as `operator` leaves in source order:
+    // the operator is structure, and the parent's label (identity for rename and profile
+    // passes) stays exactly as it was.
+    let operator_bearing = operator_tokens::is_operator_bearing(node.kind());
     let mut cursor = node.walk();
-    let children: Vec<CstNode> = node
-        .named_children(&mut cursor)
-        .map(|child| serialize_ts_node(child, source))
-        .collect::<Result<Vec<_>, _>>()?;
+    let mut children: Vec<CstNode> = Vec::new();
+    for child in node.children(&mut cursor) {
+        if child.is_named() {
+            children.push(serialize_ts_node(child, source)?);
+        } else if operator_bearing && operator_tokens::is_operator_token(child.kind()) {
+            let (s, e) = (child.start_position(), child.end_position());
+            children.push(CstNode {
+                node_type: operator_tokens::OPERATOR_NODE_TYPE.to_owned(),
+                named: false,
+                text: child.kind().to_owned(),
+                operator: String::new(),
+                start_line: s.row as u32,
+                start_col: s.column as u32,
+                end_line: e.row as u32,
+                end_col: e.column as u32,
+                children: Vec::new(),
+            });
+        }
+    }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
     let text = if keep_text {
         node.utf8_text(source)
@@ -4666,22 +4686,14 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     {
         node_type = "async_function_def".to_owned();
     }
-    // Same defect class as `async` above, for every operator (#229): read the anonymous tokens
-    // of operator-bearing nodes so `a + b` -> `a - b` is a semantic change, not style.
     // Python's `async for` and `async with` change behaviour, not formatting.
     // tree-sitter represents `async` as an anonymous leaf, which the named-child
     // serializer otherwise discards. Preserve it in the semantic hash.
+    // (Operators are carried as `operator` leaf children above, not here.)
     let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement")
         && node.child(0).is_some_and(|child| child.kind() == "async")
     {
         "async".to_owned()
-    } else if operator_tokens::is_operator_bearing(&node_type) {
-        let mut op_cursor = node.walk();
-        node.children(&mut op_cursor)
-            .filter(|child| !child.is_named() && operator_tokens::is_operator_token(child.kind()))
-            .map(|child| child.kind().to_owned())
-            .collect::<Vec<_>>()
-            .join(" ")
     } else {
         String::new()
     };
@@ -6850,20 +6862,29 @@ fn convert_cst_with_hash_memo(
         None
     };
     let child_parent_class = own_class.as_deref().or(parent_class);
-    let children: Vec<SemanticNode> = node
-        .children
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, child)| {
-            convert_cst_with_hash_memo(
-                child,
-                &format!("{id_prefix}.{idx}"),
-                child_parent_class,
-                hash_memo,
-            )
-        })
-        .collect();
-    if !is_semantic(&node.node_type) && children.is_empty() {
+    // Operator leaves (#229) are named `<parent>.op<k>` and do not take a sibling slot, so every
+    // other child keeps the id it had before operators were carried - and the same id the
+    // Wasm route's source recovery produces (native/Wasm candidate parity).
+    let mut children: Vec<SemanticNode> = Vec::with_capacity(node.children.len());
+    let (mut idx, mut op_idx) = (0usize, 0usize);
+    for child in &node.children {
+        let child_id = if child.node_type == operator_tokens::OPERATOR_NODE_TYPE {
+            op_idx += 1;
+            format!("{id_prefix}.op{}", op_idx - 1)
+        } else {
+            idx += 1;
+            format!("{id_prefix}.{}", idx - 1)
+        };
+        if let Some(converted) =
+            convert_cst_with_hash_memo(child, &child_id, child_parent_class, hash_memo)
+        {
+            children.push(converted);
+        }
+    }
+    if !is_semantic(&node.node_type)
+        && children.is_empty()
+        && node.node_type != operator_tokens::OPERATOR_NODE_TYPE
+    {
         return None;
     }
     let parent_type = if matches!(
@@ -7241,6 +7262,10 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let before_label = matches.len();
     let matches = label_match(&old_index, &new_index, matches);
     diagnostics.label_parent_matches += matches.len().saturating_sub(before_label);
+    // Operator leaves (#229) have no identity of their own: every `+` hashes alike, so a
+    // hash/label match could pair it with an unrelated `+` and skew bottom-up similarity.
+    // Drop any such pairs here and bind them through their parents after matching.
+    let matches = operator_tokens::without_operator_pairs(matches);
     // Preserve only call-role correspondences established before bottom-up recovery;
     // bottom-up pairs may be bootstrapped by harvested leaves and are not proof.
     let label_pairs: HashMap<&str, &str> = matches.iter()
@@ -7258,6 +7283,8 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
     let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
+    let matches = prune_cross_entity_operator_pairs(&old_index, &new_index, matches);
+    let matches = operator_tokens::bind_operator_leaves(matches);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
     MatchingReport {
@@ -7994,6 +8021,61 @@ fn enclosing_entity_node<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a Sema
     None
 }
 
+/// An operator expression paired across DIFFERENT enclosing entities (greet's `"Hi" <> name`
+/// with add's `x + y`) is a structural harvest, not a correspondence. It was invisible while
+/// both sides were labelled alike; once operators are carried (#229) it fabricates operator
+/// Updates. Drop operator-bearing pairs whose anchors (see `operator_pair_anchor`) are matched
+/// to different partners.
+fn prune_cross_entity_operator_pairs<'a>(
+    old_index: &TreeIndex<'a>,
+    new_index: &TreeIndex<'a>,
+    matches: Vec<MatchPair<'a>>,
+) -> Vec<MatchPair<'a>> {
+    let paired: HashMap<&str, &str> = matches
+        .iter()
+        .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
+        .collect();
+    matches
+        .into_iter()
+        .filter(|pair| {
+            if !operator_tokens::is_operator_bearing(&pair.old_node.node_type)
+                || !operator_tokens::is_operator_bearing(&pair.new_node.node_type)
+            {
+                return true;
+            }
+            match (
+                operator_pair_anchor(old_index, &pair.old_node.id),
+                operator_pair_anchor(new_index, &pair.new_node.id),
+            ) {
+                // Drop only when the old anchor is matched to a DIFFERENT new anchor; an
+                // unmatched anchor (deleted or relocated container) keeps the pair.
+                (Some(old_anchor), Some(new_anchor)) => paired
+                    .get(old_anchor.id.as_str())
+                    .is_none_or(|partner| *partner == new_anchor.id.as_str()),
+                _ => true,
+            }
+        })
+        .collect()
+}
+
+/// The container an operator expression belongs to: the enclosing named entity, else the
+/// nearest labelled container (elixir `def`s are `call('greet')`, not named entities).
+fn operator_pair_anchor<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a SemanticNode> {
+    if let Some(entity) = enclosing_entity_node(index, id) {
+        return Some(entity);
+    }
+    let mut cursor = id;
+    while let Some(parent) = index.parent.get(cursor) {
+        if let Some(node) = index.by_id.get(*parent) {
+            if !node.children.is_empty() && !node.label.is_empty() && node.label != node.node_type {
+                return Some(node);
+            }
+        }
+        cursor = parent;
+    }
+    None
+}
+
 /// Approximate calls cannot steal a different statement's call merely by callee name.
 fn call_role_compatible(
     old_node: &SemanticNode,
@@ -8406,6 +8488,16 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             if old_to_new.contains_key(node.id.as_str()) {
                 continue;
             }
+            // An operator leaf (#229) under an unmatched parent is covered by the parent's own
+            // edit (or its suppression); only a matched parent makes it an independent change.
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && old_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !old_to_new.contains_key(*parent))
+            {
+                continue;
+            }
             if move_old_descendants.contains(node.id.as_str())
                 || pruned_old_deletes.contains(node.id.as_str())
             {
@@ -8425,6 +8517,14 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     measure_value_optional(probe.as_deref_mut(), "rust_edit_add_generation", || {
         for node in &new_index.nodes {
             if matched_new.contains_key(node.id.as_str()) {
+                continue;
+            }
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && new_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !matched_new.contains_key(*parent))
+            {
                 continue;
             }
             if move_new_descendants.contains(node.id.as_str())

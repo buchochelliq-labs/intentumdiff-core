@@ -125,6 +125,8 @@ fn python_operator_change_is_a_semantic_modification_on_every_route() {
         ("def f(a, b):\n    return a < b\n", "def f(a, b):\n    return a > b\n"),
         ("def f(a, b):\n    return a and b\n", "def f(a, b):\n    return a or b\n"),
         ("x = 1\nx += 2\n", "x = 1\nx -= 2\n"),
+        // Matched parent gaining an operator leaf: must surface, not be skipped as covered.
+        ("def f(a, b):\n    return a is b\n", "def f(a, b):\n    return a is not b\n"),
     ];
     for (old, new) in cases {
         for (route, result) in rename_review_routes(old, new) {
@@ -1406,4 +1408,3 @@ fn duplicate_sibling_slots_are_indexed_once_for_candidate_ranking() {
         assert_eq!(index.sibling_slot.get(child.id.as_str()), Some(&i));
     }
 }
-
