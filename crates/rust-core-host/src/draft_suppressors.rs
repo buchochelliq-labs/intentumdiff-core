@@ -659,6 +659,51 @@ pub(crate) fn suppress_dart_signature_body_scaffold_churn_drafts(
         }
     }
 
+    // Operator leaves (#229) are structure, not rename content: a body whose only non-rename
+    // labels are operators is still rename churn - but only when the removed and added
+    // candidate subtrees carry the same operators, so `a + b` -> `x * y` stays visible.
+    const SCAFFOLD_TYPES: [&str; 6] = [
+        "additive_expression",
+        "multiplicative_expression",
+        "function_expression_body",
+        "return_statement",
+        "function_body",
+        "block",
+    ];
+    fn concrete_and_operators(node: &SemanticNode) -> (Vec<&String>, Vec<&str>) {
+        let (mut concrete, mut ops) = (Vec::new(), Vec::new());
+        for n in std::iter::once(node).chain(node.descendants()) {
+            if n.node_type == crate::operator_tokens::OPERATOR_NODE_TYPE {
+                ops.push(n.label.as_str());
+            } else if !n.label.is_empty() && n.label != node.node_type {
+                concrete.push(&n.label);
+            }
+        }
+        (concrete, ops)
+    }
+    let rename_churn = |node: &SemanticNode| {
+        let (concrete, _) = concrete_and_operators(node);
+        !concrete.is_empty() && concrete.iter().all(|label| rename_labels.contains(*label))
+    };
+    let (mut removed_ops, mut added_ops): (Vec<String>, Vec<String>) = (Vec::new(), Vec::new());
+    if !rename_labels.is_empty() {
+        for change in changes.iter() {
+            let (node, side) = match change.change_type {
+                "ADDITION" => (change.new_node, &mut added_ops),
+                "DELETION" => (change.old_node, &mut removed_ops),
+                _ => continue,
+            };
+            if let Some(node) = node.filter(|n| SCAFFOLD_TYPES.contains(&n.node_type.as_str())) {
+                if rename_churn(node) {
+                    side.extend(concrete_and_operators(node).1.into_iter().map(str::to_owned));
+                }
+            }
+        }
+    }
+    removed_ops.sort();
+    added_ops.sort();
+    let operators_unchanged = removed_ops == added_ops;
+
     let mut old_labels = Vec::new();
     let mut new_labels = Vec::new();
     let mut old_ids = Vec::new();
@@ -682,21 +727,10 @@ pub(crate) fn suppress_dart_signature_body_scaffold_churn_drafts(
         // Body kinds join the RENAME-CONDITIONED arm only (never blanket): a body node whose
         // concrete subtree labels are ALL rename participants is churn from a parameter
         // rename; one with any other content is a real edit and survives (trivial-body case).
-        let suppress = if matches!(
-            node_type,
-            "additive_expression" | "multiplicative_expression" | "function_expression_body"
-                | "return_statement" | "function_body" | "block"
-        ) && !rename_labels.is_empty()
-        {
-            let mut labels = Vec::new();
-            let mut ids = Vec::new();
-            collect_subtree_labels_and_ids(node, &mut labels, &mut ids);
-            let concrete: HashSet<&String> =
-                labels.iter().filter(|label| **label != node.node_type).collect();
-            !concrete.is_empty() && concrete.iter().all(|label| rename_labels.contains(*label))
-        } else {
-            false
-        };
+        let suppress = SCAFFOLD_TYPES.contains(&node_type)
+            && !rename_labels.is_empty()
+            && rename_churn(node)
+            && (operators_unchanged || concrete_and_operators(node).1.is_empty());
         if suppress {
             if is_add {
                 collect_subtree_labels_and_ids(node, &mut new_labels, &mut new_ids);

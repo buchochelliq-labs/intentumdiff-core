@@ -7262,6 +7262,10 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let before_label = matches.len();
     let matches = label_match(&old_index, &new_index, matches);
     diagnostics.label_parent_matches += matches.len().saturating_sub(before_label);
+    // Operator leaves (#229) have no identity of their own: every `+` hashes alike, so a
+    // hash/label match could pair it with an unrelated `+` and skew bottom-up similarity.
+    // Drop any such pairs here and bind them through their parents after matching.
+    let matches = operator_tokens::without_operator_pairs(matches);
     // Preserve only call-role correspondences established before bottom-up recovery;
     // bottom-up pairs may be bootstrapped by harvested leaves and are not proof.
     let label_pairs: HashMap<&str, &str> = matches.iter()
@@ -7279,6 +7283,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
     let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
+    let matches = operator_tokens::bind_operator_leaves(matches);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
     MatchingReport {

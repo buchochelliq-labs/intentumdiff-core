@@ -275,6 +275,33 @@ fn recover_node(
     false
 }
 
+/// Drop matcher pairs that involve an operator leaf (see `bind_operator_leaves`).
+pub(crate) fn without_operator_pairs(matches: Vec<crate::MatchPair<'_>>) -> Vec<crate::MatchPair<'_>> {
+    matches
+        .into_iter()
+        .filter(|pair| {
+            pair.old_node.node_type != OPERATOR_NODE_TYPE && pair.new_node.node_type != OPERATOR_NODE_TYPE
+        })
+        .collect()
+}
+
+/// An operator leaf's identity is its parent: for every matched parent pair, pair their
+/// operator children in source order. `+`/`+` then produces no edit and `+`/`-` an Update on
+/// the leaf; leaves of unmatched parents travel with the parent's ADDITION/DELETION.
+pub(crate) fn bind_operator_leaves(matches: Vec<crate::MatchPair<'_>>) -> Vec<crate::MatchPair<'_>> {
+    let mut matches = without_operator_pairs(matches);
+    let mut bound = Vec::new();
+    for pair in &matches {
+        let old_ops = pair.old_node.children.iter().filter(|c| c.node_type == OPERATOR_NODE_TYPE);
+        let new_ops = pair.new_node.children.iter().filter(|c| c.node_type == OPERATOR_NODE_TYPE);
+        for (old_node, new_node) in old_ops.zip(new_ops) {
+            bound.push(crate::MatchPair { old_node, new_node });
+        }
+    }
+    matches.extend(bound);
+    matches
+}
+
 fn offset_to_line_col(starts: &[usize], offset: usize) -> (u32, u32) {
     let line = starts.partition_point(|&s| s <= offset).saturating_sub(1);
     (line as u32, (offset - starts[line]) as u32)
