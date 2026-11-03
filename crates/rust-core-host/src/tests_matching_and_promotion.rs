@@ -129,7 +129,15 @@ fn python_operator_change_is_a_semantic_modification_on_every_route() {
     for (old, new) in cases {
         for (route, result) in rename_review_routes(old, new) {
             assert_ne!(result["is_style_only"], true, "{route} {old:?}->{new:?}: {result}");
-            assert_eq!(result["has_semantic_changes"], true, "{route} {old:?}->{new:?}: {result}");
+            // `has_semantic_changes` belongs to the final diff (batch route); the routed
+            // finalize payload carries changes + groups only.
+            if route == "batch" {
+                assert_eq!(result["has_semantic_changes"], true, "{route} {old:?}->{new:?}: {result}");
+            }
+            assert!(
+                result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"),
+                "{route} {old:?}->{new:?}: operator change is not a MODIFICATION: {result}"
+            );
             assert!(
                 !result["changes"].as_array().unwrap().is_empty(),
                 "{route} {old:?}->{new:?}: no changes reported: {result}"
