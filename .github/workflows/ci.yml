@@ -41,7 +41,7 @@ jobs:
           key: engine
           workspaces: crates/rust-core-host
       - name: Install Python 3.12
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
       - name: Test parser artifact discovery
@@ -104,7 +104,7 @@ jobs:
           key: cli
           workspaces: crates/cli
       - name: Install Python 3.12 for verified component provisioning
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
       - name: Provision checksum-verified CLI test components
