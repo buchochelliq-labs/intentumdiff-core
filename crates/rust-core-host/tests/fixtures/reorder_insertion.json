@@ -1,0 +1,130 @@
+[
+  {
+    "name": "inserted DATA does not reorder existing WRITE",
+    "language": "abap",
+    "filename": "code.abap",
+    "old": "REPORT z_demo.\nFORM greet.\n  WRITE: 'hello'.\nENDFORM.\n",
+    "new": "REPORT z_demo.\nFORM greet.\n  DATA(lv_msg) = 'hello'.\n  WRITE: lv_msg.\nENDFORM.\n",
+    "old_tree": {
+      "children": [
+        {
+          "children": [],
+          "id": "0.0",
+          "label": "Z_DEMO",
+          "node_type": "report",
+          "position": {
+            "end_col": 0,
+            "end_line": 0,
+            "start_col": 0,
+            "start_line": 0
+          },
+          "structural_hash": "62ec13704a41387f18d11ab6cd9702ae6fb9ff0a2482355e73898a784a03bc89"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "id": "0.1.0",
+              "label": "'hello'",
+              "node_type": "write_statement",
+              "position": {
+                "end_col": 17,
+                "end_line": 2,
+                "start_col": 0,
+                "start_line": 2
+              },
+              "structural_hash": "e02bd11e53c67e5cd9b1e9c7b68917f161ab618073202c5a2be776e626a062d3"
+            }
+          ],
+          "id": "0.1",
+          "label": "GREET",
+          "node_type": "form",
+          "position": {
+            "end_col": 0,
+            "end_line": 3,
+            "start_col": 0,
+            "start_line": 1
+          },
+          "structural_hash": "adecf77b38f30411409847d4a903c717b98b721e767dea538e84f5223dfd2265"
+        }
+      ],
+      "id": "0",
+      "label": "program",
+      "node_type": "program",
+      "position": {
+        "end_col": 0,
+        "end_line": 3,
+        "start_col": 0,
+        "start_line": 0
+      },
+      "structural_hash": "bf941e4bbc9b4c33506fd5a997395750a1a73dcec0863c191188ec3272bc133a"
+    },
+    "new_tree": {
+      "children": [
+        {
+          "children": [],
+          "id": "0.0",
+          "label": "Z_DEMO",
+          "node_type": "report",
+          "position": {
+            "end_col": 0,
+            "end_line": 0,
+            "start_col": 0,
+            "start_line": 0
+          },
+          "structural_hash": "62ec13704a41387f18d11ab6cd9702ae6fb9ff0a2482355e73898a784a03bc89"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "id": "0.1.0",
+              "label": "LV_MSG",
+              "node_type": "data_declaration",
+              "position": {
+                "end_col": 25,
+                "end_line": 2,
+                "start_col": 0,
+                "start_line": 2
+              },
+              "structural_hash": "febcbdd19d10f98f092d49449a0967ef529e09d37e6e7ad5da5dff60490837a3"
+            },
+            {
+              "children": [],
+              "id": "0.1.1",
+              "label": "lv_msg",
+              "node_type": "write_statement",
+              "position": {
+                "end_col": 16,
+                "end_line": 3,
+                "start_col": 0,
+                "start_line": 3
+              },
+              "structural_hash": "2aaf145e63302db3e1cbaf0605256f39b96334b7da57ff4d1c41aff90b9b6314"
+            }
+          ],
+          "id": "0.1",
+          "label": "GREET",
+          "node_type": "form",
+          "position": {
+            "end_col": 0,
+            "end_line": 4,
+            "start_col": 0,
+            "start_line": 1
+          },
+          "structural_hash": "9704b515adc104f892f59a4497c782f30a487f5210005cf78f7530eb0fb862d4"
+        }
+      ],
+      "id": "0",
+      "label": "program",
+      "node_type": "program",
+      "position": {
+        "end_col": 0,
+        "end_line": 4,
+        "start_col": 0,
+        "start_line": 0
+      },
+      "structural_hash": "c28ad55fb5356ac82416a73b5a00d76436f49bbe0a8b3a30d4b0a5b2e02f7bc4"
+    }
+  }
+]

@@ -43,10 +43,87 @@ pub(crate) fn validate_certified_semantic_diff_envelope(diff: &Value) -> Result<
         .get("details")
         .and_then(Value::as_object)
         .ok_or_else(|| "SemanticDiff rust_core details must be an object".to_owned())?;
-    if details.get("certification").and_then(Value::as_str)
+    if details.get("certification").and_then(Value::as_str) == Some("rust_source_fallback_v1") {
+        // This certifies source evidence delivery, never semantic interpretation.
+        // Keep parser certification separate and reject incomplete/forged envelopes.
+        if diff.get("is_fallback").and_then(Value::as_bool) != Some(true)
+            || diff.get("is_style_only").and_then(Value::as_bool) != Some(false)
+            || metadata.get("engine_owner").and_then(Value::as_str) != Some("rust")
+            || metadata.get("semantic_contract").and_then(Value::as_str) != Some("rust_source_fallback_v1")
+            || details.get("engine").and_then(Value::as_str) != Some("rust_source_fallback_v1")
+            || details.get("python_parser_backend").and_then(Value::as_str) != Some("source_comparison")
+            || details.get("wasm_boundary").and_then(Value::as_str) != Some("not_applicable")
+        {
+            return Err("invalid Rust source fallback certification".to_owned());
+        }
+        if !metadata.get("fallback_reason").and_then(Value::as_str).is_some_and(|reason| !reason.is_empty()) {
+            return Err("source fallback requires a reason".to_owned());
+        }
+        if metadata.get("fallback_reason").and_then(Value::as_str) == Some("parse_errors")
+            && !diff.get("parse_errors").and_then(Value::as_array).is_some_and(|warnings| !warnings.is_empty())
+        {
+            return Err("parse-error fallback requires warnings".to_owned());
+        }
+        let changes = diff.get("changes").and_then(Value::as_array)
+            .ok_or_else(|| "source fallback requires changes array".to_owned())?;
+        if changes.len() > 1 || diff.get("has_semantic_changes").and_then(Value::as_bool) != Some(!changes.is_empty()) {
+            return Err("invalid source fallback change state".to_owned());
+        }
+        if let Some(change) = changes.first() {
+            if !matches!(change.get("change_type").and_then(Value::as_str), Some("ADDITION" | "DELETION" | "MODIFICATION")) {
+                return Err("source fallback cannot claim semantic classifications".to_owned());
+            }
+            let old_present = change.get("old_node").is_some_and(|node| node.is_object());
+            let new_present = change.get("new_node").is_some_and(|node| node.is_object());
+            if !matches!((change["change_type"].as_str(), old_present, new_present),
+                (Some("ADDITION"), false, true) | (Some("DELETION"), true, false) | (Some("MODIFICATION"), true, true)) {
+                return Err("source fallback requires evidence for each changed side".to_owned());
+            }
+            for side in ["old_node", "new_node"] {
+                if let Some(node) = change.get(side).filter(|node| !node.is_null()) {
+                    if node.get("node_type").and_then(Value::as_str) != Some("unparsed_source")
+                        || !node.get("position").is_some_and(Value::is_object)
+                        || !node.get("label").is_some_and(Value::is_string)
+                    {
+                        return Err("source fallback requires unparsed source nodes".to_owned());
+                    }
+                }
+            }
+            let groups = diff.get("change_groups").and_then(Value::as_array)
+                .ok_or_else(|| "source fallback requires unknown-semantics group".to_owned())?;
+            if groups.len() != 1 || groups[0]["metadata"]["semantic_equivalence"] != "unknown"
+                || groups[0]["raw_change_indices"] != json!([0])
+                || groups[0]["kind"] != "MEANINGFUL_CHANGE"
+                || groups[0]["rule_id"] != "source.incomplete_review" {
+                return Err("source fallback must preserve semantic uncertainty".to_owned());
+            }
+        }
+        if changes.is_empty() && diff.get("change_groups") != Some(&json!([])) {
+            return Err("unchanged source fallback must not fabricate groups".to_owned());
+        }
+        let ranges = metadata.get("source_ranges")
+            .ok_or_else(|| "source fallback requires source ranges".to_owned())?;
+        for side in ["old", "new"] {
+            let start = ranges.get(format!("{side}_start_byte")).and_then(Value::as_u64);
+            let end = ranges.get(format!("{side}_end_byte")).and_then(Value::as_u64);
+            if !matches!((start, end), (Some(start), Some(end)) if start <= end) {
+                return Err("invalid source fallback byte range".to_owned());
+            }
+            let has_span = start != end;
+            let has_node = changes.first().and_then(|change| change.get(format!("{side}_node")))
+                .is_some_and(Value::is_object);
+            if has_span != has_node {
+                return Err("source fallback range must match side evidence".to_owned());
+            }
+        }
+        if ranges["old_start_byte"] != ranges["new_start_byte"] {
+            return Err("source fallback ranges must share their unchanged prefix".to_owned());
+        }
+    } else if diff.get("is_fallback").and_then(Value::as_bool) == Some(true)
+        || details.get("certification").and_then(Value::as_str)
         != Some(PYTHON_NATIVE_V4KB_CERTIFICATION)
     {
-        return Err("SemanticDiff certification is not python_native_v4kb".to_owned());
+        return Err("SemanticDiff certification is not python_native_v4kb or rust_source_fallback_v1".to_owned());
     }
     if details.get("trust_tier").and_then(Value::as_str) != Some("first_party_core_builder") {
         return Err("SemanticDiff trust tier is not first_party_core_builder".to_owned());

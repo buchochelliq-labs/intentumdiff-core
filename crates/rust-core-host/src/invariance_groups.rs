@@ -946,41 +946,87 @@ pub(crate) fn rust_css_color_equivalence(
 }
 
 pub(crate) fn rust_canonicalize_css_colors(source: &str) -> (String, Vec<(String, String, (usize, usize))>) {
+    // Only entire values of known color properties are color evidence. Scanning
+    // arbitrary words rewrites selectors (.red), strings and custom-property data.
     let mut tokens = Vec::new();
-    let mut output = String::with_capacity(source.len());
+    let mut replacements = Vec::new();
     let bytes = source.as_bytes();
-    let mut idx = 0usize;
-    while idx < bytes.len() {
-        if bytes[idx] == b'#' {
-            if let Some((label, canonical, end)) = rust_parse_hex_color(source, idx) {
-                output.push_str(&canonical);
-                tokens.push((label, canonical, (idx, end)));
-                idx = end;
-                continue;
+    let mut start = 0;
+    let mut in_block = false;
+    let mut quote = None;
+    let mut escaped = false;
+    let mut comment = false;
+    let mut nesting = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        let c = bytes[i];
+        if comment {
+            if c == b'*' && bytes.get(i + 1) == Some(&b'/') { comment = false; i += 2; continue; }
+        } else if let Some(q) = quote {
+            if escaped { escaped = false; }
+            else if c == b'\\' { escaped = true; }
+            else if c == q { quote = None; }
+        } else if c == b'/' && bytes.get(i + 1) == Some(&b'*') {
+            comment = true; i += 2; continue;
+        } else if c == b'\'' || c == b'"' { quote = Some(c); }
+        else if c == b'\\' { i += 2; continue; }
+        else if matches!(c, b'(' | b'[') { nesting.push(c); }
+        else if matches!(c, b')' | b']') {
+            if nesting.pop() != Some(if c == b')' { b'(' } else { b'[' }) {
+                return (source.to_owned(), Vec::new());
             }
         }
-        if rust_starts_with_ascii_case_insensitive(source, idx, "rgb(") {
-            if let Some((label, canonical, end)) = rust_parse_rgb_color(source, idx) {
-                output.push_str(&canonical);
-                tokens.push((label, canonical, (idx, end)));
-                idx = end;
-                continue;
-            }
+        else if !nesting.is_empty() {
+            // Nested separators are custom-property/function token data, not
+            // declarations. Brace-valued constructs remain conservatively exact.
+            if matches!(c, b'{' | b'}') { return (source.to_owned(), Vec::new()); }
         }
-        let ch = source[idx..].chars().next().unwrap();
-        if ch.is_ascii_alphabetic() {
-            let end = rust_ascii_word_end(source, idx);
-            let word = &source[idx..end];
-            if let Some((red, green, blue)) = rust_css_named_color(word) {
-                let canonical = rust_format_srgb(red, green, blue);
-                output.push_str(&canonical);
-                tokens.push((word.to_owned(), canonical, (idx, end)));
-                idx = end;
-                continue;
+        else if c == b'{' {
+            // A brace within a value (notably a custom-property token stream)
+            // does not introduce declarations we are entitled to interpret.
+            if in_block && source[start..i].contains(':') {
+                return (source.to_owned(), Vec::new());
             }
+            in_block = true; start = i + 1;
         }
-        output.push(ch);
-        idx += ch.len_utf8();
+        else if c == b';' || c == b'}' {
+            if in_block {
+                let declaration = &source[start..i];
+                if let Some(colon) = declaration.find(':') {
+                    let property = declaration[..colon].trim().to_ascii_lowercase();
+                    if matches!(property.as_str(), "color" | "background-color" | "border-color"
+                        | "border-top-color" | "border-right-color" | "border-bottom-color"
+                        | "border-left-color" | "outline-color" | "text-decoration-color"
+                        | "background" | "fill" | "stroke") {
+                        let raw = &declaration[colon + 1..];
+                        let value = raw.trim();
+                        let offset = start + colon + 1 + raw.len() - raw.trim_start().len();
+                        let parsed = if value.starts_with('#') {
+                            rust_parse_hex_color(value, 0).filter(|(_, _, end)| *end == value.len())
+                        } else if value.to_ascii_lowercase().starts_with("rgb(") {
+                            rust_parse_rgb_color(value, 0).filter(|(_, _, end)| *end == value.len())
+                        } else {
+                            rust_css_named_color(value).map(|(r, g, b)|
+                                (value.to_owned(), rust_format_srgb(r, g, b), value.len()))
+                        };
+                        if let Some((label, canonical, len)) = parsed {
+                            replacements.push((offset, offset + len, canonical.clone()));
+                            tokens.push((label, canonical, (offset, offset + len)));
+                        }
+                    }
+                }
+            }
+            start = i + 1;
+            if c == b'}' { in_block = false; }
+        }
+        i += 1;
+    }
+    if !nesting.is_empty() || quote.is_some() || comment {
+        return (source.to_owned(), Vec::new());
+    }
+    let mut output = source.to_owned();
+    for (start, end, canonical) in replacements.into_iter().rev() {
+        output.replace_range(start..end, &canonical);
     }
     (output, tokens)
 }
@@ -1186,42 +1232,31 @@ pub(crate) fn rust_offset_from_line_col(offsets: &[usize], line: u32, col: u32) 
         .map(|line_start| line_start + col as usize)
 }
 
-pub(crate) fn python_formatting_equivalence_group(changes: &[ChangeDraft<'_>]) -> Value {
-    let old_ids: Vec<String> = changes
-        .iter()
-        .filter_map(|change| change.old_node.map(|node| node.id.clone()))
-        .take(8)
-        .collect();
-    let new_ids: Vec<String> = changes
-        .iter()
-        .filter_map(|change| change.new_node.map(|node| node.id.clone()))
-        .take(8)
-        .collect();
-    let old_labels: Vec<String> = changes
-        .iter()
-        .flat_map(|change| node_labels(change.old_node))
-        .filter(|label| !label.is_empty())
-        .take(24)
-        .collect();
-    let new_labels: Vec<String> = changes
-        .iter()
-        .flat_map(|change| node_labels(change.new_node))
-        .filter(|label| !label.is_empty())
-        .take(24)
-        .collect();
-    json!({
-        "kind": "IGNORED_STYLE",
-        "raw_change_indices": [],
-        "old_labels": old_labels,
-        "new_labels": new_labels,
-        "old_node_ids": old_ids,
-        "new_node_ids": new_ids,
-        "confidence": 0.85,
-        "rule_id": "python.formatting.call_wrapping_equivalence",
-        "metadata": {
-            "reason": "Python formatting/call wrapping changed without changing review intent."
-        },
-    })
+/// Style evidence must name unchanged matched calls, never surviving semantic edits.
+pub(crate) fn python_call_layout_groups(
+    matching: &[MatchPair<'_>], old_source: &str, new_source: &str,
+) -> Vec<Value> {
+    matching.iter().filter_map(|pair| {
+        let old = pair.old_node;
+        let new = pair.new_node;
+        if old.node_type != "call" || new.node_type != "call"
+            || old.structural_hash != new.structural_hash { return None; }
+        let (os, oe) = rust_source_span_offsets(old_source, &old.position)?;
+        let (ns, ne) = rust_source_span_offsets(new_source, &new.position)?;
+        let old_text = old_source.get(os..oe)?;
+        let new_text = new_source.get(ns..ne)?;
+        // Exact semantic-tree equality includes literal contents. Different source
+        // spans of the same call then supply layout evidence, including trailing commas.
+        if old_text == new_text { return None; }
+        Some(json!({
+            "kind":"IGNORED_STYLE", "raw_change_indices":[],
+            "old_labels":node_labels(Some(old)), "new_labels":node_labels(Some(new)),
+            "old_node_ids":[old.id], "new_node_ids":[new.id], "confidence":1.0,
+            "rule_id":"python.formatting.call_wrapping_equivalence",
+            "metadata":{"reason":"Matched call has an unchanged semantic tree and changed source layout.",
+                "old_position":old.position, "new_position":new.position, "evidence":"matched_call_source"}
+        }))
+    }).collect()
 }
 
 pub(crate) fn add_compact_superseded_group_for_refactorings(
@@ -1834,3 +1869,28 @@ pub(crate) fn formatting_equivalence_group_drafts(
     Some((group, ignored))
 }
 
+
+#[cfg(test)]
+mod css_value_scope_tests {
+    use super::*;
+
+    #[test]
+    fn css_colors_are_only_canonicalized_as_property_values() {
+        let canonical = |s| rust_canonicalize_css_colors(s).0;
+        assert_eq!(canonical("a{color:red}"), canonical("a{color:#ff0000}"));
+        assert_eq!(canonical("a{background:rgb(255, 0, 0)}"), canonical("a{background:red}"));
+        for (old, new) in [
+            (".red{color:red}", ".RED{color:red}"),
+            ("#abc{color:red}", "#aabbcc{color:red}"),
+            ("a{content:\"red\"}", "a{content:\"RED\"}"),
+            ("a{--theme:red}", "a{--theme:RED}"),
+            ("a{animation-name:red}", "a{animation-name:RED}"),
+            ("a{background:url(red)}", "a{background:url(RED)}"),
+            ("x { --theme: { color: red; }; }", "x { --theme: { color: #f00; }; }"),
+            ("a { --theme: (x; color: red;); }", "a { --theme: (x; color: #f00;); }"),
+            ("a { --theme: [x; color: red;]; }", "a { --theme: [x; color: #f00;]; }"),
+        ] {
+            assert_ne!(canonical(old), canonical(new), "{old} versus {new}");
+        }
+    }
+}

@@ -251,11 +251,26 @@ pub(crate) fn user_dialect_coordinate_key(
     Some(key)
 }
 
+// Native reviews isolate profile context per request/thread; Python's explicit registry
+// remains the compatibility default outside a native scoped review.
+thread_local! { static SCOPED_XML_DIALECTS: std::cell::RefCell<Option<Vec<UserXmlDialect>>> = const { std::cell::RefCell::new(None) }; }
+pub(crate) struct XmlDialectScope(Option<Vec<UserXmlDialect>>);
+pub(crate) fn scoped_xml_dialects(dialects: Vec<UserXmlDialect>) -> XmlDialectScope {
+    XmlDialectScope(SCOPED_XML_DIALECTS.with(|slot|slot.replace(Some(dialects))))
+}
+impl Drop for XmlDialectScope {
+    fn drop(&mut self) { SCOPED_XML_DIALECTS.with(|slot|{slot.replace(self.0.take());}); }
+}
+
 /// The first registered dialect whose predicate claims either tree.
 pub(crate) fn matching_user_xml_dialect(
     old_tree: &SemanticNode,
     new_tree: &SemanticNode,
 ) -> Option<UserXmlDialect> {
+    if let Some(found) = SCOPED_XML_DIALECTS.with(|slot|slot.borrow().as_ref().map(|dialects|dialects.iter()
+        .find(|d|xml_tree_matches_user_dialect(d,old_tree)||xml_tree_matches_user_dialect(d,new_tree)).cloned())) {
+        return found;
+    }
     let guard = user_xml_dialects().read().ok()?;
     guard
         .iter()

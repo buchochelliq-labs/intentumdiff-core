@@ -22,6 +22,8 @@ path = "src/main.rs"
 intentumdiff-rust-core = { path = "../rust-core-host", default-features = false }
 clap = { version = "4", features = ["derive"] }
 serde_json = "1"
+# Presentation only; optional syntax/Markdown engines are unnecessary here.
+rs-rich = { version = "=0.0.9", default-features = false }
 
 # Same first-party patches the core's build uses (patch sections apply at the consuming
 # package root, so they must be repeated here).

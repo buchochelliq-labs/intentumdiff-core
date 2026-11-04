@@ -1,0 +1,93 @@
+[
+  {
+    "id": "root-comment-is-null",
+    "operation": "strip",
+    "tree": "{\"type\":\"comment\",\"text\":\"note\"}",
+    "trivia": [
+      "comment"
+    ],
+    "expected": null
+  },
+  {
+    "id": "semantic-root-comment-is-null",
+    "operation": "strip",
+    "tree": "{\"node_type\":\"comment\",\"label\":\"note\"}",
+    "trivia": [
+      "comment"
+    ],
+    "expected": null
+  },
+  {
+    "id": "only-child-trivia-removed",
+    "operation": "strip",
+    "tree": "{\"type\":\"root\",\"children\":[{\"type\":\"comment\",\"text\":\"note\"},{\"type\":\"identifier\",\"text\":\"café\"}]}",
+    "trivia": [
+      "comment"
+    ],
+    "expected": {
+      "type": "root",
+      "children": [
+        {
+          "type": "identifier",
+          "text": "café"
+        }
+      ]
+    }
+  },
+  {
+    "id": "unicode-cst-leaf",
+    "operation": "hash",
+    "tree": "{\"type\":\"identifier\",\"text\":\"café\"}",
+    "trivia": [],
+    "expected": "af7ee902749d9499cf09350f7e5f42134f6163b5d8625e50f4cac833bd69dbfc"
+  },
+  {
+    "id": "equivalent-semantic-leaf",
+    "operation": "hash",
+    "tree": "{\"node_type\":\"identifier\",\"label\":\"café\"}",
+    "trivia": [],
+    "expected": "af7ee902749d9499cf09350f7e5f42134f6163b5d8625e50f4cac833bd69dbfc"
+  },
+  {
+    "id": "malformed-strip",
+    "operation": "strip",
+    "tree": "not JSON",
+    "trivia": [],
+    "error_contains": "invalid JSON"
+  },
+  {
+    "id": "scalar-strip",
+    "operation": "strip",
+    "tree": "42",
+    "trivia": [],
+    "error_contains": "nodes must be objects"
+  },
+  {
+    "id": "bad-children-strip",
+    "operation": "strip",
+    "tree": "{\"type\":\"root\",\"children\":42}",
+    "trivia": [],
+    "error_contains": "children must be an array"
+  },
+  {
+    "id": "malformed-hash",
+    "operation": "hash",
+    "tree": "not JSON",
+    "trivia": [],
+    "error_contains": "invalid JSON"
+  },
+  {
+    "id": "scalar-hash",
+    "operation": "hash",
+    "tree": "42",
+    "trivia": [],
+    "error_contains": "nodes must be objects"
+  },
+  {
+    "id": "bad-children-hash",
+    "operation": "hash",
+    "tree": "{\"type\":\"root\",\"children\":42}",
+    "trivia": [],
+    "error_contains": "children must be an array"
+  }
+]

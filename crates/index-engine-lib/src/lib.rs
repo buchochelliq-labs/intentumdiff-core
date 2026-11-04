@@ -55,16 +55,16 @@ struct FileEntry {
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-struct SymbolDefinition {
-    qualified_name: String,
-    file: String,
-    node_type: String,
-    node_id: String,
-    start_line: u32,
-    start_col: u32,
-    end_line: u32,
-    end_col: u32,
-    language: String,
+pub struct SymbolDefinition {
+    pub qualified_name: String,
+    pub file: String,
+    pub node_type: String,
+    pub node_id: String,
+    pub start_line: u32,
+    pub start_col: u32,
+    pub end_line: u32,
+    pub end_col: u32,
+    pub language: String,
 }
 
 // SymbolTable: qualified_name → list of definitions
@@ -74,23 +74,25 @@ type SymbolTable = HashMap<String, Vec<SymbolDefinition>>;
 // Output schema: ReferenceUsage
 // ---------------------------------------------------------------------------
 
-#[derive(Debug, Clone, Serialize)]
-struct ReferencePosition {
-    start_line: u32,
-    start_col: u32,
-    end_line: u32,
-    end_col: u32,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ReferencePosition {
+    pub start_line: u32,
+    pub start_col: u32,
+    pub end_line: u32,
+    pub end_col: u32,
 }
 
-#[derive(Debug, Serialize)]
-struct ReferenceUsage {
-    qualified_name: String,
-    file: String,
-    node_id: String,
-    reference_kind: &'static str, // "CALL" | "IMPORT" | "TYPE_USAGE"
-    position: ReferencePosition,
-    language: String,
-    enclosing_scope: Option<String>,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ReferenceUsage {
+    pub qualified_name: String,
+    pub file: String,
+    pub node_id: String,
+    pub reference_kind: String, // "CALL" | "IMPORT" | "TYPE_USAGE"
+    pub position: ReferencePosition,
+    pub language: String,
+    pub enclosing_scope: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resolved_definition: Option<SymbolDefinition>,
 }
 
 // ReferenceTable: label → list of usages
@@ -389,7 +391,7 @@ fn extract_references(
             qualified_name: node.label.clone(),
             file: filename.to_string(),
             node_id: node.id.clone(),
-            reference_kind: kind,
+            reference_kind: kind.to_owned(),
             position: ReferencePosition {
                 start_line: node.position.start_line,
                 start_col: node.position.start_col,
@@ -398,6 +400,7 @@ fn extract_references(
             },
             language: language.to_string(),
             enclosing_scope: scope.map(str::to_string),
+            resolved_definition: None,
         };
         table.entry(node.label.clone()).or_default().push(usage);
     }
@@ -964,4 +967,17 @@ mod tests {
         assert_eq!(move_change["node_type"], "function_definition");
         assert_eq!(move_change["symbol_kind"], "function");
     }
+}
+
+/// Resolve each usage only when its exact qualified name has one definition.
+/// Ambiguity and missing definitions explicitly clear prior resolution; inputs are unchanged.
+pub fn resolve_references(definitions: &[SymbolDefinition], references: &[ReferenceUsage]) -> Vec<ReferenceUsage> {
+    references.iter().map(|reference| {
+        let mut matches = definitions.iter().filter(|definition| definition.qualified_name == reference.qualified_name);
+        let first = matches.next();
+        let resolved = if matches.next().is_none() { first.cloned() } else { None };
+        let mut result = reference.clone();
+        result.resolved_definition = resolved;
+        result
+    }).collect()
 }

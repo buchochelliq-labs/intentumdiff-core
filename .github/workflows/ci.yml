@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "release/v0.0.2-rc"]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -23,29 +24,33 @@ jobs:
       # contributors a real signal instead of a hard failure they cannot fix.
       HAS_SPLIT_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
-        uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c # stable
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
         with:
           toolchain: 1.95.0
+      - name: Build test-only FullParse host-utils guest
+        run: |
+          rustup target add wasm32-wasip2
+          cargo build --locked --manifest-path crates/rust-core-host/tests/fixtures/host-utils-guest/Cargo.toml --target wasm32-wasip2
       - name: Cache Rust build artefacts
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.7.5
+        uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
         with:
           key: engine
           workspaces: crates/rust-core-host
       - name: Install Python 3.12
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: "3.12"
-      - name: Test pinned parser artifact discovery
+      - name: Test parser artifact discovery
         run: |
-          pip install pytest pyyaml
+          pip install pytest "pyyaml>=6.0"
           python -m pytest tests/tooling -q
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
-        # live in the sibling intentumdiff-<lang>-parser repos. Pull the three they name
+        # live in the sibling intentumdiff-<lang>-parser repos. Pull the components they name
         # from those repos' CI artifacts and verify each against the SHA-256 pinned in
         # intentumdiff-registry (#95) — the pin is what makes this a supply-chain control
         # and not just a download. Fail-closed on a missing OR unverified component:
@@ -65,7 +70,7 @@ jobs:
         # provisioning existed; with INTENTUMDIFF_TEST_WASM_DIR staged it is the full
         # 203-test gate, matching the monorepo.
         if: env.HAS_SPLIT_TOKEN == 'true'
-        run: cargo test
+        run: cargo test --locked --features host-utils-guest
         working-directory: crates/rust-core-host
         env:
           INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/wasm
@@ -78,45 +83,94 @@ jobs:
         if: env.HAS_SPLIT_TOKEN != 'true'
         run: |
           echo "::notice::Fork PR - SPLIT_REPO_TOKEN unavailable, so the 25 Tier-C tests are skipped. A maintainer run will exercise the full gate."
-          cargo test --no-default-features
+          cargo test --locked --no-default-features --features host-utils-guest
         working-directory: crates/rust-core-host
 
   cli:
-    name: Native CLI builds
+    name: Native CLI builds and tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
-        uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c # stable
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
         with:
           toolchain: 1.95.0
       - name: Cache Rust build artefacts
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.7.5
+        uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
         with:
           key: cli
           workspaces: crates/cli
+      - name: Install Python 3.12 for verified component provisioning
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.12"
+      - name: Provision checksum-verified CLI test components
+        run: |
+          pip install "pyyaml>=6.0"
+          python scripts/provision_parser_components.py --out build/cli-wasm
+        env:
+          GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Build the intentumdiff CLI
-        run: cargo build --release
+        run: cargo build --locked --release
         working-directory: crates/cli
+      - name: Test the actual native CLI
+        run: cargo test --locked --release
+        working-directory: crates/cli
+        env:
+          INTENTUMDIFF_TEST_WASM_DIR: ${{ github.workspace }}/build/cli-wasm
+
+  wasmtime48_pinned:
+    name: Production Wasmtime 48.0.7 locked security and Rust API gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install pinned Rust
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        with:
+          toolchain: 1.95.0
+      - name: Verify patched runtime pins and tested resolved lock
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import tomllib
+          from pathlib import Path
+          base = Path("crates/rust-core-host")
+          manifest = tomllib.loads((base / "Cargo.toml").read_text())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert manifest["dependencies"][name] == "48.0.7", name
+          raw_lock = (base / "Cargo.lock").read_bytes()
+          expected_sha = "9954b0ac8353864b5c703078c308953c6ff270ad146cf99f40b2c25ac9cef0f8"
+          assert hashlib.sha256(raw_lock).hexdigest() == expected_sha, "lockfile changed from the independently tested 48.0.7 graph"
+          lock = tomllib.loads(raw_lock.decode())
+          for name in ("wasmtime", "wasmtime-wasi"):
+              assert [p["version"] for p in lock["package"] if p["name"] == name] == ["48.0.7"], name
+          assert all(p["version"] != "47.0.3" for p in lock["package"] if p["name"].startswith("wasmtime")), "vulnerable old Wasmtime package remains"
+          PY
+          cargo test --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features
+          echo "::notice::Production 48.0.7 Rust host security and API gate passed; cross-platform 74-language source judgement, wheel/VSIX and independent Python thin-wrapper audit remain mandatory."
 
   components:
     name: Wasm components build (index engine + renderers)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0 (+ wasm32-wasip2)
-        uses: dtolnay/rust-toolchain@2c7215f132e9ebf062739d9130488b56d53c060c # stable
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
         with:
           toolchain: 1.95.0
           targets: wasm32-wasip2
       - name: Cache Rust build artefacts
-        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.7.5
+        uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
         with:
           key: components
       - name: Authenticate cross-repo git deps
@@ -171,7 +225,7 @@ jobs:
           ls -l dist/renderers
 
       - name: Upload the renderer components
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: renderer-components
           path: dist/renderers/*.wasm

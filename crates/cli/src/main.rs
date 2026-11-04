@@ -3,6 +3,7 @@
 //! functions + the ungated cache/analytics stores in-process. This replaces the Python
 //! `intentumdiff` console script; commands are added slice by slice (cache first).
 
+use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
@@ -455,7 +456,10 @@ fn resolve_wasm_dir(explicit: Option<&Path>) -> String {
 
 /// Diff two in-memory contents via the native all-language engine (`live_diff_contents`, which
 /// resolves the parser from *filename*'s extension against the bundled manifest).
-fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(), String> {
+fn run_diff(
+    filename: &str, old: &str, new: &str, opts: &DiffOpts,
+    input_paths: Option<(&Path, &Path)>,
+) -> Result<(), String> {
     let wasm_dir = resolve_wasm_dir(opts.wasm_dir.as_deref());
     let raw = intentumdiff_rust_core::live_server::live_diff_contents_impl(
         ".", filename, old, new, "{}", &wasm_dir,
@@ -469,47 +473,25 @@ fn run_diff(filename: &str, old: &str, new: &str, opts: &DiffOpts) -> Result<(),
             "the native engine did not produce a diff for {filename:?}: {reason}"
         ));
     }
-    let diff = result.get("diff").unwrap_or(&result);
+    let mut diff = result.get("diff").cloned().unwrap_or(result);
+    // The content API compares versions of one logical file. File mode retains
+    // the two paths supplied by the caller for both JSON and terminal provenance.
+    if let Some((old_path, new_path)) = input_paths {
+        diff["old_filename"] = json!(old_path.to_string_lossy());
+        diff["new_filename"] = json!(new_path.to_string_lossy());
+    }
 
     if opts.json {
-        println!("{}", serde_json::to_string_pretty(diff).map_err(|e| e.to_string())?);
+        println!("{}", serde_json::to_string_pretty(&diff).map_err(|e| e.to_string())?);
         return Ok(());
     }
 
-    // Parked-rich plain summary: change count + one line per change. The full rich presentation
-    // lands later via `gold`.
-    let changes = diff.get("changes").and_then(|v| v.as_array());
-    let engine = diff
-        .get("metadata")
-        .and_then(|m| m.get("rust_core"))
-        .and_then(|r| r.get("engine"))
-        .and_then(|v| v.as_str())
-        .unwrap_or("native");
-    match changes {
-        Some(changes) => {
-            println!("{} change(s) [engine: {engine}]", changes.len());
-            for change in changes {
-                let change_type = change.get("change_type").and_then(|v| v.as_str()).unwrap_or("?");
-                // `description` is the human "what" ("Update integer('1') -> integer('2')"); fall
-                // back to a node label when a change carries no description.
-                let label = change
-                    .get("description")
-                    .or_else(|| change.get("new_label"))
-                    .or_else(|| change.get("label"))
-                    .and_then(|v| v.as_str())
-                    .or_else(|| {
-                        change
-                            .get("new_node")
-                            .or_else(|| change.get("old_node"))
-                            .and_then(|n| n.get("label"))
-                            .and_then(|v| v.as_str())
-                    })
-                    .unwrap_or("");
-                println!("  {change_type:<14} {label}");
-            }
-        }
-        None => println!("0 change(s) [engine: {engine}]"),
-    }
+    let width = rich::Console::new().width().clamp(16, 300);
+    let color = std::io::stdout().is_terminal() && std::env::var_os("NO_COLOR").is_none();
+    let rendered = intentumdiff_rust_core::cli_presentation::render_cli_review_impl(
+        &json!({"diff": diff, "width": width, "color": color}).to_string(),
+    )?;
+    print!("{rendered}");
     Ok(())
 }
 
@@ -914,9 +896,9 @@ fn run(cli: Cli) -> Result<(), String> {
             // Language is detected from the new file's name (its extension).
             let filename = new.file_name().map(|f| f.to_string_lossy().into_owned())
                 .unwrap_or_else(|| "file".to_string());
-            run_diff(&filename, &old_content, &new_content, &opts)
+            run_diff(&filename, &old_content, &new_content, &opts, Some((&old, &new)))
         }
-        Command::String { old, new, filename, opts } => run_diff(&filename, &old, &new, &opts),
+        Command::String { old, new, filename, opts } => run_diff(&filename, &old, &new, &opts, None),
         Command::Git { repo, file, old, new, staged, unpushed, opts } => {
             run_git(&repo, file.as_deref(), old.as_deref(), &new, staged, unpushed, &opts)
         }
@@ -953,7 +935,15 @@ fn main() -> ExitCode {
     match run(Cli::parse()) {
         Ok(()) => ExitCode::SUCCESS,
         Err(message) => {
-            eprintln!("error: {message}");
+            if std::io::stderr().is_terminal() {
+                let console = rich::Console::builder().force_terminal(true).build();
+                let mut text = rich::Text::new("");
+                text.append("error: ", Some("bold red".into()));
+                text.append(&message, None);
+                eprintln!("{}", console.render_to_string(&text));
+            } else {
+                eprintln!("error: {message}");
+            }
             ExitCode::FAILURE
         }
     }

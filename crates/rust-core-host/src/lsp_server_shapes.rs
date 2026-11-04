@@ -123,6 +123,103 @@ pub fn semantic_diff_to_diagnostics_value(diff: &Value) -> Vec<Value> {
     diags
 }
 
+
+/// Source-accurate CodeLens mapping. Rust chooses the original source for an
+/// old-only change and the live source for a new node; Python only transports
+/// the result into lsprotocol DTOs.
+pub(crate) fn semantic_diff_to_codelens_utf16_value(
+    diff: &Value,
+    old_source: &str,
+    new_source: &str,
+) -> Result<Vec<Value>, String> {
+    let changes = diff.get("changes").and_then(Value::as_array)
+        .ok_or("Rust LSP CodeLens requires a changes array")?;
+    let mut lenses = Vec::new();
+    for change in changes {
+        let change_type = change.get("change_type").and_then(Value::as_str).unwrap_or("");
+        if !CODELENS_CHANGE_TYPES.contains(&change_type) {
+            continue;
+        }
+        let node_with_source = change.get("new_node").filter(|n| !n.is_null())
+            .map(|n| (n, new_source))
+            .or_else(|| change.get("old_node").filter(|n| !n.is_null())
+                .map(|n| (n, old_source)));
+        let Some((node, source)) = node_with_source else {
+            continue;
+        };
+        let range = node_to_utf16_lsp_range_value(node, source)?;
+        lenses.push(json!({
+            "range": range,
+            "command": {"title": codelens_title(change), "command": ""},
+        }));
+    }
+    Ok(lenses)
+}
+
+/// Source-accurate diagnostic mapping. A style hint always points to the
+/// new-source node; parse-error diagnostics keep the full-document sentinel.
+pub(crate) fn semantic_diff_to_diagnostics_utf16_value(
+    diff: &Value,
+    new_source: &str,
+) -> Result<Vec<Value>, String> {
+    let changes = diff.get("changes").and_then(Value::as_array)
+        .ok_or("Rust LSP diagnostics requires a changes array")?;
+    let parse_errors = diff.get("parse_errors").and_then(Value::as_array)
+        .ok_or("Rust LSP diagnostics requires a parse_errors array")?;
+    let mut diagnostics = Vec::new();
+    for change in changes {
+        if change.get("change_type").and_then(Value::as_str) != Some("STYLE_ONLY") {
+            continue;
+        }
+        let Some(new_node) = change.get("new_node").filter(|n| !n.is_null()) else {
+            continue;
+        };
+        diagnostics.push(json!({
+            "range": node_to_utf16_lsp_range_value(new_node, new_source)?,
+            "severity": SEVERITY_HINT,
+            "message": "Style-only change — no semantic impact",
+            "source": "intentumdiff",
+        }));
+    }
+    for error in parse_errors {
+        let text = match error {
+            Value::String(s) => s.clone(),
+            other => other.to_string(),
+        };
+        diagnostics.push(json!({
+            "range": {
+                "start": {"line": 0, "character": 0},
+                "end": {"line": 2_147_483_647i64, "character": 0},
+            },
+            "severity": SEVERITY_WARNING,
+            "message": format!("Parse error: {text}"),
+            "source": "intentumdiff",
+        }));
+    }
+    Ok(diagnostics)
+}
+
+pub(crate) fn codelens_utf16_json_impl(
+    diff_json: &str,
+    old_source: &str,
+    new_source: &str,
+) -> Result<String, String> {
+    let diff: Value = serde_json::from_str(diff_json)
+        .map_err(|e| format!("invalid Rust LSP CodeLens diff JSON: {e}"))?;
+    semantic_diff_to_codelens_utf16_value(&diff, old_source, new_source)
+        .map(|lenses| Value::Array(lenses).to_string())
+}
+
+pub(crate) fn diagnostics_utf16_json_impl(
+    diff_json: &str,
+    new_source: &str,
+) -> Result<String, String> {
+    let diff: Value = serde_json::from_str(diff_json)
+        .map_err(|e| format!("invalid Rust LSP diagnostics diff JSON: {e}"))?;
+    semantic_diff_to_diagnostics_utf16_value(&diff, new_source)
+        .map(|diagnostics| Value::Array(diagnostics).to_string())
+}
+
 pub(crate) fn codelens_json_impl(diff_json: &str) -> Result<String, String> {
     let diff: Value =
         serde_json::from_str(diff_json).map_err(|e| format!("invalid diff json: {e}"))?;
@@ -133,6 +230,67 @@ pub(crate) fn diagnostics_json_impl(diff_json: &str) -> Result<String, String> {
     let diff: Value =
         serde_json::from_str(diff_json).map_err(|e| format!("invalid diff json: {e}"))?;
     Ok(Value::Array(semantic_diff_to_diagnostics_value(&diff)).to_string())
+}
+
+
+/// Convert a Rust parser byte-column into an LSP UTF-16 character offset.
+///
+/// `NodePosition` columns are UTF-8 byte offsets within their own
+/// source lines, not Unicode scalar or UTF-16 offsets. The source is mandatory;
+/// guessing from a node label would silently misplace non-ASCII annotations.
+fn utf16_column_from_byte(source: &str, line: usize, column: usize) -> Result<usize, String> {
+    // Preserve the empty final line after a trailing LF. CRLF's CR is a line
+    // terminator, not a positionable LSP character.
+    let raw_line = source.split('\n').nth(line)
+        .ok_or_else(|| format!("LSP source line {line} is out of range"))?;
+    let line_text = raw_line.strip_suffix('\r').unwrap_or(raw_line);
+    if column > line_text.len() || !line_text.is_char_boundary(column) {
+        return Err(format!(
+            "invalid UTF-8 byte column {column} on source line {line}"
+        ));
+    }
+    Ok(line_text[..column].encode_utf16().count())
+}
+
+fn required_source_coordinate(position: &Value, field: &str) -> Result<usize, String> {
+    let raw = position.get(field).and_then(Value::as_u64)
+        .ok_or_else(|| format!("missing/nonnegative LSP source position {field}"))?;
+    usize::try_from(raw)
+        .map_err(|_| format!("LSP source position {field} exceeds addressable size"))
+}
+
+/// Source-judged LSP range conversion owned by Rust. Refuse malformed spans
+/// instead of allowing Python/VSIX to interpret parser bytes as UTF-16.
+pub(crate) fn node_to_utf16_lsp_range_value(
+    node: &Value,
+    source: &str,
+) -> Result<Value, String> {
+    let pos = node.get("position").and_then(Value::as_object)
+        .ok_or("semantic source node requires a position object")?;
+    let position = Value::Object(pos.clone());
+    let start_line = required_source_coordinate(&position, "start_line")?;
+    let start_col = required_source_coordinate(&position, "start_col")?;
+    let end_line = required_source_coordinate(&position, "end_line")?;
+    let end_col = required_source_coordinate(&position, "end_col")?;
+    if (end_line, end_col) < (start_line, start_col) {
+        return Err("LSP source span ends before it starts".to_owned());
+    }
+    let start_character = utf16_column_from_byte(source, start_line, start_col)?;
+    let end_character = utf16_column_from_byte(source, end_line, end_col)?;
+    Ok(json!({
+        "start": {"line": start_line, "character": start_character},
+        "end": {"line": end_line, "character": end_character},
+    }))
+}
+
+/// Stable Rust C ABI boundary for source-aware UTF-8 byte to UTF-16 LSP ranges.
+pub(crate) fn utf16_lsp_range_json_impl(
+    node_json: &str,
+    source: &str,
+) -> Result<String, String> {
+    let node: Value = serde_json::from_str(node_json)
+        .map_err(|e| format!("invalid LSP semantic node JSON: {e}"))?;
+    node_to_utf16_lsp_range_value(&node, source).map(|range| range.to_string())
 }
 
 #[cfg(test)]
@@ -195,6 +353,86 @@ mod tests {
         assert_eq!(diags[1]["severity"], 2);
         assert_eq!(diags[1]["message"], "Parse error: unexpected token");
         assert_eq!(diags[1]["range"]["end"]["line"], 2_147_483_647i64);
+    }
+
+
+    #[test]
+    fn utf16_ranges_are_source_judged_not_byte_or_codepoint_guesses() {
+        let cases = [
+            ("été\n", 0, 5, 3),
+            ("Alïcë\n", 0, 7, 5),
+            ("🦣\n", 0, 4, 2),
+            ("e\u{301}\n", 0, 3, 2),
+        ];
+        for (source, line, byte_end, utf16_end) in cases {
+            let result = node_to_utf16_lsp_range_value(
+                &node(line, 0, line, byte_end), source,
+            ).unwrap();
+            assert_eq!(result["start"], json!({"line": line, "character": 0}));
+            assert_eq!(result["end"], json!({"line": line, "character": utf16_end}));
+        }
+        // Different source lines, with CRLF and a surrogate pair in the first.
+        let range = node_to_utf16_lsp_range_value(
+            &node(0, 1, 1, 5), "a🦣\r\nété\r\n",
+        ).unwrap();
+        assert_eq!(range["start"], json!({"line": 0, "character": 1}));
+        assert_eq!(range["end"], json!({"line": 1, "character": 3}));
+    }
+
+    #[test]
+    fn utf16_ranges_fail_closed_on_interior_utf8_and_out_of_bounds_positions() {
+        let source = "été\r\n";
+        for invalid in [
+            node(0, 1, 0, 5), // interior byte of U+00E9
+            node(0, 0, 0, 6), // past logical line end / into CR
+            node(2, 0, 2, 0), // beyond final LF
+            node(0, 5, 0, 0), // backwards
+            node(0, 0, 1, 1), // past trailing empty line
+        ] {
+            assert!(node_to_utf16_lsp_range_value(&invalid, source).is_err());
+        }
+        let bad = json!({"position": {"start_line": 0, "start_col": -1,
+            "end_line": 0, "end_col": 1}});
+        assert!(node_to_utf16_lsp_range_value(&bad, source).is_err());
+        assert!(utf16_lsp_range_json_impl("not-json", source).is_err());
+    }
+
+
+    #[test]
+    fn unicode_codelens_selects_correct_old_and_new_sources() {
+        let diff = json!({"changes": [
+            {"change_type": "MOVE", "description": "old anchor",
+             "new_node": null, "old_node": node(0, 0, 0, 4)},
+            {"change_type": "REFACTORING", "description": "new anchor",
+             "new_node": node(0, 0, 0, 5), "refactoring_kind": "RENAME_VARIABLE"}
+        ]});
+        let lenses = semantic_diff_to_codelens_utf16_value(
+            &diff, "🦣\n", "été\n",
+        ).unwrap();
+        assert_eq!(lenses.len(), 2);
+        assert_eq!(lenses[0]["range"]["end"]["character"], 2);
+        assert_eq!(lenses[1]["range"]["end"]["character"], 3);
+        assert_eq!(lenses[1]["command"]["title"], "↻ RENAME_VARIABLE: new anchor");
+    }
+
+    #[test]
+    fn unicode_diagnostics_use_utf16_and_refuse_unverifiable_spans() {
+        let diff = json!({"changes": [
+            {"change_type": "STYLE_ONLY", "new_node": node(0, 0, 0, 5)}
+        ], "parse_errors": ["bad syntax"]});
+        let output = semantic_diff_to_diagnostics_utf16_value(&diff, "été\n").unwrap();
+        assert_eq!(output.len(), 2);
+        assert_eq!(output[0]["range"]["end"]["character"], 3);
+        assert_eq!(output[1]["range"]["end"]["line"], 2_147_483_647i64);
+
+        assert!(semantic_diff_to_diagnostics_utf16_value(&diff, "e\n").is_err());
+        assert!(semantic_diff_to_codelens_utf16_value(
+            &json!({"changes":[{"change_type":"MOVE","old_node":node(0,0,0,4)}]}),
+            "a\n", "été\n",
+        ).is_err());
+        assert!(semantic_diff_to_codelens_utf16_value(
+            &json!({"changes":null}), "🦣", "été",
+        ).is_err());
     }
 
     #[test]

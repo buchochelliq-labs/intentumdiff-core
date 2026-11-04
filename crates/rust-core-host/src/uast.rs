@@ -70,6 +70,7 @@ mod tests {
             end_line: 1,
             end_col: 1,
             children,
+            operator: String::new(),
         }
     }
     fn leaf(node_type: &str) -> CstNode {
@@ -232,6 +233,7 @@ mod structural_fact_tests {
             end_line: 1,
             end_col: 1,
             children,
+            operator: String::new(),
         }
     }
     fn l2(t: &str) -> CstNode {

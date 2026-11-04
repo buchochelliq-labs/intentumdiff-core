@@ -54,6 +54,33 @@ pub fn live_capabilities_impl() -> String {
     .to_string()
 }
 
+/// Capabilities of the synchronous native transport. Python retains its streaming contract.
+pub fn live_native_capabilities_impl() -> String {
+    let mut capabilities: Value = serde_json::from_str(&live_capabilities_impl())
+        .expect("canonical capabilities are valid JSON");
+    for feature in ["stream", "review_streaming", "edit_deltas"] {
+        capabilities[feature] = json!(false);
+    }
+    capabilities.to_string()
+}
+
+#[cfg(test)]
+mod native_capability_tests {
+    use super::*;
+
+    #[test]
+    fn native_flags_match_transport_without_changing_python_capabilities() {
+        let native: Value = serde_json::from_str(&live_native_capabilities_impl()).unwrap();
+        let mut expected: Value = serde_json::from_str(&live_capabilities_impl()).unwrap();
+        for feature in ["stream", "review_streaming", "edit_deltas"] {
+            assert_eq!(expected[feature], true);
+            assert_eq!(native[feature], false);
+            expected[feature] = json!(false);
+        }
+        assert_eq!(native, expected);
+    }
+}
+
 /// The repo-relative path security guard (mirrors python `_normalise_request_path`): reject
 /// absolute paths, `..` traversal, and any drive/URI-scheme (`:`), returning the backslash-
 /// normalised path. Returns `Ok(normalised)` or `Err((code, message))`.
@@ -274,19 +301,6 @@ pub(crate) enum GuardrailPolicyState {
 
 /// The languages protected rules may target (python `GUARDRAIL_CONFIG_LANGUAGES` =
 /// keyed-data | resource-profile) — all served by the native wasm chain, never by the batch.
-const GUARDRAIL_RULE_LANGUAGES: [&str; 11] = [
-    "adf",
-    "databricks",
-    "databricks-workflow",
-    "dbt-config",
-    "dbt-packages",
-    "dbt-yaml",
-    "dockerfile",
-    "hcl",
-    "json",
-    "puppet",
-    "yaml",
-];
 
 fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPolicyState {
     // python apply_guardrails_to_diff: `if not config.guardrails_enabled: return diff`.
@@ -318,121 +332,167 @@ fn load_guardrail_policy_state(repo_path: &str, config: &Value) -> GuardrailPoli
         Ok(raw) => raw,
         Err(e) => return GuardrailPolicyState::Defer(format!("guardrail policy unreadable: {e}")),
     };
-    let doc: Value = match serde_yaml::from_str(&raw) {
-        Ok(doc) => doc,
-        Err(e) => {
-            return GuardrailPolicyState::Defer(format!("guardrail policy unparseable: {e}"))
-        }
-    };
-    let Some(raw_rules) = doc
-        .get("guardrails")
-        .and_then(|g| g.get("protected"))
-        .and_then(Value::as_array)
-    else {
-        return GuardrailPolicyState::NoRules;
-    };
-    if raw_rules.is_empty() {
-        return GuardrailPolicyState::NoRules;
+    match crate::guardrail_policy::parse_policy(&raw) {
+        Ok(rules) if rules.is_empty() => GuardrailPolicyState::NoRules,
+        Ok(rules) => GuardrailPolicyState::Rules(rules),
+        Err(error) => GuardrailPolicyState::Defer(error),
     }
-    // Strict python `_parse_rule` mirror — python RAISES on any off-spec rule, so anything
-    // unexpected defers rather than silently dropping a rule.
-    let mut rules: Vec<Value> = Vec::with_capacity(raw_rules.len());
-    for (index, raw_rule) in raw_rules.iter().enumerate() {
-        let Some(map) = raw_rule.as_object() else {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] must be a mapping"
-            ));
-        };
-        let language = map
-            .get("language")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .trim()
-            .to_lowercase();
-        if !GUARDRAIL_RULE_LANGUAGES.contains(&language.as_str()) {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] targets unsupported language '{language}'"
-            ));
-        }
-        let path =
-            crate::guardrail_normalise_path(map.get("path").and_then(Value::as_str).unwrap_or(""));
-        if path.is_empty() {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] requires path"
-            ));
-        }
-        let severity = map
-            .get("severity")
-            .and_then(Value::as_str)
-            .unwrap_or("important")
-            .to_lowercase();
-        if severity != "important" && severity != "immutable" {
-            return GuardrailPolicyState::Defer(format!(
-                "guardrails.protected[{index}] has unsupported severity '{severity}'"
-            ));
-        }
-        let files: Vec<String> = match map.get("files") {
-            None | Some(Value::Null) => Vec::new(),
-            Some(Value::String(s)) => vec![s.clone()],
-            Some(Value::Array(items)) => items
-                .iter()
-                .map(|item| match item {
-                    Value::String(s) => s.clone(),
-                    other => other.to_string(),
-                })
-                .collect(),
-            Some(_) => {
-                return GuardrailPolicyState::Defer(format!(
-                    "guardrails.protected[{index}].files is invalid"
-                ));
-            }
-        };
-        let rule_id = map
-            .get("id")
-            .and_then(Value::as_str)
-            .filter(|s| !s.is_empty())
-            .map(str::to_owned)
-            .unwrap_or_else(|| format!("guardrail.{}", index + 1));
-        let message = map
-            .get("message")
-            .and_then(Value::as_str)
-            .filter(|s| !s.is_empty())
-            .map(str::to_owned)
-            .unwrap_or_else(|| format!("Protected path {path} changed"));
-        rules.push(json!({
-            "rule_id": rule_id,
-            "severity": severity,
-            "language": language,
-            "path": path,
-            "message": message,
-            "files": files,
-        }));
-    }
-    GuardrailPolicyState::Rules(rules)
 }
 
 /// python `apply_guardrails_to_diff`'s policy-file check: a change to intentumdiff.yaml itself is
 /// an IMMUTABLE violation regardless of rules.
 fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -> Value {
-    let file = if !new_filename.is_empty() {
-        new_filename
-    } else {
-        old_filename
-    };
+    crate::guardrail_policy::policy_file_violation(diff, old_filename, new_filename)
+}
+
+// Core owns the completeness policy for every caller (native stdio, C ABI and
+// Python host). A fallback tree or incomplete parse diagnostics are not proof of
+// a semantic diff, even when the engine can represent unparsed source (#17).
+// Preserve the existing `fallback` envelope so host bindings cannot mistake
+// a declined computation for a successfully verified change.
+fn live_diff_parse_incomplete_reason(diff: &Value) -> Option<String> {
+    let parse_errors = diff.get("parse_errors").and_then(Value::as_array);
+    if diff.get("is_fallback").and_then(Value::as_bool) == Some(false)
+        && parse_errors.is_some_and(Vec::is_empty)
+        && diff.get("changes").and_then(Value::as_array).is_some()
+    {
+        return None;
+    }
+    Some(
+        parse_errors
+            .and_then(|items| items.first())
+            .map(|error| {
+                error
+                    .as_str()
+                    .or_else(|| error.get("message").and_then(Value::as_str))
+                    .map(str::to_owned)
+                    .unwrap_or_else(|| error.to_string())
+            })
+            .unwrap_or_else(|| "Rust returned an uncertified or malformed parse result".to_owned()),
+    )
+}
+
+fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     json!({
-        "rule_id": "intentumdiff.policy_file",
-        "severity": "immutable",
-        "file": file,
-        "language": diff.get("language").cloned().unwrap_or_else(|| json!("")),
-        "semantic_path": "intentumdiff.yaml",
-        "node_type": "",
-        "old_node_id": Value::Null,
-        "new_node_id": Value::Null,
-        "position": Value::Null,
-        "old_value": "project policy",
-        "new_value": "project policy",
-        "message": "Project guardrail policy changed",
+        "fallback": format!("{path}: {reason}"),
+        "fallback_code": "native_parse_incomplete"
     })
+    .to_string()
+}
+
+fn certify_live_diff_value(mut diff: Value) -> Result<Value, String> {
+    if let Some(reason) = live_diff_parse_incomplete_reason(&diff) {
+        return Err(reason);
+    }
+    // Both direct and commit-wide native paths must publish the same ownership
+    // contract, from Rust itself. Never overwrite a contradictory provenance.
+    let metadata = &mut diff["metadata"];
+    if metadata.is_null() {
+        *metadata = json!({});
+    }
+    if !metadata.is_object() {
+        return Err("invalid Rust diff metadata".to_owned());
+    }
+    if let Some(owner) = metadata.get("engine_owner") {
+        if owner.as_str() != Some("rust") {
+            return Err("contradictory diff engine ownership".to_owned());
+        }
+    } else {
+        metadata["engine_owner"] = json!("rust");
+    }
+    Ok(diff)
+}
+
+fn certified_live_diff_response(diff: Value, path: &str) -> String {
+    match certify_live_diff_value(diff) {
+        Ok(certified) => json!({ "diff": certified }).to_string(),
+        Err(reason) => live_incomplete_file_response(path, &reason),
+    }
+}
+
+#[cfg(test)]
+mod live_parse_completeness_tests {
+    use super::*;
+
+    #[test]
+    fn declines_fallbacks_parse_errors_and_malformed_completeness_fields() {
+        for diff in [
+            json!({"is_fallback": true, "parse_errors": []}),
+            json!({"is_fallback": false, "parse_errors": ["syntax error"]}),
+            json!({"is_fallback": false, "parse_errors": [{"message": "bad token"}]}),
+            json!({"is_fallback": false, "parse_errors": "not an array"}),
+            json!({"is_fallback": false, "parse_errors": [], "changes": {}}),
+            json!({"is_fallback": false}),
+            json!({"parse_errors": []}),
+            json!({"is_fallback": "false", "parse_errors": []}),
+        ] {
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff, "example.py"))
+                .expect("valid structured response");
+            assert!(actual.get("diff").is_none(), "{actual}");
+            assert_eq!(actual["fallback_code"], "native_parse_incomplete", "{actual}");
+            assert!(actual["fallback"].as_str().is_some_and(|s| !s.is_empty()), "{actual}");
+        }
+    }
+
+    #[test]
+    fn certifies_complete_and_empty_valid_semantic_diffs_without_inventing_changes() {
+        for changes in [json!([]), json!([{"change_type": "MODIFICATION"}])] {
+            let diff = json!({
+                "is_fallback": false,
+                "parse_errors": [],
+                "changes": changes
+            });
+            let actual: Value = serde_json::from_str(&certified_live_diff_response(diff.clone(), "example.py"))
+                .expect("valid response");
+            let mut expected = diff;
+            expected["metadata"] = json!({"engine_owner": "rust"});
+            assert_eq!(actual["diff"], expected);
+            assert!(actual.get("fallback").is_none(), "{actual}");
+        }
+    }
+
+    #[test]
+    fn commit_file_certification_stamps_owner_without_modifying_changes_or_spans() {
+        let diff = json!({
+            "old_filename": "app.ts",
+            "new_filename": "app.ts",
+            "is_fallback": false,
+            "parse_errors": [],
+            "changes": [{"change_type": "MODIFICATION", "old_position": {"start_byte": 1}}],
+            "metadata": {"source": "wasm"}
+        });
+        let certified = certify_live_diff_value(diff.clone()).expect("certified commit item");
+        assert_eq!(certified["metadata"]["engine_owner"], "rust");
+        assert_eq!(certified["metadata"]["source"], "wasm");
+        assert_eq!(certified["changes"], diff["changes"]);
+        assert_eq!(certified["old_filename"], diff["old_filename"]);
+        assert_eq!(certified["new_filename"], diff["new_filename"]);
+    }
+
+    #[test]
+    fn preserves_rust_metadata_but_rejects_false_or_malformed_provenance() {
+        let base = json!({"is_fallback": false, "parse_errors": [], "changes": []});
+        let mut complete = base.clone();
+        complete["metadata"] = json!({"engine_owner": "rust", "source": "native"});
+        let accepted: Value = serde_json::from_str(
+            &certified_live_diff_response(complete.clone(), "example.py")
+        ).unwrap();
+        assert_eq!(accepted["diff"], complete);
+
+        for metadata in [
+            json!({"engine_owner": "python"}),
+            json!({"engine_owner": false}),
+            json!("invalid metadata"),
+        ] {
+            let mut invalid = base.clone();
+            invalid["metadata"] = metadata;
+            let declined: Value = serde_json::from_str(
+                &certified_live_diff_response(invalid, "example.py")
+            ).unwrap();
+            assert!(declined.get("diff").is_none(), "{declined}");
+            assert_eq!(declined["fallback_code"], "native_parse_incomplete");
+        }
+    }
 }
 
 /// python `LiveServer._process_request_with_source` (non-streaming) — the native single-file
@@ -444,8 +504,9 @@ fn policy_file_violation(diff: &Value, old_filename: &str, new_filename: &str) -
 /// runs the native non-Python chain (`native_wasm_single_diff`: wasm-parse -> finalize ->
 /// invariances -> assemble, mirroring the differ's routed `_diff_single`). Either path returns
 /// `{"fallback": <reason>}` for an uncovered case (unresolved extension, uncertified batch item,
-/// off-spec guardrail policy, finalize declined) so the Python differ path runs
-/// unchanged. *config_json* is `self._differ._config` marshalled by the caller. Returns
+/// off-spec guardrail policy, finalize declined). These declines are not
+/// certified semantic results and the Python live transport must fail closed.
+/// *config_json* is `self._differ._config` marshalled by the caller. Returns
 /// `{"diff": <SemanticDiff>}` on a served result, else `{"fallback": <reason>}`.
 pub fn live_handle_diff_impl(
     repo_path: &str,
@@ -455,11 +516,72 @@ pub fn live_handle_diff_impl(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    // old side = blob@ref ("" when absent, matching LiveBufferSource); new side = live buffer.
-    let old_source = crate::vcs_backend::read_blob("git", repo_path, path, git_ref)
-        .map(|b| String::from_utf8_lossy(&b).into_owned())
-        .unwrap_or_default();
+    // A proved absent path at a valid commit is a legitimate addition. Invalid
+    // Git refs, read failures and invalid UTF-8 must never become an empty or
+    // replacement-character baseline before Rust computes source spans (#207).
+    let old_source = match crate::vcs_backend::read_live_git_blob_strict(
+        repo_path, path, git_ref,
+    )? {
+        Some(bytes) => String::from_utf8(bytes)
+            .map_err(|e| format!("invalid UTF-8 in live Git baseline {path:?}: {e}"))?,
+        None => String::new(),
+    };
     diff_resolved_sources(repo_path, path, &old_source, content, config_json, wasm_dir)
+}
+
+#[cfg(test)]
+mod strict_live_git_baseline_tests {
+    use super::*;
+    use std::process::Command;
+
+    fn git(root: &std::path::Path, args: &[&str]) {
+        let output = Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(args)
+            .output()
+            .expect("git executable required for Rust Git-source acceptance");
+        assert!(
+            output.status.success(),
+            "git {args:?}: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
+    fn live_git_baselines_are_byte_exact_and_missing_refs_fail_closed() {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let root = repo.path();
+        git(root, &["init", "--quiet"]);
+        git(root, &["config", "user.name", "IntentumDiff CI"]);
+        git(root, &["config", "user.email", "ci@example.invalid"]);
+        std::fs::write(root.join("good.py"), "value = 'é'\n").unwrap();
+        std::fs::write(root.join("bad.py"), b"value = \xff\n").unwrap();
+        git(root, &["add", "."]);
+        git(root, &["commit", "-m", "strict source acceptance"]);
+        let path = root.to_str().expect("utf8 temporary test path");
+
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "good.py", "HEAD").unwrap(),
+            Some("value = 'é'\n".as_bytes().to_vec())
+        );
+        assert_eq!(
+            crate::vcs_backend::read_live_git_blob_strict(path, "missing.py", "HEAD").unwrap(),
+            None
+        );
+        let raw = crate::vcs_backend::read_live_git_blob_strict(path, "bad.py", "HEAD")
+            .unwrap()
+            .expect("committed bad source exists");
+        assert_eq!(raw, b"value = \xff\n");
+
+        let invalid = live_handle_diff_impl(path, "bad.py", "HEAD", "value = 1\n", "{}", "");
+        assert!(invalid.unwrap_err().contains("invalid UTF-8 in live Git baseline"));
+
+        let bad_ref = live_handle_diff_impl(
+            path, "good.py", "not-a-real-ref", "value = 2\n", "{}", "",
+        );
+        assert!(bad_ref.is_err(), "an invalid ref cannot become an empty baseline");
+    }
 }
 
 /// Content-vs-content diff with the SAME resolution/guardrail/branch behaviour as the live
@@ -476,6 +598,65 @@ pub fn live_diff_contents_impl(
     diff_resolved_sources(repo_path, path, old_content, new_content, config_json, wasm_dir)
 }
 
+/// Independently require the entire Python token stream to match before serving
+/// a style-only result. Named-only CSTs can omit anonymous operators/keywords:
+/// even if the CST hashes match, `async for` -> `for` must not be certified.
+/// Every leaf token (including anonymous punctuation and keywords) is preserved;
+/// only tree-sitter-confirmed comments are trivia. Invalid parses fail closed.
+fn python_significant_tokens(source: &str) -> Result<Vec<(String, String)>, String> {
+    fn collect(
+        node: tree_sitter::Node<'_>,
+        bytes: &[u8],
+        out: &mut Vec<(String, String)>,
+    ) -> Result<(), String> {
+        if node.kind() == "comment" {
+            return Ok(());
+        }
+        if node.is_missing() || node.is_error() {
+            return Err("Python syntax is not sufficiently parsed for style-only proof".to_owned());
+        }
+        if node.child_count() == 0 {
+            let token = node.utf8_text(bytes)
+                .map_err(|error| format!("Python token is not UTF-8: {error}"))?;
+            out.push((node.kind().to_owned(), token.to_owned()));
+            return Ok(());
+        }
+        let mut cursor = node.walk();
+        for child in node.children(&mut cursor) {
+            collect(child, bytes, out)?;
+        }
+        Ok(())
+    }
+
+    let tree = crate::parse_python_tree(source)?;
+    if tree.root_node().has_error() {
+        return Err("Python syntax contains errors; style-only equivalence unproven".to_owned());
+    }
+    let mut tokens = Vec::new();
+    collect(tree.root_node(), source.as_bytes(), &mut tokens)?;
+    Ok(tokens)
+}
+
+/// A style-only Python diff assembled by the routed review (`routed_review::complete`), so the
+/// native server returns the same DTO and `generic.style_only_shortcut` evidence as the wheel.
+/// Only called after the batch proved style equivalence (`STYLE_ONLY_NOT_CERTIFIED`).
+fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -> Result<Value, String> {
+    if old_source == new_source {
+        return Err("style-only decline on identical sources".to_owned());
+    }
+    if python_significant_tokens(old_source)? != python_significant_tokens(new_source)? {
+        return Err("Python syntax tokens differ; style-only equivalence unproven".to_owned());
+    }
+    crate::routed_review::complete(&json!({
+        "language": "python",
+        "old_source": old_source,
+        "new_source": new_source,
+        "old_filename": path,
+        "new_filename": path,
+        "finalized": {"changes": [], "change_groups": [], "ignored_style_changes": [], "is_style_only": true},
+    }))
+}
+
 /// The shared compute tail: resolve the parser, load the guardrail policy, and serve via
 /// the native wasm chain (non-Python) or the certified batch (Python). Returns the
 /// `{"diff"}` / `{"fallback"}` JSON both public entry points emit.
@@ -489,18 +670,14 @@ fn diff_resolved_sources(
 ) -> Result<String, String> {
     let fallback = |reason: &str| Ok(json!({ "fallback": reason }).to_string());
 
-    // Resolve the parser via the bundled manifest (extension-based). An unknown extension or a
-    // missing manifest -> the Python differ path. Python resolves to the native tree-sitter path
-    // (empty wasm_path); other languages carry their wasm parser path (`lib.rs:3303`).
-    let resolved = match crate::parser_registry::resolve_parser(path, wasm_dir) {
-        Some(r) => r,
-        None => return fallback("no bundled parser for this file extension"),
-    };
-
     let config: Value = if config_json.trim().is_empty() {
         json!({})
     } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
+    };
+    let resolved = match crate::parser_registry::resolve_parser_for_sources(path, old_source, content, &config, wasm_dir)? {
+        Some(r) => r,
+        None => return fallback("no bundled parser accepted this file"),
     };
     // Native guardrails (#100): strictly load the discovered policy's protected rules once.
     // Off-spec/unreadable policies defer (python raises for those on EVERY diff, python files
@@ -525,10 +702,13 @@ fn diff_resolved_sources(
             content,
             path,
             path,
-            config_json,
+            &crate::schema_context::config_for_repo(config_json, repo_path)?,
             guardrail_rules.as_deref(),
         ) {
             Ok(mut diff) => {
+                if let Some(context) = crate::compile_context::discover(path, &resolved.language, std::path::Path::new(repo_path))? {
+                    diff["metadata"]["compile_commands"] = context;
+                }
                 // python apply_guardrails_to_diff's policy-file check: editing intentumdiff.yaml
                 // itself is an IMMUTABLE violation.
                 if guardrails_enabled
@@ -538,7 +718,7 @@ fn diff_resolved_sources(
                     let violation = policy_file_violation(&diff, path, path);
                     crate::attach_guardrail_violations(&mut diff, vec![violation]);
                 }
-                Ok(json!({ "diff": diff }).to_string())
+                Ok(certified_live_diff_response(diff, path))
             }
             Err(reason) => fallback(&reason),
         };
@@ -569,8 +749,21 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(json!({ "diff": diff }).to_string()),
+                    Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
                     None => fallback("batch item missing diff"),
+                }
+            }
+            // live-server#24: the batch declines style-only files after PROVING the
+            // trivia-filtered CSTs hash equal (operator-aware since core#229). Serve that proof
+            // as the same style-only review the routed path returns, with Core's style
+            // evidence, instead of turning every comment/format edit into an error.
+            Some(item)
+                if item.get("reason").and_then(Value::as_str)
+                    == Some(crate::STYLE_ONLY_NOT_CERTIFIED) =>
+            {
+                match python_style_only_live_diff(old_source, content, path) {
+                    Ok(diff) => Ok(certified_live_diff_response(diff, path)),
+                    Err(reason) => fallback(&reason),
                 }
             }
             Some(item) => fallback(
@@ -602,6 +795,17 @@ fn diff_resolved_sources(
 /// empty (they are the union of the per-file violations, which are empty whenever the native path
 /// serves — it defers on any in-effect policy). *config_json* = `self._differ._config`. *wasm_dir*
 /// = the package wasm dir (see `live_handle_diff_json`).
+fn normalize_review_fuel(config: &mut Value) -> Result<(bool, u64), String> {
+    if !config.is_object() { return Err("review config must be a JSON object".to_owned()); }
+    // Use the same alias precedence, defaults and negative-value semantics as
+    // execution, so metadata and the effective parser configuration agree.
+    let effective = crate::RustCoreConfig::from_json(&config.to_string())?.plugin_fuel;
+    let capped = effective == u64::MAX;
+    let review_fuel = if capped { 100_000_000 } else { effective };
+    config["plugin_fuel"] = json!(review_fuel);
+    Ok((capped, review_fuel))
+}
+
 pub fn live_handle_review_impl(
     repo_path: &str,
     old_ref: &str,
@@ -617,11 +821,17 @@ pub fn live_handle_review_impl(
         Ok(f) => f,
         Err(reason) => return fallback(&reason),
     };
-    let config_value: Value = if config_json.trim().is_empty() {
+    let mut config_value: Value = if config_json.trim().is_empty() {
         json!({})
     } else {
         serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
     };
+    // The live review contract caps unlimited interactive configuration for Git
+    // reviews, while direct diffs retain unlimited execution.
+    let (review_fuel_capped, review_plugin_fuel) = normalize_review_fuel(&mut config_value)?;
+    let review_config_json = config_value.to_string();
+    let config_json = review_config_json.as_str();
+    let review_metadata = json!({"review_fuel_capped":review_fuel_capped,"review_plugin_fuel":review_plugin_fuel});
     // Native guardrails (#100): load once for the whole commit; off-spec policies defer (python
     // raises for those on every file); rules are evaluated per non-Python file below.
     let guardrail_rules: Option<Vec<Value>> =
@@ -652,7 +862,7 @@ pub fn live_handle_review_impl(
         let (old_content, new_content, old_path, new_path, staging) =
             (get(0), get(1), get(2), get(3), get(4));
         let path = if !new_path.is_empty() { new_path.clone() } else { old_path.clone() };
-        let resolved = match crate::parser_registry::resolve_parser(&path, wasm_dir) {
+        let resolved = match crate::parser_registry::resolve_parser_for_sources(&path, &old_content, &new_content, &config_value, wasm_dir)? {
             Some(r) => r,
             None => return fallback(&format!("no bundled parser for {path}")),
         };
@@ -691,7 +901,8 @@ pub fn live_handle_review_impl(
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
     // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let cross_file_changes = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir);
+    let (cross_file_changes, mut index_telemetry) =
+        crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).
@@ -715,8 +926,44 @@ pub fn live_handle_review_impl(
                         // The commit payload is plain UTF-8 JSON (Python: `bytes(commit_payload)`).
                         Some(bytes) => match serde_json::from_slice::<Value>(&bytes) {
                             Ok(mut commit_diff) => {
+                                // A "complete" batch control is insufficient if any
+                                // serialized per-file DTO is missing or uncertified.
+                                // Check every source before advertising commit success.
+                                if !commit_diff.get("parse_errors")
+                                    .and_then(Value::as_array).is_some_and(Vec::is_empty)
+                                {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "commit parse diagnostics are incomplete",
+                                    ));
+                                }
+                                let Some(diffs) = commit_diff.get_mut("file_diffs")
+                                    .and_then(Value::as_array_mut) else {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit missing file_diffs array",
+                                    ));
+                                };
+                                if diffs.len() != review_files.len() {
+                                    return Ok(live_incomplete_file_response(
+                                        "commit", "certified commit dropped or added source files",
+                                    ));
+                                }
+                                for (file, diff) in review_files.iter().zip(diffs.iter_mut()) {
+                                    match certify_live_diff_value(diff.clone()) {
+                                        Ok(certified) => *diff = certified,
+                                        Err(reason) => return Ok(live_incomplete_file_response(&file.path, &reason)),
+                                    }
+                                }
                                 commit_diff["cross_file_changes"] = cross_file_changes.clone();
-                                Ok(json!({ "commit_diff": commit_diff }).to_string())
+                                if let Some(diffs) = commit_diff["file_diffs"].as_array_mut() {
+                                    for diff in diffs {
+                                        let key = (diff["old_filename"].as_str().unwrap_or("").to_owned(),
+                                            diff["new_filename"].as_str().unwrap_or("").to_owned());
+                                        if let Some(calls) = index_telemetry.remove(&key) {
+                                            crate::attach_native_parser_telemetry(diff, calls);
+                                        }
+                                    }
+                                }
+                                Ok(json!({ "commit_diff": commit_diff, "metadata": review_metadata }).to_string())
                             }
                             Err(e) => fallback(&format!("commit payload parse: {e}")),
                         },
@@ -782,13 +1029,20 @@ pub fn live_handle_review_impl(
                 &f.new_content,
                 &f.old_path,
                 &f.new_path,
-                config_json,
+                &crate::schema_context::config_for_repo(config_json, repo_path)?,
                 guardrail_rules.as_deref(),
             ) {
                 Ok(d) => d,
                 // Name the file: an anonymous per-file error cost a whole debugging round.
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
+        };
+        // An incomplete/malformed per-file parse declines the ENTIRE commit,
+        // preserving the file and parser cause rather than manufacturing
+        // commit-level parse_errors: [] (#193). The native transport is a relay.
+        diff = match certify_live_diff_value(diff) {
+            Ok(certified) => certified,
+            Err(reason) => return Ok(live_incomplete_file_response(&f.path, &reason)),
         };
         // python apply_guardrails_to_diff's policy-file check: an edit to intentumdiff.yaml itself.
         if guardrails_enabled
@@ -801,6 +1055,9 @@ pub fn live_handle_review_impl(
         // Carry the staging status (working-tree reviews); commit-to-commit rows leave it empty.
         if !f.staging.is_empty() {
             diff["staging_status"] = json!(f.staging);
+        }
+        if let Some(calls) = index_telemetry.remove(&(f.old_path.clone(), f.new_path.clone())) {
+            crate::attach_native_parser_telemetry(&mut diff, calls);
         }
         file_diffs.push(diff);
     }
@@ -823,7 +1080,7 @@ pub fn live_handle_review_impl(
         "guardrail_violations": commit_guardrails,
         "parse_errors": [],
     });
-    Ok(json!({ "commit_diff": commit_diff }).to_string())
+    Ok(json!({ "commit_diff": commit_diff, "metadata": review_metadata }).to_string())
 }
 
 // ---------------------------------------------------------------------------
@@ -1091,6 +1348,26 @@ fn resolve_for_containment(path: &std::path::Path) -> std::path::PathBuf {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn review_fuel_normalization_matches_execution_aliases_and_negative_values() {
+        for mut config in [json!([]), json!(true), json!("x"), json!(null), json!(7)] {
+            assert_eq!(normalize_review_fuel(&mut config).unwrap_err(), "review config must be a JSON object");
+        }
+        for (mut config, capped, expected) in [
+            (json!({"plugin_fuel":-1}), true, 100_000_000),
+            (json!({"pluginFuel":-1}), true, 100_000_000),
+            (json!({"pluginFuel":-2}), true, 100_000_000),
+            (json!({"plugin_fuel":-20}), true, 100_000_000),
+            (json!({"plugin_fuel":123,"pluginFuel":-1}), false, 123),
+            (json!({"plugin_fuel":-1,"pluginFuel":123}), true, 100_000_000),
+            (json!({"pluginFuel":200_000_000}), false, 200_000_000),
+            (json!({}), false, 10_000_000),
+        ] {
+            assert_eq!(normalize_review_fuel(&mut config).unwrap(), (capped, expected));
+            assert_eq!(crate::RustCoreConfig::from_json(&config.to_string()).unwrap().plugin_fuel, expected);
+        }
+    }
+
     use super::*;
 
     fn parse(req: &str) -> Value {
@@ -1476,11 +1753,31 @@ mod tests {
 
     #[test]
     fn native_diff_falls_back_without_manifest() {
-        // With no wasm_dir/manifest, resolution fails -> fallback so the Python differ path runs.
+        if !have_git() {
+            return;
+        }
+        // A missing repository is an I/O failure, not a reason to manufacture
+        // a fallback result. The strict Git baseline gate must run first.
+        let missing_repo = live_handle_diff_json(
+            "/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "",
+        );
+        assert!(missing_repo.is_err(), "a missing Git repository must fail closed");
+
+        // Missing parser assets are a legitimate *post-baseline* fallback.
+        // Exercise that path in a real committed repo to keep the two states distinct.
+        let repo = asset_repo("fallback-no-manifest");
         let v: Value = serde_json::from_str(
-            &live_handle_diff_json("/nonexistent", "src/app.ts", "HEAD", "x = 1", "{}", "").unwrap(),
+            &live_handle_diff_json(
+                &repo.to_string_lossy(),
+                "src/app.ts",
+                "HEAD",
+                "x = 1",
+                "{}",
+                "",
+            )
+            .expect("valid Git source permits parser resolution"),
         )
-        .unwrap();
+        .expect("fallback response is JSON");
         assert!(v.get("fallback").is_some(), "no manifest must fall back: {v}");
         assert!(v.get("diff").is_none());
     }
@@ -1516,4 +1813,95 @@ pub(crate) fn live_handle_diff_json(
     wasm_dir: &str,
 ) -> Result<String, String> {
     live_handle_diff_impl(repo_path, path, git_ref, content, config_json, wasm_dir)
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "live_review_completeness_source_tests.rs"]
+mod live_review_completeness_source_tests;
+
+#[cfg(test)]
+mod style_only_python_live_tests {
+    //! live-server#24: a proven style-only Python edit is served as style-only, not declined;
+    //! an operator change (core#229) is still a semantic change on the same route.
+    use super::*;
+
+    fn live(old: &str, new: &str) -> Value {
+        let repo = tempfile::tempdir().expect("temporary repo");
+        let staged = std::path::PathBuf::from(
+            std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+                .expect("set INTENTUMDIFF_TEST_WASM_DIR to the verified parser components")
+        );
+        // CI stages verified parser bytes, not a product runtime catalog.
+        // Prove discovery against the REAL staged guest by supplying only a
+        // local manifest; no synthetic guest, no replacement semantics.
+        let dir = tempfile::tempdir().expect("temporary verified parser catalog");
+        std::fs::copy(staged.join("python_parser.wasm"), dir.path().join("python_parser.wasm"))
+            .expect("verified staged Python parser component");
+        std::fs::write(dir.path().join("parser_manifest.json"), serde_json::json!({
+            "parsers": {"python": {
+                "plugin_id": "python",
+                "wasm": "python_parser.wasm",
+                "extensions": [".py", ".pyi"]
+            }},
+            "extension_index": {".py": "python", ".pyi": "python"}
+        }).to_string()).expect("test parser catalog");
+        let out = live_diff_contents_impl(
+            repo.path().to_str().unwrap(), "a.py", old, new, "{}",
+            dir.path().to_str().unwrap(),
+        )
+        .expect("live diff");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_comment_and_whitespace_edits_are_served_as_style_only() {
+        let base = "def f(a, b):\n    return a + b\n";
+        for new in ["def f(a, b):\n    # sum\n    return a + b\n", "def f(a, b):\n    return a  +  b\n"] {
+            let r = live(base, new);
+            let diff = r.get("diff").unwrap_or_else(|| panic!("style-only edit was declined: {r}"));
+            assert_eq!(diff["is_style_only"], true, "{r}");
+            assert_eq!(diff["has_semantic_changes"], false, "{r}");
+            assert!(diff["changes"].as_array().unwrap().is_empty(), "{r}");
+            assert!(
+                diff["change_groups"].as_array().unwrap().iter().any(|g| g["kind"] == "IGNORED_STYLE"),
+                "style-only result must carry IGNORED_STYLE evidence: {r}"
+            );
+        }
+    }
+
+    #[test]
+    fn python_trivia_proof_preserves_anonymous_semantic_tokens() {
+        let base = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let bare = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let awith = "async def f(cm):\n    async with cm:\n        pass\n";
+        let with_ = "async def f(cm):\n    with cm:\n        pass\n";
+        let style = "async def f(xs):\n    # iteration\n    async for x in xs:\n        print( x )\n";
+        assert_eq!(python_significant_tokens(base).unwrap(), python_significant_tokens(style).unwrap());
+        assert_ne!(python_significant_tokens(base).unwrap(), python_significant_tokens(bare).unwrap());
+        assert_ne!(python_significant_tokens(awith).unwrap(), python_significant_tokens(with_).unwrap());
+        assert_ne!(
+            python_significant_tokens("def f(a,b):\n return a + b\n").unwrap(),
+            python_significant_tokens("def f(a,b):\n return a - b\n").unwrap()
+        );
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm")]
+    fn python_async_iteration_change_is_not_served_as_style_only() {
+        let old = "async def f(xs):\n    async for x in xs:\n        print(x)\n";
+        let new = "async def f(xs):\n    for x in xs:\n        print(x)\n";
+        let r = live(old, new);
+        assert_ne!(r.get("diff").and_then(|d| d.get("is_style_only")), Some(&json!(true)),
+            "async iteration change must never be certified as style-only: {r}");
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn python_operator_change_is_not_served_as_style_only() {
+        let r = live("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n");
+        let diff = r.get("diff").unwrap_or_else(|| panic!("operator change declined: {r}"));
+        assert_eq!(diff["is_style_only"], false, "{r}");
+        assert_eq!(diff["has_semantic_changes"], true, "{r}");
+    }
 }

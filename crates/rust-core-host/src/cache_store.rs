@@ -459,9 +459,8 @@ impl SqliteStore {
         })
     }
 
-    /// Metadata rows (no BLOBs) as a JSON array string. Filters mirror the Python method;
-    /// the file_glob filter is applied in the Python delegator (fnmatch), so this returns
-    /// up to `limit*10` rows when a glob is requested.
+    /// Legacy metadata query. New callers should use `list_entries_filtered`.
+    /// The boolean only requests an expanded result window; it does not filter.
     #[allow(clippy::too_many_arguments)]
     pub fn list_entries(
         &self,
@@ -473,6 +472,19 @@ impl SqliteStore {
         max_size: Option<i64>,
         limit: i64,
         with_glob: bool,
+    ) -> Result<String, StoreError> {
+        let fetch_limit = if with_glob { limit.checked_mul(10).ok_or_else(|| StoreError::Value("limit overflow".into()))? } else { limit };
+        self.list_entries_filtered(table, language, since, before, min_size, max_size, fetch_limit, None)
+    }
+
+    /// Metadata only, filtered before limiting, ordered by newest timestamp then key.
+    /// Glob matches either diff filename, case-sensitively on every platform. Empty
+    /// patterns and patterns on non-diff tables retain the historical no-filter behavior.
+    #[allow(clippy::too_many_arguments)]
+    pub fn list_entries_filtered(
+        &self, table: &str, language: Option<&str>, since: Option<i64>,
+        before: Option<i64>, min_size: Option<i64>, max_size: Option<i64>,
+        limit: i64, file_glob: Option<&str>,
     ) -> Result<String, StoreError> {
         let (key_col, meta_cols) = listable_table(table)
             .ok_or_else(|| StoreError::Value(format!("Unknown table {table:?}")))?;
@@ -506,13 +518,17 @@ impl SqliteStore {
         } else {
             format!("WHERE {}", conditions.join(" AND "))
         };
-        let fetch_limit = if with_glob { limit * 10 } else { limit };
+        let matcher = file_glob.filter(|pattern| table == "diff_cache" && !pattern.is_empty())
+            .map(crate::schema_profiles::compile_filename_glob)
+            .transpose().map_err(|error| StoreError::Value(format!("Invalid file glob: {error}")))?;
+        // With a glob, stream all SQL matches until enough filename matches are found.
+        let sql_limit = if matcher.is_some() { -1 } else { limit };
         let select_cols = std::iter::once(key_col)
             .chain(meta_cols.iter().copied())
             .collect::<Vec<_>>()
             .join(", ");
         let sql = format!(
-            "SELECT {select_cols} FROM {table} {where_clause} ORDER BY created_at DESC LIMIT {fetch_limit}"
+            "SELECT {select_cols} FROM {table} {where_clause} ORDER BY created_at DESC, {key_col} ASC LIMIT {sql_limit}"
         );
         let now = now_epoch();
         self.with_conn(|conn| {
@@ -532,6 +548,11 @@ impl SqliteStore {
             let mut result: Vec<serde_json::Value> = Vec::new();
             for row in rows {
                 let mut map = row.map_err(db_err)?;
+                if let Some(matcher) = &matcher {
+                    if !["old_filename", "new_filename"].iter().any(|field| {
+                        matcher.is_match(map.get(*field).and_then(|v| v.as_str()).unwrap_or(""))
+                    }) { continue; }
+                }
                 let created = map.get("created_at").and_then(|v| v.as_i64()).unwrap_or(0);
                 map.insert("age_seconds".into(), serde_json::json!(now - created));
                 map.insert(
@@ -544,6 +565,7 @@ impl SqliteStore {
                     }
                 }
                 result.push(serde_json::Value::Object(map));
+                if result.len() as i64 >= limit { break; }
             }
             serde_json::to_string(&result).map_err(db_err)
         })

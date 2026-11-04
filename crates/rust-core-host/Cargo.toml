@@ -18,6 +18,8 @@ license = "MIT"
 [features]
 default = ["tier-c-wasm"]
 tier-c-wasm = []
+# Test-only component imports; CI builds the guest before enabling this gate.
+host-utils-guest = []
 
 [lib]
 name = "intentumdiff_rust_core"
@@ -32,6 +34,9 @@ crate-type = ["cdylib", "rlib"]
 # reached parity (the whole suite passes over the C ABI). The engine compute was always pyo3-free.
 
 [dependencies]
+rs-rich = { version = "=0.0.9", default-features = false }
+diffy = "=0.5.1"
+ignore = "=0.4.33"
 # The canonical AST vocabulary (#9). Pinned to a tag, not a branch: the category and role
 # sets are a CONTRACT for anything derived from them, and a moving dependency would let the
 # vocabulary shift underneath the engine without a visible change here.
@@ -46,7 +51,7 @@ anyhow = "1"
 # without a Wasm round-trip (Rust-authoritative for #91).
 index-engine-lib = { path = "../index-engine-lib" }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde_json = { version = "1", features = ["unbounded_depth"] }
 # Project-config (intentumdiff.yaml) parsing for the config subsystem port (#99).
 # Same version the first-party databricks/dbt-schema parser crates already use.
 serde_yaml = "0.9"
@@ -76,6 +81,9 @@ tree-sitter = "0.25"
 tree-sitter-python = "0.25"
 wasmtime = "48.0.7"
 wasmtime-wasi = "48.0.7"
+
+[dev-dependencies]
+tempfile = "3"
 
 [patch.crates-io]
 quote = { path = "../patches/quote" }

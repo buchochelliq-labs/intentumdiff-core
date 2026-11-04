@@ -190,6 +190,36 @@
         assert!(new_tree_json.contains("greet"), "new tree names greet");
     }
 
+
+    #[test]
+    fn interpret_cst_parser_rejects_missing_filtered_cst() {
+        let err = validate_parser_input_requirements(false, "", "{}")
+            .expect_err("interpret-cst parser must fail closed without old filtered CST");
+        assert!(
+            err.contains("interpret-cst parser requires filtered CST input"),
+            "unexpected error: {err}"
+        );
+
+        let err = validate_parser_input_requirements(false, "{}", "   ")
+            .expect_err("interpret-cst parser must fail closed without new filtered CST");
+        assert!(
+            err.contains("interpret-cst parser requires filtered CST input"),
+            "unexpected error: {err}"
+        );
+    }
+
+    #[test]
+    fn full_parse_parser_allows_source_only_execution() {
+        validate_parser_input_requirements(true, "", "")
+            .expect("full-parse parsers do not require filtered CST input");
+    }
+
+    #[test]
+    fn interpret_cst_parser_accepts_filtered_cst_on_both_sides() {
+        validate_parser_input_requirements(false, "{\"type\":\"module\"}", "{\"type\":\"module\"}")
+            .expect("interpret-cst parsers may execute when both filtered CST inputs are present");
+    }
+
     fn module_with_nodes(children: Vec<SemanticNode>) -> SemanticNode {
         SemanticNode {
             id: "0".to_owned(),

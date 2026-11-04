@@ -250,6 +250,32 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
     // FileNotFoundError the git readers raise).
     let outcome: Result<String, String> = (|| match name {
         "version" => Ok(crate::VERSION.to_owned()),
+        "render_cli_review" => crate::cli_presentation::render_cli_review_impl(arg_str(args,0,"request_json")?),
+        "review_text" => crate::review_text(arg_str(args,0,"old_source")?,arg_str(args,1,"new_source")?,
+            arg_str(args,2,"old_filename")?,arg_str(args,3,"new_filename")?).map(|v|v.to_string()),
+        "reconcile_markdown" => serde_json::to_string(&crate::markdown_review::reconcile(
+            arg_json(args,0,"presentation")?,arg_str(args,1,"old_source")?,arg_str(args,2,"new_source")?,
+            arg_str(args,3,"old_filename")?,arg_str(args,4,"new_filename")?,arg_json(args,5,"phase")?
+        )?).map_err(|e|e.to_string()),
+        "compile_context" => value_request(args, crate::compile_context::request),
+        "schema_profiles" => crate::schema_profiles::schema_profiles_impl(arg_str(args,0,"request_json")?),
+        "infer_file_lifecycle" => Ok(json!(crate::lifecycle::infer(
+            arg_str(args,0,"old_source")?,arg_str(args,1,"new_source")?,arg_opt_str(args,2,"status")?
+        )).to_string()),
+        "finalize_file_lifecycle" => crate::lifecycle::finalize(
+            arg_json(args,0,"diff")?,arg_json(args,1,"lifecycle")?
+        ).map(|v|v.to_string()),
+        "host_strip_trivia" => crate::host_utils::strip_trivia(
+            arg_str(args,0,"tree")?, &arg_json::<Vec<String>>(args,1,"trivia_types")?,
+            &args.get(2).filter(|v|!v.is_null()).map(|v|serde_json::from_value(v.clone())).transpose()
+                .map_err(|e|format!("host limits: {e}"))?.unwrap_or_default()
+        ).map(|v|v.to_string()),
+        "host_structural_hash" => crate::host_utils::structural_hash(
+            arg_str(args,0,"tree")?,
+            &args.get(1).filter(|v|!v.is_null()).map(|v|serde_json::from_value(v.clone())).transpose()
+                .map_err(|e|format!("host limits: {e}"))?.unwrap_or_default()
+        ).map(|v|json!(v).to_string()),
+
         "live_capabilities" => Ok(crate::live_server::live_capabilities_impl()),
         "live_limits" => Ok(crate::live_server::live_limits_impl()),
         "live_normalise_request_path" => Ok(crate::live_server::live_normalise_request_path_impl(
@@ -310,9 +336,23 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "diff_batch" => {
             crate::diff_batch_impl(arg_str(args, 0, "request_json")?).map(|v| v.to_string())
         }
+        "lsp_collect_utf16_hover_targets" => crate::lsp_enrich::collect_utf16_hover_targets_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "source")?),
         "lsp_collect_hover_targets" => {
             crate::lsp_enrich::collect_hover_targets_json_impl(arg_str(args, 0, "tree_json")?)
         }
+        "lsp_attach_type_map" => crate::lsp_enrich::attach_type_map_json_impl(
+            arg_str(args, 0, "tree_json")?, arg_str(args, 1, "type_map_json")?),
+        "lsp_utf16_range" => crate::lsp_server_shapes::utf16_lsp_range_json_impl(
+            arg_str(args, 0, "node_json")?, arg_str(args, 1, "source")?),
+        "lsp_server_codelens_utf16" => crate::lsp_server_shapes::codelens_utf16_json_impl(
+            arg_str(args, 0, "diff_json")?,
+            arg_str(args, 1, "old_source")?,
+            arg_str(args, 2, "new_source")?,
+        ),
+        "lsp_server_diagnostics_utf16" => crate::lsp_server_shapes::diagnostics_utf16_json_impl(
+            arg_str(args, 0, "diff_json")?, arg_str(args, 1, "new_source")?,
+        ),
         "lsp_server_codelens" => {
             crate::lsp_server_shapes::codelens_json_impl(arg_str(args, 0, "diff_json")?)
         }
@@ -323,12 +363,13 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 0, "start_path")?,
             arg_opt_str(args, 1, "explicit_path")?,
         ),
-        "find_intentumdiff_config_path" => Ok(json!(crate::config::find_config_path(
-            arg_opt_str(args, 0, "start_path")?,
-            arg_opt_str(args, 1, "explicit_path")?,
-        )
-        .map(|p| p.display().to_string()))
-        .to_string()),
+        "find_intentumdiff_config_path" => {
+            let path = crate::config::find_config_path(
+                arg_opt_str(args, 0, "start_path")?,
+                arg_opt_str(args, 1, "explicit_path")?,
+            )?;
+            Ok(json!(path.map(|p| p.display().to_string())).to_string())
+        },
         "git_repo_toplevel" => {
             crate::git_source::repo_toplevel(arg_str(args, 0, "repo_path")?)
         }
@@ -354,6 +395,12 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         "build_symbol_table" => {
             Ok(index_engine_lib::build_symbol_table_impl(arg_str(args, 0, "files_json")?))
         }
+        "reconstruct_patch" => crate::patch_source::reconstruct_json_impl(arg_str(args, 0, "request_json")?),
+        "resolve_references" => {
+            let definitions: Vec<index_engine_lib::SymbolDefinition> = serde_json::from_str(arg_str(args, 0, "definitions_json")?).map_err(|e| e.to_string())?;
+            let references: Vec<index_engine_lib::ReferenceUsage> = serde_json::from_str(arg_str(args, 1, "references_json")?).map_err(|e| e.to_string())?;
+            serde_json::to_string(&index_engine_lib::resolve_references(&definitions, &references)).map_err(|e| e.to_string())
+        }
         "build_reference_table" => {
             Ok(index_engine_lib::build_reference_table_impl(arg_str(args, 0, "files_json")?))
         }
@@ -377,6 +424,7 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             "rust_core_semantic_tree_v3",
         ),
         "diff_python_semantic_tree" => {
+            crate::RustCoreConfig::from_json(arg_str(args, 5, "config_json")?)?;
             let language = arg_str(args, 4, "language")?;
             if !language.eq_ignore_ascii_case("python") {
                 Ok(json!({
@@ -397,7 +445,9 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                 )
             }
         }
-        "diff_python_sources_stage11" => Ok(match crate::diff_python_sources_stage11_impl(
+        "diff_python_sources_stage11" => {
+            crate::RustCoreConfig::from_json(arg_str(args, 5, "config_json")?)?;
+            Ok(match crate::diff_python_sources_stage11_impl(
             arg_str(args, 0, "old_source")?,
             arg_str(args, 1, "new_source")?,
             arg_str(args, 2, "old_filename")?,
@@ -410,12 +460,25 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
                 json!({"status": crate::SCAFFOLD, "engine": crate::V3_ENGINE, "reason": exc})
                     .to_string()
             }
-        }),
+        })
+        },
+        "empty_semantic_tree" => Ok(crate::lifecycle::empty_tree(arg_str(args, 0, "language")?).to_string()),
+        "complete_routed_review" => value_request(args, crate::routed_review::complete),
+        "apply_guardrail_policy" => {
+            let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
+                .map_err(|e| format!("request: {e}"))?;
+            serde_json::to_string(&crate::guardrail_policy::apply_policy(&request)?)
+                .map_err(|e| format!("serialize: {e}"))
+        }
+        "parse_guardrail_policy" => {
+            serde_json::to_string(&crate::guardrail_policy::parse_policy(arg_str(args, 0, "source")?)?)
+                .map_err(|e| format!("serialize: {e}"))
+        }
         "evaluate_guardrail_rules" => {
             let request: crate::GuardrailEvalRequest =
                 serde_json::from_str(arg_str(args, 0, "request_json")?)
                     .map_err(|e| format!("request: {e}"))?;
-            serde_json::to_string(&crate::evaluate_guardrail_rules(&request))
+            serde_json::to_string(&crate::evaluate_guardrail_rules_checked(&request)?)
                 .map_err(|e| format!("serialize: {e}"))
         }
         "enrich_node_facts" => {
@@ -426,6 +489,9 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             serde_json::to_string(&tree).map_err(|e| format!("serialize tree: {e}"))
         }
         // VCS backend read ops (git/hg/svn/p4) — delegate to the newly-factored ungated impls.
+        "p4_policy_path" => crate::vcs_backend::p4_policy_path_impl(
+            arg_str(args, 0, "client_root")?, arg_str(args, 1, "depot_path")?,
+        ).map(|path| json!({ "path": path }).to_string()),
         "vcs_backend_resolve_root" => crate::vcs_backend::vcs_backend_resolve_root_impl(
             arg_str(args, 0, "vcs")?,
             arg_str(args, 1, "repo_path")?,
@@ -581,6 +647,19 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_i64(args, 9, "limit")?,
             arg_opt_bool(args, 10, "with_glob")?,
         )),
+        "cache_list_entries_filtered" => store_json(crate::cache_registry::list_entries_filtered(
+            arg_str(args, 0, "path")?,
+            arg_i64(args, 1, "ttl_days")?,
+            arg_i64(args, 2, "max_mb")?,
+            arg_str(args, 3, "table")?,
+            arg_opt_str(args, 4, "language")?,
+            arg_opt_json(args, 5, "since")?,
+            arg_opt_json(args, 6, "before")?,
+            arg_opt_json(args, 7, "min_size")?,
+            arg_opt_json(args, 8, "max_size")?,
+            arg_i64(args, 9, "limit")?,
+            arg_opt_str(args, 10, "file_glob")?,
+        )),
         "cache_get_entry_metadata" => store_opt(crate::cache_registry::get_entry_metadata(
             arg_str(args, 0, "path")?,
             arg_i64(args, 1, "ttl_days")?,
@@ -703,6 +782,22 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 4, "language")?,
             arg_str(args, 5, "config_json")?,
         ),
+        "source_fallback_diff" => crate::source_fallback::source_fallback_diff_impl(
+            arg_str(args, 0, "old_source")?, arg_str(args, 1, "new_source")?,
+            arg_str(args, 2, "old_filename")?, arg_str(args, 3, "new_filename")?,
+            arg_str(args, 4, "language")?, arg_str(args, 5, "reason")?,
+        ).map(|v| v.to_string()),
+        "parse_errors_present" => crate::source_fallback::parse_errors_present_impl(
+            arg_str(args, 0, "source")?, arg_str(args, 1, "tree_json")?, arg_str(args, 2, "language")?,
+        ),
+        "enrich_literal_labels" => crate::enrich_literal_labels_json_str(
+            arg_str(args, 0, "tree_json")?,
+            arg_str(args, 1, "source")?,
+        ),
+        "review_trees_equivalent" => crate::review_trees_equivalent_impl(
+            arg_str(args, 0, "old_tree_json")?,
+            arg_str(args, 1, "new_tree_json")?,
+        ),
         "enrich_profile_labels" => crate::enrich_profile_labels_impl(
             arg_str(args, 0, "tree_json")?,
             arg_str(args, 1, "source")?,
@@ -737,6 +832,14 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         )),
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
+        "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
+        "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
+        "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
+        "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
+        "parser_availability_with_digest" => Ok(crate::parser_availability::availability_json_with_digest_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?, arg_str(args, 4, "component_sha256")?)),
+        "parser_component_availability" => Ok(crate::parser_availability::component_availability_json_impl(arg_str(args, 0, "wasm_filename")?, arg_str(args, 1, "system")?, arg_str(args, 2, "machine")?, arg_str(args, 3, "component_sha256")?)),
+        "parser_candidate_shortlist" => crate::parser_routing::shortlist_json_impl(arg_str(args, 0, "request")?),
+        "match_ignore_rules" => crate::ignore_rules::match_json_impl(arg_str(args, 0, "request")?),
         "detect_content_type" => {
             let data: Vec<u8> = arg_json(args, 0, "data")?;
             serde_json::to_string(&crate::content_type::detect_content_type(&data))
@@ -808,11 +911,187 @@ fn dispatch_git_reader(name: &str, args: &[Value]) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn cli_presentation_envelopes() {
+        let mut request = json!({"width": 80, "color": false, "diff": {
+            "changes": [], "has_semantic_changes": false,
+            "is_style_only": true, "is_fallback": false
+        }});
+        let result = call("render_cli_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true);
+        let unchanged = result["result"].as_str().unwrap();
+        assert!(unchanged.contains("No changes detected"));
+        assert!(!unchanged.contains("Formatting changed"));
+
+        request["diff"]["change_groups"] = json!([{"kind": "IGNORED_STYLE"}]);
+        let result = call("render_cli_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true);
+        let style_only = result["result"].as_str().unwrap();
+        assert!(style_only.contains("Style-only change"));
+        assert!(style_only.contains("Formatting changed"));
+        assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
+        assert_eq!(call("render_cli_review", json!([]))["ok"], false);
+    }
+
+    #[test]
+    fn filename_selection_envelopes() {
+        let request = json!({"entries":[{"id":"py","languages":["python"],"extensions":[".py"]}],"filename":"x.py"});
+        let first = json!({"request":request,"events":[]});
+        let good = call("filename_selection_next", json!([first.to_string()]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"], json!({"kind":"load","index":0}));
+        let invalid = json!({"request":request,"events":[{"kind":"probed","index":0,"language":"python"}]});
+        assert_eq!(call("filename_selection_next", json!([invalid.to_string()]))["ok"], false);
+    }
+
+    #[test]
+    fn content_detection_envelopes() {
+        let request = json!({"entries":[{"plugin_id":"py","grammar_id":"py","languages":["python"],"priority":1}],"content":"def f(): pass"});
+        let plan = call("content_detection_plan", json!([request.to_string()]));
+        assert_eq!(plan["ok"], true);
+        assert_eq!(plan["result"]["indices"], json!([0]));
+        let good = json!({"request":request,"observations":[{"index":0,"language":"python"}]});
+        assert_eq!(call("content_detection_finish", json!([good.to_string()]))["result"]["results"][0]["language"], "python");
+        let bad = json!({"request":request,"observations":[{"index":0,"language":"ruby"}]});
+        assert_eq!(call("content_detection_finish", json!([bad.to_string()]))["ok"], false);
+    }
+
+    #[test]
+    fn patch_reconstruction_envelopes() {
+        let request = json!({"patch_text":"--- a/x\n+++ b/x\n@@ -1 +1 @@\n-old\n+new\n", "original_content":"old\n"});
+        let out = call("reconstruct_patch",json!([request.to_string()]));
+        assert_eq!(out["ok"],true,"{out}");
+        assert_eq!(out["result"]["new_content"],"new\n");
+        assert_eq!(call("reconstruct_patch",json!(["{}"]))["ok"],false);
+    }
+
+    #[test]
+    fn hover_utf16_envelopes() {
+        let tree = json!({"id":"value","node_type":"variable_name","position":{"start_line":0,"start_col":6},"children":[]}).to_string();
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, "\"é\"; value = 1"])), json!({"ok":true,"result":[{"id":"value","line":0,"col":5}]}));
+        assert_eq!(call("lsp_collect_utf16_hover_targets",json!([tree, ""]))["ok"],false);
+    }
+
+    #[test]
+    fn reference_resolution_envelopes() {
+        assert_eq!(call("resolve_references", json!(["[]", "[]"])), json!({"ok":true,"result":[]}));
+        assert_eq!(call("resolve_references", json!(["{}", "[]"]))["ok"], false);
+        assert_eq!(call("resolve_references", json!(["[]", "[{}]"]))["ok"], false);
+    }
+
+    #[test]
+    fn routed_review_envelopes() {
+        let empty = call("empty_semantic_tree", json!(["sql"]));
+        assert_eq!(empty["ok"], true);
+        assert_eq!(empty["result"]["children"], json!([]));
+        assert_eq!(empty["result"], crate::lifecycle::empty_tree("sql"));
+        let request = json!({"language":"generic","old_source":"old","new_source":"new",
+            "old_filename":"a.txt","new_filename":"a.txt","finalized":{"changes":[],"change_groups":[]}});
+        let result = call("complete_routed_review", json!([request.to_string()]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["has_semantic_changes"], true);
+        assert_eq!(call("complete_routed_review", json!(["{}"]))["ok"], false);
+    }
+
+    #[test]
+    fn guardrail_policy_envelopes_preserve_errors_and_results() {
+        let rules = call("parse_guardrail_policy", json!(["protected: [{language: json, path: secret}] "]));
+        assert_eq!(rules["ok"], true);
+        assert_eq!(rules["result"][0]["severity"], "important");
+        for severity in ["42", "null", "[]"] {
+            let source = format!("protected: [{{language: json, path: secret, severity: {severity}}}]");
+            assert_eq!(call("parse_guardrail_policy", json!([source]))["ok"], false);
+        }
+        let request = json!({"diff":{"language":"yaml", "old_filename":"intentumdiff.yaml", "new_filename":"intentumdiff.yaml", "changes":[]}, "old_source":"old", "new_source":"new", "rules":[]});
+        let applied = call("apply_guardrail_policy", json!([request.to_string()]));
+        assert_eq!(applied["ok"], true, "{applied}");
+        assert_eq!(applied["result"]["metadata"]["guardrails"]["immutable_count"], 1);
+        assert_eq!(call("apply_guardrail_policy", json!(["{}"]))["ok"], false);
+    }
+
+    #[test]
+    fn migration_lifecycle_preserves_meaningful_evidence() {
+        let diff = json!({"changes":[{"description":"new source"}],
+            "change_groups":[{"kind":"IGNORED_STYLE"},{"kind":"MEANINGFUL_CHANGE"}],
+            "is_style_only":true,"has_semantic_changes":false,"metadata":{"other":1}});
+        let added = call("finalize_file_lifecycle", json!([diff, "added"]));
+        assert_eq!(added["ok"], true, "{added}");
+        assert_eq!(added["result"]["change_groups"],json!([{"kind":"MEANINGFUL_CHANGE"}]));
+        assert_eq!(added["result"]["has_semantic_changes"],true);
+        assert_eq!(added["result"]["is_style_only"],false);
+        assert_eq!(added["result"]["metadata"]["other"],1);
+        let modified = call("finalize_file_lifecycle", json!([diff, "modified"]));
+        assert_eq!(modified["result"]["change_groups"],diff["change_groups"]);
+        assert_eq!(call("infer_file_lifecycle", json!(["", "", "added"]))["result"], "added");
+        assert_eq!(call("infer_file_lifecycle", json!(["", "", null]))["result"], "modified");
+        assert_eq!(call("finalize_file_lifecycle", json!([diff, "nonsense"]))["ok"],false);
+    }
+
+    #[test]
+    fn migration_host_utils_have_one_tree_contract() {
+        let root = json!({"type":"comment","text":"comment","children":[]}).to_string();
+        assert_eq!(call("host_strip_trivia", json!([root,["comment"]])),json!({"ok":true,"result":null}));
+        let cst=json!({"type":"identifier","text":"café","children":[]}).to_string();
+        let semantic=json!({"node_type":"identifier","label":"café","children":[]}).to_string();
+        let a=call("host_structural_hash",json!([cst]));
+        let b=call("host_structural_hash",json!([semantic]));
+        assert_eq!(a["ok"],true,"{a}");
+        assert_eq!(a,b);
+        assert_eq!(call("host_structural_hash",json!(["{"]))["ok"],false);
+        assert_eq!(call("host_strip_trivia",json!(["{",[]]))["ok"],false);
+    }
     use super::*;
     use std::ffi::CString;
 
     fn call(name: &str, args: Value) -> Value {
         serde_json::from_str(&dispatch(name, args.as_array().unwrap())).unwrap()
+    }
+
+    #[test]
+    fn incomplete_parse_detection_and_bounds_use_the_abi() {
+        for (source, tree, language, expected) in [
+            ("def broken(", "{}", "python", true),
+            ("x = 1", "{}", "python", false),
+            ("", r#"{"children":[{"is_missing":true}]}"#, "javascript", true),
+            ("", r#"{"children":[{"node_type":"ERROR"}]}"#, "", true),
+        ] {
+            let env = call("parse_errors_present", json!([source, tree, language]));
+            assert_eq!(env["ok"], true);
+            assert_eq!(env["result"], expected);
+        }
+        assert_eq!(call("parse_errors_present", json!(["", "invalid", "js"]))["ok"], false);
+        assert_eq!(call("source_fallback_diff", json!([]))["ok"], false);
+        let too_big = "x".repeat(4 * 1024 * 1024 + 1);
+        assert_eq!(call("source_fallback_diff", json!([too_big, "", "a", "a", "js", "parse_errors"]))["ok"], false);
+    }
+
+    #[test]
+    fn incomplete_source_preserves_exact_bytes() {
+        for (old, new) in [
+            ("def broken(:\n x = \"hello  world\"\n", "def broken(:\n x = \"hello world\"\n"),
+            ("def broken(:\n    x = 1\n", "def broken(:\n  x = 1\n"),
+            ("é\r\n\"unterminated  ", "é\r\n\"unterminated "),
+            ("", "def broken("), ("def broken(", ""),
+        ] {
+            let env = call("source_fallback_diff", json!([old, new, "a.py", "a.py", "python", "parse_errors"]));
+            assert_eq!(env["ok"], true, "{env}");
+            let diff = &env["result"];
+            assert_eq!(diff["is_fallback"], true);
+            assert_eq!(diff["is_style_only"], false);
+            assert_eq!(diff["changes"].as_array().unwrap().len(), 1);
+            let range = &diff["metadata"]["source_ranges"];
+            let a = range["old_start_byte"].as_u64().unwrap() as usize;
+            let b = range["old_end_byte"].as_u64().unwrap() as usize;
+            let c = range["new_start_byte"].as_u64().unwrap() as usize;
+            let d = range["new_end_byte"].as_u64().unwrap() as usize;
+            assert_eq!(format!("{}{}{}", &old[..a], &new[c..d], &old[b..]), new);
+            assert_eq!(diff["change_groups"][0]["kind"], "MEANINGFUL_CHANGE");
+            assert_eq!(diff["metadata"]["engine_owner"], "rust");
+        }
+        let env = call("source_fallback_diff", json!(["x(", "x(", "a", "a", "python", "parse_errors"]));
+        assert_eq!(env["result"]["has_semantic_changes"], false);
+        assert_eq!(env["result"]["changes"], json!([]));
     }
 
     #[test]
@@ -894,6 +1173,68 @@ mod tests {
         assert!(env["result"].is_array());
     }
 
+
+    #[test]
+    fn lsp_source_aware_shapes_dispatch_and_check_required_sources() {
+        let n = json!({"position":{"start_line":0,"start_col":0,
+            "end_line":0,"end_col":5}});
+        let diagnostics = json!({"changes":[{"change_type":"STYLE_ONLY","new_node":n}],
+            "parse_errors":[]}).to_string();
+        let good = call("lsp_server_diagnostics_utf16", json!([diagnostics, "été\n"]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"][0]["range"]["end"]["character"], 3);
+        let missing = call("lsp_server_diagnostics_utf16", json!([diagnostics]));
+        assert_eq!(missing["ok"], false);
+
+        let before = json!({"position":{"start_line":0,"start_col":0,
+            "end_line":0,"end_col":4}});
+        let move_diff = json!({"changes":[{"change_type":"MOVE",
+            "new_node":null,"old_node":before}]}).to_string();
+        let lens = call("lsp_server_codelens_utf16", json!([move_diff,"🦣\n","été\n"]));
+        assert_eq!(lens["ok"], true);
+        assert_eq!(lens["result"][0]["range"]["end"]["character"], 2);
+        let bad = call("lsp_server_codelens_utf16", json!([move_diff,"a\n","été\n"]));
+        assert_eq!(bad["ok"], false);
+    }
+
+    #[test]
+    fn lsp_type_map_attachment_dispatches_over_c_abi_and_fails_closed() {
+        let tree = r#"{"id":"root","node_type":"module","children":[
+            {"id":"a","node_type":"identifier","children":[]},
+            {"id":"b","node_type":"identifier","children":[]}]}"#;
+        let good = call("lsp_attach_type_map", json!([tree, r#"{"a":"int"}"#]));
+        assert_eq!(good["ok"], true);
+        assert_eq!(good["result"]["children"][0]["type_info"], "int");
+        assert!(good["result"]["children"][1].get("type_info").is_none());
+
+        let missing = call("lsp_attach_type_map", json!([tree]));
+        assert_eq!(missing["ok"], false);
+        let malformed = call("lsp_attach_type_map", json!([tree, r#"{"a":null}"#]));
+        assert_eq!(malformed["ok"], false);
+        let bad_tree = call("lsp_attach_type_map", json!(["{}", "{}"]));
+        assert_eq!(bad_tree["ok"], false);
+    }
+
+
+    #[test]
+    fn lsp_utf16_range_dispatch_is_source_aware_and_fail_closed() {
+        let node = json!({"position": {
+            "start_line": 0, "start_col": 0, "end_line": 0, "end_col": 5,
+        }}).to_string();
+        let accepted = call("lsp_utf16_range", json!([node, "été\n"]));
+        assert_eq!(accepted["ok"], true);
+        assert_eq!(accepted["result"]["end"]["character"], 3);
+
+        let missing_source = call("lsp_utf16_range", json!([node]));
+        assert_eq!(missing_source["ok"], false);
+        let inside_codepoint = json!({"position": {
+            "start_line": 0, "start_col": 1, "end_line": 0, "end_col": 5,
+        }}).to_string();
+        let invalid = call("lsp_utf16_range", json!([inside_codepoint, "été\n"]));
+        assert_eq!(invalid["ok"], false);
+        assert_eq!(invalid["error_type"], "value_error");
+    }
+
     #[test]
     fn config_handlers_take_optional_args() {
         // No args (both None) -> engine defaults, valid JSON config.
@@ -909,6 +1250,73 @@ mod tests {
         let env = call("load_project_diff_config", json!([42]));
         assert_eq!(env["ok"], false);
         assert!(env["error"].as_str().unwrap().contains("start_path"));
+    }
+
+    #[test]
+    fn config_handlers_reject_unresolvable_physical_origin() {
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let source = std::env::temp_dir()
+            .join(format!("idf_cfg_absent_{}_{}", std::process::id(), nonce))
+            .join("missing-parent")
+            .join("file.py");
+        for handler in ["load_project_diff_config", "find_intentumdiff_config_path"] {
+            let env = call(handler, json!([source.to_str().unwrap(), null]));
+            assert_eq!(env["ok"], false, "{handler}: {env}");
+            assert_eq!(env["error_type"], "value_error");
+            assert!(
+                env["error"].as_str().unwrap().contains("cannot resolve project configuration search root"),
+                "{handler}: {env}"
+            );
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn config_abi_dangling_policy_link_never_becomes_empty_success() {
+        use std::os::unix::fs::symlink;
+
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!(
+            "idf_cabi_dangling_cfg_{}_{}", std::process::id(), nonce
+        ));
+        std::fs::create_dir_all(&root).unwrap();
+        let source = root.join("sample.py");
+        std::fs::write(&source, "value = 1\n").unwrap();
+        let policy = root.join("intentumdiff.yaml");
+        symlink(root.join("missing-target.yaml"), &policy).unwrap();
+        assert!(!policy.exists());
+        assert!(policy.symlink_metadata().is_ok());
+
+        // Discovery reports a present entry, even though the target cannot
+        // be opened; the load handler must then propagate a typed error.
+        let discovered = call(
+            "find_intentumdiff_config_path",
+            json!([source.to_str().unwrap(), null]),
+        );
+        assert_eq!(discovered["ok"], true, "{discovered}");
+        assert_eq!(
+            discovered["result"].as_str().unwrap(),
+            root.canonicalize().unwrap().join("intentumdiff.yaml").to_str().unwrap()
+        );
+        for args in [
+            json!([source.to_str().unwrap(), null]),
+            json!([null, policy.to_str().unwrap()]),
+        ] {
+            let env = call("load_project_diff_config", args);
+            assert_eq!(env["ok"], false, "{env}");
+            assert_eq!(env["error_type"], "value_error", "{env}");
+            assert!(
+                env["error"].as_str().unwrap().contains("intentumdiff.yaml"),
+                "{env}"
+            );
+        }
+        std::fs::remove_dir_all(root).unwrap();
     }
 
     #[test]
@@ -937,6 +1345,15 @@ mod tests {
         // Admin surface reaches the same warm store.
         let stats = call("cache_stats", json!([path, 30, 500]));
         assert_eq!(stats["result"]["diff_cache"]["count"], 1);
+
+        let filtered = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "b.py"]));
+        assert_eq!(filtered["ok"], true);
+        assert_eq!(filtered["result"][0]["key"], "k");
+        let missing = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 1, "*.rs"]));
+        assert_eq!(missing["result"], json!([]));
+        let invalid = call("cache_list_entries_filtered", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, "*"]));
+        assert_eq!(invalid["ok"], false);
+        assert_eq!(invalid["error_type"], "value_error");
 
         // A bad-limit list is a value_error (the store's ValueError parity).
         let bad = call("cache_list_entries", json!([path, 30, 500, "diff_cache", null, null, null, null, null, 0, false]));
@@ -1089,6 +1506,153 @@ mod tests {
     }
 
     #[test]
+    fn parser_availability_envelope() {
+        let result = call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "ARM64"]));
+        assert_eq!(result["ok"], true);
+        assert!(result["result"]["reason"].as_str().unwrap().contains("aborts the process"));
+        assert_eq!(result["result"]["unavailable"][0], "powershell");
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Darwin", "arm64"]))["result"]["reason"].is_null());
+        // Exact vetted PowerShell bytes are accepted only by the digest-aware
+        // API under pinned metered Wasmtime 48.0.7. Unknown bytes still fail closed.
+        let vetted = crate::parser_availability::METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256;
+        let candidate = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", vetted]));
+        assert_eq!(candidate["ok"], true);
+        assert!(candidate["result"]["reason"].is_null());
+        assert!(candidate["result"]["unavailable"].is_null());
+        let deny = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", ""]));
+        assert_eq!(deny["ok"], true);
+        assert_eq!(deny["result"]["unavailable"][0], "powershell");
+        let legacy_sha = "db4db1515d13b3f452057d0a6c3c659ae9b3b484ef3cb572c7a19d670981c30a";
+        let old = call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64", legacy_sha]));
+        assert_eq!(old["result"]["unavailable"][0], "powershell");
+        // Original four-argument API retains a strict refusal for unknown bytes.
+        assert!(call("parser_availability", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["result"]["reason"].is_string());
+        // Partial arguments never manufacture an 'allowed' result.
+        assert_eq!(call("parser_availability_with_digest", json!(["powershell", "deploy.ps1", "Windows", "arm64"]))["ok"], false);
+        let protected = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", ""]));
+        assert_eq!(protected["result"]["reason"].is_string(), true);
+        let vetted_component = call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64", vetted]));
+        assert!(vetted_component["result"]["reason"].is_null());
+        let non_powershell = call("parser_component_availability", json!(["python_parser.wasm", "Windows", "arm64", ""]));
+        assert!(non_powershell["result"]["reason"].is_null());
+        assert_eq!(call("parser_component_availability", json!(["powershell_parser.wasm", "Windows", "arm64"]))["ok"], false);
+    }
+
+    #[test]
+    fn parser_shortlist_envelope() {
+        let request = json!({"entries":[{"id":"python","languages":["python"],"extensions":[".py"]}],"query":{"filename":"x.py"}}).to_string();
+        let env = call("parser_candidate_shortlist", json!([request]));
+        assert_eq!(env["ok"], true); assert_eq!(env["result"], json!([0]));
+        let invalid = json!({"entries":[{"id":""}],"query":{}}).to_string();
+        assert_eq!(call("parser_candidate_shortlist", json!([invalid]))["ok"], false);
+    }
+
+    #[test]
+    fn ignore_rules_envelope() {
+        let request = json!({"files":[{"directory":"","content":"*.log\n"}],"paths":[{"path":"a.log"},{"path":"a.py"}]}).to_string();
+        let env = call("match_ignore_rules", json!([request]));
+        assert_eq!(env["ok"], true);
+        assert_eq!(env["result"], json!([true, false]));
+        let invalid = json!({"files":[],"paths":[{"path":"../escape"}]}).to_string();
+        assert_eq!(call("match_ignore_rules", json!([invalid]))["ok"], false);
+    }
+
+
+    #[test]
+    fn unsupported_diff_options_fail_instead_of_being_ignored() {
+        let tree = r#"{"id":"m","node_type":"module","label":"m",
+            "position":{"start_line":0,"start_col":0,"end_line":0,"end_col":1},
+            "structural_hash":"h","children":[]}"#;
+        for (key, value) in [
+            ("ignore_style", json!(false)), ("ignoreStyle", json!(false)),
+            ("detect_refactorings", json!(false)), ("detectRefactorings", json!(false)),
+            ("leaf_text_diff", json!(false)), ("leafTextDiff", json!(false)),
+            ("approx_move_threshold", json!(0.8)), ("approxMoveThreshold", json!(0.8)),
+            ("extra_trivia_types", json!(["identifier"])), ("extraTriviaTypes", json!(["identifier"])),
+            ("ignore_style", json!("true")), ("approx_move_threshold", json!(null)),
+            ("extra_trivia_types", json!("")),
+        ] {
+            let config = json!({key: value});
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config.to_string()]));
+            assert_eq!(result["ok"], false, "{key}: {result}");
+            assert_eq!(result["error_type"], "value_error", "{result}");
+            assert!(result["error"].as_str().unwrap().contains(key), "{result}");
+            let declined = call("diff_python_semantic_tree",
+                json!([tree, tree, "a.go", "a.go", "go", config.to_string()]));
+            assert_eq!(declined["ok"], false, "{declined}");
+            let legacy = call("diff_python_sources_stage11",
+                json!(["a", "b", "a.py", "a.py", "", config.to_string()]));
+            assert_eq!(legacy["ok"], false, "{legacy}");
+            assert!(legacy["error"].as_str().unwrap().contains(key), "{legacy}");
+            // Empty work and unsupported-language early exits must enforce the same contract.
+            for handler in ["diff_batch", "diff_batch_commit_json"] {
+                let request = json!({"files": [], "config": config}).to_string();
+                let result = call(handler, json!([request]));
+                assert_eq!(result["ok"], false, "{handler}: {result}");
+                assert!(result["error"].as_str().unwrap().contains(key), "{result}");
+            }
+            let request = json!({"language": "js", "config": config}).to_string();
+            assert_eq!(call("finalize_stage11", json!([request]))["ok"], false);
+        }
+        for config in [
+            json!({}),
+            json!({"ignore_style":true,"detect_refactorings":true,"leaf_text_diff":true,
+                "approx_move_threshold":0.4,"extra_trivia_types":[]}),
+            json!({"ignoreStyle":true,"detectRefactorings":true,"leafTextDiff":true,
+                "approxMoveThreshold":0.4,"extraTriviaTypes":[]}),
+        ] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config.to_string()]));
+            assert_eq!(result["ok"], true, "{result}");
+        }
+        // A default snake-case value must not hide an unsupported alias.
+        let config = r#"{"ignore_style":true,"ignoreStyle":false}"#;
+        assert_eq!(call("finalize_review", json!([tree,tree,"a","b","python",config]))["ok"], false);
+    }
+
+    #[test]
+    fn invalid_diff_configuration_never_becomes_default_success() {
+        let tree = r#"{"id":"m","node_type":"module","label":"m",
+            "position":{"start_line":0,"start_col":0,"end_line":0,"end_col":1},
+            "structural_hash":"h","children":[]}"#;
+        for config in ["{broken", "[]", "null", "true", r#"{"min_height":"2"}"#,
+            r#"{"max_nodes":-1}"#, r#"{"min_similarity":2}"#,
+            r#"{"collect_trace":"false"}"#, r#"{"pluginFuel":null}"#] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config]));
+            assert_eq!(result["ok"], false, "invalid config {config}: {result}");
+            assert!(result["error"].as_str().unwrap().contains("config"));
+        }
+        for config in ["{}", "", "  ", r#"{"minHeight":2,"minSimilarity":0.5,"collect_trace":false}"#] {
+            let result = call("finalize_review", json!([tree, tree, "a", "b", "python", config]));
+            assert_eq!(result["ok"], true, "valid config {config}: {result}");
+        }
+        // Unsupported-language declines still reject malformed configuration.
+        let request = json!({"language":"js", "config":[]}).to_string();
+        assert_eq!(call("finalize_stage11", json!([request]))["ok"], false);
+        // Missing parser manifests must not hide malformed live-review settings.
+        let result = call("live_diff_contents", json!([".", "x.py", "a=1", "a=2", "[]", ""]));
+        assert_eq!(result["ok"], false, "{result}");
+        assert!(result["error"].as_str().unwrap().contains("config"));
+        // Reusing the validated fallback flag must preserve valid unchanged batches.
+        for parallel in [false, true] {
+            let file = json!({"old_filename":"x.py","new_filename":"x.py", "language":"python",
+                "old_source":"x=1", "new_source":"x=1"});
+            let request = json!({"files":[file.clone(),file], "python_parser_backend":"native",
+                "parallel":parallel, "config":{"fallback_to_token_diff":false}}).to_string();
+            let result = call("diff_batch", json!([request]));
+            assert_eq!(result["ok"], true, "{result}");
+            assert_eq!(result["result"]["status"], "complete", "{result}");
+        }
+        // An empty batch cannot bypass validation and manufacture empty success.
+        for config in [json!([]), Value::Null, json!({"maxNodes":"bad"})] {
+            let request = json!({"files":[],"config":config}).to_string();
+            for handler in ["diff_batch", "diff_batch_commit_json"] {
+                let result = call(handler, json!([request]));
+                assert_eq!(result["ok"], false, "{handler}: {result}");
+            }
+        }
+    }
+
+    #[test]
     fn review_and_enrichment_seams_dispatch() {
         let tree = r#"{"id":"m","node_type":"module","label":"m",
             "position":{"start_line":0,"start_col":0,"end_line":9,"end_col":0},
@@ -1099,6 +1663,10 @@ mod tests {
             json!([tree, tree, "", "", "python", "{}"]),
         );
         assert_eq!(env["ok"], true);
+        assert_eq!(call("enrich_literal_labels", json!([tree, ""]))["ok"], true);
+        let equivalent = call("review_trees_equivalent", json!([tree, tree]));
+        assert_eq!(equivalent["ok"], true);
+        assert_eq!(equivalent["result"], true);
         // profile-label enrichment (optional identity_fields defaulting to null) round-trips.
         assert_eq!(
             call("enrich_profile_labels", json!([tree, "", "json", null]))["ok"],
@@ -1110,6 +1678,23 @@ mod tests {
         assert!(env["result"].is_object());
         // registering an empty XML-dialect set replaces with zero dialects.
         assert_eq!(call("register_user_xml_dialects", json!([[]]))["result"], 0);
+    }
+
+    #[test]
+    fn literal_enrichment_preserves_physical_lines_and_value_whitespace() {
+        let source = "a=\"\u{2028}\"; b=\" target \"\r\n";
+        let tree = json!({"id":"s", "node_type":"string", "label":"string",
+            "position":{"start_line":0,"start_col":11,"end_line":0,"end_col":21},
+            "structural_hash":"h","children":[]});
+        let result = call("enrich_literal_labels", json!([tree.to_string(), source]));
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["result"]["label"], " target ");
+        let mut changed = tree.clone();
+        changed["label"] = json!("a  b");
+        let mut original = tree;
+        original["label"] = json!("a b");
+        let eq = call("review_trees_equivalent", json!([original.to_string(), changed.to_string()]));
+        assert_eq!(eq["result"], false, "{eq}");
     }
 
     #[test]
@@ -1155,6 +1740,9 @@ mod tests {
 
     #[test]
     fn vcs_backend_ops_dispatch_over_the_abi() {
+        let env = call("p4_policy_path", json!(["/repo", "//depot/... "]));
+        assert_eq!(env["ok"], false);
+        assert!(env["error"].as_str().unwrap().contains("exact depot file"));
         // An unknown VCS is a clean error envelope from the ported impl (no git/hg/svn/p4 needed).
         let env = call("vcs_backend_resolve_root", json!(["mercurialish", "/repo"]));
         assert_eq!(env["ok"], false);
@@ -1271,5 +1859,49 @@ mod tests {
         assert_eq!(env["ok"], false);
         // A NULL/malformed call at the FFI boundary is classified bad_request.
         assert_eq!(env["error_type"], "bad_request");
+    }
+}
+
+#[cfg(test)]
+mod markdown_migration_tests {
+    use super::*;
+    #[test]
+    fn native_generic_markdown_reconciles_heading_rename() {
+        let diff=crate::native_generic_text_diff("generic","# Old\nsame\n","# New\nsame\n","a.md","a.md").unwrap();
+        assert!(diff["changes"].as_array().unwrap().iter().any(|c|c["description"].as_str().unwrap_or("").starts_with("Rename Markdown section")),"{diff}");
+    }
+    #[test]
+    fn fenced_examples_are_not_document_sections() {
+        assert!(crate::markdown_sections("```\n# Not a section\nvalue\n```\n","old").is_empty());
+    }
+}
+
+#[cfg(test)]
+mod migration_corpus {
+    use super::*;
+    #[test]
+    fn shared_markdown_output_validity_corpus() {
+        let cases:Value=serde_json::from_str(include_str!("../../../tests/fixtures/migration/markdown.json")).unwrap();
+        for case in cases.as_array().unwrap(){
+            let args=json!([case["old"],case["new"],"doc.md","doc.md"]);
+            let env:Value=serde_json::from_str(&dispatch("review_text",args.as_array().unwrap())).unwrap();
+            assert_eq!(env["ok"],true,"{}: {env}",case["id"]);
+            let diff=&env["result"];let changes=diff["changes"].as_array().unwrap();
+            let labels:Vec<&str>=changes.iter().flat_map(|c|[c["old_node"]["label"].as_str(),c["new_node"]["label"].as_str()]).flatten().collect();
+            for required in case["required_labels"].as_array().unwrap(){assert!(labels.contains(&required.as_str().unwrap()),"{} missing {required}: {diff}",case["id"]);}
+            if let Some(count)=case["exact_changes"].as_u64(){assert_eq!(changes.len() as u64,count,"{}",case["id"]);}
+            if let Some(count)=case["moves"].as_u64(){assert_eq!(changes.iter().filter(|c|c["change_type"]=="MOVE").count() as u64,count,"{}",case["id"]);}
+            assert_eq!(diff["has_semantic_changes"],true);assert_eq!(diff["is_style_only"],false);
+            if let Some(columns) = case["end_columns"].as_array() {
+                assert_eq!(changes[0]["old_node"]["position"]["end_col"], columns[0]);
+                assert_eq!(changes[0]["new_node"]["position"]["end_col"], columns[1]);
+            }
+            if case["forbid_ignored_style"] == true { assert!(diff["metadata"].get("ignored_style_changes").is_none(), "{diff}"); }
+            if let Some(forbidden) = case["forbidden_group_kinds"].as_array() {
+                for group in diff["change_groups"].as_array().unwrap() { assert!(!forbidden.contains(&group["kind"]), "{diff}"); }
+            }
+
+            for group in diff["change_groups"].as_array().unwrap(){for index in group["raw_change_indices"].as_array().unwrap(){assert!(index.as_u64().unwrap()<(changes.len() as u64));}}
+        }
     }
 }

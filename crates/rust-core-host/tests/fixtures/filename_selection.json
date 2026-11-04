@@ -1,0 +1,1076 @@
+[
+  {
+    "name": "initial-load",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [],
+    "expected": {
+      "kind": "load",
+      "index": 0
+    }
+  },
+  {
+    "name": "probe-request",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      }
+    ],
+    "expected": {
+      "kind": "probe",
+      "index": 0,
+      "sample": "def f(): pass"
+    }
+  },
+  {
+    "name": "specific-success",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 0,
+      "language": "python"
+    }
+  },
+  {
+    "name": "decline-to-generic",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": ""
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 1,
+        "language": "generic"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 1,
+      "language": "generic"
+    }
+  },
+  {
+    "name": "load-failure-to-generic",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "load_failed",
+        "index": 0,
+        "terminal": false
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 1,
+        "language": "generic"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 1,
+      "language": "generic"
+    }
+  },
+  {
+    "name": "fuel-terminal",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "load_failed",
+        "index": 0,
+        "terminal": true
+      }
+    ],
+    "expected": {
+      "kind": "failure",
+      "event": 0
+    }
+  },
+  {
+    "name": "probe-error-terminal",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "plugin_id": "py"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probe_failed",
+        "index": 0
+      }
+    ],
+    "expected": {
+      "kind": "failure",
+      "event": 1
+    }
+  },
+  {
+    "name": "explicit-decline",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "plugin_id": "py"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": ""
+      }
+    ],
+    "expected": {
+      "kind": "not_found",
+      "identity": "py"
+    }
+  },
+  {
+    "name": "strict-hint-absent",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "language_hint": "ruby",
+      "strict": true
+    },
+    "events": [],
+    "expected": {
+      "kind": "not_found",
+      "identity": "ruby"
+    }
+  },
+  {
+    "name": "non-strict-hint-fallback",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "language_hint": "ruby"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 0,
+      "language": "python"
+    }
+  },
+  {
+    "name": "explicit-hint-incompatible",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "plugin_id": "py",
+      "language_hint": "ruby"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      }
+    ],
+    "expected": {
+      "kind": "not_found",
+      "identity": "py"
+    }
+  },
+  {
+    "name": "unknown-plugin",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "plugin_id": "missing"
+    },
+    "events": [],
+    "expected": {
+      "kind": "not_found",
+      "identity": "missing"
+    }
+  },
+  {
+    "name": "hint-no-probe",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "language_hint": "python"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 0,
+      "language": "python"
+    }
+  },
+  {
+    "name": "undeclared-claim",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": "ruby"
+      }
+    ],
+    "error": "undeclared language"
+  },
+  {
+    "name": "out-of-order",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      }
+    ],
+    "error": "out-of-order"
+  },
+  {
+    "name": "unsolicited-after-result",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 0,
+        "language": "python"
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      }
+    ],
+    "error": "unsolicited"
+  },
+  {
+    "name": "allowlist-empty",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "aliases": [
+            "py"
+          ],
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "generic",
+          "aliases": [
+            "generic"
+          ],
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".txt"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass",
+      "allowed_plugins": []
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      }
+    ],
+    "expected": {
+      "kind": "not_found",
+      "identity": "unknown"
+    }
+  },
+  {
+    "name": "runtime-priority",
+    "request": {
+      "entries": [
+        {
+          "id": "a",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "b",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 1
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 200
+      },
+      {
+        "kind": "probed",
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 1,
+      "language": "python"
+    }
+  },
+  {
+    "name": "phase-fuel-stays-terminal",
+    "request": {
+      "entries": [
+        {
+          "id": "a",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "b",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        }
+      ],
+      "filename": "example.py",
+      "content": "def f(): pass"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 200
+      },
+      {
+        "kind": "load_failed",
+        "index": 1,
+        "terminal": true
+      }
+    ],
+    "expected": {
+      "kind": "failure",
+      "event": 1
+    }
+  },
+  {
+    "name": "runtime-generic-deferred",
+    "request": {
+      "entries": [
+        {
+          "id": "py",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "rb",
+          "languages": [
+            "ruby"
+          ],
+          "extensions": [
+            ".rb"
+          ]
+        }
+      ],
+      "filename": "x.py",
+      "content": "text"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 0,
+        "grammar_id": "generic",
+        "languages": [
+          "generic"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "ruby",
+        "languages": [
+          "ruby"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 1,
+        "language": "ruby"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 1,
+      "language": "ruby"
+    }
+  },
+  {
+    "name": "filename-generic-deferred",
+    "request": {
+      "entries": [
+        {
+          "id": "generic",
+          "languages": [
+            "generic"
+          ],
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "id": "py",
+          "languages": [
+            "python"
+          ],
+          "extensions": [
+            ".rb"
+          ]
+        }
+      ],
+      "filename": "x.py",
+      "content": "text"
+    },
+    "events": [
+      {
+        "kind": "loaded",
+        "index": 1,
+        "grammar_id": "python",
+        "languages": [
+          "python"
+        ],
+        "priority": 0
+      },
+      {
+        "kind": "probed",
+        "index": 1,
+        "language": "python"
+      }
+    ],
+    "expected": {
+      "kind": "selected",
+      "index": 1,
+      "language": "python"
+    }
+  }
+]

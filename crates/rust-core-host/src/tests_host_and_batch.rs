@@ -255,6 +255,9 @@ use crate::*;
         assert_eq!(payload["status"], COMPLETE);
         assert_eq!(payload["engine"], BATCH_ENGINE);
         assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        // A complete Rust response must own the guardrail array, including an empty one.
+        // The Python DTO adapter is required to reject an omitted inventory.
+        assert_eq!(payload["diffs"][0]["diff"]["guardrail_violations"], json!([]));
         assert_eq!(
             payload["diffs"][0]["diff"]["metadata"]["rust_core"]["engine"],
             BATCH_ENGINE
@@ -340,6 +343,9 @@ use crate::*;
         assert_eq!(payload["status"], COMPLETE);
         assert_eq!(payload["engine"], BATCH_ENGINE);
         assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        // A complete Rust response must own the guardrail array, including an empty one.
+        // The Python DTO adapter is required to reject an omitted inventory.
+        assert_eq!(payload["diffs"][0]["diff"]["guardrail_violations"], json!([]));
         assert_eq!(
             payload["diffs"][0]["diff"]["metadata"]["rust_core"]["status"],
             COMPLETE
@@ -810,12 +816,10 @@ use crate::*;
         let out = diff_batch(&request.to_string()).unwrap();
         let payload: Value = serde_json::from_str(&out).unwrap();
 
-        assert_eq!(payload["status"], FALLBACK);
-        assert_eq!(payload["diffs"][0]["status"], FALLBACK);
-        assert_eq!(
-            payload["diffs"][0]["reason"],
-            "parse errors require Python token fallback"
-        );
+        assert_eq!(payload["status"], COMPLETE);
+        assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        assert_eq!(payload["diffs"][0]["diff"]["is_fallback"], true);
+        assert_eq!(payload["diffs"][0]["diff"]["metadata"]["engine_owner"], "rust");
     }
     #[test]
     #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
@@ -1016,12 +1020,10 @@ use crate::*;
         let out = diff_batch(&request.to_string()).unwrap();
         let payload: Value = serde_json::from_str(&out).unwrap();
 
-        assert_eq!(payload["status"], FALLBACK);
-        assert_eq!(payload["diffs"][0]["status"], FALLBACK);
-        assert!(payload["diffs"][0]["reason"]
-            .as_str()
-            .unwrap()
-            .contains("parse errors require Python token fallback"));
+        assert_eq!(payload["status"], COMPLETE);
+        assert_eq!(payload["diffs"][0]["status"], COMPLETE);
+        assert_eq!(payload["diffs"][0]["diff"]["is_fallback"], true);
+        assert_eq!(payload["diffs"][0]["diff"]["metadata"]["engine_owner"], "rust");
     }
     #[test]
     fn path_enrichment_recovers_markup_labels_attributes_and_text() {

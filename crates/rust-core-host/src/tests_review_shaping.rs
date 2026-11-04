@@ -75,6 +75,38 @@ use crate::*;
         assert!(!sync_json.contains("async_function_def"));
     }
     #[test]
+    fn native_cst_hash_distinguishes_operator_tokens() {
+        // Oracle (Core #229): an operator token is behaviour, not trivia. `named_children`
+        // drops anonymous tokens (`+`, `-`, `<`, `and`, `+=`, ...), so these pairs hashed
+        // equal and the style-only shortcut reported a logic change as IGNORED_STYLE.
+        fn style_hash(source: &str) -> String {
+            let json = serialize_tree_json(&parse_python_tree(source).unwrap(), source).unwrap();
+            let trivia: Vec<String> = PYTHON_TRIVIA.iter().map(|t| (*t).to_owned()).collect();
+            semantic_hash_json(&strip_trivia_json(&json, &trivia).unwrap()).unwrap()
+        }
+        let pairs = [
+            ("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n"),
+            ("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a * b\n"),
+            ("def f(a, b):\n    return a < b\n", "def f(a, b):\n    return a > b\n"),
+            ("def f(a, b):\n    return a and b\n", "def f(a, b):\n    return a or b\n"),
+            ("x = 1\nx += 2\n", "x = 1\nx -= 2\n"),
+            ("def f(a, b):\n    return a is b\n", "def f(a, b):\n    return a is not b\n"),
+        ];
+        let mut failures = Vec::new();
+        for (old, new) in pairs {
+            if style_hash(old) == style_hash(new) {
+                failures.push(format!("{old:?} -> {new:?}"));
+            }
+        }
+        assert!(failures.is_empty(), "operator change hashed style-only-equal:\n{}", failures.join("\n"));
+
+        // Control: genuine layout/comment edits must STILL hash equal (the fix must not
+        // turn the style-only shortcut off).
+        let base = "def f(a, b):\n    return a + b\n";
+        assert_eq!(style_hash(base), style_hash("def f(a, b):\n    return a  +  b\n"));
+        assert_eq!(style_hash(base), style_hash("def f(a, b):\n    # sum\n    return a + b\n"));
+    }
+    #[test]
     fn paired_change_endpoints_suppress_duplicate_add_delete_drafts() {
         // Oracle scenario (issue #13): a promoted literal MODIFICATION must absorb the raw
         // ADDITION/DELETION drafts of the same nodes — one edit is reported exactly once.
@@ -396,7 +428,7 @@ use crate::*;
             addition_draft(&new_tree.children[0].children[0]),
         ];
         let mut finalization = PythonReviewFinalization::default();
-        finalize_python_review_drafts(&mut changes, &old_tree, &new_tree, "a", "b", &mut finalization, "python");
+        finalize_python_review_drafts(&mut changes, &old_tree, &new_tree, "a", "b", &mut finalization, "python", &[]);
 
         let surviving: Vec<&str> = changes.iter().map(|change| change.change_type).collect();
         assert!(

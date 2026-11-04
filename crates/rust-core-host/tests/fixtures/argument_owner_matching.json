@@ -1,0 +1,219 @@
+[
+  {
+    "name": "deleted unrelated call",
+    "old": "def f():\n    print(\"foo\")\n    return use(1)\n",
+    "new": "def f():\n    return use(2)\n",
+    "expected": [
+      [
+        "DELETION",
+        "expression_statement",
+        "expression_statement",
+        null,
+        null
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "inserted unrelated call",
+    "old": "def f():\n    return use(1)\n",
+    "new": "def f():\n    print(\"foo\")\n    return use(2)\n",
+    "expected": [
+      [
+        "ADDITION",
+        null,
+        null,
+        "expression_statement",
+        "expression_statement"
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "deleted same callee sibling",
+    "old": "def f():\n    use(\"foo\")\n    return use(1)\n",
+    "new": "def f():\n    return use(2)\n",
+    "expected": [
+      [
+        "DELETION",
+        "expression_statement",
+        "expression_statement",
+        null,
+        null
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "argument edit",
+    "old": "def f():\n    return use(1)\n",
+    "new": "def f():\n    return use(2)\n",
+    "expected": [
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "callee and argument edit",
+    "old": "def f():\n    return use(1)\n",
+    "new": "def f():\n    return consume(2)\n",
+    "expected": [
+      [
+        "MODIFICATION",
+        "identifier",
+        "use",
+        "identifier",
+        "consume"
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "callee rename",
+    "old": "def f():\n    return use(1)\n",
+    "new": "def f():\n    return consume(1)\n",
+    "expected": [
+      [
+        "MODIFICATION",
+        "identifier",
+        "use",
+        "identifier",
+        "consume"
+      ]
+    ]
+  },
+  {
+    "name": "nested keyword argument edit",
+    "old": "def f():\n    print(\"foo\")\n    return wrap(use(count=1))\n",
+    "new": "def f():\n    return wrap(use(count=2))\n",
+    "expected": [
+      [
+        "DELETION",
+        "expression_statement",
+        "expression_statement",
+        null,
+        null
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "moved function with edited call",
+    "old": "def f():\n    return use(1)\n\nclass C:\n    pass\n",
+    "new": "class C:\n    def f():\n        return use(2)\n",
+    "expected": [
+      [
+        "MOVE",
+        "function_definition",
+        "f",
+        "function_definition",
+        "f"
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ],
+      [
+        "DELETION",
+        "pass_statement",
+        "pass",
+        null,
+        null
+      ]
+    ]
+  },
+  {
+    "name": "deleted call and renamed survivor share leaves",
+    "old": "def f():\n    print(1)\n    return use(1)\n",
+    "new": "def f():\n    return consume(2)\n",
+    "expected": [
+      [
+        "DELETION",
+        "expression_statement",
+        "expression_statement",
+        null,
+        null
+      ],
+      [
+        "MODIFICATION",
+        "identifier",
+        "use",
+        "identifier",
+        "consume"
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  },
+  {
+    "name": "deleted arbitrary call and renamed survivor share leaves",
+    "old": "def f():\n    emit(1)\n    return use(1)\n",
+    "new": "def f():\n    return consume(2)\n",
+    "expected": [
+      [
+        "DELETION",
+        "expression_statement",
+        "expression_statement",
+        null,
+        null
+      ],
+      [
+        "MODIFICATION",
+        "identifier",
+        "use",
+        "identifier",
+        "consume"
+      ],
+      [
+        "MODIFICATION",
+        "integer",
+        "1",
+        "integer",
+        "2"
+      ]
+    ]
+  }
+]

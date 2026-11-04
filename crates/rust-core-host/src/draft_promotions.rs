@@ -215,6 +215,314 @@ pub(crate) fn node_id_in_subtree(node: &SemanticNode, ids: &HashSet<String>) -> 
             .any(|child| node_id_in_subtree(child, ids))
 }
 
+/// Clojure's real parser emits `list_lit` named defn forms, `vec_lit`
+/// parameter scopes, and `sym_lit` binders/references. Generic Python-like
+/// `identifier` promotion cannot recognise those and reports each binder and
+/// body use as DELETE+ADD (Core #192). This is a Rust-only, proof-gated repair:
+/// a continued unique named defn, identical syntax tree modulo a bijective
+/// fresh parameter rename, and actual old/new deleted/added binder endpoints.
+/// Never infer from arbitrary list/symbol nodes, permutations, capture,
+/// destructuring, multi-arity definitions or shadowing binders.
+pub(crate) fn promote_clojure_defn_parameter_renames<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+    language: &str,
+) {
+    if language != "clojure" {
+        return;
+    }
+
+    fn is_named_defn(node: &SemanticNode) -> bool {
+        node.node_type == "list_lit"
+            && !node.label.is_empty()
+            && node.children.iter().find(|child| child.node_type == "sym_lit")
+                .is_some_and(|head| matches!(head.label.as_str(), "defn" | "defn-"))
+    }
+
+    fn simple_params(form: &SemanticNode) -> Option<Vec<&SemanticNode>> {
+        let vectors: Vec<_> = form.children.iter()
+            .filter(|child| child.node_type == "vec_lit").collect();
+        if vectors.len() != 1 {
+            return None;
+        }
+        let params: Vec<_> = vectors[0].children.iter().collect();
+        if params.is_empty() || params.iter().any(|param| {
+            param.node_type != "sym_lit" || param.label.is_empty()
+                || param.label == "&" || param.label.contains('/')
+                || param.label.contains(':') || param.label.contains('.')
+        }) {
+            return None;
+        }
+        Some(params)
+    }
+
+    fn has_shadowing_binder(form: &SemanticNode) -> bool {
+        const SHADOWING: &[&str] = &[
+            "let", "let*", "letfn", "fn", "fn*", "loop", "loop*",
+            "binding", "for", "doseq", "if-let", "when-let",
+            "if-some", "when-some", "with-open", "as->", "catch",
+            "defn", "defn-",
+        ];
+        form.descendants().iter().any(|node| {
+            node.node_type == "list_lit"
+                && node.children.iter().find(|child| child.node_type == "sym_lit")
+                    .is_some_and(|head| SHADOWING.contains(&head.label.as_str()))
+        })
+    }
+
+    // Clojure quote forms carry symbols as DATA, not references to function
+    // parameters. Applying the rename map within (quote a), 'a or syntax
+    // quoting can turn a real literal change into a false pure refactoring.
+    // Until reference scopes are resolved by Rust, decline the whole
+    // promotion for quoted/reader-macro forms; retain the raw semantic edits.
+    fn has_quoted_data(form: &SemanticNode) -> bool {
+        const READER_QUOTES: &[&str] = &[
+            // Actual node types emitted by the pinned tree-sitter-clojure
+            // grammar, not just the older parser's childless whitelist.
+            "quoting_lit", "syn_quoting_lit", "unquoting_lit",
+            "unquote_splicing_lit", "var_quoting_lit",
+            // Retain compatibility with alternate/legacy CST shapes.
+            "quote_lit", "syn_quote_lit", "unquote_lit",
+            "var_lit",
+        ];
+        const SPECIAL_QUOTES: &[&str] = &[
+            "quote", "syntax-quote", "unquote", "unquote-splicing", "var",
+            // Clojure case test constants are *unevaluated literal data*,
+            // even when written as ordinary unquoted symbols. Renaming a
+            // binder cannot rewrite them as if they were bound references.
+            "case", "case*",
+        ];
+        form.descendants().iter().any(|node| {
+            READER_QUOTES.contains(&node.node_type.as_str())
+                || (node.node_type == "list_lit"
+                    && node.children.iter().find(|child| child.node_type == "sym_lit")
+                        .is_some_and(|head| {
+                            SPECIAL_QUOTES.contains(&head.label.as_str())
+                                // Java interop contains literal member names, not
+                                // bound references: (. object member), (.. ...),
+                                // shorthand (.member object), and doto clauses.
+                                || head.label.starts_with('.')
+                                || head.label == "doto"
+                                // A qualified or aliased `case` still treats its test
+                                // constants as literal data, never binder references.
+                                // Conservatively decline promotion for any such head.
+                                || head.label.rsplit_once('/')
+                                    .is_some_and(|(_, symbol)| matches!(symbol, "case" | "case*"))
+                        }))
+        })
+    }
+
+    fn equal_modulo_renames(
+        old: &SemanticNode, new: &SemanticNode, renames: &HashMap<String, String>,
+    ) -> bool {
+        if old.node_type != new.node_type || old.children.len() != new.children.len() {
+            return false;
+        }
+        let expected = if old.node_type == "sym_lit" {
+            renames.get(old.label.as_str()).map(String::as_str)
+                .unwrap_or(old.label.as_str())
+        } else {
+            old.label.as_str()
+        };
+        expected == new.label
+            && old.children.iter().zip(new.children.iter())
+                .all(|(a, b)| equal_modulo_renames(a, b, renames))
+    }
+
+    let old_defs: Vec<&SemanticNode> = old_tree.children.iter()
+        .filter(|node| is_named_defn(node)).collect();
+    let new_defs: Vec<&SemanticNode> = new_tree.children.iter()
+        .filter(|node| is_named_defn(node)).collect();
+    let mut covered_old: HashSet<String> = HashSet::new();
+    let mut covered_new: HashSet<String> = HashSet::new();
+    let mut promoted: Vec<ChangeDraft<'a>> = Vec::new();
+
+    for old_form in &old_defs {
+        // Duplicate defns or overloaded declarations are ambiguous: fail closed.
+        if old_defs.iter().filter(|candidate| candidate.label == old_form.label).count() != 1 {
+            continue;
+        }
+        let candidates: Vec<_> = new_defs.iter()
+            .filter(|candidate| candidate.label == old_form.label).collect();
+        if candidates.len() != 1 {
+            continue;
+        }
+        let new_form = *candidates[0];
+        if has_shadowing_binder(old_form) || has_shadowing_binder(new_form)
+            || has_quoted_data(old_form) || has_quoted_data(new_form)
+        {
+            continue;
+        }
+        let (Some(old_params), Some(new_params)) =
+            (simple_params(old_form), simple_params(new_form))
+        else {
+            continue;
+        };
+        if old_params.len() != new_params.len() {
+            continue;
+        }
+        let old_names: HashSet<&str> = old_params.iter().map(|n| n.label.as_str()).collect();
+        let new_names: HashSet<&str> = new_params.iter().map(|n| n.label.as_str()).collect();
+        if old_names.len() != old_params.len() || new_names.len() != new_params.len() {
+            continue;
+        }
+
+        let mut mapping: HashMap<String, String> = HashMap::new();
+        let mut pairs: Vec<(&SemanticNode, &SemanticNode)> = Vec::new();
+        let mut valid = true;
+        for (old, new) in old_params.iter().zip(new_params.iter()) {
+            if old.label == new.label {
+                continue;
+            }
+            // No permutation/capture: target must not be an old binder, and
+            // must not already occur free in the old function's body.
+            if old_names.contains(new.label.as_str())
+                || new_names.contains(old.label.as_str())
+                || old_form.descendants().iter().any(|node| {
+                    node.node_type == "sym_lit" && node.label == new.label
+                })
+            {
+                valid = false;
+                break;
+            }
+            mapping.insert(old.label.clone(), new.label.clone());
+            pairs.push((old, new));
+        }
+        if !valid || pairs.is_empty()
+            || !equal_modulo_renames(old_form, new_form, &mapping)
+        {
+            continue;
+        }
+        // Do not invent new reviews: require the actual parser/matcher to
+        // expose both sides of every old/new parameter change.
+        if !pairs.iter().all(|(old, new)| {
+            changes.iter().any(|c| c.change_type == "DELETION"
+                && c.old_node.is_some_and(|n| n.id == old.id))
+                && changes.iter().any(|c| c.change_type == "ADDITION"
+                    && c.new_node.is_some_and(|n| n.id == new.id))
+        }) {
+            continue;
+        }
+
+        covered_old.insert(old_form.id.clone());
+        covered_old.extend(old_form.descendants().iter().map(|n| n.id.clone()));
+        covered_new.insert(new_form.id.clone());
+        covered_new.extend(new_form.descendants().iter().map(|n| n.id.clone()));
+        for (old, new) in pairs {
+            promoted.push(ChangeDraft {
+                change_type: "REFACTORING",
+                old_node: Some(old),
+                new_node: Some(new),
+                old_index: None,
+                new_index: None,
+                confidence: 1.0,
+                description: format!("Rename variable '{}' -> '{}'", old.label, new.label),
+                refactoring_kind: Some("RENAME_VARIABLE"),
+                text_diff: None,
+            });
+        }
+    }
+    if promoted.is_empty() {
+        return;
+    }
+    // Safe only because EVERY node of each continued defn matched one-to-one
+    // structurally modulo the exact binder map. Other functions' edits survive.
+    changes.retain(|change| match change.change_type {
+        "DELETION" => !change.old_node.is_some_and(|node| covered_old.contains(node.id.as_str())),
+        "ADDITION" => !change.new_node.is_some_and(|node| covered_new.contains(node.id.as_str())),
+        _ => true,
+    });
+    changes.extend(promoted);
+}
+
+/// Clojure positional binders are not an unordered set: [a b] -> [b a]
+/// changes the function's argument contract even if a matcher discards all of
+/// the raw symbol churn. This pass runs *after* normal refinement so it only
+/// recovers otherwise missing edits; it never classifies permutations as renames.
+/// It is limited to unique, simple, named defn forms with the exact same set of
+/// distinct parameter symbols. Other symbol lists and destructuring are excluded.
+pub(crate) fn preserve_clojure_ordered_parameter_permutations<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+    language: &str,
+) {
+    if language != "clojure" {
+        return;
+    }
+    fn params(form: &SemanticNode) -> Option<&SemanticNode> {
+        if form.node_type != "list_lit" || form.label.is_empty()
+            || !form.children.iter().find(|child| child.node_type == "sym_lit")
+                .is_some_and(|head| matches!(head.label.as_str(), "defn" | "defn-"))
+        {
+            return None;
+        }
+        let mut vectors = form.children.iter().filter(|node| node.node_type == "vec_lit");
+        let vector = vectors.next()?;
+        if vectors.next().is_some() || vector.children.len() < 2
+            || vector.children.iter().any(|child| child.node_type != "sym_lit"
+                || child.label.is_empty() || child.label == "&"
+                || child.label.contains('/') || child.label.contains(':')
+                || child.label.contains('.'))
+        {
+            return None;
+        }
+        let unique: HashSet<&str> = vector.children.iter().map(|c| c.label.as_str()).collect();
+        if unique.len() != vector.children.len() {
+            return None;
+        }
+        Some(vector)
+    }
+    let old_defs: Vec<_> = old_tree.children.iter().filter(|form| params(form).is_some()).collect();
+    let new_defs: Vec<_> = new_tree.children.iter().filter(|form| params(form).is_some()).collect();
+    for old_form in &old_defs {
+        // Ambiguous duplicate definitions cannot establish the same callable.
+        if old_defs.iter().filter(|form| form.label == old_form.label).count() != 1 {
+            continue;
+        }
+        let candidates: Vec<_> = new_defs.iter().filter(|form| form.label == old_form.label).collect();
+        if candidates.len() != 1 {
+            continue;
+        }
+        let new_form = candidates[0];
+        let (Some(old_vec), Some(new_vec)) = (params(old_form), params(new_form)) else {
+            continue;
+        };
+        let old_names: Vec<&str> = old_vec.children.iter().map(|n| n.label.as_str()).collect();
+        let new_names: Vec<&str> = new_vec.children.iter().map(|n| n.label.as_str()).collect();
+        if old_names == new_names || old_names.len() != new_names.len()
+            || old_names.iter().copied().collect::<HashSet<_>>()
+                != new_names.iter().copied().collect::<HashSet<_>>()
+        {
+            continue;
+        }
+        let belongs_to = |node: &SemanticNode, vector: &SemanticNode| {
+            node.id == vector.id || node.id.strip_prefix(&vector.id)
+                .is_some_and(|tail| tail.starts_with('.'))
+        };
+        // An existing semantic edit of the parameter vector already carries
+        // the intent. Only recover a permutation when it was wholly lost.
+        if changes.iter().any(|change| {
+            change.old_node.is_some_and(|node| belongs_to(node, old_vec))
+                || change.new_node.is_some_and(|node| belongs_to(node, new_vec))
+        }) {
+            continue;
+        }
+        changes.push(ChangeDraft {
+            change_type: "MODIFICATION",
+            old_node: Some(old_vec),
+            new_node: Some(new_vec),
+            old_index: None,
+            new_index: None,
+            confidence: 1.0,
+            description: format!("Reorder formal parameters of '{}'", old_form.label),
+            refactoring_kind: None,
+            text_diff: None,
+        });
+    }
+}
+
 pub(crate) fn promote_parameter_identifier_modification_renames<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
     old_tree: &'a SemanticNode,
@@ -814,7 +1122,9 @@ pub(crate) fn source_line(source: &str, line: u32) -> Option<&str> {
     source.lines().nth(line as usize)
 }
 
-pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
+pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>, matching: &[MatchPair<'_>]) {
+    let paired: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let reverse: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let mut additions = Vec::new();
     let refactoring_label_pairs = refactoring_label_pairs(changes);
     for change in changes.iter() {
@@ -835,7 +1145,10 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             if !old_descendant.is_leaf() {
                 continue;
             }
-            let exact_new = new_descendants.get(old_descendant.id.as_str()).copied();
+            // Exact subtree ownership survives sibling reordering. Position IDs do not.
+            let partner_id = paired.get(old_descendant.id.as_str()).copied();
+            if partner_id.is_some_and(|id| !new_descendants.contains_key(id)) { continue; }
+            let exact_new = new_descendants.get(partner_id.unwrap_or(old_descendant.id.as_str())).copied();
             // The positional fallback only makes sense for SHAPE-PRESERVING edits: when the
             // two sides have different leaf counts (`return p` -> `return os.path.basename(p)`
             // is 1 leaf vs 4), pairing by index fabricates garbage like p -> os, and the
@@ -851,7 +1164,8 @@ pub(crate) fn promote_descendant_leaf_updates_drafts<'a>(changes: &mut Vec<Chang
             let Some(new_descendant) = loose_new else {
                 continue;
             };
-            if !new_descendant.is_leaf()
+            if reverse.get(new_descendant.id.as_str()).is_some_and(|id| *id != old_descendant.id.as_str())
+                || !new_descendant.is_leaf()
                 || old_descendant.node_type != new_descendant.node_type
                 || old_descendant.label == new_descendant.label
                 || refactoring_label_pairs
@@ -913,7 +1227,10 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
     old_tree: &'a SemanticNode,
     new_tree: &'a SemanticNode,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
+    let matched_old: HashMap<&str, &str> = matching.iter().map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let matched_new: HashMap<&str, &str> = matching.iter().map(|p| (p.new_node.id.as_str(), p.old_node.id.as_str())).collect();
     let refactoring_pairs = refactoring_label_pairs(changes);
     let new_by_id = all_descendant_node_refs_by_id(new_tree);
     // Keyed-data identity guard (issue #57 json/yaml): node ids are POSITION paths, so an
@@ -932,6 +1249,12 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
     };
     let old_refs_by_id = semantic_node_refs_by_id_with_root(old_tree);
     let new_refs_by_id = semantic_node_refs_by_id_with_root(new_tree);
+    // Existing paired edits own their endpoints. Positional fallback must not reuse
+    // a surviving call's edited argument for a leaf in a deleted preceding call.
+    let paired_old: HashSet<&str> = changes.iter().filter(|c| c.new_node.is_some())
+        .filter_map(|c| c.old_node.map(|n| n.id.as_str())).collect();
+    let paired_new: HashSet<&str> = changes.iter().filter(|c| c.old_node.is_some())
+        .filter_map(|c| c.new_node.map(|n| n.id.as_str())).collect();
     let mut additions = Vec::new();
     for old_node in old_tree.descendants() {
         if !old_node.is_leaf() || !matches!(old_node.node_type.as_str(), "string" | "integer") {
@@ -940,7 +1263,10 @@ pub(crate) fn promote_tree_leaf_value_updates_drafts<'a>(
         let Some(new_node) = new_by_id.get(old_node.id.as_str()).copied() else {
             continue;
         };
-        if !new_node.is_leaf()
+        if matched_old.get(old_node.id.as_str()).is_some_and(|id| *id != new_node.id.as_str())
+            || matched_new.get(new_node.id.as_str()).is_some_and(|id| *id != old_node.id.as_str())
+            || paired_old.contains(old_node.id.as_str()) || paired_new.contains(new_node.id.as_str())
+            || !new_node.is_leaf()
             || old_node.node_type != new_node.node_type
             || old_node.label == new_node.label
             || refactoring_pairs.contains(&(old_node.label.clone(), new_node.label.clone()))
@@ -1433,82 +1759,16 @@ pub(crate) fn suppress_add_delete_drafts_covered_by_pairings(changes: &mut Vec<C
 }
 
 pub(crate) fn suppress_deletions_covered_by_literal_modifications(changes: &mut Vec<ChangeDraft<'_>>) {
-    let mut covered_old_labels = HashSet::new();
-    for change in changes.iter() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let Some(old_node) = change.old_node else {
-            continue;
-        };
-        if !matches!(old_node.node_type.as_str(), "string" | "integer" | "float") {
-            continue;
-        }
-        covered_old_labels.insert(old_node.label.clone());
-        if let Some(decoded) = decode_simple_python_string(&old_node.label) {
-            covered_old_labels.insert(decoded);
-        }
-    }
-    if covered_old_labels.is_empty() {
-        return;
-    }
-    changes.retain(|change| {
-        if change.change_type != "DELETION" {
-            return true;
-        }
-        let Some(old_node) = change.old_node else {
-            return true;
-        };
-        // Never swallow the deletion of a whole named entity via label containment: a deleted
-        // function whose body merely CONTAINS a covered literal (e.g. `return 1` when some
-        // unrelated integer modification covers "1") is real removed code, not literal-edit
-        // residue (issue #31 — removed code became invisible to review).
-        if is_named_entity_type(old_node.node_type.as_str()) {
-            return true;
-        }
-        let labels = node_labels(Some(old_node));
-        !labels.iter().any(|label| {
-            covered_old_labels
-                .iter()
-                .any(|covered| !covered.is_empty() && (label == covered || label.contains(covered)))
-        })
-    });
-}
-
-pub(crate) fn promote_removed_print_call_deletions_from_source<'a>(
-    changes: &mut Vec<ChangeDraft<'a>>,
-    old_tree: &'a SemanticNode,
-    new_source: &str,
-) {
-    let mut additions = Vec::new();
-    for old_node in std::iter::once(old_tree).chain(old_tree.descendants()) {
-        if old_node.node_type != "expression_statement"
-            || change_has_node_id(changes, "DELETION", Some(old_node.id.as_str()), None)
-        {
-            continue;
-        }
-        let labels = node_labels(Some(old_node));
-        if !labels.iter().any(|label| label.contains("print"))
-            || !labels.iter().any(|label| label.contains("foo"))
-            || !labels.iter().any(|label| label.contains("host"))
-            || new_source.contains("print(\"foo\", host)")
-            || new_source.contains("print('foo', host)")
-        {
-            continue;
-        }
-        additions.push(ChangeDraft {
-            change_type: "DELETION",
-            old_node: Some(old_node),
-            new_node: None,
-            old_index: None,
-            new_index: None,
-            confidence: 1.0,
-            description: format!("Delete {}", format_node_ref(old_node)),
-            refactoring_kind: None,
-            text_diff: None,
-        });
-    }
-    changes.extend(additions);
+    let covered_old_ids: HashSet<String> = changes.iter()
+        .filter(|c| c.change_type == "MODIFICATION")
+        .filter_map(|c| c.old_node)
+        .filter(|n| matches!(n.node_type.as_str(), "string" | "integer" | "float"))
+        .map(|n| n.id.clone()).collect();
+    // Literal values are not identity: deleting print(1) remains meaningful when a
+    // different call changes 1 to 2. Only the actual edited literal is covered;
+    // an enclosing statement can contain additional code that really was deleted.
+    changes.retain(|change| change.change_type != "DELETION"
+        || !change.old_node.is_some_and(|n| covered_old_ids.contains(&n.id)));
 }
 
 pub(crate) fn promote_string_concat_to_fstring_modifications<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
@@ -1946,6 +2206,18 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     // subsequence of new sibling indices, walked in old order) are insertion shifts; the rest
     // genuinely moved and are promoted to MOVE drafts (mirroring the Python
     // ``_suppress_low_signal_reorders`` entity promotion).
+    let rename_pairs: HashSet<(String, String)> = changes.iter()
+        .filter(|c| c.refactoring_kind == Some("RENAME_SYMBOL"))
+        .filter_map(|c| Some((c.old_node?.id.clone(), c.new_node?.id.clone())))
+        .collect();
+    let same_identity = |old: &SemanticNode, new: &SemanticNode| {
+        old.node_type == new.node_type && (old.label == new.label
+            || rename_pairs.contains(&(old.id.clone(), new.id.clone())))
+    };
+    let inside_rename = |old: &SemanticNode, new: &SemanticNode| {
+        rename_pairs.iter().any(|(o, n)| old.id.starts_with(&format!("{o}."))
+            && new.id.starts_with(&format!("{n}.")))
+    };
     let before = changes.len();
     let mut group_members: HashMap<String, Vec<(usize, usize, usize)>> = HashMap::new();
     for (idx, change) in changes.iter().enumerate() {
@@ -1978,9 +2250,8 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                         || ct.contains("class")
                 })
         };
-        if old_node.node_type != new_node.node_type
-            || old_node.label != new_node.label
-            || !reorder_entity(old_node)
+        if !same_identity(old_node, new_node) || !(reorder_entity(old_node)
+            || old_node.node_type == "decorator" || inside_rename(old_node, new_node))
         {
             continue;
         }
@@ -2019,7 +2290,7 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         let same_identity = matches!(
             (change.old_node, change.new_node),
             (Some(old_node), Some(new_node))
-                if old_node.node_type == new_node.node_type && old_node.label == new_node.label
+                if same_identity(old_node, new_node)
         );
         if !same_identity {
             result.push(change);
@@ -2029,16 +2300,24 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             let old_node = change
                 .old_node
                 .expect("genuine mover reorder always carries both nodes");
+            // Reordering executable children within a renamed callable can change
+            // behavior (e.g. increment then multiply). The rename only owns its name.
+            let decorator_reorder = old_node.node_type == "decorator";
+            let behavior_reorder = decorator_reorder || change.new_node.is_some_and(|new_node|
+                inside_rename(old_node, new_node) && !is_named_entity_type(&old_node.node_type));
             let description = format!(
-                "Move {}('{}') from sibling {} to {}",
+                "{} {}('{}') from sibling {} to {}",
+                if decorator_reorder { "Reorder decorator" } else if behavior_reorder { "Reorder statement" } else { "Move" },
                 old_node.node_type,
                 old_node.label,
                 change.old_index.map(|i| i.to_string()).unwrap_or_default(),
                 change.new_index.map(|i| i.to_string()).unwrap_or_default(),
             );
-            promoted_indices.push(result.len());
+            if !behavior_reorder {
+                promoted_indices.push(result.len());
+            }
             result.push(ChangeDraft {
-                change_type: "MOVE",
+                change_type: if behavior_reorder { "MODIFICATION" } else { "MOVE" },
                 confidence: change.confidence.min(0.85),
                 description,
                 ..change
@@ -2050,4 +2329,69 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     let suppressed = before.saturating_sub(result.len());
     *changes = result;
     (suppressed, promoted_indices)
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "clojure_rename_source_tests.rs"]
+mod clojure_rename_source_tests;
+
+#[cfg(test)]
+mod clojure_interop_rename_tests {
+    use super::*;
+
+    fn node(id: &str, kind: &str, label: &str, children: Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode {
+            id: id.into(), node_type: kind.into(), label: label.into(), children,
+            position: NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            structural_hash: id.into(), parent_type: None, type_info: None, facts: None,
+        }
+    }
+
+    fn tree(binder: &str, head: &str, member: &str) -> SemanticNode {
+        node("root", "source", "", vec![node("def", "list_lit", "f", vec![
+            node("keyword", "sym_lit", "defn", vec![]),
+            node("name", "sym_lit", "f", vec![]),
+            node("params", "vec_lit", "", vec![node("binder", "sym_lit", binder, vec![])]),
+            node("body", "list_lit", "", vec![
+                node("head", "sym_lit", head, vec![]),
+                node("object", "sym_lit", binder, vec![]),
+                node("member", "sym_lit", member, vec![]),
+            ]),
+        ])])
+    }
+
+    fn edits<'a>(old: &'a SemanticNode, new: &'a SemanticNode) -> Vec<ChangeDraft<'a>> {
+        let mut edits = vec![];
+        for id in ["binder", "object", "member"] {
+            for (kind, tree) in [("DELETION", old), ("ADDITION", new)] {
+                let node = tree.descendants().into_iter().find(|n| n.id == id).unwrap();
+                edits.push(ChangeDraft { change_type: kind,
+                    old_node: if kind == "DELETION" { Some(node) } else { None },
+                    new_node: if kind == "ADDITION" { Some(node) } else { None },
+                    old_index: None, new_index: None, confidence: 1.0,
+                    description: String::new(), refactoring_kind: None, text_diff: None });
+            }
+        }
+        edits
+    }
+
+    #[test]
+    fn java_member_edits_survive_parameter_rename_promotion() {
+        let old = tree("getX", ".", "getX");
+        let new = tree("getY", ".", "getY");
+        let mut changes = edits(&old, &new);
+        promote_clojure_defn_parameter_renames(&mut changes, &old, &new, "clojure");
+        assert_eq!(changes.len(), 6, "member-name changes must not be consumed");
+        assert!(changes.iter().all(|c| c.refactoring_kind != Some("RENAME_VARIABLE")));
+    }
+
+    #[test]
+    fn ordinary_bound_references_still_promote() {
+        let old = tree("a", "+", "a");
+        let new = tree("x", "+", "x");
+        let mut changes = edits(&old, &new);
+        promote_clojure_defn_parameter_renames(&mut changes, &old, &new, "clojure");
+        assert_eq!(changes.len(), 1);
+        assert_eq!(changes[0].refactoring_kind, Some("RENAME_VARIABLE"));
+    }
 }

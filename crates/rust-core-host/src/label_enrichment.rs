@@ -80,14 +80,17 @@ pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> S
     if start_line >= source_lines.len() {
         return String::new();
     }
+    // Tree-sitter columns are UTF-8 BYTE offsets, not Unicode scalar indexes.
+    // Slicing by chars shifted every nested markup node after a non-ASCII
+    // character and silently lost meaningful XML text modifications.
     let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let chars: Vec<char> = line.chars().collect();
-        let from = from.unwrap_or(0).min(chars.len());
-        let to = to.unwrap_or(chars.len()).min(chars.len());
+        let from = from.unwrap_or(0).min(line.len());
+        let to = to.unwrap_or(line.len()).min(line.len());
         if from >= to {
             return String::new();
         }
-        chars[from..to].iter().collect()
+        // Invalid byte boundaries are not recoverable by char-index guessing.
+        line.get(from..to).unwrap_or("").to_string()
     };
     let end_line = pos.end_line as usize;
     if start_line == end_line {
@@ -207,15 +210,19 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
                 let region_start = j;
                 let mut k = j;
                 let mut ok = false;
+                let mut quote: Option<char> = None;
                 while k < chars.len() {
                     match chars[k] {
-                        '>' => {
+                        '"' | '\'' if quote.is_none() => quote = Some(chars[k]),
+                        c if quote == Some(c) => quote = None,
+                        '>' if quote.is_none() => {
                             ok = true;
                             break;
                         }
-                        '<' => break,
-                        _ => k += 1,
+                        '<' if quote.is_none() => break,
+                        _ => {}
                     }
+                    k += 1;
                 }
                 if ok {
                     let mut region: String = chars[region_start..k].iter().collect();
@@ -285,45 +292,52 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
     result
 }
 
+/// End of a markup opening tag, ignoring > within single or double quoted
+/// attributes. Offsets are UTF-8 bytes, matching Tree-sitter coordinates.
+fn markup_opening_tag_end(snippet: &str) -> Option<usize> {
+    let mut quote: Option<char> = None;
+    for (offset, ch) in snippet.char_indices() {
+        match ch {
+            '"' | '\'' if quote.is_none() => quote = Some(ch),
+            c if quote == Some(c) => quote = None,
+            '>' if quote.is_none() => return Some(offset + 1),
+            '<' if offset > 0 && quote.is_none() => return None,
+            _ => {}
+        }
+    }
+    None
+}
+
 /// python path_profiles._direct_markup_text: fullmatch `<tag ...> text </tag>` (text has
 /// no '<') or the CDATA variant; whitespace-compacted. Case-insensitive tag comparison.
+/// Use source-byte offsets throughout: Unicode case folding can change byte length.
 pub(crate) fn direct_markup_text(snippet: &str, tag_label: &str) -> String {
     let text = snippet.trim();
-    let lower = text.to_lowercase();
-    let tag = tag_label.to_lowercase();
-    let Some(rest) = lower.strip_prefix('<') else {
+    let Some(open_len) = markup_opening_tag_end(text) else {
         return String::new();
     };
-    let ws_trimmed = rest.len() - rest.trim_start().len();
-    let rest_trim = rest.trim_start();
-    let Some(after_tag) = rest_trim.strip_prefix(tag.as_str()) else {
+    let Some(opening) = text.get(1..open_len - 1) else {
         return String::new();
     };
-    let gt_rel = match after_tag.find('>') {
-        Some(idx)
-            if idx == 0 || after_tag[..idx].starts_with(|c: char| c.is_whitespace()) =>
-        {
-            idx
-        }
-        _ => return String::new(),
-    };
-    if after_tag[..gt_rel].contains('<') {
+    let opening = opening.trim_start();
+    let name_len = opening.find(char::is_whitespace).unwrap_or(opening.len());
+    let name = &opening[..name_len];
+    if name.to_lowercase() != tag_label.to_lowercase() || opening[name_len..].contains('<') {
         return String::new();
     }
-    let open_len = 1 + ws_trimmed + tag.len() + gt_rel + 1;
+
     let body_and_close = &text[open_len..];
-    let lower_body = &lower[open_len..];
-    let close_start = match lower_body.rfind("</") {
-        Some(idx) => idx,
-        None => return String::new(),
-    };
-    let closing = lower_body[close_start + 2..].trim_start();
-    let Some(after_close_tag) = closing.strip_prefix(tag.as_str()) else {
+    let Some(close_start) = body_and_close.rfind("</") else {
         return String::new();
     };
-    if after_close_tag.trim() != ">" {
+    let closing = body_and_close[close_start + 2..].trim_start();
+    let Some(closing_name) = closing.strip_suffix('>') else {
+        return String::new();
+    };
+    if closing_name.trim().to_lowercase() != tag_label.to_lowercase() {
         return String::new();
     }
+
     let content = body_and_close[..close_start].trim();
     if content.is_empty() {
         return String::new();
@@ -434,61 +448,82 @@ pub(crate) fn path_is_generic_label(label: &str, node_type: &str) -> bool {
         )
 }
 
-/// python path_profiles._style_items_from_source: line-parse a rule body into
-/// (type, label, value) items; `@include`/`@extend`; nested `{`; scss `&` replaced
-/// by the parent selector.
-pub(crate) fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<(String, String, String)> {
+// Style enrichment uses parser byte columns. Keep the exact slice and offsets
+// while deriving nodes; a parent's start is not a child's source location.
+fn style_source_slice(lines: &[&str], node: &SemanticNode) -> String {
+    let p = &node.position;
+    let Some(first) = lines.get(p.start_line as usize) else { return String::new() };
+    if p.start_line == p.end_line {
+        return first.get(p.start_col as usize..p.end_col as usize).unwrap_or("").to_string();
+    }
+    let Some(start) = first.get(p.start_col as usize..) else { return String::new() };
+    let mut parts = vec![start];
+    for line in p.start_line + 1..p.end_line {
+        let Some(text) = lines.get(line as usize) else { return String::new() };
+        parts.push(text);
+    }
+    let Some(end) = lines.get(p.end_line as usize).and_then(|line| line.get(..p.end_col as usize)) else { return String::new() };
+    parts.push(end);
+    parts.join("\n")
+}
+
+fn style_position(node: &SemanticNode, snippet: &str, range: std::ops::Range<usize>) -> NodePosition {
+    let point = |offset: usize| {
+        let prefix = &snippet[..offset];
+        let line = prefix.bytes().filter(|&b| b == b'\n').count() as u32;
+        let col = prefix.rfind('\n').map_or(node.position.start_col as usize + offset, |i| offset - i - 1);
+        (node.position.start_line + line, col as u32)
+    };
+    let (start_line, start_col) = point(range.start);
+    let (end_line, end_col) = point(range.end);
+    NodePosition { start_line, start_col, end_line, end_col }
+}
+
+struct StyleItem {
+    kind: String,
+    label: String,
+    value: String,
+    span: std::ops::Range<usize>,
+    value_span: std::ops::Range<usize>,
+}
+
+fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<StyleItem> {
     let body = match (snippet.find('{'), snippet.rfind('}')) {
         (Some(open), Some(close)) if close > open => &snippet[open + 1..close],
         _ => return Vec::new(),
     };
+    let range = |text: &str| {
+        let start = text.as_ptr() as usize - snippet.as_ptr() as usize;
+        start..start + text.len()
+    };
     let mut result = Vec::new();
+    let mut push = |kind: &str, label: String, value: &str, span: &str| {
+        result.push(StyleItem {
+            kind: kind.to_string(), label, value: value.to_string(), span: range(span),
+            value_span: if value.is_empty() { 0..0 } else { range(value) },
+        });
+    };
     for raw_line in body.lines() {
         let line = raw_line.trim();
-        if line.is_empty() || line == "}" {
-            continue;
-        }
+        if line.is_empty() || line == "}" { continue; }
         if let Some(rest) = line.strip_prefix("@include") {
-            let name = rest
-                .trim()
-                .split('(')
-                .next()
-                .unwrap_or("")
-                .trim_end_matches(';')
-                .trim();
-            if !name.is_empty() {
-                result.push(("include_statement".to_string(), name.to_string(), String::new()));
-            }
+            let name = rest.trim().split('(').next().unwrap_or("").trim_end_matches(';').trim();
+            if !name.is_empty() { push("include_statement", name.into(), "", line); }
             continue;
         }
         if let Some(rest) = line.strip_prefix("@extend") {
             let name = rest.trim().trim_end_matches(';').trim();
-            if !name.is_empty() {
-                result.push(("extend_statement".to_string(), name.to_string(), String::new()));
-            }
+            if !name.is_empty() { push("extend_statement", name.into(), "", line); }
             continue;
         }
         if let Some(brace) = line.find('{') {
             let selector = line[..brace].trim().replace('&', parent_selector);
-            if !selector.is_empty() {
-                result.push(("rule_set".to_string(), compact_ws(&selector), String::new()));
-            }
-            let nested_body = &line[brace + 1..];
-            if let Some(colon) = nested_body.find(':') {
-                let nested_property = nested_body[..colon].trim();
-                let nested_value = nested_body[colon + 1..]
-                    .split('}')
-                    .next()
-                    .unwrap_or("")
-                    .trim_end_matches(';')
-                    .trim();
-                if !nested_property.is_empty() {
-                    result.push((
-                        "declaration".to_string(),
-                        nested_property.to_string(),
-                        nested_value.to_string(),
-                    ));
-                }
+            if !selector.is_empty() { push("rule_set", compact_ws(&selector), "", line); }
+            let nested = line[brace + 1..].split('}').next().unwrap_or("").trim();
+            if let Some(colon) = nested.find(':') {
+                let name = nested[..colon].trim();
+                let value = nested[colon + 1..].trim_end_matches(';').trim();
+                if !name.is_empty() { push("declaration", name.into(), value, nested); }
             }
             continue;
         }
@@ -496,13 +531,7 @@ pub(crate) fn style_items_from_source(snippet: &str, parent_selector: &str) -> V
             if let Some(colon) = line.find(':') {
                 let name = line[..colon].trim();
                 let value = line[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() {
-                    result.push((
-                        "declaration".to_string(),
-                        name.to_string(),
-                        value.to_string(),
-                    ));
-                }
+                if !name.is_empty() { push("declaration", name.into(), value, line); }
             }
         }
     }
@@ -518,7 +547,7 @@ pub(crate) fn enrich_style_children(
 ) -> Vec<SemanticNode> {
     let node_type = node.node_type.to_lowercase();
     if matches!(node_type.as_str(), "declaration" | "variable_declaration") {
-        let snippet = path_source_slice(source_lines, node);
+        let snippet = style_source_slice(source_lines, node);
         let value = match snippet.find(':') {
             Some(colon) => snippet[colon + 1..].trim().trim_end_matches(';').trim().to_string(),
             None => String::new(),
@@ -528,11 +557,14 @@ pub(crate) fn enrich_style_children(
         {
             return children;
         }
+        let value_start = snippet.find(':').unwrap() + 1;
+        let value_start = value_start + snippet[value_start..].len() - snippet[value_start..].trim_start().len();
+        let value_position = style_position(node, &snippet, value_start..value_start + value.len());
         children.push(path_synthetic_node(
             format!("{}.path_value", node.id),
             "property_value",
             value,
-            path_synthetic_position(node),
+            value_position,
             Vec::new(),
         ));
         return children;
@@ -544,29 +576,29 @@ pub(crate) fn enrich_style_children(
         .iter()
         .map(|c| (c.node_type.clone(), c.label.clone()))
         .collect();
-    let snippet = path_source_slice(source_lines, node);
-    for (index, (item_type, item_label, item_value)) in
+    let snippet = style_source_slice(source_lines, node);
+    for (index, item) in
         style_items_from_source(&snippet, label).into_iter().enumerate()
     {
-        if existing.contains(&(item_type.clone(), item_label.clone())) {
+        if existing.contains(&(item.kind.clone(), item.label.clone())) {
             continue;
         }
-        let item_children = if item_value.is_empty() {
+        let item_children = if item.value.is_empty() {
             Vec::new()
         } else {
             vec![path_synthetic_node(
                 format!("{}.path_{}.value", node.id, index),
                 "property_value",
-                item_value,
-                path_synthetic_position(node),
+                item.value,
+                style_position(node, &snippet, item.value_span),
                 Vec::new(),
             )]
         };
         children.push(path_synthetic_node(
             format!("{}.path_{}", node.id, index),
-            &item_type,
-            item_label,
-            path_synthetic_position(node),
+            &item.kind,
+            item.label,
+            style_position(node, &snippet, item.span),
             item_children,
         ));
     }
@@ -702,6 +734,39 @@ pub(crate) fn enrich_markup_attributes(
     result
 }
 
+/// Locate the *source bytes* for a synthetic markup text child, rather than
+/// attributing the text mutation to a zero-width span at the element's start.
+/// The label may be whitespace-normalized or XML-entity-decoded, so searching
+/// for the final label would lose the original evidence range.
+fn markup_text_position(node: &SemanticNode, snippet: &str) -> Option<NodePosition> {
+    let open_end = markup_opening_tag_end(snippet)?;
+    let close_start = snippet.rfind("</")?;
+    if close_start <= open_end {
+        return None;
+    }
+    let raw = snippet.get(open_end..close_start)?;
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    let mut start = open_end + raw.len() - raw.trim_start().len();
+    let mut end = start + trimmed.len();
+    if trimmed.starts_with("<![CDATA[") && trimmed.ends_with("]]>") {
+        // Point at the actual CDATA content, not the <![CDATA[ delimiters.
+        start += "<![CDATA[".len();
+        end = end.checked_sub("]]>".len())?;
+        let inner = snippet.get(start..end)?;
+        start += inner.len() - inner.trim_start().len();
+        end -= inner.len() - inner.trim_end().len();
+    }
+    if start >= end {
+        return None;
+    }
+    // style_position is byte-based and translates multiline offsets to
+    // parser coordinates. It is appropriate for markup source slices too.
+    Some(style_position(node, snippet, start..end))
+}
+
 /// python path_profiles._enrich_markup_children: attributes + a synthetic `text` child
 /// so text-value changes surface as element-level MODIFICATIONs (xml decodes entities).
 pub(crate) fn enrich_markup_children(
@@ -735,7 +800,12 @@ pub(crate) fn enrich_markup_children(
         format!("{}.path_text", node.id),
         "text",
         text,
-        path_synthetic_position(node),
+        markup_text_position(node, &snippet).unwrap_or(NodePosition {
+            start_line: node.position.start_line,
+            start_col: node.position.start_col,
+            end_line: node.position.end_line,
+            end_col: node.position.end_col,
+        }),
         Vec::new(),
     ));
     children
@@ -754,53 +824,58 @@ pub(crate) fn enrich_mdx_children(
     if children.iter().any(|c| c.node_type == "code_content") {
         return children;
     }
-    let snippet = path_source_slice(source_lines, node);
-    let mut body = {
-        let lines: Vec<&str> = snippet.lines().collect();
-        if lines.len() >= 2 && lines[0].trim_start().starts_with("```") {
-            let inner: &[&str] = if lines[lines.len() - 1].trim_start().starts_with("```") {
-                &lines[1..lines.len() - 1]
-            } else {
-                &lines[1..]
-            };
-            inner
-                .iter()
-                .map(|l| l.trim_end())
-                .collect::<Vec<_>>()
-                .join("\n")
-                .trim()
-                .to_string()
-        } else {
-            String::new()
-        }
+    // Rust owns both the MDX code-body label and its source coordinates. A
+    // synthetic (opening_fence_row, 0)-(same_row, 0) extent incorrectly claimed
+    // the body had no source bytes; route equality cannot certify that (#206).
+    let opening = node.position.start_line as usize;
+    let closing = node.position.end_line as usize;
+    let Some(opening_line) = source_lines.get(opening) else {
+        return children;
     };
-    if body.is_empty() {
-        let start_line = node.position.start_line as usize;
-        if start_line < source_lines.len()
-            && source_lines[start_line].trim_start().starts_with("```")
-        {
-            let mut collected: Vec<String> = Vec::new();
-            for line in &source_lines[start_line + 1..] {
-                if line.trim_start().starts_with("```") {
-                    break;
-                }
-                collected.push(line.trim_end().to_string());
-            }
-            body = collected.join("\n").trim().to_string();
-        }
+    let fence = opening_line.trim_start();
+    if !(fence.starts_with("```") || fence.starts_with("~~~")) {
+        return children;
     }
+    // An unterminated fence ends on its final content row. Exclude that
+    // row only if it is a matching closing delimiter, not arbitrary code.
+    let delimiter = fence.as_bytes()[0];
+    let width = fence.bytes().take_while(|byte| *byte == delimiter).count();
+    let has_closing_fence = closing > opening && source_lines.get(closing).is_some_and(|line| {
+        let candidate = line.trim();
+        let closing_width = candidate.bytes().take_while(|byte| *byte == delimiter).count();
+        closing_width >= width && candidate[closing_width..].is_empty()
+    });
+    let body_end = if has_closing_fence { closing } else { closing.saturating_add(1) };
+    let Some(inner) = source_lines.get(opening + 1..body_end) else {
+        return children;
+    };
+    let body = inner.iter().map(|line| line.trim_end())
+        .collect::<Vec<_>>().join("\n").trim().to_string();
     if body.is_empty() {
         return children;
     }
+    let Some(first) = inner.iter().position(|line| !line.trim().is_empty()) else {
+        return children;
+    };
+    let Some(last) = inner.iter().rposition(|line| !line.trim().is_empty()) else {
+        return children;
+    };
+    let position = NodePosition {
+        start_line: (opening + 1 + first) as u32,
+        start_col: (inner[first].len() - inner[first].trim_start().len()) as u32,
+        end_line: (opening + 1 + last) as u32,
+        end_col: inner[last].trim_end().len() as u32,
+    };
     children.push(path_synthetic_node(
         format!("{}.path_code", node.id),
         "code_content",
         body,
-        path_synthetic_position(node),
+        position,
         Vec::new(),
     ));
     children
 }
+
 
 /// python path_profiles.enrich_path_profile_labels (issue #57 profile-enrichment port):
 /// recover css/scss selector + declaration labels, html/xml tag/attribute labels with
@@ -1248,4 +1323,298 @@ pub(crate) fn enrich_query_profile_labels_node(
     updated.label = label;
     updated.children = children;
     (updated, true)
+}
+
+#[cfg(test)]
+mod markup_text_span_tests {
+    use super::*;
+
+    #[test]
+    fn nested_xml_text_points_to_the_value_not_the_opening_tag() {
+        let source = "<root><value>1</value></root>";
+        let node = path_synthetic_node(
+            "0.0.0".into(), "element", "value".into(),
+            NodePosition { start_line: 0, start_col: 6, end_line: 0, end_col: 22 },
+            vec![],
+        );
+        let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "1");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (0, 13, 0, 14),
+        );
+    }
+
+    #[test]
+    fn multiline_xml_text_uses_source_line_and_indentation() {
+        let source = "<value>\n    alpha\n</value>";
+        let node = path_synthetic_node(
+            "0.0".into(), "element", "value".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 2, end_col: 8 },
+            vec![],
+        );
+        let lines: Vec<&str> = source.lines().collect();
+        let children = enrich_markup_children(&node, &lines, vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "alpha");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (1, 4, 1, 9),
+        );
+    }
+
+    #[test]
+    fn markup_after_unicode_prefix_keeps_meaningful_source_span() {
+        let source = "<root>é<value>1</value></root>";
+        let start = source.find("<value>").expect("nested value");
+        let end = start + "<value>1</value>".len();
+        let node = path_synthetic_node(
+            "0.0.0".into(), "element", "value".into(),
+            NodePosition {
+                start_line: 0, start_col: start as u32,
+                end_line: 0, end_col: end as u32,
+            }, vec![],
+        );
+        assert_eq!(path_source_slice(&[source], &node), "<value>1</value>");
+        let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+        let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+        assert_eq!(text.label, "1");
+        assert_eq!(
+            (text.position.start_line, text.position.start_col,
+             text.position.end_line, text.position.end_col),
+            (0, 15, 0, 16),
+        );
+    }
+
+    #[test]
+    fn quoted_gt_in_attribute_preserves_text_and_attribute_evidence() {
+        // Both are legal XML opening tags; the delimiter is the unquoted '>'.
+        // The non-ASCII capital dotted I also expands when lowercased, so
+        // calculating offsets from a lowercased copy corrupts UTF-8 spans.
+        for (source, value, attribute) in [
+            ("<value note=\"x>y\">1</value>", "1", "x>y"),
+            ("<value note=\"İ>y\">2</value>", "2", "İ>y"),
+            ("<value note='x>y'>3</value>", "3", "x>y"),
+        ] {
+            assert_eq!(direct_markup_text(source, "value"), value);
+            assert_eq!(
+                attributes_from_opening_tag(source),
+                vec![("note".to_string(), attribute.to_string())]
+            );
+            let node = path_synthetic_node(
+                "0.0".into(), "element", "value".into(),
+                NodePosition {
+                    start_line: 0, start_col: 0,
+                    end_line: 0, end_col: source.len() as u32,
+                },
+                vec![],
+            );
+            let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+            let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+            let expected_start = source.find(&format!(">{value}<")).unwrap() + 1;
+            assert_eq!(text.label, value);
+            assert_eq!(
+                (text.position.start_line, text.position.start_col,
+                 text.position.end_line, text.position.end_col),
+                (0, expected_start as u32, 0, (expected_start + value.len()) as u32),
+            );
+        }
+    }
+
+    #[test]
+    fn xml_entities_and_cdata_preserve_original_byte_ranges() {
+        for (source, label, start, end) in [
+            ("<value>A&amp;B</value>", "A&B", 7, 14),
+            ("<value><![CDATA[  one  ]]></value>", "one", 18, 21),
+            ("<value>café</value>", "café", 7, 12),
+        ] {
+            let node = path_synthetic_node(
+                "0.0".into(), "element", "value".into(),
+                NodePosition {
+                    start_line: 0, start_col: 0,
+                    end_line: 0, end_col: source.len() as u32,
+                },
+                vec![],
+            );
+            let children = enrich_markup_children(&node, &[source], vec![], "value", "xml");
+            let text = children.iter().find(|c| c.node_type == "text").expect("text child");
+            assert_eq!(text.label, label);
+            assert_eq!(
+                (text.position.start_line, text.position.start_col,
+                 text.position.end_line, text.position.end_col),
+                (0, start, 0, end),
+            );
+        }
+    }
+}
+
+#[cfg(test)]
+mod style_span_tests {
+    use super::*;
+
+    #[test]
+    fn style_children_point_to_declarations_values_and_nested_selectors() {
+        let source = ".button {\n  color: white;\n  padding: 8px 16px;\n  @include base;\n  &:hover { color: blue; }\n}";
+        let node = path_synthetic_node("0.0".into(), "rule_set", ".button".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 5, end_col: 1 }, vec![]);
+        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button");
+        let color = &children[0];
+        assert_eq!((color.position.start_line, color.position.start_col), (1, 2));
+        assert_eq!((color.position.end_line, color.position.end_col), (1, 15));
+        let value = &color.children[0];
+        assert_eq!((value.position.start_line, value.position.start_col, value.position.end_col), (1, 9, 14));
+        assert_eq!((children[2].position.start_line, children[2].position.start_col), (3, 2));
+        assert_eq!((children[3].position.start_line, children[3].position.start_col), (4, 2));
+        assert_eq!((children[4].position.start_line, children[4].position.start_col), (4, 12));
+    }
+
+    #[test]
+    fn style_value_span_uses_utf8_bytes_and_declaration_offset() {
+        let source = "é $name: café;";
+        let node = path_synthetic_node("0.0".into(), "declaration", "$name".into(),
+            NodePosition { start_line: 0, start_col: 3, end_line: 0, end_col: source.len() as u32 }, vec![]);
+        let children = enrich_style_children(&node, &[source], vec![], "$name");
+        assert_eq!(children[0].label, "café");
+        assert_eq!((children[0].position.start_col, children[0].position.end_col), (10, 15));
+    }
+}
+
+#[cfg(test)]
+mod mdx_code_body_source_span_tests {
+    use super::*;
+
+    fn fenced_node(lines: &[&str]) -> SemanticNode {
+        path_synthetic_node(
+            "0.0".into(), "code_block", "bash".into(),
+            NodePosition {
+                start_line: 0, start_col: 0,
+                end_line: (lines.len() - 1) as u32,
+                end_col: lines.last().map_or(0, |line| line.len() as u32),
+            },
+            vec![],
+        )
+    }
+
+    #[test]
+    fn code_content_is_anchored_to_actual_body_bytes_not_opening_fence() {
+        let lines = ["```bash", "npm install my-package", "```"];
+        let node = fenced_node(&lines);
+        let children = enrich_mdx_children(&node, &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        let body = &children[0];
+        assert_eq!(body.node_type, "code_content");
+        assert_eq!(body.label, "npm install my-package");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 0, 1, lines[1].len() as u32),
+        );
+    }
+
+    #[test]
+    fn code_content_multiline_utf8_span_tracks_original_indentation() {
+        let lines = ["```bash", "  echo café", "    echo 😀", "```"];
+        let node = fenced_node(&lines);
+        let children = enrich_mdx_children(&node, &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        let body = &children[0];
+        assert_eq!(body.label, "echo café\n    echo 😀");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 2, lines[2].len() as u32),
+        );
+    }
+
+    #[test]
+    fn unclosed_code_fences_retain_final_content_and_utf8_span() {
+        for lines in [
+            vec!["```bash", "echo hello"],
+            vec!["~~~bash", "echo first", "  echo café"],
+            vec!["````bash", "echo first", "```"],
+            vec!["```bash", "echo first", "~~~"],
+            vec!["```bash", "echo first", "```not a closing fence"],
+        ] {
+            let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+            assert_eq!(children.len(), 1, "{lines:?}");
+            let body = &children[0];
+            assert_eq!(body.label, lines[1..].join("\n"));
+            assert_eq!(body.position.start_line, 1);
+            assert_eq!(body.position.start_col, 0);
+            assert_eq!(body.position.end_line, (lines.len() - 1) as u32);
+            assert_eq!(body.position.end_col, lines.last().unwrap().len() as u32);
+        }
+    }
+
+    #[test]
+    fn matching_longer_closing_fence_is_excluded_from_content() {
+        let lines = ["~~~bash", "echo hello", "  ~~~~  "];
+        let children = enrich_mdx_children(&fenced_node(&lines), &lines, vec![]);
+        assert_eq!(children.len(), 1);
+        assert_eq!(children[0].label, "echo hello");
+        assert_eq!(children[0].position.end_line, 1);
+    }
+
+    #[test]
+    fn empty_code_fence_cannot_manufacture_content_evidence() {
+        let lines = ["```bash", "   ", "```"];
+        let node = fenced_node(&lines);
+        assert!(enrich_mdx_children(&node, &lines, vec![]).is_empty());
+    }
+}
+
+#[cfg(test)]
+mod mdx_unclosed_fence_regression_tests {
+    use super::*;
+
+    fn code_content(source: &str, end_line: u32) -> SemanticNode {
+        let lines: Vec<&str> = source.lines().collect();
+        let node = path_synthetic_node(
+            "0.0".into(), "code_block", String::new(),
+            NodePosition {
+                start_line: 0, start_col: 0,
+                end_line, end_col: lines[end_line as usize].len() as u32,
+            },
+            vec![],
+        );
+        enrich_mdx_children(&node, &lines, vec![])
+            .into_iter().find(|child| child.node_type == "code_content")
+            .expect("MDX body must survive enrichment")
+    }
+
+    #[test]
+    fn unclosed_single_line_body_at_eof_is_not_discarded() {
+        let body = code_content("```bash\necho hello", 1);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 0, 1, 10),
+        );
+    }
+
+    #[test]
+    fn unclosed_multiline_body_preserves_final_line_and_utf8_byte_spans() {
+        let body = code_content("```sh\n  echo hello\n  echo café", 2);
+        assert_eq!(body.label, "echo hello\n  echo café");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 2, 12),
+        );
+    }
+
+    #[test]
+    fn closed_fence_still_excludes_matching_delimiter_line() {
+        let body = code_content("````sh\n  echo hello\n````", 2);
+        assert_eq!(body.label, "echo hello");
+        assert_eq!(
+            (body.position.start_line, body.position.start_col,
+             body.position.end_line, body.position.end_col),
+            (1, 2, 1, 12),
+        );
+    }
 }

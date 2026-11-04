@@ -6,6 +6,25 @@ future language — drives the identical surface. Bindings do zero functional wo
 
 ## The two exports
 
+Semantic source positions use zero-based lines and UTF-8 byte columns, matching parser spans.
+Bindings must not reinterpret columns as character indices.
+
+Additional semantic helpers:
+
+| Handler | Positional arguments | Result |
+|---|---|---|
+| `reconstruct_patch` | request JSON string: patch_text, optional original_content/filename, require_complete | old/new content, filename, scope, optional warning |
+| `resolve_references` | definition-array JSON string, usage-array JSON string | usages with unique exact-name definition attached; ambiguity clears resolution |
+| `empty_semantic_tree` | language string | canonical empty source tree (native: `lifecycle::empty_tree`) |
+| `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
+| `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
+| `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
+| `enrich_literal_labels` | tree JSON string, source string | enriched tree |
+| `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
+
+These share the engine implementations used by native routes. Malformed trees return the
+normal error envelope. Equivalence preserves whitespace in string and character values.
+
 ```c
 char *intentumdiff_call(const char *name, const char *args_json);
 void  intentumdiff_free(char *ptr);
@@ -63,3 +82,292 @@ names with the `_json` suffix dropped (the two commit functions keep it).
 - Python: [`intentumdiff-python`](https://github.com/buchochelliq-labs/intentumdiff-python) (`src/intentumdiff/rust_core.py` — `_CtypesBackend`)
 - Go: [`intentumdiff-go`](https://github.com/buchochelliq-labs/intentumdiff-go)
 - Java: [`intentumdiff-java`](https://github.com/buchochelliq-labs/intentumdiff-java)
+
+### Incomplete-source review (core #21)
+
+`parse_errors_present(source, tree_json, language)` returns a boolean. It examines
+raw CST or semantic-tree error/missing markers; Python also uses the native parser
+because semantic plugins can prune those markers. Call before trivia equivalence.
+Malformed tree JSON is an error. Source is bounded to 4 MiB and tree JSON to 16 MiB.
+
+`source_fallback_diff(old_source, new_source, old_filename, new_filename, language,
+reason)` returns a complete diff with `is_fallback=true`. It compares exact UTF-8
+source, preserving indentation, line endings and literal whitespace. It emits one
+contiguous range spanning all edits (possibly including unchanged text between
+edits), found by equal character prefix/suffix. `metadata.source_ranges` contains
+exclusive UTF-8 byte offsets on each side; node positions use zero-based lines and
+byte columns. Node labels preview at most 160 characters, while ranges and hashes
+cover the entire changed region. Consumers retain original sources for full text.
+
+Changed input is review-worthy with confidence 0.5 and semantic equivalence unknown;
+it is never called refactoring or style-only. Identical input has no changes. The
+operation is linear and accepts at most 4 MiB per source. `reason=parse_errors`
+adds a parse diagnostic; other decline reasons do not invent parse failures.
+
+Native Python batches return `COMPLETE` with this fallback diff, rather than a
+control-plane `FALLBACK` request for a binding to perform comparison. The
+`fallback_to_token_diff` configuration name remains compatible but now selects
+Rust source comparison. `finalize_review` can likewise return `fallback_diff`;
+bindings must preserve that full payload and only attach filenames/lifecycle.
+
+Build provisioning searches up to ten pages of 100 successful workflow runs at
+the registry-pinned commit. GitHub-generated `dynamic/` jobs are ignored; they do
+not publish project parser artifacts. Commit and component-checksum checks remain
+mandatory. This prevents scheduled-job history from hiding a still-valid build
+(core #54); missing or expired artifacts still fail provisioning explicitly.
+
+## Shared-operation migration
+
+All handlers below retain the same `intentumdiff_call`/`intentumdiff_free` ownership
+and error envelope. Python wheels remain maturin/cffi; Go/Java need no Python runtime.
+
+| Handler | Positional arguments | Result |
+|---|---|---|
+| `review_text` | old source, new source, old filename, new filename | Complete plain-text/Markdown diff |
+| `reconcile_markdown` | presentation object, old source, new source, old filename, new filename, phase (`moves`, `renames`, `all`) | Presentation with changes, remapped groups, ignored-style evidence |
+| `infer_file_lifecycle` | old source, new source, optional status | `added`, `deleted`, or `modified`; explicit status takes precedence over empty contents |
+| `finalize_file_lifecycle` | diff object, lifecycle string | Diff with lifecycle metadata and final flags |
+| `host_strip_trivia` | tree JSON string, trivia string array, optional limits object | Tree object, or JSON null if root is trivia |
+| `host_structural_hash` | tree JSON string, optional limits object | Deterministic SHA-256 hex string |
+| `schema_profiles` | JSON-string request with operation | Operation-specific profile/schema result |
+| `compile_context` | request object: database array, database_path, filename, language, cwd | Context object or null for missing/ambiguous exact matches |
+
+`schema_profiles` operations and their typed equivalents are defined in the public
+`schema_profiles` module: `discover`, `provider`, `derive`, `parse_documents`,
+`validate`, `match`, and `resolve`. Descriptor errors are returned as diagnostics;
+malformed operation requests use the normal error envelope. Hosts fetch schema bytes;
+engine processing never fetches schemas over the network.
+
+Tree utility defaults cap JSON at 8 MiB, depth at 256 and visited JSON values at
+1,000,000; trivia limits are 1,024 names, 256 bytes/name and 64 KiB total. Callers may
+tighten these limits, never loosen the shared ceiling. Malformed trees fail explicitly.
+Compile context is metadata-only: no compiler is executed and flags do not alter
+semantic parsing. Exact paths use target-platform syntax; unrelated basenames never
+supply context. Two exact matches are ambiguous and return null.
+
+The supported native facade is `api::review_text` / `api::review_sources`, returning
+`Result<api::Review, api::ReviewError>`. Nodes, source positions and groups are typed;
+extensible attributes/metadata preserve unknown engine fields. Classification names
+are open strings for forward compatibility. `ReviewOptions::settings` accepts the
+same configuration keys as native live review. Lower-level Rust operations remain
+public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
+
+## Shared guardrail policy
+
+Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
+Hosts discover/read policy files; Rust interprets root `protected` and nested `guardrails.protected`
+forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
+Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
+Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
+It owns invariance suppression, generic/Markdown replacement, group indices, style decisions
+and evidence. Suppression of non-equivalent sources does not manufacture equivalence evidence.
+Partially retained meaningful groups describe only surviving changes; partially invalidated
+relationship classifications are discarded. Explicit non-final index spaces are preserved.
+
+Native Rust uses `symbol_index::{SymbolDefinition, ReferenceUsage, ReferencePosition, resolve_references}`.
+Resolution matches exact qualified names, never chooses arbitrarily between multiple definitions,
+and returns new DTOs without mutating the input usages. Python retains ordinary map lookup and
+DTO transport; it does not decide uniqueness. Malformed ABI arrays return errors.
+
+Native Rust hover selection is available as `lsp_enrich::collect_hover_targets`, shared
+with `lsp_collect_hover_targets`. Returned columns are semantic UTF-8 byte columns.
+Use `lsp_enrich::collect_utf16_hover_targets(tree, source)` or the
+`lsp_collect_utf16_hover_targets` ABI handler (tree JSON string, source string) to
+prepare UTF-16 protocol positions. Invalid source offsets and coordinate overflow
+return explicit errors. Python advertises UTF-16 and uses this converted API.
+Python selection failures must propagate; there is no Python semantic tree walker fallback.
+
+## Patch reconstruction
+
+Rust callers use `patch_source::reconstruct` and receive typed `PatchContent` with
+`ReconstructionScope::{Complete, Excerpt}`. Only one text file is supported. Hunk
+positions, context/deletions, line counts and final-newline boundaries are checked;
+there is no fuzzy relocation. Binary and multi-file patches fail explicitly.
+
+Without an original, ordinary modifications represent only contiguous visible
+content, not a proven complete file. The result labels this as `excerpt` and carries
+a warning. Unknown prefixes/internal gaps are errors; `require_complete=true`
+rejects excerpts. Creation/deletion headers establish the empty opposite side.
+Bindings must preserve this scope; Python exposes `is_partial` and warns on excerpts.
+
+Filename inference follows the conventional `a/` old and `b/` new header pair; creation `b/` and deletion `a/` headers use the same convention. Plain headers naming the same `a/` or `b/` directory preserve it. Single-sided headers can be ambiguous: provide an explicit filename to preserve a literal prefix.
+
+## Content routing
+
+`content_type::detect_content_type` is a supported native Rust API, also exposed as `detect_content_type` through the C ABI. Rust owns the 8192-byte sampling window and routing decision. This is leading-sample classification, not complete-file UTF-8 validation: an incomplete final code point is tolerated because a caller may supply a truncated sample. Literal U+FFFD is valid text; explicit invalid UTF-8 and NUL classify as binary. Required engine failures propagate in Python. Native Git probes and Python streaming review use this shared detector.
+
+## Ignore matching
+
+Native callers compile `ignore_rules::IgnoreRules::new(&[IgnoreFile])`, then call
+`is_ignored(path, is_dir)`. Each file supplies a repository-relative directory
+(empty for root) and complete raw contents. No filesystem or global Git config is
+consulted. Deeper rule files override parent matches, later lines take precedence,
+and an excluded parent prevents child reinclusion. Matching is case-sensitive;
+paths must be normalized relative POSIX paths, with no traversal/backslashes.
+
+C ABI `match_ignore_rules` takes one JSON string with `files` (directory/content)
+and `paths` (path/optional is_dir), returning booleans in input order. Invalid
+rules/paths fail explicitly. Python `DiffIgnore` takes raw text and optional
+`directory_rules` mapping; it retains only host file reads and DTO transport.
+This replaces its old test-oriented pathspec-object constructor. Neither matcher
+infers that a tracked deletion was caused by ignore rules.
+
+## Parser candidate planning
+
+Public `parser_routing::shortlist` accepts discovered `Candidate` descriptors and
+`RoutingQuery`, returning source indices. Explicit plugin identities/aliases take
+precedence over language filters, then filename matching. Unknown filenames leave
+all candidates eligible. Generic is always last, followed by descending declared
+priority and stable identity ties. Filenames accept either path separator and are
+matched case-insensitively. `filename_candidates` omits the no-match fallback.
+C ABI `parser_candidate_shortlist` takes JSON text with `entries` and `query`.
+Empty/duplicate identities are errors. This plans candidates; it does not assert
+successful component loading or capabilities. Python discovery has no declared
+priority and supplies zero, independent of cache warmth. Native manifest routing
+preserves its declared extension winner and now recognizes literal special names.
+Full load/probe decisions, returned-claim validation and content-only ranking
+remain tracked in #108.
+
+The Dockerfile source fixture compares complete changes/groups/semantic flags
+through native and Python APIs. Native omits optional null DTO fields; comparison
+deserializes both through the public SemanticDiff schema without discarding any
+change, node, group or evidence field.
+
+### Cache metadata filtering
+
+`cache_list_entries_filtered(path, ttl_days, max_mb, table, language, since,
+before, min_size, max_size, limit, file_glob)` delegates to the public Rust
+`cache_store::SqliteStore::list_entries_filtered` (also available through
+`cache_registry`). The existing `cache_list_entries` boolean-window operation
+remains available for compatibility; new bindings should use the filtered form.
+
+Rust applies language/time/size filters, then matches either old or new diff
+filename, then limits the result. Rows are ordered by `created_at DESC, key ASC`.
+Globs use case-sensitive fnmatch syntax on every platform: `*`, `?`, character
+classes and negation; separators are ordinary characters and backslash is not an
+escape. This intentionally removes the old Windows Python case normalization.
+Null/empty patterns and patterns on non-diff tables impose no filename filter.
+Limits must be positive. Only metadata is read; matching streams until the
+requested number of results is reached, without a finite over-fetch window.
+
+### Content detection policy
+
+`content_detection_plan(request_json)` and `content_detection_finish(input_json)`
+delegate to supported Rust `content_detection::{plan, finish}`. The request carries
+loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
+optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+`preferred_plugins` (language to plugin ID). A plan returns eligible source indices
+and a sample ending at the last complete UTF-8 character within 4096 bytes.
+
+Hosts execute those probes and pass `{request, observations}` to finish. Each
+observation has an index and a nullable language (null/empty means a genuine
+decline). Duplicate, missing, ineligible or unsupported claims fail explicitly.
+Probe errors, especially fuel exhaustion, must propagate from the host; they are
+not declines. Generic results always rank last, followed by preferred plugin,
+descending priority, language, grammar ID and plugin ID. Multiple plugins can
+produce separate results for one language. Confidence is reciprocal rank rounded
+to three decimal places with ties to even; it is not a measured probability.
+
+The outcome contains ordered result DTOs and `not_found` for an explicit plugin
+with no valid match. Python only invokes adapters, marshals DTOs and maps this
+no-match outcome to its public exception. This slice does not migrate the existing
+component loader or filename `detect_parser` failure/fallback policy (#108).
+
+### Filename selection actions
+
+`filename_selection_next({request, events})` accepts a JSON string and delegates
+to public Rust `filename_selection::next_action`. Request fields are catalogue
+`entries` (the candidate-planner DTO), `filename`, `content`, optional
+`old_content` (defaults to an empty string), optional
+`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+For comparisons, hosts send the new source in `content` and previous source in
+`old_content`. Rust probes the new source whenever it is nonempty (including
+whitespace); only an exactly empty new source uses `old_content`. Single-source
+callers may omit `old_content`. Bindings must not choose between the sources.
+Hosts may bound each transported head to 2048 Unicode characters; Rust still
+applies the authoritative UTF-8-safe 2048-byte bound below.
+Actions are tagged `load`, `probe`, `selected`, `not_found`, or `failure`.
+Hosts append exactly the requested `loaded`/`load_failed` or
+`probed`/`probe_failed` event and replay. Loaded metadata includes grammar ID,
+languages and priority. Failure actions identify the original host exception by
+its event index. Probe samples are complete UTF-8 prefixes of at most 2048 bytes.
+
+Hints precede filename candidates, other specific parsers, then generic. Strict
+hints and explicit plugin requests never cross their boundary. The existing
+non-explicit catalogue-hint alias of a generic component remains supported.
+Metadata for all candidates in the current phase is loaded before ranking by
+loaded priority and stable catalogue identity. A fuel/security denial during
+that phase is terminal even when another candidate might succeed. Later phases
+are not loaded after success. Ordinary load failures can fall through; probe
+failures and undeclared claims cannot. Hosts must mark security/fuel load errors
+terminal; Python uses typed exceptions, including `PluginSecurityError`, a
+backward-compatible `PluginLoadError` subtype.
+
+Events are bounded to twice the catalogue length and validated against the
+requested action; duplicate/out-of-order events and events after an outcome fail.
+The existing native bundled-manifest resolver has not yet adopted this protocol;
+its integration and broader inventory loading remain tracked in #108.
+
+`parser_availability(name, filename, system, machine)` returns an object with
+`reason` (string or null) and `unavailable` (`[parser, reason]` or null). It delegates
+to the public `parser_availability` Rust module. Hosts supply their OS/architecture;
+both Python discovery and native bundled discovery apply this policy before
+compiling components. This legacy four-argument operation always rejects
+PowerShell on Windows ARM64, because it cannot know which Wasm bytes will load.
+
+`parser_availability_with_digest(name, filename, system, machine, component_sha256)`
+is the compatible **new** operation for a host that has staged a component.
+The host performs permitted I/O to compute the lowercase or uppercase SHA-256
+of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
+policy and returns the same `reason`/`unavailable` shape. Only the component
+built and tested with fuel-enabled Wasmtime 48.0.7 on Windows ARM64 in
+PowerShell parser PR #5 (CI #40707156445; Core Rust API CI #40709266345)
+(SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
+may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
+digests **fail closed**, and earlier four-argument clients remain excluded.
+The digest is not a substitute for registry trust verification: hosts must
+check the signed/pinned source and checksum and must not rely on untrusted
+metadata as proof of bytes. Other OS/architecture availability is unchanged.
+This Rust policy is a migration gate pending broader core #183 preflight
+and final native/C ABI/Python semantic acceptance.
+
+`parser_component_availability(wasm_filename, system, machine, component_sha256)`
+is the raw-component loader guard. On Windows ARM64, a request for the standard
+`powershell_parser.wasm` component with an empty digest returns a Rust-owned
+restriction. A thin host can then hash the **actual bytes** and repeat the
+operation; only the vetted PowerShell artifact on pinned Wasmtime 48.0.7
+is allowed. Unrelated components
+have a null `reason`, so no whole-catalogue hashing is needed. A missing C ABI
+operation must **fail closed** rather than return a false success. The native
+Wasmtime loader checks the exact bytes and compiles those same bytes, preventing
+a check/reopen race on this guarded component. Other Wasm compiler aborts remain
+in scope of core #183 and are not certified by this special-case guard.
+
+
+### Human CLI presentation (Rust-owned)
+
+`render_cli_review(request_json: str) -> str` formats an already-authoritative
+`SemanticDiff` DTO using crates.io `rs-rich` 0.0.9. The public Rust entry point is
+`cli_presentation::render_cli_review_impl`. The request contains `diff`, `width`
+(16–300 columns), and `color` (boolean); hosts determine terminal width, honor
+`NO_COLOR`, and choose stdout/stderr. The returned string includes its final newline.
+No source parsing or semantic decisions occur here. Missing required diff flags or
+malformed inputs return errors, never an empty success. Human summaries, guardrails,
+change tables and explicit source-fallback warnings share this implementation;
+JSON/patch/HTML/LLM/SARIF exports do not pass through it. Strings are literal text,
+not rich markup, and terminal controls are escaped.
+
+
+### Compatibility-only diff configuration (0.0.2)
+
+The shared Rust diff configuration accepts the following compatibility fields only at
+their existing defaults: `ignore_style=true`, `detect_refactorings=true`,
+`leaf_text_diff=true`, `approx_move_threshold=0.4`, and `extra_trivia_types=[]`.
+Omitting them preserves current engine behavior. Non-default values and wrong JSON
+types produce a configuration error instead of being silently ignored. The camel-case
+spellings are checked too; a default in one spelling cannot hide an override in another.
+These fields do not yet provide configurable semantics. Possible support is tracked
+in #220–#224; the contract inventory is #214. Bindings forward values and errors;
+they must not implement substitute behavior.

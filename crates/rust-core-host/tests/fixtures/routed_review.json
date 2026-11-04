@@ -1,0 +1,257 @@
+[
+  {
+    "name": "generic_real_edit",
+    "request": {
+      "old_filename": "a.txt",
+      "new_filename": "a.txt",
+      "language": "generic",
+      "old_source": "old\n",
+      "new_source": "new\n",
+      "finalized": {
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              42
+            ]
+          }
+        ],
+        "is_style_only": true
+      }
+    },
+    "semantic": true,
+    "style": false,
+    "changes": 1
+  },
+  {
+    "name": "suppressed_non_equivalence",
+    "request": {
+      "old_filename": "a.py",
+      "new_filename": "a.py",
+      "language": "python",
+      "old_source": "pass",
+      "new_source": "print(1)",
+      "finalized": {
+        "changes": [],
+        "change_groups": [],
+        "is_style_only": false
+      },
+      "old_tree": {
+        "id": "pass",
+        "node_type": "identifier",
+        "label": "pass",
+        "children": [],
+        "structural_hash": "pass",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 1
+        }
+      },
+      "new_tree": {
+        "id": "print",
+        "node_type": "identifier",
+        "label": "print",
+        "children": [],
+        "structural_hash": "print",
+        "position": {
+          "start_line": 0,
+          "start_col": 0,
+          "end_line": 0,
+          "end_col": 1
+        }
+      }
+    },
+    "semantic": false,
+    "style": false,
+    "changes": 0,
+    "no_style_evidence": true
+  },
+  {
+    "name": "mixed_meaningful_group",
+    "request": {
+      "language": "python",
+      "old_source": "[1, 2]",
+      "new_source": "[0x1, 3]",
+      "old_filename": "a.py",
+      "new_filename": "a.py",
+      "old_tree": {
+        "id": "old",
+        "node_type": "module",
+        "label": "",
+        "structural_hash": "old",
+        "position": {
+          "start_line": 0,
+          "end_line": 0,
+          "start_col": 0,
+          "end_col": 6
+        },
+        "children": [
+          {
+            "id": "a",
+            "node_type": "integer",
+            "label": "1",
+            "children": [],
+            "structural_hash": "1",
+            "position": {
+              "start_line": 0,
+              "start_col": 1,
+              "end_line": 0,
+              "end_col": 2
+            }
+          },
+          {
+            "id": "c",
+            "node_type": "integer",
+            "label": "2",
+            "children": [],
+            "structural_hash": "2",
+            "position": {
+              "start_line": 0,
+              "start_col": 4,
+              "end_line": 0,
+              "end_col": 5
+            }
+          }
+        ]
+      },
+      "new_tree": {
+        "id": "new",
+        "node_type": "module",
+        "label": "",
+        "structural_hash": "new",
+        "position": {
+          "start_line": 0,
+          "end_line": 0,
+          "start_col": 0,
+          "end_col": 8
+        },
+        "children": [
+          {
+            "id": "b",
+            "node_type": "integer",
+            "label": "0x1",
+            "children": [],
+            "structural_hash": "0x1",
+            "position": {
+              "start_line": 0,
+              "start_col": 1,
+              "end_line": 0,
+              "end_col": 4
+            }
+          },
+          {
+            "id": "d",
+            "node_type": "integer",
+            "label": "3",
+            "children": [],
+            "structural_hash": "3",
+            "position": {
+              "start_line": 0,
+              "start_col": 6,
+              "end_line": 0,
+              "end_col": 7
+            }
+          }
+        ]
+      },
+      "finalized": {
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "a",
+              "node_type": "integer",
+              "label": "1",
+              "children": [],
+              "structural_hash": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 1,
+                "end_line": 0,
+                "end_col": 2
+              }
+            },
+            "new_node": {
+              "id": "b",
+              "node_type": "integer",
+              "label": "0x1",
+              "children": [],
+              "structural_hash": "0x1",
+              "position": {
+                "start_line": 0,
+                "start_col": 1,
+                "end_line": 0,
+                "end_col": 4
+              }
+            }
+          },
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "c",
+              "node_type": "integer",
+              "label": "2",
+              "children": [],
+              "structural_hash": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 4,
+                "end_line": 0,
+                "end_col": 5
+              }
+            },
+            "new_node": {
+              "id": "d",
+              "node_type": "integer",
+              "label": "3",
+              "children": [],
+              "structural_hash": "3",
+              "position": {
+                "start_line": 0,
+                "start_col": 6,
+                "end_line": 0,
+                "end_col": 7
+              }
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0,
+              1
+            ],
+            "rule_id": "mixed",
+            "old_labels": [
+              "1",
+              "2"
+            ],
+            "new_labels": [
+              "0x1",
+              "3"
+            ],
+            "old_node_ids": [
+              "a",
+              "c"
+            ],
+            "new_node_ids": [
+              "b",
+              "d"
+            ]
+          }
+        ],
+        "is_style_only": false
+      }
+    },
+    "semantic": true,
+    "style": false,
+    "changes": 1,
+    "meaningful_indices": [
+      0
+    ]
+  }
+]

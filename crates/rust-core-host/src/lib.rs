@@ -1,3 +1,12 @@
+mod source_fallback;
+mod operator_tokens;
+
+/// Batch decline reason when the trivia-filtered CSTs hash equal (a style-only edit). The
+/// certified batch leaves style-only presentation to the caller; the native live server serves
+/// it through the routed review assembly (live-server#24).
+pub(crate) const STYLE_ONLY_NOT_CERTIFIED: &str =
+    "style-only changed file is not certified for Rust product path";
+pub mod cli_presentation;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
 use serde::{Deserialize, Serialize};
@@ -30,8 +39,19 @@ mod registry;
 // pub: the live-server protocol + handler impls are the engine's binding-independent public
 // API — the native live-server binary (crates/live-server, #100) links them feature-off.
 pub mod c_abi;
+pub mod api;
+pub mod lifecycle;
+pub mod compile_context;
+pub mod schema_profiles;
+mod schema_context;
+pub mod host_utils;
+pub mod guardrail_policy;
+pub mod routed_review;
+pub mod patch_source;
+/// Shared typed symbol/reference API for native Rust consumers.
+pub use index_engine_lib as symbol_index;
 pub mod live_server;
-mod lsp_enrich;
+pub mod lsp_enrich;
 pub mod lsp_server_shapes;
 mod parser_registry;
 mod vcs_backend;
@@ -39,7 +59,12 @@ mod cache_keys;
 pub mod cache_store;
 pub mod cache_registry;
 mod config;
-mod content_type;
+pub mod content_type;
+pub mod ignore_rules;
+pub mod parser_routing;
+pub mod parser_availability;
+pub mod content_detection;
+pub mod filename_selection;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const COMPLETE: &str = "complete";
@@ -155,7 +180,7 @@ pub(crate) fn diff_python_cst_impl(
     new_filename: &str,
     config_json: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old CST JSON", old_filtered_cst_json, config.max_cst_bytes)?;
     check_byte_limit("new CST JSON", new_filtered_cst_json, config.max_cst_bytes)?;
     let old_cst: CstNode =
@@ -242,7 +267,7 @@ fn diff_semantic_tree_impl(
     config_json: &str,
     engine_label: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     let mut old_tree: SemanticNode = serde_json::from_str(old_tree_json)
         .map_err(|exc| format!("old SemanticNode JSON: {exc}"))?;
     let mut new_tree: SemanticNode = serde_json::from_str(new_tree_json)
@@ -328,7 +353,7 @@ mod text_review_generic;
 use text_review_generic::*;
 
 
-mod markdown_review;
+pub mod markdown_review;
 use markdown_review::*;
 
 
@@ -1387,6 +1412,8 @@ fn augment_html_path_matching<'a>(
 // later unchanged values into bogus MODIFICATIONs, and a key reorder pairs by identity. The
 // adf/databricks/dbt keys are NOT ported: those languages are already routed-green without them.
 
+mod callable_renames;
+
 mod keyed_data;
 use keyed_data::*;
 
@@ -1406,13 +1433,28 @@ fn finalize_review_impl(
     language: &str,
     config_json: &str,
 ) -> Result<String, String> {
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     let mut old_tree: SemanticNode =
         serde_json::from_str(old_tree_json).map_err(|exc| format!("old tree: {exc}"))?;
     let mut new_tree: SemanticNode =
         serde_json::from_str(new_tree_json).map_err(|exc| format!("new tree: {exc}"))?;
     validate_unique_ids(&old_tree).map_err(|exc| format!("old tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new tree: {exc}"))?;
+    // #229 option A: parser components drop anonymous operator tokens, so recover them from
+    // the source between each operator node's children before any hash comparison or matching.
+    // Idempotent for trees whose labels already carry the operator. Retire with core#230.
+    operator_tokens::recover_operator_tokens(&mut old_tree, old_source, language);
+    operator_tokens::recover_operator_tokens(&mut new_tree, new_source, language);
+
+    if config.fallback_to_token_diff && (
+        source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
+        source_fallback::parse_errors_present_impl(new_source, new_tree_json, language)? == "true"
+    ) {
+        let diff = source_fallback::source_fallback_diff_impl(old_source, new_source, "", "", language, "parse_errors")?;
+        return Ok(json!({"used":true,"engine":"rust_source_fallback_v1", "changes":diff["changes"],
+            "change_groups":diff["change_groups"],"is_style_only":false,"no_surviving_changes":!diff["has_semantic_changes"].as_bool().unwrap_or(false),
+            "ignored_style_changes":[],"fallback_diff":diff}).to_string());
+    }
 
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
@@ -1420,14 +1462,37 @@ fn finalize_review_impl(
         return Ok(json!({"used": false, "reason": "tree_too_large"}).to_string());
     }
 
-    // File-lifecycle degenerate case (issue #57 payoff, empty-tree tier): an empty root on
-    // one side is a file add/delete, not a tree edit. The gumtree matcher would pair the two
-    // roots structurally and emit a bogus root MODIFICATION; the contract shape downstream
-    // lifecycle handling expects is the python-parity DELETION(old root) + ADDITION(new root)
-    // pair, which _apply_file_lifecycle_to_diff then interprets via file_lifecycle metadata.
-    if old_tree.children.is_empty() != new_tree.children.is_empty() {
-        let drafts = vec![
-            ChangeDraft {
+    // Enrich facts and resource labels before lifecycle serialization. Additions and
+    // deletions return early below, but must expose the same Rust-authored NodeFacts as
+    // ordinary edits and as the public Python route (Core #203).
+    // Resource-profile label enrichment (issue #39): fill resource/parameter identity labels
+    // from semantic children before matching so keys + review labels are stable. Only changes
+    // labels (not ids/structural_hash). No-op for non-resource languages.
+    if resource_profile_language(language) {
+        enrich_resource_profile_labels(&mut old_tree, language);
+        enrich_resource_profile_labels(&mut new_tree, language);
+    }
+    // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
+    enrich_tree_facts(&mut old_tree);
+    enrich_tree_facts(&mut new_tree);
+
+    // Source absence, not child count, determines a lifecycle boundary. Leaf trees
+    // may represent populated files. Never expose the empty placeholder as a change.
+    if old_source.is_empty() != new_source.is_empty() {
+        let drafts = if old_source.is_empty() {
+            vec![ChangeDraft {
+                change_type: "ADDITION",
+                old_node: None,
+                new_node: Some(&new_tree),
+                old_index: None,
+                new_index: None,
+                confidence: 1.0,
+                description: format!("Insert -> {}({:?})", new_tree.node_type, new_tree.label),
+                refactoring_kind: None,
+                text_diff: None,
+            }]
+        } else {
+            vec![ChangeDraft {
                 change_type: "DELETION",
                 old_node: Some(&old_tree),
                 new_node: None,
@@ -1437,22 +1502,8 @@ fn finalize_review_impl(
                 description: format!("Delete {}({:?})", old_tree.node_type, old_tree.label),
                 refactoring_kind: None,
                 text_diff: None,
-            },
-            ChangeDraft {
-                change_type: "ADDITION",
-                old_node: None,
-                new_node: Some(&new_tree),
-                old_index: None,
-                new_index: None,
-                confidence: 1.0,
-                description: format!(
-                    "Insert -> {}({:?})",
-                    new_tree.node_type, new_tree.label
-                ),
-                refactoring_kind: None,
-                text_diff: None,
-            },
-        ];
+            }]
+        };
         let serialized = serialize_change_drafts(&drafts);
         return Ok(json!({
             "used": true,
@@ -1467,26 +1518,17 @@ fn finalize_review_impl(
         .to_string());
     }
 
-    // Resource-profile label enrichment (issue #39): fill resource/parameter identity labels
-    // from semantic children before matching so keys + review labels are stable. Only changes
-    // labels (not ids/structural_hash). No-op for non-resource languages.
-    if resource_profile_language(language) {
-        enrich_resource_profile_labels(&mut old_tree, language);
-        enrich_resource_profile_labels(&mut new_tree, language);
-    }
-    // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
-    enrich_tree_facts(&mut old_tree);
-    enrich_tree_facts(&mut new_tree);
-
     if config.collect_trace {
         finalize_trace_start();
     }
-    let matching = compute_matching(
-        &old_tree,
-        &new_tree,
+    let matching = compute_matching_with_diagnostics_indexed(
+        &TreeIndex::new(&old_tree),
+        &TreeIndex::new(&new_tree),
         config.min_height,
         config.min_similarity,
-    );
+        false,
+        Some((old_source, new_source)),
+    ).pairs;
     // Entity-anchored matching (issue #57, anchors.py port): re-pair same-identity entities and
     // their stable descendants BEFORE the edit script — relocated content becomes MOVEs instead
     // of DELETE+ADD churn (mirrors the default path's differ.py stage ordering: entity →
@@ -1505,7 +1547,7 @@ fn finalize_review_impl(
     let matching = augment_resource_profile_matching(&old_tree, &new_tree, matching, language);
     // Statement-profile matching (issue #57 asm/bash/delphi): re-pair keyed statements by identity
     // so an operand-value edit is a MODIFICATION, not DELETE+ADD. No-op for other languages.
-    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language);
+    let matching = augment_statement_profile_matching(&old_tree, &new_tree, matching, language, Some((old_source, new_source)));
     // Query-profile matching (issue #57 sql): clauses/relations/fields pair by role + normalized
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
@@ -1531,7 +1573,7 @@ fn finalize_review_impl(
         } else {
             Vec::new()
         };
-    refine_candidate_drafts(&mut drafts, &matching, None, language);
+    refine_candidate_drafts(&mut drafts, &matching, None, language, Some((old_source, new_source)));
     // Statement-profile cross-key split (issue #57 bash): must run BEFORE finalize's parent/child
     // suppression turns the keyed statement pair into a leaf word MODIFICATION.
     split_cross_key_statement_modifications_drafts(&mut drafts, &old_tree, &new_tree, language);
@@ -1544,6 +1586,7 @@ fn finalize_review_impl(
         new_source,
         &mut finalization,
         language,
+        &matching,
     );
 
     // Language-gated presentation passes, mirroring python `presentation.py`'s
@@ -1619,13 +1662,7 @@ fn finalize_review_impl(
     let mut ignored_style_changes = finalization.ignored_style_changes;
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&drafts));
-    change_groups.extend(final_meaningful_groups_from_drafts(&drafts));
-    // Entity-anchored grouping (issue #57 abap): "GREET changed" for child modifications
-    // under a same-identity entity whose content changed.
-    change_groups.extend(entity_child_content_groups(&drafts, &old_tree, &new_tree));
-    // Changed-in-place entity surfacing (issue #57 graphql): a matched named entity whose body
-    // changed carries its label into a group even though only descendants appear as changes.
-    change_groups.extend(surface_changed_in_place_entity_groups(&drafts, &matching));
+    change_groups.extend(final_meaningful_groups_from_drafts(&drafts, &matching));
     if let Some((group, ignored)) = formatting_equivalence_group_drafts(&drafts, language) {
         change_groups.push(group);
         ignored_style_changes.push(ignored);
@@ -2089,6 +2126,15 @@ fn guardrail_file_matches(rule: &GuardrailRuleInput, old_filename: &str, new_fil
 
 /// python guardrails._evaluate_policy_rules: match a parsed policy's protected paths
 /// against the diff's changes and construct the violations.
+fn evaluate_guardrail_rules_checked(request: &GuardrailEvalRequest) -> Result<Vec<GuardrailViolationOutput>, String> {
+    let relevant = request.rules.iter().any(|rule| rule.language == request.language.to_lowercase()
+        && guardrail_file_matches(rule, &request.old_filename, &request.new_filename));
+    if relevant && (request.old_tree.is_none() || request.new_tree.is_none()) {
+        return Err("guardrail evaluation requires parsed trees for applicable rules".into());
+    }
+    Ok(evaluate_guardrail_rules(request))
+}
+
 fn evaluate_guardrail_rules(request: &GuardrailEvalRequest) -> Vec<GuardrailViolationOutput> {
     let language = request.language.to_lowercase();
     let file = if !request.new_filename.is_empty() {
@@ -2346,12 +2392,65 @@ struct RustCoreConfig {
     plugin_fuel: u64,
     profile_phases: bool,
     collect_trace: bool,
+    fallback_to_token_diff: bool,
 }
 
 impl RustCoreConfig {
-    fn from_json(raw: &str) -> Self {
-        let value: Value = serde_json::from_str(raw).unwrap_or(Value::Null);
-        Self {
+    fn from_json(raw: &str) -> Result<Self, String> {
+        // Empty config is the existing parse_to_tree default shorthand. Once
+        // supplied, every known field must be typed; malformed input is not {}.
+        let value: Value = if raw.trim().is_empty() {
+            json!({})
+        } else {
+            serde_json::from_str(raw).map_err(|error| format!("invalid diff config JSON: {error}"))?
+        };
+        let fields = value.as_object().ok_or("diff config must be a JSON object")?;
+        // Compatibility-only options retain their historical defaults. Their
+        // overrides are not implemented; accepting them would silently lie to
+        // native and binding callers. Validate both spellings independently so
+        // a default value cannot mask an unsupported alias.
+        for (keys, default) in [
+            (["ignore_style", "ignoreStyle"], json!(true)),
+            (["detect_refactorings", "detectRefactorings"], json!(true)),
+            (["leaf_text_diff", "leafTextDiff"], json!(true)),
+            (["approx_move_threshold", "approxMoveThreshold"], json!(0.4)),
+            (["extra_trivia_types", "extraTriviaTypes"], json!([])),
+        ] {
+            for key in keys {
+                if fields.get(key).is_some_and(|value| value != &default) {
+                    return Err(format!(
+                        "diff config {key} override is unsupported; omit it or use {default}"
+                    ));
+                }
+            }
+        }
+
+        for key in ["min_height", "minHeight", "max_nodes", "maxNodes",
+                    "max_cst_bytes", "maxCstBytes", "max_plugin_output_bytes", "maxPluginOutputBytes"] {
+            if let Some(value) = fields.get(key) {
+                if value.as_u64().and_then(|n| usize::try_from(n).ok()).is_none() {
+                    return Err(format!("diff config {key} must be a non-negative platform-sized integer"));
+                }
+            }
+        }
+        for key in ["min_similarity", "minSimilarity"] {
+            if let Some(value) = fields.get(key) {
+                if !value.as_f64().is_some_and(|n| n.is_finite() && (0.0..=1.0).contains(&n)) {
+                    return Err(format!("diff config {key} must be a number between 0 and 1"));
+                }
+            }
+        }
+        for key in ["plugin_fuel", "pluginFuel"] {
+            if fields.get(key).is_some_and(|value| value.as_i64().is_none()) {
+                return Err(format!("diff config {key} must be a signed integer"));
+            }
+        }
+        for key in ["profile_phases", "profilePhases", "collect_trace", "fallback_to_token_diff"] {
+            if fields.get(key).is_some_and(|value| !value.is_boolean()) {
+                return Err(format!("diff config {key} must be a boolean"));
+            }
+        }
+        Ok(Self {
             min_height: value
                 .get("min_height")
                 .or_else(|| value.get("minHeight"))
@@ -2362,6 +2461,7 @@ impl RustCoreConfig {
                 .or_else(|| value.get("minSimilarity"))
                 .and_then(Value::as_f64)
                 .unwrap_or(0.5),
+            fallback_to_token_diff: value.get("fallback_to_token_diff").and_then(Value::as_bool).unwrap_or(true),
             collect_trace: value
                 .get("collect_trace")
                 .and_then(Value::as_bool)
@@ -2393,7 +2493,7 @@ impl RustCoreConfig {
                 .or_else(|| value.get("profilePhases"))
                 .and_then(Value::as_bool)
                 .unwrap_or(true),
-        }
+        })
     }
 }
 
@@ -2424,6 +2524,10 @@ struct CstNode {
     end_col: u32,
     #[serde(default)]
     children: Vec<CstNode>,
+    /// Operator tokens of an operator-bearing node (#229). tree-sitter keeps them as anonymous
+    /// children, which `named_children` drops; without this `a + b` and `a - b` hash equal.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    operator: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -2484,6 +2588,9 @@ struct TreeIndex<'a> {
     parent: HashMap<&'a str, &'a str>,
     by_id: HashMap<&'a str, &'a SemanticNode>,
     children: HashMap<&'a str, Vec<&'a str>>,
+    // Pre-index child ordinals once. Matching duplicate leaves must not
+    // rescan every sibling list for every candidate (quadratic-to-cubic).
+    sibling_slot: HashMap<&'a str, usize>,
     heights: HashMap<&'a str, usize>,
     subtree_sizes: HashMap<&'a str, usize>,
     named_entities: Vec<&'a SemanticNode>,
@@ -2496,6 +2603,7 @@ impl<'a> TreeIndex<'a> {
             parent: HashMap::new(),
             by_id: HashMap::new(),
             children: HashMap::new(),
+            sibling_slot: HashMap::new(),
             heights: HashMap::new(),
             subtree_sizes: HashMap::new(),
             named_entities: Vec::new(),
@@ -2524,7 +2632,8 @@ impl<'a> TreeIndex<'a> {
         }
         let mut height = 0usize;
         let mut subtree_size = 1usize;
-        for child in &node.children {
+        for (slot, child) in node.children.iter().enumerate() {
+            self.sibling_slot.insert(child.id.as_str(), slot);
             let child_size = self.push_node(child, Some(node.id.as_str()));
             subtree_size += child_size;
             height = height.max(self.heights.get(child.id.as_str()).copied().unwrap_or(0) + 1);
@@ -2797,6 +2906,7 @@ impl PhaseProbe {
 }
 
 struct ParserHostState {
+    host_error: Option<String>,
     table: ResourceTable,
     ctx: WasiCtx,
 }
@@ -2814,6 +2924,7 @@ struct ParserComponentLookup {
 }
 
 struct WasmProcessPair {
+    calls: Vec<Value>,
     old_tree: String,
     new_tree: String,
     cache_hit: bool,
@@ -2826,6 +2937,7 @@ static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserCo
 impl ParserHostState {
     fn new() -> Self {
         Self {
+            host_error: None,
             table: ResourceTable::new(),
             ctx: WasiCtxBuilder::new().build(),
         }
@@ -2843,26 +2955,17 @@ impl WasiView for ParserHostState {
 
 impl parser_plugin::intentdiff::plugin::host_utils::Host for ParserHostState {
     fn strip_trivia(&mut self, cst_json: String, trivia_types: Vec<String>) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            return json!({"error": "host-utils input exceeds byte limit"}).to_string();
+        match host_utils::strip_trivia(&cst_json, &trivia_types, &host_utils::Limits::default()) {
+            Ok(value) => value.to_string(),
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        if let Err(detail) = check_trivia_type_limit(&trivia_types) {
-            return json!({"error": detail}).to_string();
-        }
-        strip_trivia_json(&cst_json, &trivia_types).unwrap_or(cst_json)
     }
 
     fn structural_hash(&mut self, cst_json: String) -> String {
-        if cst_json.as_bytes().len() > DEFAULT_MAX_CST_BYTES {
-            let mut hasher = Sha256::new();
-            hasher.update(b"host-utils input exceeds byte limit");
-            return hex::encode(hasher.finalize());
+        match host_utils::structural_hash(&cst_json, &host_utils::Limits::default()) {
+            Ok(value) => value,
+            Err(error) => { self.host_error = Some(error.clone()); json!({"error":error}).to_string() }
         }
-        semantic_hash_json(&cst_json).unwrap_or_else(|_| {
-            let mut hasher = Sha256::new();
-            hasher.update(cst_json.as_bytes());
-            hex::encode(hasher.finalize())
-        })
     }
 
     fn log(&mut self, _level: String, _message: String) {}
@@ -2890,7 +2993,7 @@ fn diff_python_sources_stage11_impl(
         return Err(format!("parser wasm path not found: {parser_wasm_path}"));
     }
 
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
     let mut probe = PhaseProbe::default();
@@ -3047,7 +3150,7 @@ fn diff_python_sources_final_impl(
         return Err(format!("parser wasm path not found: {parser_wasm_path}"));
     }
 
-    let config = RustCoreConfig::from_json(config_json);
+    let config = RustCoreConfig::from_json(config_json)?;
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
     let mut probe = PhaseProbe::default();
@@ -3075,10 +3178,12 @@ fn diff_python_sources_final_impl(
     let new_ts_tree = probe.measure("rust_tree_sitter_parse_new", || {
         parse_python_tree(new_source)
     })?;
-    if certified_product
+    if config.fallback_to_token_diff
         && (old_ts_tree.root_node().has_error() || new_ts_tree.root_node().has_error())
     {
-        return Err("parse errors require Python token fallback".to_owned());
+        let mut diff = source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors")?;
+        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle);
+        return Ok(diff);
     }
     let (
         mut old_tree,
@@ -3124,7 +3229,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
@@ -3214,7 +3319,7 @@ fn diff_python_sources_final_impl(
         if old_hash == new_hash {
             if certified_product {
                 return Err(
-                    "style-only changed file is not certified for Rust product path".to_owned(),
+                    STYLE_ONLY_NOT_CERTIFIED.to_owned(),
                 );
             }
             let phases = probe.phases();
@@ -3352,6 +3457,7 @@ fn diff_python_sources_final_impl(
             config.min_height,
             config.min_similarity,
             detailed_matching_diagnostics,
+            Some((old_source, new_source)),
         ))
     })?;
     let matching = matching_report.pairs;
@@ -3374,7 +3480,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
-    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python");
+    refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
     let review_finalization_started = probe.enabled().then(Instant::now);
@@ -3387,6 +3493,7 @@ fn diff_python_sources_final_impl(
         new_source,
         &mut review_finalization,
         "python",
+        &matching,
     );
     probe.push_elapsed(
         "rust_python_review_finalization",
@@ -3464,6 +3571,7 @@ fn diff_python_sources_final_impl(
 
     let mut change_groups = review_finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&change_report.drafts));
+    change_groups.extend(final_meaningful_groups_from_drafts(&change_report.drafts, &matching));
     let has_semantic_changes = !changes.is_empty();
     let phases = probe.phases();
     let mut diff = semantic_diff_payload(
@@ -3524,6 +3632,33 @@ fn diff_python_sources_final_impl(
         diff["metadata"]["ignored_style_changes"] =
             Value::Array(review_finalization.ignored_style_changes);
     }
+    // Certified and component routes share source-level invariance completion.
+    // In a mixed edit, equivalent literal spelling must not remain meaningful
+    // merely because another edit in the same entity changes behavior.
+    let completed = routed_review::complete(&json!({
+        "language":"python", "old_source":old_source, "new_source":new_source,
+        "old_filename":old_filename, "new_filename":new_filename,
+        "old_tree":old_tree, "new_tree":new_tree,
+        "finalized":{"changes":diff["changes"], "change_groups":diff["change_groups"],
+            "is_style_only":diff["is_style_only"],
+            "ignored_style_changes":diff["metadata"]["ignored_style_changes"],
+            "no_surviving_changes":diff["metadata"]["no_surviving_changes"]}
+    }))?;
+    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only"] {
+        diff[key] = completed[key].clone();
+    }
+    for key in ["ignored_style_changes", "no_surviving_changes"] {
+        if let Some(value) = completed["metadata"].get(key) { diff["metadata"][key] = value.clone(); }
+    }
+    // Scope indices also refer to the surviving final change list.
+    let final_changes = diff["changes"].as_array().expect("completed changes");
+    let old_scopes = scope_entries_for_change_values(final_changes, true, &old_index);
+    let new_scopes = scope_entries_for_change_values(final_changes, false, &new_index);
+    if !old_scopes.is_empty() || !new_scopes.is_empty() {
+        diff["metadata"]["scope_trails"] = json!({"old":old_scopes, "new":new_scopes});
+    } else {
+        diff["metadata"].as_object_mut().unwrap().remove("scope_trails");
+    }
     apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
     Ok(diff)
 }
@@ -3571,7 +3706,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let metered = config.plugin_fuel != u64::MAX;
     let preloads = Arc::new(probe.measure("rust_wasm_batch_component_preload", || {
@@ -3619,6 +3754,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                                 &preloads,
                                 &python_parser_backend,
                                 config.profile_phases,
+                                config.fallback_to_token_diff,
                             )
                         })
                         .collect()
@@ -3636,6 +3772,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                             &preloads,
                             &python_parser_backend,
                             config.profile_phases,
+                            config.fallback_to_token_diff,
                         )
                     })
                     .collect())
@@ -3653,6 +3790,7 @@ fn diff_batch_impl_from_request(request: &Value, mut probe: PhaseProbe) -> Resul
                         &preloads,
                         &python_parser_backend,
                         config.profile_phases,
+                        config.fallback_to_token_diff,
                     )
                 })
                 .collect())
@@ -3806,7 +3944,7 @@ pub(crate) fn diff_batch_commit_json_impl(
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let python_parser_backend = python_parser_backend_from_request(&request)?;
     if python_parser_backend != PYTHON_PARSER_BACKEND_NATIVE {
@@ -3839,7 +3977,7 @@ pub(crate) fn diff_working_tree_python_commit_json_impl(
         .get("config")
         .map(Value::to_string)
         .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
+    let config = RustCoreConfig::from_json(&config_json)?;
     probe.set_enabled(config.profile_phases);
     let python_parser_backend = python_parser_backend_from_request(&request)?;
     if python_parser_backend != PYTHON_PARSER_BACKEND_NATIVE {
@@ -4090,6 +4228,7 @@ fn diff_batch_file_item(
     candidate_mode: bool,
     preloads: &BatchComponentPreloads,
     python_parser_backend: &str,
+    fallback_to_token_diff: bool,
 ) -> BatchItemResult {
     let old_filename = value_str(file, "old_filename", "oldFilename").unwrap_or("old.py");
     let new_filename = value_str(file, "new_filename", "newFilename").unwrap_or(old_filename);
@@ -4117,6 +4256,23 @@ fn diff_batch_file_item(
     let file_lifecycle = infer_file_lifecycle_from_file(file);
 
     if old_source == new_source {
+        if fallback_to_token_diff {
+            let incomplete = source_fallback::parse_errors_present_impl(old_source, "{}", "python")
+                .and_then(|errors| if errors == "true" {
+                    source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors").map(Some)
+                } else { Ok(None) });
+            match incomplete {
+                Ok(Some(mut diff)) => {
+                    attach_content_type_metadata(&mut diff, old_source, new_source);
+                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+                    return BatchItemResult::complete(json!({"index":index,"old_filename":old_filename,
+                        "new_filename":new_filename,"language":"python","status":COMPLETE,"diff":diff}), false);
+                }
+                Err(reason) => return BatchItemResult::fallback(batch_fallback_item(index, old_filename, new_filename, &reason)),
+                Ok(None) => {}
+            }
+        }
+
         let certification = if python_parser_backend == PYTHON_PARSER_BACKEND_NATIVE {
             PYTHON_NATIVE_V4KB_CERTIFICATION
         } else {
@@ -4293,6 +4449,7 @@ fn timed_diff_batch_file_item(
     preloads: &BatchComponentPreloads,
     python_parser_backend: &str,
     timing_enabled: bool,
+    fallback_to_token_diff: bool,
 ) -> BatchItemResult {
     if !timing_enabled {
         return diff_batch_file_item(
@@ -4302,6 +4459,7 @@ fn timed_diff_batch_file_item(
             candidate_mode,
             preloads,
             python_parser_backend,
+            fallback_to_token_diff,
         );
     }
     let started = Instant::now();
@@ -4312,6 +4470,7 @@ fn timed_diff_batch_file_item(
         candidate_mode,
         preloads,
         python_parser_backend,
+        fallback_to_token_diff,
     );
     let duration_ms = started.elapsed().as_secs_f64() * 1000.0;
     result.duration_ms = duration_ms;
@@ -4480,11 +4639,31 @@ fn serialize_tree_json(tree: &tree_sitter::Tree, source: &str) -> Result<String,
 fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNode, String> {
     let start = node.start_position();
     let end = node.end_position();
+    // Operator tokens (#229) are anonymous in tree-sitter, so `named_children` drops them and
+    // `a + b` / `a - b` serialized identically. Keep them as `operator` leaves in source order:
+    // the operator is structure, and the parent's label (identity for rename and profile
+    // passes) stays exactly as it was.
+    let operator_bearing = operator_tokens::is_operator_bearing(node.kind());
     let mut cursor = node.walk();
-    let children: Vec<CstNode> = node
-        .named_children(&mut cursor)
-        .map(|child| serialize_ts_node(child, source))
-        .collect::<Result<Vec<_>, _>>()?;
+    let mut children: Vec<CstNode> = Vec::new();
+    for child in node.children(&mut cursor) {
+        if child.is_named() {
+            children.push(serialize_ts_node(child, source)?);
+        } else if operator_bearing && operator_tokens::is_operator_token(child.kind()) {
+            let (s, e) = (child.start_position(), child.end_position());
+            children.push(CstNode {
+                node_type: operator_tokens::OPERATOR_NODE_TYPE.to_owned(),
+                named: false,
+                text: child.kind().to_owned(),
+                operator: String::new(),
+                start_line: s.row as u32,
+                start_col: s.column as u32,
+                end_line: e.row as u32,
+                end_col: e.column as u32,
+                children: Vec::new(),
+            });
+        }
+    }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
     let text = if keep_text {
         node.utf8_text(source)
@@ -4507,10 +4686,23 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
     {
         node_type = "async_function_def".to_owned();
     }
+    // Python's `async for` and `async with` change behaviour, not formatting.
+    // tree-sitter represents `async` as an anonymous leaf, which the named-child
+    // serializer otherwise discards. Preserve it in the semantic hash.
+    // (Operators are carried as `operator` leaf children above, not here.)
+    // The comprehension clause (`[x async for x in xs]`) is the same protocol switch.
+    let operator = if matches!(node_type.as_str(), "for_statement" | "with_statement" | "for_in_clause")
+        && node.child(0).is_some_and(|child| child.kind() == "async")
+    {
+        "async".to_owned()
+    } else {
+        String::new()
+    };
     Ok(CstNode {
         node_type,
         named: node.is_named(),
         text,
+        operator,
         start_line: start.row as u32,
         start_col: start.column as u32,
         end_line: end.row as u32,
@@ -4586,8 +4778,8 @@ fn count_cst_nodes(node: &CstNode) -> usize {
 }
 
 fn fuel_budget(floor: u64, candidate: u64) -> u64 {
-    if floor == u64::MAX {
-        u64::MAX
+    if floor == u64::MAX || floor < 1_000_000 {
+        floor
     } else {
         floor.max(candidate)
     }
@@ -4631,6 +4823,22 @@ fn cached_parser_component(
     wasm_path: &str,
     metered: bool,
 ) -> Result<ParserComponentLookup, String> {
+    // The manifest inventory is not a compiler safety boundary: callers may
+    // load a component directly. Check the *exact bytes* before a cache hit
+    // or Wasmtime compilation, and compile those same bytes to avoid a
+    // check/open race on Windows ARM64.
+    let guarded_bytes = if parser_availability::guarded_powershell_component(
+        Path::new(wasm_path), std::env::consts::OS, std::env::consts::ARCH
+    ) {
+        let bytes = std::fs::read(wasm_path)
+            .map_err(|e| format!("read guarded parser component {wasm_path}: {e}"))?;
+        parser_availability::verify_staged_powershell_bytes(
+            Path::new(wasm_path), &bytes, std::env::consts::OS, std::env::consts::ARCH
+        )?;
+        Some(bytes)
+    } else {
+        None
+    };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
     let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
     {
@@ -4650,8 +4858,10 @@ fn cached_parser_component(
     cfg.consume_fuel(metered);
     cfg.wasm_memory64(false);
     let engine = Engine::new(&cfg).map_err(|exc| format!("create wasmtime engine: {exc}"))?;
-    let component = Component::from_file(&engine, wasm_path)
-        .map_err(|exc| format!("load parser component: {exc}"))?;
+    let component = match &guarded_bytes {
+        Some(bytes) => Component::new(&engine, bytes.as_slice()),
+        None => Component::from_file(&engine, wasm_path),
+    }.map_err(|exc| format!("load parser component: {exc}"))?;
     let cached = Arc::new(CachedParserComponent { engine, component });
     let mut guard = cache
         .lock()
@@ -4697,7 +4907,8 @@ pub(crate) fn run_python_wasm_process_pair(
     Ok((result.old_tree, result.new_tree))
 }
 
-/// python `_differ_presentation._slice_source_text` (CHAR-based columns for python-string parity).
+/// Parser source spans use zero-based UTF-8 byte columns. Invalid boundaries fail
+/// closed; character slicing corrupts evidence after non-ASCII source text.
 fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
     let start_line = position.start_line as usize;
     let end_line = position.end_line as usize;
@@ -4705,10 +4916,7 @@ fn slice_source_text(lines: &[&str], position: &NodePosition) -> String {
         return String::new();
     }
     let char_slice = |line: &str, from: usize, to: Option<usize>| -> String {
-        match to {
-            Some(t) => line.chars().skip(from).take(t.saturating_sub(from)).collect(),
-            None => line.chars().skip(from).collect(),
-        }
+        line.get(from..to.unwrap_or(line.len())).unwrap_or_default().to_owned()
     };
     if start_line == end_line {
         return char_slice(
@@ -4747,13 +4955,14 @@ fn clean_string_literal_label(text: &str) -> String {
         && matches!(chars[0], '\'' | '"' | '`')
     {
         let inner: String = chars[1..chars.len() - 1].iter().collect();
-        return inner.trim().to_owned();
+        return inner;
     }
     value.trim().to_owned()
 }
 
 /// python `_differ_presentation._enrich_literal_labels` (differ.py stage 4-7): string-literal
-/// leaves get their DECODED source value as label (and order_by_clause its "descending" marker).
+/// leaves get source text with delimiters removed (not escape decoding), and
+/// order_by_clause gets its "descending" marker.
 /// Keyed profile enrichment AND guardrail semantic paths key off these labels — skipping this
 /// left native json/yaml pairs unlabeled, which silently produced ZERO guardrail semantic paths
 /// (the rule-eval gap found porting native guardrails).
@@ -4821,8 +5030,7 @@ pub(crate) fn attach_guardrail_violations(diff: &mut Value, new_violations: Vec<
 /// Evaluate protected-path guardrail rules against a served native diff (#100): builds the SAME
 /// eval request the Python glue marshals (`analysis/guardrails._evaluate_policy_rules`) from the
 /// enriched trees + final changes, runs the A1.3 rule engine, and returns the violations as JSON
-/// values. Best-effort: a malformed request yields no violations (the strict policy PARSE in the
-/// live-server layer already deferred anything off-spec).
+/// values. Malformed requests propagate errors so protection cannot silently disappear.
 fn evaluate_guardrail_rules_for_diff(
     diff: &Value,
     rules: &[Value],
@@ -4831,7 +5039,7 @@ fn evaluate_guardrail_rules_for_diff(
     new_filename: &str,
     old_tree_json: &str,
     new_tree_json: &str,
-) -> Vec<Value> {
+) -> Result<Vec<Value>, String> {
     let changes: Vec<Value> = diff
         .get("changes")
         .and_then(Value::as_array)
@@ -4864,12 +5072,11 @@ fn evaluate_guardrail_rules_for_diff(
         "changes": changes,
         "rules": rules,
     });
-    let Ok(request) = serde_json::from_value::<GuardrailEvalRequest>(request_value) else {
-        return Vec::new();
-    };
-    evaluate_guardrail_rules(&request)
+    let request = serde_json::from_value::<GuardrailEvalRequest>(request_value)
+        .map_err(|e| format!("invalid guardrail evaluation request: {e}"))?;
+    evaluate_guardrail_rules_checked(&request)?
         .into_iter()
-        .filter_map(|violation| serde_json::to_value(violation).ok())
+        .map(|violation| serde_json::to_value(violation).map_err(|e| e.to_string()))
         .collect()
 }
 
@@ -4877,18 +5084,7 @@ fn evaluate_guardrail_rules_for_diff(
 /// an EMPTY source side (file add/delete lifecycle) instead of parsing "" — some Wasm parsers
 /// return an in-band error envelope for empty input. Shape + hash recipe match python exactly.
 fn empty_semantic_tree_json(language: &str) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(format!("intentumdiff-empty-tree:{language}").as_bytes());
-    let digest = format!("{:x}", hasher.finalize());
-    json!({
-        "id": "0",
-        "node_type": "source_file",
-        "label": "",
-        "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0},
-        "structural_hash": digest,
-        "children": [],
-    })
-    .to_string()
+    lifecycle::empty_tree(language).to_string()
 }
 
 /// Native generic/markdown-as-text diff (#100): the exact Rust review the differ's routed
@@ -4896,6 +5092,12 @@ fn empty_semantic_tree_json(language: &str) -> String {
 /// the stage-12 zero-change style evidence mirrored (differ.py:1918). The audit
 /// NOISE_SUPPRESSED group is omitted (it only records the discarded finalize's churn count,
 /// which this path never computes).
+/// Review text (including Markdown presentation) directly from the public Rust API.
+/// Language-aware consumers can use `live_server::live_diff_contents_impl` with parser context.
+pub fn review_text(old_source:&str,new_source:&str,old_filename:&str,new_filename:&str)->Result<Value,String>{
+    native_generic_text_diff("generic",old_source,new_source,old_filename,new_filename)
+}
+
 fn native_generic_text_diff(
     language: &str,
     old_source: &str,
@@ -4903,8 +5105,15 @@ fn native_generic_text_diff(
     old_filename: &str,
     new_filename: &str,
 ) -> Result<Value, String> {
-    let changes = generic_text_changes_value(old_source, new_source)
-        .ok_or_else(|| "generic text review declined (input too large)".to_owned())?;
+    let markdown = [old_filename, new_filename].iter().any(|name| {
+        let lower = name.to_lowercase();
+        lower.ends_with(".md") || lower.ends_with(".markdown")
+    });
+    let changes = if markdown {
+        text_review_generic::generic_markdown_changes_value(old_source, new_source)
+    } else {
+        generic_text_changes_value(old_source, new_source)
+    }.ok_or_else(|| "generic text review declined (input too large)".to_owned())?;
     let mut change_groups: Vec<Value> = Vec::new();
     let mut metadata = json!({
         "engine_owner": "rust",
@@ -4936,6 +5145,17 @@ fn native_generic_text_diff(
             }
         }
     }
+    let presented = markdown_review::reconcile(
+        markdown_review::Presentation { changes, change_groups, ignored_style_changes:metadata["ignored_style_changes"].as_array().cloned().unwrap_or_default() },
+        old_source,new_source,old_filename,new_filename,markdown_review::ReviewPhase::All,
+    )?;
+    metadata.as_object_mut().unwrap().remove("ignored_style_changes");
+    if !presented.ignored_style_changes.is_empty() {
+        metadata["ignored_style_changes"] = json!(presented.ignored_style_changes);
+    }
+    let changes=presented.changes;
+    let change_groups=presented.change_groups;
+    let is_style_only=is_style_only && changes.is_empty();
     let has_semantic_changes = !changes.is_empty();
     let mut diff = json!({
         "old_filename": old_filename,
@@ -4985,9 +5205,12 @@ pub fn parse_to_tree(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    let resolved = crate::parser_registry::resolve_parser(path, wasm_dir)
+    let config = RustCoreConfig::from_json(config_json)?;
+    let selection_config = if config_json.trim().is_empty() { serde_json::json!({}) } else {
+        serde_json::from_str(config_json).map_err(|e| format!("invalid config json: {e}"))?
+    };
+    let resolved = crate::parser_registry::resolve_parser(path, content, &selection_config, wasm_dir)?
         .ok_or("no bundled parser for this file extension")?;
-    let config = RustCoreConfig::from_json(config_json);
 
     let tree_json: String = if content.is_empty() {
         empty_semantic_tree_json(&resolved.language)
@@ -5048,6 +5271,7 @@ pub(crate) fn native_wasm_single_diff(
     config_json: &str,
     guardrail_rules: Option<&[Value]>,
 ) -> Result<Value, String> {
+    let config = RustCoreConfig::from_json(config_json)?;
     // generic: the differ's routed branch REPLACES parser-token churn wholesale with the Rust
     // text review's line/char spans (normalize_generic_text_for_review is pure delegation to
     // text_review_generic.rs) — so serve the SAME Rust review directly, skipping the throwaway
@@ -5057,7 +5281,6 @@ pub(crate) fn native_wasm_single_diff(
     }
     // NB: guardrails are handled by the caller (`live_handle_diff_json` falls back when a
     // guardrail policy is in effect), so this pure-engine path never attaches violations.
-    let config = RustCoreConfig::from_json(config_json);
     check_byte_limit("old source", old_source, config.max_cst_bytes)?;
     check_byte_limit("new source", new_source, config.max_cst_bytes)?;
 
@@ -5075,13 +5298,14 @@ pub(crate) fn native_wasm_single_diff(
         config.plugin_fuel,
         20_000_000 + (old_source.len() + new_source.len()) as u64 * 20_000,
     );
+    let mut parser_calls = Vec::new();
     let (old_tree_json, new_tree_json) = if old_source.is_empty() && new_source.is_empty() {
         (
             empty_semantic_tree_json(language),
             empty_semantic_tree_json(language),
         )
     } else if old_source.is_empty() {
-        let (_, new_tree) = run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             new_source,
             "",
@@ -5093,9 +5317,10 @@ pub(crate) fn native_wasm_single_diff(
             config.max_plugin_output_bytes,
             language,
         )?;
-        (empty_semantic_tree_json(language), new_tree)
+        parser_calls = pair.calls;
+        (empty_semantic_tree_json(language), pair.new_tree)
     } else if new_source.is_empty() {
-        let (old_tree, _) = run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             old_source,
             "",
@@ -5107,9 +5332,10 @@ pub(crate) fn native_wasm_single_diff(
             config.max_plugin_output_bytes,
             language,
         )?;
-        (old_tree, empty_semantic_tree_json(language))
+        parser_calls = pair.calls;
+        (pair.old_tree, empty_semantic_tree_json(language))
     } else {
-        run_python_wasm_process_pair(
+        let pair = run_python_wasm_process_pair_detailed(
             parser_wasm_path,
             old_source,
             "",
@@ -5120,8 +5346,12 @@ pub(crate) fn native_wasm_single_diff(
             adaptive_fuel,
             config.max_plugin_output_bytes,
             language,
-        )?
+        )?;
+        parser_calls = pair.calls;
+        (pair.old_tree, pair.new_tree)
     };
+
+    for call in &mut parser_calls { call["plugin"] = json!(parser_wasm_path); }
 
     // Stage 4-7 literal-label enrichment (differ.py:1604) BEFORE the profile pass: string
     // literals carry their decoded VALUE as label — keyed enrichment + guardrail semantic paths
@@ -5130,15 +5360,15 @@ pub(crate) fn native_wasm_single_diff(
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
         .map_err(|exc| format!("literal enrich (new): {exc}"))?;
-    // Stage-7b profile-label enrichment (differ.py:1611): fill keyed/path/query/statement/resource
-    // identity labels from children BEFORE the diff, so e.g. a sql SELECT `term` folds its field
-    // identity into one node (otherwise the field surfaces as a spurious second change). No-op for
-    // non-profile languages. The differ enriches the trees here too, so finalize sees the same
-    // input. identity_fields=None matches the default (no-schema) case the differ passes for
-    // json/yaml; a configured schema's identity fields aren't threaded to the live path yet.
-    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, None)
+    // Resolve schema identities per file, for both native and binding consumers.
+    let schema_config: Value = serde_json::from_str(config_json).unwrap_or_else(|_|json!({}));
+    let (identity_fields, schema_metadata, xml_dialects) = schema_context::resolve(
+        &schema_config, new_filename, language, if new_source.is_empty(){old_source}else{new_source},
+    )?;
+    let _xml_scope = xml_schema::scoped_xml_dialects(xml_dialects);
+    let old_tree_json = enrich_profile_labels_impl(&old_tree_json, old_source, language, Some(identity_fields.clone()))
         .map_err(|exc| format!("profile enrich (old): {exc}"))?;
-    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, None)
+    let new_tree_json = enrich_profile_labels_impl(&new_tree_json, new_source, language, Some(identity_fields))
         .map_err(|exc| format!("profile enrich (new): {exc}"))?;
 
     // Tree-diff + finalize in one call — the same core the differ routes through for every
@@ -5163,92 +5393,33 @@ pub(crate) fn native_wasm_single_diff(
         ));
     }
 
-    let mut changes = fin
-        .get("changes")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
-    let mut change_groups = fin
-        .get("change_groups")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
-    let mut is_style_only = fin
-        .get("is_style_only")
-        .and_then(Value::as_bool)
-        .unwrap_or(false);
-
-    // Semantic invariances (css color / literal / quote-and-formatting equivalence): the routed
-    // short-circuit runs them on the finalized changes (differ.py:1786). No-op when none fire.
-    if !changes.is_empty() {
-        let inv_request = json!({
-            "mode": "apply",
-            "changes": changes,
-            "old_tree": serde_json::from_str::<Value>(&old_tree_json)
-                .map_err(|exc| format!("old tree json: {exc}"))?,
-            "new_tree": serde_json::from_str::<Value>(&new_tree_json)
-                .map_err(|exc| format!("new tree json: {exc}"))?,
-            "old_source": old_source,
-            "new_source": new_source,
-            "language": language,
-        });
-        let inv = crate::invariance_groups::rust_apply_invariances_value(&inv_request)?;
-        let inv_changes = inv
-            .get("changes")
-            .and_then(Value::as_array)
-            .cloned()
-            .unwrap_or_default();
-        let inv_groups = inv
-            .get("change_groups")
-            .and_then(Value::as_array)
-            .cloned()
-            .unwrap_or_default();
-        if inv_changes.len() != changes.len() || !inv_groups.is_empty() {
-            changes = inv_changes;
-            change_groups.extend(inv_groups);
-            if changes.is_empty() && old_source != new_source {
-                is_style_only = true;
-            }
+    if let Some(mut diff) = fin.get("fallback_diff").cloned() {
+        diff["old_filename"] = json!(old_filename);
+        diff["new_filename"] = json!(new_filename);
+        let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
+        if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
+    }
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+        if let Some(rules) = guardrail_rules {
+            let violations = evaluate_guardrail_rules_for_diff(
+                &diff, rules, language, old_filename, new_filename, "null", "null")?;
+            attach_guardrail_violations(&mut diff, violations);
         }
+        attach_native_parser_telemetry(&mut diff, parser_calls);
+        return Ok(diff);
     }
 
-    // Stage-12 style-only resolution (differ.py:1876): zero surviving changes with identical or
-    // whitespace-collapsed tree-equal sources is a style-only diff for every routed language.
-    if changes.is_empty() && !is_style_only {
-        let old_tree: SemanticNode =
-            serde_json::from_str(&old_tree_json).map_err(|exc| format!("old tree: {exc}"))?;
-        let new_tree: SemanticNode =
-            serde_json::from_str(&new_tree_json).map_err(|exc| format!("new tree: {exc}"))?;
-        is_style_only = old_source == new_source
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
+    let mut diff = routed_review::complete(&json!({
+        "finalized":fin,"language":language,"old_source":old_source,"new_source":new_source,
+        "old_filename":old_filename,"new_filename":new_filename,
+        "old_tree":serde_json::from_str::<Value>(&old_tree_json).map_err(|e|e.to_string())?,
+        "new_tree":serde_json::from_str::<Value>(&new_tree_json).map_err(|e|e.to_string())?,
+    }))?;
+
+    if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
+        diff["metadata"]["schema"] = schema_metadata;
     }
-
-    let has_semantic_changes = !changes.is_empty() && !is_style_only;
-    let mut diff = json!({
-        "old_filename": old_filename,
-        "new_filename": new_filename,
-        "language": language,
-        "changes": changes,
-        "change_groups": change_groups,
-        "has_semantic_changes": has_semantic_changes,
-        "is_style_only": is_style_only,
-        "parse_errors": [],
-        "llm_summary": "",
-        "gitignore_excluded": false,
-        "is_fallback": false,
-        "guardrail_violations": [],
-        "metadata": {
-            "engine_owner": "rust",
-            "semantic_contract": "rust_finalize_review_v1",
-            "rust_core": {
-                "engine": "rust_finalize_review_v1",
-                "stage": "per_stage_finalize_routing_native_live",
-                "used": true,
-            },
-        },
-    });
-
     // File lifecycle (add/delete/modify) — mirrors differ's _apply_file_lifecycle_to_diff.
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
     apply_file_lifecycle_to_diff(&mut diff, lifecycle);
@@ -5264,11 +5435,66 @@ pub(crate) fn native_wasm_single_diff(
                 new_filename,
                 &old_tree_json,
                 &new_tree_json,
-            );
+            )?;
             attach_guardrail_violations(&mut diff, violations);
         }
     }
+    attach_native_parser_telemetry(&mut diff, parser_calls);
     Ok(diff)
+}
+
+pub(crate) fn attach_native_parser_telemetry(diff: &mut Value, calls: Vec<Value>) {
+    let metadata = diff["metadata"].as_object_mut().expect("engine diff metadata");
+    let telemetry = metadata.entry("engine_telemetry").or_insert_with(|| json!({"schema_version":1,"calls":[]}));
+    let existing = telemetry["calls"].as_array_mut().expect("engine telemetry calls");
+    existing.extend(calls);
+    let hotspots = native_fuel_hotspots(existing);
+    telemetry["fuel_hotspots"] = hotspots;
+}
+
+// Preserve the established Python policy: classify each (plugin, function) using
+// peak call fuel and summed input sizes. Keep actual per-call records untouched.
+fn native_fuel_hotspots(calls: &[Value]) -> Value {
+    let mut groups: std::collections::BTreeMap<(String, String), Value> = std::collections::BTreeMap::new();
+    for call in calls {
+        let key = (call["plugin"].as_str().unwrap_or("").to_owned(), call["function"].as_str().unwrap_or("").to_owned());
+        let group = groups.entry(key).or_insert_with(|| {
+            let mut value = call.clone();
+            value["fuel_consumed"] = json!(0);
+            value["input_bytes"] = json!(0);
+            value["input_lines"] = json!(0);
+            value["max_fuel_used_percent"] = Value::Null;
+            value
+        });
+        group["fuel_consumed"] = json!(group["fuel_consumed"].as_u64().unwrap_or(0).max(call["fuel_consumed"].as_u64().unwrap_or(0)));
+        for field in ["input_bytes", "input_lines"] {
+            group[field] = json!(group[field].as_u64().unwrap_or(0).saturating_add(call[field].as_u64().unwrap_or(0)));
+        }
+        if let Some(percent) = call["max_fuel_used_percent"].as_f64() {
+            group["max_fuel_used_percent"] = json!(group["max_fuel_used_percent"].as_f64().unwrap_or(0.0).max(percent));
+        }
+    }
+    let mut groups: Vec<_> = groups.into_values().collect();
+    groups.sort_by_key(|call| std::cmp::Reverse(call["fuel_consumed"].as_u64().unwrap_or(0)));
+    json!(groups.iter().filter_map(|call| {
+        let used = call["fuel_consumed"].as_u64()?;
+        if used == 0 { return None; }
+        let per_kb = used as f64 / (call["input_bytes"].as_u64().unwrap_or(0) as f64 / 1024.0).max(1.0);
+        let per_line = used as f64 / call["input_lines"].as_u64().unwrap_or(0).max(1) as f64;
+        let mut exceeded = Vec::new();
+        if used > 30_000_000 { exceeded.push("absolute"); }
+        if per_kb > 22_000_000.0 { exceeded.push("per_kb"); }
+        if per_line > 1_500_000.0 { exceeded.push("per_line"); }
+        if !exceeded.iter().any(|item| *item != "absolute") { return None; }
+        Some(json!({"plugin":call["plugin"], "function":call["function"],
+            "language":call["language"], "filename":call["filename"],
+            "fuel_consumed":used, "fuel_budget":call["fuel_budget"],
+            "fuel_used_percent":call["max_fuel_used_percent"],
+            "input_bytes":call["input_bytes"], "input_lines":call["input_lines"],
+            "fuel_per_kb":(per_kb * 1000.0).round()/1000.0,
+            "fuel_per_line":(per_line * 1000.0).round()/1000.0,
+            "thresholds_exceeded":exceeded}))
+    }).collect::<Vec<_>>())
 }
 
 /// Build the trivia-stripped CST JSON for a Python source, as the interpret-cst Python parser
@@ -5289,18 +5515,68 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// sides parse to trees the SAME way `differ.parse` does — Python through the bundled Wasm parser
 /// in interpret-cst mode (fed the trivia-stripped CST), other languages through their full-parse
 /// Wasm parser — so the symbol tables (and thus the cross-file changes) match the differ's. Builds
-/// the two symbol tables and diffs them. Best-effort: any parse/build failure just omits that file
-/// (or yields an empty list), never raises. *files* are the same commit-batch file objects the
+/// the two symbol tables and diffs them. Every required parse/index failure aborts the
+/// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
+// A symbol named "error" is valid source data: only the typed table schema
+// distinguishes it from the index engine's string-valued error envelope.
+fn validate_symbol_index_table(table: &str, side: &str) -> Result<(), String> {
+    let _: HashMap<String, Vec<index_engine_lib::SymbolDefinition>> =
+        serde_json::from_str(table)
+            .map_err(|reason| format!("symbol-index {side} table construction failed: {reason}"))?;
+    Ok(())
+}
+
+#[cfg(test)]
+mod symbol_index_error_name_tests {
+    use super::*;
+
+    #[test]
+    fn function_named_error_is_a_valid_symbol_not_an_error_envelope() {
+        let files = json!([{
+            "filename": "module.py",
+            "language": "python",
+            "tree": {
+                "id": "0",
+                "node_type": "module",
+                "label": "",
+                "position": {"start_line": 0, "start_col": 0, "end_line": 1, "end_col": 0},
+                "children": [{
+                    "id": "0.0",
+                    "node_type": "function_definition",
+                    "label": "error",
+                    "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 12},
+                    "children": []
+                }]
+            }
+        }]);
+        let table = index_engine_lib::build_symbol_table_impl(&files.to_string());
+        assert!(validate_symbol_index_table(&table, "new").is_ok(), "{table}");
+        let parsed: Value = serde_json::from_str(&table).unwrap();
+        assert_eq!(parsed["error"][0]["qualified_name"], "error");
+    }
+
+    #[test]
+    fn string_error_envelopes_and_malformed_definition_rows_fail_closed() {
+        assert!(validate_symbol_index_table(r#"{"error":"cannot index"}"#, "old").is_err());
+        assert!(validate_symbol_index_table(r#"{"error":[{"wrong":true}]}"#, "new").is_err());
+        assert!(validate_symbol_index_table(r#"[]"#, "new").is_err());
+    }
+}
+
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> Value {
-    if wasm_dir.is_empty() {
-        return json!([]); // the bundled Python parser is required for Python symbol trees
+) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
+    let config = RustCoreConfig::from_json(config_json)?;
+    let mut telemetry = HashMap::new();
+    if files.is_empty() {
+        return Ok((json!([]), telemetry));
     }
-    let config = RustCoreConfig::from_json(config_json);
+    if wasm_dir.is_empty() {
+        return Err("commit symbol indexing requires the verified parser bundle".to_owned());
+    }
     let python_wasm_path = Path::new(wasm_dir)
         .join("python_parser.wasm")
         .to_string_lossy()
@@ -5350,13 +5626,15 @@ pub(crate) fn compute_commit_cross_file_changes(
         }
         let (old_side_cst, new_side_cst) = if wasm_path.is_empty() {
             (
-                python_wasm_filtered_cst(parse_old_src).unwrap_or_default(),
-                python_wasm_filtered_cst(parse_new_src).unwrap_or_default(),
+                python_wasm_filtered_cst(parse_old_src)
+                    .map_err(|reason| format!("symbol-index CST for {old_p}: {reason}"))?,
+                python_wasm_filtered_cst(parse_new_src)
+                    .map_err(|reason| format!("symbol-index CST for {new_p}: {reason}"))?,
             )
         } else {
             (String::new(), String::new())
         };
-        if let Ok((old_tree, new_tree)) = run_python_wasm_process_pair(
+        let mut pair = run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5367,27 +5645,41 @@ pub(crate) fn compute_commit_cross_file_changes(
             fuel,
             config.max_plugin_output_bytes,
             language,
-        ) {
-            if both || old_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&old_tree) {
-                    old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
-                }
+        ).map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        for call in &mut pair.calls {
+            call["plugin"] = json!(parser_path);
+            call["purpose"] = json!("symbol_index");
+        }
+        telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
+        if both || old_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.old_tree)
+                .map_err(|reason| format!("symbol-index invalid old tree for {old_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed old tree for {old_p}"));
             }
-            if both || new_parse.is_some() {
-                if let Ok(tree) = serde_json::from_str::<Value>(&new_tree) {
-                    new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
-                }
+            old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
+        }
+        if both || new_parse.is_some() {
+            let tree: Value = serde_json::from_str(&pair.new_tree)
+                .map_err(|reason| format!("symbol-index invalid new tree for {new_p}: {reason}"))?;
+            if !tree.is_object() || tree.get("error").is_some() {
+                return Err(format!("symbol-index malformed new tree for {new_p}"));
             }
+            new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
         }
     }
     let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
     let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    match serde_json::from_str::<Value>(&index_engine_lib::diff_symbol_tables_impl(
-        &old_table, &new_table,
-    )) {
-        Ok(v) if v.is_array() => v,
-        _ => json!([]),
+    for (side, table) in [("old", &old_table), ("new", &new_table)] {
+        validate_symbol_index_table(table, side)?;
     }
+    let changes: Value = serde_json::from_str(
+        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
+    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
+    if !changes.is_array() {
+        return Err(format!("symbol-index diff did not return changes: {changes}"));
+    }
+    Ok((changes, telemetry))
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -5405,7 +5697,7 @@ pub(crate) fn run_python_wasm_process_pair_detailed(
     let unlimited = fuel == u64::MAX;
     let lookup = cached_parser_component(wasm_path, !unlimited)?;
     let cached = lookup.cached;
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &cached,
         old_source,
         old_filtered_cst,
@@ -5419,6 +5711,7 @@ pub(crate) fn run_python_wasm_process_pair_detailed(
         None,
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5443,7 +5736,7 @@ fn run_python_wasm_process_pair_detailed_profiled(
         cached_parser_component(wasm_path, !unlimited)
     })?;
     let cached = lookup.cached;
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &cached,
         old_source,
         old_filtered_cst,
@@ -5457,6 +5750,7 @@ fn run_python_wasm_process_pair_detailed_profiled(
         Some(probe),
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5476,7 +5770,7 @@ fn run_python_wasm_process_pair_preloaded_profiled(
     max_output_bytes: usize,
     probe: &mut PhaseProbe,
 ) -> Result<WasmProcessPair, String> {
-    let (old_tree, new_tree) = run_python_wasm_process_pair_with_cached_component(
+    let (old_tree, new_tree, calls) = run_python_wasm_process_pair_with_cached_component(
         &lookup.cached,
         old_source,
         old_filtered_cst,
@@ -5490,6 +5784,7 @@ fn run_python_wasm_process_pair_preloaded_profiled(
         Some(probe),
     )?;
     Ok(WasmProcessPair {
+        calls,
         old_tree,
         new_tree,
         cache_hit: lookup.cache_hit,
@@ -5509,7 +5804,7 @@ fn run_python_wasm_process_pair_with_cached_component(
     max_output_bytes: usize,
     language: &str,
     mut probe: Option<&mut PhaseProbe>,
-) -> Result<(String, String), String> {
+) -> Result<(String, String, Vec<Value>), String> {
     let unlimited = fuel == u64::MAX;
     let linker: Linker<ParserHostState> =
         measure_optional(probe.as_deref_mut(), "rust_wasm_linker_setup", || {
@@ -5547,6 +5842,11 @@ fn run_python_wasm_process_pair_with_cached_component(
         parser_mode,
         parser_plugin::exports::intentdiff::plugin::parser::ParserMode::FullParse
     );
+    validate_parser_input_requirements(
+        full_parse,
+        old_filtered_cst,
+        new_filtered_cst,
+    )?;
     if !unlimited {
         measure_optional(
             probe.as_deref_mut(),
@@ -5568,11 +5868,15 @@ fn run_python_wasm_process_pair_with_cached_component(
     } else {
         new_filtered_cst
     };
+    let old_started = std::time::Instant::now();
     let old_tree = measure_optional(probe.as_deref_mut(), "rust_wasm_process_old", || {
         parser
             .call_process(&mut store, old_input, language, old_filename)
             .map_err(|exc| format!("call parser process for old source: {exc:#}"))
     })?;
+    let old_elapsed_ms = old_started.elapsed().as_secs_f64() * 1000.0;
+    let old_remaining = if unlimited { None } else { Some(store.get_fuel().map_err(|e| format!("read old parser fuel: {e}"))?) };
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("old parser output", &old_tree, max_output_bytes)?;
     if !unlimited {
         measure_optional(probe.as_deref_mut(), "rust_wasm_fuel_reset", || {
@@ -5581,13 +5885,45 @@ fn run_python_wasm_process_pair_with_cached_component(
                 .map_err(|exc| format!("reset wasm fuel: {exc}"))
         })?;
     }
+    let new_started = std::time::Instant::now();
     let new_tree = measure_optional(probe.as_deref_mut(), "rust_wasm_process_new", || {
         parser
             .call_process(&mut store, new_input, language, new_filename)
             .map_err(|exc| format!("call parser process for new source: {exc:#}"))
     })?;
+    let new_elapsed_ms = new_started.elapsed().as_secs_f64() * 1000.0;
+    let new_remaining = if unlimited { None } else { Some(store.get_fuel().map_err(|e| format!("read new parser fuel: {e}"))?) };
+    if let Some(error) = store.data_mut().host_error.take() { return Err(error); }
     check_byte_limit("new parser output", &new_tree, max_output_bytes)?;
-    Ok((old_tree, new_tree))
+    let calls = [(old_input, old_filename, old_remaining, old_elapsed_ms),
+                 (new_input, new_filename, new_remaining, new_elapsed_ms)].into_iter()
+        .map(|(input, filename, remaining, elapsed_ms)| {
+            let consumed = remaining.map(|remaining| fuel - remaining);
+            json!({"function":"process", "engine_owner":"rust", "engine":"rust_wasmtime_plugin_host",
+                "provenance":"sandboxed_wasm_plugin", "trusted":false, "language":language,
+                "filename":filename, "call_count":1, "elapsed_ms":elapsed_ms, "statuses":{"ok":1},
+                "fuel_budget":if unlimited { None } else { Some(fuel) },
+                "fuel_consumed":consumed, "total_fuel_consumed":consumed,
+                "max_fuel_used_percent":consumed.map(|used| if fuel == 0 { 0.0 } else { used as f64 / fuel as f64 * 100.0 }),
+                "input_bytes":input.len(), "input_lines":input.lines().count()})
+        }).collect();
+    Ok((old_tree, new_tree, calls))
+}
+
+fn validate_parser_input_requirements(
+    full_parse: bool,
+    old_filtered_cst: &str,
+    new_filtered_cst: &str,
+) -> Result<(), String> {
+    if !full_parse
+        && (old_filtered_cst.trim().is_empty() || new_filtered_cst.trim().is_empty())
+    {
+        return Err(
+            "interpret-cst parser requires filtered CST input; source-only native execution is unsupported"
+                .to_owned(),
+        );
+    }
+    Ok(())
 }
 
 fn measure_optional<T, F>(
@@ -6527,20 +6863,29 @@ fn convert_cst_with_hash_memo(
         None
     };
     let child_parent_class = own_class.as_deref().or(parent_class);
-    let children: Vec<SemanticNode> = node
-        .children
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, child)| {
-            convert_cst_with_hash_memo(
-                child,
-                &format!("{id_prefix}.{idx}"),
-                child_parent_class,
-                hash_memo,
-            )
-        })
-        .collect();
-    if !is_semantic(&node.node_type) && children.is_empty() {
+    // Operator leaves (#229) are named `<parent>.op<k>` and do not take a sibling slot, so every
+    // other child keeps the id it had before operators were carried - and the same id the
+    // Wasm route's source recovery produces (native/Wasm candidate parity).
+    let mut children: Vec<SemanticNode> = Vec::with_capacity(node.children.len());
+    let (mut idx, mut op_idx) = (0usize, 0usize);
+    for child in &node.children {
+        let child_id = if child.node_type == operator_tokens::OPERATOR_NODE_TYPE {
+            op_idx += 1;
+            format!("{id_prefix}.op{}", op_idx - 1)
+        } else {
+            idx += 1;
+            format!("{id_prefix}.{}", idx - 1)
+        };
+        if let Some(converted) =
+            convert_cst_with_hash_memo(child, &child_id, child_parent_class, hash_memo)
+        {
+            children.push(converted);
+        }
+    }
+    if !is_semantic(&node.node_type)
+        && children.is_empty()
+        && node.node_type != operator_tokens::OPERATOR_NODE_TYPE
+    {
         return None;
     }
     let parent_type = if matches!(
@@ -6767,6 +7112,13 @@ fn is_semantic(node_type: &str) -> bool {
 }
 
 fn label_for(node: &CstNode) -> String {
+    operator_tokens::label_with_operator(&base_label_for(node), &node.operator)
+}
+
+fn base_label_for(node: &CstNode) -> String {
+    // A Python module is a structural container, not a source-named leaf.
+    // Emptying it must not manufacture a module("module") -> module("") edit.
+    if node.node_type == "module" { return "module".to_owned(); }
     if matches!(node.node_type.as_str(), "string" | "integer" | "float") && !node.text.is_empty() {
         return node.text.clone();
     }
@@ -6798,6 +7150,10 @@ fn structural_hash_cst_with_memo(node: &CstNode, memo: &mut HashMap<usize, Strin
         hasher.update(node.text.as_bytes());
     } else {
         hasher.update(node.node_type.as_bytes());
+        if !node.operator.is_empty() {
+            hasher.update(b"|op:");
+            hasher.update(node.operator.as_bytes());
+        }
         for child in &node.children {
             hasher.update(b"|");
             hasher.update(structural_hash_cst_with_memo(child, memo).as_bytes());
@@ -6861,6 +7217,7 @@ fn compute_matching_with_diagnostics_mode<'a>(
         min_height,
         min_similarity,
         detailed_diagnostics,
+        None,
     )
 }
 
@@ -6870,6 +7227,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     min_height: usize,
     min_similarity: f64,
     detailed_diagnostics: bool,
+    sources: Option<(&str, &str)>,
 ) -> MatchingReport<'a> {
     let mut diagnostics = MatchingDiagnostics {
         attempted: true,
@@ -6883,6 +7241,7 @@ fn compute_matching_with_diagnostics_indexed<'a>(
         &mut diagnostics,
         detailed_diagnostics,
     );
+    callable_renames::seed_renamed_callables(old_index, new_index, &mut matches, min_similarity, sources);
     let before_top_down = matches.len();
     matches = top_down_match_with_existing(&old_index, &new_index, min_height, matches);
     diagnostics.structural_matches += matches.len().saturating_sub(before_top_down);
@@ -6904,10 +7263,29 @@ fn compute_matching_with_diagnostics_indexed<'a>(
     let before_label = matches.len();
     let matches = label_match(&old_index, &new_index, matches);
     diagnostics.label_parent_matches += matches.len().saturating_sub(before_label);
+    // Operator leaves (#229) have no identity of their own: every `+` hashes alike, so a
+    // hash/label match could pair it with an unrelated `+` and skew bottom-up similarity.
+    // Drop any such pairs here and bind them through their parents after matching.
+    let matches = operator_tokens::without_operator_pairs(matches);
+    // Preserve only call-role correspondences established before bottom-up recovery;
+    // bottom-up pairs may be bootstrapped by harvested leaves and are not proof.
+    let label_pairs: HashMap<&str, &str> = matches.iter()
+        .map(|p| (p.old_node.id.as_str(), p.new_node.id.as_str())).collect();
+    let renamed_call_statements: HashSet<(&str, &str)> = matches.iter().filter_map(|p| {
+        if p.old_node.node_type != "call" || p.old_node.label == p.new_node.label { return None; }
+        let old_parent = effective_parent_node(old_index, &p.old_node.id)?;
+        let new_parent = effective_parent_node(new_index, &p.new_node.id)?;
+        (matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+            && old_parent.node_type == new_parent.node_type
+            && label_pairs.get(old_parent.id.as_str()).copied() == Some(new_parent.id.as_str()))
+            .then_some((old_parent.id.as_str(), new_parent.id.as_str()))
+    }).collect();
     let before_bottom_up = matches.len();
     let matches = bottom_up_match(&old_index, &new_index, matches, min_similarity);
     diagnostics.bottom_up_matches += matches.len().saturating_sub(before_bottom_up);
-    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches);
+    let matches = prune_cross_statement_leaf_pairs(&old_index, &new_index, matches, &renamed_call_statements);
+    let matches = prune_cross_entity_operator_pairs(&old_index, &new_index, matches);
+    let matches = operator_tokens::bind_operator_leaves(matches);
     diagnostics.final_matching_pairs = matches.len();
     diagnostics.used = diagnostics.seeded_matches > 0;
     MatchingReport {
@@ -6928,6 +7306,7 @@ fn prune_cross_statement_leaf_pairs<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
     matches: Vec<MatchPair<'a>>,
+    renamed_call_statements: &HashSet<(&str, &str)>,
 ) -> Vec<MatchPair<'a>> {
     fn enclosing_statement<'b>(index: &TreeIndex<'b>, id: &str) -> Option<&'b SemanticNode> {
         let mut cursor = id;
@@ -6972,6 +7351,9 @@ fn prune_cross_statement_leaf_pairs<'a>(
                 && !pair.new_node.is_leaf()
         })
         .filter(|pair| {
+            if renamed_call_statements.contains(&(pair.old_node.id.as_str(), pair.new_node.id.as_str())) {
+                return false;
+            }
             match (
                 first_callee_label(pair.old_node),
                 first_callee_label(pair.new_node),
@@ -7026,6 +7408,49 @@ fn prune_cross_statement_leaf_pairs<'a>(
         .zip(keep)
         .filter_map(|(pair, keep)| keep.then_some(pair))
         .collect()
+}
+
+// If duplicate literal leaves occupy the same grammatical parent, source byte
+// columns can shift after an earlier edit. Prefer the corresponding child slot
+// before absolute column distance; fall back to columns for unrelated parents.
+// Scope to leaf nodes so moved/reordered structural subtrees retain their
+// existing structural and positional matching policy.
+fn same_parent_leaf_slot_distance(
+    old_node: &SemanticNode,
+    candidate: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+) -> usize {
+    if !old_node.is_leaf() || !candidate.is_leaf()
+        || old_node.node_type != candidate.node_type || old_node.label != candidate.label
+    {
+        return usize::MAX;
+    }
+    let (Some(old_parent_id), Some(new_parent_id)) = (
+        old_index.parent.get(old_node.id.as_str()),
+        new_index.parent.get(candidate.id.as_str()),
+    ) else {
+        return usize::MAX;
+    };
+    let (Some(old_parent), Some(new_parent)) = (
+        old_index.by_id.get(*old_parent_id),
+        new_index.by_id.get(*new_parent_id),
+    ) else {
+        return usize::MAX;
+    };
+    if old_parent.id != new_parent.id
+        || old_parent.node_type != new_parent.node_type
+        || old_parent.label != new_parent.label
+    {
+        return usize::MAX;
+    }
+    match (
+        old_index.sibling_slot.get(old_node.id.as_str()),
+        new_index.sibling_slot.get(candidate.id.as_str()),
+    ) {
+        (Some(old_slot), Some(new_slot)) => old_slot.abs_diff(*new_slot),
+        _ => usize::MAX,
+    }
 }
 
 fn top_down_match_with_existing<'a>(
@@ -7086,8 +7511,21 @@ fn top_down_match_with_existing<'a>(
             .copied()
             .filter(|candidate| !matched_new.contains(candidate.id.as_str()))
             .min_by_key(|candidate| {
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                // Deleting an earlier argument shifts surviving ordinal slots.
+                // A source-coordinate-exact leaf under the same parent must
+                // remain paired before ordinal slot ranking; if an earlier edit
+                // changes columns, the slot remains the tie-breaker instead.
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
+                        .abs(),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
                 )
@@ -7434,6 +7872,42 @@ fn label_match<'a>(
         if matched_old.contains(old_node.id.as_str()) {
             continue;
         }
+        // A call in a uniquely corresponding structural role may change its callee.
+        // Establish the call before matching its argument-list scaffold.
+        if old_node.node_type == "call" {
+            let partner = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| paired_old_to_new.get(*p))
+                .and_then(|p| new_index.by_id.get(*p));
+            let old_parent = old_index.parent.get(old_node.id.as_str())
+                .and_then(|p| old_index.by_id.get(*p));
+            if let (Some(old_parent), Some(new_parent)) = (old_parent, partner) {
+                let old_calls: Vec<_> = old_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                let new_calls: Vec<_> = new_parent.children.iter().filter(|n| n.node_type == "call").collect();
+                if matches!(old_parent.node_type.as_str(), "return_statement" | "expression_statement")
+                    && old_parent.node_type == new_parent.node_type
+                    && old_calls.len() == 1 && new_calls.len() == 1
+                    && !matched_new.contains(new_calls[0].id.as_str()) {
+                    let new_node = new_calls[0];
+                    result.push(MatchPair { old_node, new_node });
+                    matched_old.insert(old_node.id.as_str());
+                    matched_new.insert(new_node.id.as_str());
+                    paired_old_to_new.insert(old_node.id.as_str(), new_node.id.as_str());
+                    // A changed invocation target is an identifier update, not evidence
+                    // of a variable rename. Keep it paired in the established call slot.
+                    if let (Some(old_callee), Some(new_callee)) = (old_node.children.first(), new_node.children.first()) {
+                        if old_callee.node_type == "identifier" && new_callee.node_type == "identifier"
+                            && !matched_old.contains(old_callee.id.as_str())
+                            && !matched_new.contains(new_callee.id.as_str()) {
+                            result.push(MatchPair { old_node: old_callee, new_node: new_callee });
+                            matched_old.insert(old_callee.id.as_str());
+                            matched_new.insert(new_callee.id.as_str());
+                            paired_old_to_new.insert(old_callee.id.as_str(), new_callee.id.as_str());
+                        }
+                    }
+                    continue;
+                }
+            }
+        }
         let Some(candidates) =
             new_by_type_label.get_mut(&(old_node.node_type.as_str(), old_node.label.as_str()))
         else {
@@ -7482,14 +7956,25 @@ fn label_match<'a>(
                 !matched_new.contains(candidate.id.as_str())
                     && label_match_parent_compatible(old_node, candidate, old_index, new_index)
                     && generic_anchored(candidate)
+                    && argument_owner_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
+                    && call_role_compatible(old_node, candidate, old_index, new_index, &paired_old_to_new)
             })
             .min_by_key(|(_, candidate)| {
                 let candidate_parent = new_index.parent.get(candidate.id.as_str()).copied();
                 let parent_consistent =
                     matches!((old_parent_partner, candidate_parent), (Some(p), Some(c)) if p == c);
+                let sibling_distance =
+                    same_parent_leaf_slot_distance(old_node, candidate, old_index, new_index);
+                let exact_unchanged_coordinate = sibling_distance != usize::MAX
+                    && candidate.position.start_line == old_node.position.start_line
+                    && candidate.position.start_col == old_node.position.start_col;
                 (
                     if parent_consistent { 0u8 } else { 1u8 },
                     (candidate.position.start_line as i64 - old_node.position.start_line as i64)
+                        .abs(),
+                    if exact_unchanged_coordinate { 0u8 } else { 1u8 },
+                    sibling_distance,
+                    (candidate.position.start_col as i64 - old_node.position.start_col as i64)
                         .abs(),
                     candidate.id.as_str(),
                 )
@@ -7535,6 +8020,102 @@ fn enclosing_entity_node<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a Sema
         cursor = parent;
     }
     None
+}
+
+/// An operator expression paired across DIFFERENT enclosing entities (greet's `"Hi" <> name`
+/// with add's `x + y`) is a structural harvest, not a correspondence. It was invisible while
+/// both sides were labelled alike; once operators are carried (#229) it fabricates operator
+/// Updates. Drop operator-bearing pairs whose anchors (see `operator_pair_anchor`) are matched
+/// to different partners.
+fn prune_cross_entity_operator_pairs<'a>(
+    old_index: &TreeIndex<'a>,
+    new_index: &TreeIndex<'a>,
+    matches: Vec<MatchPair<'a>>,
+) -> Vec<MatchPair<'a>> {
+    let paired: HashMap<&str, &str> = matches
+        .iter()
+        .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
+        .collect();
+    matches
+        .into_iter()
+        .filter(|pair| {
+            if !operator_tokens::is_operator_bearing(&pair.old_node.node_type)
+                || !operator_tokens::is_operator_bearing(&pair.new_node.node_type)
+            {
+                return true;
+            }
+            match (
+                operator_pair_anchor(old_index, &pair.old_node.id),
+                operator_pair_anchor(new_index, &pair.new_node.id),
+            ) {
+                // Drop only when the old anchor is matched to a DIFFERENT new anchor; an
+                // unmatched anchor (deleted or relocated container) keeps the pair.
+                (Some(old_anchor), Some(new_anchor)) => paired
+                    .get(old_anchor.id.as_str())
+                    .is_none_or(|partner| *partner == new_anchor.id.as_str()),
+                _ => true,
+            }
+        })
+        .collect()
+}
+
+/// The container an operator expression belongs to: the enclosing named entity, else the
+/// nearest labelled container (elixir `def`s are `call('greet')`, not named entities).
+fn operator_pair_anchor<'a>(index: &TreeIndex<'a>, id: &str) -> Option<&'a SemanticNode> {
+    if let Some(entity) = enclosing_entity_node(index, id) {
+        return Some(entity);
+    }
+    let mut cursor = id;
+    while let Some(parent) = index.parent.get(cursor) {
+        if let Some(node) = index.by_id.get(*parent) {
+            if !node.children.is_empty() && !node.label.is_empty() && node.label != node.node_type {
+                return Some(node);
+            }
+        }
+        cursor = parent;
+    }
+    None
+}
+
+/// Approximate calls cannot steal a different statement's call merely by callee name.
+fn call_role_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "call" { return true; }
+    let (Some(old_parent), Some(new_parent)) = (
+        effective_parent_node(old_index, &old_node.id),
+        effective_parent_node(new_index, &new_node.id),
+    ) else { return true; };
+    if let Some(partner) = paired.get(old_parent.id.as_str()) {
+        return *partner == new_parent.id;
+    }
+    if paired.values().any(|id| *id == new_parent.id) { return false; }
+    old_parent.node_type == new_parent.node_type
+}
+
+/// Argument-list labels describe a grammatical role, not movable identity. Approximate
+/// matching must use the owning call's established correspondence; otherwise an earlier
+/// deleted call can steal the surviving call's arguments (issue #131). Exact subtree
+/// matching remains free to recognize genuine unchanged relocated expressions.
+fn argument_owner_compatible(
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+    old_index: &TreeIndex<'_>,
+    new_index: &TreeIndex<'_>,
+    paired: &HashMap<&str, &str>,
+) -> bool {
+    if old_node.node_type != "argument_list" {
+        return true;
+    }
+    match (old_index.parent.get(old_node.id.as_str()), new_index.parent.get(new_node.id.as_str())) {
+        (Some(old_parent), Some(new_parent)) => paired.get(*old_parent) == Some(new_parent),
+        (None, None) => true,
+        _ => false,
+    }
 }
 
 fn label_match_parent_compatible(
@@ -7607,10 +8188,26 @@ fn bottom_up_match<'a>(
         .iter()
         .map(|pair| (pair.old_node.id.as_str(), pair.new_node.id.as_str()))
         .collect();
+    let trace_match = std::env::var("INTENTUMDIFF_TRACE_MATCH").is_ok();
     for old_node in unmatched_old {
         let Some(candidates) = new_by_type.get(old_node.node_type.as_str()) else {
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match] {} '{}' — NO CANDIDATES of type {}",
+                    old_node.id, old_node.label, old_node.node_type
+                );
+            }
             continue;
         };
+        if trace_match && !old_node.label.is_empty() {
+            eprintln!(
+                "[match] {} '{}' ({}) — {} candidate(s)",
+                old_node.id,
+                old_node.label,
+                old_node.node_type,
+                candidates.len()
+            );
+        }
         let old_desc_count = old_index
             .subtree_sizes
             .get(old_node.id.as_str())
@@ -7623,7 +8220,29 @@ fn bottom_up_match<'a>(
             if matched_new.contains(new_node.id.as_str()) {
                 continue;
             }
-            if !bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index) {
+            let base_compatible =
+                bottom_up_match_candidate_compatible(old_node, new_node, old_index, new_index);
+            let argument_compatible =
+                argument_owner_compatible(old_node, new_node, old_index, new_index, &old_to_new);
+            let call_compatible =
+                call_role_compatible(old_node, new_node, old_index, new_index, &old_to_new);
+            if trace_match && !old_node.label.is_empty() {
+                let named = is_named_entity_type(old_node.node_type.as_str());
+                let parent_ok = !named
+                    || label_match_parent_compatible(old_node, new_node, old_index, new_index);
+                let label_ok = !named || old_node.label == new_node.label;
+                eprintln!(
+                    "[match]     vs '{}' — gate {} (named={} label_eq={} parent_ok={} argument_ok={} call_ok={})",
+                    new_node.label,
+                    if base_compatible && argument_compatible && call_compatible { "PASS" } else { "REJECT" },
+                    named,
+                    label_ok,
+                    parent_ok,
+                    argument_compatible,
+                    call_compatible
+                );
+            }
+            if !base_compatible || !argument_compatible || !call_compatible {
                 continue;
             }
             // Scope gate (issue #19, delphi statement scoping): a container may only
@@ -7655,6 +8274,12 @@ fn bottom_up_match<'a>(
                 old_node.node_type.as_str(),
                 new_node.node_type.as_str(),
             );
+            if trace_match && !old_node.label.is_empty() {
+                eprintln!(
+                    "[match]     vs '{}' — dice {:.3} (need > {:.3})",
+                    new_node.label, score, best_score
+                );
+            }
             if score > best_score {
                 best_score = score;
                 best_match = Some(new_node);
@@ -7864,6 +8489,16 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             if old_to_new.contains_key(node.id.as_str()) {
                 continue;
             }
+            // An operator leaf (#229) under an unmatched parent is covered by the parent's own
+            // edit (or its suppression); only a matched parent makes it an independent change.
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && old_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !old_to_new.contains_key(*parent))
+            {
+                continue;
+            }
             if move_old_descendants.contains(node.id.as_str())
                 || pruned_old_deletes.contains(node.id.as_str())
             {
@@ -7883,6 +8518,14 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     measure_value_optional(probe.as_deref_mut(), "rust_edit_add_generation", || {
         for node in &new_index.nodes {
             if matched_new.contains_key(node.id.as_str()) {
+                continue;
+            }
+            if node.node_type == operator_tokens::OPERATOR_NODE_TYPE
+                && new_index
+                    .parent
+                    .get(node.id.as_str())
+                    .is_some_and(|parent| !matched_new.contains_key(*parent))
+            {
                 continue;
             }
             if move_new_descendants.contains(node.id.as_str())
@@ -8119,6 +8762,9 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     }
 
     measure_value_optional(probe.as_deref_mut(), "rust_edit_reorder_generation", || {
+        // Compare order among surviving siblings. Absolute child indices also
+        // shift on insertion/deletion, which is not a reorder of existing code.
+        let mut reordered_by_parent: HashMap<&str, HashSet<&str>> = HashMap::new();
         for pair in matching {
             if move_old_descendants.contains(pair.old_node.id.as_str())
                 || move_old_all_descendants.contains(pair.old_node.id.as_str())
@@ -8145,6 +8791,21 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             let Some(new_siblings) = new_index.children.get(*new_pid) else {
                 continue;
             };
+            let reordered = reordered_by_parent.entry(*old_pid).or_insert_with(|| {
+                let surviving: Vec<_> = old_siblings.iter().filter_map(|id| {
+                    let partner = old_to_new.get(*id)?;
+                    (new_index.parent.get(partner.id.as_str()).copied() == Some(*new_pid))
+                        .then_some((*id, partner.id.as_str()))
+                }).collect();
+                let surviving_new: HashSet<_> = surviving.iter().map(|(_, new)| *new).collect();
+                let new_ranks: HashMap<_, _> = new_siblings.iter().copied()
+                    .filter(|id| surviving_new.contains(id)).enumerate()
+                    .map(|(rank, id)| (id, rank)).collect();
+                surviving.iter().enumerate().filter_map(|(rank, (old, new))| {
+                    (new_ranks.get(new) != Some(&rank)).then_some(*old)
+                }).collect()
+            });
+            if !reordered.contains(pair.old_node.id.as_str()) { continue; }
             let Some(old_index) = old_siblings
                 .iter()
                 .position(|id| *id == pair.old_node.id.as_str())
@@ -8157,7 +8818,7 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
             else {
                 continue;
             };
-            if old_index != new_index {
+            {
                 ops.push(EditOp {
                     kind: "REORDER",
                     old_node: Some(pair.old_node),
@@ -8419,9 +9080,8 @@ fn update_looks_moved(
     new_parent: &HashMap<&str, &str>,
     old_to_new: &HashMap<&str, &SemanticNode>,
 ) -> bool {
-    if pair.old_node.position.start_line != pair.new_node.position.start_line {
-        return true;
-    }
+    // Line offsets shift after sibling insertions/deletions; only changed ownership
+    // supports moved-update wording. Named moved ancestors are annotated separately.
     let Some(old_pid) = old_parent.get(pair.old_node.id.as_str()) else {
         return false;
     };
@@ -8445,7 +9105,9 @@ fn refine_candidate_drafts<'a>(
     matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
     language: &str,
+    sources: Option<(&str, &str)>,
 ) {
+    callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
         probe.as_deref_mut(),
@@ -8585,10 +9247,12 @@ fn finalize_python_review_drafts<'a>(
     new_source: &str,
     finalization: &mut PythonReviewFinalization,
     language: &str,
+    matching: &[MatchPair<'_>],
 ) {
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
     probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes));
+    probed!(changes, "promote_clojure_defn_parameter_renames", promote_clojure_defn_parameter_renames(changes, old_tree, new_tree, language));
     probed!(changes, "promote_python_signature_changes", promote_python_signature_changes_from_sources(
         changes, old_tree, new_tree, old_source, new_source,
     ));
@@ -8598,8 +9262,8 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "promote_parameter_renames", promote_parameter_renames_from_signature_changes(changes));
     probed!(changes, "promote_parameter_identifier_renames", promote_parameter_identifier_modification_renames(changes, old_tree, new_tree));
     probed!(changes, "promote_moved_empty_read_condition", promote_moved_empty_read_condition_updates(changes));
-    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes));
-    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language));
+    probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes, matching));
+    probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language, matching));
     probed!(changes, "promote_unique_domain_string_labels", promote_unique_domain_string_label_updates_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_source_string_literal_updates", promote_source_string_literal_updates_drafts(
         changes, old_tree, new_tree, old_source, new_source,
@@ -8621,7 +9285,6 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(changes));
     probed!(changes, "suppress_add_delete_by_pairings", suppress_add_delete_drafts_covered_by_pairings(changes));
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
-    probed!(changes, "promote_removed_print_calls", promote_removed_print_call_deletions_from_source(changes, old_tree, new_source));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(changes, language));
@@ -8671,13 +9334,11 @@ fn finalize_python_review_drafts<'a>(
             "rule_id": "refinement.suppress_low_signal_reorders",
             "metadata": {"suppressed_count": suppressed_reorders},
         }));
-        // The formatting-equivalence relabel is a PYTHON style rule; it carried
-        // "python.formatting.call_wrapping_equivalence" into a ts function swap.
-        if language == "python" {
-            finalization
-                .change_groups
-                .push(python_formatting_equivalence_group(changes));
-        }
+    }
+    if language == "python" {
+        finalization.change_groups.extend(python_call_layout_groups(matching, old_source, new_source));
+        decorator_order::preserve_decorator_order(changes, old_tree, new_tree, old_source, new_source);
+        function_extraction::promote_expression_extractions(changes, old_tree, new_tree, old_source, new_source);
     }
     add_compact_superseded_group_for_refactorings(changes, finalization);
     apply_python_literal_invariances(
@@ -8688,10 +9349,22 @@ fn finalize_python_review_drafts<'a>(
         new_source,
         finalization,
     );
+    // A changed AssemblyScript operator and its operand edits belong to one
+    // continuing binary-expression change; do not present them as orphan edits.
+    probed!(changes, "promote_assemblyscript_operator_expression_changes",
+        assemblyscript_operators::promote_assemblyscript_operator_expression_changes(
+            changes, old_tree, new_tree, language));
+    // A positional Clojure binder permutation is a source-level signature edit,
+    // not a proven rename or ignored formatting. Run after all suppression.
+    probed!(changes, "preserve_clojure_ordered_parameter_permutations",
+        preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
     sort_candidate_drafts(changes);
 }
 
+mod assemblyscript_operators;
 mod draft_promotions;
+mod decorator_order;
+mod function_extraction;
 use draft_promotions::*;
 
 
@@ -8728,6 +9401,11 @@ fn longest_increasing_subsequence_positions(sequence: &[usize]) -> HashSet<usize
 }
 
 fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
+    let config_json = request
+        .get("config")
+        .map(Value::to_string)
+        .unwrap_or_else(|| "{}".to_owned());
+    let config = RustCoreConfig::from_json(&config_json)?;
     let language = request
         .get("language")
         .and_then(Value::as_str)
@@ -8742,11 +9420,6 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
         }));
     }
 
-    let config_json = request
-        .get("config")
-        .map(Value::to_string)
-        .unwrap_or_else(|| "{}".to_owned());
-    let config = RustCoreConfig::from_json(&config_json);
     let old_source = request
         .get("old_source")
         .and_then(Value::as_str)
@@ -8833,6 +9506,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
             new_source,
             &mut finalization,
             language,
+            &matching,
         );
 
         if changes.is_empty() {
@@ -8892,6 +9566,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     let serialized = serialize_change_drafts_fast(&changes);
     let mut change_groups = finalization.change_groups;
     change_groups.extend(final_change_groups_from_drafts(&changes));
+    change_groups.extend(final_meaningful_groups_from_drafts(&changes, &matching));
     let is_style_only = file_lifecycle == "modified"
         && changes.is_empty()
         && (old_source == new_source || !finalization.ignored_style_changes.is_empty());
@@ -9142,187 +9817,81 @@ fn stage11_change_description(
 
 mod invariance_groups;
 use invariance_groups::*;
-/// MEANINGFUL_CHANGE groups for the finalize-routed path ONLY (issue #57): python's
-/// presentation surfaces every surviving semantic change as a MEANINGFUL_CHANGE group
-/// carrying the change's labels; routed languages skip python presentation entirely, so
-/// downstream classifiers saw group-less output and read every edit as 'other' (csharp
-/// pilot). Deliberately NOT part of final_change_groups_from_drafts — the certified
-/// batch path feeds python presentation, which builds its own groups.
-fn final_meaningful_groups_from_drafts(changes: &[ChangeDraft<'_>]) -> Vec<Value> {
-    changes
-        .iter()
-        .enumerate()
-        .filter(|(_, change)| {
-            matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION")
-        })
-        .map(|(idx, change)| {
-            final_change_group_from_draft(
-                idx,
-                change,
-                "MEANINGFUL_CHANGE",
-                "presentation.final_meaningful_group",
-            )
-        })
-        .collect()
-}
-
-/// python refinement._group_child_modifications_under_entities (issue #57 abap): a MODIFICATION
-/// whose nearest same-identity entity ancestor changed content gets an entity-ANCHORED
-/// MEANINGFUL_CHANGE group (rule refinement.entity_child_content_changed) so the review reads
-/// "GREET changed" with the statement edits beneath it — not a free-floating leaf edit.
-fn entity_child_content_groups(
-    changes: &[ChangeDraft<'_>],
-    old_tree: &SemanticNode,
-    new_tree: &SemanticNode,
+/// Every final Rust route owns its meaningful groups. The certified batch returns
+/// directly through the thin Python wrapper, so it cannot rely on Python presentation
+/// to add these groups (especially for body edits next to a callable rename).
+fn final_meaningful_groups_from_drafts(
+    changes: &[ChangeDraft<'_>], matching: &[MatchPair<'_>],
 ) -> Vec<Value> {
-    const ROOT_CONTAINERS: &[&str] = &["module", "document", "program", "source_file"];
-    fn nearest_entity<'a>(
-        id: &str,
-        by_id: &HashMap<&str, &'a SemanticNode>,
-    ) -> Option<&'a SemanticNode> {
-        let mut current = id.to_string();
-        while let Some((parent_id, _)) = current.rsplit_once('.') {
-            if let Some(node) = by_id.get(parent_id).copied() {
-                if is_entity_container_type(node.node_type.to_lowercase().as_str()) {
-                    return Some(node);
+    // Each ordinary edit has one meaningful representation. A nearest matched
+    // entity supplies context, not an extra independently counted semantic item.
+    // MOVE/REFACTORING relationships remain owned by their dedicated groups.
+    let is_entity = |node: &SemanticNode| {
+        !node.label.is_empty() && node.label != node.node_type
+            && (is_entity_container_type(&node.node_type)
+                || node.node_type.ends_with("_definition")
+                || node.node_type.ends_with("_declaration"))
+    };
+    let descendant = |node: Option<&SemanticNode>, parent: &SemanticNode| {
+        node.is_some_and(|node| node.id.strip_prefix(&parent.id).is_some_and(|tail| tail.starts_with('.')))
+    };
+    let eligible: Vec<_> = matching.iter().filter(|pair| {
+        is_entity(pair.old_node) && is_entity(pair.new_node)
+            && pair.old_node.node_type == pair.new_node.node_type
+            && pair.old_node.label == pair.new_node.label
+            && pair.old_node.structural_hash != pair.new_node.structural_hash
+    }).collect();
+    let old_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.old_node.id.as_str(), *pair)).collect();
+    let new_owners: HashMap<_, _> = eligible.iter().map(|pair| (pair.new_node.id.as_str(), *pair)).collect();
+    let mut groups = Vec::new();
+    let mut anchors: HashMap<(String, String), usize> = HashMap::new();
+    for (index, change) in changes.iter().enumerate() {
+        if !matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION") { continue; }
+        let mut anchor = None;
+        let (node, owners) = if let Some(node) = change.old_node { (Some(node), &old_owners) }
+            else { (change.new_node, &new_owners) };
+        if let Some(node) = node {
+            let mut id = node.id.as_str();
+            while let Some((parent, _)) = id.rsplit_once('.') {
+                if let Some(pair) = owners.get(parent) {
+                    if change.old_node.is_none_or(|_| descendant(change.old_node, pair.old_node))
+                        && change.new_node.is_none_or(|_| descendant(change.new_node, pair.new_node)) {
+                        anchor = Some(*pair);
+                        break;
+                    }
                 }
+                id = parent;
             }
-            current = parent_id.to_string();
         }
-        None
-    }
-    let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
-    let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
-    let all_labels = |node: Option<&SemanticNode>| -> Vec<String> {
-        let Some(node) = node else { return Vec::new() };
-        std::iter::once(node)
-            .chain(node.descendants())
-            .filter(|n| !n.label.is_empty())
-            .map(|n| n.label.clone())
-            .collect()
-    };
-    let all_ids = |node: &SemanticNode| -> Vec<String> {
-        std::iter::once(node)
-            .chain(node.descendants())
-            .map(|n| n.id.clone())
-            .collect()
-    };
-
-    let mut groups = Vec::new();
-    let mut seen: HashSet<(String, String)> = HashSet::new();
-    for (idx, change) in changes.iter().enumerate() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+        let Some(pair) = anchor else {
+            groups.push(final_change_group_from_draft(index, change, "MEANINGFUL_CHANGE", "presentation.final_meaningful_group"));
             continue;
         };
-        let (Some(old_entity), Some(new_entity)) = (
-            nearest_entity(old_node.id.as_str(), &old_by_id),
-            nearest_entity(new_node.id.as_str(), &new_by_id),
-        ) else {
-            continue;
-        };
-        if ROOT_CONTAINERS.contains(&old_entity.node_type.to_lowercase().as_str())
-            || ROOT_CONTAINERS.contains(&new_entity.node_type.to_lowercase().as_str())
-        {
-            continue;
+        let key = (pair.old_node.id.clone(), pair.new_node.id.clone());
+        let group_index = *anchors.entry(key).or_insert_with(|| {
+            let position = groups.len();
+            groups.push(json!({
+                "kind":"MEANINGFUL_CHANGE", "raw_change_indices":[],
+                "old_labels":[pair.old_node.label], "new_labels":[pair.new_node.label],
+                "old_node_ids":[], "new_node_ids":[], "confidence":0.9,
+                "rule_id":"refinement.entity_child_content_changed",
+                "metadata":{"index_space":"final_changes", "entity_node_id":pair.old_node.id,
+                    "old_entity_node_id":pair.old_node.id, "new_entity_node_id":pair.new_node.id,
+                    "old_entity_label":pair.old_node.label, "new_entity_label":pair.new_node.label,
+                    "entity_type":pair.old_node.node_type}
+            }));
+            position
+        });
+        let group = &mut groups[group_index];
+        group["raw_change_indices"].as_array_mut().unwrap().push(json!(index));
+        for (node, ids, labels) in [(change.old_node,"old_node_ids","old_labels"), (change.new_node,"new_node_ids","new_labels")] {
+            if let Some(node) = node {
+                group[ids].as_array_mut().unwrap().push(json!(node.id));
+                let label = json!(node.label);
+                let values = group[labels].as_array_mut().unwrap();
+                if !node.label.is_empty() && !values.contains(&label) { values.push(label); }
+            }
         }
-        if old_entity.id == old_node.id || new_entity.id == new_node.id {
-            continue;
-        }
-        if old_entity.node_type != new_entity.node_type
-            || old_entity.label != new_entity.label
-            || old_entity.structural_hash == new_entity.structural_hash
-        {
-            continue;
-        }
-        let key = (old_entity.id.clone(), new_entity.id.clone());
-        if !seen.insert(key) {
-            continue;
-        }
-        let mut old_labels = vec![old_entity.label.clone()];
-        old_labels.extend(all_labels(change.old_node));
-        let mut new_labels = vec![new_entity.label.clone()];
-        new_labels.extend(all_labels(change.new_node));
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [idx],
-            "old_labels": old_labels,
-            "new_labels": new_labels,
-            "old_node_ids": all_ids(old_entity),
-            "new_node_ids": all_ids(new_entity),
-            "confidence": 0.86,
-            "rule_id": "refinement.entity_child_content_changed",
-            "metadata": {"entity_node_id": old_entity.id},
-        }));
-    }
-    groups
-}
-
-/// python differ._surface_changed_in_place_entities (issue #57 graphql): a MATCHED named entity
-/// (``type User``, ``query UserCard``, ``fragment UserFields``) whose body changed in place never
-/// appears in the change list itself — only its changed descendants do. Emit a
-/// MEANINGFUL_CHANGE group carrying the ENTITY's label so review UIs surface the container name.
-fn surface_changed_in_place_entity_groups(
-    changes: &[ChangeDraft<'_>],
-    matching: &[MatchPair<'_>],
-) -> Vec<Value> {
-    fn is_named_entity_node(node: &SemanticNode) -> bool {
-        if node.label.is_empty() || node.label == node.node_type {
-            return false;
-        }
-        is_named_entity_type(node.node_type.as_str())
-            || node.node_type.ends_with("_definition")
-            || node.node_type.ends_with("_declaration")
-    }
-    let surfaced_old: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.old_node.map(|n| n.id.as_str()))
-        .collect();
-    let surfaced_new: HashSet<&str> = changes
-        .iter()
-        .filter_map(|c| c.new_node.map(|n| n.id.as_str()))
-        .collect();
-    let mut groups = Vec::new();
-    for pair in matching {
-        if !is_named_entity_node(pair.old_node) || !is_named_entity_node(pair.new_node) {
-            continue;
-        }
-        if surfaced_old.contains(pair.old_node.id.as_str())
-            || surfaced_new.contains(pair.new_node.id.as_str())
-        {
-            continue;
-        }
-        // A descendant appearing in the change list is the reliable "changed in place" signal.
-        let changed = pair
-            .old_node
-            .descendants()
-            .iter()
-            .any(|d| surfaced_old.contains(d.id.as_str()))
-            || pair
-                .new_node
-                .descendants()
-                .iter()
-                .any(|d| surfaced_new.contains(d.id.as_str()));
-        if !changed {
-            continue;
-        }
-        groups.push(json!({
-            "kind": "MEANINGFUL_CHANGE",
-            "raw_change_indices": [],
-            "old_labels": [pair.old_node.label],
-            "new_labels": [pair.new_node.label],
-            "old_node_ids": [pair.old_node.id],
-            "new_node_ids": [pair.new_node.id],
-            "confidence": 0.9,
-            "rule_id": "presentation.surface_changed_in_place_entity",
-            "metadata": {
-                "entity_type": pair.old_node.node_type,
-                "old_label": pair.old_node.label,
-                "new_label": pair.new_node.label,
-            },
-        }));
     }
     groups
 }
@@ -9368,6 +9937,16 @@ fn final_change_group_from_draft(
     });
     if let Some(refactoring_kind) = change.refactoring_kind {
         group["refactoring_kind"] = json!(refactoring_kind);
+    }
+    // A callable rename owns the declaration identity, not every descendant.
+    // Including body IDs/labels lets group compaction swallow independent behavior edits.
+    if change.refactoring_kind == Some("RENAME_SYMBOL")
+        && change.old_node.is_some_and(anchor_is_function)
+    {
+        group["old_labels"] = json!(change.old_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["new_labels"] = json!(change.new_node.map(|n| vec![n.label.clone()]).unwrap_or_default());
+        group["old_node_ids"] = json!(change.old_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
+        group["new_node_ids"] = json!(change.new_node.map(|n| vec![n.id.clone()]).unwrap_or_default());
     }
     group
 }
@@ -10010,6 +10589,9 @@ fn lifecycle_from_status(status: Option<&str>) -> Option<&'static str> {
     {
         return Some("added");
     }
+    if ["modified", "modify", "m", "changed"].iter().any(|item| status.eq_ignore_ascii_case(item)) {
+        return Some("modified");
+    }
     if ["deleted", "delete", "d", "removed", "remove"]
         .iter()
         .any(|item| status.eq_ignore_ascii_case(item))
@@ -10098,7 +10680,16 @@ fn semantic_diff_payload_with_style(
 /// program; labels differing in content are not.
 fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
     let mut hasher = Sha256::new();
-    let normalized: String = node.label.split_whitespace().collect::<Vec<_>>().join(" ");
+    // Whitespace within literal values is data. Parent labels may contain quoted
+    // source too, so conservatively preserve those rather than proving equivalence.
+    let normalized = if node.node_type.to_lowercase().contains("string")
+        || matches!(node.node_type.as_str(), "character_literal" | "char_literal" | "character")
+        || node.label.contains(['\'', '"', '`'])
+    {
+        node.label.clone()
+    } else {
+        node.label.split_whitespace().collect::<Vec<_>>().join(" ")
+    };
     hasher.update(node.node_type.as_bytes());
     hasher.update(b":");
     hasher.update(normalized.as_bytes());
@@ -10107,6 +10698,12 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
         hasher.update(whitespace_normalized_tree_hash(child).as_bytes());
     }
     format!("{:x}", hasher.finalize())
+}
+
+fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
+    let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
+    let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
+    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
 }
 
 fn semantic_diff_payload(
@@ -10140,6 +10737,9 @@ fn semantic_diff_payload(
         "llm_summary": "",
         "gitignore_excluded": false,
         "is_fallback": false,
+        // Rust explicitly certifies the (possibly empty) guardrail inventory.
+        // Python must not manufacture it through DTO defaults (#202).
+        "guardrail_violations": [],
         "metadata": metadata,
     })
 }
@@ -10260,3 +10860,116 @@ mod tests;
 mod test_wrappers;
 #[cfg(test)]
 pub(crate) use test_wrappers::*;
+
+#[cfg(all(test, feature = "host-utils-guest"))]
+#[path = "host_utils_guest_tests.rs"]
+mod host_utils_guest_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+mod native_parser_telemetry_tests {
+    use super::*;
+
+    #[test]
+    fn hotspot_policy_preserves_thresholds_aggregation_and_unlimited() {
+        let make = |fuel: Value, bytes, lines| json!({"plugin":"parser.wasm","function":"process","fuel_consumed":fuel,"fuel_budget":100000000,"max_fuel_used_percent":35.0,"input_bytes":bytes,"input_lines":lines,"language":"typescript","filename":"main.ts"});
+        assert_eq!(native_fuel_hotspots(&[make(json!(1_500_000), 1024, 1)]), json!([]));
+        let hot = native_fuel_hotspots(&[make(json!(35_000_000), 512, 24)]);
+        assert_eq!(hot[0]["thresholds_exceeded"], json!(["absolute","per_kb"]));
+        assert_eq!(hot[0]["filename"], "main.ts");
+        assert_eq!(native_fuel_hotspots(&[make(json!(40_000_000), 100000, 100)]), json!([]));
+        assert_eq!(native_fuel_hotspots(&[make(Value::Null, 512, 1)]), json!([]));
+        // Peak fuel / summed sizes, not total fuel / one call's input.
+        assert_eq!(native_fuel_hotspots(&[make(json!(22_000_001), 1024, 20), make(json!(22_000_001), 1024, 20)]), json!([]));
+        assert_eq!(fuel_budget(999_999, 100_000_000), 999_999);
+        assert_eq!(fuel_budget(1_000_000, 100_000_000), 100_000_000);
+        assert_eq!(fuel_budget(u64::MAX, 100_000_000), u64::MAX);
+    }
+
+    #[test]
+    fn real_parser_fuel_survives_native_review_and_source_fallback() {
+        let wasm = PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components"));
+        for (language, component, filename, old, new) in [
+            ("javascript", "js_ts_parser.wasm", "edit.js", "const n = 1;", "const n = 2;"),
+            ("json", "json_parser.wasm", "settings.json", "{\"n\":1}", "{\"n\":2}"),
+            ("javascript", "js_ts_parser.wasm", "broken.js", "function f(", "function g("),
+        ] {
+            let parser = wasm.join(component);
+            let diff = native_wasm_single_diff(language, parser.to_str().unwrap(), old, new, filename, filename, "{}", None).unwrap();
+            assert!(!diff["changes"].as_array().unwrap().is_empty(), "{diff}");
+            if filename == "broken.js" { assert_eq!(diff["is_fallback"], true); }
+            let process: Vec<_> = diff["metadata"]["engine_telemetry"]["calls"].as_array().unwrap()
+                .iter().filter(|call| call["function"] == "process").collect();
+            assert_eq!(process.len(), 2);
+            for (call, source) in process.iter().zip([old, new]) {
+                let used = call["fuel_consumed"].as_u64().unwrap();
+                let budget = call["fuel_budget"].as_u64().unwrap();
+                assert!(used > 0 && used < budget, "{call}");
+                assert_eq!(call["total_fuel_consumed"], used);
+                assert_eq!(call["call_count"], 1);
+                assert_eq!(call["engine_owner"], "rust");
+                assert_eq!(call["function"], "process");
+                assert_eq!(call["input_bytes"], source.len());
+                assert_eq!(call["input_lines"], source.lines().count());
+                assert_eq!(call["filename"], filename);
+                assert_eq!(call["language"], language);
+                assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
+            }
+        }
+    }
+
+    #[test]
+    fn unlimited_parser_fuel_is_unknown_not_zero() {
+        let wasm = PathBuf::from(std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components"));
+        let parser = wasm.join("json_parser.wasm");
+        let bounded = native_wasm_single_diff("json", parser.to_str().unwrap(), "{\"n\":1}", "{\"n\":2}",
+            "a.json", "a.json", r#"{"plugin_fuel":200000000}"#, None).unwrap();
+        for call in bounded["metadata"]["engine_telemetry"]["calls"].as_array().unwrap() {
+            assert_eq!(call["fuel_budget"], 200000000);
+            assert!(call["fuel_consumed"].as_u64().unwrap() > 0);
+        }
+        let diff = native_wasm_single_diff("json", parser.to_str().unwrap(), "{\"n\":1}", "{\"n\":2}",
+            "a.json", "a.json", r#"{"plugin_fuel":-1}"#, None).unwrap();
+        let calls = diff["metadata"]["engine_telemetry"]["calls"].as_array().unwrap();
+        assert_eq!(calls.len(), 2);
+        for call in calls {
+            assert!(call["fuel_consumed"].is_null());
+            assert!(call["total_fuel_consumed"].is_null());
+            assert!(call["fuel_budget"].is_null());
+            assert!(call["max_fuel_used_percent"].is_null());
+            assert!(call["elapsed_ms"].as_f64().unwrap() >= 0.0);
+        }
+    }
+}
+
+#[cfg(test)]
+mod native_commit_index_fail_closed_tests {
+    use super::*;
+
+    #[test]
+    fn native_commit_requires_parser_bundle_for_indexing() {
+        let changed = vec![json!({
+            "old_source": "def f():\n    return 1\n",
+            "new_source": "def f():\n    return 2\n",
+            "old_filename": "changed.py", "new_filename": "changed.py",
+            "language": "python", "parser_wasm_path": ""
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "").unwrap_err();
+        assert!(error.contains("parser bundle"), "{error}");
+        assert!(compute_commit_cross_file_changes(&[], "{}", "").unwrap().0.as_array().unwrap().is_empty());
+    }
+
+    #[test]
+    fn native_commit_does_not_suppress_second_pass_parser_failure() {
+        let changed = vec![json!({
+            "old_source": "function f() { return 1; }",
+            "new_source": "function f() { return 2; }",
+            "old_filename": "broken.js", "new_filename": "broken.js",
+            "language": "javascript",
+            "parser_wasm_path": "/__intentumdiff_missing__/parser.wasm"
+        })];
+        let error = compute_commit_cross_file_changes(&changed, "{}", "/__intentumdiff_missing__")
+            .unwrap_err();
+        assert!(error.contains("broken.js"), "{error}");
+        assert!(error.contains("symbol-index parser"), "{error}");
+    }
+}

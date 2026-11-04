@@ -1,0 +1,219 @@
+[
+  {
+    "name": "declaration_targets",
+    "source": "def f():\n    value = 1\nvalue\n",
+    "tree": {
+      "id": "root",
+      "node_type": "module",
+      "label": "root",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 2,
+        "end_col": 5
+      },
+      "structural_hash": "root",
+      "children": [
+        {
+          "id": "f",
+          "node_type": "function_name",
+          "label": "f",
+          "position": {
+            "start_line": 0,
+            "start_col": 4,
+            "end_line": 0,
+            "end_col": 5
+          },
+          "structural_hash": "f",
+          "children": []
+        },
+        {
+          "id": "assignment",
+          "node_type": "assignment",
+          "label": "assignment",
+          "position": {
+            "start_line": 1,
+            "start_col": 4,
+            "end_line": 1,
+            "end_col": 13
+          },
+          "structural_hash": "assignment",
+          "children": [
+            {
+              "id": "value",
+              "node_type": "variable_name",
+              "label": "value",
+              "position": {
+                "start_line": 1,
+                "start_col": 4,
+                "end_line": 1,
+                "end_col": 9
+              },
+              "structural_hash": "value",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "plain",
+          "node_type": "identifier",
+          "label": "plain",
+          "position": {
+            "start_line": 2,
+            "start_col": 0,
+            "end_line": 2,
+            "end_col": 5
+          },
+          "structural_hash": "plain",
+          "children": []
+        }
+      ]
+    },
+    "expected": [
+      [
+        "f",
+        0,
+        4
+      ],
+      [
+        "assignment",
+        1,
+        4
+      ],
+      [
+        "value",
+        1,
+        4
+      ]
+    ],
+    "expected_utf16": [
+      [
+        "f",
+        0,
+        4
+      ],
+      [
+        "assignment",
+        1,
+        4
+      ],
+      [
+        "value",
+        1,
+        4
+      ]
+    ]
+  },
+  {
+    "name": "empty",
+    "source": "",
+    "tree": {
+      "id": "root",
+      "node_type": "module",
+      "label": "root",
+      "position": {
+        "start_line": 0,
+        "start_col": 0,
+        "end_line": 0,
+        "end_col": 0
+      },
+      "structural_hash": "root",
+      "children": []
+    },
+    "expected": [],
+    "expected_utf16": []
+  },
+  {
+    "name": "bmp",
+    "source": "\"é\"; value = 1",
+    "tree": {
+      "id": "value",
+      "node_type": "variable_name",
+      "label": "value",
+      "position": {
+        "start_line": 0,
+        "end_line": 0,
+        "start_col": 6,
+        "end_col": 11
+      },
+      "structural_hash": "value",
+      "children": []
+    },
+    "expected": [
+      [
+        "value",
+        0,
+        6
+      ]
+    ],
+    "expected_utf16": [
+      [
+        "value",
+        0,
+        5
+      ]
+    ]
+  },
+  {
+    "name": "astral",
+    "source": "\"😀\"; value = 1",
+    "tree": {
+      "id": "value",
+      "node_type": "variable_name",
+      "label": "value",
+      "position": {
+        "start_line": 0,
+        "end_line": 0,
+        "start_col": 8,
+        "end_col": 13
+      },
+      "structural_hash": "value",
+      "children": []
+    },
+    "expected": [
+      [
+        "value",
+        0,
+        8
+      ]
+    ],
+    "expected_utf16": [
+      [
+        "value",
+        0,
+        6
+      ]
+    ]
+  },
+  {
+    "name": "crlf",
+    "source": "\"é\"\r\nvalue = 1",
+    "tree": {
+      "id": "value",
+      "node_type": "variable_name",
+      "label": "value",
+      "position": {
+        "start_line": 1,
+        "end_line": 1,
+        "start_col": 0,
+        "end_col": 5
+      },
+      "structural_hash": "value",
+      "children": []
+    },
+    "expected": [
+      [
+        "value",
+        1,
+        0
+      ]
+    ],
+    "expected_utf16": [
+      [
+        "value",
+        1,
+        0
+      ]
+    ]
+  }
+]

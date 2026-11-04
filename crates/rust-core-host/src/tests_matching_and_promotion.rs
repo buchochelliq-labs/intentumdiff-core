@@ -5,6 +5,242 @@
 use super::*;
 use crate::*;
 
+#[test]
+fn callable_renames_accept_actual_parser_shapes_without_parameter_children() {
+    // Captured from the published Wasm components listed in the fixture README.
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/callable_parser_shapes.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["old_source"].as_str().unwrap(), case["new_source"].as_str().unwrap(),
+            case["language"].as_str().unwrap(), "{}",
+        ).unwrap()).unwrap();
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["old_node"]["label"] == case["old_name"]
+            && c["new_node"]["label"] == case["new_name"]), "{}: {result}", case["language"]);
+        if case["language"] == "vue" {
+            let old: SemanticNode = serde_json::from_value(case["old_tree"].clone()).unwrap();
+            let new: SemanticNode = serde_json::from_value(case["new_tree"].clone()).unwrap();
+            let changed = format!("{}\nother();", case["new_source"].as_str().unwrap());
+            assert!(!callable_renames::exact_source_rename(&old.children[0], &new.children[0],
+                Some((case["old_source"].as_str().unwrap(), &changed))));
+        }
+    }
+}
+
+fn rename_review_routes(old: &str, new: &str) -> Vec<(&'static str, Value)> {
+    let request = json!({
+        "schema_version": 1, "python_parser_backend": "native",
+        "files": [{"old_source": old, "new_source": new,
+            "old_filename": "example.py", "new_filename": "example.py",
+            "language": "python", "parser_wasm_path": "unused.wasm"}]
+    });
+    let batch: Value = serde_json::from_str(&diff_batch(&request.to_string()).unwrap()).unwrap();
+    assert_eq!(batch["status"], COMPLETE, "{batch}");
+    fn tree(source: &str) -> String {
+        let cst: CstNode = serde_json::from_str(&python_wasm_filtered_cst(source).unwrap()).unwrap();
+        serde_json::to_string(&convert_cst(&cst, "0", None).unwrap()).unwrap()
+    }
+    let routed: Value = serde_json::from_str(&finalize_review_impl(
+        &tree(old), &tree(new), old, new, "python", "{}"
+    ).unwrap()).unwrap();
+    vec![("batch", batch["diffs"][0]["diff"].clone()), ("routed", routed)]
+}
+
+fn assert_function_rename(result: &Value, old: &str, new: &str) {
+    let changes = result["changes"].as_array().unwrap();
+    assert!(changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+        && c["old_node"]["label"] == old && c["new_node"]["label"] == new
+        && c["old_node"]["node_type"] == "function_definition"), "{result}");
+}
+
+#[test]
+fn rename_prefers_unique_exact_body_over_position() {
+    for (old, new) in [
+        ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x * 1\n", "def c(x): return x * 1\n"),
+    ] {
+      for (_, result) in rename_review_routes(old, new) {
+        assert_function_rename(&result, "b", "c");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "DELETION" && c["old_node"]["label"] == "a"), "{result}");
+      }
+    }
+}
+
+#[test]
+fn decorator_order_is_behavior_with_or_without_rename() {
+    for name in ["calc", "compute"] {
+        let old = "@cache\n@authorize\ndef calc(x): return x + 1\n";
+        let new = format!("@authorize\n@cache\ndef {name}(x): return x + 1\n");
+        for (_, result) in rename_review_routes(old, &new) {
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        }
+    }
+}
+
+#[test]
+fn decorator_insertion_does_not_hide_existing_order_change() {
+    for (_, result) in rename_review_routes("@a\n@b\ndef f(x): return x\n",
+        "@c\n@b\n@a\ndef f(x): return x\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION"
+            && c["description"].as_str().unwrap().contains("Reorder decorator")), "{result}");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "ADDITION"), "{result}");
+    }
+}
+
+#[test]
+fn extraction_requires_exact_expression_arguments_and_context() {
+    let old = "def calc(x):\n    return x * 2\n";
+    for new in [
+        "def helper(x):\n    return x + 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(3)\n",
+        "def helper(x):\n    log(x)\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "@decorate\ndef helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n",
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    print(helper(x))\n",
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+        }
+    }
+    for (_, result) in rename_review_routes(old,
+        "def helper(x):\n    return x * 2\ndef calc(x):\n    return helper(x)\n") {
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "EXTRACT_FUNCTION"), "{result}");
+    }
+}
+
+#[test]
+fn python_operator_change_is_a_semantic_modification_on_every_route() {
+    // Oracle (Core #229): changing only an operator changes behaviour. Both the batch
+    // product route and the routed finalize_review route must report it as a semantic
+    // change - never `is_style_only`, never an empty change list.
+    let cases = [
+        ("def f(a, b):\n    return a + b\n", "def f(a, b):\n    return a - b\n"),
+        ("def f(a, b):\n    return a < b\n", "def f(a, b):\n    return a > b\n"),
+        ("def f(a, b):\n    return a and b\n", "def f(a, b):\n    return a or b\n"),
+        ("x = 1\nx += 2\n", "x = 1\nx -= 2\n"),
+        // Matched parent gaining an operator leaf: must surface, not be skipped as covered.
+        ("def f(a, b):\n    return a is b\n", "def f(a, b):\n    return a is not b\n"),
+        // `async` on a comprehension clause is the iteration protocol, not layout.
+        ("async def f(xs):\n    return [x async for x in xs]\n",
+         "async def f(xs):\n    return [x for x in xs]\n"),
+    ];
+    for (old, new) in cases {
+        for (route, result) in rename_review_routes(old, new) {
+            assert_ne!(result["is_style_only"], true, "{route} {old:?}->{new:?}: {result}");
+            // `has_semantic_changes` belongs to the final diff (batch route); the routed
+            // finalize payload carries changes + groups only.
+            if route == "batch" {
+                assert_eq!(result["has_semantic_changes"], true, "{route} {old:?}->{new:?}: {result}");
+            }
+            assert!(
+                result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"),
+                "{route} {old:?}->{new:?}: operator change is not a MODIFICATION: {result}"
+            );
+            assert!(
+                !result["changes"].as_array().unwrap().is_empty(),
+                "{route} {old:?}->{new:?}: no changes reported: {result}"
+            );
+            assert!(
+                !result["change_groups"].as_array().unwrap().iter().any(|g| g["kind"] == "IGNORED_STYLE"),
+                "{route} {old:?}->{new:?}: operator change filed as IGNORED_STYLE: {result}"
+            );
+        }
+    }
+}
+
+#[test]
+fn renamed_function_with_body_edit_preserves_both_intents() {
+    for (_, result) in rename_review_routes("def calc(x):\n    return x + 1\n", "def compute(x):\n    return x + 2\n") {
+        assert_function_rename(&result, "calc", "compute");
+        assert!(result["changes"].as_array().unwrap().iter().any(|c|
+            c["change_type"] == "MODIFICATION" && c["old_node"]["label"] == "1"
+            && c["new_node"]["label"] == "2"), "{result}");
+        assert_ne!(result["is_style_only"], true);
+        let literal_index = result["changes"].as_array().unwrap().iter().position(|c|
+            c["change_type"] == "MODIFICATION" && c["new_node"]["label"] == "2").unwrap();
+        assert!(result["change_groups"].as_array().unwrap().iter().any(|g|
+            g["kind"] == "MEANINGFUL_CHANGE"
+            && g["raw_change_indices"].as_array().unwrap().contains(&json!(literal_index))), "{result}");
+
+    }
+}
+
+#[test]
+fn renamed_function_with_inserted_helper_keeps_cap_edit() {
+    let old = "import os\nimport sys\n\ndef calculate_total(items):\n    total = 0\n    for i in items:\n        total += i.price * i.qty\n    return min(total, 50)\n";
+    let new = "import sys\nimport os\n\ndef _subtotal(i):\n    return i.price * i.qty\n\ndef compute_order_total(items):\n    total = 0\n    for i in items:\n        total += _subtotal(i)\n    return min(total, 75)\n";
+    for (route, result) in rename_review_routes(old, new) {
+        assert!(result["changes"].as_array().unwrap().iter().all(|c| c["change_type"] != "REORDER" && c["change_type"] != "MOVE"), "{route}: insertion is not relocation: {result}");
+        assert_function_rename(&result, "calculate_total", "compute_order_total");
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+            && c["old_node"]["label"] == "50" && c["new_node"]["label"] == "75"), "{result}");
+        assert!(!changes.iter().any(|c| c["refactoring_kind"] == "RENAME_SYMBOL"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
+        assert!(changes.iter().any(|c| c["new_node"]["label"] == "_subtotal"), "helper must remain visible: {result}");
+        assert!(changes.iter().any(|c| c["refactoring_kind"] == "EXTRACT_FUNCTION"
+            && c["new_node"]["label"] == "_subtotal"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_controls_decline_ambiguous_and_unrelated_pairs() {
+    for (old, new) in [
+        ("def a(): return 1\n", "def b(): return 2\n"),
+        ("def a(x): return x + 1\ndef b(x): return x + 1\n", "def c(x): return x + 1\n"),
+        ("def old_one(): return 1\ndef keep(): return 0\n",
+         "def keep(): return 0\ndef new_one(): return 2\n"),
+        ("def alpha(a): return a * 3\n", "def beta(b): return b - 9\n"),
+        ("def alpha(x): return x + 1\ndef beta(x): return x + 1\n",
+         "def gamma(x): return x + 2\ndef delta(x): return x + 2\n"),
+        ("class A:\n    class Inner:\n        def calc(x): return x + 1\nclass B:\n    class Inner:\n        pass\n",
+         "class A:\n    class Inner:\n        pass\nclass B:\n    class Inner:\n        def compute(x): return x + 2\n"),
+        ("class A:\n    def calc(x): return x + 1\n",
+         "class B:\n    def compute(x): return x + 2\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+                c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+        }
+    }
+}
+
+#[test]
+fn renamed_function_control_preserves_pure_rename_and_existing_identity() {
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n", "def compute(x): return x + 1\n") {
+        assert_function_rename(&result, "calc", "compute");
+    }
+    for (_, result) in rename_review_routes("def calc(x): return x + 1\n",
+        "def compute(x): return x + 2\ndef calc(x): return x + 1\n") {
+        assert!(!result["changes"].as_array().unwrap().iter().any(|c|
+            c["refactoring_kind"] == "RENAME_SYMBOL"), "{result}");
+    }
+}
+
+#[test]
+fn renamed_function_keeps_behavioral_statement_order_changes() {
+    for (old, new) in [
+        ("def calc(x):\n    x = x + 1\n    x = x * 2\n    return x\n",
+         "def compute(x):\n    x = x * 2\n    x = x + 1\n    return x\n"),
+        ("def calc(x):\n    first(x)\n    second(x)\n    return x\n",
+         "def compute(x):\n    second(x)\n    first(x)\n    return x\n"),
+    ] {
+        for (_, result) in rename_review_routes(old, new) {
+            assert_function_rename(&result, "calc", "compute");
+            assert!(result["changes"].as_array().unwrap().iter().any(|c|
+                c["change_type"] == "MODIFICATION"
+                && c["description"].as_str().unwrap().contains("Reorder statement")), "{result}");
+        }
+    }
+}
+
     #[test]
     fn cst_diff_reports_update_for_renamed_python_function() {
         let out = diff_python_cst_json(
@@ -24,12 +260,9 @@ use crate::*;
         assert!(!changes.is_empty());
     }
     #[test]
-    fn same_id_named_relabel_promotes_to_refactoring_rename_not_move() {
-        // Oracle scenario (intentumdiff-diff-expectations / issue #10): a clean function rename
-        // (greet -> welcome) — same structural id, same node type, same position, only the
-        // label changed — is a REFACTORING rename, never a MOVE. The old behavior emitted
-        // change_type "MOVE" here, surfacing the rename as MOVE + a redundant identifier
-        // modification while the Python oracle collapses it to one change.
+    fn positional_callable_relabel_without_body_evidence_stays_explicit() {
+        // IDs are positions, not identities. Empty synthetic callables provide no
+        // evidence for a rename; real-source pure-renames are covered separately.
         let old_fn = node("0.1", "function_definition", "greet", vec![]);
         let new_fn = node("0.1", "function_definition", "welcome", vec![]);
         let mut changes = vec![
@@ -59,15 +292,8 @@ use crate::*;
 
         promote_same_id_named_renames_from_add_delete_drafts(&mut changes);
 
-        assert_eq!(
-            changes.len(),
-            1,
-            "add+delete must collapse to one change: {changes:?}"
-        );
-        assert_eq!(changes[0].change_type, "REFACTORING");
-        assert_eq!(changes[0].refactoring_kind, Some("RENAME_SYMBOL"));
-        assert_eq!(changes[0].old_node.unwrap().label, "greet");
-        assert_eq!(changes[0].new_node.unwrap().label, "welcome");
+        assert_eq!(changes.len(), 2, "position alone cannot collapse a callable: {changes:?}");
+        assert!(changes.iter().all(|c| c.refactoring_kind.is_none()));
     }
     #[test]
     fn markdown_section_swap_is_one_move() {
@@ -917,4 +1143,271 @@ fn user_xml_dialect_predicate_and_coordinate_key() {
     }))
     .expect("spec parses");
     assert!(!xml_tree_matches_user_dialect(&unpredicated, &tree));
+}
+
+#[test]
+fn inserted_statement_does_not_reorder_existing_abap_statement() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/reorder_insertion.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["old"].as_str().unwrap(), case["new"].as_str().unwrap(),
+            "abap", "{}",
+        ).unwrap()).unwrap();
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["change_type"] == "ADDITION"), "{result}");
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"), "{result}");
+        assert!(!changes.iter().any(|c| c["change_type"] == "REORDER" || c["change_type"] == "MOVE"), "{result}");
+    }
+}
+
+#[test]
+fn reorder_compares_surviving_siblings_not_absolute_positions() {
+    for (old_labels, new_labels, reordered) in [
+        (vec!["a", "b"], vec!["x", "a", "b"], false),
+        (vec!["x", "a", "b"], vec!["a", "b"], false),
+        (vec!["a", "b"], vec!["b", "a"], true),
+        (vec!["a", "b"], vec!["x", "b", "a"], true),
+    ] {
+        let make = |labels: &[&str]| node("0", "block", "block", labels.iter().enumerate()
+            .map(|(i, label)| node(&format!("0.{i}"), "statement", label, vec![])).collect());
+        let old = make(&old_labels);
+        let new = make(&new_labels);
+        let mut pairs = vec![MatchPair { old_node: &old, new_node: &new }];
+        for old_node in &old.children {
+            if let Some(new_node) = new.children.iter().find(|n| n.label == old_node.label) {
+                pairs.push(MatchPair { old_node, new_node });
+            }
+        }
+        let script = generate_edit_script_with_diagnostics_indexed(
+            &TreeIndex::new(&old), &TreeIndex::new(&new), &pairs, None);
+        let reorders: Vec<_> = script.ops.iter().filter(|op| op.kind == "REORDER").collect();
+        assert_eq!(!reorders.is_empty(), reordered, "{old_labels:?} -> {new_labels:?}");
+        if new_labels == ["x", "b", "a"] {
+            // B has the same absolute index but changed its order relative to A.
+            assert!(reorders.iter().any(|op| op.old_node.unwrap().label == "b"));
+        }
+    }
+}
+
+#[test]
+fn call_layout_evidence_excludes_real_edits_and_deleted_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/call_layout_evidence.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MOVE"), "{route}: {diff}");
+            let groups: Vec<_> = diff["change_groups"].as_array().unwrap().iter()
+                .filter(|g| g["rule_id"] == "python.formatting.call_wrapping_equivalence").collect();
+            assert_eq!(!groups.is_empty(), case["style"].as_bool().unwrap(), "{route}: {diff}");
+            for group in groups {
+                assert_eq!(group["metadata"]["evidence"], "matched_call_source");
+                let labels = group["old_labels"].as_array().unwrap();
+                assert!(labels.contains(&json!("send")));
+                assert!(!labels.contains(&json!("foo")) && !labels.contains(&json!("use")));
+            }
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "DELETION"));
+            assert!(diff["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"));
+        }
+    }
+}
+
+#[test]
+fn argument_lists_follow_their_owning_calls() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/argument_owner_matching.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        for (route, diff) in rename_review_routes(case["old"].as_str().unwrap(), case["new"].as_str().unwrap()) {
+            let mut actual: Vec<String> = diff["changes"].as_array().unwrap().iter().map(|c|
+                json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]]).to_string()).collect();
+            let mut expected: Vec<String> = case["expected"].as_array().unwrap().iter().map(Value::to_string).collect();
+            actual.sort(); expected.sort();
+            assert_eq!(actual, expected, "{} {route}: {diff}", case["name"]);
+            if !case["expected"].as_array().unwrap().iter().any(|e| e[0] == "MOVE") {
+                assert!(!diff["changes"].as_array().unwrap().iter().any(|c| c["description"].as_str().unwrap_or("").contains("moved")), "{route}: {diff}");
+            }
+        }
+    }
+}
+
+#[test]
+fn elixir_sibling_swap_does_not_rewrite_unchanged_definitions() {
+    let cases: Value = serde_json::from_str(include_str!("../tests/fixtures/elixir_sibling_swap.json")).unwrap();
+    for case in cases.as_array().unwrap() {
+        let diff: Value = serde_json::from_str(&finalize_review_impl(
+            &case["old_tree"].to_string(), &case["new_tree"].to_string(),
+            case["source"]["old"].as_str().unwrap(), case["source"]["new"].as_str().unwrap(), "elixir", "{}",
+        ).unwrap()).unwrap();
+        // Unchanged definitions contribute only their module's coarse structural update;
+        // a real edit inside a relocated definition remains exactly that value edit.
+        let actual: Vec<Value> = diff["changes"].as_array().unwrap().iter().map(|c|
+            json!([c["change_type"], c["old_node"]["node_type"], c["old_node"]["label"], c["new_node"]["node_type"], c["new_node"]["label"]])).collect();
+        assert_eq!(json!(actual), case["expected"], "{}: {diff}", case["source"]["name"]);
+    }
+}
+
+
+#[test]
+fn same_line_duplicate_go_literals_prefer_actual_source_column() {
+    // Source: "\tfmt.Println(add(3, 4))" at zero-based row 13.
+    // The first argument changes 3 -> 4 at byte col 17; the second
+    // argument 4 remains unchanged at col 20. Hash/label-only matching
+    // must not steal that unchanged second argument for the first slot.
+    fn literal(id: &str, label: &str, col: u32) -> SemanticNode {
+        let mut node = node(id, "int_literal", label, vec![]);
+        node.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + 1,
+        };
+        node
+    }
+    fn tree(first: &str, call_hash: &str, root_hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            literal("0.0.0", first, 17),
+            literal("0.0.1", "4", 20),
+        ]);
+        call.structural_hash = call_hash.into();
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = root_hash.into();
+        root
+    }
+    let old = tree("3", "old-call", "old-root");
+    let new = tree("4", "new-call", "new-root");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: unchanged old 4 must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: matching duplicated 4 at byte col 17 instead of unchanged col 20");
+        assert_eq!(unchanged.new_node.position.start_col, 20, "{stage}");
+        assert!(pairs.iter().all(|pair|
+            !(pair.old_node.id == "0.0.1" && pair.new_node.id == "0.0.0")),
+            "{stage}: duplicate literal must not steal edited span");
+    }
+}
+
+
+#[test]
+fn shifted_go_duplicate_literal_keeps_unchanged_argument_slot() {
+    // Two independent source edits on the same line: the earlier identifier
+    // shortens and the last argument changes 3 -> 4. The existing middle 4
+    // must not be paired to the newly edited final 4 merely because its
+    // absolute byte column is now nearer the old middle argument.
+    let old_source = "add(longName, 4, 3)";
+    let new_source = "add(x, 4, 4)";
+    assert_eq!(old_source.find(", 4").unwrap() + 2, 14);
+    assert_eq!(new_source.find(", 4").unwrap() + 2, 7);
+    assert_eq!(new_source.rfind(", 4").unwrap() + 2, 10);
+
+    fn leaf(id: &str, kind: &str, label: &str, col: u32) -> SemanticNode {
+        let mut result = node(id, kind, label, vec![]);
+        result.position = NodePosition {
+            start_line: 13,
+            start_col: col,
+            end_line: 13,
+            end_col: col + label.len() as u32,
+        };
+        result
+    }
+    fn tree(prior: &str, middle_col: u32, last: &str, last_col: u32, hash: &str) -> SemanticNode {
+        let mut call = node("0.0", "call_expression", "add", vec![
+            leaf("0.0.0", "identifier", prior, 4),
+            leaf("0.0.1", "int_literal", "4", middle_col),
+            leaf("0.0.2", "int_literal", last, last_col),
+        ]);
+        call.structural_hash = format!("{hash}-call");
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = format!("{hash}-root");
+        root
+    }
+    let old = tree("longName", 14, "3", 17, "old");
+    let new = tree("x", 7, "4", 10, "new");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: old middle literal must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.1",
+            "{stage}: preceding width change must not steal the unchanged middle argument");
+        assert_eq!(unchanged.new_node.position.start_col, 7, "{stage}");
+        assert!(pairs.iter().all(|pair| !(pair.old_node.id == "0.0.1"
+            && pair.new_node.id == "0.0.2")), "{stage}: edited last 4 must remain distinct");
+    }
+}
+
+#[test]
+fn deleting_preceding_go_argument_preserves_unchanged_duplicate_source_position() {
+    // The deleted first argument shifts the child slot of the unchanged 4
+    // from 1 to 0, while its actual line and UTF-8 byte column remain
+    // identical. The last argument changes 3 -> 4, creating a duplicate
+    // which MUST NOT steal the existing literal from its real source.
+    let old_source = "add(x,\n    4, 3)";
+    let new_source = "add(\n    4, 4)";
+    assert!(old_source.contains("\n    4, 3"));
+    assert!(new_source.contains("\n    4, 4"));
+    fn literal(id: &str, kind: &str, label: &str, line: u32, col: u32) -> SemanticNode {
+        let mut result = node(id, kind, label, vec![]);
+        result.position = NodePosition {
+            start_line: line,
+            start_col: col,
+            end_line: line,
+            end_col: col + label.len() as u32,
+        };
+        result
+    }
+    fn tree(with_first: bool, final_value: &str, hash: &str) -> SemanticNode {
+        let mut children = Vec::new();
+        if with_first {
+            children.push(literal("0.0.0", "identifier", "x", 0, 4));
+        }
+        let unchanged_id = if with_first { "0.0.1" } else { "0.0.0" };
+        let changed_id = if with_first { "0.0.2" } else { "0.0.1" };
+        children.push(literal(unchanged_id, "int_literal", "4", 1, 4));
+        children.push(literal(changed_id, "int_literal", final_value, 1, 7));
+        let mut call = node("0.0", "call_expression", "add", children);
+        call.structural_hash = format!("{hash}-call");
+        let mut root = node("0", "source_file", "root", vec![call]);
+        root.structural_hash = format!("{hash}-root");
+        root
+    }
+    let old = tree(true, "3", "old");
+    let new = tree(false, "4", "new");
+    let old_index = TreeIndex::new(&old);
+    let new_index = TreeIndex::new(&new);
+    assert_eq!(old_index.sibling_slot.get("0.0.1"), Some(&1));
+    assert_eq!(new_index.sibling_slot.get("0.0.0"), Some(&0));
+    for (stage, pairs) in [
+        ("label_match", label_match(&old_index, &new_index, vec![])),
+        ("top_down", top_down_match_with_existing(&old_index, &new_index, 0, vec![])),
+    ] {
+        let unchanged = pairs.iter()
+            .find(|pair| pair.old_node.id == "0.0.1")
+            .unwrap_or_else(|| panic!("{stage}: unchanged old 4 must match"));
+        assert_eq!(unchanged.new_node.id, "0.0.0",
+            "{stage}: slot shift must not reassign original 4 to edited final 4");
+        assert_eq!(unchanged.new_node.position.start_col, 4, "{stage}");
+        assert!(pairs.iter().all(|pair| !(pair.old_node.id == "0.0.1"
+            && pair.new_node.id == "0.0.1")), "{stage}: edited final 4 must stay distinct");
+    }
+}
+
+#[test]
+fn duplicate_sibling_slots_are_indexed_once_for_candidate_ranking() {
+    let children = (0..512usize)
+        .map(|i| node(&format!("0.{i}"), "int_literal", "4", vec![]))
+        .collect();
+    let root = node("0", "argument_list", "args", children);
+    let index = TreeIndex::new(&root);
+    for (i, child) in root.children.iter().enumerate() {
+        assert_eq!(index.sibling_slot.get(child.id.as_str()), Some(&i));
+    }
 }
