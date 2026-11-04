@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
-        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # stable
         with:
           toolchain: 1.95.0
       - name: Build test-only FullParse host-utils guest
@@ -95,7 +95,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0
-        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # stable
         with:
           toolchain: 1.95.0
       - name: Cache Rust build artefacts
@@ -131,7 +131,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install pinned Rust
-        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # stable
         with:
           toolchain: 1.95.0
       - name: Verify patched runtime pins and tested resolved lock
@@ -165,7 +165,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Rust 1.95.0 (+ wasm32-wasip2)
-        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # stable
         with:
           toolchain: 1.95.0
           targets: wasm32-wasip2
