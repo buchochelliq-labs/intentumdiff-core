@@ -300,6 +300,13 @@ pub(crate) fn rust_apply_literal_equivalences(
     let mut groups = Vec::new();
     let mut ignored = Vec::new();
     for change in changes {
+        if let (Some(old),Some(new)) = (rust_change_node(&change,"old_node"),rust_change_node(&change,"new_node")) {
+            if (!old.children.is_empty() || !new.children.is_empty())
+                && opaque_payload::changed(&old,&new,old_source,new_source,language) {
+                kept.push(change);
+                continue; // A descendant literal cannot prove the parent's own payload equivalent.
+            }
+        }
         if let Some((group, item)) = rust_integer_literal_equivalence_group(&change, language)
         {
             groups.push(group);
@@ -1376,12 +1383,19 @@ pub(crate) fn apply_python_literal_invariances(
     old_source: &str,
     new_source: &str,
     finalization: &mut PythonReviewFinalization,
+    language: &str,
 ) {
     let mut remove_indices = HashSet::new();
     let mut covered_literal_labels = HashSet::new();
     for (idx, change) in changes.iter().enumerate() {
         if change.change_type != "MODIFICATION" {
             continue;
+        }
+        if let (Some(old),Some(new)) = (change.old_node,change.new_node) {
+            if (!old.children.is_empty() || !new.children.is_empty())
+                && opaque_payload::changed(old,new,old_source,new_source,language) {
+                continue;
+            }
         }
         if let Some(group) = integer_literal_equivalence_group(change) {
             collect_literal_pair_labels(change, "integer", &mut covered_literal_labels);

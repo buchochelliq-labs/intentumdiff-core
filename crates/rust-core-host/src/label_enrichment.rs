@@ -1199,7 +1199,7 @@ pub(crate) fn enrich_resource_profile_labels_node(node: &SemanticNode, language:
     if label == node.label && !children_changed {
         return node.clone();
     }
-    let structural_hash = synthetic_structural_hash(&node.node_type, &label, &children);
+    let structural_hash = enriched_structural_hash(node, &label, &children);
     let mut updated = node.clone();
     updated.label = label;
     updated.children = children;
