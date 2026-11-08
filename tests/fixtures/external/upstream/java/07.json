@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "        List<String> result = new ArrayList<>();\n        for (String x : strings) {\n            if (substring.contains(x)) {\n                result.add(x);\n            }\n        }\n        return result;\n    }\n}",
+  "canonical_solution": "        List<String> result = new ArrayList<>();\n        for (String x : strings) {\n            if (x.contains(substring)) {\n                result.add(x);\n            }\n        }\n        return result;\n    }\n}",
+  "declaration": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    public List<String> filterBySubstring(List<String> strings, String substring) {\n",
+  "docstring": "Filter an input list of strings only for ones that contain given substring\n>>> filterBySubstring(List.of(), \"a\")\n[]\n>>> filterBySubstring(Arrays.asList(\"abc\", \"bacd\", \"cde\", \"array\"), \"a\")\n[\"abc\", \"bacd\", \"array\"]",
+  "entry_point": "filterBySubstring",
+  "example_test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.filterBySubstring(new ArrayList<>(List.of()), \"s\").equals(List.of()),\n                s.filterBySubstring(new ArrayList<>(Arrays.asList(\"abc\", \"bacd\", \"cde\", \"array\")), \"a\").equals(Arrays.asList(\"abc\", \"bacd\", \"array\"))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Java function `public List<String> filterBySubstring(List<String> strings, String substring)` to solve the following problem:\nFilter an input list of strings only for ones that contain given substring\n>>> filterBySubstring(List.of(), \"a\")\n[]\n>>> filterBySubstring(Arrays.asList(\"abc\", \"bacd\", \"cde\", \"array\"), \"a\")\n[\"abc\", \"bacd\", \"array\"]",
+  "prompt": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    /**\n    Filter an input list of strings only for ones that contain given substring\n    >>> filterBySubstring(List.of(), \"a\")\n    []\n    >>> filterBySubstring(Arrays.asList(\"abc\", \"bacd\", \"cde\", \"array\"), \"a\")\n    [\"abc\", \"bacd\", \"array\"]\n     */\n    public List<String> filterBySubstring(List<String> strings, String substring) {\n",
+  "signature": "public List<String> filterBySubstring(List<String> strings, String substring)",
+  "task_id": "Java/7",
+  "test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.filterBySubstring(new ArrayList<>(List.of()), \"john\").equals(List.of()),\n                s.filterBySubstring(new ArrayList<>(Arrays.asList(\"xxx\", \"asd\", \"xxy\", \"john doe\", \"xxxAAA\", \"xxx\")), \"xxx\").equals(Arrays.asList(\"xxx\", \"xxxAAA\", \"xxx\")),\n                s.filterBySubstring(new ArrayList<>(Arrays.asList(\"xxx\", \"asd\", \"aaaxxy\", \"john doe\", \"xxxAAA\", \"xxx\")), \"xx\").equals(Arrays.asList(\"xxx\", \"aaaxxy\", \"xxxAAA\", \"xxx\")),\n                s.filterBySubstring(new ArrayList<>(Arrays.asList(\"grunt\", \"trumpet\", \"prune\", \"gruesome\")), \"run\").equals(Arrays.asList(\"grunt\", \"prune\"))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}",
+  "test_setup": ""
+}

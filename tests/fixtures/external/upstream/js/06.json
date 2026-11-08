@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "  var parseParenGroup = function (s) {\n    let depth = 0, max_depth = 0;\n    for (const c of s) {\n      if (c == '(') {\n        depth += 1;\n        max_depth = Math.max(max_depth, depth);\n      } else {\n        max_depth -= 1;\n      }\n    }\n    return max_depth;\n  }\n  return paren_string.split(' ')\n          .filter(x => x != '')\n          .map(x => parseParenGroup(x));\n}\n\n",
+  "canonical_solution": "  var parseParenGroup = function (s) {\n    let depth = 0, max_depth = 0;\n    for (const c of s) {\n      if (c == '(') {\n        depth += 1;\n        max_depth = Math.max(max_depth, depth);\n      } else {\n        depth -= 1;\n      }\n    }\n    return max_depth;\n  }\n  return paren_string.split(' ')\n          .filter(x => x != '')\n          .map(x => parseParenGroup(x));\n}\n\n",
+  "declaration": "\nconst parseNestedParens = (paren_string) => {\n",
+  "docstring": "Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.\n>>> parseNestedParens('(()()) ((())) () ((())()())')\n[2, 3, 1, 3]",
+  "entry_point": "parseNestedParens",
+  "example_test": "const testParseNestedParens = () => {\n  console.assert(\n    JSON.stringify(parseNestedParens('(()()) ((())) () ((())()())')) ===\n      JSON.stringify([2, 3, 1, 3])\n  )\n}\ntestParseNestedParens()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const parseNestedParens = (paren_string)` to solve the following problem:\nInput to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.\n>>> parseNestedParens('(()()) ((())) () ((())()())')\n[2, 3, 1, 3]",
+  "prompt": "/* Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n  For each of the group, output the deepest level of nesting of parentheses.\n  E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n  >>> parseNestedParens('(()()) ((())) () ((())()())')\n  [2, 3, 1, 3]\n  */\nconst parseNestedParens = (paren_string) => {\n",
+  "signature": "const parseNestedParens = (paren_string)",
+  "task_id": "JavaScript/6",
+  "test": "const testParseNestedParens = () => {\n  console.assert(\n    JSON.stringify(parseNestedParens('(()()) ((())) () ((())()())')) ===\n      JSON.stringify([2, 3, 1, 3])\n  )\n  console.assert(\n    JSON.stringify(parseNestedParens('() (()) ((())) (((())))')) ===\n      JSON.stringify([1, 2, 3, 4])\n  )\n  console.assert(\n    JSON.stringify(parseNestedParens('(()(())((())))')) === JSON.stringify([4])\n  )\n}\n\ntestParseNestedParens()\n",
+  "test_setup": ""
+}

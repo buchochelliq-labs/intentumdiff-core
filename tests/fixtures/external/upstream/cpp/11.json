@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "    string output=\"\";\n    for (int i=0;(i<a.length() and i<b.length());i++)\n    {\n        if (i<a.length() and i<b.length())\n        {\n            if (a[i]== b[i]) \n            {\n                output+='1';\n            }  \n            else output+='0';\n        }\n        else\n        {\n            if (i>=a.length()) \n            {\n            output+=b[i];\n            }\n            else output+=a[i];\n        }\n    }\n    return output;\n}\n",
+  "canonical_solution": "    string output=\"\";\n    for (int i=0;(i<a.length() and i<b.length());i++)\n    {\n        if (i<a.length() and i<b.length())\n        {\n            if (a[i]== b[i]) \n            {\n                output+='0';\n            }  \n            else output+='1';\n        }\n        else\n        {\n            if (i>=a.length()) \n            {\n            output+=b[i];\n            }\n            else output+=a[i];\n        }\n    }\n    return output;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<string>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nstring string_xor(string a,string b){\n",
+  "docstring": "Input are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> string_xor(\"010\", \"110\")\n\"100\"",
+  "entry_point": "string_xor",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (string_xor(\"010\", \"110\") == \"100\");\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a C++ function `string string_xor(string a,string b)` to solve the following problem:\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> string_xor(\"010\", \"110\")\n\"100\"",
+  "prompt": "/*\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> string_xor(\"010\", \"110\")\n\"100\"\n*/\n#include<stdio.h>\n#include<string>\nusing namespace std;\nstring string_xor(string a,string b){\n",
+  "signature": "string string_xor(string a,string b)",
+  "task_id": "CPP/11",
+  "test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (string_xor(\"111000\", \"101010\") == \"010010\");\n     assert (string_xor(\"1\", \"1\") == \"0\");\n    assert (string_xor(\"0101\", \"0000\") == \"0101\");\n\n}\n",
+  "test_setup": ""
+}

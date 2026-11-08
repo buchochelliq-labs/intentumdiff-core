@@ -2134,7 +2134,9 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
     });
 }
 
-pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(changes: &mut Vec<ChangeDraft<'_>>) {
+pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
+    changes: &mut Vec<ChangeDraft<'_>>, old_source: &str, new_source: &str, language: &str,
+) {
     changes.retain(|change| {
         if change.change_type != "MODIFICATION" {
             return true;
@@ -2152,6 +2154,7 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(changes
             return true;
         }
         subtree_has_leaf_label_delta(old_node, new_node)
+            || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
 }
 

@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "        int balance = 0;\n\n        for (int op : operations) {\n            balance += op;\n            if (balance == 0) {\n                return true;\n            }\n        }\n\n        return false;\n    }\n}",
+  "canonical_solution": "        int balance = 0;\n\n        for (int op : operations) {\n            balance += op;\n            if (balance < 0) {\n                return true;\n            }\n        }\n\n        return false;\n    }\n}",
+  "declaration": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    public boolean belowZero(List<Integer> operations) {\n",
+  "docstring": "You're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.\n>>> belowZero(Arrays.asList(1, 2, 3))\nfalse\n>>> belowZero(Arrays.asList(1, 2, -4, 5))\ntrue",
+  "entry_point": "belowZero",
+  "example_test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                !s.belowZero(new ArrayList<>(Arrays.asList(1, 2, 3))),\n                s.belowZero(new ArrayList<>(Arrays.asList(1, 2, -4, 5)))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Java function `public boolean belowZero(List<Integer> operations)` to solve the following problem:\nYou're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.\n>>> belowZero(Arrays.asList(1, 2, 3))\nfalse\n>>> belowZero(Arrays.asList(1, 2, -4, 5))\ntrue",
+  "prompt": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    /**\n    You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> belowZero(Arrays.asList(1, 2, 3))\n    false\n    >>> belowZero(Arrays.asList(1, 2, -4, 5))\n    true\n     */\n    public boolean belowZero(List<Integer> operations) {\n",
+  "signature": "public boolean belowZero(List<Integer> operations)",
+  "task_id": "Java/3",
+  "test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                !s.belowZero(new ArrayList<>(Arrays.asList())),\n                !s.belowZero(new ArrayList<>(Arrays.asList(1, 2, -3, 1, 2, -3))),\n                s.belowZero(new ArrayList<>(Arrays.asList(1, 2, -4, 5, 6))),\n                !s.belowZero(new ArrayList<>(Arrays.asList(1, -1, 2, -2, 5, -5, 4, -4))),\n                s.belowZero(new ArrayList<>(Arrays.asList(1, -1, 2, -2, 5, -5, 4, -5))),\n                s.belowZero(new ArrayList<>(Arrays.asList(1, -2, 2, -2, 5, -5, 4, -4)))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}",
+  "test_setup": ""
+}

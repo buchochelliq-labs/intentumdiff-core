@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — v0.0.3 correctness foundation
+
+- Add a source-pinned six-language external pilot, explicit admission ledger for
+  all 74 routed IDs, independent control expectations and machine-readable results.
+- Add an offline Rust public-API benchmark gate and exact installed-binding
+  acceptance, separating semantic accuracy from parity and infrastructure failures.
+- Consume the verified C/C++ component preserving character-literal payloads,
+  prefixes, escapes and byte spans. Wider 0.0.3 acceptance remains open.
+
 ## Unreleased — v0.0.2 release candidate
 
 - Preserve callable rename identity alongside independent body edits and statement

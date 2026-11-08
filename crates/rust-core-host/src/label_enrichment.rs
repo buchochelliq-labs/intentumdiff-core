@@ -487,53 +487,139 @@ struct StyleItem {
     value_span: std::ops::Range<usize>,
 }
 
-fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<StyleItem> {
-    let body = match (snippet.find('{'), snippet.rfind('}')) {
-        (Some(open), Some(close)) if close > open => &snippet[open + 1..close],
-        _ => return Vec::new(),
-    };
-    let range = |text: &str| {
-        let start = text.as_ptr() as usize - snippet.as_ptr() as usize;
-        start..start + text.len()
-    };
-    let mut result = Vec::new();
-    let mut push = |kind: &str, label: String, value: &str, span: &str| {
-        result.push(StyleItem {
-            kind: kind.to_string(), label, value: value.to_string(), span: range(span),
-            value_span: if value.is_empty() { 0..0 } else { range(value) },
-        });
-    };
-    for raw_line in body.lines() {
-        let line = raw_line.trim();
-        if line.is_empty() || line == "}" { continue; }
-        if let Some(rest) = line.strip_prefix("@include") {
-            let name = rest.trim().split('(').next().unwrap_or("").trim_end_matches(';').trim();
-            if !name.is_empty() { push("include_statement", name.into(), "", line); }
-            continue;
-        }
-        if let Some(rest) = line.strip_prefix("@extend") {
-            let name = rest.trim().trim_end_matches(';').trim();
-            if !name.is_empty() { push("extend_statement", name.into(), "", line); }
-            continue;
-        }
-        if let Some(brace) = line.find('{') {
-            let selector = line[..brace].trim().replace('&', parent_selector);
-            if !selector.is_empty() { push("rule_set", compact_ws(&selector), "", line); }
-            let nested = line[brace + 1..].split('}').next().unwrap_or("").trim();
-            if let Some(colon) = nested.find(':') {
-                let name = nested[..colon].trim();
-                let value = nested[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() { push("declaration", name.into(), value, nested); }
+// Replace lexical comments with spaces without moving source byte offsets. Only
+// delimiters outside strings and balanced function/attribute arguments split items.
+fn style_lexical_source(snippet: &str, language: &str) -> (String, Vec<(usize, u8)>) {
+    let bytes = snippet.as_bytes();
+    let mut cleaned = bytes.to_vec();
+    let mut delimiters = Vec::new();
+    let mut quote = None;
+    let mut interpolation = 0usize;
+    let mut arguments = Vec::new();
+    let mut url_depth = None;
+    let mut i = 0;
+    while i < bytes.len() {
+        let byte = bytes[i];
+        if let Some(q) = quote {
+            if byte == b'\\' { i += 2; continue; }
+            if byte == q { quote = None; }
+        } else if url_depth.is_none() && byte == b'/' && bytes.get(i + 1) == Some(&b'*') {
+            let start = i;
+            i += 2;
+            while i < bytes.len() && !(bytes[i] == b'*' && bytes.get(i + 1) == Some(&b'/')) {
+                i += 1;
+            }
+            i = (i + 2).min(bytes.len());
+            for b in &mut cleaned[start..i] {
+                if !matches!(*b, b'\r' | b'\n') { *b = b' '; }
             }
             continue;
-        }
-        if !line.starts_with('@') {
-            if let Some(colon) = line.find(':') {
-                let name = line[..colon].trim();
-                let value = line[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() { push("declaration", name.into(), value, line); }
+        } else if language == "scss" && url_depth.is_none()
+            && byte == b'/' && bytes.get(i + 1) == Some(&b'/') {
+            while i < bytes.len() && !matches!(bytes[i], b'\r' | b'\n') {
+                cleaned[i] = b' ';
+                i += 1;
+            }
+            continue;
+        } else {
+            if language == "scss" && byte == b'#' && bytes.get(i + 1) == Some(&b'{') {
+                interpolation += 1;
+                i += 2;
+                continue;
+            }
+            if interpolation > 0 && matches!(byte, b'{' | b'}') {
+                if byte == b'{' { interpolation += 1; } else { interpolation -= 1; }
+                i += 1;
+                continue;
+            }
+            match byte {
+                b'\\' => { i += 2; continue; }
+                b'\'' | b'"' => quote = Some(byte),
+                b'[' | b']' if url_depth.is_some() => {},
+                b'(' | b'[' => {
+                    if byte == b'(' && url_depth.is_none() && i >= 3
+                        && bytes[i - 3..i].eq_ignore_ascii_case(b"url")
+                        && (i == 3 || !matches!(bytes[i - 4], b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'_' | b'-' | 0x80..=0xff)) {
+                        // Sass permits // inside the CSS url() token.
+                        url_depth = Some(arguments.len() + 1);
+                    }
+                    arguments.push(byte);
+                }
+                b')' if arguments.last() == Some(&b'(') => {
+                    if url_depth == Some(arguments.len()) { url_depth = None; }
+                    arguments.pop();
+                }
+                b']' if arguments.last() == Some(&b'[') => { arguments.pop(); }
+                b':' | b';' | b'{' | b'}' if arguments.is_empty() && interpolation == 0 => delimiters.push((i, byte)),
+                _ => {}
             }
         }
+        i += 1;
+    }
+    // Comment bytes alone were replaced by ASCII spaces, preserving UTF-8.
+    (String::from_utf8(cleaned).expect("comment masking preserves UTF-8"), delimiters)
+}
+
+fn style_items_from_source(snippet: &str, parent_selector: &str, language: &str) -> Vec<StyleItem> {
+    let (cleaned, delimiters) = style_lexical_source(snippet, language);
+    let Some(open) = delimiters.iter().position(|(_, byte)| *byte == b'{') else { return vec![] };
+    let mut result: Vec<StyleItem> = Vec::new();
+    let mut blocks: Vec<Option<usize>> = vec![None];
+    let mut start = delimiters[open].0 + 1;
+    let mut colon = None;
+    let mut value_blocks = 0usize;
+    for &(offset, byte) in &delimiters[open + 1..] {
+        if value_blocks > 0 {
+            if byte == b'{' { value_blocks += 1; }
+            if byte == b'}' { value_blocks -= 1; }
+            continue;
+        }
+        if byte == b'{' && colon.is_some_and(|colon| cleaned[start..colon].trim().starts_with("--")) {
+            value_blocks = 1;
+            continue;
+        }
+        if byte == b':' { colon.get_or_insert(offset); continue; }
+        let text = cleaned[start..offset].trim();
+        let text_start = start + cleaned[start..offset].len() - cleaned[start..offset].trim_start().len();
+        if byte == b'{' {
+            let index = if text.is_empty() { None } else {
+                result.push(StyleItem {
+                    kind: "rule_set".into(), label: compact_ws(&text.replace('&', parent_selector)),
+                    value: String::new(), span: text_start..offset + 1, value_span: 0..0,
+                });
+                Some(result.len() - 1)
+            };
+            blocks.push(index);
+        } else {
+            if let Some(rest) = text.strip_prefix("@include").filter(|rest| rest.starts_with(char::is_whitespace)) {
+                let name = rest.trim().split('(').next().unwrap_or("").trim();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "include_statement".into(), label: name.into(), value: String::new(),
+                        span: text_start..offset + usize::from(byte == b';'), value_span: 0..0 });
+                }
+            } else if let Some(rest) = text.strip_prefix("@extend").filter(|rest| rest.starts_with(char::is_whitespace)) {
+                let name = rest.trim();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "extend_statement".into(), label: name.into(), value: String::new(),
+                        span: text_start..offset + usize::from(byte == b';'), value_span: 0..0 });
+                }
+            } else if let Some(colon) = colon.filter(|_| !text.starts_with('@')) {
+                let name = cleaned[start..colon].trim();
+                let value_text = cleaned[colon + 1..offset].trim();
+                let value_start = colon + 1 + cleaned[colon + 1..offset].len() - cleaned[colon + 1..offset].trim_start().len();
+                let value_span = value_start..value_start + value_text.len();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "declaration".into(), label: name.into(),
+                        value: snippet[value_span.clone()].into(), span: text_start..offset + usize::from(byte == b';'), value_span });
+                }
+            }
+            if byte == b'}' {
+                if let Some(Some(index)) = blocks.pop() { result[index].span.end = offset + 1; }
+                if blocks.is_empty() { break; }
+            }
+        }
+        start = offset + 1;
+        colon = None;
     }
     result
 }
@@ -544,6 +630,7 @@ pub(crate) fn enrich_style_children(
     source_lines: &[&str],
     mut children: Vec<SemanticNode>,
     label: &str,
+    language: &str,
 ) -> Vec<SemanticNode> {
     let node_type = node.node_type.to_lowercase();
     if matches!(node_type.as_str(), "declaration" | "variable_declaration") {
@@ -578,7 +665,7 @@ pub(crate) fn enrich_style_children(
         .collect();
     let snippet = style_source_slice(source_lines, node);
     for (index, item) in
-        style_items_from_source(&snippet, label).into_iter().enumerate()
+        style_items_from_source(&snippet, label, language).into_iter().enumerate()
     {
         if existing.contains(&(item.kind.clone(), item.label.clone())) {
             continue;
@@ -931,7 +1018,7 @@ pub(crate) fn enrich_path_profile_labels_node(
             }
         }
         let before = children.len();
-        children = enrich_style_children(node, source_lines, children, &label);
+        children = enrich_style_children(node, source_lines, children, &label, language);
         if children.len() != before {
             children_changed = true;
         }
@@ -1112,7 +1199,7 @@ pub(crate) fn enrich_resource_profile_labels_node(node: &SemanticNode, language:
     if label == node.label && !children_changed {
         return node.clone();
     }
-    let structural_hash = synthetic_structural_hash(&node.node_type, &label, &children);
+    let structural_hash = enriched_structural_hash(node, &label, &children);
     let mut updated = node.clone();
     updated.label = label;
     updated.children = children;
@@ -1456,11 +1543,105 @@ mod style_span_tests {
     use super::*;
 
     #[test]
+    fn style_source_keeps_complete_escaped_multiline_values() {
+        let source = "a {\n  b: 'line1 \\\n      line2';\n}\n\n";
+        let items = style_items_from_source(source, "a", "scss");
+        assert_eq!(items.len(), 1);
+        assert_eq!(items[0].label, "b");
+        assert_eq!(items[0].value, "'line1 \\\n      line2'");
+        assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+    }
+
+    #[test]
+    fn style_source_skips_comments_and_tracks_lexical_delimiters() {
+        let source = ".é { /* : ; { ignored } */ color /* name */: red; content: 'é;}:/*text*/'; transform: fn(1; 2); &:hover { b: blue; c: green; } }";
+        let items = style_items_from_source(source, ".é", "css");
+        let actual: Vec<_> = items.iter().map(|i| (i.kind.as_str(), i.label.as_str(), i.value.as_str())).collect();
+        assert_eq!(actual, vec![
+            ("declaration", "color", "red"),
+            ("declaration", "content", "'é;}:/*text*/'"),
+            ("declaration", "transform", "fn(1; 2)"),
+            ("rule_set", ".é:hover", ""),
+            ("declaration", "b", "blue"),
+            ("declaration", "c", "green"),
+        ]);
+        for item in items.iter().filter(|i| !i.value.is_empty()) {
+            assert_eq!(&source[item.value_span.clone()], item.value);
+        }
+        assert!(source[items[0].span.clone()].starts_with("color"));
+    }
+
+    #[test]
+    fn style_source_multiline_value_positions_preserve_crlf_and_utf8() {
+        let source = "é a {\r\n  b: 'café \\\r\n    fin'; c: \"x\";\r\n}";
+        let node = path_synthetic_node("0.0".into(), "rule_set", "a".into(),
+            NodePosition { start_line: 0, start_col: 3, end_line: 3, end_col: 1 }, vec![]);
+        let children = enrich_style_children(&node, &source.split('\n').collect::<Vec<_>>(), vec![], "a", "scss");
+        let value = &children[0].children[0];
+        assert_eq!(value.label, "'café \\\r\n    fin'");
+        assert_eq!((value.position.start_line, value.position.start_col, value.position.end_line, value.position.end_col), (1, 5, 2, 8));
+        assert_eq!(children[1].label, "c");
+    }
+
+    #[test]
+    fn style_source_preserves_interpolation_and_custom_property_blocks() {
+        for (source, expected) in [
+            ("a { color: #{$tone}; margin: 1px; }", vec![("color", "#{$tone}"), ("margin", "1px")]),
+            ("a { --theme: { color: red; }; margin: 1px; }", vec![("--theme", "{ color: red; }"), ("margin", "1px")]),
+        ] {
+            let items = style_items_from_source(source, "a", "scss");
+            assert!(items.iter().all(|i| i.kind == "declaration"));
+            assert_eq!(items.iter().map(|i| (i.label.as_str(), i.value.as_str())).collect::<Vec<_>>(), expected);
+        }
+    }
+
+    #[test]
+    fn style_source_skips_scss_line_comment_delimiters() {
+        let items = style_items_from_source("a { // } ; :\n color: red;\n}", "a", "scss");
+        assert_eq!(items.len(), 1);
+        assert_eq!((items[0].label.as_str(), items[0].value.as_str()), ("color", "red"));
+    }
+
+    #[test]
+    fn style_source_keeps_unquoted_scss_url_comment_markers() {
+        let source = "a { background: url(http://example/a); color: red; }";
+        let items = style_items_from_source(source, "a", "scss");
+        assert_eq!(items.len(), 2);
+        assert_eq!((items[0].label.as_str(), items[0].value.as_str()), ("background", "url(http://example/a)"));
+        assert_eq!(&source[items[0].span.clone()], "background: url(http://example/a);");
+        assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+    }
+
+    #[test]
+    fn style_source_keeps_block_comment_markers_in_unquoted_urls() {
+        let source = "a { background: url(https://example/a/*/b); color: red; }";
+        for language in ["css", "scss"] {
+            let items = style_items_from_source(source, "a", language);
+            assert_eq!(items.len(), 2);
+            assert_eq!(items[0].value, "url(https://example/a/*/b)");
+            assert_eq!(&source[items[0].span.clone()], "background: url(https://example/a/*/b);");
+            assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+        }
+    }
+
+    #[test]
+    fn style_source_keeps_unmatched_brackets_in_url_payloads() {
+        let source = "a { background: url(https://example/a[b); color: red; }";
+        for language in ["css", "scss"] {
+            let items = style_items_from_source(source, "a", language);
+            assert_eq!(items.len(), 2);
+            assert_eq!(items[0].value, "url(https://example/a[b)");
+            assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+            assert_eq!((items[1].label.as_str(), items[1].value.as_str()), ("color", "red"));
+        }
+    }
+
+    #[test]
     fn style_children_point_to_declarations_values_and_nested_selectors() {
         let source = ".button {\n  color: white;\n  padding: 8px 16px;\n  @include base;\n  &:hover { color: blue; }\n}";
         let node = path_synthetic_node("0.0".into(), "rule_set", ".button".into(),
             NodePosition { start_line: 0, start_col: 0, end_line: 5, end_col: 1 }, vec![]);
-        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button");
+        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button", "scss");
         let color = &children[0];
         assert_eq!((color.position.start_line, color.position.start_col), (1, 2));
         assert_eq!((color.position.end_line, color.position.end_col), (1, 15));
@@ -1476,7 +1657,7 @@ mod style_span_tests {
         let source = "é $name: café;";
         let node = path_synthetic_node("0.0".into(), "declaration", "$name".into(),
             NodePosition { start_line: 0, start_col: 3, end_line: 0, end_col: source.len() as u32 }, vec![]);
-        let children = enrich_style_children(&node, &[source], vec![], "$name");
+        let children = enrich_style_children(&node, &[source], vec![], "$name", "scss");
         assert_eq!(children[0].label, "café");
         assert_eq!((children[0].position.start_col, children[0].position.end_col), (10, 15));
     }

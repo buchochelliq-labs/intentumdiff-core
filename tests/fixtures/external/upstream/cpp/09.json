@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "    vector<int> out;\n    int max=0;\n    for (int i=0;i<numbers.size();i++)\n    {\n        if (numbers[i]>max) max=numbers[i];\n        out.push_back(numbers[i]);\n    }\n    return out;\n}\n",
+  "canonical_solution": "    vector<int> out;\n    int max=0;\n    for (int i=0;i<numbers.size();i++)\n    {\n        if (numbers[i]>max) max=numbers[i];\n        out.push_back(max);\n    }\n    return out;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<vector>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nvector<int> rolling_max(vector<int> numbers){\n",
+  "docstring": "From a given vector of integers, generate a vector of rolling maximum element found until given moment\nin the sequence.\n>>> rolling_max({1, 2, 3, 2, 3, 4, 2})\n{1, 2, 3, 3, 3, 4, 4}",
+  "entry_point": "rolling_max",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<int> a,vector<int>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n        if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n     assert (issame(rolling_max({1, 2, 3, 2, 3, 4, 2}),{1, 2, 3, 3, 3, 4, 4}));\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a C++ function `vector<int> rolling_max(vector<int> numbers)` to solve the following problem:\nFrom a given vector of integers, generate a vector of rolling maximum element found until given moment\nin the sequence.\n>>> rolling_max({1, 2, 3, 2, 3, 4, 2})\n{1, 2, 3, 3, 3, 4, 4}",
+  "prompt": "/*\nFrom a given vector of integers, generate a vector of rolling maximum element found until given moment\nin the sequence.\n>>> rolling_max({1, 2, 3, 2, 3, 4, 2})\n{1, 2, 3, 3, 3, 4, 4}\n*/\n#include<stdio.h>\n#include<vector>\nusing namespace std;\nvector<int> rolling_max(vector<int> numbers){\n",
+  "signature": "vector<int> rolling_max(vector<int> numbers)",
+  "task_id": "CPP/9",
+  "test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<int> a,vector<int>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n        if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n     assert (issame(rolling_max({}),{}));\n    assert (issame(rolling_max({1, 2, 3, 4}) , {1, 2, 3, 4}));\n     assert (issame(rolling_max({4, 3, 2, 1}),{4, 4, 4, 4}));\n      assert (issame(rolling_max({3, 2, 3, 100, 3}) ,{3, 3, 3, 100, 100}));\n}",
+  "test_setup": ""
+}

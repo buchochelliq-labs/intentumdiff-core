@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "  return strings.filter(x => substring.indexOf(x) != -1);\n}\n\n",
+  "canonical_solution": "  return strings.filter(x => x.indexOf(substring) != -1);\n}\n\n",
+  "declaration": "\nconst filterBySubstring = (strings, substring) => {\n",
+  "docstring": "Filter an input list of strings only for ones that contain given substring\n>>> filterBySubstring([], 'a')\n[]\n>>> filterBySubstring(['abc', 'bacd', 'cde', 'array'], 'a')\n['abc', 'bacd', 'array']",
+  "entry_point": "filterBySubstring",
+  "example_test": "const testFilterBySubstring = () => {\n  console.assert(\n    JSON.stringify(filterBySubstring([], 'a')) === JSON.stringify([])\n  )\n  console.assert(\n    JSON.stringify(\n      filterBySubstring(\n        ['abc', 'bacd', 'cde', 'array'], 'a'\n      )\n    ) === JSON.stringify(['abc', 'bacd', 'array'])\n  )\n}\ntestFilterBySubstring()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const filterBySubstring = (strings, substring)` to solve the following problem:\nFilter an input list of strings only for ones that contain given substring\n>>> filterBySubstring([], 'a')\n[]\n>>> filterBySubstring(['abc', 'bacd', 'cde', 'array'], 'a')\n['abc', 'bacd', 'array']",
+  "prompt": "/* Filter an input list of strings only for ones that contain given substring\n  >>> filterBySubstring([], 'a')\n  []\n  >>> filterBySubstring(['abc', 'bacd', 'cde', 'array'], 'a')\n  ['abc', 'bacd', 'array']\n  */\nconst filterBySubstring = (strings, substring) => {\n",
+  "signature": "const filterBySubstring = (strings, substring)",
+  "task_id": "JavaScript/7",
+  "test": "const testFilterBySubstring = () => {\n  console.assert(\n    JSON.stringify(filterBySubstring([], 'john')) === JSON.stringify([])\n  )\n  console.assert(\n    JSON.stringify(\n      filterBySubstring(\n        ['xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'],\n        'xxx'\n      )\n    ) === JSON.stringify(['xxx', 'xxxAAA', 'xxx'])\n  )\n  console.assert(\n    JSON.stringify(\n      filterBySubstring(\n        ['xxx', 'asd', 'aaaxxy', 'john doe', 'xxxAAA', 'xxx'],\n        'xx'\n      )\n    ) === JSON.stringify(['xxx', 'aaaxxy', 'xxxAAA', 'xxx'])\n  )\n  console.assert(\n    JSON.stringify(\n      filterBySubstring(['grunt', 'trumpet', 'prune', 'gruesome'], 'run')\n    ) === JSON.stringify(['grunt', 'prune'])\n  )\n}\n\ntestFilterBySubstring()\n",
+  "test_setup": ""
+}

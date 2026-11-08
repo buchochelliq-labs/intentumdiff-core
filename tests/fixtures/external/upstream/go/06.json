@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "    parse_paren_group := func(s string) int {\n        depth := 0\n        max_depth := 0\n        for _, c := range s {\n            if c == '(' {\n                depth += 1\n                max_depth = int(math.Max(float64(depth), float64(max_depth)))\n            } else {\n                max_depth -= 1\n            }\n        }\n        return max_depth\n    }\n    result := make([]int, 0)\n    for _, x := range strings.Split(paren_string, \" \") {\n        result = append(result, parse_paren_group(x))\n    }\n    return result\n\n}\n\n",
+  "canonical_solution": "    parse_paren_group := func(s string) int {\n        depth := 0\n        max_depth := 0\n        for _, c := range s {\n            if c == '(' {\n                depth += 1\n                max_depth = int(math.Max(float64(depth), float64(max_depth)))\n            } else {\n                depth -= 1\n            }\n        }\n        return max_depth\n    }\n    result := make([]int, 0)\n    for _, x := range strings.Split(paren_string, \" \") {\n        result = append(result, parse_paren_group(x))\n    }\n    return result\n\n}\n\n",
+  "declaration": "\nfunc ParseNestedParens(paren_string string) []int {\n",
+  "docstring": "Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.\n>>> ParseNestedParens('(()()) ((())) () ((())()())')\n[2, 3, 1, 3]",
+  "entry_point": "ParseNestedParens",
+  "example_test": "func TestParseNestedParens(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{2, 3, 1, 3}, ParseNestedParens(\"(()()) ((())) () ((())()())\"))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "import (\n    \"math\"\n    \"strings\"\n)\n",
+  "instruction": "Write a Go function `func ParseNestedParens(paren_string string) []int` to solve the following problem:\nInput to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.\n>>> ParseNestedParens('(()()) ((())) () ((())()())')\n[2, 3, 1, 3]",
+  "prompt": "import (\n    \"math\"\n    \"strings\"\n)\n\n// Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n// For each of the group, output the deepest level of nesting of parentheses.\n// E.g. (()()) has maximum two levels of nesting while ((())) has three.\n// \n// >>> ParseNestedParens('(()()) ((())) () ((())()())')\n// [2, 3, 1, 3]\nfunc ParseNestedParens(paren_string string) []int {\n",
+  "signature": "func ParseNestedParens(paren_string string) []int",
+  "task_id": "Go/6",
+  "test": "func TestParseNestedParens(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{2, 3, 1, 3}, ParseNestedParens(\"(()()) ((())) () ((())()())\"))\n    assert.Equal([]int{1, 2, 3, 4}, ParseNestedParens(\"() (()) ((())) (((())))\"))\n    assert.Equal([]int{4}, ParseNestedParens(\"(()(())((())))\"))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

@@ -1,5 +1,8 @@
 mod source_fallback;
 mod operator_tokens;
+mod opaque_payload;
+#[cfg(all(test, feature = "tier-c-wasm"))]
+mod semantic_payload_tests;
 
 /// Batch decline reason when the trivia-filtered CSTs hash equal (a style-only edit). The
 /// certified batch leaves style-only presentation to the caller; the native live server serves
@@ -1552,7 +1555,9 @@ fn finalize_review_impl(
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
     let script =
-        generate_edit_script_with_diagnostics(&old_tree, &new_tree, &matching, None);
+        generate_edit_script_with_diagnostics_indexed_source_aware(
+            &TreeIndex::new(&old_tree), &TreeIndex::new(&new_tree), &matching, None,
+            Some((old_source, new_source, language)));
     let mut drafts: Vec<ChangeDraft> = script.ops.into_iter().map(edit_op_to_draft).collect();
     // Snapshot the raw drafts so js/ts style suppression residue can be relabelled as
     // IGNORED_STYLE evidence after the passes run (python _style_groups_from_suppression).
@@ -1622,14 +1627,14 @@ fn finalize_review_impl(
     // hidden by coarse container matches; identical-content positional-label churn suppresses
     // with evidence.
     if let Some(group) =
-        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language)
+        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language, old_source, new_source)
     {
         finalization.change_groups.push(group);
     }
     // YAML representation-graph equivalence (issue #57 yaml): block↔flow style churn suppresses
     // with evidence; a diff fully consumed by it is style-only.
     if language == "yaml" {
-        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts) {
+        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts, old_source, new_source) {
             finalization.change_groups.push(group);
             if drafts.is_empty() {
                 finalization.is_style_only = true;
@@ -1647,9 +1652,8 @@ fn finalize_review_impl(
     // The issue #51 style discriminator, mirrored from the batch finalization: an empty
     // result on differing sources is style-only ONLY under (normalized) tree equality.
     if drafts.is_empty() && old_source != new_source {
-        let style_equivalent = old_tree.structural_hash == new_tree.structural_hash
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
+        let style_equivalent = opaque_payload::trees_equivalent(&old_tree, &new_tree,
+            Some((old_source, new_source, language)));
         if style_equivalent {
             finalization.is_style_only = true;
         } else {
@@ -1701,6 +1705,16 @@ fn synthetic_structural_hash(node_type: &str, label: &str, children: &[SemanticN
         hasher.update(b"\0");
         hasher.update(child.structural_hash.as_bytes());
     }
+    format!("{:x}", hasher.finalize())
+}
+
+/// Identity enrichment adds information; its exported projection must not erase
+/// opaque payload already represented by the parser's original structural hash.
+fn enriched_structural_hash(node: &SemanticNode, label: &str, children: &[SemanticNode]) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(node.structural_hash.as_bytes());
+    hasher.update(b"\0enriched_projection\0");
+    hasher.update(synthetic_structural_hash(&node.node_type, label, children).as_bytes());
     format!("{:x}", hasher.finalize())
 }
 
@@ -1785,7 +1799,12 @@ fn enrich_profile_labels_impl(
         let source_lines: Vec<&str> = source.lines().collect();
         enrich_statement_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "css" | "scss" | "html" | "xml" | "mdx") {
-        let source_lines: Vec<&str> = source.lines().collect();
+        // Style values retain exact CRLF bytes, including escaped continuations.
+        let source_lines: Vec<&str> = if matches!(language.as_str(), "css" | "scss") {
+            source.split('\n').collect()
+        } else {
+            source.lines().collect()
+        };
         enrich_path_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "json" | "yaml") {
         // python keyed identity set: id/key/name + normalized schema identity fields.
@@ -3463,11 +3482,12 @@ fn diff_python_sources_final_impl(
     let matching = matching_report.pairs;
     let initial_diff_started = probe.enabled().then(Instant::now);
     let draft_generation_started = probe.enabled().then(Instant::now);
-    let script = generate_edit_script_with_diagnostics_indexed(
+    let script = generate_edit_script_with_diagnostics_indexed_source_aware(
         &old_index,
         &new_index,
         &matching,
         Some(&mut probe),
+        Some((old_source, new_source, "python")),
     );
     let mut change_report = ChangeGenerationReport {
         drafts: script.ops.into_iter().map(edit_op_to_draft).collect(),
@@ -3535,9 +3555,8 @@ fn diff_python_sources_final_impl(
         // DIFFER, suppression reduced a real semantic delta to zero — that must never be
         // presented as style equivalence (the #41 pass -> print false negative rode the old
         // blanket claim, with fabricated source-equivalence evidence).
-        let style_equivalent = old_tree.structural_hash == new_tree.structural_hash
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
+        let style_equivalent = opaque_payload::trees_equivalent(&old_tree, &new_tree,
+            Some((old_source, new_source, "python")));
         if style_equivalent {
             review_finalization.is_style_only = true;
             if let Ok(style_evidence) = rust_build_style_only_evidence(&json!({
@@ -8402,7 +8421,17 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
     matching: &[MatchPair<'a>],
+    probe: Option<&mut PhaseProbe>,
+) -> EditScriptReport<'a> {
+    generate_edit_script_with_diagnostics_indexed_source_aware(old_index, new_index, matching, probe, None)
+}
+
+fn generate_edit_script_with_diagnostics_indexed_source_aware<'a>(
+    old_index: &TreeIndex<'a>,
+    new_index: &TreeIndex<'a>,
+    matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
+    sources: Option<(&str, &str, &str)>,
 ) -> EditScriptReport<'a> {
     let old_to_new: HashMap<&str, &SemanticNode> = matching
         .iter()
@@ -8546,7 +8575,9 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     });
     measure_value_optional(probe.as_deref_mut(), "rust_edit_update_generation", || {
         for pair in matching {
-            if pair.old_node.label != pair.new_node.label || should_report_structural_update(pair) {
+            if pair.old_node.label != pair.new_node.label || should_report_structural_update(pair)
+                || sources.is_some_and(|(old, new, language)| opaque_payload::changed(
+                    pair.old_node, pair.new_node, old, new, language)) {
                 let kind = if update_looks_moved(
                     pair,
                     &old_index.parent,
@@ -9107,6 +9138,9 @@ fn refine_candidate_drafts<'a>(
     language: &str,
     sources: Option<(&str, &str)>,
 ) {
+    if let Some((old, new)) = sources {
+        opaque_payload::annotate(changes, old, new, language);
+    }
     callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
@@ -9166,7 +9200,7 @@ fn refine_candidate_drafts<'a>(
     measure_value_optional(
         probe.as_deref_mut(),
         "rust_refine_suppress_parent_modifications",
-        || suppress_parent_modifications_drafts(changes, language),
+        || suppress_parent_modifications_drafts(changes, language, sources),
     );
     finalize_debug_probe("refine:suppress_parent_modifications", changes);
     measure_value_optional(
@@ -9282,12 +9316,14 @@ fn finalize_python_review_drafts<'a>(
     // MODIFICATION with no id-stable leaf delta is about to die, so it must not first
     // swallow the ADD+DELETE pair it covers — that composition erased the go
     // error-wrapping edit entirely (issue #57 pilot: only the import addition survived).
-    probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(changes));
+    probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(
+        changes, old_source, new_source, language));
     probed!(changes, "suppress_add_delete_by_pairings", suppress_add_delete_drafts_covered_by_pairings(changes));
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
-    probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(changes, language));
+    probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
+        changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));
     let (suppressed_reorders, promoted_indices) =
         suppress_low_signal_reorders_drafts(changes);
@@ -9348,6 +9384,7 @@ fn finalize_python_review_drafts<'a>(
         old_source,
         new_source,
         finalization,
+        language,
     );
     // A changed AssemblyScript operator and its operand edits belong to one
     // continuing binary-expression change; do not present them as orphan edits.
@@ -10703,7 +10740,7 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
 fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
     let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
     let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
-    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
+    Ok(json!(opaque_payload::trees_equivalent(&old, &new, None)).to_string())
 }
 
 fn semantic_diff_payload(

@@ -851,7 +851,9 @@ pub(crate) fn collect_suppression_root_id_node(node: &SemanticNode, result: &mut
     result.insert(node.id.clone());
 }
 
-pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft<'_>>, language: &str) {
+pub(crate) fn suppress_parent_modifications_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>, language: &str, sources: Option<(&str, &str)>,
+) {
     // Member-level anchoring first: when an entity-container MODIFICATION (e.g.
     // method_declaration 'Bar') covers a bare LEAF modification, the member keeps the
     // review anchor and the leaf drops — MODIFICATION integer_literal('2') alone loses
@@ -938,6 +940,12 @@ pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft
                 .is_some_and(|node| is_statement_review_container(node, language))
         {
             return true;
+        }
+        if let (Some((old_source,new_source)),Some(old),Some(new)) =
+            (sources,change.old_node,change.new_node) {
+            if opaque_payload::changed(old,new,old_source,new_source,language) {
+                return true; // A descendant edit cannot account for this node's own payload.
+            }
         }
         let has_modified_old_descendant = change
             .old_node

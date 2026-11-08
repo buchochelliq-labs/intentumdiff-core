@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "        if (numbers.size() == 0) {\n            return List.of();\n        }\n        List<Integer> result = new ArrayList<>(List.of());\n        for (int i = 0; i < numbers.size() - 1; i++) {\n            result.add(numbers.get(i));\n            result.add(delimiter);\n        }\n\n        return result;\n    }\n}",
+  "canonical_solution": "        if (numbers.size() == 0) {\n            return List.of();\n        }\n        List<Integer> result = new ArrayList<>(List.of());\n        for (int i = 0; i < numbers.size() - 1; i++) {\n            result.add(numbers.get(i));\n            result.add(delimiter);\n        }\n\n        result.add(numbers.get(numbers.size() - 1));\n\n        return result;\n    }\n}",
+  "declaration": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    public List<Integer> intersperse(List<Integer> numbers, int delimiter) {\n",
+  "docstring": "Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse(List.of(), 4)\n[]\n>>> intersperse(Arrays.asList(1, 2, 3), 4)\n[1, 4, 2, 4, 3]",
+  "entry_point": "intersperse",
+  "example_test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.intersperse(new ArrayList<>(List.of()), 4).equals(List.of()),\n                s.intersperse(new ArrayList<>(Arrays.asList(1,2,3)), 4).equals(Arrays.asList(1,4,2,4,3))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Java function `public List<Integer> intersperse(List<Integer> numbers, int delimiter)` to solve the following problem:\nInsert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse(List.of(), 4)\n[]\n>>> intersperse(Arrays.asList(1, 2, 3), 4)\n[1, 4, 2, 4, 3]",
+  "prompt": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    /**\n    Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse(List.of(), 4)\n    []\n    >>> intersperse(Arrays.asList(1, 2, 3), 4)\n    [1, 4, 2, 4, 3]\n     */\n    public List<Integer> intersperse(List<Integer> numbers, int delimiter) {\n",
+  "signature": "public List<Integer> intersperse(List<Integer> numbers, int delimiter)",
+  "task_id": "Java/5",
+  "test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.intersperse(new ArrayList<>(List.of()), 7).equals(List.of()),\n                s.intersperse(new ArrayList<>(Arrays.asList(5, 6, 3, 2)), 8).equals(Arrays.asList(5, 8, 6, 8, 3, 8, 2)),\n                s.intersperse(new ArrayList<>(Arrays.asList(2, 2, 2)), 2).equals(Arrays.asList(2, 2, 2, 2, 2))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}",
+  "test_setup": ""
+}

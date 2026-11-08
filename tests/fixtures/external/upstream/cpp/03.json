@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "    int num=0;\n    for (int i=0;i<operations.size();i++)\n    {\n        num+=operations[i];\n        if (num==0) return true;\n    }\n    return false;\n}\n",
+  "canonical_solution": "    int num=0;\n    for (int i=0;i<operations.size();i++)\n    {\n        num+=operations[i];\n        if (num<0) return true;\n    }\n    return false;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<vector>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nbool below_zero(vector<int> operations){\n",
+  "docstring": "You\"re given a vector of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account falls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> below_zero({1, 2, 3})\nfalse\n>>> below_zero({1, 2, -4, 5})\ntrue",
+  "entry_point": "below_zero",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (below_zero({1, 2, 3}) == false);\n    assert (below_zero({1, 2, -4, 5}) == true);\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a C++ function `bool below_zero(vector<int> operations)` to solve the following problem:\nYou\"re given a vector of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account falls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> below_zero({1, 2, 3})\nfalse\n>>> below_zero({1, 2, -4, 5})\ntrue",
+  "prompt": "/*\nYou\"re given a vector of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account falls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> below_zero({1, 2, 3})\nfalse\n>>> below_zero({1, 2, -4, 5})\ntrue\n*/\n#include<stdio.h>\n#include<vector>\nusing namespace std;\nbool below_zero(vector<int> operations){\n",
+  "signature": "bool below_zero(vector<int> operations)",
+  "task_id": "CPP/3",
+  "test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (below_zero({}) == false);\n    assert (below_zero({1, 2, -3, 1, 2, -3}) == false);\n    assert (below_zero({1, 2, -4, 5, 6}) == true);\n    assert (below_zero({1, -1, 2, -2, 5, -5, 4, -4}) == false);\n    assert (below_zero({1, -1, 2, -2, 5, -5, 4, -5}) == true);\n    assert (below_zero({1, -2, 2, -2, 5, -5, 4, -4}) == true);\n}",
+  "test_setup": ""
+}

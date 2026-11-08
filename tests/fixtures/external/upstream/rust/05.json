@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "\n    let mut res:Vec<u32> = vec![];\n    numbers.iter().for_each(|item:&u32| {res.push(*item); res.push(delimeter);});\n    return res;\n}\n",
+  "canonical_solution": "\n    let mut res:Vec<u32> = vec![];\n    numbers.iter().for_each(|item:&u32| {res.push(*item); res.push(delimeter);});\n    res.pop();\n    return res;\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn intersperse(numbers:Vec<u32>, delimeter: u32) -> Vec<u32>{\n",
+  "docstring": "Insert a number 'delimeter' between every two consecutive elements of input list `numbers'",
+  "entry_point": "intersperse",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `intersperse(numbers:Vec<u32>, delimeter: u32) -> Vec<u32>` to solve the following problem:\nInsert a number 'delimeter' between every two consecutive elements of input list `numbers'",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    \n*/\nfn intersperse(numbers:Vec<u32>, delimeter: u32) -> Vec<u32>{\n",
+  "signature": "intersperse(numbers:Vec<u32>, delimeter: u32) -> Vec<u32>",
+  "task_id": "Rust/5",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n #[test]\n    fn test_intersperse() {\n        assert!(intersperse(vec![], 7) == vec![]);\n        assert!(intersperse(vec![5, 6, 3, 2], 8) == vec![5, 8, 6, 8, 3, 8, 2]);\n        assert!(intersperse(vec![2, 2, 2], 2) == vec![2, 2, 2, 2, 2]);\n    }\n\n}\n",
+  "test_setup": ""
+}

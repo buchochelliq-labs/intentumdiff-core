@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "    s2b := func(bs string) int32 {\n        result := int32(0)\n        runes := []rune(bs)\n        for _, r := range runes {\n            result = result << 1\n            temp := r - rune('0')\n            result += temp\n        }\n        return result\n    }\n    ab := s2b(a)\n    bb := s2b(b)\n    res := ab ^ bb\n    sprint := fmt.Sprintf(\"%b\", res)\n    for i := 0; i < len(a)-len(sprint); i++ {\n        sprint = \"1\" + sprint\n    }\n    return sprint\n}\n\n",
+  "canonical_solution": "    s2b := func(bs string) int32 {\n        result := int32(0)\n        runes := []rune(bs)\n        for _, r := range runes {\n            result = result << 1\n            temp := r - rune('0')\n            result += temp\n        }\n        return result\n    }\n    ab := s2b(a)\n    bb := s2b(b)\n    res := ab ^ bb\n    sprint := fmt.Sprintf(\"%b\", res)\n    for i := 0; i < len(a)-len(sprint); i++ {\n        sprint = \"0\" + sprint\n    }\n    return sprint\n}\n\n",
+  "declaration": "\nfunc StringXor(a string, b string) string {\n",
+  "docstring": "Input are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> StringXor('010', '110')\n'100'",
+  "entry_point": "StringXor",
+  "example_test": "func TestStringXor(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(\"100\", StringXor(\"010\", \"110\"))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "import (\n    \"fmt\"\n)\n",
+  "instruction": "Write a Go function `func StringXor(a string, b string) string` to solve the following problem:\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> StringXor('010', '110')\n'100'",
+  "prompt": "import (\n    \"fmt\"\n)\n\n// Input are two strings a and b consisting only of 1s and 0s.\n// Perform binary XOR on these inputs and return result also as a string.\n// >>> StringXor('010', '110')\n// '100'\nfunc StringXor(a string, b string) string {\n",
+  "signature": "func StringXor(a string, b string) string",
+  "task_id": "Go/11",
+  "test": "func TestStringXor(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(\"010010\", StringXor(\"111000\", \"101010\"))\n    assert.Equal(\"0\", StringXor(\"1\", \"1\"))\n    assert.Equal(\"0101\", StringXor(\"0101\", \"0000\"))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

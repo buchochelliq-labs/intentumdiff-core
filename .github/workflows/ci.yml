@@ -46,7 +46,7 @@ jobs:
           python-version: "3.12"
       - name: Test parser artifact discovery
         run: |
-          pip install pytest "pyyaml>=6.0"
+          pip install pytest "pyyaml>=6.0" pyarrow==26.0.1 "intentumdiff-python==0.0.2b2"
           python -m pytest tests/tooling -q
       - name: Provision the Tier-C parser components
         # The 25 Tier-C certification tests instantiate real parser components, which
@@ -61,7 +61,8 @@ jobs:
         if: env.HAS_SPLIT_TOKEN == 'true'
         run: |
           pip install "pyyaml>=6.0"
-          python scripts/provision_parser_components.py --out build/wasm
+          PUBLISHED_WASM=$(python -c 'import intentumdiff, pathlib; print(pathlib.Path(intentumdiff.__file__).parent / "wasm")')
+          python scripts/provision_parser_components.py --out build/wasm --mirror-dir "$PUBLISHED_WASM"
         env:
           GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Run engine pins (full gate, Tier-C included)
@@ -109,8 +110,9 @@ jobs:
           python-version: "3.12"
       - name: Provision checksum-verified CLI test components
         run: |
-          pip install "pyyaml>=6.0"
-          python scripts/provision_parser_components.py --out build/cli-wasm
+          pip install "pyyaml>=6.0" "intentumdiff-python==0.0.2b2"
+          PUBLISHED_WASM=$(python -c 'import intentumdiff, pathlib; print(pathlib.Path(intentumdiff.__file__).parent / "wasm")')
+          python scripts/provision_parser_components.py --out build/cli-wasm --mirror-dir "$PUBLISHED_WASM"
         env:
           GH_TOKEN: ${{ secrets.SPLIT_REPO_TOKEN }}
       - name: Build the intentumdiff CLI

@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "\n    let mut result:Vec<i32> = vec![];\n    let mut depth:i32 = 0;\n    let mut max_depth:i32 = 0;\n\n    for splits in paren_string.split(' '){\n        for c in splits.chars(){ \n        if c == '('{\n        depth = depth + 1;\n        max_depth = max(depth, max_depth);\n        }\n        else{\n        max_depth = depth - 1;\n        }\n    }\n    \n    if depth == 0 {\n        result.push(max_depth);\n        max_depth = 0;\n        }\n    }\n\n    return result;\n}\n",
+  "canonical_solution": "\n    let mut result:Vec<i32> = vec![];\n    let mut depth:i32 = 0;\n    let mut max_depth:i32 = 0;\n\n    for splits in paren_string.split(' '){\n        for c in splits.chars(){ \n        if c == '('{\n        depth = depth + 1;\n        max_depth = max(depth, max_depth);\n        }\n        else{\n        depth = depth - 1;\n        }\n    }\n    \n    if depth == 0 {\n        result.push(max_depth);\n        max_depth = 0;\n        }\n    }\n\n    return result;\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn parse_nested_parens(paren_string:String) -> Vec<i32>{\n",
+  "docstring": "Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.",
+  "entry_point": "parse_nested_parens",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `parse_nested_parens(paren_string:String) -> Vec<i32>` to solve the following problem:\nInput to this function is a string represented multiple groups for nested parentheses separated by spaces.\nFor each of the group, output the deepest level of nesting of parentheses.\nE.g. (()()) has maximum two levels of nesting while ((())) has three.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n    \n*/\nfn parse_nested_parens(paren_string:String) -> Vec<i32>{\n",
+  "signature": "parse_nested_parens(paren_string:String) -> Vec<i32>",
+  "task_id": "Rust/6",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n#[test]\n    fn test_parse_nested_parens() {\n        assert!(\n            parse_nested_parens(String::from(\"(()()) ((())) () ((())()())\")) == vec![2, 3, 1, 3]\n        );\n        assert!(parse_nested_parens(String::from(\"() (()) ((())) (((())))\")) == vec![1, 2, 3, 4]);\n        assert!(parse_nested_parens(String::from(\"(()(())((())))\")) == vec![4]);\n    }\n\n}\n",
+  "test_setup": ""
+}

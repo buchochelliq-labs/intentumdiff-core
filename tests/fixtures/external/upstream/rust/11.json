@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "\n\n    let xor = |i:char, j:char| {if i == j{return \"1\".to_string()}else{return \"0\".to_string()}};\n    return a.chars().into_iter().zip(b.chars().into_iter()).map(|(i,j)| \"\".to_string() + &xor(i,j)).collect();   \n}\n",
+  "canonical_solution": "\n\n    let xor = |i:char, j:char| {if i == j{return \"0\".to_string()}else{return \"1\".to_string()}};\n    return a.chars().into_iter().zip(b.chars().into_iter()).map(|(i,j)| \"\".to_string() + &xor(i,j)).collect();   \n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn string_xor(a:String, b:String) -> String{\n",
+  "docstring": "Input are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.",
+  "entry_point": "string_xor",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `string_xor(a:String, b:String) -> String` to solve the following problem:\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    \n*/\nfn string_xor(a:String, b:String) -> String{\n",
+  "signature": "string_xor(a:String, b:String) -> String",
+  "task_id": "Rust/11",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n #[test]\n    fn test_string_xor() {\n        assert!(string_xor(\"111000\".to_string(), \"101010\".to_string()) == \"010010\");\n        assert!(string_xor(\"1\".to_string(), \"1\".to_string()) == \"0\");\n        assert!(string_xor(\"0101\".to_string(), \"0000\".to_string()) == \"0101\");\n    }\n\n}\n",
+  "test_setup": ""
+}

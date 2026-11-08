@@ -1,0 +1,143 @@
+{
+  "source_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+  "sources": [
+    {
+      "attribution": "BigCode HumanEvalPack authors; see upstream/README.md and per-task records.",
+      "id": "humanevalpack-cpp",
+      "license": "MIT",
+      "pilot_viewer_comparison": "Original retained API viewer sample not independently recovered; no equality claim.",
+      "revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+      "url": "https://huggingface.co/datasets/bigcode/humanevalpack/resolve/9a41762f73a8cb23bb5811b73d5aab164efcf378/cpp/test-00000-of-00001.parquet"
+    },
+    {
+      "attribution": "BigCode HumanEvalPack authors; see upstream/README.md and per-task records.",
+      "id": "humanevalpack-go",
+      "license": "MIT",
+      "pilot_viewer_comparison": "Original retained API viewer sample not independently recovered; no equality claim.",
+      "revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+      "url": "https://huggingface.co/datasets/bigcode/humanevalpack/resolve/9a41762f73a8cb23bb5811b73d5aab164efcf378/go/test-00000-of-00001.parquet"
+    },
+    {
+      "attribution": "BigCode HumanEvalPack authors; see upstream/README.md and per-task records.",
+      "id": "humanevalpack-java",
+      "license": "MIT",
+      "pilot_viewer_comparison": "Original retained API viewer sample not independently recovered; no equality claim.",
+      "revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+      "url": "https://huggingface.co/datasets/bigcode/humanevalpack/resolve/9a41762f73a8cb23bb5811b73d5aab164efcf378/java/test-00000-of-00001.parquet"
+    },
+    {
+      "attribution": "BigCode HumanEvalPack authors; see upstream/README.md and per-task records.",
+      "id": "humanevalpack-rust",
+      "license": "MIT",
+      "pilot_viewer_comparison": "Original retained API viewer sample not independently recovered; no equality claim.",
+      "revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+      "url": "https://huggingface.co/datasets/bigcode/humanevalpack/resolve/9a41762f73a8cb23bb5811b73d5aab164efcf378/rust/test-00000-of-00001.parquet"
+    }
+  ],
+  "records": [
+    {
+      "task_id": "CPP/0",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/00.json",
+      "record_sha256": "b3a86bb4938753f2249166a295e3d3fa4d35e3c1d99eaa76d5f4da63e2c3cbfe",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/test-00000-of-00001.parquet",
+      "parquet_row_index": 0,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "CPP/2",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/02.json",
+      "record_sha256": "a35d0fa13651be00ba98596a3073348106c76ef6bbf40f32182e2a786174d195",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/test-00000-of-00001.parquet",
+      "parquet_row_index": 2,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "CPP/3",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/03.json",
+      "record_sha256": "70e5e1ccf0b776b23b444fe19d02d4b7a4ac646a3c0ffa14ebf6ef67c9b49da0",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/test-00000-of-00001.parquet",
+      "parquet_row_index": 3,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "CPP/11",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/11.json",
+      "record_sha256": "95303f64d5f6896e2fc98442070b9c10ab5f61c2f34e9a9270dce279b1ce2cb8",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/cpp/test-00000-of-00001.parquet",
+      "parquet_row_index": 11,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Go/0",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/00.json",
+      "record_sha256": "b23ddadedbd2bbe848c782bf0bb02e9092ab7f34059c88674b76af58b12134d3",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/test-00000-of-00001.parquet",
+      "parquet_row_index": 0,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Go/2",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/02.json",
+      "record_sha256": "e28d2e49dc9fefe349a4da83cc297cde768b71b9fe2291b5bbbc694412c20571",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/test-00000-of-00001.parquet",
+      "parquet_row_index": 2,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Go/3",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/03.json",
+      "record_sha256": "1a84bc30d88b3fbcdf9f77b905548cb6f3212f6ecd8b4e5caca996b21a90ea12",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/go/test-00000-of-00001.parquet",
+      "parquet_row_index": 3,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Java/0",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/00.json",
+      "record_sha256": "fc8833e5b85a65f9418853bd2a14ccf162ca3c00b155ef36fcf8405b7a71b2c4",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/test-00000-of-00001.parquet",
+      "parquet_row_index": 0,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Java/2",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/02.json",
+      "record_sha256": "606b58a17add4d048b38f8c7172c650db0372456d4df2bcd6187912ba740702d",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/test-00000-of-00001.parquet",
+      "parquet_row_index": 2,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Java/3",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/03.json",
+      "record_sha256": "dd923b0e46c98fccf44ddd2dd1a7b2320e0c0de1740310e5fe843013984dfddc",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/java/test-00000-of-00001.parquet",
+      "parquet_row_index": 3,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Rust/0",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/00.json",
+      "record_sha256": "81b7ff7fe83d88deb06a7f10cd617b196103a7471f3f703ea0c92032212e9888",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/test-00000-of-00001.parquet",
+      "parquet_row_index": 0,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Rust/2",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/02.json",
+      "record_sha256": "dff9ca699c861e880a01e01d4d0ff231a984f48ae7c8002fd74217166038e48d",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/test-00000-of-00001.parquet",
+      "parquet_row_index": 2,
+      "verified_record_equals_parquet_row": true
+    },
+    {
+      "task_id": "Rust/3",
+      "record_path": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/03.json",
+      "record_sha256": "414afffa37bcf9bda59e812962ef6617f442ea147086da4eb17a9cd79d46c24b",
+      "source_parquet": "tests/fixtures/language_assessment/upstream/compiled/humanevalpack/rust/test-00000-of-00001.parquet",
+      "parquet_row_index": 3,
+      "verified_record_equals_parquet_row": true
+    }
+  ]
+}
