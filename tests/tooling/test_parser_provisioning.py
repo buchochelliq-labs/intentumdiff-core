@@ -77,3 +77,41 @@ def test_json_checksum_mismatch_never_reaches_staging(monkeypatch, tmp_path):
     with pytest.raises(SystemExit, match='1'):
         stage()
     assert not (tmp_path / 'json_parser.wasm').exists()
+
+
+def test_published_mirror_requires_registry_commit_and_actual_digest(tmp_path):
+    import hashlib
+    import pytest
+    fetch = runpy.run_path(str(Path(__file__).resolve().parents[2] / 'scripts/provision_parser_components.py'))['fetch_mirrored_component']
+    payload = b'published parser bytes'
+    digest = hashlib.sha256(payload).hexdigest()
+    (tmp_path / 'json_parser.wasm').write_bytes(payload)
+    manifest = {'artifacts': {'json_parser.wasm': {'sha256': digest, 'source': {
+        'commit': 'a' * 40, 'repository': 'https://github.com/buchochelliq-labs/intentumdiff-json-parser'}}}}
+    (tmp_path / 'wasm_provenance.json').write_text(json.dumps(manifest))
+    assert fetch('json', tmp_path, 'a' * 40, digest) == ('json_parser.wasm', 'a' * 40, digest, payload)
+    # A wheel carrying an earlier source version is not a mirror of a new pin.
+    assert fetch('json', tmp_path, 'b' * 40, digest) is None
+    (tmp_path / 'json_parser.wasm').write_bytes(b'corrupted')
+    with pytest.raises(RuntimeError, match='checksum'):
+        fetch('json', tmp_path, 'a' * 40, digest)
+
+
+def test_verified_mirror_avoids_expired_ci_artifacts(monkeypatch, tmp_path):
+    import hashlib
+    stage = runpy.run_path(str(Path(__file__).resolve().parents[2] / 'scripts/provision_parser_components.py'))['main']
+    mirror = tmp_path / 'mirror'; mirror.mkdir()
+    payload = b'published parser bytes'; digest = hashlib.sha256(payload).hexdigest()
+    (mirror / 'json_parser.wasm').write_bytes(payload)
+    (mirror / 'wasm_provenance.json').write_text(json.dumps({'artifacts': {'json_parser.wasm': {
+        'sha256': digest, 'source': {'commit': 'a' * 40,
+        'repository': 'https://github.com/buchochelliq-labs/intentumdiff-json-parser'}}}}))
+    monkeypatch.setenv('GH_TOKEN', 'test-token')
+    monkeypatch.setattr('sys.argv', ['provision', '--components', 'json', '--out', str(tmp_path / 'out'), '--mirror-dir', str(mirror)])
+    monkeypatch.setitem(stage.__globals__, 'load_registry_pins', lambda token: (
+        {'json_parser.wasm': digest}, {'intentumdiff-json-parser': 'a' * 40}))
+    def expired(*args):
+        raise AssertionError('an independently verified byte mirror needs no expired artifact')
+    monkeypatch.setitem(stage.__globals__, 'fetch_component', expired)
+    stage()
+    assert (tmp_path / 'out/json_parser.wasm').read_bytes() == payload

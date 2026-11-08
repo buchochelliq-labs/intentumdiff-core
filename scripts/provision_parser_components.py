@@ -230,6 +230,36 @@ def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
     return pins, refs
 
 
+def fetch_mirrored_component(
+    slug: str, mirror: Path, ref: str | None, pinned: str | None,
+) -> tuple[str, str, str, bytes] | None:
+    """Use published bytes only when both independent registry pins match.
+
+    CI artifacts expire. A wheel can mirror the exact old build without changing
+    the registry's identity. An older wheel simply does not mirror a newer pin;
+    corrupted bytes claiming the requested identity are an error, never a bypass.
+    """
+    name = f"{slug.replace('-', '_')}_parser.wasm"
+    if Path(name).name != name or not ref or not pinned:
+        raise RuntimeError(f"invalid mirrored component identity: {slug}")
+    manifest = mirror / "wasm_provenance.json"
+    if not manifest.is_file() or not (mirror / name).is_file():
+        return None
+    try:
+        record = json.loads(manifest.read_text())["artifacts"].get(name)
+        if not isinstance(record, dict) or record.get("source", {}).get("commit") != ref:
+            return None
+        if record.get("sha256") != pinned or record["source"].get("repository") != f"https://github.com/{ORG}/intentumdiff-{slug}-parser":
+            raise RuntimeError(f"mirror source/checksum disagrees with registry for {name}")
+        payload = (mirror / name).read_bytes()
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        raise RuntimeError(f"invalid mirror provenance for {name}: {exc}") from exc
+    digest = hashlib.sha256(payload).hexdigest()
+    if digest != pinned:
+        raise RuntimeError(f"mirror checksum mismatch for {name}")
+    return name, ref, digest, payload
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default=str(REPO_ROOT / "build" / "wasm"),
@@ -239,7 +269,11 @@ def main() -> None:
     parser.add_argument("--no-verify", action="store_true",
                         help="skip verification against the registry's pinned checksums "
                              "(for bringing up a component the registry does not pin yet)")
+    parser.add_argument("--mirror-dir", type=Path,
+                        help="published wheel Wasm directory; verify exact registry ref and SHA-256 before use")
     args = parser.parse_args()
+    if args.no_verify and args.mirror_dir:
+        parser.error("--mirror-dir requires registry verification")
 
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if not token:
@@ -259,7 +293,10 @@ def main() -> None:
         # Take the build the registry pins, not whatever ran most recently.
         ref = refs.get(f"intentumdiff-{slug}-parser")
         try:
-            name, head_sha, digest, payload = fetch_component(slug, token, ref)
+            mirrored = fetch_mirrored_component(
+                slug, args.mirror_dir, ref, pins.get(f"{slug.replace('-', '_')}_parser.wasm"),
+            ) if args.mirror_dir else None
+            name, head_sha, digest, payload = mirrored or fetch_component(slug, token, ref)
         except (RuntimeError, urllib.error.HTTPError) as exc:
             failures.append(f"{slug}: {exc}")
             continue
