@@ -24,10 +24,22 @@ only local fixtures and components. The workflow
 Its immutable inputs are in `scripts/external_benchmark_inputs.lock.json`.
 
 The published wheel supplies existing component bytes. Each is independently
-checked against the committed registry, and the C/C++ component comes from the
-specific successful CI artifact recorded in the lock. The stager rejects dirty
-registry inputs, missing components and digest mismatches. Artifact expiration is
-an explicit acquisition failure; there is no fallback to a newer build.
+checked against the committed registry. C/C++, JavaScript/TypeScript, JSON, SQL
+and YAML come from the exact successful CI artifacts recorded in the schema-2
+lock. Both source commits and component hashes must agree with that registry.
+Acquisition verifies the artifact ID, successful source run, archive digest,
+single flat archive member and component digest. The same acquisition helper
+serves Tier-C provisioning; locked components never fall back to wheel or latest
+build bytes. Redirects cannot forward credentials across hosts or downgrade HTTPS.
+
+For offline staging, supply the locked archives as `<artifact_id>.zip` in
+`--artifacts-dir` and omit `--download-artifacts`. The stager rejects dirty
+registry inputs, missing components, stale output and identity mismatches. It
+publishes a complete directory atomically only after every input validates.
+The manifest distinguishes registry-matched wheel mirrors from locked archives
+and records their source refs, artifact IDs, archive hashes and registry commit.
+Artifact expiration is an explicit acquisition failure; there is no fallback to
+a newer build. CI retains the normal report/manifest identities with its results.
 
 After staging to `build/benchmark-inputs`, run from the repository root:
 

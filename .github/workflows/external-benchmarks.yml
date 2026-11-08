@@ -36,8 +36,8 @@ jobs:
           import json, os
           values = json.load(open('scripts/external_benchmark_inputs.lock.json'))
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
-              for key, value in values.items():
-                  print(f'{key}={value}', file=out)
+              for key in ('registry_commit', 'published_distribution'):
+                  print(f'{key}={values[key]}', file=out)
           PY
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -45,34 +45,18 @@ jobs:
           ref: ${{ steps.inputs.outputs.registry_commit }}
           path: build/registry
           persist-credentials: false
-      - name: Acquire pinned byte mirrors
+      - name: Install pinned published byte mirror and tooling
         env:
-          GH_TOKEN: ${{ github.token }}
-          CPP_ARTIFACT_ID: ${{ steps.inputs.outputs.cpp_artifact_id }}
           PUBLISHED_DISTRIBUTION: ${{ steps.inputs.outputs.published_distribution }}
         run: |
           python -m pip install pytest pyyaml pyarrow==26.0.1 "$PUBLISHED_DISTRIBUTION"
-          gh api "repos/buchochelliq-labs/intentumdiff-cpp-parser/actions/artifacts/${CPP_ARTIFACT_ID}/zip" > build/cpp-artifact.zip
-          python - <<'PY'
-          import hashlib, json, pathlib, zipfile
-          pins = json.load(open('scripts/external_benchmark_inputs.lock.json'))
-          archive = pathlib.Path('build/cpp-artifact.zip')
-          assert hashlib.sha256(archive.read_bytes()).hexdigest() == pins['cpp_artifact_archive_sha256']
-          with zipfile.ZipFile(archive) as z:
-              names = [n for n in z.namelist() if n.endswith('.wasm')]
-              assert names == ['intentumdiff_cpp_parser.wasm'], names
-              payload = z.read(names[0])
-          assert hashlib.sha256(payload).hexdigest() == pins['cpp_component_sha256']
-          out = pathlib.Path('build/cpp-artifact'); out.mkdir()
-          (out / 'cpp_parser.wasm').write_bytes(payload)
-          PY
       - name: Stage independently verified parser inputs
         env:
           REGISTRY_COMMIT: ${{ steps.inputs.outputs.registry_commit }}
-          CPP_COMMIT: ${{ steps.inputs.outputs.cpp_commit }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           PUBLISHED_WASM=$(python -c 'import intentumdiff, pathlib; print(pathlib.Path(intentumdiff.__file__).parent / "wasm")')
-          python scripts/stage_external_benchmark_inputs.py --registry build/registry/registry.yaml --registry-commit "$REGISTRY_COMMIT" --inventory tests/fixtures/external/inventory.json --published-dir "$PUBLISHED_WASM" --candidate-dir build/cpp-artifact --candidate-commit "$CPP_COMMIT" --out build/benchmark-inputs
+          python scripts/stage_external_benchmark_inputs.py --registry build/registry/registry.yaml --registry-commit "$REGISTRY_COMMIT" --inventory tests/fixtures/external/inventory.json --published-dir "$PUBLISHED_WASM" --lock scripts/external_benchmark_inputs.lock.json --artifacts-dir build/parser-artifacts --download-artifacts --out build/benchmark-inputs
       - name: Offline corpus and gate checks
         run: |
           python scripts/import_external_benchmarks.py --validate
