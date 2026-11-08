@@ -91,6 +91,7 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         if fin["no_surviving_changes"] == true || (changes.is_empty() && !style && old_source != new_source) {
             metadata["no_surviving_changes"] = json!(true);
         }
+        reconcile_groups_to_final_changes(&changes, &mut groups);
         json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
             "has_semantic_changes":!changes.is_empty() && !style,"is_style_only":style,
             "changes":changes,"change_groups":groups,"metadata":metadata,
@@ -103,4 +104,32 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         if let Some(value) = request.get(input).filter(|v| !v.is_null()) { diff["metadata"][output] = value.clone(); }
     }
     Ok(diff)
+}
+
+/// Restore final-array ownership after every invariance/source group is appended.
+/// Node identity survives filtering and sorting; metadata retains evidence provenance.
+fn reconcile_groups_to_final_changes(changes: &[Value], groups: &mut [Value]) {
+    for group in groups {
+        let ids = |field: &str| group[field].as_array().into_iter().flatten()
+            .filter_map(Value::as_str).collect::<std::collections::HashSet<_>>();
+        let old_ids = ids("old_node_ids");
+        let new_ids = ids("new_node_ids");
+        let indices: Vec<usize> = if !old_ids.is_empty() || !new_ids.is_empty() {
+            changes.iter().enumerate().filter_map(|(i, change)| {
+                let owns = change["old_node"]["id"].as_str().is_some_and(|id| old_ids.contains(id))
+                    || change["new_node"]["id"].as_str().is_some_and(|id| new_ids.contains(id));
+                owns.then_some(i)
+            }).collect()
+        } else {
+            match group["metadata"]["index_space"].as_str() {
+                Some("final_changes") => group["raw_change_indices"].as_array().into_iter().flatten()
+                    .filter_map(Value::as_u64).filter_map(|i| usize::try_from(i).ok())
+                    .filter(|i| *i < changes.len()).collect(),
+                Some("presentation_input" | "mixed") => Vec::new(),
+                // Source evidence owns no changes; its producer emits honest [].
+                _ => continue,
+            }
+        };
+        group["raw_change_indices"] = json!(indices);
+    }
 }

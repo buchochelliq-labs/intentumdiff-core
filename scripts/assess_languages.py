@@ -191,8 +191,115 @@ def load_cases(root, inventory, selected=None):
     return cases, files
 
 
+def native_library_path(explicit=None):
+    from intentumdiff.rust_core import _extension_path
+    return Path(explicit if explicit is not None else _extension_path()).resolve(strict=True)
+
+
+def worker_transport(explicit=None):
+    """Select only the transport's library; all processing remains in Rust."""
+    import intentumdiff.rust_core as transport
+    path = native_library_path(explicit)
+    if explicit is not None:
+        transport._extension_path = lambda: str(path)
+        transport._C_ABI_LIB = None
+    return transport, path
+
+
+def baseline_cases(baseline, required_languages, selected):
+    """Validate the complete reviewed input before narrowing comparison scope."""
+    if (not isinstance(baseline, dict) or type(baseline.get('schema_version')) is not int
+            or baseline['schema_version'] != 1 or not isinstance(baseline.get('languages'), list)
+            or not baseline['languages']):
+        raise ValueError('invalid or empty assessment baseline')
+    languages = set(); identities = set(); previous = {}
+    statuses = {'passed', 'failed', 'invalid_result', 'runtime_error', 'not_executed',
+                'bounded_incomplete_observation', 'bounded_explicit_fallback', 'bounded_explicit_error'}
+    oracle_keys = ('has_semantic_changes', 'is_style_only', 'changes_empty')
+    for language in baseline['languages']:
+        if (not isinstance(language, dict) or not isinstance(language.get('language_id'), str)
+                or not language['language_id'] or language['language_id'] in languages
+                or not isinstance(language.get('case_results'), list) or not language['case_results']):
+            raise ValueError('baseline requires unique languages with nonempty case_results')
+        language_id = language['language_id']; languages.add(language_id)
+        for row in language['case_results']:
+            if (not isinstance(row, dict) or not isinstance(row.get('id'), str) or not row['id']
+                    or row['id'] in identities or row.get('language_id') != language_id):
+                raise ValueError('baseline contains duplicate or misrouted case ID')
+            identities.add(row['id'])
+            if (not isinstance(row.get('status'), str) or row['status'] not in statuses
+                    or any(not isinstance(row.get(key), str) or not re.fullmatch('[0-9a-f]{64}', row[key])
+                           for key in ('old_sha256', 'new_sha256'))
+                    or not isinstance(row.get('expected'), dict)
+                    or any(key not in row['expected'] or
+                           (row['expected'][key] is not None and type(row['expected'][key]) is not bool)
+                           for key in oracle_keys)):
+                raise ValueError('baseline case lacks source/oracle/status identity')
+            if selected is None or language_id in selected:
+                previous[row['id']] = row
+    missing = (required_languages | set(selected or [])) - languages
+    if missing or not previous:
+        raise ValueError(f'baseline coverage missing for requested scope: {sorted(missing)}')
+    return previous
+
+
+def compare_baseline(baseline, cases, groups, selected, native_sha):
+    """Protect reviewed passes and input identity without blessing known failures."""
+    previous = baseline_cases(baseline, {c['language_id'] for c in cases}, selected)
+    regressions = []; improvements = []
+
+    def reject(reason, language, case_id=None):
+        regressions.append({'language_id': language, 'case_id': case_id, 'reason': reason})
+
+    current = {c['id']: c for c in cases}; observed = {}; workers = {}
+    for group in groups:
+        language = group['language_id']
+        if language in workers:
+            reject('duplicate worker', language)
+        workers[language] = group
+        if group.get('worker_error'):
+            reject('worker error: ' + group['worker_error'], language)
+        if group.get('native_library_sha256') != native_sha:
+            reject('worker native library identity missing or differs from parent', language)
+        for row in group['cases']:
+            identity = row['id']
+            if identity in observed or identity not in current or row.get('language_id') != language:
+                reject('unexpected, duplicate or misrouted observation', language, identity)
+            observed[identity] = row
+            if row['status'] in {'runtime_error', 'not_executed'}:
+                reject('execution status: ' + row['status'], language, identity)
+    for language in {c['language_id'] for c in cases} - workers.keys():
+        reject('missing worker', language)
+    for identity, case in current.items():
+        if identity not in observed:
+            reject('missing case observation', case['language_id'], identity)
+    for identity, old in previous.items():
+        language = old['language_id']; case = current.get(identity); row = observed.get(identity)
+        if case is None:
+            reject('baseline fixture missing; explicit baseline rebase required', language, identity)
+        else:
+            inputs = {'old_sha256': sha(case['old'].encode()), 'new_sha256': sha(case['new'].encode()),
+                      'expected': case['expected'], 'language_id': case['language_id']}
+            for key, value in inputs.items():
+                if old.get(key) != value:
+                    reject(f'baseline {key} changed; explicit baseline rebase required', language, identity)
+                if row is not None and row.get(key) != value:
+                    reject(f'observed {key} missing or differs from fixture', language, identity)
+        if old['status'] == 'passed':
+            if row is None or row.get('status') != 'passed' or row.get('oracle_evaluated') is not True:
+                reject('previous pass did not execute and pass its oracle', language, identity)
+        elif row is not None and row.get('status') == 'passed' and row.get('oracle_evaluated') is True:
+            improvements.append(identity)
+    return {'scope_languages': sorted(selected) if selected is not None else 'all baseline languages',
+            'protected_passes': sum(row['status'] == 'passed' for row in previous.values()),
+            'regression_count': len(regressions), 'regressions': regressions,
+            'improvements': sorted(improvements)}
+
+
 def worker(request):
-    from intentumdiff.rust_core import _c_abi_call, _extension_path, _NativeCAbiOperationFailure
+    transport, library = worker_transport(request.get('native_library'))
+    _c_abi_call = transport._c_abi_call
+    _NativeCAbiOperationFailure = transport._NativeCAbiOperationFailure
     parsers = request['parsers']; cases = request['cases']; rows = []
     options = {'language_hint': request['language_id'], 'strict_plugins': True}
     config = json.dumps(options)
@@ -251,7 +358,7 @@ def worker(request):
         print(json.dumps({'type': 'case', 'row': row}, ensure_ascii=False), flush=True)
     return {'language_id': request['language_id'], 'options': options, 'completed_count': len(rows),
             'peak_rss_kib': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-            'native_library_sha256': sha(Path(_extension_path()).read_bytes())}
+            'native_library_path': str(library), 'native_library_sha256': sha(library.read_bytes())}
 
 
 def recover_worker(text, language, cases, error=None):
@@ -285,6 +392,8 @@ def recover_worker(text, language, cases, error=None):
 def run_group(language, cases, args):
     request = {'language_id': language, 'cases': cases, 'parsers': str(args.parsers.resolve()),
                'repo': str(Path(__file__).resolve().parents[1])}
+    if args.native_library is not None:
+        request['native_library'] = str(args.native_library.resolve())
     started = time.monotonic()
     try:
         result = subprocess.run([sys.executable, str(Path(__file__).resolve()), '--worker'],
@@ -295,7 +404,7 @@ def run_group(language, cases, args):
         group['stderr'] = result.stderr[-5000:]
     except subprocess.TimeoutExpired as error:
         group = recover_worker(error.stdout, language, cases, str(error))
-    except (RuntimeError, ValueError) as error:
+    except (OSError, RuntimeError, ValueError) as error:
         group = recover_worker('', language, cases, str(error))
     group['wall_seconds'] = round(time.monotonic() - started, 3)
     return group
@@ -308,6 +417,8 @@ def main():
     parser.add_argument('--parsers', type=Path)
     parser.add_argument('--report', type=Path)
     parser.add_argument('--languages', nargs='+')
+    parser.add_argument('--native-library', type=Path, help='candidate Rust C ABI library (default: installed transport library)')
+    parser.add_argument('--baseline', type=Path, help='reviewed assessment JSON; fail on regressions after retaining results')
     parser.add_argument('--jobs', type=int, default=4)
     parser.add_argument('--timeout', type=int, default=120)
     args = parser.parse_args()
@@ -316,7 +427,8 @@ def main():
         print(json.dumps({'type': 'complete', 'summary': summary}, ensure_ascii=False), flush=True); return
     if not all((args.fixtures, args.parsers, args.report)):
         parser.error('--fixtures, --parsers and --report are required')
-    from intentumdiff.rust_core import _extension_path
+    library = native_library_path(args.native_library)
+    native_sha = sha(library.read_bytes())
     inventory_path = Path(__file__).resolve().parents[1] / 'tests/fixtures/external/inventory.json'
     inventory = json.loads(inventory_path.read_bytes())
     staged_raw = (args.parsers / 'parser_manifest.json').read_bytes(); staged = json.loads(staged_raw)
@@ -339,7 +451,7 @@ def main():
     result = {'schema_version': 1, 'run_utc': datetime.now(timezone.utc).isoformat(),
         'scope': 'bounded diagnostic baseline; not full language certification',
         'interface': 'production Rust C ABI: live_diff_contents + parse_to_tree',
-        'native_library_sha256': sha(Path(_extension_path()).read_bytes()),
+        'native_library_path': str(library), 'native_library_sha256': native_sha,
         'inventory_sha256': sha(inventory_path.read_bytes()), 'parser_manifest_sha256': sha(staged_raw),
         'fixture_files': fixture_files, 'parser_manifest': staged, 'languages': [],
         'limitations': ['Handwritten/repository probes are supplementary, not external gold.',
@@ -371,10 +483,31 @@ def main():
             'external_gold_cases': sum(r['provenance_class'] == 'upstream_gold' for r in rows),
             'wall_seconds': group['wall_seconds'], 'peak_rss_kib': group.get('peak_rss_kib'),
             'worker_error': group.get('worker_error'), 'raw_results': str(raw_dir / (language + '.json')),
+            'native_library_path': group.get('native_library_path'),
+            'native_library_sha256': group.get('native_library_sha256'),
             'case_results': [{k: v for k, v in row.items() if k not in {'review', 'trees'}} for row in rows]})
+    if args.baseline is not None:
+        baseline_raw = None
+        try:
+            baseline_raw = args.baseline.read_bytes()
+            gate = compare_baseline(json.loads(baseline_raw), cases, groups, args.languages, native_sha)
+        except (OSError, UnicodeError, ValueError) as error:
+            message = f'invalid assessment baseline: {error}'
+            gate = {'error': message, 'protected_passes': None, 'regression_count': 1,
+                    'regressions': [{'language_id': '(baseline)', 'case_id': None, 'reason': message}],
+                    'improvements': []}
+        result['baseline_gate'] = {**gate, 'path': str(args.baseline),
+                                   'sha256': sha(baseline_raw) if baseline_raw is not None else None}
     args.report.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
     print(f"Report: {len(groups)} languages, {len(cases)} executions -> {args.report}")
+    if args.baseline is not None:
+        gate = result['baseline_gate']
+        print(f"Baseline gate: {gate['regression_count']} regressions; {len(gate['improvements'])} improvements")
+        for regression in gate['regressions']:
+            print(f"  {regression['language_id']} {regression['case_id'] or '(worker)'}: {regression['reason']}")
+        return 1 if gate['regression_count'] else 0
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

@@ -475,6 +475,8 @@ mod host_and_batch;
 mod matching_and_promotion;
 #[path = "tests_review_shaping.rs"]
 mod review_shaping;
+#[path = "tests_yaml_representation.rs"]
+mod yaml_representation;
 
 // Rust language-parity harness (#23): a 1:1 port of tests/unit/construct_edit_matrix.py driven
 // over the same corpus, so every language the Python matrix covers is also covered from
