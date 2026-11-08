@@ -1785,7 +1785,12 @@ fn enrich_profile_labels_impl(
         let source_lines: Vec<&str> = source.lines().collect();
         enrich_statement_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "css" | "scss" | "html" | "xml" | "mdx") {
-        let source_lines: Vec<&str> = source.lines().collect();
+        // Style values retain exact CRLF bytes, including escaped continuations.
+        let source_lines: Vec<&str> = if matches!(language.as_str(), "css" | "scss") {
+            source.split('\n').collect()
+        } else {
+            source.lines().collect()
+        };
         enrich_path_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "json" | "yaml") {
         // python keyed identity set: id/key/name + normalized schema identity fields.
