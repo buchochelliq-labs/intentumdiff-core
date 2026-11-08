@@ -1,0 +1,91 @@
+name: External source correctness
+
+on:
+  pull_request:
+  push:
+    branches: [main, release/v0.0.3-rc]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  external-correctness:
+    name: External source correctness (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
+      CARGO_BUILD_JOBS: 2
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+        with:
+          python-version: '3.12'
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
+        with:
+          toolchain: 1.95.0
+      - name: Read immutable artifact identities
+        id: inputs
+        run: |
+          python - <<'PY'
+          import json, os
+          values = json.load(open('scripts/external_benchmark_inputs.lock.json'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              for key, value in values.items():
+                  print(f'{key}={value}', file=out)
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: buchochelliq-labs/intentumdiff-registry
+          ref: ${{ steps.inputs.outputs.registry_commit }}
+          path: build/registry
+          persist-credentials: false
+      - name: Acquire pinned byte mirrors
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CPP_ARTIFACT_ID: ${{ steps.inputs.outputs.cpp_artifact_id }}
+          PUBLISHED_DISTRIBUTION: ${{ steps.inputs.outputs.published_distribution }}
+        run: |
+          python -m pip install pytest pyyaml pyarrow==26.0.1 "$PUBLISHED_DISTRIBUTION"
+          gh api "repos/buchochelliq-labs/intentumdiff-cpp-parser/actions/artifacts/${CPP_ARTIFACT_ID}/zip" > build/cpp-artifact.zip
+          python - <<'PY'
+          import hashlib, json, pathlib, zipfile
+          pins = json.load(open('scripts/external_benchmark_inputs.lock.json'))
+          archive = pathlib.Path('build/cpp-artifact.zip')
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == pins['cpp_artifact_archive_sha256']
+          with zipfile.ZipFile(archive) as z:
+              names = [n for n in z.namelist() if n.endswith('.wasm')]
+              assert names == ['intentumdiff_cpp_parser.wasm'], names
+              payload = z.read(names[0])
+          assert hashlib.sha256(payload).hexdigest() == pins['cpp_component_sha256']
+          out = pathlib.Path('build/cpp-artifact'); out.mkdir()
+          (out / 'cpp_parser.wasm').write_bytes(payload)
+          PY
+      - name: Stage independently verified parser inputs
+        env:
+          REGISTRY_COMMIT: ${{ steps.inputs.outputs.registry_commit }}
+          CPP_COMMIT: ${{ steps.inputs.outputs.cpp_commit }}
+        run: |
+          PUBLISHED_WASM=$(python -c 'import intentumdiff, pathlib; print(pathlib.Path(intentumdiff.__file__).parent / "wasm")')
+          python scripts/stage_external_benchmark_inputs.py --registry build/registry/registry.yaml --registry-commit "$REGISTRY_COMMIT" --inventory tests/fixtures/external/inventory.json --published-dir "$PUBLISHED_WASM" --candidate-dir build/cpp-artifact --candidate-commit "$CPP_COMMIT" --out build/benchmark-inputs
+      - name: Offline corpus and gate checks
+        run: |
+          python scripts/import_external_benchmarks.py --validate
+          python -m pytest tests/tooling -q
+          cargo test --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --example external_benchmarks
+          cargo build --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --lib --example external_benchmarks
+      - name: Execute source-judged pilot without network
+        run: |
+          crates/rust-core-host/target/debug/examples/external_benchmarks --fixtures tests/fixtures/external --parsers build/benchmark-inputs --report build/benchmarks/results.json
+      - name: Retain exact results and identities
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: external-source-correctness-linux
+          path: build/benchmarks/
+          if-no-files-found: error

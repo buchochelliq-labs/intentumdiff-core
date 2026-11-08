@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "  var xor = function (i, j) {\n    if (i == j)\n      return '1';\n    else\n      return '0';\n  }\n  return a.split('').map((item, index) => xor(item, b[index])).join('');\n}\n\n",
+  "canonical_solution": "  var xor = function (i, j) {\n    if (i == j)\n      return '0';\n    else\n      return '1';\n  }\n  return a.split('').map((item, index) => xor(item, b[index])).join('');\n}\n\n",
+  "declaration": "\nconst stringXor = (a, b) => {\n",
+  "docstring": "Input are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> stringXor('010', '110')\n'100'",
+  "entry_point": "stringXor",
+  "example_test": "const testStringXor = () => {\n  console.assert(stringXor('010', '110') === '100')\n}\ntestStringXor()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const stringXor = (a, b)` to solve the following problem:\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> stringXor('010', '110')\n'100'",
+  "prompt": "/* Input are two strings a and b consisting only of 1s and 0s.\n  Perform binary XOR on these inputs and return result also as a string.\n  >>> stringXor('010', '110')\n  '100'\n  */\nconst stringXor = (a, b) => {\n",
+  "signature": "const stringXor = (a, b)",
+  "task_id": "JavaScript/11",
+  "test": "const testStringXor = () => {\n  console.assert(stringXor('111000', '101010') === '010010')\n  console.assert(stringXor('1', '1') === '0')\n  console.assert(stringXor('0101', '0000') === '0101')\n}\n\ntestStringXor()\n",
+  "test_setup": ""
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "\n    return strings.iter().filter(|x| substring.contains(&**x)).cloned().collect();\n}\n",
+  "canonical_solution": "\n    return strings.iter().filter(|x:&&String| x.contains(&substring)).map(String::from).collect();\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn filter_by_substring(strings: Vec<String>, substring:String) -> Vec<String>{\n",
+  "docstring": "Filter an input list of strings only for ones that contain given substring",
+  "entry_point": "filter_by_substring",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `filter_by_substring(strings: Vec<String>, substring:String) -> Vec<String>` to solve the following problem:\nFilter an input list of strings only for ones that contain given substring",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n Filter an input list of strings only for ones that contain given substring\n    \n*/\nfn filter_by_substring(strings: Vec<String>, substring:String) -> Vec<String>{\n",
+  "signature": "filter_by_substring(strings: Vec<String>, substring:String) -> Vec<String>",
+  "task_id": "Rust/7",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n #[test]\n    fn test_filter_by_substring() {\n        let v_empty: Vec<String> = vec![];\n        assert!(filter_by_substring(vec![], String::from(\"john\")) == v_empty);\n        assert!(\n            filter_by_substring(\n                vec![\n                    \"xxx\".to_string(),\n                    \"asd\".to_string(),\n                    \"xxy\".to_string(),\n                    \"john doe\".to_string(),\n                    \"xxxAAA\".to_string(),\n                    \"xxx\".to_string()\n                ],\n                String::from(\"xxx\")\n            ) == vec![\"xxx\", \"xxxAAA\", \"xxx\"]\n        );\n        assert!(\n            filter_by_substring(\n                vec![\n                    \"xxx\".to_string(),\n                    \"asd\".to_string(),\n                    \"aaaxxy\".to_string(),\n                    \"john doe\".to_string(),\n                    \"xxxAAA\".to_string(),\n                    \"xxx\".to_string()\n                ],\n                String::from(\"xx\")\n            ) == vec![\"xxx\", \"aaaxxy\", \"xxxAAA\", \"xxx\"]\n        );\n        assert!(\n            filter_by_substring(\n                vec![\n                    \"grunt\".to_string(),\n                    \"trumpet\".to_string(),\n                    \"prune\".to_string(),\n                    \"gruesome\".to_string()\n                ],\n                String::from(\"run\")\n            ) == [\"grunt\", \"prune\"]\n        );\n    }\n\n}\n",
+  "test_setup": ""
+}

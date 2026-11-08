@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "  if (!Array.isArray(numbers) || numbers.length == 0)\n    return [];\n  var result = [];\n  for (const n of numbers) {\n    result.push(n, delimeter);\n  }\n  return result;\n}\n\n",
+  "canonical_solution": "  if (!Array.isArray(numbers) || numbers.length == 0)\n    return [];\n  var result = [];\n  for (const n of numbers) {\n    result.push(n, delimeter);\n  }\n  result.pop();\n  return result;\n}\n\n",
+  "declaration": "\nconst intersperse = (numbers, delimeter) => {\n",
+  "docstring": "Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse([], 4)\n[]\n>>> intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "entry_point": "intersperse",
+  "example_test": "const testIntersperse = () => {\n  console.assert(JSON.stringify(intersperse([], 4)) === JSON.stringify([]))\n  console.assert(\n    JSON.stringify(\n      intersperse([1,2,3], 4)) === JSON.stringify([1,4,2,4,3])\n  )\n}\ntestIntersperse()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const intersperse = (numbers, delimeter)` to solve the following problem:\nInsert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse([], 4)\n[]\n>>> intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "prompt": "/* Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n  >>> intersperse([], 4)\n  []\n  >>> intersperse([1, 2, 3], 4)\n  [1, 4, 2, 4, 3]\n  */\nconst intersperse = (numbers, delimeter) => {\n",
+  "signature": "const intersperse = (numbers, delimeter)",
+  "task_id": "JavaScript/5",
+  "test": "const testIntersperse = () => {\n  console.assert(JSON.stringify(intersperse([], 7)) === JSON.stringify([]))\n  console.assert(\n    JSON.stringify(\n      intersperse([5, 6, 3, 2], 8)) === JSON.stringify([5, 8, 6, 8, 3, 8, 2])\n  )\n  console.assert(\n    JSON.stringify(\n      intersperse([2, 2, 2], 2)) === JSON.stringify([2, 2, 2, 2, 2])\n  )\n}\n\ntestIntersperse()\n",
+  "test_setup": ""
+}

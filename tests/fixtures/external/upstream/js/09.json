@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "  var running_max, result = [];\n  for (const n of numbers) {\n    if (running_max == undefined)\n      running_max = n;\n    else\n      running_max = Math.max(numbers);\n    result.push(running_max);\n  }\n  return result;\n}\n\n",
+  "canonical_solution": "  var running_max, result = [];\n  for (const n of numbers) {\n    if (running_max == undefined)\n      running_max = n;\n    else\n      running_max = Math.max(running_max, n);\n    result.push(running_max);\n  }\n  return result;\n}\n\n",
+  "declaration": "\nconst rollingMax = (numbers) => {\n",
+  "docstring": "From a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> rollingMax([1, 2, 3, 2, 3, 4, 2])\n[1, 2, 3, 3, 3, 4, 4]",
+  "entry_point": "rollingMax",
+  "example_test": "const testRollingMax = () => {\n  console.assert(JSON.stringify(rollingMax([1, 2, 3, 2, 3, 4, 2])) === JSON.stringify([1, 2, 3, 3, 3, 4, 4]))\n}\ntestRollingMax()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const rollingMax = (numbers)` to solve the following problem:\nFrom a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> rollingMax([1, 2, 3, 2, 3, 4, 2])\n[1, 2, 3, 3, 3, 4, 4]",
+  "prompt": "/* From a given list of integers, generate a list of rolling maximum element found until given moment\n  in the sequence.\n  >>> rollingMax([1, 2, 3, 2, 3, 4, 2])\n  [1, 2, 3, 3, 3, 4, 4]\n  */\nconst rollingMax = (numbers) => {\n",
+  "signature": "const rollingMax = (numbers)",
+  "task_id": "JavaScript/9",
+  "test": "const testRollingMax = () => {\n  console.assert(JSON.stringify(rollingMax([])) === JSON.stringify([]))\n  console.assert(\n    JSON.stringify(rollingMax([1, 2, 3, 4])) === JSON.stringify([1, 2, 3, 4])\n  )\n  console.assert(\n    JSON.stringify(rollingMax([4, 3, 2, 1])) === JSON.stringify([4, 4, 4, 4])\n  )\n  console.assert(\n    JSON.stringify(\n      rollingMax([3, 2, 3, 100, 3])) === JSON.stringify([3, 3, 3, 100, 100])\n  )\n}\n\ntestRollingMax()\n",
+  "test_setup": ""
+}

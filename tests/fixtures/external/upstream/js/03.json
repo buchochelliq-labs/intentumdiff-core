@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "  var balance = 0;\n  for (const op of operations) {\n    balance += op;\n    if (balance == 0) {\n      return true;\n    }\n  }\n  return false;\n}\n\n",
+  "canonical_solution": "  var balance = 0;\n  for (const op of operations) {\n    balance += op;\n    if (balance < 0) {\n      return true;\n    }\n  }\n  return false;\n}\n\n",
+  "declaration": "\nconst belowZero = (operations) => {\n",
+  "docstring": "You're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> belowZero([1, 2, 3])\nfalse\n>>> belowZero([1, 2, -4, 5])\ntrue",
+  "entry_point": "belowZero",
+  "example_test": "const testBelowZero = () => {\n  console.assert(belowZero([1, 2, 3]) === false)\n  console.assert(belowZero([1, 2, -4, 5]) === true)\n}\ntestBelowZero()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const belowZero = (operations)` to solve the following problem:\nYou're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> belowZero([1, 2, 3])\nfalse\n>>> belowZero([1, 2, -4, 5])\ntrue",
+  "prompt": "/* You're given a list of deposit and withdrawal operations on a bank account that starts with\n  zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n  at that point function should return true. Otherwise it should return false.\n  >>> belowZero([1, 2, 3])\n  false\n  >>> belowZero([1, 2, -4, 5])\n  true\n  */\nconst belowZero = (operations) => {\n",
+  "signature": "const belowZero = (operations)",
+  "task_id": "JavaScript/3",
+  "test": "const testBelowZero = () => {\n  console.assert(belowZero([]) === false)\n  console.assert(belowZero([1, 2, -3, 1, 2, -3]) === false)\n  console.assert(belowZero([1, 2, -4, 5, 6]) === true)\n  console.assert(belowZero([1, -1, 2, -2, 5, -5, 4, -4]) === false)\n  console.assert(belowZero([1, -1, 2, -2, 5, -5, 4, -5]) === true)\n  console.assert(belowZero([1, -2, 2, -2, 5, -5, 4, -4]) === true)\n}\n\ntestBelowZero()\n",
+  "test_setup": ""
+}

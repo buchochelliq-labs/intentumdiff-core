@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "    if not numbers:\n        return []\n\n    result = []\n\n    for n in numbers[:-1]:\n        result.append(n)\n        result.append(delimeter)\n\n    return result\n",
+  "canonical_solution": "    if not numbers:\n        return []\n\n    result = []\n\n    for n in numbers[:-1]:\n        result.append(n)\n        result.append(delimeter)\n\n    result.append(numbers[-1])\n\n    return result\n",
+  "declaration": "from typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n",
+  "docstring": "Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse([], 4)\n[]\n>>> intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "entry_point": "intersperse",
+  "example_test": "def check(intersperse):\n    assert intersperse([], 4) == []\n    assert intersperse([1,2,3], 4) == [1,4,2,4,3]\ncheck(intersperse)\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Python function `intersperse(numbers: List[int], delimeter: int) -> List[int]` to solve the following problem:\nInsert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> intersperse([], 4)\n[]\n>>> intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "prompt": "from typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \"\"\"\n",
+  "signature": "intersperse(numbers: List[int], delimeter: int) -> List[int]",
+  "task_id": "Python/5",
+  "test": "\n\n\n\n\ndef check(intersperse):\n    assert intersperse([], 7) == []\n    assert intersperse([5, 6, 3, 2], 8) == [5, 8, 6, 8, 3, 8, 2]\n    assert intersperse([2, 2, 2], 2) == [2, 2, 2, 2, 2]\n\ncheck(intersperse)",
+  "test_setup": ""
+}

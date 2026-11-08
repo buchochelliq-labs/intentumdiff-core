@@ -198,7 +198,7 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 
 REGISTRY_REPO = "intentumdiff-registry"
 # Same vetted component inventory as the Python/native release candidate.
-REGISTRY_REF = "cabcb9e78bd888d08d5c2250d7e8bd3065f2c7b9"
+REGISTRY_REF = "8911328ede24630ad9ea6a33da8ed010f066d3b1"
 
 
 def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:

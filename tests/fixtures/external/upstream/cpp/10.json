@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "   int i;\n   for (i=0;i<str.length();i++)\n   {\n        if (is_palindrome(str))\n        {\n            string nstr;\n            nstr=str.substr(0,i);\n            string n2str(nstr.rbegin(),nstr.rend());\n            return str+n2str;\n        }\n   }\n   string n2str(str.rbegin(),str.rend());\n   return str+n2str;\n}\n",
+  "canonical_solution": "   int i;\n   for (i=0;i<str.length();i++)\n   {\n        string rstr=str.substr(i);\n        if (is_palindrome(rstr))\n        {\n            string nstr;\n            nstr=str.substr(0,i);\n            string n2str(nstr.rbegin(),nstr.rend());\n            return str+n2str;\n        }\n   }\n   string n2str(str.rbegin(),str.rend());\n   return str+n2str;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<string>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nbool is_palindrome(string str){\n    string s(str.rbegin(),str.rend());\n    return s==str;\n}\nstring make_palindrome(string str){\n",
+  "docstring": "Find the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple: - Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> make_palindrome(\"\")\n\"\"\n>>> make_palindrome(\"cat\")\n\"catac\"\n>>> make_palindrome(\"cata\")\n\"catac\"",
+  "entry_point": "make_palindrome",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (make_palindrome(\"\") == \"\");\n    assert (make_palindrome(\"cat\") == \"catac\");\n     assert (make_palindrome(\"cata\") == \"catac\");\n}\n",
+  "failure_symptoms": "stackoverflow",
+  "import": "",
+  "instruction": "Write a C++ function `string make_palindrome(string str)` to solve the following problem:\nFind the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple: - Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> make_palindrome(\"\")\n\"\"\n>>> make_palindrome(\"cat\")\n\"catac\"\n>>> make_palindrome(\"cata\")\n\"catac\"",
+  "prompt": "#include<stdio.h>\n#include<string>\nusing namespace std;\nbool is_palindrome(string str){\n    //Test if given string is a palindrome \n    string s(str.rbegin(),str.rend());\n    return s==str;\n}\nstring make_palindrome(string str){\n    /*\n    Find the shortest palindrome that begins with a supplied string. \n    Algorithm idea is simple: - Find the longest postfix of supplied string that is a palindrome. \n    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n    >>> make_palindrome(\"\") \n    \"\" \n    >>> make_palindrome(\"cat\") \n    \"catac\" \n    >>> make_palindrome(\"cata\") \n    \"catac\" \n    */\n",
+  "signature": "string make_palindrome(string str)",
+  "task_id": "CPP/10",
+  "test": "#undef NDEBUG\n#include<assert.h>\nint main(){\n    assert (make_palindrome(\"\") == \"\");\n    assert (make_palindrome(\"x\") == \"x\");\n     assert (make_palindrome(\"xyz\") == \"xyzyx\");\n     assert (make_palindrome(\"xyx\") == \"xyx\") ;\n     assert (make_palindrome(\"jerry\") == \"jerryrrej\");\n}\n\n\n",
+  "test_setup": ""
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "    result := make([]int, 0)\n    if len(numbers) == 0 {\n        return result\n    }\n    for i := 0; i < len(numbers)-1; i++ {\n        n := numbers[i]\n        result = append(result, n)\n        result = append(result, delimeter)\n    }\n    return result\n}\n\n",
+  "canonical_solution": "    result := make([]int, 0)\n    if len(numbers) == 0 {\n        return result\n    }\n    for i := 0; i < len(numbers)-1; i++ {\n        n := numbers[i]\n        result = append(result, n)\n        result = append(result, delimeter)\n    }\n    result = append(result, numbers[len(numbers)-1])\n    return result\n}\n\n",
+  "declaration": "\nfunc Intersperse(numbers []int, delimeter int) []int {\n",
+  "docstring": "Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> Intersperse([], 4)\n[]\n>>> Intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "entry_point": "Intersperse",
+  "example_test": "func TestIntersperse(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{}, Intersperse([]int{}, 4))\n    assert.Equal([]int{1,4,2,4,3}, Intersperse([]int{1,2,3}, 4))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Go function `func Intersperse(numbers []int, delimeter int) []int` to solve the following problem:\nInsert a number 'delimeter' between every two consecutive elements of input list `numbers'\n>>> Intersperse([], 4)\n[]\n>>> Intersperse([1, 2, 3], 4)\n[1, 4, 2, 4, 3]",
+  "prompt": "\n// Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n// >>> Intersperse([], 4)\n// []\n// >>> Intersperse([1, 2, 3], 4)\n// [1, 4, 2, 4, 3]\nfunc Intersperse(numbers []int, delimeter int) []int {\n",
+  "signature": "func Intersperse(numbers []int, delimeter int) []int",
+  "task_id": "Go/5",
+  "test": "func TestIntersperse(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{}, Intersperse([]int{}, 7))\n    assert.Equal([]int{5, 8, 6, 8, 3, 8, 2}, Intersperse([]int{5, 6, 3, 2}, 8))\n    assert.Equal([]int{2, 2, 2, 2, 2}, Intersperse([]int{2, 2, 2}, 2))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

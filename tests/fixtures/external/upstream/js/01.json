@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "  var result = [];\n  var current_string = [];\n  var current_depth = 0;\n\n  for (const c of paren_string) {\n    if (c == '(') {\n      current_depth += 1;\n      current_string.push(c);\n    } else if (c == ')') {\n      current_depth -= 1;\n      current_string.push(c);\n      if (current_depth < 0) {\n        result.push(current_string.join(''));\n        current_string = [];\n      }\n    }\n  }\n\n  return result;\n}\n\n",
+  "canonical_solution": "  var result = [];\n  var current_string = [];\n  var current_depth = 0;\n\n  for (const c of paren_string) {\n    if (c == '(') {\n      current_depth += 1;\n      current_string.push(c);\n    } else if (c == ')') {\n      current_depth -= 1;\n      current_string.push(c);\n      if (current_depth == 0) {\n        result.push(current_string.join(''));\n        current_string = [];\n      }\n    }\n  }\n\n  return result;\n}\n\n",
+  "declaration": "\nconst separateParenGroups = (paren_string) => {\n",
+  "docstring": "Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\nseparate those group into separate strings and return the list of those.\nSeparate groups are balanced (each open brace is properly closed) and not nested within each other\nIgnore any spaces in the input string.\n>>> separateParenGroups('( ) (( )) (( )( ))')\n['()', '(())', '(()())']",
+  "entry_point": "separateParenGroups",
+  "example_test": "const testSeparateParenGroups = () => {\n  console.assert(\n    JSON.stringify(separateParenGroups('( ) (( )) (( )( ))')) ===\n      JSON.stringify(['()', '(())', '(()())'])\n  )\n}\ntestSeparateParenGroups()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const separateParenGroups = (paren_string)` to solve the following problem:\nInput to this function is a string containing multiple groups of nested parentheses. Your goal is to\nseparate those group into separate strings and return the list of those.\nSeparate groups are balanced (each open brace is properly closed) and not nested within each other\nIgnore any spaces in the input string.\n>>> separateParenGroups('( ) (( )) (( )( ))')\n['()', '(())', '(()())']",
+  "prompt": "/* Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n  separate those group into separate strings and return the list of those.\n  Separate groups are balanced (each open brace is properly closed) and not nested within each other\n  Ignore any spaces in the input string.\n  >>> separateParenGroups('( ) (( )) (( )( ))')\n  ['()', '(())', '(()())']\n  */\nconst separateParenGroups = (paren_string) => {\n",
+  "signature": "const separateParenGroups = (paren_string)",
+  "task_id": "JavaScript/1",
+  "test": "const testSeparateParenGroups = () => {\n  console.assert(\n    JSON.stringify(separateParenGroups('(()()) ((())) () ((())()())')) ===\n      JSON.stringify(['(()())', '((()))', '()', '((())()())'])\n  )\n  console.assert(\n    JSON.stringify(separateParenGroups('() (()) ((())) (((())))')) ===\n      JSON.stringify(['()', '(())', '((()))', '(((())))'])\n  )\n  console.assert(\n    JSON.stringify(separateParenGroups('(()(())((())))')) ===\n      JSON.stringify(['(()(())((())))'])\n  )\n  console.assert(\n    JSON.stringify(separateParenGroups('( ) (( )) (( )( ))')) ===\n      JSON.stringify(['()', '(())', '(()())'])\n  )\n}\n\ntestSeparateParenGroups()\n",
+  "test_setup": ""
+}

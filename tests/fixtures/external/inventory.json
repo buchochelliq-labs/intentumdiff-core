@@ -1,0 +1,669 @@
+{
+  "extension_index": {
+    ".abap": "abap",
+    ".adoc": "asciidoc",
+    ".as": "assemblyscript",
+    ".asc": "asciidoc",
+    ".asciidoc": "asciidoc",
+    ".asm": "asm",
+    ".astro": "astro",
+    ".c": "c",
+    ".cfg": "ini",
+    ".cjs": "javascript",
+    ".clj": "clojure",
+    ".cmake": "cmake",
+    ".conf": "ini",
+    ".cpp": "cpp",
+    ".cs": "csharp",
+    ".css": "css",
+    ".cts": "typescript",
+    ".cursorignore": "gitignore",
+    ".dart": "dart",
+    ".dax": "dax",
+    ".ddl": "sql",
+    ".dml": "sql",
+    ".dockerignore": "gitignore",
+    ".editorconfig": "ini",
+    ".eslintignore": "gitignore",
+    ".ex": "elixir",
+    ".gcloudignore": "gitignore",
+    ".gitconfig": "ini",
+    ".gitignore": "gitignore",
+    ".go": "go",
+    ".gql": "graphql",
+    ".graphql": "graphql",
+    ".groovy": "groovy",
+    ".hcl": "hcl",
+    ".helmignore": "gitignore",
+    ".hs": "haskell",
+    ".htm": "html",
+    ".html": "html",
+    ".ini": "ini",
+    ".java": "java",
+    ".js": "javascript",
+    ".json": "json",
+    ".jsx": "javascript",
+    ".kt": "kotlin",
+    ".latex": "latex",
+    ".lua": "lua",
+    ".m": "m",
+    ".make": "make",
+    ".markdown": "markdown",
+    ".md": "markdown",
+    ".mdown": "markdown",
+    ".mdx": "mdx",
+    ".mjs": "javascript",
+    ".mk": "make",
+    ".mkd": "markdown",
+    ".mkdn": "markdown",
+    ".ml": "ocaml",
+    ".mli": "ocaml",
+    ".mts": "typescript",
+    ".npmignore": "gitignore",
+    ".nut": "squirrel",
+    ".odin": "odin",
+    ".pas": "delphi",
+    ".php": "php",
+    ".pl": "perl",
+    ".po": "po",
+    ".pot": "po",
+    ".pp": "puppet",
+    ".prettierignore": "gitignore",
+    ".proto": "proto",
+    ".ps": "postscript",
+    ".ps1": "powershell",
+    ".py": "python",
+    ".pyi": "python",
+    ".qs": "qsharp",
+    ".r": "r",
+    ".rb": "ruby",
+    ".re": "reasonml",
+    ".rei": "reasonml",
+    ".rs": "rust",
+    ".sas": "sas",
+    ".scala": "scala",
+    ".scss": "scss",
+    ".sh": "bash",
+    ".sql": "sql",
+    ".svelte": "svelte",
+    ".swift": "swift",
+    ".tex": "latex",
+    ".tf": "hcl",
+    ".toml": "toml",
+    ".ts": "typescript",
+    ".tsql": "tsql",
+    ".tsx": "tsx",
+    ".txt": "generic",
+    ".vb": "vbnet",
+    ".vscodeignore": "gitignore",
+    ".vue": "vue",
+    ".wast": "wast",
+    ".wat": "wat",
+    ".xml": "xml",
+    ".yaml": "yaml",
+    ".yml": "yaml",
+    ".zig": "zig",
+    "CMakeLists.txt": "cmake",
+    "Dockerfile": "dockerfile",
+    "GNUmakefile": "make",
+    "Makefile": "make",
+    "go.mod": "gomod"
+  },
+  "parsers": {
+    "abap": {
+      "extensions": [
+        ".abap"
+      ],
+      "plugin_id": "abap",
+      "wasm": "abap_parser.wasm"
+    },
+    "adf": {
+      "extensions": [
+        ".json"
+      ],
+      "plugin_id": "adf",
+      "wasm": "adf_parser.wasm"
+    },
+    "asciidoc": {
+      "extensions": [
+        ".adoc",
+        ".asc",
+        ".asciidoc"
+      ],
+      "plugin_id": "asciidoc",
+      "wasm": "asciidoc_parser.wasm"
+    },
+    "asm": {
+      "extensions": [
+        ".asm"
+      ],
+      "plugin_id": "asm",
+      "wasm": "asm_parser.wasm"
+    },
+    "assemblyscript": {
+      "extensions": [
+        ".as"
+      ],
+      "plugin_id": "assemblyscript",
+      "wasm": "assemblyscript_parser.wasm"
+    },
+    "astro": {
+      "extensions": [
+        ".astro"
+      ],
+      "plugin_id": "astro",
+      "wasm": "astro_parser.wasm"
+    },
+    "bash": {
+      "extensions": [
+        ".sh"
+      ],
+      "plugin_id": "bash",
+      "wasm": "bash_parser.wasm"
+    },
+    "c": {
+      "extensions": [
+        ".c"
+      ],
+      "plugin_id": "c",
+      "wasm": "cpp_parser.wasm"
+    },
+    "clojure": {
+      "extensions": [
+        ".clj"
+      ],
+      "plugin_id": "clojure",
+      "wasm": "clojure_parser.wasm"
+    },
+    "cmake": {
+      "extensions": [
+        "CMakeLists.txt",
+        ".cmake"
+      ],
+      "plugin_id": "cmake",
+      "wasm": "cmake_parser.wasm"
+    },
+    "cpp": {
+      "extensions": [
+        ".cpp"
+      ],
+      "plugin_id": "cpp",
+      "wasm": "cpp_parser.wasm"
+    },
+    "csharp": {
+      "extensions": [
+        ".cs"
+      ],
+      "plugin_id": "csharp",
+      "wasm": "csharp_parser.wasm"
+    },
+    "css": {
+      "extensions": [
+        ".css"
+      ],
+      "plugin_id": "css",
+      "wasm": "css_parser.wasm"
+    },
+    "dart": {
+      "extensions": [
+        ".dart"
+      ],
+      "plugin_id": "dart",
+      "wasm": "dart_parser.wasm"
+    },
+    "databricks": {
+      "extensions": [],
+      "plugin_id": "databricks-workflow",
+      "wasm": "databricks_parser.wasm"
+    },
+    "databricks-workflow": {
+      "extensions": [
+        ".yml"
+      ],
+      "plugin_id": "databricks-workflow",
+      "wasm": "databricks_parser.wasm"
+    },
+    "dax": {
+      "extensions": [
+        ".dax"
+      ],
+      "plugin_id": "dax",
+      "wasm": "dax_parser.wasm"
+    },
+    "delphi": {
+      "extensions": [
+        ".pas"
+      ],
+      "plugin_id": "delphi",
+      "wasm": "delphi_parser.wasm"
+    },
+    "dockerfile": {
+      "extensions": [
+        "Dockerfile"
+      ],
+      "plugin_id": "dockerfile",
+      "wasm": "dockerfile_parser.wasm"
+    },
+    "elixir": {
+      "extensions": [
+        ".ex"
+      ],
+      "plugin_id": "elixir",
+      "wasm": "elixir_parser.wasm"
+    },
+    "generic": {
+      "extensions": [
+        ".txt"
+      ],
+      "plugin_id": "generic",
+      "wasm": "generic_parser.wasm"
+    },
+    "gitignore": {
+      "extensions": [
+        ".cursorignore",
+        ".dockerignore",
+        ".eslintignore",
+        ".gcloudignore",
+        ".gitignore",
+        ".helmignore",
+        ".npmignore",
+        ".prettierignore",
+        ".vscodeignore"
+      ],
+      "plugin_id": "gitignore",
+      "wasm": "gitignore_parser.wasm"
+    },
+    "go": {
+      "extensions": [
+        ".go"
+      ],
+      "plugin_id": "go",
+      "wasm": "go_parser.wasm"
+    },
+    "gomod": {
+      "extensions": [
+        "go.mod"
+      ],
+      "plugin_id": "gomod",
+      "wasm": "gomod_parser.wasm"
+    },
+    "graphql": {
+      "extensions": [
+        ".gql",
+        ".graphql"
+      ],
+      "plugin_id": "graphql",
+      "wasm": "graphql_parser.wasm"
+    },
+    "groovy": {
+      "extensions": [
+        ".groovy"
+      ],
+      "plugin_id": "groovy",
+      "wasm": "groovy_parser.wasm"
+    },
+    "haskell": {
+      "extensions": [
+        ".hs"
+      ],
+      "plugin_id": "haskell",
+      "wasm": "haskell_parser.wasm"
+    },
+    "hcl": {
+      "extensions": [
+        ".hcl",
+        ".tf"
+      ],
+      "plugin_id": "hcl",
+      "wasm": "terraform_parser.wasm"
+    },
+    "html": {
+      "extensions": [
+        ".htm",
+        ".html"
+      ],
+      "plugin_id": "html",
+      "wasm": "html_parser.wasm"
+    },
+    "ini": {
+      "extensions": [
+        ".ini",
+        ".cfg",
+        ".conf",
+        ".editorconfig",
+        ".gitconfig"
+      ],
+      "plugin_id": "ini",
+      "wasm": "ini_parser.wasm"
+    },
+    "java": {
+      "extensions": [
+        ".java"
+      ],
+      "plugin_id": "java",
+      "wasm": "java_parser.wasm"
+    },
+    "javascript": {
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs"
+      ],
+      "plugin_id": "javascript",
+      "wasm": "js_ts_parser.wasm"
+    },
+    "json": {
+      "extensions": [
+        ".json"
+      ],
+      "plugin_id": "json",
+      "wasm": "json_parser.wasm"
+    },
+    "kotlin": {
+      "extensions": [
+        ".kt"
+      ],
+      "plugin_id": "kotlin",
+      "wasm": "kotlin_parser.wasm"
+    },
+    "latex": {
+      "extensions": [
+        ".latex",
+        ".tex"
+      ],
+      "plugin_id": "latex",
+      "wasm": "latex_parser.wasm"
+    },
+    "lua": {
+      "extensions": [
+        ".lua"
+      ],
+      "plugin_id": "lua",
+      "wasm": "lua_parser.wasm"
+    },
+    "m": {
+      "extensions": [
+        ".m"
+      ],
+      "plugin_id": "m",
+      "wasm": "dax_parser.wasm"
+    },
+    "make": {
+      "extensions": [
+        "Makefile",
+        "GNUmakefile",
+        ".mk",
+        ".make"
+      ],
+      "plugin_id": "make",
+      "wasm": "make_parser.wasm"
+    },
+    "markdown": {
+      "extensions": [
+        ".markdown",
+        ".md",
+        ".mdown",
+        ".mkd",
+        ".mkdn"
+      ],
+      "plugin_id": "markdown",
+      "wasm": "markdown_parser.wasm"
+    },
+    "mdx": {
+      "extensions": [
+        ".mdx"
+      ],
+      "plugin_id": "mdx",
+      "wasm": "mdx_parser.wasm"
+    },
+    "ocaml": {
+      "extensions": [
+        ".ml",
+        ".mli"
+      ],
+      "plugin_id": "ocaml",
+      "wasm": "ocaml_parser.wasm"
+    },
+    "odin": {
+      "extensions": [
+        ".odin"
+      ],
+      "plugin_id": "odin",
+      "wasm": "odin_parser.wasm"
+    },
+    "perl": {
+      "extensions": [
+        ".pl"
+      ],
+      "plugin_id": "perl",
+      "wasm": "perl_parser.wasm"
+    },
+    "php": {
+      "extensions": [
+        ".php"
+      ],
+      "plugin_id": "php",
+      "wasm": "php_parser.wasm"
+    },
+    "plsql": {
+      "extensions": [
+        ".sql"
+      ],
+      "plugin_id": "plsql",
+      "wasm": "plsql_parser.wasm"
+    },
+    "po": {
+      "extensions": [
+        ".po",
+        ".pot"
+      ],
+      "plugin_id": "po",
+      "wasm": "po_parser.wasm"
+    },
+    "postscript": {
+      "extensions": [
+        ".ps"
+      ],
+      "plugin_id": "postscript",
+      "wasm": "postscript_parser.wasm"
+    },
+    "powershell": {
+      "extensions": [
+        ".ps1"
+      ],
+      "plugin_id": "powershell",
+      "wasm": "powershell_parser.wasm"
+    },
+    "proto": {
+      "extensions": [
+        ".proto"
+      ],
+      "plugin_id": "proto",
+      "wasm": "proto_parser.wasm"
+    },
+    "puppet": {
+      "extensions": [
+        ".pp"
+      ],
+      "plugin_id": "puppet",
+      "wasm": "puppet_parser.wasm"
+    },
+    "python": {
+      "extensions": [
+        ".py",
+        ".pyi"
+      ],
+      "plugin_id": "python",
+      "wasm": "python_parser.wasm"
+    },
+    "qsharp": {
+      "extensions": [
+        ".qs"
+      ],
+      "plugin_id": "qsharp",
+      "wasm": "qsharp_parser.wasm"
+    },
+    "r": {
+      "extensions": [
+        ".r"
+      ],
+      "plugin_id": "r",
+      "wasm": "r_parser.wasm"
+    },
+    "reasonml": {
+      "extensions": [
+        ".re",
+        ".rei"
+      ],
+      "plugin_id": "reasonml",
+      "wasm": "reasonml_parser.wasm"
+    },
+    "ruby": {
+      "extensions": [
+        ".rb"
+      ],
+      "plugin_id": "ruby",
+      "wasm": "ruby_parser.wasm"
+    },
+    "rust": {
+      "extensions": [
+        ".rs"
+      ],
+      "plugin_id": "rust",
+      "wasm": "rust_parser.wasm"
+    },
+    "sas": {
+      "extensions": [
+        ".sas"
+      ],
+      "plugin_id": "sas",
+      "wasm": "sas_parser.wasm"
+    },
+    "scala": {
+      "extensions": [
+        ".scala"
+      ],
+      "plugin_id": "scala",
+      "wasm": "scala_parser.wasm"
+    },
+    "scss": {
+      "extensions": [
+        ".scss"
+      ],
+      "plugin_id": "scss",
+      "wasm": "scss_parser.wasm"
+    },
+    "sql": {
+      "extensions": [
+        ".ddl",
+        ".dml",
+        ".sql"
+      ],
+      "plugin_id": "sql",
+      "wasm": "sql_parser.wasm"
+    },
+    "squirrel": {
+      "extensions": [
+        ".nut"
+      ],
+      "plugin_id": "squirrel",
+      "wasm": "squirrel_parser.wasm"
+    },
+    "svelte": {
+      "extensions": [
+        ".svelte"
+      ],
+      "plugin_id": "svelte",
+      "wasm": "svelte_parser.wasm"
+    },
+    "swift": {
+      "extensions": [
+        ".swift"
+      ],
+      "plugin_id": "swift",
+      "wasm": "swift_parser.wasm"
+    },
+    "toml": {
+      "extensions": [
+        ".toml"
+      ],
+      "plugin_id": "toml",
+      "wasm": "toml_parser.wasm"
+    },
+    "tsql": {
+      "extensions": [
+        ".tsql"
+      ],
+      "plugin_id": "tsql",
+      "wasm": "tsql_parser.wasm"
+    },
+    "tsx": {
+      "extensions": [
+        ".tsx"
+      ],
+      "plugin_id": "tsx",
+      "wasm": "js_ts_parser.wasm"
+    },
+    "typescript": {
+      "extensions": [
+        ".cts",
+        ".mts",
+        ".ts"
+      ],
+      "plugin_id": "typescript",
+      "wasm": "js_ts_parser.wasm"
+    },
+    "vbnet": {
+      "extensions": [
+        ".vb"
+      ],
+      "plugin_id": "vbnet",
+      "wasm": "vbnet_parser.wasm"
+    },
+    "vue": {
+      "extensions": [
+        ".vue"
+      ],
+      "plugin_id": "vue",
+      "wasm": "vue_parser.wasm"
+    },
+    "wast": {
+      "extensions": [
+        ".wast"
+      ],
+      "plugin_id": "wat",
+      "wasm": "wat_parser.wasm"
+    },
+    "wat": {
+      "extensions": [
+        ".wat"
+      ],
+      "plugin_id": "wat",
+      "wasm": "wat_parser.wasm"
+    },
+    "xml": {
+      "extensions": [
+        ".xml"
+      ],
+      "plugin_id": "xml",
+      "wasm": "xml_parser.wasm"
+    },
+    "yaml": {
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "plugin_id": "yaml",
+      "wasm": "yaml_parser.wasm"
+    },
+    "zig": {
+      "extensions": [
+        ".zig"
+      ],
+      "plugin_id": "zig",
+      "wasm": "zig_parser.wasm"
+    }
+  },
+  "schema_version": 1
+}

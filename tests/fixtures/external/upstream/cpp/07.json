@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "    vector<string> out;\n    for (int i=0;i<strings.size();i++)\n    {\n        if (substring.find(strings[i])!=strings[i].npos)\n        out.push_back(strings[i]);\n    }\n    return out;\n}\n",
+  "canonical_solution": "    vector<string> out;\n    for (int i=0;i<strings.size();i++)\n    {\n        if (strings[i].find(substring)!=strings[i].npos)\n        out.push_back(strings[i]);\n    }\n    return out;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<vector>\n#include<string>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nvector<string> filter_by_substring(vector<string> strings, string substring){\n",
+  "docstring": "Filter an input vector of strings only for ones that contain given substring\n>>> filter_by_substring({}, \"a\")\n{}\n>>> filter_by_substring({\"abc\", \"bacd\", \"cde\", \"vector\"}, \"a\")\n{\"abc\", \"bacd\", \"vector\"}",
+  "entry_point": "filter_by_substring",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<string> a,vector<string>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n    if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n    assert (issame(filter_by_substring({}, \"a\"),{}));\n     assert (issame(filter_by_substring({\"abc\", \"bacd\", \"cde\", \"array\"}, \"a\"), {\"abc\", \"bacd\", \"array\"}));\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a C++ function `vector<string> filter_by_substring(vector<string> strings, string substring)` to solve the following problem:\nFilter an input vector of strings only for ones that contain given substring\n>>> filter_by_substring({}, \"a\")\n{}\n>>> filter_by_substring({\"abc\", \"bacd\", \"cde\", \"vector\"}, \"a\")\n{\"abc\", \"bacd\", \"vector\"}",
+  "prompt": "/*\nFilter an input vector of strings only for ones that contain given substring\n>>> filter_by_substring({}, \"a\")\n{}\n>>> filter_by_substring({\"abc\", \"bacd\", \"cde\", \"vector\"}, \"a\")\n{\"abc\", \"bacd\", \"vector\"}\n*/\n#include<stdio.h>\n#include<vector>\n#include<string>\nusing namespace std;\nvector<string> filter_by_substring(vector<string> strings, string substring){\n",
+  "signature": "vector<string> filter_by_substring(vector<string> strings, string substring)",
+  "task_id": "CPP/7",
+  "test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<string> a,vector<string>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n    if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n    assert (issame(filter_by_substring({}, \"john\"),{}));\n     assert (issame(filter_by_substring({\"xxx\", \"asd\", \"xxy\", \"john doe\", \"xxxAAA\", \"xxx\"}, \"xxx\"), {\"xxx\", \"xxxAAA\", \"xxx\"}));\n    assert (issame(filter_by_substring({\"xxx\", \"asd\", \"aaaxxy\", \"john doe\", \"xxxAAA\", \"xxx\"}, \"xx\"),{\"xxx\", \"aaaxxy\", \"xxxAAA\", \"xxx\"}));\n     assert (issame(filter_by_substring({\"grunt\", \"trumpet\", \"prune\", \"gruesome\"}, \"run\") ,{\"grunt\", \"prune\"}));\n}\n",
+  "test_setup": ""
+}
