@@ -1622,14 +1622,14 @@ fn finalize_review_impl(
     // hidden by coarse container matches; identical-content positional-label churn suppresses
     // with evidence.
     if let Some(group) =
-        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language)
+        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language, old_source, new_source)
     {
         finalization.change_groups.push(group);
     }
     // YAML representation-graph equivalence (issue #57 yaml): block↔flow style churn suppresses
     // with evidence; a diff fully consumed by it is style-only.
     if language == "yaml" {
-        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts) {
+        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts, old_source, new_source) {
             finalization.change_groups.push(group);
             if drafts.is_empty() {
                 finalization.is_style_only = true;

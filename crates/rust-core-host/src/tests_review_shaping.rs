@@ -509,7 +509,7 @@ use crate::*;
             refactoring_kind: None,
             text_diff: None,
         }];
-        let group = suppress_yaml_representation_equivalent_drafts(&mut changes)
+        let group = suppress_yaml_representation_equivalent_drafts(&mut changes, "[]", "[]")
             .expect("restyle suppressed with evidence");
         assert!(changes.is_empty());
         assert_eq!(
