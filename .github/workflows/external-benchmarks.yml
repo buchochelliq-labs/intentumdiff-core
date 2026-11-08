@@ -84,7 +84,7 @@ jobs:
           crates/rust-core-host/target/debug/examples/external_benchmarks --fixtures tests/fixtures/external --parsers build/benchmark-inputs --report build/benchmarks/results.json
       - name: Guard all 760 language probes against reviewed baseline
         run: |
-          python scripts/assess_languages.py --fixtures tests/fixtures/language_assessment --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --baseline docs/evidence/2026-11-08-language-assessment.json --report build/language-assessment/results.json
+          python scripts/assess_languages.py --fixtures tests/fixtures/language_assessment --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --baseline docs/evidence/2026-11-08-post-fix-language-baseline.json --report build/language-assessment/results.json
       - name: Retain exact results and identities
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
