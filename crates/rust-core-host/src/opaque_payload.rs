@@ -104,6 +104,12 @@ pub(crate) fn trees_equivalent(
     if old.structural_hash == new.structural_hash {
         return true;
     }
+    // Source-backed opaque update generation is scoped to configured profiles.
+    // Other source-aware routes retain their existing normalized equivalence;
+    // tightening their certificate requires corresponding producer support.
+    if sources.is_some_and(|(_, _, language)| !configured_language(language)) {
+        return true;
+    }
     fn explained(
         old: &SemanticNode,
         new: &SemanticNode,

@@ -158,6 +158,60 @@ fn source_case(language: &str, filename: &str, old: &str, new: &str) -> Value {
 }
 
 #[test]
+fn semantic_payload_unconfigured_source_aware_equivalence_keeps_legacy_projection_proof() {
+    let tree = |hash: &str| {
+        serde_json::from_value::<SemanticNode>(json!({
+            "id":"0", "node_type":"document", "label":"document", "children":[],
+            "position":{"start_line":0,"start_col":0,"end_line":0,"end_col":9},
+            "structural_hash":hash
+        }))
+        .unwrap()
+    };
+    let old = tree("old-source-hash");
+    let new = tree("new-source-hash");
+    assert!(
+        !opaque_payload::trees_equivalent(&old, &new, None),
+        "source-less opaque hash evidence still requires a proof"
+    );
+    assert!(
+        !opaque_payload::trees_equivalent(&old, &new, Some(("value = 1", "value = 2", "make"))),
+        "configured opaque payload changes still require their stricter source proof"
+    );
+    assert!(
+        opaque_payload::trees_equivalent(
+            &old,
+            &new,
+            Some(("value = 1", "; ordinary comment\nvalue = 1", "ini"))
+        ),
+        "an unconfigured source-aware route must retain its existing projection proof"
+    );
+}
+
+#[test]
+fn semantic_payload_unconfigured_ini_preservation_keeps_style_evidence() {
+    let diff = review(&case("data_config.ini.safe_preservation"));
+    assert_eq!(diff["parse_errors"], json!([]), "{diff:#}");
+    assert_eq!(diff["is_fallback"], false, "{diff:#}");
+    assert_eq!(diff["changes"], json!([]), "{diff:#}");
+    assert_eq!(diff["has_semantic_changes"], false, "{diff:#}");
+    assert_eq!(diff["is_style_only"], true, "{diff:#}");
+    assert!(
+        diff["change_groups"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|group| group["rule_id"] == "generic.style_only_shortcut.source_equivalence"),
+        "{diff:#}"
+    );
+    assert!(
+        diff["metadata"]["ignored_style_changes"]
+            .as_array()
+            .is_some_and(|e| !e.is_empty()),
+        "{diff:#}"
+    );
+}
+
+#[test]
 fn semantic_payload_source_hash_delta_alone_does_not_create_an_edit() {
     // Some components hash raw source. An opaque hash delta still needs changed
     // payload tokens; this unit isolates that contract from guest hash choices.
