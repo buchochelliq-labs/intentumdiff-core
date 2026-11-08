@@ -50,7 +50,12 @@ API = "https://api.github.com"
 # is a language silently dropping out of the matrix while the suite still reports green.
 # JSON is also required by the native parser fuel telemetry regressions.
 # Source-judged Core #192 tests require actual parser bytes, never synthetic CSTs.
-TIER_C_COMPONENTS = ["python", "go", "js-ts", "ini", "asm", "json", "clojure", "assemblyscript"]
+# Tier-C certification and source regressions require actual verified components.
+# Keep the shared correctness repair batch enabled on every independent fix PR.
+TIER_C_COMPONENTS = [
+    "python", "go", "js-ts", "ini", "asm", "json", "clojure", "assemblyscript",
+    "css", "scss", "yaml", "make", "proto", "puppet", "toml",
+]
 
 
 class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):

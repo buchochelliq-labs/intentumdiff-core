@@ -72,8 +72,10 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             ignored = specific;
         }
         if changes.is_empty() && !style {
-            style = old_source == new_source || crate::review_trees_equivalent_impl(
-                &request["old_tree"].to_string(), &request["new_tree"].to_string())? == "true";
+            style = old_source == new_source || crate::opaque_payload::trees_equivalent(
+                &serde_json::from_value(request["old_tree"].clone()).map_err(|e| format!("old tree: {e}"))?,
+                &serde_json::from_value(request["new_tree"].clone()).map_err(|e| format!("new tree: {e}"))?,
+                Some((old_source, new_source, language)));
         }
         // Suppression alone is not proof of equivalence. Never fabricate style evidence
         // for different source trees merely because no changes survived refinement.

@@ -100,7 +100,7 @@ pub(crate) fn is_operator_token(token: &str) -> bool {
 }
 
 #[derive(Clone, Copy)]
-enum CommentStyle {
+pub(crate) enum CommentStyle {
     /// `// ...` and `/* ... */`
     Slash,
     /// `# ...`
@@ -109,14 +109,14 @@ enum CommentStyle {
     DashDash,
 }
 
-fn comment_styles(language: &str) -> &'static [CommentStyle] {
+pub(crate) fn comment_styles(language: &str) -> &'static [CommentStyle] {
     use CommentStyle::*;
     match language.to_ascii_lowercase().as_str() {
         "python" | "ruby" | "r" | "elixir" | "perl" | "bash" | "shell" | "sh" | "powershell"
-        | "nim" | "julia" | "crystal" | "coffeescript" | "tcl" | "cmake" | "makefile"
+        | "nim" | "julia" | "crystal" | "coffeescript" | "tcl" | "cmake" | "makefile" | "make"
         | "yaml" | "toml" | "dockerfile" => &[Hash],
         "sql" | "tsql" | "plsql" | "lua" | "haskell" | "elm" | "ada" | "purescript" => &[DashDash],
-        "php" => &[Slash, Hash],
+        "php" | "puppet" => &[Slash, Hash],
         _ => &[Slash],
     }
 }
