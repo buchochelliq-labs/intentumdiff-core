@@ -1,0 +1,800 @@
+---
+title: CommonMark Spec
+author: John MacFarlane
+version: '0.31.2'
+date: '2024-01-28'
+license: '[CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)'
+...
+
+# Introduction
+
+## What is Markdown?
+
+Markdown is a plain text format for writing structured documents,
+based on conventions for indicating formatting in email
+and usenet posts.  It was developed by John Gruber (with
+help from Aaron Swartz) and released in 2004 in the form of a
+[syntax description](https://daringfireball.net/projects/markdown/syntax)
+and a Perl script (`Markdown.pl`) for converting Markdown to
+HTML.  In the next decade, dozens of implementations were
+developed in many languages.  Some extended the original
+Markdown syntax with conventions for footnotes, tables, and
+other document elements.  Some allowed Markdown documents to be
+rendered in formats other than HTML.  Websites like Reddit,
+StackOverflow, and GitHub had millions of people using Markdown.
+And Markdown started to be used beyond the web, to author books,
+articles, slide shows, letters, and lecture notes.
+
+What distinguishes Markdown from many other lightweight markup
+syntaxes, which are often easier to write, is its readability.
+As Gruber writes:
+
+> The overriding design goal for Markdown's formatting syntax is
+> to make it as readable as possible. The idea is that a
+> Markdown-formatted document should be publishable as-is, as
+> plain text, without looking like it's been marked up with tags
+> or formatting instructions.
+> (<https://daringfireball.net/projects/markdown/>)
+
+The point can be illustrated by comparing a sample of
+[AsciiDoc](https://asciidoc.org/) with
+an equivalent sample of Markdown.  Here is a sample of
+AsciiDoc from the AsciiDoc manual:
+
+```
+1. List item one.
++
+List item one continued with a second paragraph followed by an
+Indented block.
++
+.................
+$ ls *.sh
+$ mv *.sh ~/tmp
+.................
++
+List item continued with a third paragraph.
+
+2. List item two continued with an open block.
++
+--
+This paragraph is part of the preceding list item.
+
+a. This list is nested and does not require explicit item
+continuation.
++
+This paragraph is part of the preceding list item.
+
+b. List item b.
+
+This paragraph belongs to item two of the outer list.
+--
+```
+
+And here is the equivalent in Markdown:
+```
+1.  List item one.
+
+    List item one continued with a second paragraph followed by an
+    Indented block.
+
+        $ ls *.sh
+        $ mv *.sh ~/tmp
+
+    List item continued with a third paragraph.
+
+2.  List item two continued with an open block.
+
+    This paragraph is part of the preceding list item.
+
+    1. This list is nested and does not require explicit item continuation.
+
+       This paragraph is part of the preceding list item.
+
+    2. List item b.
+
+    This paragraph belongs to item two of the outer list.
+```
+
+The AsciiDoc version is, arguably, easier to write. You don't need
+to worry about indentation.  But the Markdown version is much easier
+to read.  The nesting of list items is apparent to the eye in the
+source, not just in the processed document.
+
+## Why is a spec needed?
+
+John Gruber's [canonical description of Markdown's
+syntax](https://daringfireball.net/projects/markdown/syntax)
+does not specify the syntax unambiguously.  Here are some examples of
+questions it does not answer:
+
+1.  How much indentation is needed for a sublist?  The spec says that
+    continuation paragraphs need to be indented four spaces, but is
+    not fully explicit about sublists.  It is natural to think that
+    they, too, must be indented four spaces, but `Markdown.pl` does
+    not require that.  This is hardly a "corner case," and divergences
+    between implementations on this issue often lead to surprises for
+    users in real documents. (See [this comment by John
+    Gruber](https://web.archive.org/web/20170611172104/http://article.gmane.org/gmane.text.markdown.general/1997).)
+
+2.  Is a blank line needed before a block quote or heading?
+    Most implementations do not require the blank line.  However,
+    this can lead to unexpected results in hard-wrapped text, and
+    also to ambiguities in parsing (note that some implementations
+    put the heading inside the blockquote, while others do not).
+    (John Gruber has also spoken [in favor of requiring the blank
+    lines](https://web.archive.org/web/20170611172104/http://article.gmane.org/gmane.text.markdown.general/2146).)
+
+3.  Is a blank line needed before an indented code block?
+    (`Markdown.pl` requires it, but this is not mentioned in the
+    documentation, and some implementations do not require it.)
+
+    ``` markdown
+    paragraph
+        code?
+    ```
+
+4.  What is the exact rule for determining when list items get
+    wrapped in `<p>` tags?  Can a list be partially "loose" and partially
+    "tight"?  What should we do with a list like this?
+
+    ``` markdown
+    1. one
+
+    2. two
+    3. three
+    ```
+
+    Or this?
+
+    ``` markdown
+    1.  one
+        - a
+
+        - b
+    2.  two
+    ```
+
+    (There are some relevant comments by John Gruber
+    [here](https://web.archive.org/web/20170611172104/http://article.gmane.org/gmane.text.markdown.general/2554).)
+
+5.  Can list markers be indented?  Can ordered list markers be right-aligned?
+
+    ``` markdown
+     8. item 1
+     9. item 2
+    10. item 2a
+    ```
+
+6.  Is this one list with a thematic break in its second item,
+    or two lists separated by a thematic break?
+
+    ``` markdown
+    * a
+    * * * * *
+    * b
+    ```
+
+7.  When list markers change from numbers to bullets, do we have
+    two lists or one?  (The Markdown syntax description suggests two,
+    but the perl scripts and many other implementations produce one.)
+
+    ``` markdown
+    1. fee
+    2. fie
+    -  foe
+    -  fum
+    ```
+
+8.  What are the precedence rules for the markers of inline structure?
+    For example, is the following a valid link, or does the code span
+    take precedence ?
+
+    ``` markdown
+    [a backtick (`)](/url) and [another backtick (`)](/url).
+    ```
+
+9.  What are the precedence rules for markers of emphasis and strong
+    emphasis?  For example, how should the following be parsed?
+
+    ``` markdown
+    *foo *bar* baz*
+    ```
+
+10. What are the precedence rules between block-level and inline-level
+    structure?  For example, how should the following be parsed?
+
+    ``` markdown
+    - `a long code span can contain a hyphen like this
+      - and it can screw things up`
+    ```
+
+11. Can list items include section headings?  (`Markdown.pl` does not
+    allow this, but does allow blockquotes to include headings.)
+
+    ``` markdown
+    - # Heading
+    ```
+
+12. Can list items be empty?
+
+    ``` markdown
+    * a
+    *
+    * b
+    ```
+
+13. Can link references be defined inside block quotes or list items?
+
+    ``` markdown
+    > Blockquote [foo].
+    >
+    > [foo]: /url
+    ```
+
+14. If there are multiple definitions for the same reference, which takes
+    precedence?
+
+    ``` markdown
+    [foo]: /url1
+    [foo]: /url2
+
+    [foo][]
+    ```
+
+In the absence of a spec, early implementers consulted `Markdown.pl`
+to resolve these ambiguities.  But `Markdown.pl` was quite buggy, and
+gave manifestly bad results in many cases, so it was not a
+satisfactory replacement for a spec.
+
+Because there is no unambiguous spec, implementations have diverged
+considerably.  As a result, users are often surprised to find that
+a document that renders one way on one system (say, a GitHub wiki)
+renders differently on another (say, converting to docbook using
+pandoc).  To make matters worse, because nothing in Markdown counts
+as a "syntax error," the divergence often isn't discovered right away.
+
+## About this document
+
+This document attempts to specify Markdown syntax unambiguously.
+It contains many examples with side-by-side Markdown and
+HTML.  These are intended to double as conformance tests.  An
+accompanying script `spec_tests.py` can be used to run the tests
+against any Markdown program:
+
+    python test/spec_tests.py --spec spec.txt --program PROGRAM
+
+Since this document describes how Markdown is to be parsed into
+an abstract syntax tree, it would have made sense to use an abstract
+representation of the syntax tree instead of HTML.  But HTML is capable
+of representing the structural distinctions we need to make, and the
+choice of HTML for the tests makes it possible to run the tests against
+an implementation without writing an abstract syntax tree renderer.
+
+Note that not every feature of the HTML samples is mandated by
+the spec.  For example, the spec says what counts as a link
+destination, but it doesn't mandate that non-ASCII characters in
+the URL be percent-encoded.  To use the automatic tests,
+implementers will need to provide a renderer that conforms to
+the expectations of the spec examples (percent-encoding
+non-ASCII characters in URLs).  But a conforming implementation
+can use a different renderer and may choose not to
+percent-encode non-ASCII characters in URLs.
+
+This document is generated from a text file, `spec.txt`, written
+in Markdown with a small extension for the side-by-side tests.
+The script `tools/makespec.py` can be used to convert `spec.txt` into
+HTML or CommonMark (which can then be converted into other formats).
+
+In the examples, the `→` character is used to represent tabs.
+
+# Preliminaries
+
+## Characters and lines
+
+Any sequence of [characters] is a valid CommonMark
+document.
+
+A [character](@) is a Unicode code point.  Although some
+code points (for example, combining accents) do not correspond to
+characters in an intuitive sense, all code points count as characters
+for purposes of this spec.
+
+This spec does not specify an encoding; it thinks of lines as composed
+of [characters] rather than bytes.  A conforming parser may be limited
+to a certain encoding.
+
+A [line](@) is a sequence of zero or more [characters]
+other than line feed (`U+000A`) or carriage return (`U+000D`),
+followed by a [line ending] or by the end of file.
+
+A [line ending](@) is a line feed (`U+000A`), a carriage return
+(`U+000D`) not followed by a line feed, or a carriage return and a
+following line feed.
+
+A line containing no characters, or a line containing only spaces
+(`U+0020`) or tabs (`U+0009`), is called a [blank line](@).
+
+The following definitions of character classes will be used in this spec:
+
+A [Unicode whitespace character](@) is a character in the Unicode `Zs` general
+category, or a tab (`U+0009`), line feed (`U+000A`), form feed (`U+000C`), or
+carriage return (`U+000D`).
+
+[Unicode whitespace](@) is a sequence of one or more
+[Unicode whitespace characters].
+
+A [tab](@) is `U+0009`.
+
+A [space](@) is `U+0020`.
+
+An [ASCII control character](@) is a character between `U+0000–1F` (both
+including) or `U+007F`.
+
+An [ASCII punctuation character](@)
+is `!`, `"`, `#`, `$`, `%`, `&`, `'`, `(`, `)`,
+`*`, `+`, `,`, `-`, `.`, `/` (U+0021–2F), 
+`:`, `;`, `<`, `=`, `>`, `?`, `@` (U+003A–0040),
+`[`, `\`, `]`, `^`, `_`, `` ` `` (U+005B–0060), 
+`{`, `|`, `}`, or `~` (U+007B–007E).
+
+A [Unicode punctuation character](@) is a character in the Unicode `P`
+(puncuation) or `S` (symbol) general categories.
+
+## Tabs
+
+Tabs in lines are not expanded to [spaces].  However,
+in contexts where spaces help to define block structure,
+tabs behave as if they were replaced by spaces with a tab stop
+of 4 characters.
+
+Thus, for example, a tab can be used instead of four spaces
+in an indented code block.  (Note, however, that internal
+tabs are passed through as literal tabs, not expanded to
+spaces.)
+
+```````````````````````````````` example
+→foo→baz→→bim
+.
+<pre><code>foo→baz→→bim
+</code></pre>
+````````````````````````````````
+
+```````````````````````````````` example
+  →foo→baz→→bim
+.
+<pre><code>foo→baz→→bim
+</code></pre>
+````````````````````````````````
+
+```````````````````````````````` example
+    a→a
+    ὐ→a
+.
+<pre><code>a→a
+ὐ→a
+</code></pre>
+````````````````````````````````
+
+In the following example, a continuation paragraph of a list
+item is indented with a tab; this has exactly the same effect
+as indentation with four spaces would:
+
+```````````````````````````````` example
+  - foo
+
+→bar
+.
+<ul>
+<li>
+<p>foo</p>
+<p>bar</p>
+</li>
+</ul>
+````````````````````````````````
+
+```````````````````````````````` example
+- foo
+
+→→bar
+.
+<ul>
+<li>
+<p>foo</p>
+<pre><code>  bar
+</code></pre>
+</li>
+</ul>
+````````````````````````````````
+
+Normally the `>` that begins a block quote may be followed
+optionally by a space, which is not considered part of the
+content.  In the following case `>` is followed by a tab,
+which is treated as if it were expanded into three spaces.
+Since one of these spaces is considered part of the
+delimiter, `foo` is considered to be indented six spaces
+inside the block quote context, so we get an indented
+code block starting with two spaces.
+
+```````````````````````````````` example
+>→→foo
+.
+<blockquote>
+<pre><code>  foo
+</code></pre>
+</blockquote>
+````````````````````````````````
+
+```````````````````````````````` example
+-→→foo
+.
+<ul>
+<li>
+<pre><code>  foo
+</code></pre>
+</li>
+</ul>
+````````````````````````````````
+
+
+```````````````````````````````` example
+    foo
+→bar
+.
+<pre><code>foo
+bar
+</code></pre>
+````````````````````````````````
+
+```````````````````````````````` example
+ - foo
+   - bar
+→ - baz
+.
+<ul>
+<li>foo
+<ul>
+<li>bar
+<ul>
+<li>baz</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+````````````````````````````````
+
+```````````````````````````````` example
+#→Foo
+.
+<h1>Foo</h1>
+````````````````````````````````
+
+```````````````````````````````` example
+*→*→*→
+.
+<hr />
+````````````````````````````````
+
+
+## Insecure characters
+
+For security reasons, the Unicode character `U+0000` must be replaced
+with the REPLACEMENT CHARACTER (`U+FFFD`).
+
+
+## Backslash escapes
+
+Any ASCII punctuation character may be backslash-escaped:
+
+```````````````````````````````` example
+\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~
+.
+<p>!&quot;#$%&amp;'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~</p>
+````````````````````````````````
+
+
+Backslashes before other characters are treated as literal
+backslashes:
+
+```````````````````````````````` example
+\→\A\a\ \3\φ\«
+.
+<p>\→\A\a\ \3\φ\«</p>
+````````````````````````````````
+
+
+Escaped characters are treated as regular characters and do
+not have their usual Markdown meanings:
+
+```````````````````````````````` example
+\*not emphasized*
+\<br/> not a tag
+\[not a link](/foo)
+\`not code`
+1\. not a list
+\* not a list
+\# not a heading
+\[foo]: /url "not a reference"
+\&ouml; not a character entity
+.
+<p>*not emphasized*
+&lt;br/&gt; not a tag
+[not a link](/foo)
+`not code`
+1. not a list
+* not a list
+# not a heading
+[foo]: /url &quot;not a reference&quot;
+&amp;ouml; not a character entity</p>
+````````````````````````````````
+
+
+If a backslash is itself escaped, the following character is not:
+
+```````````````````````````````` example
+\\*emphasis*
+.
+<p>\<em>emphasis</em></p>
+````````````````````````````````
+
+
+A backslash at the end of the line is a [hard line break]:
+
+```````````````````````````````` example
+foo\
+bar
+.
+<p>foo<br />
+bar</p>
+````````````````````````````````
+
+
+Backslash escapes do not work in code blocks, code spans, autolinks, or
+raw HTML:
+
+```````````````````````````````` example
+`` \[\` ``
+.
+<p><code>\[\`</code></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+    \[\]
+.
+<pre><code>\[\]
+</code></pre>
+````````````````````````````````
+
+
+```````````````````````````````` example
+~~~
+\[\]
+~~~
+.
+<pre><code>\[\]
+</code></pre>
+````````````````````````````````
+
+
+```````````````````````````````` example
+<https://example.com?find=\*>
+.
+<p><a href="https://example.com?find=%5C*">https://example.com?find=\*</a></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+<a href="/bar\/)">
+.
+<a href="/bar\/)">
+````````````````````````````````
+
+
+But they work in all other contexts, including URLs and link titles,
+link references, and [info strings] in [fenced code blocks]:
+
+```````````````````````````````` example
+[foo](/bar\* "ti\*tle")
+.
+<p><a href="/bar*" title="ti*tle">foo</a></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+[foo]
+
+[foo]: /bar\* "ti\*tle"
+.
+<p><a href="/bar*" title="ti*tle">foo</a></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+``` foo\+bar
+foo
+```
+.
+<pre><code class="language-foo+bar">foo
+</code></pre>
+````````````````````````````````
+
+
+## Entity and numeric character references
+
+Valid HTML entity references and numeric character references
+can be used in place of the corresponding Unicode character,
+with the following exceptions:
+
+- Entity and character references are not recognized in code
+  blocks and code spans.
+
+- Entity and character references cannot stand in place of
+  special characters that define structural elements in
+  CommonMark.  For example, although `&#42;` can be used
+  in place of a literal `*` character, `&#42;` cannot replace
+  `*` in emphasis delimiters, bullet list markers, or thematic
+  breaks.
+
+Conforming CommonMark parsers need not store information about
+whether a particular character was represented in the source
+using a Unicode character or an entity reference.
+
+[Entity references](@) consist of `&` + any of the valid
+HTML5 entity names + `;`. The
+document <https://html.spec.whatwg.org/entities.json>
+is used as an authoritative source for the valid entity
+references and their corresponding code points.
+
+```````````````````````````````` example
+&nbsp; &amp; &copy; &AElig; &Dcaron;
+&frac34; &HilbertSpace; &DifferentialD;
+&ClockwiseContourIntegral; &ngE;
+.
+<p>  &amp; © Æ Ď
+¾ ℋ ⅆ
+∲ ≧̸</p>
+````````````````````````````````
+
+
+[Decimal numeric character
+references](@)
+consist of `&#` + a string of 1--7 arabic digits + `;`. A
+numeric character reference is parsed as the corresponding
+Unicode character. Invalid Unicode code points will be replaced by
+the REPLACEMENT CHARACTER (`U+FFFD`).  For security reasons,
+the code point `U+0000` will also be replaced by `U+FFFD`.
+
+```````````````````````````````` example
+&#35; &#1234; &#992; &#0;
+.
+<p># Ӓ Ϡ �</p>
+````````````````````````````````
+
+
+[Hexadecimal numeric character
+references](@) consist of `&#` +
+either `X` or `x` + a string of 1-6 hexadecimal digits + `;`.
+They too are parsed as the corresponding Unicode character (this
+time specified with a hexadecimal numeral instead of decimal).
+
+```````````````````````````````` example
+&#X22; &#XD06; &#xcab;
+.
+<p>&quot; ആ ಫ</p>
+````````````````````````````````
+
+
+Here are some nonentities:
+
+```````````````````````````````` example
+&nbsp &x; &#; &#x;
+&#87654321;
+&#abcdef0;
+&ThisIsNotDefined; &hi?;
+.
+<p>&amp;nbsp &amp;x; &amp;#; &amp;#x;
+&amp;#87654321;
+&amp;#abcdef0;
+&amp;ThisIsNotDefined; &amp;hi?;</p>
+````````````````````````````````
+
+
+Although HTML5 does accept some entity references
+without a trailing semicolon (such as `&copy`), these are not
+recognized here, because it makes the grammar too ambiguous:
+
+```````````````````````````````` example
+&copy
+.
+<p>&amp;copy</p>
+````````````````````````````````
+
+
+Strings that are not on the list of HTML5 named entities are not
+recognized as entity references either:
+
+```````````````````````````````` example
+&MadeUpEntity;
+.
+<p>&amp;MadeUpEntity;</p>
+````````````````````````````````
+
+
+Entity and numeric character references are recognized in any
+context besides code spans or code blocks, including
+URLs, [link titles], and [fenced code block][] [info strings]:
+
+```````````````````````````````` example
+<a href="&ouml;&ouml;.html">
+.
+<a href="&ouml;&ouml;.html">
+````````````````````````````````
+
+
+```````````````````````````````` example
+[foo](/f&ouml;&ouml; "f&ouml;&ouml;")
+.
+<p><a href="/f%C3%B6%C3%B6" title="föö">foo</a></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+[foo]
+
+[foo]: /f&ouml;&ouml; "f&ouml;&ouml;"
+.
+<p><a href="/f%C3%B6%C3%B6" title="föö">foo</a></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+``` f&ouml;&ouml;
+foo
+```
+.
+<pre><code class="language-föö">foo
+</code></pre>
+````````````````````````````````
+
+
+Entity and numeric character references are treated as literal
+text in code spans and code blocks:
+
+```````````````````````````````` example
+`f&ouml;&ouml;`
+.
+<p><code>f&amp;ouml;&amp;ouml;</code></p>
+````````````````````````````````
+
+
+```````````````````````````````` example
+    f&ouml;f&ouml;
+.
+<pre><code>f&amp;ouml;f&amp;ouml;
+</code></pre>
+````````````````````````````````
+
+
+Entity and numeric character references cannot be used
+in place of symbols indicating structure in CommonMark
+documents.
+
+```````````````````````````````` example
+&#42;foo&#42;
+*foo*
+.
+<p>*foo*
+<em>foo</em></p>
+````````````````````````````````
+
+```````````````````````````````` example
+&#42; foo
+
+* foo
+.
+<p>* foo</p>
+<ul>
+<li>foo</li>
+</ul>
+````````````````````````````````

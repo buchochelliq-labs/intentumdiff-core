@@ -1,0 +1,23 @@
+{
+  "repository": "WebAssembly/spec",
+  "revision": "f3268fa9dcb7d3a60d09546e743e7281e75cddb0",
+  "url": "https://raw.githubusercontent.com/WebAssembly/spec/f3268fa9dcb7d3a60d09546e743e7281e75cddb0/test/core/func.wast",
+  "license": "Apache-2.0",
+  "license_path": "test/LICENSE",
+  "files": [
+    {
+      "path": "tests/fixtures/language_assessment/upstream/compiled/webassembly/func.wast",
+      "sha256": "fb48ac22e13b3f5bd34063e194756af2f558b99d0f6f230e871c0b6d56849497"
+    },
+    {
+      "path": "tests/fixtures/language_assessment/upstream/compiled/webassembly/LICENSE",
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+    }
+  ],
+  "extraction": {
+    "function_line_1based": 116,
+    "assertion_line_1based": 300,
+    "wrapper": "(module\\n<exact function line>)\\n",
+    "new_mutation": "i32.const 77 -> i32.const 78 in function body only"
+  }
+}
