@@ -62,6 +62,19 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         }
     }
 
+    if matches!(language, "css" | "scss") {
+        let mut kept = Vec::new();
+        for change in changes {
+            if let Some((group, ignored)) = rust_style_string_equivalence(&change, old_source, new_source, language) {
+                change_groups.push(group);
+                ignored_style_changes.push(ignored);
+            } else {
+                kept.push(change);
+            }
+        }
+        changes = kept;
+    }
+
     if !changes.is_empty() && rust_literal_invariance_language(language) {
         let (kept, groups, ignored) =
             rust_apply_literal_equivalences(changes, old_source, new_source, language);
@@ -215,6 +228,59 @@ pub(crate) fn rust_empty_invariance_result() -> Value {
         "change_groups": [],
         "ignored_style_changes": [],
     })
+}
+
+// Synthetic style values retain raw source spelling. Suppress only a whole,
+// matched leaf literal whose source bytes prove the same decoded string.
+fn rust_style_string_equivalence(
+    change: &Value, old_source: &str, new_source: &str, language: &str,
+) -> Option<(Value, Value)> {
+    if rust_change_type(change) != "MODIFICATION" { return None; }
+    let old = rust_change_node(change, "old_node")?;
+    let new = rust_change_node(change, "new_node")?;
+    if old.node_type != "property_value" || new.node_type != "property_value"
+        || !old.is_leaf() || !new.is_leaf() { return None; }
+    let old_span = rust_source_span_offsets(old_source, &old.position)?;
+    let new_span = rust_source_span_offsets(new_source, &new.position)?;
+    let old_raw = old_source.get(old_span.0..old_span.1)?;
+    let new_raw = new_source.get(new_span.0..new_span.1)?;
+    if old_raw != old.label || new_raw != new.label || old_raw == new_raw { return None; }
+    let decoded = decode_style_string(old_raw)?;
+    if decoded != decode_style_string(new_raw)? { return None; }
+    let evidence = RustSourceLiteralEvidence {
+        old_label: old_raw.into(), new_label: new_raw.into(),
+        canonical: format!("string({decoded})"), old_span, new_span,
+    };
+    let (mut group, ignored) = rust_source_literal_group(
+        &evidence, "core.style_string.decoded_value.safe",
+        "Both complete style string literals decode to the same plain string value.",
+        "canonical_value_equivalence", "amber", language, 0, "source_literal", 0.95,
+    );
+    group["old_node_ids"] = json!([old.id]);
+    group["new_node_ids"] = json!([new.id]);
+    Some((group, ignored))
+}
+
+// CSS/Sass escapes differ from programming-language escapes (e.g. \\n is
+// not a newline). Accept only quotes, backslashes and escaped physical line
+// endings here; unsupported escapes and Sass interpolation remain meaningful.
+fn decode_style_string(raw: &str) -> Option<String> {
+    let quote = raw.chars().next()?;
+    if !matches!(quote, '\'' | '"') || raw.len() < 2 || !raw.ends_with(quote)
+        || raw.contains("#{") { return None; }
+    let mut chars = raw[1..raw.len() - 1].chars().peekable();
+    let mut value = String::new();
+    while let Some(ch) = chars.next() {
+        if ch == quote || matches!(ch, '\r' | '\n' | '\u{000c}') { return None; }
+        if ch != '\\' { value.push(ch); continue; }
+        match chars.next()? {
+            ch @ ('\'' | '"' | '\\') => value.push(ch),
+            '\n' | '\u{000c}' => {},
+            '\r' => { if chars.peek() == Some(&'\n') { chars.next(); } },
+            _ => return None,
+        }
+    }
+    Some(value)
 }
 
 pub(crate) fn rust_literal_invariance_language(language: &str) -> bool {
