@@ -1,6 +1,7 @@
 mod source_fallback;
 mod operator_tokens;
 mod opaque_payload;
+mod python_literals;
 #[cfg(all(test, feature = "tier-c-wasm"))]
 mod semantic_payload_tests;
 
@@ -10885,6 +10886,10 @@ fn node_signature_value(node: Option<&Value>) -> Value {
         }
     })
 }
+
+#[cfg(test)]
+#[path = "tests_python_literal_semantics.rs"]
+mod tests_python_literal_semantics;
 
 #[cfg(test)]
 #[path = "tests_inline.rs"]
