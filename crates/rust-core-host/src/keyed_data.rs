@@ -385,6 +385,54 @@ pub(crate) fn js_style_group_from_suppression(
     Some((group, ignored))
 }
 
+/// A full-document proof is required before presentation scaffolding can be removed. Comparing
+/// labels (even positional item labels) says nothing about the values below those wrappers.
+pub(crate) fn yaml_representation_equivalent_sources(old_source: &str, new_source: &str) -> bool {
+    // The value decoder resolves aliases and does not retain anchor identities. Fail closed
+    // across the complete sources, including tokens outside the surviving change drafts.
+    // Directive/schema changes are also outside this YAML 1.2 proof. This deliberately also
+    // declines markers inside strings/comments rather than risking an identity change.
+    if [old_source, new_source].iter().any(|source| source.contains(['&', '*', '!', '%'])) {
+        return false;
+    }
+    fn numeric_looking(text: &str) -> bool {
+        static NUMBER: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+        NUMBER.get_or_init(|| regex::Regex::new(
+            r"(?ix)^[+-]?(?:0x[0-9a-f_]+|0o[0-7_]+|0b[01_]+|(?:[0-9][0-9_]*(?:\.[0-9_]*)?|\.[0-9][0-9_]*)(?:e[+-]?[0-9][0-9_]*)?|\.inf|\.nan)$"
+        ).expect("valid numeric-looking YAML scalar pattern")).is_match(text)
+    }
+    fn supported(value: &serde_yaml::Value) -> bool {
+        match value {
+            // Distinct decimal values and keys can round to the same f64. Equality after that
+            // conversion is not proof; leave float-containing documents to the ordinary diff.
+            serde_yaml::Value::Number(number) => !number.is_f64(),
+            // Unsupported integer ranges and overflowing float exponents can fall back to
+            // String in this decoder. Such a value cannot prove that an unquoted numeric
+            // scalar has the same YAML type as a quoted spelling (including mapping keys).
+            serde_yaml::Value::String(text) => !numeric_looking(text),
+            serde_yaml::Value::Sequence(items) => items.iter().all(supported),
+            serde_yaml::Value::Mapping(mapping) => mapping.iter()
+                .all(|(key, value)| supported(key) && supported(value)),
+            serde_yaml::Value::Tagged(_) => false,
+            _ => true,
+        }
+    }
+    // Value decoding preserves scalar types, ordered sequence multiplicity, and full mapping
+    // payloads. Duplicate keys, invalid input and multi-document streams return errors: none
+    // may be treated as an equivalence proof.
+    let (Ok(old), Ok(new)) = (
+        serde_yaml::from_str::<serde_yaml::Value>(old_source),
+        serde_yaml::from_str::<serde_yaml::Value>(new_source),
+    ) else {
+        return false;
+    };
+    // The decoder also maps an empty/comment-only stream (zero documents) to Null. Decline
+    // top-level nulls rather than conflating that stream with a document whose root is null.
+    !matches!(&old, serde_yaml::Value::Null)
+        && !matches!(&new, serde_yaml::Value::Null)
+        && supported(&old) && supported(&new) && old == new
+}
+
 /// python presentation._suppress_yaml_representation_equivalent_modifications (issue #57 yaml):
 /// block and flow styles present the SAME representation graph (YAML 1.2 §3), so style-wrapper
 /// churn (block_node↔flow_node MODIFICATIONs, scaffold item ADD/DELETEs with generic or
@@ -392,10 +440,16 @@ pub(crate) fn js_style_group_from_suppression(
 /// (&, *, !) change identity, not presentation — guarded out.
 pub(crate) fn suppress_yaml_representation_equivalent_drafts(
     changes: &mut Vec<ChangeDraft<'_>>,
+    old_source: &str,
+    new_source: &str,
 ) -> Option<Value> {
+    if !yaml_representation_equivalent_sources(old_source, new_source) {
+        return None;
+    }
     const SCAFFOLD: &[&str] = &[
         "block_node", "flow_node", "block_sequence", "flow_sequence", "block_mapping",
         "flow_mapping", "block_sequence_item", "flow_sequence_item",
+        "block_mapping_pair", "flow_pair",
     ];
     const SCALARS: &[&str] = &[
         "plain_scalar", "single_quote_scalar", "double_quote_scalar", "integer_scalar",
@@ -407,6 +461,7 @@ pub(crate) fn suppress_yaml_representation_equivalent_drafts(
             ("block_node", "flow_node") | ("flow_node", "block_node")
                 | ("block_sequence", "flow_sequence") | ("flow_sequence", "block_sequence")
                 | ("block_mapping", "flow_mapping") | ("flow_mapping", "block_mapping")
+                | ("block_mapping_pair", "flow_pair") | ("flow_pair", "block_mapping_pair")
         )
     }
     fn has_identity_tokens(node: &SemanticNode) -> bool {
@@ -459,7 +514,8 @@ pub(crate) fn suppress_yaml_representation_equivalent_drafts(
                     return true;
                 }
                 let positional = node.label.starts_with('[');
-                if !(node.label == node.node_type || positional) {
+                let pair = matches!(nt.as_str(), "block_mapping_pair" | "flow_pair");
+                if !(node.label == node.node_type || positional || pair) {
                     return true;
                 }
                 suppressed_labels.push(node.label.clone());
@@ -570,6 +626,8 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
     old_tree: &'a SemanticNode,
     new_tree: &'a SemanticNode,
     language: &str,
+    old_source: &str,
+    new_source: &str,
 ) -> Option<Value> {
     if !matches!(language, "json" | "yaml") {
         return None;
@@ -578,8 +636,16 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
     // an array element with IDENTICAL content whose positional label shifted after a sibling
     // insertion ([1]->[2]) is not a change — drop the MODIFICATION/REORDER pair noise,
     // carrying the suppression as evidence.
+    // A same-hash YAML node can also move because sequence order changed. Its own content
+    // cannot prove that its ordered context stayed equivalent, so require the document proof
+    // here too. On meaningful edits this deliberately retains positional noise with evidence.
+    let suppress_positional = language != "yaml"
+        || yaml_representation_equivalent_sources(old_source, new_source);
     let mut suppressed_labels: Vec<String> = Vec::new();
     changes.retain(|change| {
+        if !suppress_positional {
+            return true;
+        }
         if !matches!(change.change_type, "MODIFICATION" | "REORDER" | "MOVE") {
             return true;
         }
