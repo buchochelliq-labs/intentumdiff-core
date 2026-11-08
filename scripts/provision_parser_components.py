@@ -25,7 +25,9 @@ import hashlib
 import io
 import json
 import os
+import re
 import sys
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -68,6 +70,8 @@ class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
     """
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if urllib.parse.urlsplit(newurl).scheme != "https":
+            raise urllib.error.HTTPError(newurl, 403, "refusing non-HTTPS artifact redirect", headers, fp)
         new = super().redirect_request(req, fp, code, msg, headers, newurl)
         if new is not None and (
             urllib.parse.urlsplit(newurl).netloc != urllib.parse.urlsplit(req.full_url).netloc
@@ -203,7 +207,138 @@ def fetch_component(slug: str, token: str, ref: str | None = None) -> tuple[str,
 
 REGISTRY_REPO = "intentumdiff-registry"
 # Same vetted component inventory as the Python/native release candidate.
-REGISTRY_REF = "8911328ede24630ad9ea6a33da8ed010f066d3b1"
+INPUTS_LOCK = REPO_ROOT / "scripts/external_benchmark_inputs.lock.json"
+_INPUTS = json.loads(INPUTS_LOCK.read_bytes())
+REGISTRY_REF = _INPUTS["registry_commit"]
+LOCKED_COMPONENTS = _INPUTS["components"]
+
+
+def _hex(value, size: int) -> bool:
+    return isinstance(value, str) and re.fullmatch(rf"[a-f0-9]{{{size}}}", value) is not None
+
+
+def flat_component(name) -> bool:
+    return isinstance(name, str) and re.fullmatch(r"[a-z][a-z0-9_]*\.wasm", name) is not None
+
+
+def registry_component_pins(document: dict) -> dict:
+    """Registry alone authorizes each component's repository, source ref and bytes."""
+    if not isinstance(document, dict) or not isinstance(document.get("plugins"), dict):
+        raise ValueError("registry plugins mapping required")
+    result = {}
+    for plugin, entry in document.get("plugins", {}).items():
+        if not isinstance(entry, dict) or not isinstance(entry.get("wasm_checksums", {}), dict):
+            raise ValueError("invalid registry plugin entry")
+        for name, digest in entry.get("wasm_checksums", {}).items():
+            if (not flat_component(name) or name in result or not _hex(entry.get("ref"), 40)
+                    or not _hex(digest, 64)
+                    or not isinstance(plugin, str)
+                    or re.fullmatch(r"intentumdiff-[a-z0-9-]+", plugin) is None):
+                raise ValueError(f"invalid or duplicate registry component identity: {name}")
+            result[name] = {"sha256": digest, "commit": entry["ref"], "repository": f"{ORG}/{plugin}"}
+    if not result:
+        raise ValueError("registry carries no component pins")
+    return result
+
+
+def checked_artifact_pin(name: str, pin: dict, registry_pin: dict | None = None) -> dict:
+    if (not flat_component(name) or not isinstance(pin, dict)
+            or type(pin.get("artifact_id")) is not int or pin["artifact_id"] <= 0
+            or not _hex(pin.get("commit"), 40) or not _hex(pin.get("archive_sha256"), 64)
+            or not _hex(pin.get("component_sha256"), 64)
+            or not isinstance(pin.get("repository"), str)
+            or re.fullmatch(rf"{ORG}/intentumdiff-[a-z0-9-]+", pin["repository"]) is None
+            or pin.get("archive_member") not in (name, "intentumdiff_" + name, "intentdiff_" + name)):
+        raise ValueError(f"invalid immutable artifact identity for {name}")
+    if registry_pin is not None and any((
+        pin["commit"] != registry_pin["commit"],
+        pin["component_sha256"] != registry_pin["sha256"],
+        pin["repository"] != registry_pin["repository"],
+    )):
+        raise ValueError(f"artifact source commit/checksum/repository disagrees with registry for {name}")
+    return pin
+
+
+def checked_artifact_lock(lock: dict, pins: dict, registry_commit: str) -> dict:
+    if (not isinstance(lock, dict) or type(lock.get("schema_version")) is not int or lock["schema_version"] != 2
+            or not _hex(registry_commit, 40) or lock.get("registry_commit") != registry_commit
+            or not isinstance(lock.get("components"), dict) or not lock["components"]):
+        raise ValueError("artifact lock requires schema 2 and the exact immutable registry commit")
+    result = {}
+    for name, pin in lock["components"].items():
+        if name not in pins:
+            raise ValueError(f"unregistered locked component {name}")
+        result[name] = checked_artifact_pin(name, pin, pins[name])
+    if len({p["artifact_id"] for p in result.values()}) != len(result):
+        raise ValueError("artifact IDs must be unique")
+    return result
+
+
+def verified_archive_payload(name: str, pin: dict, blob: bytes) -> bytes:
+    checked_artifact_pin(name, pin)
+    if hashlib.sha256(blob).hexdigest() != pin["archive_sha256"]:
+        raise ValueError(f"archive checksum mismatch for {name}")
+    try:
+        with zipfile.ZipFile(io.BytesIO(blob)) as archive:
+            members = archive.infolist()
+            if (len(members) != 1 or members[0].filename != pin["archive_member"]
+                    or members[0].is_dir() or (members[0].external_attr >> 16) & 0o170000 == 0o120000):
+                raise ValueError(f"archive must contain exactly one flat regular component for {name}")
+            payload = archive.read(members[0])
+    except (zipfile.BadZipFile, RuntimeError, OSError) as error:
+        raise ValueError(f"invalid archive for {name}: {error}") from error
+    if hashlib.sha256(payload).hexdigest() != pin["component_sha256"]:
+        raise ValueError(f"component checksum mismatch for {name}")
+    return payload
+
+
+def fetch_locked_artifact(name: str, pin: dict, token: str) -> bytes:
+    """Fetch one exact reviewed CI artifact, never a latest-run replacement."""
+    checked_artifact_pin(name, pin)
+    base = f"{API}/repos/{pin['repository']}/actions"
+    artifact_url = f"{base}/artifacts/{pin['artifact_id']}"
+    artifact = json.loads(_get(artifact_url, token))
+    if not isinstance(artifact, dict) or not isinstance(artifact.get("workflow_run"), dict):
+        raise ValueError(f"invalid GitHub artifact metadata for {name}")
+    run = artifact["workflow_run"]
+    if (type(artifact.get("id")) is not int or artifact["id"] != pin["artifact_id"]
+            or artifact.get("name") != "parser-wasm" or artifact.get("expired") is not False
+            or run.get("head_sha") != pin["commit"] or type(run.get("id")) is not int
+            or run["id"] <= 0
+            or (artifact.get("digest") is not None and artifact["digest"] != "sha256:" + pin["archive_sha256"])
+            or (run.get("repository_id") is not None and run.get("head_repository_id") != run["repository_id"])):
+        raise ValueError(f"GitHub artifact identity disagrees with locked input for {name}")
+    workflow = json.loads(_get(f"{base}/runs/{run['id']}", token))
+    if (not isinstance(workflow, dict) or type(workflow.get("id")) is not int
+            or workflow["id"] != run["id"] or workflow.get("head_sha") != pin["commit"]
+            or workflow.get("status") != "completed" or workflow.get("conclusion") != "success"):
+        raise ValueError(f"artifact workflow did not succeed at the registry-pinned commit for {name}")
+    blob = _get(artifact_url + "/zip", token)
+    verified_archive_payload(name, pin, blob)
+    return blob
+
+
+def require_fresh_output(out: Path) -> None:
+    if out.is_symlink() or (out.exists() and (not out.is_dir() or any(out.iterdir()))):
+        raise ValueError("output directory must be empty; refusing stale component inputs")
+
+
+def publish_files(out: Path, files: dict[str, bytes]) -> None:
+    """Publish a fresh complete directory atomically, retaining no partial manifest."""
+    require_fresh_output(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=f".{out.name}-", dir=out.parent) as temporary:
+        root = Path(temporary)
+        for name, payload in files.items():
+            (root / name).write_bytes(payload)
+        os.replace(root, out)
+
+
+def download_locked_artifacts(locked: dict, token: str, out: Path) -> None:
+    require_fresh_output(out)
+    archives = {f"{pin['artifact_id']}.zip": fetch_locked_artifact(name, pin, token)
+                for name, pin in sorted(locked.items())}
+    publish_files(out, archives)
 
 
 def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -224,14 +359,9 @@ def load_registry_pins(token: str) -> tuple[dict[str, str], dict[str, str]]:
         accept="application/vnd.github.raw",
     )
     document = yaml.safe_load(raw.decode("utf-8"))
-    pins: dict[str, str] = {}
-    refs: dict[str, str] = {}
-    for plugin, entry in (document.get("plugins") or {}).items():
-        pins.update(entry.get("wasm_checksums") or {})
-        if entry.get("ref"):
-            refs[plugin] = entry["ref"]
-    if not pins:
-        sys.exit("registry.yaml carries no wasm_checksums - refusing to 'verify' nothing")
+    verified = registry_component_pins(document)
+    pins = {name: pin["sha256"] for name, pin in verified.items()}
+    refs = {pin["repository"].split("/")[1]: pin["commit"] for pin in verified.values()}
     return pins, refs
 
 
@@ -285,53 +415,58 @@ def main() -> None:
         sys.exit("need GH_TOKEN or GITHUB_TOKEN with read access to the parser repos")
 
     out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-
+    if out.exists() and (not out.is_dir() or any(out.iterdir())):
+        parser.error("output directory must be empty; refusing stale component inputs")
+    if len(set(args.components)) != len(args.components):
+        parser.error("components must be unique")
     if args.no_verify:
         pins, refs = {}, {}
         print("WARNING: --no-verify - components are NOT checked against the registry")
     else:
         pins, refs = load_registry_pins(token)
 
-    failures = []
+    failures = []; checked = {}; records = []
     for slug in args.components:
-        # Take the build the registry pins, not whatever ran most recently.
+        name = f"{slug.replace('-', '_')}_parser.wasm"
+        if not flat_component(name):
+            failures.append(f"invalid component slug: {slug}")
+            continue
         ref = refs.get(f"intentumdiff-{slug}-parser")
-        try:
-            mirrored = fetch_mirrored_component(
-                slug, args.mirror_dir, ref, pins.get(f"{slug.replace('-', '_')}_parser.wasm"),
-            ) if args.mirror_dir else None
-            name, head_sha, digest, payload = mirrored or fetch_component(slug, token, ref)
-        except (RuntimeError, urllib.error.HTTPError) as exc:
-            failures.append(f"{slug}: {exc}")
-            continue
-
-        if args.no_verify:
-            (out / name).write_bytes(payload)
-            print(f"staged {name}  from {head_sha[:8]}  sha256={digest}  (unverified)")
-            continue
-
         pinned = pins.get(name)
-        if pinned is None:
-            failures.append(f"{slug}: {name} is not pinned in {REGISTRY_REPO}/registry.yaml")
-        elif pinned != digest:
-            failures.append(
-                f"{slug}: {name} CHECKSUM MISMATCH - registry pins {pinned}, the artifact "
-                f"of {head_sha[:8]} is {digest}. This is the build at the registry's own "
-                f"pinned ref, so the component genuinely changed: re-pin it via a "
-                f"registry PR through the vet gate."
-            )
-        else:
-            (out / name).write_bytes(payload)
-            print(f"staged {name}  from {head_sha[:8]}  sha256={digest}  (registry-verified)")
-
+        try:
+            locked = LOCKED_COMPONENTS.get(name) if not args.no_verify else None
+            if locked is not None:
+                checked_artifact_pin(name, locked, {"commit": ref, "sha256": pinned,
+                    "repository": f"{ORG}/intentumdiff-{slug}-parser"})
+                payload = verified_archive_payload(name, locked, fetch_locked_artifact(name, locked, token))
+                head_sha, digest = locked["commit"], locked["component_sha256"]
+                source = {"origin": "locked_ci_archive", "artifact_id": locked["artifact_id"],
+                          "artifact_archive_sha256": locked["archive_sha256"]}
+            else:
+                mirrored = fetch_mirrored_component(slug, args.mirror_dir, ref, pinned) if args.mirror_dir else None
+                actual_name, head_sha, digest, payload = mirrored or fetch_component(slug, token, ref)
+                if actual_name != name:
+                    raise ValueError(f"unexpected component name: {actual_name}")
+                source = {"origin": "unverified_ci" if args.no_verify else
+                          "published_wheel" if mirrored else "registry_pinned_ci"}
+            if not args.no_verify and (not ref or head_sha != ref or not pinned or digest != pinned
+                                       or hashlib.sha256(payload).hexdigest() != pinned):
+                raise ValueError(f"source commit/checksum disagrees with registry for {name}")
+            checked[name] = payload
+            records.append({"component": name, "commit": head_sha, "sha256": digest,
+                            "repository": f"https://github.com/{ORG}/intentumdiff-{slug}-parser", **source})
+        except (RuntimeError, ValueError, OSError, urllib.error.HTTPError) as exc:
+            failures.append(f"{slug}: {exc}")
     if failures:
-        print(f"\nFAILED to stage {len(failures)} component(s):", file=sys.stderr)
+        print(f"FAILED to stage {len(failures)} component(s):", file=sys.stderr)
         for failure in failures:
             print(f"  {failure}", file=sys.stderr)
         sys.exit(1)
-
-    print(f"\n{len(args.components)} component(s) staged in {out}")
+    manifest = {"schema_version": 1, "registry_commit": None if args.no_verify else REGISTRY_REF,
+                "verified": not args.no_verify, "components": records}
+    checked["parser_component_provenance.json"] = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode()
+    publish_files(out, checked)
+    print(f"{len(records)} component(s) staged in {out}")
 
 
 if __name__ == "__main__":

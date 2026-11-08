@@ -1,6 +1,8 @@
 """Verify the benchmark's artifact inputs independently of parser execution."""
 import hashlib
 import importlib.util
+import io
+import zipfile
 import json
 import subprocess
 from pathlib import Path
@@ -54,16 +56,28 @@ def test_rejects_missing_or_corrupted_components_before_writing_manifest(tmp_pat
 def test_candidate_requires_matching_registry_pin_and_commit(tmp_path):
     module = load_module()
     published, inventory, registry = inputs(tmp_path)
-    candidate = tmp_path / "candidate"
-    candidate.mkdir()
-    (candidate / "cpp_parser.wasm").write_bytes(b"new-component")
-    registry["plugins"]["intentumdiff-cpp-parser"]["wasm_checksums"]["cpp_parser.wasm"] = hashlib.sha256(b"new-component").hexdigest()
-    registry["plugins"]["intentumdiff-cpp-parser"]["ref"] = "c" * 40
+    payload = b"new-component"
+    digest = hashlib.sha256(payload).hexdigest()
+    registry["plugins"]["intentumdiff-cpp-parser"].update(
+        ref="c" * 40, wasm_checksums={"cpp_parser.wasm": digest})
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w") as z:
+        z.writestr("intentumdiff_cpp_parser.wasm", payload)
+    blob = output.getvalue()
+    artifacts = tmp_path / "artifacts"; artifacts.mkdir()
+    (artifacts / "1.zip").write_bytes(blob)
+    pin = {"repository": "buchochelliq-labs/intentumdiff-cpp-parser", "commit": "d" * 40,
+           "artifact_id": 1, "archive_member": "intentumdiff_cpp_parser.wasm",
+           "archive_sha256": hashlib.sha256(blob).hexdigest(), "component_sha256": digest}
+    lock = {"schema_version": 2, "registry_commit": "b" * 40, "components": {"cpp_parser.wasm": pin}}
     with pytest.raises(ValueError, match="commit"):
-        module.stage(registry, inventory, published, tmp_path / "out", registry_commit="b" * 40, candidate_dir=candidate, candidate_commit="d" * 40)
-    module.stage(registry, inventory, published, tmp_path / "out", registry_commit="b" * 40, candidate_dir=candidate, candidate_commit="c" * 40)
+        module.stage(registry, inventory, published, tmp_path / "out", registry_commit="b" * 40,
+                     artifact_lock=lock, artifacts_dir=artifacts)
+    pin["commit"] = "c" * 40
+    module.stage(registry, inventory, published, tmp_path / "out", registry_commit="b" * 40,
+                 artifact_lock=lock, artifacts_dir=artifacts)
     manifest = json.loads((tmp_path / "out" / "parser_manifest.json").read_text())
-    assert manifest["components"][0]["origin"] == "candidate_build"
+    assert manifest["components"][0]["origin"] == "locked_ci_archive"
     assert manifest["components"][0]["commit"] == "c" * 40
 
 

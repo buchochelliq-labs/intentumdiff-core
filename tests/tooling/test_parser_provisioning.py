@@ -33,10 +33,10 @@ def test_registry_document_is_fetched_at_candidate_commit(monkeypatch):
     seen = []
     def get(url, token, **kwargs):
         seen.append(url)
-        return b'plugins:\n  intentumdiff-json-parser:\n    ref: pinned\n    wasm_checksums:\n      json_parser.wasm: digest\n'
+        return ('plugins:\n  intentumdiff-json-parser:\n    ref: ' + 'a' * 40 + '\n    wasm_checksums:\n      json_parser.wasm: ' + 'b' * 64 + '\n').encode()
     monkeypatch.setitem(load.__globals__, '_get', get)
-    assert load('test-token') == ({'json_parser.wasm': 'digest'}, {'intentumdiff-json-parser': 'pinned'})
-    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=8911328ede24630ad9ea6a33da8ed010f066d3b1']
+    assert load('test-token') == ({'json_parser.wasm': 'b' * 64}, {'intentumdiff-json-parser': 'a' * 40})
+    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=c5a909b4fc618c654825de33352d4d5fa816a06a']
 
 
 def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_path):
@@ -60,6 +60,7 @@ def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_pat
         assert ref == f'pinned-{slug}'
         return f"{slug.replace('-', '_')}_parser.wasm", ref, digest, payload
     monkeypatch.setitem(stage.__globals__, 'fetch_component', fetch)
+    monkeypatch.setitem(stage.__globals__, 'LOCKED_COMPONENTS', {})
     stage()
     assert set(calls) == set(slugs)
     assert (tmp_path / 'json_parser.wasm').read_bytes() == payload
@@ -102,16 +103,16 @@ def test_verified_mirror_avoids_expired_ci_artifacts(monkeypatch, tmp_path):
     stage = runpy.run_path(str(Path(__file__).resolve().parents[2] / 'scripts/provision_parser_components.py'))['main']
     mirror = tmp_path / 'mirror'; mirror.mkdir()
     payload = b'published parser bytes'; digest = hashlib.sha256(payload).hexdigest()
-    (mirror / 'json_parser.wasm').write_bytes(payload)
-    (mirror / 'wasm_provenance.json').write_text(json.dumps({'artifacts': {'json_parser.wasm': {
+    (mirror / 'go_parser.wasm').write_bytes(payload)
+    (mirror / 'wasm_provenance.json').write_text(json.dumps({'artifacts': {'go_parser.wasm': {
         'sha256': digest, 'source': {'commit': 'a' * 40,
-        'repository': 'https://github.com/buchochelliq-labs/intentumdiff-json-parser'}}}}))
+        'repository': 'https://github.com/buchochelliq-labs/intentumdiff-go-parser'}}}}))
     monkeypatch.setenv('GH_TOKEN', 'test-token')
-    monkeypatch.setattr('sys.argv', ['provision', '--components', 'json', '--out', str(tmp_path / 'out'), '--mirror-dir', str(mirror)])
+    monkeypatch.setattr('sys.argv', ['provision', '--components', 'go', '--out', str(tmp_path / 'out'), '--mirror-dir', str(mirror)])
     monkeypatch.setitem(stage.__globals__, 'load_registry_pins', lambda token: (
-        {'json_parser.wasm': digest}, {'intentumdiff-json-parser': 'a' * 40}))
+        {'go_parser.wasm': digest}, {'intentumdiff-go-parser': 'a' * 40}))
     def expired(*args):
         raise AssertionError('an independently verified byte mirror needs no expired artifact')
     monkeypatch.setitem(stage.__globals__, 'fetch_component', expired)
     stage()
-    assert (tmp_path / 'out/json_parser.wasm').read_bytes() == payload
+    assert (tmp_path / 'out/go_parser.wasm').read_bytes() == payload
