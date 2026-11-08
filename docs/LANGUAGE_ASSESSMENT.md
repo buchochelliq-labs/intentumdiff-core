@@ -8,11 +8,14 @@ requirements](EXTERNAL_BENCHMARKS.md).
 
 ## Reproduce the observations
 
-Use a candidate installation of `intentumdiff-python` containing the native Rust
-library being assessed. Stage the registry-verified components as described in
+Install `intentumdiff-python` for its thin C ABI transport. Stage the
+registry-verified components as described in
 the external benchmark guide, including the canonical candidate C/C++ component.
-The assessment records the installed native library's SHA-256 and the complete
-parser manifest; compare these identities before comparing two runs.
+The assessment records the selected native library's path and SHA-256 in both
+the parent report and worker results, plus the complete parser manifest.
+Without `--native-library`, it uses the installed transport's native library.
+Pass `--native-library PATH` to assess a just-built Rust C ABI library without
+replacing the installed wheel's library. Each language runs in a fresh process.
 
 ```bash
 python -m pytest tests/tooling -q
@@ -29,6 +32,48 @@ well as the totals. `--languages python rust` selects a smaller reproduction.
 Raw reviews and parse trees are retained beside the report in `raw/<id>.json`.
 Interrupted workers preserve completed observations; an unobserved tail is
 `not_executed`, never a passing or completed case.
+
+## Gate candidate changes against the reviewed baseline
+
+Add `--baseline` to require that every previously passing case in scope still
+exists, executes and passes its oracle. For example, after building the host
+library:
+
+```bash
+python scripts/assess_languages.py \
+  --fixtures tests/fixtures/language_assessment \
+  --parsers build/benchmark-inputs \
+  --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so \
+  --baseline docs/evidence/2026-11-08-language-assessment.json \
+  --report build/language-assessment/results.json
+```
+
+The gate also rejects lost workers, missing observations, `not_executed` and
+runtime errors, and verifies each worker used the parent's selected library.
+Every baseline case must retain its language, old/new source hashes and expected
+verdicts, including known failing cases. Changes to those inputs require an
+explicit reviewed baseline rebase; removing a fixture cannot silently reduce
+coverage. Historical native and component hashes are recorded for comparison,
+but need not equal the candidate's hashes.
+
+Known baseline failures (including incomplete-input `invalid_result` findings)
+remain visible without failing the gate merely for persisting. Improvements
+are listed separately. Additional cases remain observations unless they expose
+execution failures. A successful gate means no protected passes regressed; it
+does not mean all 760 probes passed.
+
+Reports and raw observations are written before a regression returns exit code
+1; `baseline_gate` records the count and details. Without `--baseline`, diagnostic
+exit behavior stays unchanged. `--languages elixir` explicitly limits baseline
+scope for local reproduction; CI omits that option to protect all 74 routes.
+The complete baseline is validated before scope filtering: each language needs
+nonempty case results, unique identities, recognized statuses, source hashes and
+typed expected verdicts. Every current/requested language needs baseline coverage.
+Unreadable or malformed baselines return exit code 1 with a retained summary
+containing `baseline_gate.error`, alongside the collected raw observations.
+The external correctness workflow runs this gate against its just-built Rust
+library alongside the existing 167-case pilot and uploads both report trees
+even when a gate fails.
 
 The tool calls the production Rust C ABI with an explicit language hint and
 strict component selection. Python review uses the engine's native tree-sitter
