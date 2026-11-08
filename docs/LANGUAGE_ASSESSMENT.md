@@ -44,7 +44,7 @@ python scripts/assess_languages.py \
   --fixtures tests/fixtures/language_assessment \
   --parsers build/benchmark-inputs \
   --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so \
-  --baseline docs/evidence/2026-11-08-post-fix-language-baseline.json \
+  --baseline docs/evidence/2026-11-08-merged-rc-language-baseline.json \
   --report build/language-assessment/results.json
 ```
 
@@ -56,11 +56,12 @@ explicit reviewed baseline rebase; removing a fixture cannot silently reduce
 coverage. Historical native and component hashes are recorded for comparison,
 but need not equal the candidate's hashes.
 
-The [reviewed baseline after the first correctness fixes](evidence/2026-11-08-post-fix-language-baseline.md)
-protects 578 passing cases, including the 19 improvements from that batch. The
-original diagnostic JSON remains the historical 559-pass baseline. All 760 case
-identities and their expected verdicts are unchanged; later repair batches need
-their own reviewed baseline refresh.
+The [reviewed merged-RC baseline](evidence/2026-11-08-merged-rc-language-baseline.md)
+protects 584 passing cases, including all 578 first-batch passes plus the Python
+literal-kind repair and five long-literal suffix repairs. The original
+559-pass diagnostic JSON and the first 578-pass baseline remain unchanged as
+historical evidence. All 760 case identities and their expected verdicts are
+unchanged; later repair batches need their own reviewed baseline refresh.
 
 Known baseline failures (including incomplete-input `invalid_result` findings)
 remain visible without failing the gate merely for persisting. Improvements
