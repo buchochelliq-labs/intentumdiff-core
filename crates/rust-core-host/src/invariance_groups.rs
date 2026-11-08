@@ -1385,6 +1385,7 @@ pub(crate) fn apply_python_literal_invariances(
     finalization: &mut PythonReviewFinalization,
     language: &str,
 ) {
+    let first_literal_group = finalization.change_groups.len();
     let mut remove_indices = HashSet::new();
     let mut covered_literal_labels = HashSet::new();
     for (idx, change) in changes.iter().enumerate() {
@@ -1404,7 +1405,7 @@ pub(crate) fn apply_python_literal_invariances(
             finalization.ignored_style_changes.push(group.1);
             continue;
         }
-        if let Some(group) = string_literal_equivalence_group(change, old_source, new_source) {
+        if let Some(group) = string_literal_equivalence_group(change, old_source, new_source, language) {
             collect_literal_pair_labels(change, "string", &mut covered_literal_labels);
             remove_indices.insert(idx);
             finalization.change_groups.push(group.0);
@@ -1412,7 +1413,7 @@ pub(crate) fn apply_python_literal_invariances(
         }
     }
     for (old_idx, new_idx, group, ignored) in
-        literal_add_delete_equivalence_groups(changes, old_source, new_source)
+        literal_add_delete_equivalence_groups(changes, old_source, new_source, language)
     {
         remove_indices.insert(old_idx);
         remove_indices.insert(new_idx);
@@ -1421,7 +1422,7 @@ pub(crate) fn apply_python_literal_invariances(
         finalization.ignored_style_changes.push(ignored);
     }
     if let Some((group, ignored)) =
-        source_string_quote_equivalence_group(old_tree, new_tree, old_source, new_source)
+        source_string_quote_equivalence_group(old_tree, new_tree, old_source, new_source, language)
     {
         if !finalization.change_groups.iter().any(|item| {
             item.get("rule_id").and_then(Value::as_str)
@@ -1432,7 +1433,29 @@ pub(crate) fn apply_python_literal_invariances(
             finalization.ignored_style_changes.push(ignored);
         }
     }
-    if !covered_literal_labels.is_empty() {
+    if language == "python" {
+        // A value occurring elsewhere in the file cannot own this edit. In
+        // particular, a quote-only proof for 'plain' must not erase an independent
+        // 'plain' -> b'plain' change through their formerly shared decoded label.
+        let mut covered_old_ids = HashSet::new();
+        let mut covered_new_ids = HashSet::new();
+        for group in &finalization.change_groups[first_literal_group..] {
+            for (key, covered) in [("old_node_ids", &mut covered_old_ids),
+                                   ("new_node_ids", &mut covered_new_ids)] {
+                if let Some(ids) = group.get(key).and_then(Value::as_array) {
+                    covered.extend(ids.iter().filter_map(Value::as_str));
+                }
+            }
+        }
+        for (idx, change) in changes.iter().enumerate() {
+            let covered = match change.change_type {
+                "DELETION" => change.old_node.is_some_and(|node| covered_old_ids.contains(node.id.as_str())),
+                "ADDITION" => change.new_node.is_some_and(|node| covered_new_ids.contains(node.id.as_str())),
+                _ => false,
+            };
+            if covered { remove_indices.insert(idx); }
+        }
+    } else if !covered_literal_labels.is_empty() {
         for (idx, change) in changes.iter().enumerate() {
             if !matches!(change.change_type, "ADDITION" | "DELETION") {
                 continue;
@@ -1545,14 +1568,14 @@ pub(crate) fn string_literal_equivalence_group(
     change: &ChangeDraft<'_>,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
     let (old_node, new_node) = first_literal_pair(change, "string")?;
     let old_span = rust_source_span_offsets(old_source, &old_node.position)?;
     let new_span = rust_source_span_offsets(new_source, &new_node.position)?;
     let old_raw = source_slice(old_source, &old_node.position)?;
     let new_raw = source_slice(new_source, &new_node.position)?;
-    let old_decoded = decode_simple_python_string(old_raw)?;
-    let new_decoded = decode_simple_python_string(new_raw)?;
+    let (old_decoded, new_decoded) = literal_equivalent_values(old_raw, new_raw, language)?;
     if old_decoded != new_decoded || old_raw == new_raw {
         return None;
     }
@@ -1589,6 +1612,7 @@ pub(crate) fn literal_add_delete_equivalence_groups(
     changes: &[ChangeDraft<'_>],
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Vec<(usize, usize, Value, Value)> {
     let mut result = Vec::new();
     let mut used_deletions = HashSet::new();
@@ -1615,7 +1639,7 @@ pub(crate) fn literal_add_delete_equivalence_groups(
                     integer_literal_equivalence_values(old_node, new_node)
                 }
                 "string" => string_literal_equivalence_values(
-                    old_node, new_node, old_source, new_source,
+                    old_node, new_node, old_source, new_source, language,
                 ),
                 _ => None,
             };
@@ -1671,13 +1695,13 @@ pub(crate) fn string_literal_equivalence_values(
     new_node: &SemanticNode,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
     let old_span = rust_source_span_offsets(old_source, &old_node.position)?;
     let new_span = rust_source_span_offsets(new_source, &new_node.position)?;
     let old_raw = source_slice(old_source, &old_node.position)?;
     let new_raw = source_slice(new_source, &new_node.position)?;
-    let old_decoded = decode_simple_python_string(old_raw)?;
-    let new_decoded = decode_simple_python_string(new_raw)?;
+    let (old_decoded, new_decoded) = literal_equivalent_values(old_raw, new_raw, language)?;
     if old_decoded != new_decoded || old_raw == new_raw {
         return None;
     }
@@ -1698,6 +1722,7 @@ pub(crate) fn source_string_quote_equivalence_group(
     new_tree: &SemanticNode,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
     if old_source == new_source {
         return None;
@@ -1708,11 +1733,12 @@ pub(crate) fn source_string_quote_equivalence_group(
             .into_iter()
             .map(|(node, raw, decoded)| (node.id.as_str(), (node, raw, decoded)))
             .collect();
-    for (old_node, old_raw, old_decoded) in old_literals {
-        let Some((new_node, new_raw, new_decoded)) = new_by_id.get(old_node.id.as_str()) else {
+    for (old_node, old_raw, _) in old_literals {
+        let Some((new_node, new_raw, _)) = new_by_id.get(old_node.id.as_str()) else {
             continue;
         };
-        if old_decoded == new_decoded.as_str() && old_raw != new_raw.as_str() {
+        if old_raw == new_raw.as_str() { continue; }
+        if let Some((old_decoded, new_decoded)) = literal_equivalent_values(&old_raw, new_raw, language) {
             return Some(string_literal_equivalence_payload(
                 old_node,
                 *new_node,
@@ -1721,7 +1747,7 @@ pub(crate) fn source_string_quote_equivalence_group(
                 &old_raw,
                 new_raw,
                 &old_decoded,
-                new_decoded,
+                &new_decoded,
             ));
         }
     }
@@ -1807,6 +1833,17 @@ pub(crate) fn source_slice<'a>(source: &'a str, position: &NodePosition) -> Opti
     }
     let (start, end) = rust_source_span_offsets(source, position)?;
     source.get(start..end)
+}
+
+/// Native Python proofs retain runtime type and escape interpretation. Other
+/// language routes keep their existing decoder until their own contracts change.
+fn literal_equivalent_values(old: &str, new: &str, language: &str) -> Option<(String, String)> {
+    if language == "python" {
+        return python_literals::equivalent_values(old, new);
+    }
+    let old = decode_simple_python_string(old)?;
+    let new = decode_simple_python_string(new)?;
+    (old == new).then_some((old, new))
 }
 
 pub(crate) fn decode_simple_python_string(raw: &str) -> Option<String> {
@@ -2026,9 +2063,9 @@ mod source_evidence_integrity_tests {
         let new = node("s", position(1,8,1,13));
         let change = ChangeDraft { change_type:"MODIFICATION", old_node:Some(&old), new_node:Some(&new),
             old_index:None, new_index:None, confidence:1.0, description:String::new(), refactoring_kind:None, text_diff:None };
-        let modification = string_literal_equivalence_group(&change, old_source, new_source)
+        let modification = string_literal_equivalence_group(&change, old_source, new_source, "python")
             .expect("multiline equivalent literal evidence").0;
-        let pair = string_literal_equivalence_values(&old, &new, old_source, new_source)
+        let pair = string_literal_equivalence_values(&old, &new, old_source, new_source, "python")
             .expect("multiline add/delete evidence").0;
         for group in [modification, pair] {
             assert_eq!(group["metadata"]["old_span"], json!([15,20]));
