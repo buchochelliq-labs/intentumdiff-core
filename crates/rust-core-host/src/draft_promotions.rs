@@ -107,7 +107,11 @@ pub(crate) fn collect_semantic_leaf_tokens(node: &SemanticNode, result: &mut Has
 
 pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
 ) {
+    let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
+    let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
     let deleted_by_id: HashMap<&str, &SemanticNode> = changes
         .iter()
         .filter(|change| change.change_type == "DELETION")
@@ -119,7 +123,6 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         return;
     }
     let mut promoted_ids: HashSet<String> = HashSet::new();
-    let mut promoted_label_pairs: HashSet<(String, String)> = HashSet::new();
     let mut promoted = Vec::new();
     for new_node in changes
         .iter()
@@ -130,9 +133,7 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         let Some(old_node) = deleted_by_id.get(new_node.id.as_str()) else {
             continue;
         };
-        let label_pair = (old_node.label.clone(), new_node.label.clone());
         if old_node.label == new_node.label
-            || promoted_label_pairs.contains(&label_pair)
             || change_pair_exists_drafts(
                 changes,
                 "REFACTORING",
@@ -142,8 +143,42 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         {
             continue;
         }
+        // Same positional IDs are not proof of a rename: unrelated reads in
+        // different callables can inherit the same ID after a parameter edit.
+        // This fast path is only for a parameter binder whose callable has the
+        // corresponding old/new parameter names. Body references are handled
+        // later by scope-correlated rename inference.
+        let (Some(old_scope), Some(new_scope)) = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        ) else {
+            continue;
+        };
+        if old_scope != new_scope {
+            continue;
+        }
+        let (Some(old_callable), Some(new_callable)) = (
+            old_by_id.get(old_scope.as_str()),
+            new_by_id.get(new_scope.as_str()),
+        ) else {
+            continue;
+        };
+        let old_params = parameter_identifier_nodes(old_callable);
+        let new_params = parameter_identifier_nodes(new_callable);
+        let is_changed_parameter = old_params
+            .iter()
+            .zip(new_params.iter())
+            .any(|(old_param, new_param)| {
+                old_param.id == old_node.id
+                    && new_param.id == new_node.id
+                    && old_param.label == old_node.label
+                    && new_param.label == new_node.label
+                    && old_param.label != new_param.label
+            });
+        if !is_changed_parameter {
+            continue;
+        }
         promoted_ids.insert(old_node.id.clone());
-        promoted_label_pairs.insert(label_pair);
         promoted.push(ChangeDraft {
             change_type: "REFACTORING",
             old_node: Some(old_node),
@@ -169,21 +204,7 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         let Some(node) = change.old_node.or(change.new_node) else {
             return true;
         };
-        if promoted_ids.contains(node.id.as_str()) {
-            return false;
-        }
-        // Never sweep a whole NAMED ENTITY by label equality: a deleted function whose NAME
-        // merely equals a renamed identifier's old label (e.g. its call sites were renamed)
-        // is real removed code, not rename residue — sweeping it made the deleted
-        // calculate_discount function invisible (issue #32 follow-through; same disease as
-        // the literal-containment swallow fixed in issue #31).
-        if is_named_entity_type(node.node_type.as_str()) {
-            return true;
-        }
-        !promoted_label_pairs.iter().any(|(old_label, new_label)| {
-            (change.change_type == "DELETION" && node.label == *old_label)
-                || (change.change_type == "ADDITION" && node.label == *new_label)
-        })
+        !promoted_ids.contains(node.id.as_str())
     });
     changes.extend(promoted);
     suppress_modifications_covered_by_refactoring_ids(changes, &promoted_ids);
@@ -674,7 +695,11 @@ pub(crate) fn collect_unique_callables(tree: &SemanticNode) -> HashMap<(String, 
 /// RENAME_VARIABLE (`a`→`x` reported twice: signature + body). Keep the first per
 /// (old_label, new_label) in position order — the signature/param occurrence — and drop the rest
 /// (the pairs stay matched; they are corroborating evidence, not separate review events).
-pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
+pub(crate) fn dedupe_variable_rename_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+) {
     let mut order: Vec<usize> = (0..changes.len()).collect();
     order.sort_by(|&a, &b| {
         let pos = |i: usize| {
@@ -686,7 +711,7 @@ pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) 
         };
         pos(a).cmp(&pos(b))
     });
-    let mut seen: HashSet<(String, String)> = HashSet::new();
+    let mut seen: HashSet<(String, String, Option<String>, Option<String>)> = HashSet::new();
     let mut drop = vec![false; changes.len()];
     for index in order {
         let change = &changes[index];
@@ -698,7 +723,13 @@ pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) 
         let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
             continue;
         };
-        if !seen.insert((old_node.label.clone(), new_node.label.clone())) {
+        let key = (
+            old_node.label.clone(),
+            new_node.label.clone(),
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        );
+        if !seen.insert(key) {
             drop[index] = true;
         }
     }
@@ -719,7 +750,7 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
 ) {
     let old_callables = collect_unique_callables(old_tree);
     let new_callables = collect_unique_callables(new_tree);
-    let mut inferred: HashSet<(String, String)> = HashSet::new();
+    let mut inferred: HashSet<(String, String, String, String)> = HashSet::new();
     for (key, old_node) in &old_callables {
         let Some(new_node) = new_callables.get(key) else {
             continue;
@@ -740,7 +771,12 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
             if new_set.contains(old_label) || old_set.contains(new_label) {
                 continue;
             }
-            inferred.insert((old_label.clone(), new_label.clone()));
+            inferred.insert((
+                old_label.clone(),
+                new_label.clone(),
+                old_node.id.clone(),
+                new_node.id.clone(),
+            ));
         }
     }
     if inferred.is_empty() {
@@ -756,7 +792,18 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
         if old_node.node_type != "identifier" || new_node.node_type != "identifier" {
             continue;
         }
-        if inferred.contains(&(old_node.label.clone(), new_node.label.clone())) {
+        let scope_pair = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        );
+        if scope_pair.0.as_ref().zip(scope_pair.1.as_ref()).is_some_and(|(old_scope, new_scope)| {
+            inferred.contains(&(
+                old_node.label.clone(),
+                new_node.label.clone(),
+                old_scope.clone(),
+                new_scope.clone(),
+            ))
+        }) {
             change.change_type = "REFACTORING";
             change.refactoring_kind = Some("RENAME_VARIABLE");
             change.confidence = 0.95;
@@ -764,6 +811,28 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
                 format!("Rename variable '{}' -> '{}'", old_node.label, new_node.label);
         }
     }
+}
+
+fn enclosing_callable_id(tree: &SemanticNode, target_id: &str) -> Option<String> {
+    fn visit(
+        node: &SemanticNode,
+        target_id: &str,
+        nearest: Option<&str>,
+    ) -> Option<String> {
+        let is_callable = !node.label.is_empty()
+            && node
+                .children
+                .iter()
+                .any(|child| is_parameter_list_type(child.node_type.as_str()));
+        let nearest = if is_callable { Some(node.id.as_str()) } else { nearest };
+        if node.id == target_id {
+            return nearest.map(str::to_owned);
+        }
+        node.children
+            .iter()
+            .find_map(|child| visit(child, target_id, nearest))
+    }
+    visit(tree, target_id, None)
 }
 
 pub(crate) fn parameter_identifier_nodes(node: &SemanticNode) -> Vec<&SemanticNode> {
@@ -1954,8 +2023,28 @@ pub(crate) fn same_position_leaf_partner<'a>(
     None
 }
 
-pub(crate) fn suppress_modifications_covered_by_refactoring_labels(changes: &mut Vec<ChangeDraft<'_>>) {
-    let refactoring_pairs = refactoring_label_pairs(changes);
+pub(crate) fn suppress_modifications_covered_by_refactoring_labels(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+) {
+    let refactoring_pairs: HashSet<(String, String, String, String)> = changes
+        .iter()
+        .filter(|change| {
+            change.change_type == "REFACTORING"
+                && change.refactoring_kind == Some("RENAME_VARIABLE")
+        })
+        .filter_map(|change| {
+            let old = change.old_node?;
+            let new = change.new_node?;
+            Some((
+                old.label.clone(),
+                new.label.clone(),
+                enclosing_callable_id(old_tree, old.id.as_str())?,
+                enclosing_callable_id(new_tree, new.id.as_str())?,
+            ))
+        })
+        .collect();
     if refactoring_pairs.is_empty() {
         return;
     }
@@ -1969,34 +2058,62 @@ pub(crate) fn suppress_modifications_covered_by_refactoring_labels(changes: &mut
         let Some(new_node) = change.new_node else {
             return true;
         };
-        if refactoring_pairs.contains(&(old_node.label.clone(), new_node.label.clone())) {
+        let scope_pair = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        );
+        if scope_pair.0.as_ref().zip(scope_pair.1.as_ref()).is_some_and(|(old_scope, new_scope)| {
+            refactoring_pairs.contains(&(
+                old_node.label.clone(),
+                new_node.label.clone(),
+                old_scope.clone(),
+                new_scope.clone(),
+            ))
+        }) {
             return false;
         }
-        !all_leaf_deltas_are_refactoring_pairs(old_node, new_node, &refactoring_pairs)
+        !all_leaf_deltas_are_scoped_refactoring_pairs(
+            old_node,
+            new_node,
+            old_tree,
+            new_tree,
+            &refactoring_pairs,
+        )
     });
 }
 
-pub(crate) fn all_leaf_deltas_are_refactoring_pairs(
+fn all_leaf_deltas_are_scoped_refactoring_pairs(
     old_node: &SemanticNode,
     new_node: &SemanticNode,
-    refactoring_pairs: &HashSet<(String, String)>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    pairs: &HashSet<(String, String, String, String)>,
 ) -> bool {
     let old_leaves = leaf_nodes(old_node);
     let new_leaves = leaf_nodes(new_node);
-    let mut deltas = 0usize;
-    for (index, old_leaf) in old_leaves.iter().copied().enumerate() {
-        if let Some(new_leaf) =
-            same_position_leaf_partner(old_leaf, &new_leaves, index, &HashSet::new())
-        {
-            if old_leaf.label != new_leaf.label {
-                deltas += 1;
-                if !refactoring_pairs.contains(&(old_leaf.label.clone(), new_leaf.label.clone())) {
-                    return false;
-                }
-            }
+    let mut deltas = 0;
+    for (old_leaf, new_leaf) in old_leaves.iter().zip(&new_leaves) {
+        if old_leaf.node_type != new_leaf.node_type || old_leaf.label == new_leaf.label {
+            continue;
+        }
+        deltas += 1;
+        let scope_pair = (
+            enclosing_callable_id(old_tree, old_leaf.id.as_str()),
+            enclosing_callable_id(new_tree, new_leaf.id.as_str()),
+        );
+        let Some((old_scope, new_scope)) = scope_pair.0.as_ref().zip(scope_pair.1.as_ref()) else {
+            return false;
+        };
+        if !pairs.contains(&(
+            old_leaf.label.clone(),
+            new_leaf.label.clone(),
+            old_scope.clone(),
+            new_scope.clone(),
+        )) {
+            return false;
         }
     }
-    deltas > 0
+    deltas > 0 && old_leaves.len() == new_leaves.len()
 }
 
 /// python presentation._suppress_same_label_add_delete_pairs (issue #57 javascript Renames):
