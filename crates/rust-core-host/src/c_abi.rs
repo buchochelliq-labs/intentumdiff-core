@@ -1419,6 +1419,63 @@ mod tests {
     }
 
     #[test]
+    fn apply_invariances_abi_preserves_parent_with_unrelated_identifier_delta() {
+        let leaf = |id: &str, node_type: &str, label: &str, start: u32, end: u32| {
+            json!({"id":id,"node_type":node_type,"label":label,"structural_hash":label,
+                "position":{"start_line":0,"start_col":start,"end_line":0,"end_col":end},"children":[]})
+        };
+        let parent = |literal: Value, name: Value, end_col: u32| {
+            json!({"id":"root","node_type":"function_definition","label":"function",
+                "structural_hash":"parent","position":{"start_line":0,"start_col":0,"end_line":0,"end_col":end_col},
+                "children":[literal,name]})
+        };
+        let result = |request: Value| {
+            let env = call("apply_invariances", json!([request.to_string()]));
+            assert_eq!(env["ok"], true, "{env}");
+            match &env["result"] {
+                Value::String(encoded) => serde_json::from_str(encoded).unwrap(),
+                value => value.clone(),
+            }
+        };
+        for language in ["python", "javascript", "typescript", "tsx", "csharp"] {
+            let old_parent = parent(
+                leaf("number", "integer", "10", 0, 2),
+                leaf("name", "identifier", "safe", 3, 7),
+                7,
+            );
+            let new_parent = parent(
+                leaf("number", "integer", "0xa", 0, 3),
+                leaf("name", "identifier", "danger", 4, 10),
+                10,
+            );
+            let change = json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent});
+            let request = json!({"language":language,"old_source":"10 safe","new_source":"0xa danger",
+                "old_tree":old_parent,"new_tree":new_parent,"changes":[change]});
+            let output = result(request);
+            assert_eq!(output["changes"].as_array().unwrap().len(), 1, "{language}");
+            assert_eq!(output["change_groups"], json!([]), "{language}");
+        }
+        for language in ["python", "javascript", "typescript", "tsx"] {
+            let old_parent = parent(
+                leaf("string", "string", "'x'", 0, 3),
+                leaf("name", "identifier", "safe", 4, 8),
+                8,
+            );
+            let new_parent = parent(
+                leaf("string", "string", "\"x\"", 0, 3),
+                leaf("name", "identifier", "danger", 4, 10),
+                10,
+            );
+            let change = json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent});
+            let request = json!({"language":language,"old_source":"'x' safe","new_source":"\"x\" danger",
+                "old_tree":old_parent,"new_tree":new_parent,"changes":[change]});
+            let output = result(request);
+            assert_eq!(output["changes"].as_array().unwrap().len(), 1, "{language}");
+            assert_eq!(output["change_groups"], json!([]), "{language}");
+        }
+    }
+
+    #[test]
     fn diff_family_dispatches_over_the_abi() {
         let tree = r#"{"id":"m","node_type":"module","label":"m",
             "position":{"start_line":0,"start_col":0,"end_line":9,"end_col":0},

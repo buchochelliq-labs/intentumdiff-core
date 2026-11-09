@@ -300,6 +300,70 @@ pub(crate) fn rust_apply_literal_equivalences(
     let mut groups = Vec::new();
     let mut ignored = Vec::new();
     for change in changes {
+        // A literal nested in a parent draft proves only that literal's
+        // spelling equivalent. Keep the parent draft whenever another paired
+        // node also changed, since dropping it would hide that semantic delta.
+        if let (Some(old), Some(new)) = (
+            rust_change_node(&change, "old_node"),
+            rust_change_node(&change, "new_node"),
+        ) {
+            if !old.children.is_empty() || !new.children.is_empty() {
+                let proven_literal_id = rust_integer_literal_equivalence_group(&change, language)
+                    .or_else(|| {
+                        rust_string_literal_equivalence_group(
+                            &change, old_source, new_source, language,
+                        )
+                    })
+                    .and_then(|(group, _)| {
+                        group["old_node_ids"].as_array()?.first()?.as_str().map(str::to_owned)
+                    });
+                let nodes = rust_owned_nodes_by_id(&new);
+                let old_nodes = rust_owned_nodes_by_id(&old);
+                let proven_literal_ancestors = proven_literal_id
+                    .as_deref()
+                    .map(|literal_id| {
+                        old.descendants()
+                            .into_iter()
+                            .filter(|node| rust_node_contains_id(node, literal_id))
+                            .map(|node| node.id.clone())
+                            .collect::<HashSet<_>>()
+                    })
+                    .unwrap_or_default();
+                let has_other_delta = old.node_type != new.node_type
+                    || old.label != new.label
+                    || old.parent_type != new.parent_type
+                    || old.type_info != new.type_info
+                    || old.facts != new.facts
+                    || proven_literal_ancestors.iter().any(|id| {
+                        let (Some(prior), Some(current)) =
+                            (old_nodes.get(id), nodes.get(id.as_str()))
+                        else {
+                            return true;
+                        };
+                        opaque_payload::changed(prior, current, old_source, new_source, language)
+                    })
+                    || old.descendants().iter().any(|prior| {
+                        if proven_literal_id.as_deref() == Some(prior.id.as_str()) {
+                            return false;
+                        }
+                        let Some(current) = nodes.get(prior.id.as_str()) else {
+                            return true;
+                        };
+                        prior.node_type != current.node_type
+                            || prior.label != current.label
+                            || prior.parent_type != current.parent_type
+                            || prior.type_info != current.type_info
+                            || prior.facts != current.facts
+                            || (!proven_literal_ancestors.contains(&prior.id)
+                                && prior.structural_hash != current.structural_hash)
+                    })
+                    || nodes.keys().any(|id| !old_nodes.contains_key(id));
+                if has_other_delta {
+                    kept.push(change);
+                    continue;
+                }
+            }
+        }
         if let (Some(old),Some(new)) = (rust_change_node(&change,"old_node"),rust_change_node(&change,"new_node")) {
             if (!old.children.is_empty() || !new.children.is_empty())
                 && opaque_payload::changed(&old,&new,old_source,new_source,language) {
@@ -478,6 +542,10 @@ pub(crate) fn rust_owned_nodes_by_id(root: &SemanticNode) -> HashMap<String, Sem
         result.insert(node.id.clone(), node.clone());
     }
     result
+}
+
+fn rust_node_contains_id(node: &SemanticNode, id: &str) -> bool {
+    node.id == id || node.children.iter().any(|child| rust_node_contains_id(child, id))
 }
 
 pub(crate) fn canonical_integer_literal_for_invariance(label: &str) -> Option<String> {
@@ -2100,5 +2168,103 @@ mod source_evidence_integrity_tests {
         assert_eq!(groups[0]["raw_change_indices"], json!([]));
         assert_eq!(groups[0]["old_node_ids"], json!(["s"]));
         assert_eq!(groups[0]["metadata"]["index_space"], "invariance_input");
+    }
+
+    #[test]
+    fn nested_literal_equivalence_keeps_unrelated_identifier_delta() {
+        let mut old_literal = node("n", position(0, 0, 0, 2));
+        old_literal.node_type = "integer".to_owned();
+        old_literal.label = "10".to_owned();
+        let mut new_literal = old_literal.clone();
+        new_literal.label = "0xa".to_owned();
+        let mut old_name = node("name", position(0, 3, 0, 7));
+        old_name.node_type = "identifier".to_owned();
+        old_name.label = "safe".to_owned();
+        let mut new_name = old_name.clone();
+        new_name.label = "danger".to_owned();
+        let mut old_parent = node("root", position(0, 0, 0, 7));
+        old_parent.node_type = "function_definition".to_owned();
+        old_parent.children = vec![old_literal, old_name];
+        let mut new_parent = old_parent.clone();
+        new_parent.position = position(0, 0, 0, 10);
+        new_parent.children = vec![new_literal, new_name];
+
+        let (kept, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent})],
+            "10 safe", "0xa danger", "python");
+        assert_eq!(kept.len(), 1, "parent modification carries the identifier change");
+        assert!(groups.is_empty(), "literal equivalence cannot consume the enclosing change");
+
+        let mut hash_only_name = old_parent.children[1].clone();
+        hash_only_name.structural_hash = "changed-hash".to_owned();
+        hash_only_name.facts = Some(json!({"semantic_value":"changed"}));
+        hash_only_name.position = position(0, 4, 0, 8);
+        let mut hash_only_parent = old_parent.clone();
+        hash_only_parent.position = position(0, 0, 0, 8);
+        hash_only_parent.children = vec![new_parent.children[0].clone(), hash_only_name];
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":hash_only_parent})],
+            "10 safe", "0xa safe", "python");
+        assert_eq!(kept.len(), 1, "paired sibling hash/facts delta must remain visible");
+
+        let mut old_facts_parent = old_parent.clone();
+        old_facts_parent.facts = Some(json!({"semantic_value":"before"}));
+        let mut new_facts_parent = old_facts_parent.clone();
+        new_facts_parent.facts = Some(json!({"semantic_value":"after"}));
+        new_facts_parent.position = position(0, 0, 0, 8);
+        new_facts_parent.children[0] = new_parent.children[0].clone();
+        new_facts_parent.children[1].position = position(0, 4, 0, 8);
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_facts_parent,"new_node":new_facts_parent})],
+            "10 safe", "0xa safe", "python");
+        assert_eq!(kept.len(), 1, "parent facts delta must remain visible");
+
+        let mut old_intermediate = node("args", position(0, 1, 0, 11));
+        old_intermediate.node_type = "argument_list".to_owned();
+        old_intermediate.structural_hash = "old-args".to_owned();
+        let mut new_intermediate = old_intermediate.clone();
+        new_intermediate.structural_hash = "new-args".to_owned();
+        let mut old_nested_literal = old_parent.children[0].clone();
+        old_nested_literal.position = position(0, 2, 0, 4);
+        let mut new_nested_literal = new_parent.children[0].clone();
+        new_nested_literal.position = position(0, 2, 0, 5);
+        let mut old_nested_name = old_parent.children[1].clone();
+        old_nested_name.position = position(0, 6, 0, 10);
+        let mut new_nested_name = old_nested_name.clone();
+        new_nested_name.position = position(0, 7, 0, 11);
+        old_intermediate.children = vec![old_nested_literal, old_nested_name];
+        new_intermediate.children = vec![new_nested_literal, new_nested_name];
+        let mut old_nested_parent = node("outer", position(0, 0, 0, 11));
+        old_nested_parent.node_type = "function_definition".to_owned();
+        old_nested_parent.structural_hash = "old-outer".to_owned();
+        old_nested_parent.children = vec![old_intermediate];
+        let mut new_nested_parent = old_nested_parent.clone();
+        new_nested_parent.position = position(0, 0, 0, 12);
+        new_nested_parent.structural_hash = "new-outer".to_owned();
+        new_nested_parent.children = vec![new_intermediate];
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_nested_parent,"new_node":new_nested_parent})],
+            "f(10, safe)", "f(0xa; safe)", "python");
+        assert_eq!(kept.len(), 1, "intermediate source-owned token delta must remain visible");
+    }
+
+    #[test]
+    fn nested_literal_only_equivalence_still_suppresses_parent_draft() {
+        let mut old_literal = node("n", position(0, 0, 0, 2));
+        old_literal.node_type = "integer".to_owned();
+        old_literal.label = "10".to_owned();
+        let mut new_literal = old_literal.clone();
+        new_literal.label = "0xa".to_owned();
+        let mut old_parent = node("root", position(0, 0, 0, 2));
+        old_parent.node_type = "argument_list".to_owned();
+        old_parent.children = vec![old_literal];
+        let mut new_parent = old_parent.clone();
+        new_parent.children = vec![new_literal];
+
+        let (kept, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent})],
+            "10", "0xa", "python");
+        assert!(kept.is_empty());
+        assert_eq!(groups.len(), 1);
     }
 }
