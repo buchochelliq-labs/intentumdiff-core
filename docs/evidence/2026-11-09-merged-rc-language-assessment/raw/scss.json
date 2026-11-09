@@ -1,0 +1,2769 @@
+{
+  "language_id": "scss",
+  "options": {
+    "language_hint": "scss",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-scss-variable_value",
+      "language_id": "scss",
+      "category": "meaningful_variable_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0347ccee829ce268f2436b1a66e6c1e700b39c896c74e6d74c01e47c2991cd6a",
+      "new_sha256": "8884d74d179ad685c421f9b3a8ce982ee8467bb43071d1fa197f0d6291ef1f79",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('8px') -> property_value('12px')",
+            "old_node": {
+              "id": "0.0.path_value",
+              "node_type": "property_value",
+              "label": "8px",
+              "position": {
+                "start_line": 0,
+                "start_col": 6,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "f2d125a391916286af0aa04221ca64cf7a9c32a1cfe55d53953a146fc4289dcf",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_value",
+              "node_type": "property_value",
+              "label": "12px",
+              "position": {
+                "start_line": 0,
+                "start_col": 6,
+                "end_line": 0,
+                "end_col": 10
+              },
+              "structural_hash": "8c8fe7438e3ea4107c115438374bca2999baaeddd3d811bf68030276f463e8aa",
+              "children": []
+            },
+            "text_diff": "8px -> 12px"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "8px"
+            ],
+            "new_labels": [
+              "12px"
+            ],
+            "old_node_ids": [
+              "0.0.path_value"
+            ],
+            "new_node_ids": [
+              "0.0.path_value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.901795,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 671527,
+                "total_fuel_consumed": 671527,
+                "max_fuel_used_percent": 3.135046685340803,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.364417,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 672007,
+                "total_fuel_consumed": 672007,
+                "max_fuel_used_percent": 3.1372875816993466,
+                "input_bytes": 36,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 18197.938
+    },
+    {
+      "id": "web-scss-mixin_body",
+      "language_id": "scss",
+      "category": "meaningful_mixin_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "9e51f4833872a1a1fe802fea7796885bac91cc1d552ae0ee69e03b8aa5c816a5",
+      "new_sha256": "ff21a3dc8f8df1efdae5be13d36e7edadcdca8909be9f005c01c7e7ff820358e",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('red') -> property_value('blue')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 22,
+                "end_line": 0,
+                "end_col": 25
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "blue",
+              "position": {
+                "start_line": 0,
+                "start_col": 22,
+                "end_line": 0,
+                "end_col": 26
+              },
+              "structural_hash": "2d4b8c114c8abc580ab331032e091461f5b6fe3dec969e4c5dc3f66f582f7a6b",
+              "children": []
+            },
+            "text_diff": "red -> blue"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "red"
+            ],
+            "new_labels": [
+              "blue"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.715259,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22220000,
+                "fuel_consumed": 734494,
+                "total_fuel_consumed": 734494,
+                "max_fuel_used_percent": 3.305553555355536,
+                "input_bytes": 55,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.430489,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22220000,
+                "fuel_consumed": 735331,
+                "total_fuel_consumed": 735331,
+                "max_fuel_used_percent": 3.3093204320432044,
+                "input_bytes": 56,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "d3005fb76c2d8e5694e2fd3b3ae40781882d08e6245c9ca577daeb0cb76d12cc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "mixin_statement",
+                "label": "shade",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "6ad92cf71ec1868e5db6ffde7d950f5bfbeac509fb18ae7f2a5b43f8c90a2708",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 25
+                },
+                "structural_hash": "733838221d45e668fa10caecaf41c39f4a3689115bb93ce11d485ceba1e96c3a",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "55499c3444f8708f7429faae3252aa7b10abb755117276ec7cc688ff230ff268",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "mixin_statement",
+                "label": "shade",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 29
+                },
+                "structural_hash": "e1a6ec5998d368c8c51219f1988a14fd47147afad71eb0f0328100be4c1d8336",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 25
+                },
+                "structural_hash": "733838221d45e668fa10caecaf41c39f4a3689115bb93ce11d485ceba1e96c3a",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.735
+    },
+    {
+      "id": "web-scss-nesting",
+      "language_id": "scss",
+      "category": "meaningful_nesting",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "350fb31413efd3227e6bd2642118b8c105d7519f48a0a9bdfa67fdfc1f9ba8b4",
+      "new_sha256": "613f93533847c002677fc92744fa7d7038e257f3b79e2e768151fb4431affae1",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update rule_set('.card:hover') -> rule_set('.hover')",
+            "old_node": {
+              "id": "0.0.path_0",
+              "node_type": "rule_set",
+              "label": ".card:hover",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "774d1d4b242ce59017ff0abbf9683c6af1057161b00f64a14d82a07204bc07ef",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0",
+              "node_type": "rule_set",
+              "label": ".hover",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 30
+              },
+              "structural_hash": "7b264967e1135ca252e89d989f41dec72182719973a9427a43870ad5ab6be790",
+              "children": []
+            },
+            "text_diff": ".card:hover -> .hover"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              ".card",
+              ".card:hover"
+            ],
+            "new_labels": [
+              ".card",
+              ".hover"
+            ],
+            "old_node_ids": [
+              "0.0.path_0"
+            ],
+            "new_node_ids": [
+              "0.0.path_0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": ".card",
+              "new_entity_label": ".card",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.773667,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21340000,
+                "fuel_consumed": 736587,
+                "total_fuel_consumed": 736587,
+                "max_fuel_used_percent": 3.451672914714152,
+                "input_bytes": 34,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.32305,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21340000,
+                "fuel_consumed": 686429,
+                "total_fuel_consumed": 686429,
+                "max_fuel_used_percent": 3.216630740393627,
+                "input_bytes": 33,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "cdd1c4d491d5a39269d2cb8f28ab0e5a4a137927f814350bf612ed40a52b61aa",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 33
+                },
+                "structural_hash": "030f1d01faf7e9433a03375e6e56b8158da753c67ed69868dffd2ba846ca7790",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "351c3c574e49f3f3b417eec678cf600016d8e8137d2ba98004235506aaf19752",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 32
+                },
+                "structural_hash": "66a0b6e3a3116d4a9c10151ee6883cb316972a7414ac59e814c420ad6aa9b91d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.084
+    },
+    {
+      "id": "web-scss-cascade_order",
+      "language_id": "scss",
+      "category": "meaningful_cascade_order",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c234a8a41be729f0a65b850581ea7ffc662b3978a762995e0ad1c65621749650",
+      "new_sha256": "e92750971e7fc0a143972a2f5162010680a7b814df45dfd7bcd6a34b1a4bd36f",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MOVE",
+            "confidence": 1.0,
+            "description": "Move property_value('red') -> property_value('red')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 18
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_1.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 28,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            }
+          },
+          {
+            "change_type": "MOVE",
+            "confidence": 1.0,
+            "description": "Move property_value('blue') -> property_value('blue')",
+            "old_node": {
+              "id": "0.0.path_1.value",
+              "node_type": "property_value",
+              "label": "blue",
+              "position": {
+                "start_line": 0,
+                "start_col": 27,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "2d4b8c114c8abc580ab331032e091461f5b6fe3dec969e4c5dc3f66f582f7a6b",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "blue",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "2d4b8c114c8abc580ab331032e091461f5b6fe3dec969e4c5dc3f66f582f7a6b",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MOVED_CODE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "red"
+            ],
+            "new_labels": [
+              "red"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_1.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_move_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MOVED_CODE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "blue"
+            ],
+            "new_labels": [
+              "blue"
+            ],
+            "old_node_ids": [
+              "0.0.path_1.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_move_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.509136,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 620498,
+                "total_fuel_consumed": 620498,
+                "max_fuel_used_percent": 2.8995233644859812,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.26383,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 620202,
+                "total_fuel_consumed": 620202,
+                "max_fuel_used_percent": 2.898140186915888,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "a9199884c3f6b5868bf514d8cff6816830ae334c068bb3b0ed06b8ebd38b599e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "7eef40f4e1dab3cb21105dc25d5c0e573d51dfacb7d4bfdec401f35316b4af36",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "37a13787be4f2d640252b49fa537a41494320cb89b1e68dc3adc3fa67ca605eb",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "51e02ea5a6c6c057712e7c28c394d00a3882ff9a781f81d7186556ff2f28d95a",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.505
+    },
+    {
+      "id": "web-scss-identity",
+      "language_id": "scss",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0347ccee829ce268f2436b1a66e6c1e700b39c896c74e6d74c01e47c2991cd6a",
+      "new_sha256": "0347ccee829ce268f2436b1a66e6c1e700b39c896c74e6d74c01e47c2991cd6a",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.584806,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 671695,
+                "total_fuel_consumed": 671695,
+                "max_fuel_used_percent": 3.1387616822429907,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.338879,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 671360,
+                "total_fuel_consumed": 671360,
+                "max_fuel_used_percent": 3.137196261682243,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 61.684
+    },
+    {
+      "id": "web-scss-preservation",
+      "language_id": "scss",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0347ccee829ce268f2436b1a66e6c1e700b39c896c74e6d74c01e47c2991cd6a",
+      "new_sha256": "b0b5451ecbf42be1d401df6a7ddf0295aff21bdcfa8470b7250a98345889048d",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              ".card { margin: $gap; }\\n"
+            ],
+            "new_labels": [
+              ".card {\\n  margin: $gap;\\n}\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { margin: $gap; }\\n",
+              "new_label": ".card {\\n  margin: $gap;\\n}\\n",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                11,
+                35
+              ],
+              "new_span": [
+                11,
+                37
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { margin: $gap; }\\n",
+              "new_label": ".card {\\n  margin: $gap;\\n}\\n",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                11,
+                35
+              ],
+              "new_span": [
+                11,
+                37
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.600505,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 671319,
+                "total_fuel_consumed": 671319,
+                "max_fuel_used_percent": 3.131152052238806,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.299466,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 673061,
+                "total_fuel_consumed": 673061,
+                "max_fuel_used_percent": 3.1392770522388056,
+                "input_bytes": 37,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "700f8ab81019a8116fa7256468c346dcb6fa39311a057b7f80c1f3cb2737fdd9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule_set",
+                "label": ".card",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 1
+                },
+                "structural_hash": "94e723800175825aeaab0b41b7384e62d2aad9416c4dc8640dfa780717ac8af3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "aafc03af4799b64176f50b0e43fd2013daa9f850adc7b3af415eac5954890fbf",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "class_selector",
+                        "label": ".card",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 0,
+                          "end_line": 1,
+                          "end_col": 5
+                        },
+                        "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.483
+    },
+    {
+      "id": "web-scss-incomplete",
+      "language_id": "scss",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "dd13c5a572b0e1bb85a206f17397aee23345e9b585c6b01c2e5d7c98b40c1496",
+      "new_sha256": "d9ca93ffc8b06d31afb7439a0d198df518ca9414b33d99fc3e3f70c367320b09",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "$gap: 8px;\\n.card { color:"
+            ],
+            "new_labels": [
+              "$gap: 8px;\\n.notice { color:"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "$gap: 8px;\\n.card { color:",
+              "new_label": "$gap: 8px;\\n.notice { color:",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                25
+              ],
+              "new_span": [
+                0,
+                28
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "$gap: 8px;\\n.card { color:",
+              "new_label": "$gap: 8px;\\n.notice { color:",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                25
+              ],
+              "new_span": [
+                0,
+                28
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 1.315844,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21060000,
+                "fuel_consumed": 739255,
+                "total_fuel_consumed": 739255,
+                "max_fuel_used_percent": 3.510232668566002,
+                "input_bytes": 25,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.401707,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21060000,
+                "fuel_consumed": 741540,
+                "total_fuel_consumed": 741540,
+                "max_fuel_used_percent": 3.521082621082621,
+                "input_bytes": 28,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 14
+            },
+            "structural_hash": "f4a442ac6ec7eac48fc44205189cb3d37c994831cd3769245ae36f985f0f5636",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 1,
+              "end_line": 1,
+              "end_col": 16
+            },
+            "structural_hash": "829bc1624128aa1b8cafc13b8499e68866c36afe1ad8fedad74a04f8e7b47fdc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "declaration",
+                "label": "$gap",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 1,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "1c8fd43036601ce29679803cf39fd2f578aa69ecb43dc2d50c23be52a450054a",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 200.77
+    },
+    {
+      "id": "web-scss-unicode",
+      "language_id": "scss",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d53cce27a82ddc129b8b3ac84129a3a01bbb7c06ac7682f88539a2d77aa355a0",
+      "new_sha256": "2e0ae1b972de9439b0e902d37ed155abe7063a9cb89ab4392df769f8af916885",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('\"Café\"') -> property_value('\"Thé\"')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "\"Café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 25,
+                "end_line": 0,
+                "end_col": 32
+              },
+              "structural_hash": "4de52268d458808ba39f178959207cedf2da3933359d3e73dcd73ed5c287524e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "\"Thé\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 25,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "ab57b8d1fad854ff6a14095924a1c741d63c3c9f182f38b82a83a0e199d288fc",
+              "children": []
+            },
+            "text_diff": "\"Café\" -> \"Thé\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              ".card::before",
+              "\"Café\""
+            ],
+            "new_labels": [
+              ".card::before",
+              "\"Thé\""
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": ".card::before",
+              "new_entity_label": ".card::before",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.704038,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 600244,
+                "total_fuel_consumed": 600244,
+                "max_fuel_used_percent": 2.8022595704948645,
+                "input_bytes": 36,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.351273,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 599123,
+                "total_fuel_consumed": 599123,
+                "max_fuel_used_percent": 2.7970261437908497,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "b14683607d097da4cc3820971e736f67e9bd876814b630032fd891b328ef42bf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "before",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 35
+                },
+                "structural_hash": "2c3e122ca374fc25f610bff13a272ec4698f2730e2f5ae5df0baa323fde75ab2",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "19e5289ac5bb81833e763ad74ca02378d4be1176dbb602a4847339c5b1ca0116",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "pseudo_element_selector",
+                        "label": "before",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "2d1443c9cfd2352713baef0bb5de3be417c02697ac7ae1477839fc9a11769b56",
+                        "children": [
+                          {
+                            "id": "0.0.0.0.0",
+                            "node_type": "class_selector",
+                            "label": ".card",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 0,
+                              "end_line": 0,
+                              "end_col": 5
+                            },
+                            "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "fb9c85a22d4300028265aa90e5480d54b5d68f18aed4b63b065784d1ffa61ca0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "before",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "fa8bdf013ee13fb1c7a3d9463387a1240374d852b97b7f681bc56d5194d2e5f5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "19e5289ac5bb81833e763ad74ca02378d4be1176dbb602a4847339c5b1ca0116",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "pseudo_element_selector",
+                        "label": "before",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "2d1443c9cfd2352713baef0bb5de3be417c02697ac7ae1477839fc9a11769b56",
+                        "children": [
+                          {
+                            "id": "0.0.0.0.0",
+                            "node_type": "class_selector",
+                            "label": ".card",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 0,
+                              "end_line": 0,
+                              "end_col": 5
+                            },
+                            "structural_hash": "e1c5104ec6223c6ed212bc60d0cd6c019584233da41d39ef1c9f683e726dd361",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.062
+    },
+    {
+      "id": "web-scss-external-escaped-string-value",
+      "language_id": "scss",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "2ba4333d070379186d2a359b05ee66876f5cffbd7f458c1996ec351c32104f0b",
+      "new_sha256": "a7d2d58c2a6442e76ed461e8b8675dd6016fef2f082fb93ae996468f4a578c9c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('\\'line1 \\\n      line2\\'') -> property_value('\\'line1 \\\n      changed\\'')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "'line1 \\\n      line2'",
+              "position": {
+                "start_line": 1,
+                "start_col": 5,
+                "end_line": 2,
+                "end_col": 12
+              },
+              "structural_hash": "9ada9da335f06b3eb26c104eca42492424d25ee106332cf951287b8a75be3c70",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "'line1 \\\n      changed'",
+              "position": {
+                "start_line": 1,
+                "start_col": 5,
+                "end_line": 2,
+                "end_col": 14
+              },
+              "structural_hash": "94f19ffdbab8350fb99cb1f77060ecf08d773203f11ba2cdcfedffda697453b9",
+              "children": []
+            },
+            "text_diff": "'line1 \\\n      line2' -> 'line1 \\\n      changed'"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "a",
+              "'line1 \\\n      line2'"
+            ],
+            "new_labels": [
+              "a",
+              "'line1 \\\n      changed'"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": "a",
+              "new_entity_label": "a",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.571923,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 439783,
+                "total_fuel_consumed": 439783,
+                "max_fuel_used_percent": 2.0512266791044778,
+                "input_bytes": 35,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.30733099999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 441650,
+                "total_fuel_consumed": 441650,
+                "max_fuel_used_percent": 2.0599347014925375,
+                "input_bytes": 37,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "9f3b814c928929ca5ebc3c40134d2ad32c713d14fbbbe9fbe8be63573d7c7518",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 1
+                },
+                "structural_hash": "969ed300f4beae4f98bb2aa8733b712c4fd05844b270e36a78e991a38dd31bf8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 1
+                    },
+                    "structural_hash": "4d509a0477d634069c36436d62b11a9ce1e57396d66630975fa0c94984e7f237",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "e6dbe2fd607c39895b3611d677a519a9b349cd460ea049e87ab0fc40044fb6a7",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 1
+                },
+                "structural_hash": "3c2e8292422a15c14c075ac1e8be85b1c7d2aa43c43989131bb1870604c0b7f6",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 1
+                    },
+                    "structural_hash": "4d509a0477d634069c36436d62b11a9ce1e57396d66630975fa0c94984e7f237",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.042
+    },
+    {
+      "id": "web-scss-external-escaped-string-spelling",
+      "language_id": "scss",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "2ba4333d070379186d2a359b05ee66876f5cffbd7f458c1996ec351c32104f0b",
+      "new_sha256": "3b5c0c12db8a6812b14a312f939d1eae8b1a7a33e1c3ff7ccf0a5daa79468909",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.scss",
+        "new_filename": "assessment.scss",
+        "language": "scss",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "'line1 \\\n      line2'"
+            ],
+            "new_labels": [
+              "\"line1       line2\""
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.95,
+            "rule_id": "core.style_string.decoded_value.safe",
+            "metadata": {
+              "index_space": "source_literal",
+              "reason": "Both complete style string literals decode to the same plain string value.",
+              "equivalence_kind": "canonical_value_equivalence",
+              "old_label": "'line1 \\\n      line2'",
+              "new_label": "\"line1       line2\"",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                9,
+                30
+              ],
+              "new_span": [
+                9,
+                28
+              ],
+              "canonical_old": "string(line1       line2)",
+              "canonical_new": "string(line1       line2)"
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "source_literal",
+              "reason": "Both complete style string literals decode to the same plain string value.",
+              "equivalence_kind": "canonical_value_equivalence",
+              "old_label": "'line1 \\\n      line2'",
+              "new_label": "\"line1       line2\"",
+              "risk": "amber",
+              "language": "scss",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                9,
+                30
+              ],
+              "new_span": [
+                9,
+                28
+              ],
+              "canonical_old": "string(line1       line2)",
+              "canonical_new": "string(line1       line2)",
+              "rule_id": "core.style_string.decoded_value.safe"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.562084,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 439789,
+                "total_fuel_consumed": 439789,
+                "max_fuel_used_percent": 2.0589372659176033,
+                "input_bytes": 35,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "scss",
+                "filename": "assessment.scss",
+                "call_count": 1,
+                "elapsed_ms": 0.29942599999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 436449,
+                "total_fuel_consumed": 436449,
+                "max_fuel_used_percent": 2.0433005617977527,
+                "input_bytes": 33,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/scss_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "9f3b814c928929ca5ebc3c40134d2ad32c713d14fbbbe9fbe8be63573d7c7518",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 1
+                },
+                "structural_hash": "969ed300f4beae4f98bb2aa8733b712c4fd05844b270e36a78e991a38dd31bf8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 1
+                    },
+                    "structural_hash": "4d509a0477d634069c36436d62b11a9ce1e57396d66630975fa0c94984e7f237",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "scss",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "189d0d3da7d6337866625f06d46d0b8da6baf9dbc02eac60f170f1f86f481fe9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "62fd376e3df09cd31b6d2c42f8f7465cc98e30bb9efe6d843fb19d607fd687b4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 1
+                    },
+                    "structural_hash": "4d509a0477d634069c36436d62b11a9ce1e57396d66630975fa0c94984e7f237",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.94
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 19.704
+}

@@ -1,0 +1,2652 @@
+{
+  "language_id": "svelte",
+  "options": {
+    "language_hint": "svelte",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-svelte-script_value",
+      "language_id": "svelte",
+      "category": "meaningful_script_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1d1fc68d089cd2330e77d5acd53301d67c0011dac55f2cc0a656fff607921437",
+      "new_sha256": "4a84b25c8b6f8d8034cb2364145666eb738d59623aeca29ccd7bbb4b46369143",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update declaration_value('1') -> declaration_value('2')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 20,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "d3286a5f4147ecdf78159d687c11a0c4cdb544a4352ea231bee78e23ab8a3563",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 20,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "6c7047ac4ebf71aa454f3e0c7b98c9378849bbcea764f15774cb83d16f53c50a",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [
+              "2"
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.363715,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21880000,
+                "fuel_consumed": 218467,
+                "total_fuel_consumed": 218467,
+                "max_fuel_used_percent": 0.9984780621572212,
+                "input_bytes": 47,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.20478,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21880000,
+                "fuel_consumed": 217877,
+                "total_fuel_consumed": 217877,
+                "max_fuel_used_percent": 0.9957815356489945,
+                "input_bytes": 47,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5a4def13a37dcc8d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "fe6c1568667d017c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "count",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 21
+                    },
+                    "structural_hash": "19de2c2bbb0fdadfc823b957e925d44206c0f919d790fa479f1e5608a98570a3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 20,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "d3286a5f4147ecdf78159d687c11a0c4cdb544a4352ea231bee78e23ab8a3563",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "a0da181cceb8f9e9",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "count",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 9
+                    },
+                    "structural_hash": "1756249eca91f7a9cb7b308d51616d965df9858e1bb2f7e67fca9f58e61d6603",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "dab6d6e3f348bb30",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "fe6c1568667d019d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "count",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 21
+                    },
+                    "structural_hash": "19de2c2bbb0fdadfc823b957e925d44206c0f919d790fa479f1e5608a98570a3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 20,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "6c7047ac4ebf71aa454f3e0c7b98c9378849bbcea764f15774cb83d16f53c50a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "a0da181cceb8f9e9",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "count",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 9
+                    },
+                    "structural_hash": "1756249eca91f7a9cb7b308d51616d965df9858e1bb2f7e67fca9f58e61d6603",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 6107.81
+    },
+    {
+      "id": "web-svelte-text",
+      "language_id": "svelte",
+      "category": "meaningful_text",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c02e777315c8428068acc291927bb5e9cb0fb6ab42693a1ac9de022d3448d45c",
+      "new_sha256": "eaca21930ddb6042351319eb3d4fd1674a2c6f7ba102e4db60a02c92a551ff2a",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<p>Ready</p>\\n"
+            ],
+            "new_labels": [
+              "<p>Failed</p>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>Ready</p>\\n",
+              "new_label": "<p>Failed</p>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                13
+              ],
+              "new_span": [
+                0,
+                14
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>Ready</p>\\n",
+              "new_label": "<p>Failed</p>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                13
+              ],
+              "new_span": [
+                0,
+                14
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.262918,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20540000,
+                "fuel_consumed": 81412,
+                "total_fuel_consumed": 81412,
+                "max_fuel_used_percent": 0.3963583252190847,
+                "input_bytes": 13,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.17404399999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20540000,
+                "fuel_consumed": 80993,
+                "total_fuel_consumed": 80993,
+                "max_fuel_used_percent": 0.3943184031158715,
+                "input_bytes": 14,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "4e8067cfff4e54cf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "b473a76fc7647f1d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "249b94bde400bc56",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "42e696144f9718ed",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 53.128
+    },
+    {
+      "id": "web-svelte-head_script_src",
+      "language_id": "svelte",
+      "category": "meaningful_head_script_src",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3ff5a967eafae694564d2b12f50b0013c16b5aaed6e292885d59faf14c1ba8e3",
+      "new_sha256": "3626642777d7ead7b67b0c9e09a99f39ab7c8b3647e406e8a40868034ec0eee0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<script src=\"./safe.js\"></script>\\n"
+            ],
+            "new_labels": [
+              "<script src=\"./danger.js\"></script>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<script src=\"./safe.js\"></script>\\n",
+              "new_label": "<script src=\"./danger.js\"></script>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                14,
+                48
+              ],
+              "new_span": [
+                14,
+                50
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<script src=\"./safe.js\"></script>\\n",
+              "new_label": "<script src=\"./danger.js\"></script>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                14,
+                48
+              ],
+              "new_span": [
+                14,
+                50
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.270873,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23240000,
+                "fuel_consumed": 178233,
+                "total_fuel_consumed": 178233,
+                "max_fuel_used_percent": 0.7669234079173838,
+                "input_bytes": 80,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.333901,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23240000,
+                "fuel_consumed": 181833,
+                "total_fuel_consumed": 181833,
+                "max_fuel_used_percent": 0.7824139414802065,
+                "input_bytes": 82,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "46793512778d63cd",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "97bb603157aedf61",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "svelte:head",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "d946573e9682adcbb8d8d38069eefb30b421fa1fe9e9548f3390b373590e4c52",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3769ef0e245674c2c5d00131a9235c665366b259f3f330525b8043f9e48e03f3",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 33
+                },
+                "structural_hash": "0000000000001505",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "0f04a5ac3069e0ad",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "526caaa46d3e15a1",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "svelte:head",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "d946573e9682adcbb8d8d38069eefb30b421fa1fe9e9548f3390b373590e4c52",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3769ef0e245674c2c5d00131a9235c665366b259f3f330525b8043f9e48e03f3",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 35
+                },
+                "structural_hash": "0000000000001505",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 55.68
+    },
+    {
+      "id": "web-svelte-module_context",
+      "language_id": "svelte",
+      "category": "meaningful_module_context",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "026cc3ac2ded3eaae613c23f87d74b59da3d9cb0f7b152abb174ff400d2ddce5",
+      "new_sha256": "459d5005b5939779beae83c4da5a84358bb9fbb1dfb7ca7d5186a2377a97058e",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<script>console.log(1);</script>\\n"
+            ],
+            "new_labels": [
+              "<script module>console.log(1);</script>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<script>console.log(1);</script>\\n",
+              "new_label": "<script module>console.log(1);</script>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                33
+              ],
+              "new_span": [
+                0,
+                40
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<script>console.log(1);</script>\\n",
+              "new_label": "<script module>console.log(1);</script>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                33
+              ],
+              "new_span": [
+                0,
+                40
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.228123,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22140000,
+                "fuel_consumed": 128265,
+                "total_fuel_consumed": 128265,
+                "max_fuel_used_percent": 0.5793360433604337,
+                "input_bytes": 50,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.146512,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22140000,
+                "fuel_consumed": 133070,
+                "total_fuel_consumed": 133070,
+                "max_fuel_used_percent": 0.6010388437217706,
+                "input_bytes": 57,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "276946c58f6cd8e9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 32
+                },
+                "structural_hash": "25ea5e26fb383005",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "6e49ed44fac299e2",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3769ef0e245674c2c5d00131a9235c665366b259f3f330525b8043f9e48e03f3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "276946c58f6cd8e9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 39
+                },
+                "structural_hash": "25ea5e26fb383005",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "6e49ed44fac299e2",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3769ef0e245674c2c5d00131a9235c665366b259f3f330525b8043f9e48e03f3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 53.671
+    },
+    {
+      "id": "web-svelte-identity",
+      "language_id": "svelte",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "bbaa0d1555179a8a49641028b1af04f3793ac32653e041538efe3f5dffc7a0c8",
+      "new_sha256": "bbaa0d1555179a8a49641028b1af04f3793ac32653e041538efe3f5dffc7a0c8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.318903,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 222636,
+                "total_fuel_consumed": 222636,
+                "max_fuel_used_percent": 0.9992639138240574,
+                "input_bytes": 57,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.25564499999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 222046,
+                "total_fuel_consumed": 222046,
+                "max_fuel_used_percent": 0.9966157989228006,
+                "input_bytes": 57,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 39
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 22,
+                          "end_line": 0,
+                          "end_col": 29
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 39
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 22,
+                          "end_line": 0,
+                          "end_col": 29
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 56.412
+    },
+    {
+      "id": "web-svelte-preservation",
+      "language_id": "svelte",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "101471f083b1ddda19c9da809b6bba00c8edb2dbe8962bbd2e760755224d2478",
+      "new_sha256": "bbaa0d1555179a8a49641028b1af04f3793ac32653e041538efe3f5dffc7a0c8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update declaration_value('\\'Ready\\'') -> declaration_value('\"Ready\"')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "'Ready'",
+              "position": {
+                "start_line": 0,
+                "start_col": 22,
+                "end_line": 0,
+                "end_col": 29
+              },
+              "structural_hash": "97178a0fa9f45facd3ad2b9b61f46c5155c0237425367c34cbdaaed9c54baf80",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "\"Ready\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 22,
+                "end_line": 0,
+                "end_col": 29
+              },
+              "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+              "children": []
+            },
+            "text_diff": "'Ready' -> \"Ready\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "'Ready'"
+            ],
+            "new_labels": [
+              "\"Ready\""
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.403149,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 222472,
+                "total_fuel_consumed": 222472,
+                "max_fuel_used_percent": 0.9985278276481149,
+                "input_bytes": 57,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.228815,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 222046,
+                "total_fuel_consumed": 222046,
+                "max_fuel_used_percent": 0.9966157989228006,
+                "input_bytes": 57,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "301fb0bae5ac13a8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 39
+                },
+                "structural_hash": "052712df24a59129",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "'Ready'",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 22,
+                          "end_line": 0,
+                          "end_col": 29
+                        },
+                        "structural_hash": "97178a0fa9f45facd3ad2b9b61f46c5155c0237425367c34cbdaaed9c54baf80",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "script_block",
+                "label": "script",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 39
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 22,
+                          "end_line": 0,
+                          "end_col": 29
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 67.105
+    },
+    {
+      "id": "web-svelte-incomplete",
+      "language_id": "svelte",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fef7959faf5b3dc3e61d6f9379da78fb8dd367d6bb45ddf470fca33b6ede2482",
+      "new_sha256": "4b1b6616c6855aadc97eca667e2e2da6e2f7ff6f742dd1b4b9e5a8068e1beafd",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "literal enrich (old): literal enrich tree: missing field `id` at line 1 column 42"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 10.075
+    },
+    {
+      "id": "web-svelte-unicode",
+      "language_id": "svelte",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ae44ac0625d0fcaf275f4b5cc7b42386689308be80df2e7fe469a62b609f1243",
+      "new_sha256": "f907f3f5e8c053780a41a7d430e0e09ff4e87f9023ca50c0b25b7474ac7ceeb5",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<p>Café: 5 €</p>\\n"
+            ],
+            "new_labels": [
+              "<p>Café: 6 €</p>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>Café: 5 €</p>\\n",
+              "new_label": "<p>Café: 6 €</p>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                20
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>Café: 5 €</p>\\n",
+              "new_label": "<p>Café: 6 €</p>\\n",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                20
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.26120499999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20800000,
+                "fuel_consumed": 82907,
+                "total_fuel_consumed": 82907,
+                "max_fuel_used_percent": 0.39859134615384617,
+                "input_bytes": 20,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.14548,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20800000,
+                "fuel_consumed": 82317,
+                "total_fuel_consumed": 82317,
+                "max_fuel_used_percent": 0.39575480769230775,
+                "input_bytes": 20,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0edb3292d081270d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 19
+                },
+                "structural_hash": "479a70e76196859d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0edde85ddd5afd01",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 19
+                },
+                "structural_hash": "479a722ed612f69e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 54.15
+    },
+    {
+      "id": "web-svelte-external-static-class",
+      "language_id": "svelte",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724",
+      "new_sha256": "a939642a3f179c331d228026958f598d6f66c2fcaa50ecf73e97baf1ffe55c11",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update attribute('class=foo') -> attribute('class=bar')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "attribute",
+              "label": "class=foo",
+              "position": {
+                "start_line": 0,
+                "start_col": 5,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "d013d95b6586a429de4166b0bb1572990780c40ad0751dd226f2a3e2cbdafbf6",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "attribute",
+              "label": "class=bar",
+              "position": {
+                "start_line": 0,
+                "start_col": 5,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "e554230c2874acde8dd8d33014a6113cda0d325e14b6d28ff6bb5323165425f2",
+              "children": []
+            },
+            "text_diff": "class=foo -> class=bar"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "class=foo"
+            ],
+            "new_labels": [
+              "class=bar"
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.238604,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 135886,
+                "total_fuel_consumed": 135886,
+                "max_fuel_used_percent": 0.6495506692160612,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.208988,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 135296,
+                "total_fuel_consumed": 135296,
+                "max_fuel_used_percent": 0.6467304015296367,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 23
+            },
+            "structural_hash": "d9c1ff2559ee6775",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "657609c0f0c09253",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "28fce30da090e9344e4b8c44c5179f184e38d1e564f82692f4e8b6a35dcde5e2",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "class=foo",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 5,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "d013d95b6586a429de4166b0bb1572990780c40ad0751dd226f2a3e2cbdafbf6",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 23
+            },
+            "structural_hash": "318d558f24514532",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "655dfac9002f2084",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "31845e0e906ea10d21f8632c466e46ffabdec47ae374967580df90cec4cb378e",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "class=bar",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 5,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "e554230c2874acde8dd8d33014a6113cda0d325e14b6d28ff6bb5323165425f2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 53.275
+    },
+    {
+      "id": "web-svelte-external-static-quote-spelling",
+      "language_id": "svelte",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724",
+      "new_sha256": "50a80172d8509c452cdcf3c836f3cf461623d0957ff7ff07656e5165c8cbcb5a",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.svelte",
+        "new_filename": "assessment.svelte",
+        "language": "svelte",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<div class='foo'></div>"
+            ],
+            "new_labels": [
+              "<div class=\"foo\"></div>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<div class='foo'></div>",
+              "new_label": "<div class=\"foo\"></div>",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                23
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<div class='foo'></div>",
+              "new_label": "<div class=\"foo\"></div>",
+              "risk": "amber",
+              "language": "svelte",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                23
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.234205,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 135886,
+                "total_fuel_consumed": 135886,
+                "max_fuel_used_percent": 0.6495506692160612,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "svelte",
+                "filename": "assessment.svelte",
+                "call_count": 1,
+                "elapsed_ms": 0.195854,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 135290,
+                "total_fuel_consumed": 135290,
+                "max_fuel_used_percent": 0.6467017208413002,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/svelte_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 23
+            },
+            "structural_hash": "d9c1ff2559ee6775",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "657609c0f0c09253",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "28fce30da090e9344e4b8c44c5179f184e38d1e564f82692f4e8b6a35dcde5e2",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "class=foo",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 5,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "d013d95b6586a429de4166b0bb1572990780c40ad0751dd226f2a3e2cbdafbf6",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "svelte",
+          "tree": {
+            "id": "0",
+            "node_type": "svelte_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 23
+            },
+            "structural_hash": "10289a60e5b8e028",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "61f43aab5eb69709",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "div",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "28fce30da090e9344e4b8c44c5179f184e38d1e564f82692f4e8b6a35dcde5e2",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "class=foo",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 5,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "d013d95b6586a429de4166b0bb1572990780c40ad0751dd226f2a3e2cbdafbf6",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 54.912
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 7.255
+}

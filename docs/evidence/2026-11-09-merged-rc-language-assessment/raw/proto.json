@@ -1,0 +1,4673 @@
+{
+  "language_id": "proto",
+  "options": {
+    "language_hint": "proto",
+    "strict_plugins": true
+  },
+  "completed_count": 7,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.proto.meaningful_1_value",
+      "language_id": "proto",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "4072f45de0afc6581fe56efba6a5e6f7e696c9741deaea857fec035463a5de6c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update field_number('7') -> field_number('8')",
+            "old_node": {
+              "id": "0.2.1.2.2",
+              "node_type": "field_number",
+              "label": "7",
+              "position": {
+                "start_line": 7,
+                "start_col": 17,
+                "end_line": 7,
+                "end_col": 18
+              },
+              "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.1.2.2",
+              "node_type": "field_number",
+              "label": "8",
+              "position": {
+                "start_line": 7,
+                "start_col": 17,
+                "end_line": 7,
+                "end_col": 18
+              },
+              "structural_hash": "88472e74899b41bd668e967f0581907ee9c0bbc3b530b62a3467a506e8092604",
+              "children": []
+            },
+            "text_diff": "7 -> 8"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Invoice",
+              "7"
+            ],
+            "new_labels": [
+              "Invoice",
+              "8"
+            ],
+            "old_node_ids": [
+              "0.2.1.2.2"
+            ],
+            "new_node_ids": [
+              "0.2.1.2.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.2",
+              "old_entity_node_id": "0.2",
+              "new_entity_node_id": "0.2",
+              "old_entity_label": "Invoice",
+              "new_entity_label": "Invoice",
+              "entity_type": "message"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.312759,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30920000,
+                "fuel_consumed": 2948873,
+                "total_fuel_consumed": 2948873,
+                "max_fuel_used_percent": 9.537105433376455,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 0.997593,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30920000,
+                "fuel_consumed": 2949334,
+                "total_fuel_consumed": 2949334,
+                "max_fuel_used_percent": 9.53859637774903,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "07ee7ae2b7b5d3905cd6a7761845fb04ca7092e988a5a1892283878a39e5506e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "addeb5c1daa377aed66b94a7c3359467f60258ac0fd6d7a03be582ba8890f3ef",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "cda0cc0252472cf93e024047f8811285a88ebc3958cba96ef4aeb8f9e741e30c",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "49c833269bfff5c6f0b73df665cbaf4262bcfe49364060c8c03187be9276d2e6",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "8",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "88472e74899b41bd668e967f0581907ee9c0bbc3b530b62a3467a506e8092604",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 16925.425
+    },
+    {
+      "id": "data_config.proto.meaningful_2_type",
+      "language_id": "proto",
+      "category": "type",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "aaee1afa95ae23aaba8913ea62b36db6266ce3ecf04865a7b09b86d41432af23",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update type('int64') -> type('string')",
+            "old_node": {
+              "id": "0.2.1.1.0",
+              "node_type": "type",
+              "label": "int64",
+              "position": {
+                "start_line": 6,
+                "start_col": 2,
+                "end_line": 6,
+                "end_col": 7
+              },
+              "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.1.1.0",
+              "node_type": "type",
+              "label": "string",
+              "position": {
+                "start_line": 6,
+                "start_col": 2,
+                "end_line": 6,
+                "end_col": 8
+              },
+              "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+              "children": []
+            },
+            "text_diff": "int64 -> string"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Invoice",
+              "int64"
+            ],
+            "new_labels": [
+              "Invoice",
+              "string"
+            ],
+            "old_node_ids": [
+              "0.2.1.1.0"
+            ],
+            "new_node_ids": [
+              "0.2.1.1.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.2",
+              "old_entity_node_id": "0.2",
+              "new_entity_node_id": "0.2",
+              "old_entity_label": "Invoice",
+              "new_entity_label": "Invoice",
+              "entity_type": "message"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.317978,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30940000,
+                "fuel_consumed": 2949164,
+                "total_fuel_consumed": 2949164,
+                "max_fuel_used_percent": 9.531881060116355,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 0.9768839999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30940000,
+                "fuel_consumed": 2948712,
+                "total_fuel_consumed": 2948712,
+                "max_fuel_used_percent": 9.530420168067227,
+                "input_bytes": 274,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "ce5fb1635e548f8f5715856fa78c8d4ee81795f6133aa8d43d6657d3240700c9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "48305c5a2d4ce64e6a87c624cf7c9496ea8bab20c0577709f86efc6a9820f832",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "9bf56281e51be6690813d933d59509be9e590bc6f88677634376c29386fbc67f",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "68b61324c5a240407f89a6a68848c54451370bbf078c0f992f4b1a03dd628e96",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 23,
+                              "end_line": 6,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 108.904
+    },
+    {
+      "id": "data_config.proto.meaningful_3_body",
+      "language_id": "proto",
+      "category": "body",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "c2fb349e4018d4318204158b96be1300b77945d0c59b566a9f62eb2e713271a9",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update message_or_enum_type('Invoice') -> message_or_enum_type('Customer')",
+            "old_node": {
+              "id": "0.4.1.2",
+              "node_type": "message_or_enum_type",
+              "label": "Invoice",
+              "position": {
+                "start_line": 16,
+                "start_col": 37,
+                "end_line": 16,
+                "end_col": 44
+              },
+              "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.4.1.2",
+              "node_type": "message_or_enum_type",
+              "label": "Customer",
+              "position": {
+                "start_line": 16,
+                "start_col": 37,
+                "end_line": 16,
+                "end_col": 45
+              },
+              "structural_hash": "d1f812b220964dcf6d67c0247a639702584af5c8f091c3ea1e8de0ee158d6bb1",
+              "children": []
+            },
+            "text_diff": "Invoice -> Customer"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Invoice"
+            ],
+            "new_labels": [
+              "Customer"
+            ],
+            "old_node_ids": [
+              "0.4.1.2"
+            ],
+            "new_node_ids": [
+              "0.4.1.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 4.19974,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30940000,
+                "fuel_consumed": 2947693,
+                "total_fuel_consumed": 2947693,
+                "max_fuel_used_percent": 9.527126696832578,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.022409,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30940000,
+                "fuel_consumed": 2947441,
+                "total_fuel_consumed": 2947441,
+                "max_fuel_used_percent": 9.52631221719457,
+                "input_bytes": 274,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "e2496a332035e1ad79ae37dadb9f7b33b2c28d3214a8823342fa622aabde74d3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "911f749e2bb492a44e4efe8d20be28ed492c6ec1aa0a95058565064b81cc906b",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 47
+                    },
+                    "structural_hash": "d06d447aa6c29ae312d93f8c4cf399f7ca62eb95fefb9a0272c2dafc14000459",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Customer",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 45
+                        },
+                        "structural_hash": "d1f812b220964dcf6d67c0247a639702584af5c8f091c3ea1e8de0ee158d6bb1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 219.529
+    },
+    {
+      "id": "data_config.proto.identity",
+      "language_id": "proto",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.579534,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30920000,
+                "fuel_consumed": 2948573,
+                "total_fuel_consumed": 2948573,
+                "max_fuel_used_percent": 9.536135187580854,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.112907,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30920000,
+                "fuel_consumed": 2948414,
+                "total_fuel_consumed": 2948414,
+                "max_fuel_used_percent": 9.535620957309185,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 93.713
+    },
+    {
+      "id": "data_config.proto.safe_preservation",
+      "language_id": "proto",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "9da2ab25e80e04d2e7f509430a904da2677ef24672a78a2d77b0417d1364cfab",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// ordinary assessment comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "proto",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "proto",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.261272,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 31540000,
+                "fuel_consumed": 2947907,
+                "total_fuel_consumed": 2947907,
+                "max_fuel_used_percent": 9.346566265060241,
+                "input_bytes": 273,
+                "input_lines": 18,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 1.136811,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 31540000,
+                "fuel_consumed": 3004455,
+                "total_fuel_consumed": 3004455,
+                "max_fuel_used_percent": 9.525856055802157,
+                "input_bytes": 304,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "6ee67bc6620edfca2d543cbb44c8586d941b6ff803c7b1ef19b89f3e8e0802d2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 16,
+                      "end_line": 8,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 2,
+                              "end_line": 5,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 21,
+                              "end_line": 5,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.2.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 22,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.2.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 17,
+                              "end_line": 7,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 17,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 2,
+                              "end_line": 11,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 24,
+                              "end_line": 11,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 23,
+                              "end_line": 12,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 19,
+                          "end_line": 16,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 37,
+                          "end_line": 16,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 19,
+              "end_col": 0
+            },
+            "structural_hash": "720f7de249b5b4f07879443e79a9690923e9209931e1edd503a3a30ca2d93b5b",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "package",
+                "label": "billing",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 19
+                },
+                "structural_hash": "a08227ae75220285f4b370e7b25b08d1a26b6d9afd1b9fa2502385dad540fdd9",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "message",
+                "label": "Invoice",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 1
+                },
+                "structural_hash": "35492447a2d2fd5886f1db22e372f7a3da546036a71238b93c7e248d72d76d93",
+                "children": [
+                  {
+                    "id": "0.3.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 16,
+                      "end_line": 9,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7dddd28646c47a34f745871136df6cede0f323f00c0262eae396d75bc9275003",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "field",
+                        "label": "reference",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 23
+                        },
+                        "structural_hash": "a808415b0bce11610b0c1acfe03cebcfb5a2318617454788008afe40f8518d66",
+                        "children": [
+                          {
+                            "id": "0.3.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 2,
+                              "end_line": 6,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 21,
+                              "end_line": 6,
+                              "end_col": 22
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "field",
+                        "label": "total_cents",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 24
+                        },
+                        "structural_hash": "89dc331b4d0963a153c7a299347e427eb34e80dd043465f1a49198522fd4ef50",
+                        "children": [
+                          {
+                            "id": "0.3.1.1.0",
+                            "node_type": "type",
+                            "label": "int64",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 2,
+                              "end_line": 7,
+                              "end_col": 7
+                            },
+                            "structural_hash": "c1c29f3cd64c6d2e2cd3aa748814276ff01a1baa57d67cf64d6525786a027d1a",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 7,
+                              "start_col": 22,
+                              "end_line": 7,
+                              "end_col": 23
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.3.1.2",
+                        "node_type": "field",
+                        "label": "settled",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 8,
+                          "end_col": 19
+                        },
+                        "structural_hash": "6cb36f03b80580e79e4d829b0d2a35c8f5a3da15801220d56e7b2e696a581a89",
+                        "children": [
+                          {
+                            "id": "0.3.1.2.0",
+                            "node_type": "type",
+                            "label": "bool",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 2,
+                              "end_line": 8,
+                              "end_col": 6
+                            },
+                            "structural_hash": "7a0942dcc8a7f89ef963f1e6ad4276b544e95ec30dd8919fe916865df902e253",
+                            "children": []
+                          },
+                          {
+                            "id": "0.3.1.2.2",
+                            "node_type": "field_number",
+                            "label": "7",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 17,
+                              "end_line": 8,
+                              "end_col": 18
+                            },
+                            "structural_hash": "2363f145de82ca8508e60256a1a8513841779b16c5ca45ec2ee4aef475c8e2ee",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "message",
+                "label": "Customer",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 1
+                },
+                "structural_hash": "447f41393811b90d17dacd9fafd916c45498886e0d8603f80768b9d2abeff978",
+                "children": [
+                  {
+                    "id": "0.4.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 17,
+                      "end_line": 14,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f9b3f8fb59095efd05cc63d14f6c7d1acfc2f4314fb51ff53a15f38cfcbc9ab4",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "field",
+                        "label": "display_name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 26
+                        },
+                        "structural_hash": "90885f6dbefe9f3fde47f8cdfd624d28e9b559113e81c785190f552fb8f5bd0a",
+                        "children": [
+                          {
+                            "id": "0.4.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 2,
+                              "end_line": 12,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.4.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 12,
+                              "start_col": 24,
+                              "end_line": 12,
+                              "end_col": 25
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.4.1.1",
+                        "node_type": "field",
+                        "label": "region_code",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 2,
+                          "end_line": 13,
+                          "end_col": 25
+                        },
+                        "structural_hash": "eb2a25071691d94590170d43f829f8a7cdf7089eec3f4bafe673080774eed493",
+                        "children": [
+                          {
+                            "id": "0.4.1.1.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 13,
+                              "start_col": 2,
+                              "end_line": 13,
+                              "end_col": 8
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.4.1.1.2",
+                            "node_type": "field_number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 13,
+                              "start_col": 23,
+                              "end_line": 13,
+                              "end_col": 24
+                            },
+                            "structural_hash": "c6551e830df60a0eab8cf73fd573da58a655fa3f05d4621b3193f9c8061c7f2c",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "service",
+                "label": "Billing",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 1
+                },
+                "structural_hash": "abec2b1078261e260b106c9e7f7ef5c7d3e936a5f9698a94154927ffc8ea2bd9",
+                "children": [
+                  {
+                    "id": "0.5.1",
+                    "node_type": "rpc",
+                    "label": "FetchInvoice",
+                    "position": {
+                      "start_line": 17,
+                      "start_col": 2,
+                      "end_line": 17,
+                      "end_col": 46
+                    },
+                    "structural_hash": "aef5b028b4a7ad0fa7dda27495ab2fa0df95f991c3fd964b73fca49d5f8776ec",
+                    "children": [
+                      {
+                        "id": "0.5.1.1",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 17,
+                          "start_col": 19,
+                          "end_line": 17,
+                          "end_col": 26
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.5.1.2",
+                        "node_type": "message_or_enum_type",
+                        "label": "Invoice",
+                        "position": {
+                          "start_line": 17,
+                          "start_col": 37,
+                          "end_line": 17,
+                          "end_col": 44
+                        },
+                        "structural_hash": "5b6c715187314fb195ad1d5ae4412580745c2592e5be3f0cd35d67ae2c6f229e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 97.383
+    },
+    {
+      "id": "data_config.proto.incomplete",
+      "language_id": "proto",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "112c215105c7ffacfba1c86a932d48a3a5be589713ea64a5bd8b4144d8f6267e",
+      "new_sha256": "04666aace7bb373c623b73ec3156d6369d5a3565d1fc9b8c9c7142f3d6f09ed6",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "playground.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation",
+        "fallback_code": "native_parse_incomplete"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 22.324
+    },
+    {
+      "id": "data_config.proto.unicode_value",
+      "language_id": "proto",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "27b47fabafcf4b5ecd0350520d1c506fc6f9c7161b633be80f02f239846c983b",
+      "new_sha256": "6f4a87108791f1d2130c07a00d17ba3a5073b684979c6969414b1e3213a20c13",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.proto",
+        "new_filename": "playground.proto",
+        "language": "proto",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Parser payload changed in option(\"option\"); source evidence retained",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "option",
+              "label": "option",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 35
+              },
+              "structural_hash": "0af4322998e4e30c437d7fbf09b1327f63c2af565a983844d985dcc58d91954b",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "option",
+              "label": "option",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 35
+              },
+              "structural_hash": "29f88564ef2ff6cab6ec11b714ce10b628d2a99c95e38eba05dd0876a5ab6465",
+              "children": []
+            },
+            "text_diff": "option java_package = \"example.λ\"; -> option java_package = \"example.μ\";"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "option"
+            ],
+            "new_labels": [
+              "option"
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 0.713995,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23600000,
+                "fuel_consumed": 909393,
+                "total_fuel_consumed": 909393,
+                "max_fuel_used_percent": 3.853360169491525,
+                "input_bytes": 90,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "proto",
+                "filename": "playground.proto",
+                "call_count": 1,
+                "elapsed_ms": 0.46420100000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23600000,
+                "fuel_consumed": 909801,
+                "total_fuel_consumed": 909801,
+                "max_fuel_used_percent": 3.8550889830508472,
+                "input_bytes": 90,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/proto_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "6e0d343a9a04dab512225ba2cbb1cbbf40e362b734b6aabfc57141a1632508ef",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "option",
+                "label": "option",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 35
+                },
+                "structural_hash": "0af4322998e4e30c437d7fbf09b1327f63c2af565a983844d985dcc58d91954b",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Label",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 34
+                },
+                "structural_hash": "bc3b52caaecdae41dcdb89e303625e8a3ad0d48f7b4034c56d0e57a57483c3a4",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 14,
+                      "end_line": 2,
+                      "end_col": 34
+                    },
+                    "structural_hash": "094797ae00bb4208af32739a8ff6c97bfbb3d794662645ad3a2b5c031833f867",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "name",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 16,
+                          "end_line": 2,
+                          "end_col": 32
+                        },
+                        "structural_hash": "7518d5f371aebb31b851ee538ed08008161df7e4bcfb46e3e578b5791d8a252e",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 16,
+                              "end_line": 2,
+                              "end_col": 22
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 30,
+                              "end_line": 2,
+                              "end_col": 31
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "proto",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "e031121d6a09cd436cd9d59aec1b4fd3c8ba0b4f4c387bd05f0f9f65ef995ba5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "syntax",
+                "label": "syntax = \"proto3\";",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "407c598c51b06772d74369f17d57827051b91a0438b2f545467d4460e3e04871",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "option",
+                "label": "option",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 35
+                },
+                "structural_hash": "29f88564ef2ff6cab6ec11b714ce10b628d2a99c95e38eba05dd0876a5ab6465",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "message",
+                "label": "Label",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 34
+                },
+                "structural_hash": "bc3b52caaecdae41dcdb89e303625e8a3ad0d48f7b4034c56d0e57a57483c3a4",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "message_body",
+                    "label": "message_body",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 14,
+                      "end_line": 2,
+                      "end_col": 34
+                    },
+                    "structural_hash": "094797ae00bb4208af32739a8ff6c97bfbb3d794662645ad3a2b5c031833f867",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "field",
+                        "label": "name",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 16,
+                          "end_line": 2,
+                          "end_col": 32
+                        },
+                        "structural_hash": "7518d5f371aebb31b851ee538ed08008161df7e4bcfb46e3e578b5791d8a252e",
+                        "children": [
+                          {
+                            "id": "0.2.1.0.0",
+                            "node_type": "type",
+                            "label": "string",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 16,
+                              "end_line": 2,
+                              "end_col": 22
+                            },
+                            "structural_hash": "712031fd07530bfdbbee8b22070818680f76ffb1aed376c54adb1757d087bd5b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.2.1.0.2",
+                            "node_type": "field_number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 30,
+                              "end_line": 2,
+                              "end_col": 31
+                            },
+                            "structural_hash": "6238a66af60d0942c57a64c0005d7d96ad10fe91ed58af9c35a732ad4f4ab18a",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 73.878
+    }
+  ],
+  "attempted_count": 7,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 18.483
+}

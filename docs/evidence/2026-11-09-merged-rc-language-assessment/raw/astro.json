@@ -1,0 +1,3014 @@
+{
+  "language_id": "astro",
+  "options": {
+    "language_hint": "astro",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-astro-frontmatter_value",
+      "language_id": "astro",
+      "category": "meaningful_frontmatter_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "293b9019d1b94686994c576cd927b7eaf61444b314b936e9cb1f2d295dd63a5d",
+      "new_sha256": "2a782187417be53dda083a0a08db7840f675e9f0c7cfb07fd2476cbd898dca19",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update declaration_value('\"Old\"') -> declaration_value('\"New\"')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "\"Old\"",
+              "position": {
+                "start_line": 1,
+                "start_col": 14,
+                "end_line": 1,
+                "end_col": 19
+              },
+              "structural_hash": "fabd7e51a02d1b4592f5b5e7b07d58b1e0c99a896dcdec31e1357dba57983026",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "\"New\"",
+              "position": {
+                "start_line": 1,
+                "start_col": 14,
+                "end_line": 1,
+                "end_col": 19
+              },
+              "structural_hash": "63b3a0e6fcef0df394d15fe5a0f4e8435518d48c6ec5340f2e1350eec91deaa5",
+              "children": []
+            },
+            "text_diff": "\"Old\" -> \"New\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"Old\""
+            ],
+            "new_labels": [
+              "\"New\""
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.37321400000000005,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21840000,
+                "fuel_consumed": 200161,
+                "total_fuel_consumed": 200161,
+                "max_fuel_used_percent": 0.9164880952380952,
+                "input_bytes": 46,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.221762,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21840000,
+                "fuel_consumed": 199571,
+                "total_fuel_consumed": 199571,
+                "max_fuel_used_percent": 0.9137866300366301,
+                "input_bytes": 46,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "abdff44dfd898dff",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "660752c3be572c29",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Old\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 19
+                        },
+                        "structural_hash": "fabd7e51a02d1b4592f5b5e7b07d58b1e0c99a896dcdec31e1357dba57983026",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "80d885e71bf88aec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "660752c3be418dd4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"New\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 19
+                        },
+                        "structural_hash": "63b3a0e6fcef0df394d15fe5a0f4e8435518d48c6ec5340f2e1350eec91deaa5",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1.1: child outside parent range",
+        "old: 0.1.0: child outside parent range",
+        "old: 0.0.0.0: child outside parent range",
+        "new: 0.1.1: child outside parent range",
+        "new: 0.1.0: child outside parent range",
+        "new: 0.0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 5942.037
+    },
+    {
+      "id": "web-astro-attribute",
+      "language_id": "astro",
+      "category": "meaningful_attribute",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "bb874c3b4093d10bfeaa79e3bc64d408e30a1027f0aae56efab0d2712d07ffda",
+      "new_sha256": "8aab683cd9fe532d51a8bbaae886d33cbbf09e2c945b1f02578f55213b4b4722",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update attribute('type=button') -> attribute('type=submit')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "attribute",
+              "label": "type=button",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "145a2f202868d4649909e68c4e2d0eb237d30485a59ea9236a5003956aab3ebc",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "attribute",
+              "label": "type=submit",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "95c72b6f5800cd8e7adb1e2608380a5e12a0425e2abe090447c81e73d4a5a0ef",
+              "children": []
+            },
+            "text_diff": "type=button -> type=submit"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "type=button"
+            ],
+            "new_labels": [
+              "type=submit"
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.214558,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 131536,
+                "total_fuel_consumed": 131536,
+                "max_fuel_used_percent": 0.6158052434456929,
+                "input_bytes": 34,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.156761,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 130946,
+                "total_fuel_consumed": 130946,
+                "max_fuel_used_percent": 0.6130430711610487,
+                "input_bytes": 34,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "61bfa7d5cf850262",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "fc8b17ff7038bfff",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "246cb7bc4d3d1255a4e71123b82d348e4b3dbd8a6ca3d5b6da1750722fb252ec",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "type=button",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "145a2f202868d4649909e68c4e2d0eb237d30485a59ea9236a5003956aab3ebc",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "56c03194d7e6c2e8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "59d2937fc7bcef57",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "ff12382e7ef09cb78ebe70f9f7c15036c7cc93d96c4a9acc30bbb2586dbc62c5",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "attribute",
+                        "label": "type=submit",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "95c72b6f5800cd8e7adb1e2608380a5e12a0425e2abe090447c81e73d4a5a0ef",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.0: child outside parent range",
+        "new: 0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 46.012
+    },
+    {
+      "id": "web-astro-child_text",
+      "language_id": "astro",
+      "category": "meaningful_child_text",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "06174b950165260601a41af0c0631a0e069d0df0807e0e6ebd1cc24408c85bf4",
+      "new_sha256": "fea84176aaa1def508f4a2c04b17efa9f2edfebbd5e7a106c99ade57a0858fa1",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<main><p>Ready</p></main>\\n"
+            ],
+            "new_labels": [
+              "<main><p>Failed</p></main>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<main><p>Ready</p></main>\\n",
+              "new_label": "<main><p>Failed</p></main>\\n",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                26
+              ],
+              "new_span": [
+                0,
+                27
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<main><p>Ready</p></main>\\n",
+              "new_label": "<main><p>Failed</p></main>\\n",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                26
+              ],
+              "new_span": [
+                0,
+                27
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.194391,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21060000,
+                "fuel_consumed": 114079,
+                "total_fuel_consumed": 114079,
+                "max_fuel_used_percent": 0.5416856600189933,
+                "input_bytes": 26,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.115645,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21060000,
+                "fuel_consumed": 113721,
+                "total_fuel_consumed": 113721,
+                "max_fuel_used_percent": 0.5399857549857551,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "c64b80e0a6af80b6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "8a758aa1c8dae534",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "main",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 6
+                    },
+                    "structural_hash": "319a5843a2063b6e81e8cf536a1d36857534fabcb303b279ceea85c3a74c9317",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "ae66865d11e975c8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "d9ec27967a8346e4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "main",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 6
+                    },
+                    "structural_hash": "319a5843a2063b6e81e8cf536a1d36857534fabcb303b279ceea85c3a74c9317",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.1: child outside parent range",
+        "old: 0.0.0: child outside parent range",
+        "new: 0.0.1: child outside parent range",
+        "new: 0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 44.743
+    },
+    {
+      "id": "web-astro-expression",
+      "language_id": "astro",
+      "category": "meaningful_expression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e3747a9912e2d09d8a41adeb78a68c595470aedf60fce8b5852012ed2781612b",
+      "new_sha256": "c8896ca74a13b9cbd492fe5d8ae608991ba270aa0d63c2c037f5cffbb42eb8e6",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update interpolation('count + 1') -> interpolation('count - 1')",
+            "old_node": {
+              "id": "0.1.1",
+              "node_type": "interpolation",
+              "label": "count + 1",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 13
+              },
+              "structural_hash": "a212ce50eff13992918b320edca638a5721ca98b9f7d8d47d1947d0d07c4ceac",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.1",
+              "node_type": "interpolation",
+              "label": "count - 1",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 13
+              },
+              "structural_hash": "3329a550863c9a453a02cd293afac6b5335c3b442000ca392f56b5b938509603",
+              "children": []
+            },
+            "text_diff": "count + 1 -> count - 1"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "count + 1"
+            ],
+            "new_labels": [
+              "count - 1"
+            ],
+            "old_node_ids": [
+              "0.1.1"
+            ],
+            "new_node_ids": [
+              "0.1.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.26022300000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 200200,
+                "total_fuel_consumed": 200200,
+                "max_fuel_used_percent": 0.9200367647058825,
+                "input_bytes": 44,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.24256,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 199610,
+                "total_fuel_consumed": 199610,
+                "max_fuel_used_percent": 0.9173253676470589,
+                "input_bytes": 44,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "9d96735349e587a2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "e51a67cc6a1bbbdf",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "count",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "19de2c2bbb0fdadfc823b957e925d44206c0f919d790fa479f1e5608a98570a3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "2",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 15
+                        },
+                        "structural_hash": "6c7047ac4ebf71aa454f3e0c7b98c9378849bbcea764f15774cb83d16f53c50a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "322eeb440268cc45",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "count + 1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "a212ce50eff13992918b320edca638a5721ca98b9f7d8d47d1947d0d07c4ceac",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "9d96a3723b498388",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "e51a67cc6a1bbbdf",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "count",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "19de2c2bbb0fdadfc823b957e925d44206c0f919d790fa479f1e5608a98570a3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "2",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 15
+                        },
+                        "structural_hash": "6c7047ac4ebf71aa454f3e0c7b98c9378849bbcea764f15774cb83d16f53c50a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "322eeb57daec7607",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "count - 1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3329a550863c9a453a02cd293afac6b5335c3b442000ca392f56b5b938509603",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1.1: child outside parent range",
+        "old: 0.1.0: child outside parent range",
+        "old: 0.0.0.0: child outside parent range",
+        "new: 0.1.1: child outside parent range",
+        "new: 0.1.0: child outside parent range",
+        "new: 0.0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 53.837
+    },
+    {
+      "id": "web-astro-identity",
+      "language_id": "astro",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "57408dd1c3156299fa4efd496854e6e75da0554826b43e5c8c6b001cf5c9909c",
+      "new_sha256": "57408dd1c3156299fa4efd496854e6e75da0554826b43e5c8c6b001cf5c9909c",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.267617,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21920000,
+                "fuel_consumed": 200660,
+                "total_fuel_consumed": 200660,
+                "max_fuel_used_percent": 0.915419708029197,
+                "input_bytes": 48,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.166469,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21920000,
+                "fuel_consumed": 200070,
+                "total_fuel_consumed": 200070,
+                "max_fuel_used_percent": 0.9127281021897811,
+                "input_bytes": 48,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1.1: child outside parent range",
+        "old: 0.1.0: child outside parent range",
+        "old: 0.0.0.0: child outside parent range",
+        "new: 0.1.1: child outside parent range",
+        "new: 0.1.0: child outside parent range",
+        "new: 0.0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.216
+    },
+    {
+      "id": "web-astro-preservation",
+      "language_id": "astro",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e532ac0e874199dceb4be585725999882ab5bfc3e526e0d407261b0ae57478ca",
+      "new_sha256": "57408dd1c3156299fa4efd496854e6e75da0554826b43e5c8c6b001cf5c9909c",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update declaration_value('\\'Ready\\'') -> declaration_value('\"Ready\"')",
+            "old_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "'Ready'",
+              "position": {
+                "start_line": 1,
+                "start_col": 14,
+                "end_line": 1,
+                "end_col": 21
+              },
+              "structural_hash": "97178a0fa9f45facd3ad2b9b61f46c5155c0237425367c34cbdaaed9c54baf80",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.0",
+              "node_type": "declaration_value",
+              "label": "\"Ready\"",
+              "position": {
+                "start_line": 1,
+                "start_col": 14,
+                "end_line": 1,
+                "end_col": 21
+              },
+              "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+              "children": []
+            },
+            "text_diff": "'Ready' -> \"Ready\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "'Ready'"
+            ],
+            "new_labels": [
+              "\"Ready\""
+            ],
+            "old_node_ids": [
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.317209,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21920000,
+                "fuel_consumed": 200496,
+                "total_fuel_consumed": 200496,
+                "max_fuel_used_percent": 0.9146715328467152,
+                "input_bytes": 48,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.191405,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21920000,
+                "fuel_consumed": 200070,
+                "total_fuel_consumed": 200070,
+                "max_fuel_used_percent": 0.9127281021897811,
+                "input_bytes": 48,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "301fb0bae5ac13a8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "052712df24a59129",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "'Ready'",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "97178a0fa9f45facd3ad2b9b61f46c5155c0237425367c34cbdaaed9c54baf80",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "3f2d4c46befcccbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "052712ad875c681f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"Ready\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "c5d3d8a9e8fe95b2309525e5fbf0b38ffc6fdb8f5ec7e6efd7e216f929f66f2b",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "4d84692815aae7f4",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "h1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 4
+                    },
+                    "structural_hash": "842d4186e021d79cca969d6dabd45df4b63fcd441c94b67aa8a1ea0612b2feba",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "interpolation",
+                    "label": "title",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 10
+                    },
+                    "structural_hash": "403ca70df8d4726bf208cc06515ed6dd37dd6cc334fcf1f2c7db71efb1611b68",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1.1: child outside parent range",
+        "old: 0.1.0: child outside parent range",
+        "old: 0.0.0.0: child outside parent range",
+        "new: 0.1.1: child outside parent range",
+        "new: 0.1.0: child outside parent range",
+        "new: 0.0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 64.819
+    },
+    {
+      "id": "web-astro-incomplete",
+      "language_id": "astro",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "9aa7adb910e7e1b89628f0c7efc26f95717460ee9748a794b8b8427dce621b5b",
+      "new_sha256": "1e4a334e0512cce1812a8204e64c415db1051c9f5732d64ec45825522609370c",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "REFACTORING",
+            "confidence": 1.0,
+            "description": "Rename variable_declaration('title') -> ('name')",
+            "old_node": {
+              "id": "0.0.0",
+              "node_type": "variable_declaration",
+              "label": "title",
+              "position": {
+                "start_line": 1,
+                "start_col": 6,
+                "end_line": 1,
+                "end_col": 11
+              },
+              "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+              "children": [
+                {
+                  "id": "0.0.0.0",
+                  "node_type": "declaration_value",
+                  "label": "\"",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 14,
+                    "end_line": 1,
+                    "end_col": 15
+                  },
+                  "structural_hash": "bdca83837c5ba617e4b7d8f1dfd66b5245ee0513fff4ffd04dca501fd4b01f49",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.0",
+              "node_type": "variable_declaration",
+              "label": "name",
+              "position": {
+                "start_line": 1,
+                "start_col": 6,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "3a438aa587182d4bfb580b83abf86474795eda5bda2f47f0238f3b933a501dc4",
+              "children": [
+                {
+                  "id": "0.0.0.0",
+                  "node_type": "declaration_value",
+                  "label": "\"",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 13,
+                    "end_line": 1,
+                    "end_col": 14
+                  },
+                  "structural_hash": "bdca83837c5ba617e4b7d8f1dfd66b5245ee0513fff4ffd04dca501fd4b01f49",
+                  "children": []
+                }
+              ]
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [
+              "title",
+              "\""
+            ],
+            "new_labels": [
+              "name",
+              "\""
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.82,
+            "rule_id": "presentation.compact_superseded_meaningful_group",
+            "metadata": {
+              "reason": "refactoring_groups_replace_lower_level_meaningful_changes",
+              "suppressed_count": 1
+            }
+          },
+          {
+            "kind": "REFACTORING",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "title",
+              "\""
+            ],
+            "new_labels": [
+              "name",
+              "\""
+            ],
+            "old_node_ids": [
+              "0.0.0",
+              "0.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0",
+              "0.0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_refactoring_group",
+            "metadata": {
+              "index_space": "final_changes"
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.31925299999999995,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 110837,
+                "total_fuel_consumed": 110837,
+                "max_fuel_used_percent": 0.5344117647058824,
+                "input_bytes": 19,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.154317,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 109956,
+                "total_fuel_consumed": 109956,
+                "max_fuel_used_percent": 0.5301639344262296,
+                "input_bytes": 18,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "f829e1c9473aafdc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "c1311ed6df1a35fe",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "title",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8ec0c52f20ab7e81523b7ac402927571d8beae25eda11f79029cfa7d3ef60ba9",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 14,
+                          "end_line": 1,
+                          "end_col": 15
+                        },
+                        "structural_hash": "bdca83837c5ba617e4b7d8f1dfd66b5245ee0513fff4ffd04dca501fd4b01f49",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "81eb98d3d75b0664",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "frontmatter_block",
+                "label": "frontmatter",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "4bac277aed27e09d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declaration",
+                    "label": "name",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "3a438aa587182d4bfb580b83abf86474795eda5bda2f47f0238f3b933a501dc4",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "declaration_value",
+                        "label": "\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 13,
+                          "end_line": 1,
+                          "end_col": 14
+                        },
+                        "structural_hash": "bdca83837c5ba617e4b7d8f1dfd66b5245ee0513fff4ffd04dca501fd4b01f49",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.0: child outside parent range",
+        "old: 0.0.0.0: child outside parent range",
+        "new: 0.0.0: child outside parent range",
+        "new: 0.0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 69.646
+    },
+    {
+      "id": "web-astro-unicode",
+      "language_id": "astro",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5089ee95567864282e4c096780283bd241ba45fad85e54862be71ad73a5e6403",
+      "new_sha256": "41e5b984ba526f3fb8c0815ed3e3546b21230bc2284f76b4d9dfaa191c0f9253",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<p>你好，世界</p>\\n"
+            ],
+            "new_labels": [
+              "<p>你好，朋友</p>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>你好，世界</p>\\n",
+              "new_label": "<p>你好，朋友</p>\\n",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                23
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>你好，世界</p>\\n",
+              "new_label": "<p>你好，朋友</p>\\n",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                23
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.38206999999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 77786,
+                "total_fuel_consumed": 77786,
+                "max_fuel_used_percent": 0.3718260038240918,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.120684,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 77196,
+                "total_fuel_consumed": 77196,
+                "max_fuel_used_percent": 0.3690057361376673,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "c209442926e75c25",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "32ba02707a26eceb",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "51ebd23cfb877a8a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "32c0384d69a95ddd",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "ca3d72da12e6ebdbb48df35d71ce6e46236c835d329c16ebdfce19ea805292e0",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.0: child outside parent range",
+        "new: 0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 66.692
+    },
+    {
+      "id": "web-astro-external-button-text",
+      "language_id": "astro",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "80da029fb8386f6af29d0bafd6f72698e4f781d7acec95216c60c94e780a23d9",
+      "new_sha256": "fb0c73dbf93f1577357e2cc76f521c54e0b0a51368f8ad5592a01dfb445d7406",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<button>Click</button>"
+            ],
+            "new_labels": [
+              "<button>Stop</button>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button>Click</button>",
+              "new_label": "<button>Stop</button>",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                21
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button>Click</button>",
+              "new_label": "<button>Stop</button>",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                21
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.31215000000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 79884,
+                "total_fuel_consumed": 79884,
+                "max_fuel_used_percent": 0.3829530201342282,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.173993,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 79062,
+                "total_fuel_consumed": 79062,
+                "max_fuel_used_percent": 0.3790124640460211,
+                "input_bytes": 21,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1b0d06c825d2d38c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "4ae86bbe935651c6",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "88d13d8fbd8fa390d6cc54fa8f7b9d2f3680df96e809252395f527df42e61e14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "72917cada4ad1797",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "a8e8547653b8c386",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "88d13d8fbd8fa390d6cc54fa8f7b9d2f3680df96e809252395f527df42e61e14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.0: child outside parent range",
+        "new: 0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 56.317
+    },
+    {
+      "id": "web-astro-external-start-tag-space",
+      "language_id": "astro",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "80da029fb8386f6af29d0bafd6f72698e4f781d7acec95216c60c94e780a23d9",
+      "new_sha256": "0ad6306a10eb2cb31df2705987aced87743db0a637ba0e3aa5c12e8db176caf8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.astro",
+        "new_filename": "assessment.astro",
+        "language": "astro",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<button>Click</button>"
+            ],
+            "new_labels": [
+              "<button >Click</button>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button>Click</button>",
+              "new_label": "<button >Click</button>",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button>Click</button>",
+              "new_label": "<button >Click</button>",
+              "risk": "amber",
+              "language": "astro",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.294798,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20900000,
+                "fuel_consumed": 79884,
+                "total_fuel_consumed": 79884,
+                "max_fuel_used_percent": 0.3822200956937799,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "astro",
+                "filename": "assessment.astro",
+                "call_count": 1,
+                "elapsed_ms": 0.13978,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20900000,
+                "fuel_consumed": 79769,
+                "total_fuel_consumed": 79769,
+                "max_fuel_used_percent": 0.3816698564593301,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/astro_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1b0d06c825d2d38c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "4ae86bbe935651c6",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "88d13d8fbd8fa390d6cc54fa8f7b9d2f3680df96e809252395f527df42e61e14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "astro",
+          "tree": {
+            "id": "0",
+            "node_type": "astro_component",
+            "label": "assessment",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "e4a14b71b4ba7182",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "template_body",
+                "label": "template",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "63c1b8aeae0dc586",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "element",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "88d13d8fbd8fa390d6cc54fa8f7b9d2f3680df96e809252395f527df42e61e14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.0: child outside parent range",
+        "new: 0.0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 79.35
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 7.385
+}

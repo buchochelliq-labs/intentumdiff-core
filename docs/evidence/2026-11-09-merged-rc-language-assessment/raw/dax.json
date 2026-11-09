@@ -1,0 +1,3421 @@
+{
+  "language_id": "dax",
+  "options": {
+    "language_hint": "dax",
+    "strict_plugins": true
+  },
+  "completed_count": 7,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.dax.meaningful_1_value",
+      "language_id": "dax",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "d97a9e267a6ba75cacbd3ea3a1ef4f2246c68703a7799fd1a73d6d4ec183e11d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update query_expression('SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])') -> query_expression('SUMMARIZECOLUMNS(Dates[Year], \"SalesTotal\", [Total Sales], \"Growth\", [Sales Growth %])')",
+            "old_node": {
+              "id": "0.5.0",
+              "node_type": "query_expression",
+              "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+              "position": {
+                "start_line": 11,
+                "start_col": 0,
+                "end_line": 11,
+                "end_col": 81
+              },
+              "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.5.0",
+              "node_type": "query_expression",
+              "label": "SUMMARIZECOLUMNS(Dates[Year], \"SalesTotal\", [Total Sales], \"Growth\", [Sales Growth %])",
+              "position": {
+                "start_line": 11,
+                "start_col": 0,
+                "end_line": 11,
+                "end_col": 86
+              },
+              "structural_hash": "cbb460395258493273b85ee291b605178a0180b5a69b642d9693100b6985d35f",
+              "children": []
+            },
+            "text_diff": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %]) -> SUMMARIZECOLUMNS(Dates[Year], \"SalesTotal\", [Total Sales], \"Growth\", [Sales Growth %])"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])"
+            ],
+            "new_labels": [
+              "SUMMARIZECOLUMNS(Dates[Year], \"SalesTotal\", [Total Sales], \"Growth\", [Sales Growth %])"
+            ],
+            "old_node_ids": [
+              "0.5.0"
+            ],
+            "new_node_ids": [
+              "0.5.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.685003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40300000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.188225806451613,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.445638,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40300000,
+                "fuel_consumed": 884160,
+                "total_fuel_consumed": 884160,
+                "max_fuel_used_percent": 2.1939454094292805,
+                "input_bytes": 510,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "319a05820ee59297fd4e8cd92eefd94797f445e977acb34dc6970120acdd3602",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "0c331d5e5d9d67008d8085b4f9a89c58808ae84f202bd0b2fffc30cd057dfe92",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"SalesTotal\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 86
+                    },
+                    "structural_hash": "cbb460395258493273b85ee291b605178a0180b5a69b642d9693100b6985d35f",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.5.0: child outside parent range",
+        "new: 0.4.0: child outside parent range",
+        "new: 0.3.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 5938.655
+    },
+    {
+      "id": "data_config.dax.meaningful_2_declaration",
+      "language_id": "dax",
+      "category": "declaration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "670076d4ce498c3698a68864d734f4028b6981008910f2100c3b7b8d2fcb78aa",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update measure('Sales[Order Count]') -> measure('Sales[Row Count]')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "measure",
+              "label": "Sales[Order Count]",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 45
+              },
+              "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "measure_expression",
+                  "label": "COUNTROWS(Sales)",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 29,
+                    "end_line": 1,
+                    "end_col": 45
+                  },
+                  "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "measure",
+              "label": "Sales[Row Count]",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 43
+              },
+              "structural_hash": "eff454994a508e27886d2b782e9a50f9681a514f36c0a6c8edaffd6b5d959982",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "measure_expression",
+                  "label": "COUNTROWS(Sales)",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 27,
+                    "end_line": 1,
+                    "end_col": 43
+                  },
+                  "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Sales[Order Count]",
+              "COUNTROWS(Sales)"
+            ],
+            "new_labels": [
+              "Sales[Row Count]",
+              "COUNTROWS(Sales)"
+            ],
+            "old_node_ids": [
+              "0.0",
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0",
+              "0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.547417,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40160000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.195854083665339,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.412266,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40160000,
+                "fuel_consumed": 875879,
+                "total_fuel_consumed": 875879,
+                "max_fuel_used_percent": 2.180973605577689,
+                "input_bytes": 503,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "7ab2c4d279624a3a435267c7678b3e39e03add76c0d691fa0cccfb90ad3938b6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Row Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 43
+                },
+                "structural_hash": "eff454994a508e27886d2b782e9a50f9681a514f36c0a6c8edaffd6b5d959982",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 27,
+                      "end_line": 1,
+                      "end_col": 43
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.5.0: child outside parent range",
+        "new: 0.4.0: child outside parent range",
+        "new: 0.3.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 78.403
+    },
+    {
+      "id": "data_config.dax.meaningful_3_body",
+      "language_id": "dax",
+      "category": "body",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "dca84742eb4ea34e8bcdbd808b6d0f613a08369b52aa78814b16ebc5304a97e1",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update measure_expression('SUM(Sales[Amount])') -> measure_expression('MAX(Sales[Amount])')",
+            "old_node": {
+              "id": "0.2.0",
+              "node_type": "measure_expression",
+              "label": "SUM(Sales[Amount])",
+              "position": {
+                "start_line": 3,
+                "start_col": 29,
+                "end_line": 3,
+                "end_col": 47
+              },
+              "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.0",
+              "node_type": "measure_expression",
+              "label": "MAX(Sales[Amount])",
+              "position": {
+                "start_line": 3,
+                "start_col": 29,
+                "end_line": 3,
+                "end_col": 47
+              },
+              "structural_hash": "a6d37ddfe35f2d5f0aa8d6bd0b7b08273265467313b78820188daa15d9a5ffed",
+              "children": []
+            },
+            "text_diff": "SUM(Sales[Amount]) -> MAX(Sales[Amount])"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "SUM(Sales[Amount])"
+            ],
+            "new_labels": [
+              "MAX(Sales[Amount])"
+            ],
+            "old_node_ids": [
+              "0.2.0"
+            ],
+            "new_node_ids": [
+              "0.2.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.589194,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40200000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.1936691542288553,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.477657,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40200000,
+                "fuel_consumed": 881265,
+                "total_fuel_consumed": 881265,
+                "max_fuel_used_percent": 2.1922014925373134,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "2f6000f435efd5ce6f697f67774868a2dcfed6f98c2e20ce7eefc581295aacb8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "65e59cd1bd78c97171de9dcff3c73d809c65c61ca50b28820c7e563452617dfe",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "a6d37ddfe35f2d5f0aa8d6bd0b7b08273265467313b78820188daa15d9a5ffed",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.5.0: child outside parent range",
+        "new: 0.4.0: child outside parent range",
+        "new: 0.3.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 76.506
+    },
+    {
+      "id": "data_config.dax.identity",
+      "language_id": "dax",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.625071,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40200000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.1936691542288553,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.46126700000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40200000,
+                "fuel_consumed": 881265,
+                "total_fuel_consumed": 881265,
+                "max_fuel_used_percent": 2.1922014925373134,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.5.0: child outside parent range",
+        "new: 0.4.0: child outside parent range",
+        "new: 0.3.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.209
+    },
+    {
+      "id": "data_config.dax.safe_preservation",
+      "language_id": "dax",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "2389043fbf8b1f58d5d67009d003426e6bdc5cd491ad68bc49085d9a8147c07d",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// ordinary assessment comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "dax",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "dax",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.529203,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40820000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.1603503184713375,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.500329,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 40820000,
+                "fuel_consumed": 887716,
+                "total_fuel_consumed": 887716,
+                "max_fuel_used_percent": 2.174708476237139,
+                "input_bytes": 536,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 12,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 29,
+                      "end_line": 2,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 30,
+                      "end_line": 3,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 29,
+                      "end_line": 4,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 4,
+                      "end_line": 6,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 4,
+                      "end_line": 9,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.5.0: child outside parent range",
+        "new: 0.4.0: child outside parent range",
+        "new: 0.3.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 73.674
+    },
+    {
+      "id": "data_config.dax.incomplete",
+      "language_id": "dax",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "3029c3b2eedf288341f264d1f21300acd3e5c33934926eab85898a52ccdbae4e",
+      "new_sha256": "bc59bd0fd82ce4159d2f4a98dddb9c384a335a0c8fbbc89ae164347bcc8c4e94",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete measure('Sales[Sales YTD]')",
+            "old_node": {
+              "id": "0.3",
+              "node_type": "measure",
+              "label": "Sales[Sales YTD]",
+              "position": {
+                "start_line": 4,
+                "start_col": 0,
+                "end_line": 5,
+                "end_col": 0
+              },
+              "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+              "children": [
+                {
+                  "id": "0.3.0",
+                  "node_type": "measure_expression",
+                  "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                  "position": {
+                    "start_line": 5,
+                    "start_col": 4,
+                    "end_line": 5,
+                    "end_col": 45
+                  },
+                  "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> measure('Sales[Sa')",
+            "new_node": {
+              "id": "0.3",
+              "node_type": "measure",
+              "label": "Sales[Sa",
+              "position": {
+                "start_line": 4,
+                "start_col": 0,
+                "end_line": 4,
+                "end_col": 16
+              },
+              "structural_hash": "eeb860b974948dc0b39f3b5276b993a117642ae09df6dda910631356a7da7c00",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete measure('Sales[Sales Growth %]')",
+            "old_node": {
+              "id": "0.4",
+              "node_type": "measure",
+              "label": "Sales[Sales Growth %]",
+              "position": {
+                "start_line": 6,
+                "start_col": 0,
+                "end_line": 8,
+                "end_col": 0
+              },
+              "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+              "children": [
+                {
+                  "id": "0.4.0",
+                  "node_type": "measure_expression",
+                  "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                  "position": {
+                    "start_line": 7,
+                    "start_col": 4,
+                    "end_line": 8,
+                    "end_col": 69
+                  },
+                  "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete evaluate('query_0')",
+            "old_node": {
+              "id": "0.5",
+              "node_type": "evaluate",
+              "label": "query_0",
+              "position": {
+                "start_line": 10,
+                "start_col": 0,
+                "end_line": 11,
+                "end_col": 0
+              },
+              "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+              "children": [
+                {
+                  "id": "0.5.0",
+                  "node_type": "query_expression",
+                  "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                  "position": {
+                    "start_line": 11,
+                    "start_col": 0,
+                    "end_line": 11,
+                    "end_col": 81
+                  },
+                  "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Sales[Sales YTD]",
+              "TOTALYTD(SUM(Sales[Amount]), Dates[Date])"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.3",
+              "0.3.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "Sales[Sa"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.3"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              2
+            ],
+            "old_labels": [
+              "Sales[Sales Growth %]",
+              "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.4",
+              "0.4.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              3
+            ],
+            "old_labels": [
+              "query_0",
+              "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.5",
+              "0.5.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.5391009999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33460000,
+                "fuel_consumed": 881855,
+                "total_fuel_consumed": 881855,
+                "max_fuel_used_percent": 2.6355499103407056,
+                "input_bytes": 505,
+                "input_lines": 12,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.254352,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33460000,
+                "fuel_consumed": 432358,
+                "total_fuel_consumed": 432358,
+                "max_fuel_used_percent": 1.292163777644949,
+                "input_bytes": 168,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "845634db782d12bbf30fc7608584b78bc33ad8e6e6f503e8c9265fabffd47efc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sales YTD]",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "c50cd8048b267a7400d42b6a61e6969bb55fb02d29ab7585ceafb70436e097b6",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "measure_expression",
+                    "label": "TOTALYTD(SUM(Sales[Amount]), Dates[Date])",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 5,
+                      "end_col": 45
+                    },
+                    "structural_hash": "dd03c6e0f1abc7bc599e77c730a131a8d74f124fe4de8b9322fe9accadf5d23c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "measure",
+                "label": "Sales[Sales Growth %]",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "accc04449a8a1b6aa3aa06005c8473c95c50386e9ba8c250160a81d91509d152",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "measure_expression",
+                    "label": "DIVIDE([Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])),\nCALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date])))",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 69
+                    },
+                    "structural_hash": "d9f9e69582a3c6a7346011512ab7711bee93541c85ab539bbce62e05c613a6ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "5709fca9d6ac65790325faead7fdfbb11c0af6f5410d3889fb48e14cde042d99",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "query_expression",
+                    "label": "SUMMARIZECOLUMNS(Dates[Year], \"Total\", [Total Sales], \"Growth\", [Sales Growth %])",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 81
+                    },
+                    "structural_hash": "254ad19f24a80594504be1ec4a0ffd34a0ac238277fad8a1c11710935ec7e037",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "ccd63c72c6fb4a03509d4d2f837da5daac676ddae80c73e58a1024f8e1b8a3e4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "measure",
+                "label": "Sales[Order Count]",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 45
+                },
+                "structural_hash": "3d89569be5798cd511dcf205536a61f4b1f4a11c2a3790819b36a7567d076eb9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "measure_expression",
+                    "label": "COUNTROWS(Sales)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "a9306d0b0eb1f786b2ec90f07946799c3fad6e3996ada581e07a6cb34b4257c9",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "measure",
+                "label": "Sales[Max Discount]",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 50
+                },
+                "structural_hash": "5874e6d9b03842d0c1e60770b8275c3750c018f29d7130adb7c5ee4ef6066114",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "measure_expression",
+                    "label": "MAX(Sales[Discount])",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 30,
+                      "end_line": 2,
+                      "end_col": 50
+                    },
+                    "structural_hash": "3e82f4a71f9fa4c28d1bdf14af6e51800ba0db504d40c0a47fe34ced3743b948",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "measure",
+                "label": "Sales[Total Sales]",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 47
+                },
+                "structural_hash": "b2ee8ebd1478b0442014c012e9318f54d803d39152e8d7e5e59d6f16af6c5038",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "measure_expression",
+                    "label": "SUM(Sales[Amount])",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 29,
+                      "end_line": 3,
+                      "end_col": 47
+                    },
+                    "structural_hash": "16529d6a24c20a29ec19dc1b30f788f3a545ebb62d3e8da6902dd911dd26121a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "measure",
+                "label": "Sales[Sa",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 16
+                },
+                "structural_hash": "eeb860b974948dc0b39f3b5276b993a117642ae09df6dda910631356a7da7c00",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.5.0: child outside parent range",
+        "old: 0.4.0: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "new: 0.3: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 79.012
+    },
+    {
+      "id": "data_config.dax.unicode_value",
+      "language_id": "dax",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7d1312023f386c287e6e96cf9a4e74ea7a206f1354013219d4ee51c17f8b577",
+      "new_sha256": "17651a5b1a2eab4c2f03d01b02408bbb3f2d13f40e00a2e1a0aed6253d6bf232",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.dax",
+        "new_filename": "playground.dax",
+        "language": "dax",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update query_expression('ROW(\"label\", \"λ\")') -> query_expression('ROW(\"label\", \"μ\")')",
+            "old_node": {
+              "id": "0.0.0",
+              "node_type": "query_expression",
+              "label": "ROW(\"label\", \"λ\")",
+              "position": {
+                "start_line": 0,
+                "start_col": 9,
+                "end_line": 0,
+                "end_col": 27
+              },
+              "structural_hash": "8cff4c1df818758a23f8de060d99b409f1795b7aebdf3605beba4bac16480c84",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0",
+              "node_type": "query_expression",
+              "label": "ROW(\"label\", \"μ\")",
+              "position": {
+                "start_line": 0,
+                "start_col": 9,
+                "end_line": 0,
+                "end_col": 27
+              },
+              "structural_hash": "5bebe6289575a868287f9e379d4e0da89055e502baf3e98c47ab49e586cb05be",
+              "children": []
+            },
+            "text_diff": "ROW(\"label\", \"λ\") -> ROW(\"label\", \"μ\")"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "ROW(\"label\", \"λ\")"
+            ],
+            "new_labels": [
+              "ROW(\"label\", \"μ\")"
+            ],
+            "old_node_ids": [
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.25947200000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21120000,
+                "fuel_consumed": 135015,
+                "total_fuel_consumed": 135015,
+                "max_fuel_used_percent": 0.6392755681818182,
+                "input_bytes": 28,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "dax",
+                "filename": "playground.dax",
+                "call_count": 1,
+                "elapsed_ms": 0.211112,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21120000,
+                "fuel_consumed": 134425,
+                "total_fuel_consumed": 134425,
+                "max_fuel_used_percent": 0.6364820075757576,
+                "input_bytes": 28,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/dax_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "9055255201c63b9f7da5bee6a1e018d517223f62f14a15ced17a5882f97afbad",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 27
+                },
+                "structural_hash": "33aae2b792b8451bcf315142254a91264df962df58202d308867458bb98d74f5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "query_expression",
+                    "label": "ROW(\"label\", \"λ\")",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "8cff4c1df818758a23f8de060d99b409f1795b7aebdf3605beba4bac16480c84",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "dax",
+          "tree": {
+            "id": "0",
+            "node_type": "dax_file",
+            "label": "dax_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "d4ec840b8fa43535c5f35b2f3a4e953029d07c445e354c08e125c2a08c769977",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "evaluate",
+                "label": "query_0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 27
+                },
+                "structural_hash": "340bf306921c7700dc076e3146c416abc44512fe709cfc0533c6c5100f4ae262",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "query_expression",
+                    "label": "ROW(\"label\", \"μ\")",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "5bebe6289575a868287f9e379d4e0da89055e502baf3e98c47ab49e586cb05be",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 55.039
+    }
+  ],
+  "attempted_count": 7,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 7.073
+}

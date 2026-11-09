@@ -1,0 +1,3797 @@
+{
+  "language_id": "puppet",
+  "options": {
+    "language_hint": "puppet",
+    "strict_plugins": true
+  },
+  "completed_count": 7,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.puppet.meaningful_1_value",
+      "language_id": "puppet",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "0d2fca4312bc66251289b7a9e44957f41683144e44dd2cfe18375d7a7fcc3141",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update string('\\'Hello, World!\\'') -> string('\\'Goodbye, World!\\'')",
+            "old_node": {
+              "id": "0.0.1.0.2",
+              "node_type": "string",
+              "label": "'Hello, World!'",
+              "position": {
+                "start_line": 1,
+                "start_col": 20,
+                "end_line": 1,
+                "end_col": 35
+              },
+              "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.1.0.2",
+              "node_type": "string",
+              "label": "'Goodbye, World!'",
+              "position": {
+                "start_line": 1,
+                "start_col": 20,
+                "end_line": 1,
+                "end_col": 37
+              },
+              "structural_hash": "50b39786ce3d8c124b599e0a6f19d040108b1f128d200188d1ce39411e1a1468",
+              "children": []
+            },
+            "text_diff": "'Hello, World!' -> 'Goodbye, World!'"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "greeting",
+              "'Hello, World!'"
+            ],
+            "new_labels": [
+              "greeting",
+              "'Goodbye, World!'"
+            ],
+            "old_node_ids": [
+              "0.0.1.0.2"
+            ],
+            "new_node_ids": [
+              "0.0.1.0.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": "greeting",
+              "new_entity_label": "greeting",
+              "entity_type": "class_definition"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 1.0231590000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29040000,
+                "fuel_consumed": 2363926,
+                "total_fuel_consumed": 2363926,
+                "max_fuel_used_percent": 8.140241046831957,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.7480289999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29040000,
+                "fuel_consumed": 2363850,
+                "total_fuel_consumed": 2363850,
+                "max_fuel_used_percent": 8.139979338842975,
+                "input_bytes": 227,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "1c69b044c9d1e18569abb8bbf96428eb1bc4fb414aea9d36e2a73839aa320a14",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "8d730bb50163b9a66e2dad361b941df24ea6516b904e5c78ad8722f45cf0a233",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "e598333d0bd509fb82659e5278ac2f292ae80a5ae7f4f115467055cbd6973e84",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 37
+                        },
+                        "structural_hash": "663d7b240c1321b75d4c00ef0196bef8fa7a5c297456c4e9d3de3f8a8331d56e",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Goodbye, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 37
+                            },
+                            "structural_hash": "50b39786ce3d8c124b599e0a6f19d040108b1f128d200188d1ce39411e1a1468",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 16881.524
+    },
+    {
+      "id": "data_config.puppet.meaningful_2_type",
+      "language_id": "puppet",
+      "category": "type",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "6fc50e2e1ee3615d3b13eb6ee3962d2e8f95acd1fd66e28bd64c2d6c123f8420",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Parser payload changed in parameter(\"message\"); source evidence retained",
+            "old_node": {
+              "id": "0.0.1.0",
+              "node_type": "parameter",
+              "label": "message",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 35
+              },
+              "structural_hash": "4fc29961d8631eb59d7431fe4ff90ce38f5748b343e59ff12fefc7f2c9bb9eeb",
+              "children": [
+                {
+                  "id": "0.0.1.0.1",
+                  "node_type": "variable",
+                  "label": "message",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 9,
+                    "end_line": 1,
+                    "end_col": 17
+                  },
+                  "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                  "children": []
+                },
+                {
+                  "id": "0.0.1.0.2",
+                  "node_type": "string",
+                  "label": "'Hello, World!'",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 20,
+                    "end_line": 1,
+                    "end_col": 35
+                  },
+                  "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.1.0",
+              "node_type": "parameter",
+              "label": "message",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 45
+              },
+              "structural_hash": "ed48fb52328df21548026ac8fef46b5feccda271b38210899c0df96049d01272",
+              "children": [
+                {
+                  "id": "0.0.1.0.1",
+                  "node_type": "variable",
+                  "label": "message",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 19,
+                    "end_line": 1,
+                    "end_col": 27
+                  },
+                  "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                  "children": []
+                },
+                {
+                  "id": "0.0.1.0.2",
+                  "node_type": "string",
+                  "label": "'Hello, World!'",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 30,
+                    "end_line": 1,
+                    "end_col": 45
+                  },
+                  "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                  "children": []
+                }
+              ]
+            },
+            "text_diff": "String $message = 'Hello, World!' -> Optional[String] $message = 'Hello, World!'"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "greeting",
+              "message"
+            ],
+            "new_labels": [
+              "greeting",
+              "message"
+            ],
+            "old_node_ids": [
+              "0.0.1.0"
+            ],
+            "new_node_ids": [
+              "0.0.1.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": "greeting",
+              "new_entity_label": "greeting",
+              "entity_type": "class_definition"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 1.069415,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29200000,
+                "fuel_consumed": 2363022,
+                "total_fuel_consumed": 2363022,
+                "max_fuel_used_percent": 8.092541095890411,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.779697,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29200000,
+                "fuel_consumed": 2463915,
+                "total_fuel_consumed": 2463915,
+                "max_fuel_used_percent": 8.43806506849315,
+                "input_bytes": 235,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "34fdfa00287e06e669eba079b1ec536ed9265d778637c6660054a5cdc2dc85ce",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "dceaa2104c632d7c1bb778e22b2affa3ec51eff9bcb3096908b5996fc0aa386a",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f2f8d55375e18b0701aa5d832d715db103468ca372b998e3cfae278d864e008b",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 45
+                        },
+                        "structural_hash": "92b8b2c18912805d99f3481c27f1a530889df5d95b031f9bb4b6f0a749e24531",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 19,
+                              "end_line": 1,
+                              "end_col": 27
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 30,
+                              "end_line": 1,
+                              "end_col": 45
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 88.882
+    },
+    {
+      "id": "data_config.puppet.meaningful_3_body",
+      "language_id": "puppet",
+      "category": "body",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "74ce447ec93af0fc3d235ed3c0d747374b52fdf1ad169f60ddfc756673d54947",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Parser payload changed in attribute(\"ensure\"); source evidence retained",
+            "old_node": {
+              "id": "0.0.2.1.2",
+              "node_type": "attribute",
+              "label": "ensure",
+              "position": {
+                "start_line": 9,
+                "start_col": 4,
+                "end_line": 9,
+                "end_col": 22
+              },
+              "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.2.1.2",
+              "node_type": "attribute",
+              "label": "ensure",
+              "position": {
+                "start_line": 9,
+                "start_col": 4,
+                "end_line": 9,
+                "end_col": 21
+              },
+              "structural_hash": "2dcbf48d60f447e68812db2ee6dc369104c4848c93d8f6a549db011a9b93dcc2",
+              "children": []
+            },
+            "text_diff": "ensure  => present -> ensure  => absent"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "file /tmp/greeting.txt",
+              "ensure"
+            ],
+            "new_labels": [
+              "file /tmp/greeting.txt",
+              "ensure"
+            ],
+            "old_node_ids": [
+              "0.0.2.1.2"
+            ],
+            "new_node_ids": [
+              "0.0.2.1.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.2.1",
+              "old_entity_node_id": "0.0.2.1",
+              "new_entity_node_id": "0.0.2.1",
+              "old_entity_label": "file /tmp/greeting.txt",
+              "new_entity_label": "file /tmp/greeting.txt",
+              "entity_type": "resource_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 1.08734,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28980000,
+                "fuel_consumed": 2362876,
+                "total_fuel_consumed": 2362876,
+                "max_fuel_used_percent": 8.153471359558315,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.855479,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28980000,
+                "fuel_consumed": 2362394,
+                "total_fuel_consumed": 2362394,
+                "max_fuel_used_percent": 8.151808143547273,
+                "input_bytes": 224,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "5863bb54ecb0d963d5fe18a348c863955843f243cc28b2b7a3cad214f6864dc2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "5ca316ef8c3f7ed676419719de52fd9a4677c02554c2e65fc9469e800ca01fda",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "f16404d26f2f846d898dda8882df39aa95bf9787d554f1edf3833796533390e0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "a6c016aedb1723c8e9f0c4870c592c7107c52d4ab8d748918a2190ba83f58907",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 21
+                            },
+                            "structural_hash": "2dcbf48d60f447e68812db2ee6dc369104c4848c93d8f6a549db011a9b93dcc2",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 86.683
+    },
+    {
+      "id": "data_config.puppet.identity",
+      "language_id": "puppet",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 1.1215229999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29000000,
+                "fuel_consumed": 2364788,
+                "total_fuel_consumed": 2364788,
+                "max_fuel_used_percent": 8.154441379310345,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.875586,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29000000,
+                "fuel_consumed": 2363101,
+                "total_fuel_consumed": 2363101,
+                "max_fuel_used_percent": 8.148624137931035,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 80.469
+    },
+    {
+      "id": "data_config.puppet.safe_preservation",
+      "language_id": "puppet",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "c5938e4fb2fe1df65e04c71158bd9d7ddb8339c94ff96491d751b6cc2c46b236",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "# ordinary assessment comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "# ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "puppet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                30
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "# ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "puppet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                30
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 1.085866,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29600000,
+                "fuel_consumed": 2362924,
+                "total_fuel_consumed": 2362924,
+                "max_fuel_used_percent": 7.982851351351352,
+                "input_bytes": 225,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.854106,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29600000,
+                "fuel_consumed": 2419218,
+                "total_fuel_consumed": 2419218,
+                "max_fuel_used_percent": 8.173033783783785,
+                "input_bytes": 255,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "edd3cc1652ee765c7242350a5784c2a2b1ebd0441e415719f978c53334e4e912",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 20,
+                              "end_line": 1,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.0.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 21,
+                              "end_line": 2,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 2,
+                          "end_line": 6,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 11,
+                              "end_line": 4,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 4,
+                              "end_line": 5,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 2,
+                          "end_line": 11,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.0.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 9,
+                              "end_line": 8,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 4,
+                              "end_line": 9,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.0.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 10,
+                                  "start_col": 15,
+                                  "end_line": 10,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "4b7efca6d5a455b54038faf1f0c1f1182e6d244c6d75e6841c530e73a107d745",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "class_definition",
+                "label": "greeting",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 1
+                },
+                "structural_hash": "84c5b8146992c35363f86757a41b6b7a03e72e36f323f21cd0d604a66c68dd0d",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "parameter_list",
+                    "label": "parameter_list",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 15,
+                      "end_line": 4,
+                      "end_col": 1
+                    },
+                    "structural_hash": "14f53ddf18b7f0212cdcf5dc49a446565b990ab4d64391eb67cae871de125755",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 2,
+                          "end_line": 2,
+                          "end_col": 35
+                        },
+                        "structural_hash": "468b15ba0cafea79126b8798f2ac86bc963c4c1f7d14645024f007bd8a49c973",
+                        "children": [
+                          {
+                            "id": "0.1.1.0.1",
+                            "node_type": "variable",
+                            "label": "message",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 9,
+                              "end_line": 2,
+                              "end_col": 17
+                            },
+                            "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                            "children": []
+                          },
+                          {
+                            "id": "0.1.1.0.2",
+                            "node_type": "string",
+                            "label": "'Hello, World!'",
+                            "position": {
+                              "start_line": 2,
+                              "start_col": 20,
+                              "end_line": 2,
+                              "end_col": 35
+                            },
+                            "structural_hash": "35004bfd3dc1ee8c71700a7fc9d0e5ef24a1c28d64c0b0998af2d9d150f5f96f",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.1.1.1",
+                        "node_type": "parameter",
+                        "label": "",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 2,
+                          "end_line": 3,
+                          "end_col": 30
+                        },
+                        "structural_hash": "d712b4a1f0568385be0af30d2588ad621d94dbf851f06072ec614afc39a6ed9d",
+                        "children": [
+                          {
+                            "id": "0.1.1.1.1",
+                            "node_type": "variable",
+                            "label": "target",
+                            "position": {
+                              "start_line": 3,
+                              "start_col": 9,
+                              "end_line": 3,
+                              "end_col": 16
+                            },
+                            "structural_hash": "d9c49553c9218dd50b522f731fc09d9c45451acb0fc484f9a0a356ac02b0791b",
+                            "children": []
+                          },
+                          {
+                            "id": "0.1.1.1.2",
+                            "node_type": "string",
+                            "label": "'console'",
+                            "position": {
+                              "start_line": 3,
+                              "start_col": 21,
+                              "end_line": 3,
+                              "end_col": 30
+                            },
+                            "structural_hash": "e799375ecd076b0600b90fd5df4012176914dfcfde0a3fe856c9d1b0e53f555d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ba23dc4437db120a901fd1099bafe986cd7db901a6373f98d18f3e019431b3c0",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "resource_declaration",
+                        "label": "notify hello",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 7,
+                          "end_col": 3
+                        },
+                        "structural_hash": "9e2eeefb662dd9867508d454f92b0091f1521dd40d7143e157a0ea42b6f0804f",
+                        "children": [
+                          {
+                            "id": "0.1.2.0.1",
+                            "node_type": "string",
+                            "label": "'hello'",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 11,
+                              "end_line": 5,
+                              "end_col": 18
+                            },
+                            "structural_hash": "d335b0eeafa2ef4b99f9e6e5de182d2aceb03287e6aa45374910abf892189e71",
+                            "children": []
+                          },
+                          {
+                            "id": "0.1.2.0.2",
+                            "node_type": "attribute",
+                            "label": "message",
+                            "position": {
+                              "start_line": 6,
+                              "start_col": 4,
+                              "end_line": 6,
+                              "end_col": 23
+                            },
+                            "structural_hash": "ea023cb199d2afbd24c8fd2da98f4231a6b420788bb487d6ab114c64d451b7bc",
+                            "children": [
+                              {
+                                "id": "0.1.2.0.2.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 6,
+                                  "start_col": 15,
+                                  "end_line": 6,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "resource_declaration",
+                        "label": "file /tmp/greeting.txt",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 2,
+                          "end_line": 12,
+                          "end_col": 3
+                        },
+                        "structural_hash": "7c6b93c3c1701ad2953c882f385219400e5c0015bbe68110182eb66d6cd545c3",
+                        "children": [
+                          {
+                            "id": "0.1.2.1.1",
+                            "node_type": "string",
+                            "label": "'/tmp/greeting.txt'",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 9,
+                              "end_line": 9,
+                              "end_col": 28
+                            },
+                            "structural_hash": "415f3a7c20a76e59ca5f4e511738574933739928b1570768c5d55576a4f82aaf",
+                            "children": []
+                          },
+                          {
+                            "id": "0.1.2.1.2",
+                            "node_type": "attribute",
+                            "label": "ensure",
+                            "position": {
+                              "start_line": 10,
+                              "start_col": 4,
+                              "end_line": 10,
+                              "end_col": 22
+                            },
+                            "structural_hash": "4f82a7e57fe9426c795d4e0b907343e9c83a85c5773d30fc541904c1c3563663",
+                            "children": []
+                          },
+                          {
+                            "id": "0.1.2.1.3",
+                            "node_type": "attribute",
+                            "label": "content",
+                            "position": {
+                              "start_line": 11,
+                              "start_col": 4,
+                              "end_line": 11,
+                              "end_col": 23
+                            },
+                            "structural_hash": "455a7806735107b19bf0ee67948c4166cc91adabf80d25a60a51c6e3c3efabc0",
+                            "children": [
+                              {
+                                "id": "0.1.2.1.3.1",
+                                "node_type": "variable",
+                                "label": "message",
+                                "position": {
+                                  "start_line": 11,
+                                  "start_col": 15,
+                                  "end_line": 11,
+                                  "end_col": 23
+                                },
+                                "structural_hash": "6f4b50c98a2a6e8db3bf08e1fa776f79a5b3ea81fbeace59e7abea882fb4a005",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 82.186
+    },
+    {
+      "id": "data_config.puppet.incomplete",
+      "language_id": "puppet",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "5f4af073d208d6487f5100c746dde268101ff512e414a79460ebc8b621a7f390",
+      "new_sha256": "2557284cd77d36d3a34e1ea9ced0e1161781c65a494421e8629af9313d49f038",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "playground.pp: Incomplete or invalid syntax; source changes preserved without a semantic interpretation",
+        "fallback_code": "native_parse_incomplete"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 18.269
+    },
+    {
+      "id": "data_config.puppet.unicode_value",
+      "language_id": "puppet",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "a187970f0c8c97e61a62a32a340e0d29468ac5d4d28665c6533e11c7b976c538",
+      "new_sha256": "758643e2cce83e8fe84d7be422a685d2a2de7d6d85e15c4c4f6bd3ef655e256a",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.pp",
+        "new_filename": "playground.pp",
+        "language": "puppet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update string('\\'λ\\'') -> string('\\'μ\\'')",
+            "old_node": {
+              "id": "0.0.2.1",
+              "node_type": "string",
+              "label": "'λ'",
+              "position": {
+                "start_line": 1,
+                "start_col": 13,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "d94babd1e41c8dc6661d657a48972fe1ffc691fc01d50ea73d6bed65e7f1e07f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.2.1",
+              "node_type": "string",
+              "label": "'μ'",
+              "position": {
+                "start_line": 1,
+                "start_col": 13,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "59031ca8d3a74ef0e0705f9e29131fb7c2338c558534a0a932b2db096c4d1a96",
+              "children": []
+            },
+            "text_diff": "'λ' -> 'μ'"
+          },
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update attribute(\"message\") -> attribute(\"message\")",
+            "old_node": {
+              "id": "0.0.2",
+              "node_type": "attribute",
+              "label": "message",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "58405e2ab13fe532bfcc1058319c2205c67096fcdf1184c84abd796301658b45",
+              "children": [
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "string",
+                  "label": "'λ'",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 13,
+                    "end_line": 1,
+                    "end_col": 17
+                  },
+                  "structural_hash": "d94babd1e41c8dc6661d657a48972fe1ffc691fc01d50ea73d6bed65e7f1e07f",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.2",
+              "node_type": "attribute",
+              "label": "message",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "b8a4391afb431634fa26d6fc5b343935cbc792b065cb44376aa6720d0c54203e",
+              "children": [
+                {
+                  "id": "0.0.2.1",
+                  "node_type": "string",
+                  "label": "'μ'",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 13,
+                    "end_line": 1,
+                    "end_col": 17
+                  },
+                  "structural_hash": "59031ca8d3a74ef0e0705f9e29131fb7c2338c558534a0a932b2db096c4d1a96",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0,
+              1
+            ],
+            "old_labels": [
+              "notify label",
+              "'λ'",
+              "message"
+            ],
+            "new_labels": [
+              "notify label",
+              "'μ'",
+              "message"
+            ],
+            "old_node_ids": [
+              "0.0.2.1",
+              "0.0.2"
+            ],
+            "new_node_ids": [
+              "0.0.2.1",
+              "0.0.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": "notify label",
+              "new_entity_label": "notify label",
+              "entity_type": "resource_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.580969,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21560000,
+                "fuel_consumed": 573347,
+                "total_fuel_consumed": 573347,
+                "max_fuel_used_percent": 2.659308905380334,
+                "input_bytes": 39,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "puppet",
+                "filename": "playground.pp",
+                "call_count": 1,
+                "elapsed_ms": 0.317119,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21560000,
+                "fuel_consumed": 573338,
+                "total_fuel_consumed": 573338,
+                "max_fuel_used_percent": 2.6592671614100185,
+                "input_bytes": 39,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/puppet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "5368f5c75159ca8645dde4501009249eb703e60c58feb9dfc869aa4e21a7dd41",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "resource_declaration",
+                "label": "notify label",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "d1717d66a6a5ae9d9fb5857590550e6c3990ffd9951972a6d92e955a398aaa30",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "string",
+                    "label": "'label'",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "0e01fddacf460497f2b1f96ef8ff89af460f0915032aff724996d36aac592143",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "attribute",
+                    "label": "message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "58405e2ab13fe532bfcc1058319c2205c67096fcdf1184c84abd796301658b45",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "string",
+                        "label": "'λ'",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 13,
+                          "end_line": 1,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d94babd1e41c8dc6661d657a48972fe1ffc691fc01d50ea73d6bed65e7f1e07f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "puppet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "b58a44120c48f27ec8765c733cd8fce78828bc3b70d34929823e8450eb164b3d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "resource_declaration",
+                "label": "notify label",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "f8dd24950aa9e388b71ce207b3cc914ddf80dfaa0c36496e8576151f8f802819",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "string",
+                    "label": "'label'",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "0e01fddacf460497f2b1f96ef8ff89af460f0915032aff724996d36aac592143",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "attribute",
+                    "label": "message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "b8a4391afb431634fa26d6fc5b343935cbc792b065cb44376aa6720d0c54203e",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "string",
+                        "label": "'μ'",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 13,
+                          "end_line": 1,
+                          "end_col": 17
+                        },
+                        "structural_hash": "59031ca8d3a74ef0e0705f9e29131fb7c2338c558534a0a932b2db096c4d1a96",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.35
+    }
+  ],
+  "attempted_count": 7,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 18.259
+}

@@ -1,0 +1,4065 @@
+{
+  "language_id": "groovy",
+  "options": {
+    "language_hint": "groovy",
+    "strict_plugins": true
+  },
+  "completed_count": 11,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "dynamic/groovy/identity",
+      "language_id": "groovy",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e02d2e9a4535e4e5c1c1a54ed2628dbb4f007706169403884a5365537773e8b7",
+      "new_sha256": "e02d2e9a4535e4e5c1c1a54ed2628dbb4f007706169403884a5365537773e8b7",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 1.0448709999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 1443363,
+                "total_fuel_consumed": 1443363,
+                "max_fuel_used_percent": 6.64531767955801,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.724867,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 1443386,
+                "total_fuel_consumed": 1443386,
+                "max_fuel_used_percent": 6.645423572744015,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ef0e7b8125258a2fff3e076f05a7b6e03415ef0235b7b91c5a4545ffe80c1b7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "1d63538b0628926c238c8efc212878f193214b6c9298563f99b9edcec04fe69e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "96630e0252e6a75934a50a5127320fac7fdba6950f10ef298f75d0a3ec7886fe",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 23
+                        },
+                        "structural_hash": "aa043689dce123a2106344753acce84932aeb742fda03db1d31bf43d7c121d0e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ef0e7b8125258a2fff3e076f05a7b6e03415ef0235b7b91c5a4545ffe80c1b7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "1d63538b0628926c238c8efc212878f193214b6c9298563f99b9edcec04fe69e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "96630e0252e6a75934a50a5127320fac7fdba6950f10ef298f75d0a3ec7886fe",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 23
+                        },
+                        "structural_hash": "aa043689dce123a2106344753acce84932aeb742fda03db1d31bf43d7c121d0e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 21287.649
+    },
+    {
+      "id": "dynamic/groovy/literal",
+      "language_id": "groovy",
+      "category": "literal_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e02d2e9a4535e4e5c1c1a54ed2628dbb4f007706169403884a5365537773e8b7",
+      "new_sha256": "6cb0095cfb5ec7366f41836e7c3ca14d3de8f2f69d07ae4504c30991b77c9cfb",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "def answer() { return 1 }\\n"
+            ],
+            "new_labels": [
+              "def answer() { return 2 }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "def answer() { return 1 }\\n",
+              "new_label": "def answer() { return 2 }\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                26
+              ],
+              "new_span": [
+                0,
+                26
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "def answer() { return 1 }\\n",
+              "new_label": "def answer() { return 2 }\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                26
+              ],
+              "new_span": [
+                0,
+                26
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.859938,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 1443513,
+                "total_fuel_consumed": 1443513,
+                "max_fuel_used_percent": 6.646008287292818,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.48647399999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 1443282,
+                "total_fuel_consumed": 1443282,
+                "max_fuel_used_percent": 6.644944751381216,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ef0e7b8125258a2fff3e076f05a7b6e03415ef0235b7b91c5a4545ffe80c1b7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "1d63538b0628926c238c8efc212878f193214b6c9298563f99b9edcec04fe69e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "96630e0252e6a75934a50a5127320fac7fdba6950f10ef298f75d0a3ec7886fe",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 23
+                        },
+                        "structural_hash": "aa043689dce123a2106344753acce84932aeb742fda03db1d31bf43d7c121d0e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "99262956d5de243ed1410d32239946878a80680dca38382b2b8d773a79699637",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "a0bfb12b6a30f2c55f5516a862c4a9cd26ee383b77840bb5e2f44a450c0b12d8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "3fdd6a3a5a812147c1e1e20d5305eb148521b5181e9519c5fd85a9b6404fe5f5",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 23
+                        },
+                        "structural_hash": "8b4a8da6ca208d5408fc1773d186cb3351fd540e1f3b4f8d6c0da60dca0fb61d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 71.8
+    },
+    {
+      "id": "dynamic/groovy/operator",
+      "language_id": "groovy",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "998e8a2bb14fbc44474d6fa7c9f95f43d0d45012d04a214dd16d2fbe97a83f2c",
+      "new_sha256": "4cc20bc390ffe07ff7d6397ba14db4fef3b5dc5fc1d23b224b52635d6d93d437",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "println(6 + 2)\\n"
+            ],
+            "new_labels": [
+              "println(6 - 2)\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "println(6 + 2)\\n",
+              "new_label": "println(6 - 2)\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                15
+              ],
+              "new_span": [
+                0,
+                15
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "println(6 + 2)\\n",
+              "new_label": "println(6 - 2)\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                15
+              ],
+              "new_span": [
+                0,
+                15
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.720688,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20600000,
+                "fuel_consumed": 534549,
+                "total_fuel_consumed": 534549,
+                "max_fuel_used_percent": 2.594898058252427,
+                "input_bytes": 15,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.31337200000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20600000,
+                "fuel_consumed": 534630,
+                "total_fuel_consumed": 534630,
+                "max_fuel_used_percent": 2.5952912621359223,
+                "input_bytes": 15,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "04100b344a7e93a83e2d4b92bce6ed60edf6c688729dd25c5f8d9dd5c55ebc38",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "expression_statement",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "4877f7f0a0af9416e4e40fb204f39924c83a1d8503552adfadf96aecdd205a9e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "method_invocation",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "61a213ea3f594d5325dbfd01188dd16572e87543017c1e853a6977b82552654c",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "println",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "04100b344a7e93a83e2d4b92bce6ed60edf6c688729dd25c5f8d9dd5c55ebc38",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "expression_statement",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "4877f7f0a0af9416e4e40fb204f39924c83a1d8503552adfadf96aecdd205a9e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "method_invocation",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "61a213ea3f594d5325dbfd01188dd16572e87543017c1e853a6977b82552654c",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "println",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 64.227
+    },
+    {
+      "id": "dynamic/groovy/language-feature",
+      "language_id": "groovy",
+      "category": "declaration_or_language_feature",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6630d3b65ed5b6d21712a80c63f760cd7b9d762fa199bc71a9b6ea8364e90229",
+      "new_sha256": "300a0869bf99a6db53e6b938d6baa07a4d28fa56275b3e52d9afcbd77aee4e5d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> argument_list('argument_list')",
+            "new_node": {
+              "id": "0.1.1",
+              "node_type": "argument_list",
+              "label": "argument_list",
+              "position": {
+                "start_line": 1,
+                "start_col": 8,
+                "end_line": 1,
+                "end_col": 14
+              },
+              "structural_hash": "cd7cac19d864608840950e7c039d667a0002053dd469da3a0380d9fc698c32b6",
+              "children": [
+                {
+                  "id": "0.1.1.0",
+                  "node_type": "string_literal",
+                  "label": "\"${n}\"",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 8,
+                    "end_line": 1,
+                    "end_col": 14
+                  },
+                  "structural_hash": "ae98635c39dd2270c51663953af78796fddb69729d1fc97b51aa3fe295465dee",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "argument_list",
+              "\"${n}\""
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.1.1",
+              "0.1.1.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.612708,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21000000,
+                "fuel_consumed": 557539,
+                "total_fuel_consumed": 557539,
+                "max_fuel_used_percent": 2.654947619047619,
+                "input_bytes": 25,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.4037,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21000000,
+                "fuel_consumed": 644230,
+                "total_fuel_consumed": 644230,
+                "max_fuel_used_percent": 3.067761904761905,
+                "input_bytes": 25,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "99f65536ace6bf639957fce9c214be0e18a1f6bcfe2bb5154ee46327ed3ecda3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "b2281566ce203b162e641cb1dc62416efd1ae084c519fa58c7744c5a07df7de5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "n",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "b72acb0c9f83c74df1c6270921c4f152fd90b55b535f01575a0a2d69c79f28b3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "n",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "fab1141959a509b5b587e02aa8133f19b0994ada2227c725bf2d246558fb4501",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "juxt_function_call",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "69ebb0079197f2b404c7e3d67c5b60fb63c7f1633a296d3cececa53f3c08870a",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 7
+                    },
+                    "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "22d6c980a1265352adf9a91fc1732ea0dc0aa7a7528f03208509ff34becfa2ca",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "b2281566ce203b162e641cb1dc62416efd1ae084c519fa58c7744c5a07df7de5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "n",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "b72acb0c9f83c74df1c6270921c4f152fd90b55b535f01575a0a2d69c79f28b3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "n",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "fab1141959a509b5b587e02aa8133f19b0994ada2227c725bf2d246558fb4501",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "juxt_function_call",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "414ae4badb9077aa517eb769fdac74b50356e8b75ae7bd9bd78cc083d42f5d07",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 7
+                    },
+                    "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "argument_list",
+                    "label": "argument_list",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "cd7cac19d864608840950e7c039d667a0002053dd469da3a0380d9fc698c32b6",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "string_literal",
+                        "label": "\"${n}\"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 8,
+                          "end_line": 1,
+                          "end_col": 14
+                        },
+                        "structural_hash": "ae98635c39dd2270c51663953af78796fddb69729d1fc97b51aa3fe295465dee",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.562
+    },
+    {
+      "id": "dynamic/groovy/spacing",
+      "language_id": "groovy",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6c2f3f43a7d2a55b96b9975e82402e24768ec69ecf47e2cbcccd3e7d7d511ec5",
+      "new_sha256": "df6566d6eb6d30218cdddd9465e69b31e146ff84d9f739cf7e8899f09bfd66aa",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "def x=1+2\\n"
+            ],
+            "new_labels": [
+              "def x = 1 + 2\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "def x=1+2\\n",
+              "new_label": "def x = 1 + 2\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                10
+              ],
+              "new_span": [
+                0,
+                14
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "def x=1+2\\n",
+              "new_label": "def x = 1 + 2\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                10
+              ],
+              "new_span": [
+                0,
+                14
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.762516,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 744549,
+                "total_fuel_consumed": 744549,
+                "max_fuel_used_percent": 3.565847701149425,
+                "input_bytes": 20,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.341304,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 745492,
+                "total_fuel_consumed": 745492,
+                "max_fuel_used_percent": 3.5703639846743296,
+                "input_bytes": 24,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "c404449e749c4aa7825fff87453383e83d2e706bd160da49d42f5f61544c4ac3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "b248fd6b5ea93520285c4a51d81128329b98eeba20360ef7c11d8039112bdc15",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "202fc5fc060d5c9387e6f318c54d45a780dfa64abf056b2d3b9a8487cbcfdd44",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "ac9239e62a894d4db3bbe234ba4bdd7f7ad8e9d24fbd08e23e75b86251939724",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 9
+                    },
+                    "structural_hash": "5de03c475b667183d023c42eb2cc4073dceecf501c958447ef19585f0ce796fd",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 8,
+                          "end_line": 1,
+                          "end_col": 9
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "c404449e749c4aa7825fff87453383e83d2e706bd160da49d42f5f61544c4ac3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "b248fd6b5ea93520285c4a51d81128329b98eeba20360ef7c11d8039112bdc15",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "202fc5fc060d5c9387e6f318c54d45a780dfa64abf056b2d3b9a8487cbcfdd44",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "ac9239e62a894d4db3bbe234ba4bdd7f7ad8e9d24fbd08e23e75b86251939724",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 9
+                    },
+                    "structural_hash": "5de03c475b667183d023c42eb2cc4073dceecf501c958447ef19585f0ce796fd",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 8,
+                          "end_line": 1,
+                          "end_col": 9
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.761
+    },
+    {
+      "id": "dynamic/groovy/unicode-value",
+      "language_id": "groovy",
+      "category": "unicode_literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d4dba2fdc6a97cdee138798cbd1cf1dd896cea89d769f62892af48ace4084a39",
+      "new_sha256": "3c3257765f0c9e65d685d5dabace8e33b942f42d417e5d3a927a880d48cacedc",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update string_literal('\"café\"') -> string_literal('\"cafè\"')",
+            "old_node": {
+              "id": "0.0.0.1.0",
+              "node_type": "string_literal",
+              "label": "\"café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "04dd76e1a56f33cc46adce2d7632346f0669984c43eb9e89f80c53a8cfae2fc8",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.1.0",
+              "node_type": "string_literal",
+              "label": "\"cafè\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "a685ccb0ffff908a58754e4fc053c0cefa3fd82aa537dcb2ca40a3d8cbb6f1fc",
+              "children": []
+            },
+            "text_diff": "\"café\" -> \"cafè\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"café\""
+            ],
+            "new_labels": [
+              "\"cafè\""
+            ],
+            "old_node_ids": [
+              "0.0.0.1.0"
+            ],
+            "new_node_ids": [
+              "0.0.0.1.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.5862890000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20680000,
+                "fuel_consumed": 518071,
+                "total_fuel_consumed": 518071,
+                "max_fuel_used_percent": 2.505178916827853,
+                "input_bytes": 17,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.30657999999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20680000,
+                "fuel_consumed": 517878,
+                "total_fuel_consumed": 517878,
+                "max_fuel_used_percent": 2.5042456479690522,
+                "input_bytes": 17,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d9fd678c6a9c2ec19591a16f3ec40f85da18e49377036ecd258d8e3e993293d4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "expression_statement",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "4eb1d11e1d93bb63d429ad21b68a48b5389e25ef24ac59cfa64ac178cf83c90f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "method_invocation",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "1175f53dca4c02d7641d702ceb6ffaf4d3e2768b2f057af5c160d69aa75f0b6e",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "println",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "argument_list",
+                        "label": "argument_list",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 7,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "02dd86fd07a685c9cc770a51cef6fb0c045db01880296289245abd93c1c47c35",
+                        "children": [
+                          {
+                            "id": "0.0.0.1.0",
+                            "node_type": "string_literal",
+                            "label": "\"café\"",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 8,
+                              "end_line": 0,
+                              "end_col": 15
+                            },
+                            "structural_hash": "04dd76e1a56f33cc46adce2d7632346f0669984c43eb9e89f80c53a8cfae2fc8",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "7e5405fc488a4ec8f63c9569bcb1f5b6681bbc7cc824b14dc9cf56afd2d54759",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "expression_statement",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "24b047866cb7e9606a2e2c15d3520538b6ee8dd9b9d220d46b58a05dd21a474e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "method_invocation",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "96cbe93402b335ca06af5c741163f7bad6dbac45931cc8adc009e551d2554b4e",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "println",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "argument_list",
+                        "label": "argument_list",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 7,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "a4fe9a0e1071135d7338b5cba1cdaf60027a309ba1ca0b854895b1ad948500b6",
+                        "children": [
+                          {
+                            "id": "0.0.0.1.0",
+                            "node_type": "string_literal",
+                            "label": "\"cafè\"",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 8,
+                              "end_line": 0,
+                              "end_col": 15
+                            },
+                            "structural_hash": "a685ccb0ffff908a58754e4fc053c0cefa3fd82aa537dcb2ca40a3d8cbb6f1fc",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 63.906
+    },
+    {
+      "id": "dynamic/groovy/incomplete",
+      "language_id": "groovy",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "70b5482e808e942fedf115b8952ba03e6668518ac95331f9991d027e238f2aa9",
+      "new_sha256": "726432e611fa7a13e34a704ca1bedf2d116484726ee5074207926fb0a5aec394",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "assessment.groovy: Incomplete or invalid syntax; source changes preserved without a semantic interpretation",
+        "fallback_code": "native_parse_incomplete"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 16.655
+    },
+    {
+      "id": "dynamic/groovy/comment",
+      "language_id": "groovy",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e02d2e9a4535e4e5c1c1a54ed2628dbb4f007706169403884a5365537773e8b7",
+      "new_sha256": "e83bd886feb9aeeb20d6f42505b8e3c854c3a8d88d34c0a4e71be161ab30be96",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.groovy",
+        "new_filename": "assessment.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// baseline comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// baseline comment\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// baseline comment\\n",
+              "risk": "amber",
+              "language": "groovy",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.87212,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22120000,
+                "fuel_consumed": 1443478,
+                "total_fuel_consumed": 1443478,
+                "max_fuel_used_percent": 6.525669077757685,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "assessment.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.557095,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22120000,
+                "fuel_consumed": 1487172,
+                "total_fuel_consumed": 1487172,
+                "max_fuel_used_percent": 6.723200723327305,
+                "input_bytes": 63,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ef0e7b8125258a2fff3e076f05a7b6e03415ef0235b7b91c5a4545ffe80c1b7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "1d63538b0628926c238c8efc212878f193214b6c9298563f99b9edcec04fe69e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "96630e0252e6a75934a50a5127320fac7fdba6950f10ef298f75d0a3ec7886fe",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 23
+                        },
+                        "structural_hash": "aa043689dce123a2106344753acce84932aeb742fda03db1d31bf43d7c121d0e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "77672857a489be9a8f3559147eca25b266f119623e1e8ca5e4fd6a23a95976d8",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "function_definition",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 25
+                },
+                "structural_hash": "1d63538b0628926c238c8efc212878f193214b6c9298563f99b9edcec04fe69e",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 25
+                    },
+                    "structural_hash": "96630e0252e6a75934a50a5127320fac7fdba6950f10ef298f75d0a3ec7886fe",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 15,
+                          "end_line": 1,
+                          "end_col": 23
+                        },
+                        "structural_hash": "aa043689dce123a2106344753acce84932aeb742fda03db1d31bf43d7c121d0e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "method_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "7ae44894c4924a992cf5c36176969a9c91bf1cc0127cb41a8aad6c2a5020277b",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "identifier",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 8,
+                      "end_line": 2,
+                      "end_col": 14
+                    },
+                    "structural_hash": "628a131a1f6cae0432dd8bc17f4a9920b6232bc35ea878f9b454d01a6b6f977d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.283
+    },
+    {
+      "id": "dynamic/groovy/external-derived-edit",
+      "language_id": "groovy",
+      "category": "external_derived_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ee708f24c16bb326fe7a45f2646186dbd89b0b8840eaf63f4bc17dd53f35e646",
+      "new_sha256": "9695c852e508cc3379e2d3402e61c7482c9b0b69e87cb7e040bdd8018c2614a5",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.groovy",
+        "new_filename": "upstream-derived.groovy",
+        "language": "groovy",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update operator('<') -> operator('>')",
+            "old_node": {
+              "id": "0.1.0.op0",
+              "node_type": "operator",
+              "label": "<",
+              "position": {
+                "start_line": 1,
+                "start_col": 9,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "5afd5d45d60aa20d6b0f3b6e953aa6fbc60e749a6e6781f0e6e9bbfc2021c264",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.0.op0",
+              "node_type": "operator",
+              "label": ">",
+              "position": {
+                "start_line": 1,
+                "start_col": 9,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "1ee263a8ca816fe9b04d4ef94ecb4a70e2bae8f6945ab4b52d1cdad703e41846",
+              "children": []
+            },
+            "text_diff": "< -> >"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "<"
+            ],
+            "new_labels": [
+              ">"
+            ],
+            "old_node_ids": [
+              "0.1.0.op0"
+            ],
+            "new_node_ids": [
+              "0.1.0.op0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "upstream-derived.groovy",
+                "call_count": 1,
+                "elapsed_ms": 1.009696,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 2343699,
+                "total_fuel_consumed": 2343699,
+                "max_fuel_used_percent": 11.11811669829222,
+                "input_bytes": 27,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "upstream-derived.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.6123879999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 2331457,
+                "total_fuel_consumed": 2331457,
+                "max_fuel_used_percent": 11.060042694497154,
+                "input_bytes": 27,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "7a36327e0ab7b196c8ebf976275ae1e7e58a6b682648249b2a23ae496b1b9269",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a428b70ab8e9afa67328c36b0f650e7d54596b4b8e0247b5fa5b2ff81e051d01",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "6108e13913c35497fe3eef13d1423c2abca09ffe61cca8fedc911cf1dc19fcbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "assert_statement",
+                "label": "assert_statement",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "7e6940d618ee3280df7c6b96450fc38636db1dca72e5b3a6719445a7afe40255",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "binary_expression",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "e4ef0102b89530b98a81f70a236091f399f61e667ff51034583631bdb29d0a0e",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 8
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "7a36327e0ab7b196c8ebf976275ae1e7e58a6b682648249b2a23ae496b1b9269",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a428b70ab8e9afa67328c36b0f650e7d54596b4b8e0247b5fa5b2ff81e051d01",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "6108e13913c35497fe3eef13d1423c2abca09ffe61cca8fedc911cf1dc19fcbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "assert_statement",
+                "label": "assert_statement",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "7e6940d618ee3280df7c6b96450fc38636db1dca72e5b3a6719445a7afe40255",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "binary_expression",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "e4ef0102b89530b98a81f70a236091f399f61e667ff51034583631bdb29d0a0e",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 8
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.25
+    },
+    {
+      "id": "dynamic/groovy/external-derived-identity",
+      "language_id": "groovy",
+      "category": "identity",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ee708f24c16bb326fe7a45f2646186dbd89b0b8840eaf63f4bc17dd53f35e646",
+      "new_sha256": "ee708f24c16bb326fe7a45f2646186dbd89b0b8840eaf63f4bc17dd53f35e646",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.groovy",
+        "new_filename": "upstream-derived.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "upstream-derived.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.9797899999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 2343703,
+                "total_fuel_consumed": 2343703,
+                "max_fuel_used_percent": 11.118135673624288,
+                "input_bytes": 27,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "upstream-derived.groovy",
+                "call_count": 1,
+                "elapsed_ms": 0.5985320000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 2343806,
+                "total_fuel_consumed": 2343806,
+                "max_fuel_used_percent": 11.118624288425046,
+                "input_bytes": 27,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "7a36327e0ab7b196c8ebf976275ae1e7e58a6b682648249b2a23ae496b1b9269",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a428b70ab8e9afa67328c36b0f650e7d54596b4b8e0247b5fa5b2ff81e051d01",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "6108e13913c35497fe3eef13d1423c2abca09ffe61cca8fedc911cf1dc19fcbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "assert_statement",
+                "label": "assert_statement",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "7e6940d618ee3280df7c6b96450fc38636db1dca72e5b3a6719445a7afe40255",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "binary_expression",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "e4ef0102b89530b98a81f70a236091f399f61e667ff51034583631bdb29d0a0e",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 8
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "7a36327e0ab7b196c8ebf976275ae1e7e58a6b682648249b2a23ae496b1b9269",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "local_variable_declaration",
+                "label": "local_variable_declaration",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a428b70ab8e9afa67328c36b0f650e7d54596b4b8e0247b5fa5b2ff81e051d01",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "variable_declarator",
+                    "label": "x",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "6108e13913c35497fe3eef13d1423c2abca09ffe61cca8fedc911cf1dc19fcbf",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 4,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "assert_statement",
+                "label": "assert_statement",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "7e6940d618ee3280df7c6b96450fc38636db1dca72e5b3a6719445a7afe40255",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "binary_expression",
+                    "label": "x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "e4ef0102b89530b98a81f70a236091f399f61e667ff51034583631bdb29d0a0e",
+                    "children": [
+                      {
+                        "id": "0.1.0.0",
+                        "node_type": "identifier",
+                        "label": "x",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 8
+                        },
+                        "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.672
+    },
+    {
+      "id": "dynamic/groovy/repo-playground-identity",
+      "language_id": "groovy",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "295a4b94d0dcf1cabe6380a80ba32b28bc97bf8fcab3f8deb74a7ace9cce4a75",
+      "new_sha256": "295a4b94d0dcf1cabe6380a80ba32b28bc97bf8fcab3f8deb74a7ace9cce4a75",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266"
+      ],
+      "review": {
+        "old_filename": "playground.groovy",
+        "new_filename": "playground.groovy",
+        "language": "groovy",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "playground.groovy",
+                "call_count": 1,
+                "elapsed_ms": 1.644575,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26000000,
+                "fuel_consumed": 2858298,
+                "total_fuel_consumed": 2858298,
+                "max_fuel_used_percent": 10.993453846153846,
+                "input_bytes": 150,
+                "input_lines": 11,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "groovy",
+                "filename": "playground.groovy",
+                "call_count": 1,
+                "elapsed_ms": 1.474149,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26000000,
+                "fuel_consumed": 2856094,
+                "total_fuel_consumed": 2856094,
+                "max_fuel_used_percent": 10.984976923076923,
+                "input_bytes": 150,
+                "input_lines": 11,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/groovy_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "c7c779a620c8a0f41996e28e3d9370a6ad3980ec1d092a1d3a4bb81e8ac2a755",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "greet",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "5648092d3b172a03d0afe271d7bd7c22e49c3ec39f60aef12cc2d62bdb9c405c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "greet",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "c45caa0b8d5e714bff0ce6b641be87a68f30b5405c5a3d35ed80233a56f95db5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "1ad8906b39d5d805063740827931402bf253e1b1bc4c99910da98c46d686ef38",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "formal_parameter",
+                        "label": "name",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "594ba255a88db1455e23d2fac054376a1a218b96b3cc0633559a84b9e4d0fb95",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "identifier",
+                            "label": "name",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 17,
+                              "end_line": 0,
+                              "end_col": 21
+                            },
+                            "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 2,
+                      "end_col": 1
+                    },
+                    "structural_hash": "c1d8f4246a5516e0702c91a08b16ea35e3645ce296f5e59f40d88cdc0c5d3f9b",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "juxt_function_call",
+                        "label": "println",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 4,
+                          "end_line": 1,
+                          "end_col": 29
+                        },
+                        "structural_hash": "28acda6077d97e01a60b86c5a0f1ed279bb60bd669fc32dc6a80ded5e43b7ac4",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.0",
+                            "node_type": "identifier",
+                            "label": "println",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 4,
+                              "end_line": 1,
+                              "end_col": 11
+                            },
+                            "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "argument_list",
+                            "label": "argument_list",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 12,
+                              "end_line": 1,
+                              "end_col": 29
+                            },
+                            "structural_hash": "62b883676b543365d0f683578ac161fdf8cd27cce6472adf9b01af81648de587",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.1.0",
+                                "node_type": "string_literal",
+                                "label": "\"Hello, ${name}!\"",
+                                "position": {
+                                  "start_line": 1,
+                                  "start_col": 12,
+                                  "end_line": 1,
+                                  "end_col": 29
+                                },
+                                "structural_hash": "877ead8625339a5ab2d6da641d429db49959f817e6534e53a294ec1fdca58037",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "function_definition",
+                "label": "add",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "e41ae6b18e5de69442af0cd7e06839d7984ca2bb799de01b0d04f88727c0f02a",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "add",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 7
+                    },
+                    "structural_hash": "8a13d423e22f89df68f45cffe952ea4b99d2c40c9937ae80694d07a57950c6ad",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 7,
+                      "end_line": 4,
+                      "end_col": 21
+                    },
+                    "structural_hash": "f5ace685a03bdc0d19a8edbea54bf0e859d422bb39578a49e9e79e1731321968",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "formal_parameter",
+                        "label": "x",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 8,
+                          "end_line": 4,
+                          "end_col": 13
+                        },
+                        "structural_hash": "3a6993c12271c8bf536dd4b4ad82707de028924fa02a62e7c7e77e967e3bdadd",
+                        "children": [
+                          {
+                            "id": "0.1.2.0.1",
+                            "node_type": "identifier",
+                            "label": "x",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 12,
+                              "end_line": 4,
+                              "end_col": 13
+                            },
+                            "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "formal_parameter",
+                        "label": "y",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 15,
+                          "end_line": 4,
+                          "end_col": 20
+                        },
+                        "structural_hash": "c7e664425a94968e1d598fe83999eb4a983727105cd79fcde39725760c322f8b",
+                        "children": [
+                          {
+                            "id": "0.1.2.1.1",
+                            "node_type": "identifier",
+                            "label": "y",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 19,
+                              "end_line": 4,
+                              "end_col": 20
+                            },
+                            "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 22,
+                      "end_line": 6,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7e1ed6c117cc2c7204a1a31058d548d8511f9cbe52e055a7524865a8155fafe2",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 0
+                        },
+                        "structural_hash": "d2e04c3a82673065e87ef6b71f2689fbfa78b2765e37b83fc0ecc380cd956417",
+                        "children": [
+                          {
+                            "id": "0.1.3.0.0",
+                            "node_type": "binary_expression",
+                            "label": "x",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 11,
+                              "end_line": 5,
+                              "end_col": 16
+                            },
+                            "structural_hash": "9a6e64a0c79bf66e7965d2271440783c0d0be6da3857c83a3a774de92adc2e31",
+                            "children": [
+                              {
+                                "id": "0.1.3.0.0.0",
+                                "node_type": "identifier",
+                                "label": "x",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 11,
+                                  "end_line": 5,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                "children": []
+                              },
+                              {
+                                "id": "0.1.3.0.0.1",
+                                "node_type": "identifier",
+                                "label": "y",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 16
+                                },
+                                "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "method_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 10,
+                  "end_col": 1
+                },
+                "structural_hash": "7a3b4110a3a1d3212144d948f95162d8f5c3486880476d47154c397a90b1c0f9",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "identifier",
+                    "label": "multiply",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 12
+                    },
+                    "structural_hash": "d50103e0a373e514f32bbd54681bcf13a561c079f7a74ab0eae28dd08d06df0f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 12,
+                      "end_line": 8,
+                      "end_col": 26
+                    },
+                    "structural_hash": "f5ace685a03bdc0d19a8edbea54bf0e859d422bb39578a49e9e79e1731321968",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "formal_parameter",
+                        "label": "x",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 13,
+                          "end_line": 8,
+                          "end_col": 18
+                        },
+                        "structural_hash": "3a6993c12271c8bf536dd4b4ad82707de028924fa02a62e7c7e77e967e3bdadd",
+                        "children": [
+                          {
+                            "id": "0.2.2.0.1",
+                            "node_type": "identifier",
+                            "label": "x",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 17,
+                              "end_line": 8,
+                              "end_col": 18
+                            },
+                            "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "formal_parameter",
+                        "label": "y",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 20,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "c7e664425a94968e1d598fe83999eb4a983727105cd79fcde39725760c322f8b",
+                        "children": [
+                          {
+                            "id": "0.2.2.1.1",
+                            "node_type": "identifier",
+                            "label": "y",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 24,
+                              "end_line": 8,
+                              "end_col": 25
+                            },
+                            "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 27,
+                      "end_line": 10,
+                      "end_col": 1
+                    },
+                    "structural_hash": "a18b84f10a34478097625f6a91360806937b9e9779ae0240f0c547588bb0740b",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 0
+                        },
+                        "structural_hash": "d2e04c3a82673065e87ef6b71f2689fbfa78b2765e37b83fc0ecc380cd956417",
+                        "children": [
+                          {
+                            "id": "0.2.3.0.0",
+                            "node_type": "binary_expression",
+                            "label": "x",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 11,
+                              "end_line": 9,
+                              "end_col": 16
+                            },
+                            "structural_hash": "9a6e64a0c79bf66e7965d2271440783c0d0be6da3857c83a3a774de92adc2e31",
+                            "children": [
+                              {
+                                "id": "0.2.3.0.0.0",
+                                "node_type": "identifier",
+                                "label": "x",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 11,
+                                  "end_line": 9,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                "children": []
+                              },
+                              {
+                                "id": "0.2.3.0.0.1",
+                                "node_type": "identifier",
+                                "label": "y",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 15,
+                                  "end_line": 9,
+                                  "end_col": 16
+                                },
+                                "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "groovy",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "c7c779a620c8a0f41996e28e3d9370a6ad3980ec1d092a1d3a4bb81e8ac2a755",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_definition",
+                "label": "greet",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "5648092d3b172a03d0afe271d7bd7c22e49c3ec39f60aef12cc2d62bdb9c405c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "greet",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "c45caa0b8d5e714bff0ce6b641be87a68f30b5405c5a3d35ed80233a56f95db5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "1ad8906b39d5d805063740827931402bf253e1b1bc4c99910da98c46d686ef38",
+                    "children": [
+                      {
+                        "id": "0.0.1.0",
+                        "node_type": "formal_parameter",
+                        "label": "name",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "594ba255a88db1455e23d2fac054376a1a218b96b3cc0633559a84b9e4d0fb95",
+                        "children": [
+                          {
+                            "id": "0.0.1.0.1",
+                            "node_type": "identifier",
+                            "label": "name",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 17,
+                              "end_line": 0,
+                              "end_col": 21
+                            },
+                            "structural_hash": "ef68e456d64269f15164f99369d3b66589282a763a461e15e80ced1f3d24307d",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 2,
+                      "end_col": 1
+                    },
+                    "structural_hash": "c1d8f4246a5516e0702c91a08b16ea35e3645ce296f5e59f40d88cdc0c5d3f9b",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "juxt_function_call",
+                        "label": "println",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 4,
+                          "end_line": 1,
+                          "end_col": 29
+                        },
+                        "structural_hash": "28acda6077d97e01a60b86c5a0f1ed279bb60bd669fc32dc6a80ded5e43b7ac4",
+                        "children": [
+                          {
+                            "id": "0.0.2.0.0",
+                            "node_type": "identifier",
+                            "label": "println",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 4,
+                              "end_line": 1,
+                              "end_col": 11
+                            },
+                            "structural_hash": "cdb6100b70ca5d5b06a830dcb83deb367c378089e9ae29ebec8a4afbb4b7f11e",
+                            "children": []
+                          },
+                          {
+                            "id": "0.0.2.0.1",
+                            "node_type": "argument_list",
+                            "label": "argument_list",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 12,
+                              "end_line": 1,
+                              "end_col": 29
+                            },
+                            "structural_hash": "62b883676b543365d0f683578ac161fdf8cd27cce6472adf9b01af81648de587",
+                            "children": [
+                              {
+                                "id": "0.0.2.0.1.0",
+                                "node_type": "string_literal",
+                                "label": "\"Hello, ${name}!\"",
+                                "position": {
+                                  "start_line": 1,
+                                  "start_col": 12,
+                                  "end_line": 1,
+                                  "end_col": 29
+                                },
+                                "structural_hash": "877ead8625339a5ab2d6da641d429db49959f817e6534e53a294ec1fdca58037",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "function_definition",
+                "label": "add",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "e41ae6b18e5de69442af0cd7e06839d7984ca2bb799de01b0d04f88727c0f02a",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "add",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 7
+                    },
+                    "structural_hash": "8a13d423e22f89df68f45cffe952ea4b99d2c40c9937ae80694d07a57950c6ad",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 7,
+                      "end_line": 4,
+                      "end_col": 21
+                    },
+                    "structural_hash": "f5ace685a03bdc0d19a8edbea54bf0e859d422bb39578a49e9e79e1731321968",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "formal_parameter",
+                        "label": "x",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 8,
+                          "end_line": 4,
+                          "end_col": 13
+                        },
+                        "structural_hash": "3a6993c12271c8bf536dd4b4ad82707de028924fa02a62e7c7e77e967e3bdadd",
+                        "children": [
+                          {
+                            "id": "0.1.2.0.1",
+                            "node_type": "identifier",
+                            "label": "x",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 12,
+                              "end_line": 4,
+                              "end_col": 13
+                            },
+                            "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "formal_parameter",
+                        "label": "y",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 15,
+                          "end_line": 4,
+                          "end_col": 20
+                        },
+                        "structural_hash": "c7e664425a94968e1d598fe83999eb4a983727105cd79fcde39725760c322f8b",
+                        "children": [
+                          {
+                            "id": "0.1.2.1.1",
+                            "node_type": "identifier",
+                            "label": "y",
+                            "position": {
+                              "start_line": 4,
+                              "start_col": 19,
+                              "end_line": 4,
+                              "end_col": 20
+                            },
+                            "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "closure",
+                    "label": "closure",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 22,
+                      "end_line": 6,
+                      "end_col": 1
+                    },
+                    "structural_hash": "7e1ed6c117cc2c7204a1a31058d548d8511f9cbe52e055a7524865a8155fafe2",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 0
+                        },
+                        "structural_hash": "d2e04c3a82673065e87ef6b71f2689fbfa78b2765e37b83fc0ecc380cd956417",
+                        "children": [
+                          {
+                            "id": "0.1.3.0.0",
+                            "node_type": "binary_expression",
+                            "label": "x",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 11,
+                              "end_line": 5,
+                              "end_col": 16
+                            },
+                            "structural_hash": "9a6e64a0c79bf66e7965d2271440783c0d0be6da3857c83a3a774de92adc2e31",
+                            "children": [
+                              {
+                                "id": "0.1.3.0.0.0",
+                                "node_type": "identifier",
+                                "label": "x",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 11,
+                                  "end_line": 5,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                "children": []
+                              },
+                              {
+                                "id": "0.1.3.0.0.1",
+                                "node_type": "identifier",
+                                "label": "y",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 15,
+                                  "end_line": 5,
+                                  "end_col": 16
+                                },
+                                "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "method_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 10,
+                  "end_col": 1
+                },
+                "structural_hash": "7a3b4110a3a1d3212144d948f95162d8f5c3486880476d47154c397a90b1c0f9",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "identifier",
+                    "label": "multiply",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 12
+                    },
+                    "structural_hash": "d50103e0a373e514f32bbd54681bcf13a561c079f7a74ab0eae28dd08d06df0f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "formal_parameters",
+                    "label": "formal_parameters",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 12,
+                      "end_line": 8,
+                      "end_col": 26
+                    },
+                    "structural_hash": "f5ace685a03bdc0d19a8edbea54bf0e859d422bb39578a49e9e79e1731321968",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "formal_parameter",
+                        "label": "x",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 13,
+                          "end_line": 8,
+                          "end_col": 18
+                        },
+                        "structural_hash": "3a6993c12271c8bf536dd4b4ad82707de028924fa02a62e7c7e77e967e3bdadd",
+                        "children": [
+                          {
+                            "id": "0.2.2.0.1",
+                            "node_type": "identifier",
+                            "label": "x",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 17,
+                              "end_line": 8,
+                              "end_col": 18
+                            },
+                            "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "formal_parameter",
+                        "label": "y",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 20,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "c7e664425a94968e1d598fe83999eb4a983727105cd79fcde39725760c322f8b",
+                        "children": [
+                          {
+                            "id": "0.2.2.1.1",
+                            "node_type": "identifier",
+                            "label": "y",
+                            "position": {
+                              "start_line": 8,
+                              "start_col": 24,
+                              "end_line": 8,
+                              "end_col": 25
+                            },
+                            "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "block",
+                    "label": "block",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 27,
+                      "end_line": 10,
+                      "end_col": 1
+                    },
+                    "structural_hash": "a18b84f10a34478097625f6a91360806937b9e9779ae0240f0c547588bb0740b",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "return_statement",
+                        "label": "return_statement",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 0
+                        },
+                        "structural_hash": "d2e04c3a82673065e87ef6b71f2689fbfa78b2765e37b83fc0ecc380cd956417",
+                        "children": [
+                          {
+                            "id": "0.2.3.0.0",
+                            "node_type": "binary_expression",
+                            "label": "x",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 11,
+                              "end_line": 9,
+                              "end_col": 16
+                            },
+                            "structural_hash": "9a6e64a0c79bf66e7965d2271440783c0d0be6da3857c83a3a774de92adc2e31",
+                            "children": [
+                              {
+                                "id": "0.2.3.0.0.0",
+                                "node_type": "identifier",
+                                "label": "x",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 11,
+                                  "end_line": 9,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "efd7def478f4085fc6e6a957a9c3b174d166c197b36624c5846cefc62bbc5f3e",
+                                "children": []
+                              },
+                              {
+                                "id": "0.2.3.0.0.1",
+                                "node_type": "identifier",
+                                "label": "y",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 15,
+                                  "end_line": 9,
+                                  "end_col": 16
+                                },
+                                "structural_hash": "c632eed4c0478c9fe2eacfdbdaef382af84b7a045274e289ca0e593eafd2641b",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 114.106
+    }
+  ],
+  "attempted_count": 11,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 23.013
+}

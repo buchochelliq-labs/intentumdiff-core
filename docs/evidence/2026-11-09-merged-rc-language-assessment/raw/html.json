@@ -1,0 +1,2525 @@
+{
+  "language_id": "html",
+  "options": {
+    "language_hint": "html",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-html-text",
+      "language_id": "html",
+      "category": "meaningful_text",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1a634ca7513b6670a8af1d80998c62a28e69f1cb365c404369a0d8fd36f07a46",
+      "new_sha256": "a89222d2500dda146904ce74466063b369dd79f4a2949e1e2e9b1af5eb36afbb",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update text('Safe') -> text('Danger')",
+            "old_node": {
+              "id": "0.1.path_text",
+              "node_type": "text",
+              "label": "Safe",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 0,
+                "end_col": 22
+              },
+              "structural_hash": "5cc039629b63a842f02dadf4e06d479a793a9aefb2f8b9553a2006c356f0ad06",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.path_text",
+              "node_type": "text",
+              "label": "Danger",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 0,
+                "end_col": 24
+              },
+              "structural_hash": "2c37328778681623fde9c449717329f9fb0f4a39c36aea77b89b4ff75d9d81a5",
+              "children": []
+            },
+            "text_diff": "Safe -> Danger"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Safe"
+            ],
+            "new_labels": [
+              "Danger"
+            ],
+            "old_node_ids": [
+              "0.1.path_text"
+            ],
+            "new_node_ids": [
+              "0.1.path_text"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.5012610000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21120000,
+                "fuel_consumed": 495135,
+                "total_fuel_consumed": 495135,
+                "max_fuel_used_percent": 2.3443892045454544,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.26834800000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21120000,
+                "fuel_consumed": 496138,
+                "total_fuel_consumed": 496138,
+                "max_fuel_used_percent": 2.3491382575757576,
+                "input_bytes": 29,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "6074a1d334dec0269c8a5faf4e1e1ce83cd4793abc042932c540830fd037f766",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "doctype",
+                "label": "<!doctype html>",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "80cc7f8678051829d9fa6ac3cbb4e1a5f8bba31b8b6f9b971d69161bc6d3fee2",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 15,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "49a42f75ed765fbf1b961cf18f316961d125d43c6fb2e48ae3a496ab5b6298b7",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "f13b1fb538395d26d8e2ef8174d37f040d631e742a5d778b46271d55558f1f7a",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "4a4795e91083f02fe6bce5332e55f13db8e10e08aa7c96432be813746cd44343",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "doctype",
+                "label": "<!doctype html>",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "80cc7f8678051829d9fa6ac3cbb4e1a5f8bba31b8b6f9b971d69161bc6d3fee2",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 15,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "9b71c161ea513ff394b5f87032c6cae59fa5f974d6ef89e52e16686664fc827e",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "f13b1fb538395d26d8e2ef8174d37f040d631e742a5d778b46271d55558f1f7a",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 17561.896
+    },
+    {
+      "id": "web-html-url",
+      "language_id": "html",
+      "category": "meaningful_url",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c207d147d2242126214ab34dfbfc0a1593d09bc8641562f50063476c2c5732bb",
+      "new_sha256": "39eea1fc1b57a263cd8c4764de68bd35f37f808a46fb1b5429bc413e219231ce",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update attribute('href=/safe') -> attribute('href=/danger')",
+            "old_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "href=/safe",
+              "position": {
+                "start_line": 0,
+                "start_col": 3,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "2a1b8da016754db77c396aee9e003546611d5a3a91f4509b63a87df25bb87b37",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "href=/danger",
+              "position": {
+                "start_line": 0,
+                "start_col": 3,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "21dcf0505bbf4a60bcfaded052000dd297f766052431c7acfb02af41f9ffe7be",
+              "children": []
+            },
+            "text_diff": "href=/safe -> href=/danger"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "href=/safe"
+            ],
+            "new_labels": [
+              "href=/danger"
+            ],
+            "old_node_ids": [
+              "0.0.0.1"
+            ],
+            "new_node_ids": [
+              "0.0.0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.476626,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20960000,
+                "fuel_consumed": 605219,
+                "total_fuel_consumed": 605219,
+                "max_fuel_used_percent": 2.8874952290076337,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.289327,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20960000,
+                "fuel_consumed": 605957,
+                "total_fuel_consumed": 605957,
+                "max_fuel_used_percent": 2.891016221374046,
+                "input_bytes": 25,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9ea996248b508a7cb4d22a6fafdc1c5ffbdbb294843a0657d9a3e62c6538acc3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "4ce1c457804f7b3c1b2cd12419c142036867fb9e7eacbdaca979a19f26f7aaaa",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "a9df8a0836771bd0df83d9d499125f15084eb024dd28596705f974e43ce374ba",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "href",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "7733f98bbc3ee9e91cb93116707c7d666488005295d3045a189de6f228c53300",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "7e59ae9dc256864a36db6b8245ed3ca54311d69b154374e97018fdcbdb642f86",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "a",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 24
+                },
+                "structural_hash": "b81aa3813f587455f07d334d5749b7bce53fbc316ee6f05a516d20f7dc27841a",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "a",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "9384673731154f1e2f0ff726371b22e7685ff8661288f526ff73367be4922792",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "href",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 17
+                        },
+                        "structural_hash": "898d6a855124063b12033ab6e3811d2b57250e80730d9a050aca79b186269d28",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 51.166
+    },
+    {
+      "id": "web-html-button_type",
+      "language_id": "html",
+      "category": "meaningful_button_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "bb874c3b4093d10bfeaa79e3bc64d408e30a1027f0aae56efab0d2712d07ffda",
+      "new_sha256": "8aab683cd9fe532d51a8bbaae886d33cbbf09e2c945b1f02578f55213b4b4722",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update attribute('type=button') -> attribute('type=submit')",
+            "old_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "type=button",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "2e5ae8389370fee886e9bf4ea776d7f4843aac6afc6079bb79ee683e30c008bd",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "type=submit",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "f5e960793faa34c966e733bb5716fcc19de23223a252d106331227ee9104c80e",
+              "children": []
+            },
+            "text_diff": "type=button -> type=submit"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "type=button"
+            ],
+            "new_labels": [
+              "type=submit"
+            ],
+            "old_node_ids": [
+              "0.0.0.1"
+            ],
+            "new_node_ids": [
+              "0.0.0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.556304,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 618191,
+                "total_fuel_consumed": 618191,
+                "max_fuel_used_percent": 2.894152621722846,
+                "input_bytes": 34,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.254442,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21360000,
+                "fuel_consumed": 618006,
+                "total_fuel_consumed": 618006,
+                "max_fuel_used_percent": 2.893286516853933,
+                "input_bytes": 34,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "22dbc7a0e2c619eae7f3a282fa8cc0a4227d9fed080f57cc3a70fee86fdc719d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 33
+                },
+                "structural_hash": "4496efa747e50905819a541158d9df2632502ecc6e025b5ac62233b34c9c3723",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "c96a48313bff99155057912bc4ac2677c7aeb5d98766cace8b0459d0edbc5d6e",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "e268d29126a06440ee14ab7862d2b7700e96633a671932e6c419c3db6844ea00",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "07f6bd23da276975e2593dc24d866458bd4c8032801b31d531a5b475e9b2d422",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 33
+                },
+                "structural_hash": "d5b82331b169d8c75e52c7247aeaf3a69134b7dbf00e7fcfa039aad3dff5c9e5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "14ca6fe6095e30ab504b68d5782336b29f34827edab8cc2901ba6aaaee3e64a1",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "661726108377b22c727a17ad89a0b9e300fd2224744183d74c09b92b35cd1594",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 61.257
+    },
+    {
+      "id": "web-html-pre_whitespace",
+      "language_id": "html",
+      "category": "meaningful_pre_whitespace",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "bc827310eddb8b68b3c3059fdabc7d5c3d9b5d1c7a6d6faa467f5edceec52c56",
+      "new_sha256": "4a8afc233d4abf4696343aa32bb59be95a6b092b90b1e88f2afaa274039b5aaa",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<pre>a b</pre>\\n"
+            ],
+            "new_labels": [
+              "<pre>a  b</pre>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<pre>a b</pre>\\n",
+              "new_label": "<pre>a  b</pre>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                15
+              ],
+              "new_span": [
+                0,
+                16
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<pre>a b</pre>\\n",
+              "new_label": "<pre>a  b</pre>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                15
+              ],
+              "new_span": [
+                0,
+                16
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.94201,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 414212,
+                "total_fuel_consumed": 414212,
+                "max_fuel_used_percent": 2.0087875848690593,
+                "input_bytes": 15,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.17798999999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 414891,
+                "total_fuel_consumed": 414891,
+                "max_fuel_used_percent": 2.0120805043646945,
+                "input_bytes": 16,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "1ccc8ebbccb2d9263173f076bec834b1388019554a067bd890f4d823ac0e6558",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "pre",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "41d07a4c10e97d51d22c4965938214cfec19bd84da7d8b838e8d27afb7c8e1ac",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "pre",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3671030a705e4ac074f1754812ea15f96441458431c8ddb98eeeb25052c45196",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "2be3be396181fb8e78820afd1ba4a1ae9313f2f9557a7a6b337152bca3a3cfe0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "pre",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "55bf0f2be6a67dacd0c6975af9ee3c093a885a685ac74ff6f4fbd25ebf6d3057",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "pre",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3671030a705e4ac074f1754812ea15f96441458431c8ddb98eeeb25052c45196",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 63.981
+    },
+    {
+      "id": "web-html-identity",
+      "language_id": "html",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c480802fcacc5bc0692e2900286192d64f659e4c2ca2f248384f70fce1629b30",
+      "new_sha256": "c480802fcacc5bc0692e2900286192d64f659e4c2ca2f248384f70fce1629b30",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.817598,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 626724,
+                "total_fuel_consumed": 626724,
+                "max_fuel_used_percent": 2.9730740037950665,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.306118,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 626567,
+                "total_fuel_consumed": 626567,
+                "max_fuel_used_percent": 2.972329222011385,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "12c698ac08332747c892a3c086ac0259f8c031ef5a91455d0d1b4fc1c867febf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "9c4ad1946ab7177dc34401508d39ac6016d57c91064d65118fec59da62d4159e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "1d4f714e801404cb425baa339dcd869bedad9a21835b197065a9af61c9f1b311",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "title",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "5a2015a3facc2a317a17a38b4ce5e4030a9243bfacad8d828710951b9adf67ca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "12c698ac08332747c892a3c086ac0259f8c031ef5a91455d0d1b4fc1c867febf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "9c4ad1946ab7177dc34401508d39ac6016d57c91064d65118fec59da62d4159e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "1d4f714e801404cb425baa339dcd869bedad9a21835b197065a9af61c9f1b311",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "title",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "5a2015a3facc2a317a17a38b4ce5e4030a9243bfacad8d828710951b9adf67ca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.572
+    },
+    {
+      "id": "web-html-preservation",
+      "language_id": "html",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6d9bf7c30f647ea6be08ffea7e4e8cae7a8fdae9367c1b3ecc1decf36bef6d46",
+      "new_sha256": "c480802fcacc5bc0692e2900286192d64f659e4c2ca2f248384f70fce1629b30",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<p title='Ready'>Hello</p>\\n"
+            ],
+            "new_labels": [
+              "<p title=\"Ready\">Hello</p>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p title='Ready'>Hello</p>\\n",
+              "new_label": "<p title=\"Ready\">Hello</p>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                27
+              ],
+              "new_span": [
+                0,
+                27
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p title='Ready'>Hello</p>\\n",
+              "new_label": "<p title=\"Ready\">Hello</p>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                27
+              ],
+              "new_span": [
+                0,
+                27
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.765883,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 626747,
+                "total_fuel_consumed": 626747,
+                "max_fuel_used_percent": 2.973183111954459,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.32629600000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 626452,
+                "total_fuel_consumed": 626452,
+                "max_fuel_used_percent": 2.9717836812144216,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "12c698ac08332747c892a3c086ac0259f8c031ef5a91455d0d1b4fc1c867febf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "9c4ad1946ab7177dc34401508d39ac6016d57c91064d65118fec59da62d4159e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "1d4f714e801404cb425baa339dcd869bedad9a21835b197065a9af61c9f1b311",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "title",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "5a2015a3facc2a317a17a38b4ce5e4030a9243bfacad8d828710951b9adf67ca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "12c698ac08332747c892a3c086ac0259f8c031ef5a91455d0d1b4fc1c867febf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "9c4ad1946ab7177dc34401508d39ac6016d57c91064d65118fec59da62d4159e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "1d4f714e801404cb425baa339dcd869bedad9a21835b197065a9af61c9f1b311",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "title",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 3,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "5a2015a3facc2a317a17a38b4ce5e4030a9243bfacad8d828710951b9adf67ca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.582
+    },
+    {
+      "id": "web-html-incomplete",
+      "language_id": "html",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "02c400f14d7569ede8795efe88ad279a1f0d87ac32cf5bda8e5b4edf9a847c04",
+      "new_sha256": "c4ba0e63c02aff94de671fafa398574ea2312e41043087c1dfc7bf564bc09c05",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<a href=\""
+            ],
+            "new_labels": [
+              "<a title=\""
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<a href=\"",
+              "new_label": "<a title=\"",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                9
+              ],
+              "new_span": [
+                0,
+                10
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<a href=\"",
+              "new_label": "<a title=\"",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                9
+              ],
+              "new_span": [
+                0,
+                10
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.508234,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20380000,
+                "fuel_consumed": 261317,
+                "total_fuel_consumed": 261317,
+                "max_fuel_used_percent": 1.2822227674190383,
+                "input_bytes": 9,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.246698,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20380000,
+                "fuel_consumed": 261666,
+                "total_fuel_consumed": 261666,
+                "max_fuel_used_percent": 1.2839352306182532,
+                "input_bytes": 10,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 9
+            },
+            "structural_hash": "9b4427e4f35e8be0aa23c902b0d6b918dee7e01d92b998f49abbac36615cca2c",
+            "children": []
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 10
+            },
+            "structural_hash": "9e9faade471e90ac288c83f1de56744e1c776cf63effe715bd6160cbd6c59dc7",
+            "children": []
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 56.492
+    },
+    {
+      "id": "web-html-unicode",
+      "language_id": "html",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5089ee95567864282e4c096780283bd241ba45fad85e54862be71ad73a5e6403",
+      "new_sha256": "41e5b984ba526f3fb8c0815ed3e3546b21230bc2284f76b4d9dfaa191c0f9253",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update text('你好，世界') -> text('你好，朋友')",
+            "old_node": {
+              "id": "0.0.path_text",
+              "node_type": "text",
+              "label": "你好，世界",
+              "position": {
+                "start_line": 0,
+                "start_col": 3,
+                "end_line": 0,
+                "end_col": 18
+              },
+              "structural_hash": "0c48e2c00a27c9ff2f309e1cb80f3690c87cf9b31e86e06c8747cb7382eb2506",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_text",
+              "node_type": "text",
+              "label": "你好，朋友",
+              "position": {
+                "start_line": 0,
+                "start_col": 3,
+                "end_line": 0,
+                "end_col": 18
+              },
+              "structural_hash": "dcae286cf018175a98d2a4b16e01cd68199871461eaccf342ef0d1c0149f34fe",
+              "children": []
+            },
+            "text_diff": "你好，世界 -> 你好，朋友"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "你好，世界"
+            ],
+            "new_labels": [
+              "你好，朋友"
+            ],
+            "old_node_ids": [
+              "0.0.path_text"
+            ],
+            "new_node_ids": [
+              "0.0.path_text"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.599033,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 409638,
+                "total_fuel_consumed": 409638,
+                "max_fuel_used_percent": 1.9581166347992351,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.25489300000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 409388,
+                "total_fuel_consumed": 409388,
+                "max_fuel_used_percent": 1.9569216061185466,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5df98ee51d9b8209d5b67e24fc23b8e8a6c52cfe9f266e71d4f6417e047e5dc1",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "d258bb42e819865f5e9727691ea505b85e5eb702579e095d3d52fb60fcb59abe",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "f13b1fb538395d26d8e2ef8174d37f040d631e742a5d778b46271d55558f1f7a",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "8784f8578d8c668a19b4bd746eed526ff9658d92d3b62fc3ce5303df04a5ba6b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "28982f8f36506c74548986ef26a60b1980b993c07faf217f204c374d7b900640",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "p",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "f13b1fb538395d26d8e2ef8174d37f040d631e742a5d778b46271d55558f1f7a",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.306
+    },
+    {
+      "id": "web-html-external-button-type",
+      "language_id": "html",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "7809b1f0ec9160a0f17b7784a9e5c8a2499464427eedd33250423d1c0a1fc087",
+      "new_sha256": "e03ca174ee2b654234cbe6b4aa4ab31a15535bf937302a9a7b003cc9bdf5c25a",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update attribute('type=button') -> attribute('type=submit')",
+            "old_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "type=button",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "2e5ae8389370fee886e9bf4ea776d7f4843aac6afc6079bb79ee683e30c008bd",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0.1",
+              "node_type": "attribute",
+              "label": "type=submit",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "f5e960793faa34c966e733bb5716fcc19de23223a252d106331227ee9104c80e",
+              "children": []
+            },
+            "text_diff": "type=button -> type=submit"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "type=button"
+            ],
+            "new_labels": [
+              "type=submit"
+            ],
+            "old_node_ids": [
+              "0.0.0.1"
+            ],
+            "new_node_ids": [
+              "0.0.0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.5581969999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 580465,
+                "total_fuel_consumed": 580465,
+                "max_fuel_used_percent": 2.727749060150376,
+                "input_bytes": 32,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.253952,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 580332,
+                "total_fuel_consumed": 580332,
+                "max_fuel_used_percent": 2.7271240601503757,
+                "input_bytes": 32,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9b1063ad77b4847ee855de751e6412c448b0c05ef455eee83fb129f5393127f6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "0d406b5f25d0b8c1b094df965906ca567838d4e2a000877e6096266f7452cb63",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "c96a48313bff99155057912bc4ac2677c7aeb5d98766cace8b0459d0edbc5d6e",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "e268d29126a06440ee14ab7862d2b7700e96633a671932e6c419c3db6844ea00",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5b75a5eed32a2cfce50eb31bba13a2df98b3a5c8469c3df13a5a8e6de078e8df",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "dc7420054f5bf46358d99f91a387bc2fa350a4c2f239dfe2964b6aaac404e954",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "14ca6fe6095e30ab504b68d5782336b29f34827edab8cc2901ba6aaaee3e64a1",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "661726108377b22c727a17ad89a0b9e300fd2224744183d74c09b92b35cd1594",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.092
+    },
+    {
+      "id": "web-html-external-attribute-quotes",
+      "language_id": "html",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "7809b1f0ec9160a0f17b7784a9e5c8a2499464427eedd33250423d1c0a1fc087",
+      "new_sha256": "aa5a458ac35435bf20f4eff1610c261479442e19c788b6ea626bdc3212d3d036",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.html",
+        "new_filename": "assessment.html",
+        "language": "html",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<button type=\"button\"></button>\\n"
+            ],
+            "new_labels": [
+              "<button type='button'></button>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button type=\"button\"></button>\\n",
+              "new_label": "<button type='button'></button>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                32
+              ],
+              "new_span": [
+                0,
+                32
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<button type=\"button\"></button>\\n",
+              "new_label": "<button type='button'></button>\\n",
+              "risk": "amber",
+              "language": "html",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                32
+              ],
+              "new_span": [
+                0,
+                32
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.404821,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 580092,
+                "total_fuel_consumed": 580092,
+                "max_fuel_used_percent": 2.7259962406015035,
+                "input_bytes": 32,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "html",
+                "filename": "assessment.html",
+                "call_count": 1,
+                "elapsed_ms": 0.321166,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 580045,
+                "total_fuel_consumed": 580045,
+                "max_fuel_used_percent": 2.7257753759398495,
+                "input_bytes": 32,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/html_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9b1063ad77b4847ee855de751e6412c448b0c05ef455eee83fb129f5393127f6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "0d406b5f25d0b8c1b094df965906ca567838d4e2a000877e6096266f7452cb63",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "c96a48313bff99155057912bc4ac2677c7aeb5d98766cace8b0459d0edbc5d6e",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "e268d29126a06440ee14ab7862d2b7700e96633a671932e6c419c3db6844ea00",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "html",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9b1063ad77b4847ee855de751e6412c448b0c05ef455eee83fb129f5393127f6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "button",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "0d406b5f25d0b8c1b094df965906ca567838d4e2a000877e6096266f7452cb63",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "start_tag",
+                    "label": "button",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "c96a48313bff99155057912bc4ac2677c7aeb5d98766cace8b0459d0edbc5d6e",
+                    "children": [
+                      {
+                        "id": "0.0.0.1",
+                        "node_type": "attribute",
+                        "label": "type",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 8,
+                          "end_line": 0,
+                          "end_col": 21
+                        },
+                        "structural_hash": "e268d29126a06440ee14ab7862d2b7700e96633a671932e6c419c3db6844ea00",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 59.142
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 18.991
+}

@@ -1,0 +1,4040 @@
+{
+  "language_id": "clojure",
+  "options": {
+    "language_hint": "clojure",
+    "strict_plugins": true
+  },
+  "completed_count": 11,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "dynamic/clojure/identity",
+      "language_id": "clojure",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5a7fa12f0f31e97825f795bce0a484a9906e11c2554693af68c69f1be5508cfd",
+      "new_sha256": "5a7fa12f0f31e97825f795bce0a484a9906e11c2554693af68c69f1be5508cfd",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.6638529999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 854022,
+                "total_fuel_consumed": 854022,
+                "max_fuel_used_percent": 3.9685037174721187,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 2.835037,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 854022,
+                "total_fuel_consumed": 854022,
+                "max_fuel_used_percent": 3.9685037174721187,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "0ee1716213c0395bca41081b73ea115518f7fcc61e9adacac574f6823e1ddf0e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 9,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 10,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "0ee1716213c0395bca41081b73ea115518f7fcc61e9adacac574f6823e1ddf0e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 9,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 10,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 15160.834
+    },
+    {
+      "id": "dynamic/clojure/literal",
+      "language_id": "clojure",
+      "category": "literal_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5a7fa12f0f31e97825f795bce0a484a9906e11c2554693af68c69f1be5508cfd",
+      "new_sha256": "b17b5862a4386db122ed5bb0055c5a30cc2553749c5cdc555d3b56cee75cd8ff",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update num_lit('1') -> num_lit('2')",
+            "old_node": {
+              "id": "0.0.4",
+              "node_type": "num_lit",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.4",
+              "node_type": "num_lit",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [
+              "2"
+            ],
+            "old_node_ids": [
+              "0.0.4"
+            ],
+            "new_node_ids": [
+              "0.0.4"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.695272,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 854022,
+                "total_fuel_consumed": 854022,
+                "max_fuel_used_percent": 3.9685037174721187,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.414941,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 854022,
+                "total_fuel_consumed": 854022,
+                "max_fuel_used_percent": 3.9685037174721187,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "0ee1716213c0395bca41081b73ea115518f7fcc61e9adacac574f6823e1ddf0e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 9,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 10,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "fa42dfd24491b1223b91c5b15896c55288ced3fa5a48123cea93e683fd71d9be",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "66fb1d0dc78501807d8a84e7876aa2d81d14c8fb7afaaadfb550f61eb6f43124",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 9,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 10,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.862
+    },
+    {
+      "id": "dynamic/clojure/operator",
+      "language_id": "clojure",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "f23ec56570ca88e51cc986e81dd3bf398ccf2fc98073826b361efbb574b59d92",
+      "new_sha256": "3b9d1a479c2eb45810502f08aeee4cec0f9b1642e6dae2ec0d0e35077f3ec145",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update sym_lit('+') -> sym_lit('-')",
+            "old_node": {
+              "id": "0.0.2.1",
+              "node_type": "sym_lit",
+              "label": "+",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "d2a69d956015ca97ee01b983f5f41ee4d6bb44c74e2011b789517a5ff20e2afe",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.2.1",
+              "node_type": "sym_lit",
+              "label": "-",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 11
+              },
+              "structural_hash": "61b0cf74d90ee77f40ca8b922d3d13abfc2b0975370ea7bfb02a16344a07e5a8",
+              "children": []
+            },
+            "text_diff": "+ -> -"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "+"
+            ],
+            "new_labels": [
+              "-"
+            ],
+            "old_node_ids": [
+              "0.0.2.1"
+            ],
+            "new_node_ids": [
+              "0.0.2.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.582483,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558203,
+                "total_fuel_consumed": 558203,
+                "max_fuel_used_percent": 2.6940299227799227,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.361972,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558203,
+                "total_fuel_consumed": 558203,
+                "max_fuel_used_percent": 2.6940299227799227,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "c1a4b6b31e8231715f22373e36bf0724b9c844ad8374a1aac206278ebcd84bd0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "adafab64d81e3bb6b57b7f96ef5af331ceaa91f9ff64e67afb488278ce52f6ba",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "+",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "babfaea4e4fb8065c2733fe53329386332757824fb0ead4b4872573e6d46c910",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "+",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d2a69d956015ca97ee01b983f5f41ee4d6bb44c74e2011b789517a5ff20e2afe",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "6",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "b5cdc35283706b3a9f7dcf84a47624fadb02846f6c4c85cd5153d52b145e43f3",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d5ca13060e6740d283fc7c4f23aa14f1e1f0a59f8b42b50813c84df2894823a5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "b736f095b8e42b388cd41f38a2ab951ec0a57f985885f1d925484ed7f98cb389",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "-",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6ab8ddc84b33003c876fa2b44b720996e2d3b043d0d0a54fa277012ddce6bd18",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "-",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "61b0cf74d90ee77f40ca8b922d3d13abfc2b0975370ea7bfb02a16344a07e5a8",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "6",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "b5cdc35283706b3a9f7dcf84a47624fadb02846f6c4c85cd5153d52b145e43f3",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.352
+    },
+    {
+      "id": "dynamic/clojure/language-feature",
+      "language_id": "clojure",
+      "category": "declaration_or_language_feature",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1f94428258c3d0d98323f9dd7cc55cf11a9e59caaebdcd1d3db7444a1433f962",
+      "new_sha256": "278f0f37a0474376789583ef6defc94c0fbc1580f7d93f86d8dbeb09f423cb11",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> sym_lit('x')",
+            "new_node": {
+              "id": "0.0.3.1",
+              "node_type": "sym_lit",
+              "label": "x",
+              "position": {
+                "start_line": 0,
+                "start_col": 14,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "c0d90670acc606ff20839c048fc7e4e6210c17a71f3275569f1cf388929e1e0c",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "x"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.0.3.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.559659,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20780000,
+                "fuel_consumed": 492085,
+                "total_fuel_consumed": 492085,
+                "max_fuel_used_percent": 2.368070259865255,
+                "input_bytes": 19,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.32912199999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20780000,
+                "fuel_consumed": 558793,
+                "total_fuel_consumed": 558793,
+                "max_fuel_used_percent": 2.6890904716073147,
+                "input_bytes": 20,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e70f6cb5655fcaa4df1049ff7aa9b87b3363ec23560702bb46c163b7e6321fd2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d7391ab05c16f9dafca644221951ea788d562fb022bcc4d1439327bf2d9311c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 19
+                },
+                "structural_hash": "83ad42910b1396f34a57e05d1d876e0ee1c3ecf188a21aa2c4c23ef6804cf651",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "59bf93990ed54146ee5f5596352297bdab98a25beec3ae45938f623af83b14cb",
+                    "children": [
+                      {
+                        "id": "0.0.3.1",
+                        "node_type": "sym_lit",
+                        "label": "x",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "c0d90670acc606ff20839c048fc7e4e6210c17a71f3275569f1cf388929e1e0c",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 17,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 104.574
+    },
+    {
+      "id": "dynamic/clojure/spacing",
+      "language_id": "clojure",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1770ba93390890505dff90c234565a1bae25272a05f9d7857264078df2882094",
+      "new_sha256": "312f75c49a29cf3d70f2ffcbf6fe790d70872f4f9e44dd3a680b4d96cef881a8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "(println (+ 1 2))\\n"
+            ],
+            "new_labels": [
+              "(println  (+ 1 2))\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "(println (+ 1 2))\\n",
+              "new_label": "(println  (+ 1 2))\\n",
+              "risk": "amber",
+              "language": "clojure",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                19
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "(println (+ 1 2))\\n",
+              "new_label": "(println  (+ 1 2))\\n",
+              "risk": "amber",
+              "language": "clojure",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                19
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.547477,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 558203,
+                "total_fuel_consumed": 558203,
+                "max_fuel_used_percent": 2.6914320154291222,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.346914,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 558622,
+                "total_fuel_consumed": 558622,
+                "max_fuel_used_percent": 2.6934522661523626,
+                "input_bytes": 19,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "a2af7c5e040bf7824d57c0fb27066e33312676b0a4abc3645eb48fbc3408b857",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "9c1804853210d6902cff69a1db6a72cecc15cb04f9a664b69948d1b2c7420aa6",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "+",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "57c7df08a206cfd854668b81c975354e375f914492b2d6e96423090f35c4bb29",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "+",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d2a69d956015ca97ee01b983f5f41ee4d6bb44c74e2011b789517a5ff20e2afe",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "a2af7c5e040bf7824d57c0fb27066e33312676b0a4abc3645eb48fbc3408b857",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "9c1804853210d6902cff69a1db6a72cecc15cb04f9a664b69948d1b2c7420aa6",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "+",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "57c7df08a206cfd854668b81c975354e375f914492b2d6e96423090f35c4bb29",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "+",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 11,
+                          "end_line": 0,
+                          "end_col": 12
+                        },
+                        "structural_hash": "d2a69d956015ca97ee01b983f5f41ee4d6bb44c74e2011b789517a5ff20e2afe",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 13,
+                          "end_line": 0,
+                          "end_col": 14
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 15,
+                          "end_line": 0,
+                          "end_col": 16
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.183
+    },
+    {
+      "id": "dynamic/clojure/unicode-value",
+      "language_id": "clojure",
+      "category": "unicode_literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "140e95a88dfbd4b2e6cd7636de052030ebc53657582d8330c1cc9fb068ebfb3f",
+      "new_sha256": "fb266bbfa0b2790239825de918c086c290a1b85e7928b341d9fd2db12dd49c14",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update str_lit('\"café\"') -> str_lit('\"cafè\"')",
+            "old_node": {
+              "id": "0.0.2",
+              "node_type": "str_lit",
+              "label": "\"café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 9,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "3d3e6180b72e3539650ac0afba8f206e7c665353949394ac8fcb98504d7f4ec3",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.2",
+              "node_type": "str_lit",
+              "label": "\"cafè\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 9,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "be8a0e41dcc5e282e2cc0c0910810c06be6dccbef815e6622f8e6ee6a5500582",
+              "children": []
+            },
+            "text_diff": "\"café\" -> \"cafè\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"café\""
+            ],
+            "new_labels": [
+              "\"cafè\""
+            ],
+            "old_node_ids": [
+              "0.0.2"
+            ],
+            "new_node_ids": [
+              "0.0.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.406916,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 309112,
+                "total_fuel_consumed": 309112,
+                "max_fuel_used_percent": 1.4918532818532817,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.28016,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 309112,
+                "total_fuel_consumed": 309112,
+                "max_fuel_used_percent": 1.4918532818532817,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "99b50b49328d16182e2553d56e0b63cb66508b8bb74c87fab5cc74757f272d67",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "91eac2183d19248e5afe33fd35df19dd404d312d095840a27bec90fa773ea8df",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "str_lit",
+                    "label": "\"café\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "3d3e6180b72e3539650ac0afba8f206e7c665353949394ac8fcb98504d7f4ec3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "040173c1fee776bc3f74b46b4f01830520a60328ea1a8d79d2b48c899fcbfa74",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "c41a277b2c0b60d660be6cdc94ca5f0e4e77f6be966d9c175efb06af2c08b2db",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "str_lit",
+                    "label": "\"cafè\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "be8a0e41dcc5e282e2cc0c0910810c06be6dccbef815e6622f8e6ee6a5500582",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.339
+    },
+    {
+      "id": "dynamic/clojure/incomplete",
+      "language_id": "clojure",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "49df0d5b0e0a4a6de03b359f3743b3512f3614ef978a95fbdadbac192ed501a6",
+      "new_sha256": "16f73ec97f94e37a4cee30090ddbd8b7a1ba31775a7225547ee7d3a85949e191",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "assessment.clj: Incomplete or invalid syntax; source changes preserved without a semantic interpretation",
+        "fallback_code": "native_parse_incomplete"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 17.651
+    },
+    {
+      "id": "dynamic/clojure/comment",
+      "language_id": "clojure",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5a7fa12f0f31e97825f795bce0a484a9906e11c2554693af68c69f1be5508cfd",
+      "new_sha256": "06884fa0df5b8b060a5908b2f47783dbfb0c118c46eec5c38ec0bd415cfbbc87",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.clj",
+        "new_filename": "assessment.clj",
+        "language": "clojure",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "; baseline comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "; baseline comment\\n",
+              "risk": "amber",
+              "language": "clojure",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                19
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "; baseline comment\\n",
+              "risk": "amber",
+              "language": "clojure",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                19
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.7691990000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21900000,
+                "fuel_consumed": 854022,
+                "total_fuel_consumed": 854022,
+                "max_fuel_used_percent": 3.8996438356164385,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "assessment.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.419068,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21900000,
+                "fuel_consumed": 881218,
+                "total_fuel_consumed": 881218,
+                "max_fuel_used_percent": 4.023826484018265,
+                "input_bytes": 57,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "0ee1716213c0395bca41081b73ea115518f7fcc61e9adacac574f6823e1ddf0e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 9,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 10,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "0ee1716213c0395bca41081b73ea115518f7fcc61e9adacac574f6823e1ddf0e",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 18
+                },
+                "structural_hash": "c78e6baed19d8a2183b40db07220de0e05839723e092d3eee7dddc5925faa8d9",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 1,
+                      "end_line": 1,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sym_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 15
+                    },
+                    "structural_hash": "a2e7b1a94679c78471ce570bd803c3b5fce5fc64fcbfff33fd0e99d52b3bc5f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "num_lit",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 16,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 18
+                },
+                "structural_hash": "46f1e00fbdd3965dd63db42b3ed54711d3293f1ee5fd94e95885129707984578",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 1,
+                      "end_line": 2,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "list_lit",
+                    "label": "answer",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 9,
+                      "end_line": 2,
+                      "end_col": 17
+                    },
+                    "structural_hash": "02192df430af72c88c9acf3ff9a4de6a12c2f1a77a7b11036e92f9a57608f706",
+                    "children": [
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "sym_lit",
+                        "label": "answer",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 10,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "37356e98e38a58f8164ba5dbad7e969d673a0380c98f01fc63588b6f411dfcd1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.278
+    },
+    {
+      "id": "dynamic/clojure/external-derived-edit",
+      "language_id": "clojure",
+      "category": "external_derived_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "c4b507c1c957bab499d5876ed1cb2084226ca8fa6ba2742b1f1c44907301d4ac",
+      "new_sha256": "6d837ef71e4a7900d9c1c4c3a30923f64fc78a525a8b7163b4f34309645e72f1",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.clj",
+        "new_filename": "upstream-derived.clj",
+        "language": "clojure",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update num_lit('2') -> num_lit('4')",
+            "old_node": {
+              "id": "0.0.2.3",
+              "node_type": "num_lit",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 14,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.2.3",
+              "node_type": "num_lit",
+              "label": "4",
+              "position": {
+                "start_line": 0,
+                "start_col": 14,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "3e8a97841d679991b4f5235ce3d3cff78cde880fe16d73b5f97f68f0f3e16be3",
+              "children": []
+            },
+            "text_diff": "2 -> 4"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "2"
+            ],
+            "new_labels": [
+              "4"
+            ],
+            "old_node_ids": [
+              "0.0.2.3"
+            ],
+            "new_node_ids": [
+              "0.0.2.3"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "upstream-derived.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.48988000000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558123,
+                "total_fuel_consumed": 558123,
+                "max_fuel_used_percent": 2.6936438223938226,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "upstream-derived.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.305898,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558123,
+                "total_fuel_consumed": 558123,
+                "max_fuel_used_percent": 2.6936438223938226,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "63f031f8b969f52569575241f91e53fd7cdcf07a75c02c4a700a7b66a79aad6b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "3a6bbcad4aa9538e89788f14bbe3dc4f2b4bc2cb1767b6f2e94666acd0142b44",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "/",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6f500c6dbd4d78b5212457a953f93df237bcc8abfa605257a1a34eb0f36e30ed",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "/",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d9a80fae5b3c6b2dee43d8840a0e5d9a4163b5f5e04300f7f108f30afa7ba829",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "993567a65eb4191d444cb9949a1009e521cf7ca5f2a7fdcc4dac748ac50d2efe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "f23ca408a30ba1a5f89c76326da986c0d45f840da4c1c98832740e64e39cf1c4",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "/",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "85529c3c547351f682c1bb05a411e4505f0585735090c84816d79116f44bdd59",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "/",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d9a80fae5b3c6b2dee43d8840a0e5d9a4163b5f5e04300f7f108f30afa7ba829",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "4",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "3e8a97841d679991b4f5235ce3d3cff78cde880fe16d73b5f97f68f0f3e16be3",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 67.118
+    },
+    {
+      "id": "dynamic/clojure/external-derived-identity",
+      "language_id": "clojure",
+      "category": "identity",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "c4b507c1c957bab499d5876ed1cb2084226ca8fa6ba2742b1f1c44907301d4ac",
+      "new_sha256": "c4b507c1c957bab499d5876ed1cb2084226ca8fa6ba2742b1f1c44907301d4ac",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.clj",
+        "new_filename": "upstream-derived.clj",
+        "language": "clojure",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "upstream-derived.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.5679660000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558123,
+                "total_fuel_consumed": 558123,
+                "max_fuel_used_percent": 2.6936438223938226,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "upstream-derived.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.280681,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 558123,
+                "total_fuel_consumed": 558123,
+                "max_fuel_used_percent": 2.6936438223938226,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "63f031f8b969f52569575241f91e53fd7cdcf07a75c02c4a700a7b66a79aad6b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "3a6bbcad4aa9538e89788f14bbe3dc4f2b4bc2cb1767b6f2e94666acd0142b44",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "/",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6f500c6dbd4d78b5212457a953f93df237bcc8abfa605257a1a34eb0f36e30ed",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "/",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d9a80fae5b3c6b2dee43d8840a0e5d9a4163b5f5e04300f7f108f30afa7ba829",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "63f031f8b969f52569575241f91e53fd7cdcf07a75c02c4a700a7b66a79aad6b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "println",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "3a6bbcad4aa9538e89788f14bbe3dc4f2b4bc2cb1767b6f2e94666acd0142b44",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "println",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "71707be7e527a6c242b605f1aa0e0afd0001e79c34fc48f2b7eb737fedd4065c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "list_lit",
+                    "label": "/",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 9,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6f500c6dbd4d78b5212457a953f93df237bcc8abfa605257a1a34eb0f36e30ed",
+                    "children": [
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "sym_lit",
+                        "label": "/",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 10,
+                          "end_line": 0,
+                          "end_col": 11
+                        },
+                        "structural_hash": "d9a80fae5b3c6b2dee43d8840a0e5d9a4163b5f5e04300f7f108f30afa7ba829",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.2",
+                        "node_type": "num_lit",
+                        "label": "1",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 12,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "95a9dd07d07161de68a2fbf7887335d05663ea3618ede945aeb8dbdab6f0882f",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.3",
+                        "node_type": "num_lit",
+                        "label": "2",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 14,
+                          "end_line": 0,
+                          "end_col": 15
+                        },
+                        "structural_hash": "849c822eb05211e8992373693d38da044c8e30ae3ab4d4a006fcabca406056d1",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.393
+    },
+    {
+      "id": "dynamic/clojure/repo-playground-identity",
+      "language_id": "clojure",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "c83b4cb0a5a67b3db055c81237f9d80914c9c974d107e0c84c360e19e8b40644",
+      "new_sha256": "c83b4cb0a5a67b3db055c81237f9d80914c9c974d107e0c84c360e19e8b40644",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266"
+      ],
+      "review": {
+        "old_filename": "playground.clj",
+        "new_filename": "playground.clj",
+        "language": "clojure",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "playground.clj",
+                "call_count": 1,
+                "elapsed_ms": 1.197414,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26080000,
+                "fuel_consumed": 2364254,
+                "total_fuel_consumed": 2364254,
+                "max_fuel_used_percent": 9.065391104294479,
+                "input_bytes": 152,
+                "input_lines": 8,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "clojure",
+                "filename": "playground.clj",
+                "call_count": 1,
+                "elapsed_ms": 0.93054,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26080000,
+                "fuel_consumed": 2364030,
+                "total_fuel_consumed": 2364030,
+                "max_fuel_used_percent": 9.064532208588957,
+                "input_bytes": 152,
+                "input_lines": 8,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/clojure_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 8,
+              "end_col": 0
+            },
+            "structural_hash": "d60d49890db534dbe043117065abe8eead953ae13e3b5d32a11a7f07643a396c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "greet",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "93109bfcc9020a3add55c143443f4e0ff349626a12e1abf5a58ee84e94cfdea9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "greet",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "4be3bc4e7c5250dbaab8d61e3a22b152af6207b6ee01d3a1128e9c52a7480862",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 12,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "5d017f3a6b0f116712a2edd356da3e5aad7baf4c48fb7965d697bb826ebf59a6",
+                    "children": [
+                      {
+                        "id": "0.0.3.1",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 13,
+                          "end_line": 0,
+                          "end_col": 17
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "list_lit",
+                    "label": "str",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 22
+                    },
+                    "structural_hash": "9fa54f325f135bdfacc64ddeb520a25d66a4b951dd0c8d3e5174bc2c4af8274b",
+                    "children": [
+                      {
+                        "id": "0.0.4.1",
+                        "node_type": "sym_lit",
+                        "label": "str",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 3,
+                          "end_line": 1,
+                          "end_col": 6
+                        },
+                        "structural_hash": "4adc9a51e3daba4e48a8eb6930cb06239eae1d151e591ee4f6894e8b33d26d20",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.4.2",
+                        "node_type": "str_lit",
+                        "label": "\"Hello, \"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "8a4dbf5a22006d2e8335c04ab230eac467cc5cd0b9d22ab803ba8e7beae3c24c",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.4.3",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 17,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "farewell",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 25
+                },
+                "structural_hash": "5e1189f7a1067d6d3c49e7212137e382512a5c80b9b0655246e8c8d00c7d52e7",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 1,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sym_lit",
+                    "label": "farewell",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 6,
+                      "end_line": 3,
+                      "end_col": 14
+                    },
+                    "structural_hash": "b1c8200a7d25b8e74ef953ece171ad9f84a3c0b5c5edd88b7cecb8952d47b9f5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "5d017f3a6b0f116712a2edd356da3e5aad7baf4c48fb7965d697bb826ebf59a6",
+                    "children": [
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 16,
+                          "end_line": 3,
+                          "end_col": 20
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "list_lit",
+                    "label": "str",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 24
+                    },
+                    "structural_hash": "edf5624c62bc73887c97cc94c45ef422561a534db19b67840d0fd2ba2652ef04",
+                    "children": [
+                      {
+                        "id": "0.1.4.1",
+                        "node_type": "sym_lit",
+                        "label": "str",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 3,
+                          "end_line": 4,
+                          "end_col": 6
+                        },
+                        "structural_hash": "4adc9a51e3daba4e48a8eb6930cb06239eae1d151e591ee4f6894e8b33d26d20",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.4.2",
+                        "node_type": "str_lit",
+                        "label": "\"Goodbye, \"",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 7,
+                          "end_line": 4,
+                          "end_col": 18
+                        },
+                        "structural_hash": "6d27402b41e8b2af836dec4068ebc85d607e20bc482254934f1f2254ba946e01",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.4.3",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 19,
+                          "end_line": 4,
+                          "end_col": 23
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "list_lit",
+                "label": "shout",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 37
+                },
+                "structural_hash": "eadee659e497c966b1d26c5b19bce1cce85806a97d624c25dd088c3ce8be7be8",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "sym_lit",
+                    "label": "shout",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "08b63eae462c3340af531c22c5dfa804360eed96090961d369b11640ead909b2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 12,
+                      "end_line": 6,
+                      "end_col": 20
+                    },
+                    "structural_hash": "1851a96140e39770dfcb13f571b59f475f9146c8a2877545e9fee7f654fef430",
+                    "children": [
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "sym_lit",
+                        "label": "phrase",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 13,
+                          "end_line": 6,
+                          "end_col": 19
+                        },
+                        "structural_hash": "4878c2b4521ea1df95f2b36b4e3230f1ffbd92739635a070721d5a8753bcd8a3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.4",
+                    "node_type": "list_lit",
+                    "label": "clojure.string/upper-case",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 36
+                    },
+                    "structural_hash": "6e55f1fa2f59d29603ec3005230e07436a9b9adede174e11ffd1476fef9bec6a",
+                    "children": [
+                      {
+                        "id": "0.2.4.1",
+                        "node_type": "sym_lit",
+                        "label": "clojure.string/upper-case",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 3,
+                          "end_line": 7,
+                          "end_col": 28
+                        },
+                        "structural_hash": "be8792df7684a6f3c01e7a9579cb891eaefd34eb3eadd29c819ff19ca1dd326e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.4.2",
+                        "node_type": "sym_lit",
+                        "label": "phrase",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 29,
+                          "end_line": 7,
+                          "end_col": 35
+                        },
+                        "structural_hash": "4878c2b4521ea1df95f2b36b4e3230f1ffbd92739635a070721d5a8753bcd8a3",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "clojure",
+          "tree": {
+            "id": "0",
+            "node_type": "source",
+            "label": "source",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 8,
+              "end_col": 0
+            },
+            "structural_hash": "d60d49890db534dbe043117065abe8eead953ae13e3b5d32a11a7f07643a396c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "list_lit",
+                "label": "greet",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 23
+                },
+                "structural_hash": "93109bfcc9020a3add55c143443f4e0ff349626a12e1abf5a58ee84e94cfdea9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 1,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sym_lit",
+                    "label": "greet",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "4be3bc4e7c5250dbaab8d61e3a22b152af6207b6ee01d3a1128e9c52a7480862",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 12,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "5d017f3a6b0f116712a2edd356da3e5aad7baf4c48fb7965d697bb826ebf59a6",
+                    "children": [
+                      {
+                        "id": "0.0.3.1",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 13,
+                          "end_line": 0,
+                          "end_col": 17
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "list_lit",
+                    "label": "str",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 22
+                    },
+                    "structural_hash": "9fa54f325f135bdfacc64ddeb520a25d66a4b951dd0c8d3e5174bc2c4af8274b",
+                    "children": [
+                      {
+                        "id": "0.0.4.1",
+                        "node_type": "sym_lit",
+                        "label": "str",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 3,
+                          "end_line": 1,
+                          "end_col": 6
+                        },
+                        "structural_hash": "4adc9a51e3daba4e48a8eb6930cb06239eae1d151e591ee4f6894e8b33d26d20",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.4.2",
+                        "node_type": "str_lit",
+                        "label": "\"Hello, \"",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 7,
+                          "end_line": 1,
+                          "end_col": 16
+                        },
+                        "structural_hash": "8a4dbf5a22006d2e8335c04ab230eac467cc5cd0b9d22ab803ba8e7beae3c24c",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.4.3",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 17,
+                          "end_line": 1,
+                          "end_col": 21
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "list_lit",
+                "label": "farewell",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 25
+                },
+                "structural_hash": "5e1189f7a1067d6d3c49e7212137e382512a5c80b9b0655246e8c8d00c7d52e7",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 1,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sym_lit",
+                    "label": "farewell",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 6,
+                      "end_line": 3,
+                      "end_col": 14
+                    },
+                    "structural_hash": "b1c8200a7d25b8e74ef953ece171ad9f84a3c0b5c5edd88b7cecb8952d47b9f5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 15,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "5d017f3a6b0f116712a2edd356da3e5aad7baf4c48fb7965d697bb826ebf59a6",
+                    "children": [
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 16,
+                          "end_line": 3,
+                          "end_col": 20
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "list_lit",
+                    "label": "str",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 24
+                    },
+                    "structural_hash": "edf5624c62bc73887c97cc94c45ef422561a534db19b67840d0fd2ba2652ef04",
+                    "children": [
+                      {
+                        "id": "0.1.4.1",
+                        "node_type": "sym_lit",
+                        "label": "str",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 3,
+                          "end_line": 4,
+                          "end_col": 6
+                        },
+                        "structural_hash": "4adc9a51e3daba4e48a8eb6930cb06239eae1d151e591ee4f6894e8b33d26d20",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.4.2",
+                        "node_type": "str_lit",
+                        "label": "\"Goodbye, \"",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 7,
+                          "end_line": 4,
+                          "end_col": 18
+                        },
+                        "structural_hash": "6d27402b41e8b2af836dec4068ebc85d607e20bc482254934f1f2254ba946e01",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.4.3",
+                        "node_type": "sym_lit",
+                        "label": "name",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 19,
+                          "end_line": 4,
+                          "end_col": 23
+                        },
+                        "structural_hash": "44f98e7a5bcd3c1a7e9a5bd3db92e98c8b1d376c1ade84a8d9a93a2e18d0f73a",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "list_lit",
+                "label": "shout",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 37
+                },
+                "structural_hash": "eadee659e497c966b1d26c5b19bce1cce85806a97d624c25dd088c3ce8be7be8",
+                "children": [
+                  {
+                    "id": "0.2.1",
+                    "node_type": "sym_lit",
+                    "label": "defn",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 5
+                    },
+                    "structural_hash": "45065fb8558af741976607c69e79fcde65c00ef48ad3a959be0d525e089ed3aa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "sym_lit",
+                    "label": "shout",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "08b63eae462c3340af531c22c5dfa804360eed96090961d369b11640ead909b2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "vec_lit",
+                    "label": "vec_lit",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 12,
+                      "end_line": 6,
+                      "end_col": 20
+                    },
+                    "structural_hash": "1851a96140e39770dfcb13f571b59f475f9146c8a2877545e9fee7f654fef430",
+                    "children": [
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "sym_lit",
+                        "label": "phrase",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 13,
+                          "end_line": 6,
+                          "end_col": 19
+                        },
+                        "structural_hash": "4878c2b4521ea1df95f2b36b4e3230f1ffbd92739635a070721d5a8753bcd8a3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.4",
+                    "node_type": "list_lit",
+                    "label": "clojure.string/upper-case",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 36
+                    },
+                    "structural_hash": "6e55f1fa2f59d29603ec3005230e07436a9b9adede174e11ffd1476fef9bec6a",
+                    "children": [
+                      {
+                        "id": "0.2.4.1",
+                        "node_type": "sym_lit",
+                        "label": "clojure.string/upper-case",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 3,
+                          "end_line": 7,
+                          "end_col": 28
+                        },
+                        "structural_hash": "be8792df7684a6f3c01e7a9579cb891eaefd34eb3eadd29c819ff19ca1dd326e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.4.2",
+                        "node_type": "sym_lit",
+                        "label": "phrase",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 29,
+                          "end_line": 7,
+                          "end_col": 35
+                        },
+                        "structural_hash": "4878c2b4521ea1df95f2b36b4e3230f1ffbd92739635a070721d5a8753bcd8a3",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 88.929
+    }
+  ],
+  "attempted_count": 11,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 16.821
+}

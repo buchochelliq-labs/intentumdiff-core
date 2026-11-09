@@ -1,0 +1,4684 @@
+{
+  "language_id": "gomod",
+  "options": {
+    "language_hint": "gomod",
+    "strict_plugins": true
+  },
+  "completed_count": 7,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.gomod.meaningful_1_value",
+      "language_id": "gomod",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "a3f123f50d87578efef6d9f905c396df72a7183ce59806de4712f50838b6d0a0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update version('v0.9.1') -> version('v0.8.1')",
+            "old_node": {
+              "id": "0.2.0.1",
+              "node_type": "version",
+              "label": "v0.9.1",
+              "position": {
+                "start_line": 5,
+                "start_col": 23,
+                "end_line": 5,
+                "end_col": 29
+              },
+              "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.0.1",
+              "node_type": "version",
+              "label": "v0.8.1",
+              "position": {
+                "start_line": 5,
+                "start_col": 23,
+                "end_line": 5,
+                "end_col": 29
+              },
+              "structural_hash": "919c7f92e1f931bedaaad0372a08bf127741e02952e3acc83cd0af32947f1da1",
+              "children": []
+            },
+            "text_diff": "v0.9.1 -> v0.8.1"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "v0.9.1"
+            ],
+            "new_labels": [
+              "v0.8.1"
+            ],
+            "old_node_ids": [
+              "0.2.0.1"
+            ],
+            "new_node_ids": [
+              "0.2.0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 1.0426579999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29960000,
+                "fuel_consumed": 1892564,
+                "total_fuel_consumed": 1892564,
+                "max_fuel_used_percent": 6.316969292389853,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.739645,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29960000,
+                "fuel_consumed": 1890564,
+                "total_fuel_consumed": 1890564,
+                "max_fuel_used_percent": 6.3102937249666216,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "1bbfb54cf714478169e21b9c305e9fa04ce30ed295109b3ede866a18ea562aa2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "64c7e0a8dbaab079a372816aa7ad24ddc16d280b9e56ef1e796238e3badcc65b",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0668b7186b16e8ba1a5c94872b58b331d4bf4f3ffa3bea5555bf8f0c3567b512",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.8.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "919c7f92e1f931bedaaad0372a08bf127741e02952e3acc83cd0af32947f1da1",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 13440.992
+    },
+    {
+      "id": "data_config.gomod.meaningful_2_declaration",
+      "language_id": "gomod",
+      "category": "declaration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "44f63e0c388ca12eb5e00311cc92c4caa01dca9f959eeb899f92d02b4c803027",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update module_path('example.com/deploy-agent') -> module_path('example.com/other-agent')",
+            "old_node": {
+              "id": "0.0.0",
+              "node_type": "module_path",
+              "label": "example.com/deploy-agent",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0",
+              "node_type": "module_path",
+              "label": "example.com/other-agent",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 30
+              },
+              "structural_hash": "f0693ff8c60b4f4a4c365bab1df7005df586bdbaba521f384e9fa6b5921cc995",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "example.com/deploy-agent"
+            ],
+            "new_labels": [
+              "example.com/other-agent"
+            ],
+            "old_node_ids": [
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 1.022881,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29940000,
+                "fuel_consumed": 1892725,
+                "total_fuel_consumed": 1892725,
+                "max_fuel_used_percent": 6.321726786907147,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.725889,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29940000,
+                "fuel_consumed": 1890452,
+                "total_fuel_consumed": 1890452,
+                "max_fuel_used_percent": 6.314134936539746,
+                "input_bytes": 248,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "5712222de5fc0a37972aac2d012186ddacebca66f95b2242469ffb9852cefb0d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/other-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 30
+                },
+                "structural_hash": "6b774b09085b4db3e062ca272ada132cb06bc8421ed22680de3a9c9fde524582",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/other-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 30
+                    },
+                    "structural_hash": "f0693ff8c60b4f4a4c365bab1df7005df586bdbaba521f384e9fa6b5921cc995",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 87.161
+    },
+    {
+      "id": "data_config.gomod.meaningful_3_configuration",
+      "language_id": "gomod",
+      "category": "configuration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "a38d8ba08471625764e1b17799f691b60a7187b9cfdc78656074259436ab4e3c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update file_path('../legacy') -> file_path('../legacy-v2')",
+            "old_node": {
+              "id": "0.3.0.1",
+              "node_type": "file_path",
+              "label": "../legacy",
+              "position": {
+                "start_line": 11,
+                "start_col": 30,
+                "end_line": 11,
+                "end_col": 39
+              },
+              "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.3.0.1",
+              "node_type": "file_path",
+              "label": "../legacy-v2",
+              "position": {
+                "start_line": 11,
+                "start_col": 30,
+                "end_line": 11,
+                "end_col": 42
+              },
+              "structural_hash": "15bba5b68b5bc9aa677167460e59b41c8b5f874f0eb2fcfb0fd834887e3063b7",
+              "children": []
+            },
+            "text_diff": "../legacy -> ../legacy-v2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "../legacy"
+            ],
+            "new_labels": [
+              "../legacy-v2"
+            ],
+            "old_node_ids": [
+              "0.3.0.1"
+            ],
+            "new_node_ids": [
+              "0.3.0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 1.157481,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30020000,
+                "fuel_consumed": 1893467,
+                "total_fuel_consumed": 1893467,
+                "max_fuel_used_percent": 6.307351765489673,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.805527,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30020000,
+                "fuel_consumed": 1893671,
+                "total_fuel_consumed": 1893671,
+                "max_fuel_used_percent": 6.30803131245836,
+                "input_bytes": 252,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "b068e0143d24796042cf2bdd0bcdda646e19678313915cb959cf97398b530ed9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "536d82949266466321e38b7b3c983aefc6ebc056154731c845db5d20c9051aaa",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cb6f9f7a80a7abfbc2ffe5b960e96c833e17a2776784c09627701216147c5de",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy-v2",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 42
+                        },
+                        "structural_hash": "15bba5b68b5bc9aa677167460e59b41c8b5f874f0eb2fcfb0fd834887e3063b7",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 98.257
+    },
+    {
+      "id": "data_config.gomod.identity",
+      "language_id": "gomod",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 1.093091,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29960000,
+                "fuel_consumed": 1892599,
+                "total_fuel_consumed": 1892599,
+                "max_fuel_used_percent": 6.317086114819761,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.799797,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 29960000,
+                "fuel_consumed": 1890968,
+                "total_fuel_consumed": 1890968,
+                "max_fuel_used_percent": 6.311642189586116,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 91.934
+    },
+    {
+      "id": "data_config.gomod.safe_preservation",
+      "language_id": "gomod",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "98623d9cf43911484fecb5c7fbc2659da972f5d8ceda6ecf2c079df5eb9e407b",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// ordinary assessment comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "gomod",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// ordinary assessment comment\\n",
+              "risk": "amber",
+              "language": "gomod",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                31
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.818281,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30580000,
+                "fuel_consumed": 1892440,
+                "total_fuel_consumed": 1892440,
+                "max_fuel_used_percent": 6.188489208633094,
+                "input_bytes": 249,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.6618200000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 30580000,
+                "fuel_consumed": 1950039,
+                "total_fuel_consumed": 1950039,
+                "max_fuel_used_percent": 6.376844342707652,
+                "input_bytes": 280,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "3dc2045a5c293fefbccc5da4d9a30da41867f4a0f1691694f0ba5ff78a8a0e64",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 1,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 23,
+                          "end_line": 5,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 19,
+                          "end_line": 6,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 24,
+                          "end_line": 7,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.2.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 26,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 13,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 30,
+                          "end_line": 11,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 25,
+                          "end_line": 13,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "37cd2ed1e4bf174eb44733a618e7912624a42998485c7f9863576223740a355c",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "module_directive",
+                "label": "example.com/deploy-agent",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 31
+                },
+                "structural_hash": "ae53e626b8a1214c0733e4630fe390e5f79857eda75bd75f99d2103f35b130b8",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "module_path",
+                    "label": "example.com/deploy-agent",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 31
+                    },
+                    "structural_hash": "e8e6c1b2b3df9dcc540f234aa062c302a1eef41566a8ac4ab8a9c81f3d027779",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 3,
+                      "end_line": 3,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "require_directive",
+                "label": "require_directive",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "a7bf691aa137113e5bc8aab623d267e161b3a80a9008811c45190c2e12dcc973",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "require_spec",
+                    "label": "github.com/pkg/errors",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 1,
+                      "end_line": 7,
+                      "end_col": 0
+                    },
+                    "structural_hash": "2a58f299d6abfb94a04f7d1447e94458dec97fedb7f546ca4553b309f35d3ff8",
+                    "children": [
+                      {
+                        "id": "0.3.0.0",
+                        "node_type": "module_path",
+                        "label": "github.com/pkg/errors",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 1,
+                          "end_line": 6,
+                          "end_col": 22
+                        },
+                        "structural_hash": "9a1a8e0ec3ffd5997b94b306357e0be67f212e6e84d8f0e625d6e9f04b3814ef",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.0.1",
+                        "node_type": "version",
+                        "label": "v0.9.1",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 23,
+                          "end_line": 6,
+                          "end_col": 29
+                        },
+                        "structural_hash": "75dbee1b6232287bb7dcd3f8d09aeb04fb0bdb3c1c1c65d4bd331bea4ad9706e",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "require_spec",
+                    "label": "golang.org/x/sync",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 1,
+                      "end_line": 8,
+                      "end_col": 0
+                    },
+                    "structural_hash": "613b7707eaaa8f27f3b09ec3bc73acbe131dbb783f62876a14d0a2cea94a83a3",
+                    "children": [
+                      {
+                        "id": "0.3.1.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/sync",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 18
+                        },
+                        "structural_hash": "bbcccdcabb6945c645268e05640635216018ea68e696eeae72d504121ad7ae8b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.1.1",
+                        "node_type": "version",
+                        "label": "v0.7.0",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 19,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "474a18c7de6c80ad8ad08776746ae5b72151a7d5fa4b3c8dcb373212bc330be3",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "require_spec",
+                    "label": "github.com/spf13/cobra",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 1,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "7360968908226c64c7bef1fd049cd7a6a006f8139937bcb7cee8f44384456303",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "module_path",
+                        "label": "github.com/spf13/cobra",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 1,
+                          "end_line": 8,
+                          "end_col": 23
+                        },
+                        "structural_hash": "5d1c3610a12e507cf7e5cf3369ce70bf98e1aaf7829458daab6b95105b734894",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.2.1",
+                        "node_type": "version",
+                        "label": "v1.8.0",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 24,
+                          "end_line": 8,
+                          "end_col": 30
+                        },
+                        "structural_hash": "694cae3092e8424c78b8560ada09f2ccb7230c81adbf884da64d36736b85112b",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.3.3",
+                    "node_type": "require_spec",
+                    "label": "codeberg.org/solo/widget",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 1,
+                      "end_line": 10,
+                      "end_col": 0
+                    },
+                    "structural_hash": "977676f1d5eb80bc4d85755e35a361b5704413057eab24ef0d6bc3959c87beba",
+                    "children": [
+                      {
+                        "id": "0.3.3.0",
+                        "node_type": "module_path",
+                        "label": "codeberg.org/solo/widget",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 1,
+                          "end_line": 9,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f95ecd08bf8439fb1854b0dc0d2413f9825dcf1bcb1e17eef128df3e40d42ab4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.3.3.1",
+                        "node_type": "version",
+                        "label": "v1.2.3",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 26,
+                          "end_line": 9,
+                          "end_col": 32
+                        },
+                        "structural_hash": "5302ece7976f5955a15d46c8132c7e72e3eb53ba5e549fc08e2d0a526ea0e9a4",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "24b7a3acd149da2e2fbd0570b718daff7654fe4167c114ca6f204c69f5d15dff",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/legacy",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "303ab647075fd53d8871142394f291c0d3d03e1891e398f5889401be70dc6b45",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/legacy",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 8,
+                          "end_line": 12,
+                          "end_col": 26
+                        },
+                        "structural_hash": "1a39b0161bf61307a359608b3b9d4b6ca7b761d20029860b6abca12dec45b517",
+                        "children": []
+                      },
+                      {
+                        "id": "0.4.0.1",
+                        "node_type": "file_path",
+                        "label": "../legacy",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 30,
+                          "end_line": 12,
+                          "end_col": 39
+                        },
+                        "structural_hash": "8f500f19ee9f9ab14d6a3af87354aaa1f32deaba723b5e80e391d65f226a8587",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "exclude_directive",
+                "label": "exclude_directive",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 0
+                },
+                "structural_hash": "c920c685927a96b974c1926c355370591ee2bd42c80a0d6810ff77af4f3217f3",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "exclude_spec",
+                    "label": "golang.org/x/net",
+                    "position": {
+                      "start_line": 14,
+                      "start_col": 8,
+                      "end_line": 15,
+                      "end_col": 0
+                    },
+                    "structural_hash": "8fe866dc64f68639b82d5074866fc30081ddb03534bcaf9843a0de8dbde1f8cb",
+                    "children": [
+                      {
+                        "id": "0.5.0.0",
+                        "node_type": "module_path",
+                        "label": "golang.org/x/net",
+                        "position": {
+                          "start_line": 14,
+                          "start_col": 8,
+                          "end_line": 14,
+                          "end_col": 24
+                        },
+                        "structural_hash": "40646dd20c10f85701c0a0a584bd6c008ca8867c22af92f81a03af67b456b31e",
+                        "children": []
+                      },
+                      {
+                        "id": "0.5.0.1",
+                        "node_type": "version",
+                        "label": "v0.17.0",
+                        "position": {
+                          "start_line": 14,
+                          "start_col": 25,
+                          "end_line": 14,
+                          "end_col": 32
+                        },
+                        "structural_hash": "b0cfd7a87071e99bf231e62c20a1fa00f3283f386409a4d3490237e3ada3ca30",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 142.643
+    },
+    {
+      "id": "data_config.gomod.incomplete",
+      "language_id": "gomod",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "be56be910c9b867fc99d954999e73b0c4a25ad2ea8dff990b516141848929710",
+      "new_sha256": "6472613d70ab7b6b04fad5ae086cc51f34267cfebc22188886c21ad52b1594b2",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "playground.mod: Incomplete or invalid syntax; source changes preserved without a semantic interpretation",
+        "fallback_code": "native_parse_incomplete"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 17.325
+    },
+    {
+      "id": "data_config.gomod.unicode_value",
+      "language_id": "gomod",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "22099ce1596ee2881312278ef7f30680d7a1e2960d94a4f341d8825c6a816491",
+      "new_sha256": "56f661613ef7b56bbe4c7678a51dd4c665808adacbae37c8a4bd96e391b100d2",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "playground.mod",
+        "new_filename": "playground.mod",
+        "language": "gomod",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update file_path('./λ') -> file_path('./μ')",
+            "old_node": {
+              "id": "0.2.0.1",
+              "node_type": "file_path",
+              "label": "./λ",
+              "position": {
+                "start_line": 3,
+                "start_col": 29,
+                "end_line": 3,
+                "end_col": 33
+              },
+              "structural_hash": "652d49fdd79ea5e339618f819024d5ca9f8ca78040e61aa775b1505de198c12f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.0.1",
+              "node_type": "file_path",
+              "label": "./μ",
+              "position": {
+                "start_line": 3,
+                "start_col": 29,
+                "end_line": 3,
+                "end_col": 33
+              },
+              "structural_hash": "ad19a1d6dcb744aa0e3f045d89493540efae8a8062046c52fce4040f0e81d6be",
+              "children": []
+            },
+            "text_diff": "./λ -> ./μ"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "./λ"
+            ],
+            "new_labels": [
+              "./μ"
+            ],
+            "old_node_ids": [
+              "0.2.0.1"
+            ],
+            "new_node_ids": [
+              "0.2.0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.513394,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22920000,
+                "fuel_consumed": 642838,
+                "total_fuel_consumed": 642838,
+                "max_fuel_used_percent": 2.8047033158813264,
+                "input_bytes": 73,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gomod",
+                "filename": "playground.mod",
+                "call_count": 1,
+                "elapsed_ms": 0.261907,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22920000,
+                "fuel_consumed": 642855,
+                "total_fuel_consumed": 642855,
+                "max_fuel_used_percent": 2.8047774869109947,
+                "input_bytes": 73,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gomod_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "2a39b5cb01d8d3cf3ae826093c882d3fad0f4108e0311ccc4b530a5deab8cfab",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/assessment",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 29
+                },
+                "structural_hash": "c4f498d22b52702af39ac97a607ad34d40dd9ec196e09c10db9e6d639da5cb77",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/assessment",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "b041e2682fffabdf4e60ba8ad08606c2a31d5d441ac8c658154efe3e56211398",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "575e843e11ce8b4460d7c11afad831842b9df317fea104afcec715e6e21ee2d2",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/local",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 8,
+                      "end_line": 4,
+                      "end_col": 0
+                    },
+                    "structural_hash": "a08580ccde0616c27d4667cb5976adb8e361f90945eeacb45b26c635d7e08459",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/local",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 8,
+                          "end_line": 3,
+                          "end_col": 25
+                        },
+                        "structural_hash": "0eb19440ce543589b48b16a85a55da48c57e3a7bda5079f868df054410f99d2a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "file_path",
+                        "label": "./λ",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 29,
+                          "end_line": 3,
+                          "end_col": 33
+                        },
+                        "structural_hash": "652d49fdd79ea5e339618f819024d5ca9f8ca78040e61aa775b1505de198c12f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gomod",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "0e32f0a81f31d0c4cfea058f5ffba357f67cede7704d3ac1bb1b429af7bb5a36",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_directive",
+                "label": "example.com/assessment",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 29
+                },
+                "structural_hash": "c4f498d22b52702af39ac97a607ad34d40dd9ec196e09c10db9e6d639da5cb77",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "module_path",
+                    "label": "example.com/assessment",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "b041e2682fffabdf4e60ba8ad08606c2a31d5d441ac8c658154efe3e56211398",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "go_directive",
+                "label": "1.22",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "52d6d900f9bad1d5a36acbc85d548ae213344750ca41672fa55b47c94dd06781",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "go_version",
+                    "label": "1.22",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 3,
+                      "end_line": 2,
+                      "end_col": 7
+                    },
+                    "structural_hash": "f668b22d8421914116e1ca011dd781104320a81fd48ce5bac61c240c7aefa776",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "replace_directive",
+                "label": "replace_directive",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "75029180a43f67a666e6a7c3538974f0cf9b687854bf81c349eee40b41ac1313",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "replace_spec",
+                    "label": "example.com/local",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 8,
+                      "end_line": 4,
+                      "end_col": 0
+                    },
+                    "structural_hash": "9eae9cba402b2d68a0a7754f0d6a0751ed5ebb9be8c66d1f56f4cb5ed63df6a9",
+                    "children": [
+                      {
+                        "id": "0.2.0.0",
+                        "node_type": "module_path",
+                        "label": "example.com/local",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 8,
+                          "end_line": 3,
+                          "end_col": 25
+                        },
+                        "structural_hash": "0eb19440ce543589b48b16a85a55da48c57e3a7bda5079f868df054410f99d2a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.0.1",
+                        "node_type": "file_path",
+                        "label": "./μ",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 29,
+                          "end_line": 3,
+                          "end_col": 33
+                        },
+                        "structural_hash": "ad19a1d6dcb744aa0e3f045d89493540efae8a8062046c52fce4040f0e81d6be",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 59.837
+    }
+  ],
+  "attempted_count": 7,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 14.65
+}
