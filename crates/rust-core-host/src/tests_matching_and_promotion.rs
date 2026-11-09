@@ -56,6 +56,19 @@ fn assert_function_rename(result: &Value, old: &str, new: &str) {
 }
 
 #[test]
+fn python_global_read_survives_parameter_rename_in_another_function() {
+    let old = "def f(a):\n    return a\ndef g():\n    return a\n";
+    let new = "def f(b):\n    return b\ndef g():\n    return b\n";
+    for (route, result) in rename_review_routes(old, new) {
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|change| {
+            change["change_type"] == "MODIFICATION"
+                && change["old_node"]["position"]["start_line"] == 3
+        }), "{route}: unrelated global read in g must remain a semantic edit: {result}");
+    }
+}
+
+#[test]
 fn rename_prefers_unique_exact_body_over_position() {
     for (old, new) in [
         ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
@@ -1103,20 +1116,23 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         // Oracle (issue #57 dart flip): a body identifier rename (`a`->`x`) corroborated by an
         // anchored callable's parameter rename becomes a RENAME_VARIABLE; an uncorroborated one
         // (and a param swap) stay put — the routed analogue of refactoring.py inferred_rename_pairs.
-        fn callable(param_labels: &[&str]) -> SemanticNode {
+        fn callable(param_labels: &[&str], body_labels: &[&str]) -> SemanticNode {
             let params: Vec<SemanticNode> = param_labels
                 .iter()
                 .enumerate()
                 .map(|(i, l)| node(&format!("0.0.2.{i}"), "formal_parameter", l, Vec::new()))
                 .collect();
             let plist = node("0.0.2", "formal_parameter_list", "formal_parameter_list", params);
-            node("0", "module", "module", vec![node("0.0", "function_signature", "add", vec![plist])])
+            let body = node("0.0.3", "block", "block", body_labels.iter().enumerate()
+                .map(|(i, label)| node(&format!("0.0.3.{i}"), "identifier", label, Vec::new()))
+                .collect());
+            node("0", "module", "module", vec![node("0.0", "function_definition", "add", vec![plist, body])])
         }
-        let old_root: &'static SemanticNode = Box::leak(Box::new(callable(&["a", "b"])));
-        let new_root: &'static SemanticNode = Box::leak(Box::new(callable(&["x", "y"])));
+        let old_root: &'static SemanticNode = Box::leak(Box::new(callable(&["a", "b"], &["a", "b"])));
+        let new_root: &'static SemanticNode = Box::leak(Box::new(callable(&["x", "y"], &["x", "y"])));
 
-        let body_a: &'static SemanticNode = Box::leak(Box::new(node("9.0", "identifier", "a", Vec::new())));
-        let body_x: &'static SemanticNode = Box::leak(Box::new(node("9.1", "identifier", "x", Vec::new())));
+        let body_a: &'static SemanticNode = Box::leak(Box::new(old_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
+        let body_x: &'static SemanticNode = Box::leak(Box::new(new_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
         let foo: &'static SemanticNode = Box::leak(Box::new(node("9.2", "identifier", "foo", Vec::new())));
         let bar: &'static SemanticNode = Box::leak(Box::new(node("9.3", "identifier", "bar", Vec::new())));
         let modif = |o: &'static SemanticNode, n: &'static SemanticNode| ChangeDraft {
@@ -1139,9 +1155,9 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         assert_eq!(changes[1].refactoring_kind, None);
 
         // A parameter SWAP (a,b)->(b,a) infers nothing — the body reference stays a MODIFICATION.
-        let swap_new: &'static SemanticNode = Box::leak(Box::new(callable(&["b", "a"])));
-        let sb: &'static SemanticNode = Box::leak(Box::new(node("8.0", "identifier", "a", Vec::new())));
-        let sb2: &'static SemanticNode = Box::leak(Box::new(node("8.1", "identifier", "b", Vec::new())));
+        let swap_new: &'static SemanticNode = Box::leak(Box::new(callable(&["b", "a"], &["b", "a"])));
+        let sb: &'static SemanticNode = Box::leak(Box::new(old_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
+        let sb2: &'static SemanticNode = Box::leak(Box::new(swap_new.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
         let mut swap_changes = vec![modif(sb, sb2)];
         promote_corroborated_variable_renames(&mut swap_changes, old_root, swap_new);
         assert_eq!(swap_changes[0].change_type, "MODIFICATION");
@@ -1461,6 +1477,127 @@ fn user_xml_dialect_predicate_and_coordinate_key() {
     }))
     .expect("spec parses");
     assert!(!xml_tree_matches_user_dialect(&unpredicated, &tree));
+}
+
+#[test]
+fn variable_rename_inference_does_not_cross_callable_scope() {
+    fn tree(f_param: &str, f_ref: &str, g_param: &str, g_ref: &str) -> SemanticNode {
+        let callable = |id: &str, name: &str, param: &str, reference: &str| {
+            node(id, "function_definition", name, vec![
+                node(&format!("{id}.0"), "parameters", "parameters", vec![
+                    node(&format!("{id}.0.0"), "identifier", param, vec![]),
+                ]),
+                node(&format!("{id}.1"), "block", "block", vec![
+                    node(&format!("{id}.1.0"), "identifier", reference, vec![]),
+                ]),
+            ])
+        };
+        node("0", "module", "module", vec![
+            callable("0.0", "f", f_param, f_ref),
+            callable("0.1", "g", g_param, g_ref),
+        ])
+    }
+    let old_tree = tree("a", "a", "a", "a");
+    let new_tree = tree("b", "b", "a", "b");
+    let old_ref = old_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let new_ref = new_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let mut changes = vec![ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_ref),
+        new_node: Some(new_ref), old_index: None, new_index: None, confidence: 1.0,
+        description: String::new(), refactoring_kind: None, text_diff: None }];
+    promote_corroborated_variable_renames(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes[0].change_type, "MODIFICATION");
+    assert_eq!(changes[0].refactoring_kind, None);
+}
+
+#[test]
+fn duplicate_variable_rename_labels_keep_one_anchor_per_callable() {
+    fn tree(name: &str, param: &str) -> SemanticNode {
+        let function = |id: &str| node(id, "function_definition", name, vec![
+            node(&format!("{id}.0"), "parameters", "parameters", vec![
+                node(&format!("{id}.0.0"), "identifier", param, vec![]),
+            ]),
+            node(&format!("{id}.1"), "block", "block", vec![]),
+        ]);
+        node("0", "module", "module", vec![function("0.0"), function("0.1")])
+    }
+    let old_tree = tree("f", "a");
+    let new_tree = tree("f", "b");
+    let old_a = old_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let new_b = new_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let old_a2 = old_tree.descendants().into_iter().find(|n| n.id == "0.1.0.0").unwrap();
+    let new_b2 = new_tree.descendants().into_iter().find(|n| n.id == "0.1.0.0").unwrap();
+    let mut changes = vec![
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_a), new_node: Some(&new_b),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_a2), new_node: Some(&new_b2),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+    ];
+    dedupe_variable_rename_drafts(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes.len(), 2, "same labels in separate callable binders are distinct");
+}
+
+#[test]
+fn rename_label_pair_does_not_suppress_an_independent_callable_edit() {
+    let callable = |id: &str, name: &str, param: &str, reference: &str| {
+        node(id, "function_definition", name, vec![
+            node(&format!("{id}.0"), "parameters", "parameters", vec![
+                node(&format!("{id}.0.0"), "identifier", param, vec![]),
+            ]),
+            node(&format!("{id}.1"), "block", "block", vec![
+                node(&format!("{id}.1.0"), "identifier", reference, vec![]),
+            ]),
+        ])
+    };
+    let old_tree = node("0", "module", "module", vec![
+        callable("0.0", "f", "a", "a"),
+        callable("0.1", "g", "x", "a"),
+    ]);
+    let new_tree = node("0", "module", "module", vec![
+        callable("0.0", "f", "b", "b"),
+        callable("0.1", "g", "x", "b"),
+    ]);
+    let old_rename = old_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let new_rename = new_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let old_other = old_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let new_other = new_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let mut changes = vec![
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_rename), new_node: Some(new_rename),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+        ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_other), new_node: Some(new_other),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+    ];
+    suppress_modifications_covered_by_refactoring_labels(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes.len(), 2, "a rename in another callable cannot own this edit");
+}
+
+#[test]
+fn outer_parameter_rename_does_not_capture_nested_callable_edit() {
+    let tree = |outer_param: &str, nested_ref: &str| {
+        node("0", "module", "module", vec![node("0.0", "function_definition", "outer", vec![
+            node("0.0.0", "parameters", "parameters", vec![
+                node("0.0.0.0", "identifier", outer_param, vec![]),
+            ]),
+            node("0.0.1", "block", "block", vec![node("0.0.1.0", "function_definition", "inner", vec![
+                node("0.0.1.0.0", "parameters", "parameters", vec![]),
+                node("0.0.1.0.1", "block", "block", vec![
+                    node("0.0.1.0.1.0", "identifier", nested_ref, vec![]),
+                ]),
+            ])]),
+        ])])
+    };
+    let old_tree = tree("a", "a");
+    let new_tree = tree("b", "b");
+    let old_ref = old_tree.descendants().into_iter().find(|n| n.id == "0.0.1.0.1.0").unwrap();
+    let new_ref = new_tree.descendants().into_iter().find(|n| n.id == "0.0.1.0.1.0").unwrap();
+    let mut changes = vec![ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_ref),
+        new_node: Some(new_ref), old_index: None, new_index: None, confidence: 1.0,
+        description: String::new(), refactoring_kind: None, text_diff: None }];
+    promote_corroborated_variable_renames(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes[0].change_type, "MODIFICATION");
 }
 
 #[test]
