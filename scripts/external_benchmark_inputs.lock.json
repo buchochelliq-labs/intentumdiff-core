@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "registry_commit": "c5a909b4fc618c654825de33352d4d5fa816a06a",
+  "registry_commit": "28f5fce55a80933ec80e18f0b1fe389ad1d2a0ab",
   "published_distribution": "intentumdiff-python==0.0.2b2",
   "components": {
     "cpp_parser.wasm": {
@@ -42,6 +42,22 @@
       "archive_member": "intentumdiff_sql_parser.wasm",
       "archive_sha256": "27876fe189e82f97d8b031be1536c57ed5383312cdc237362c06d061aeb0da91",
       "component_sha256": "10255c582d04c55dac5bf61ab3e661fd0b0ab774002163b378baac2cda1b0a3c"
+    },
+    "adf_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-adf-parser",
+      "commit": "cf3f269e13dd641df87770d83b5866f2be8864e8",
+      "artifact_id": 13637900428,
+      "archive_member": "intentumdiff_adf_parser.wasm",
+      "archive_sha256": "bfffd6c7c8d504a3f90bd19b35c8f155b9a3623541f2cad2cbcb8562c1202b5b",
+      "component_sha256": "d1537ca40be16a9e191290ea0579b32180d360404e305f7265889dd59e00b375"
+    },
+    "databricks_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-databricks-parser",
+      "commit": "24f0c6d95e03e34f703700fe6d07f4024ff6d7b9",
+      "artifact_id": 13649537073,
+      "archive_member": "intentumdiff_databricks_parser.wasm",
+      "archive_sha256": "d62509f223006e9b3f78d005f9046feba9d25e32a6dee4d2fa563cdea3308a9a",
+      "component_sha256": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0"
     }
   }
 }

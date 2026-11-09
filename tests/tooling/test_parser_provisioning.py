@@ -36,7 +36,7 @@ def test_registry_document_is_fetched_at_candidate_commit(monkeypatch):
         return ('plugins:\n  intentumdiff-json-parser:\n    ref: ' + 'a' * 40 + '\n    wasm_checksums:\n      json_parser.wasm: ' + 'b' * 64 + '\n').encode()
     monkeypatch.setitem(load.__globals__, '_get', get)
     assert load('test-token') == ({'json_parser.wasm': 'b' * 64}, {'intentumdiff-json-parser': 'a' * 40})
-    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=c5a909b4fc618c654825de33352d4d5fa816a06a']
+    assert seen == ['https://api.github.com/repos/buchochelliq-labs/intentumdiff-registry/contents/registry.yaml?ref=28f5fce55a80933ec80e18f0b1fe389ad1d2a0ab']
 
 
 def test_default_provisioning_stages_checksum_verified_json(monkeypatch, tmp_path):
