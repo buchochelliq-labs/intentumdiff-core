@@ -1,0 +1,2174 @@
+{
+  "language_id": "swift",
+  "options": {
+    "language_hint": "swift",
+    "strict_plugins": true
+  },
+  "completed_count": 9,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "swift-literal-value",
+      "language_id": "swift",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "6b6e5a1aa2f9ff738bb3108bf6c4c811b2d310d499d1906ebb65db53daef4a0a",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-swift-parser#4"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update function_call_expression('public func answer() -> Int { return 1 }') -> function_call_expression('public func answer() -> Int { return 2 }')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func answer() -> Int { return 1 }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func answer() -> Int { return 2 }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "b301c53cb4230e859bb6c8e9fa3c13ff27085352e9f785923db9f6395bb053b5",
+              "children": []
+            },
+            "text_diff": "public func answer() -> Int { return 1 } -> public func answer() -> Int { return 2 }"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "public func answer() -> Int { return 1 }"
+            ],
+            "new_labels": [
+              "public func answer() -> Int { return 2 }"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.220339,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.39377079482439925,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.13427,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 84622,
+                "total_fuel_consumed": 84622,
+                "max_fuel_used_percent": 0.39104436229205175,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "362ec7bc50eead82451b384bfa16000ac26beec8adabe7aed55c78ac9b2e4c71",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 2 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "b301c53cb4230e859bb6c8e9fa3c13ff27085352e9f785923db9f6395bb053b5",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4925.0
+    },
+    {
+      "id": "swift-declaration-api",
+      "language_id": "swift",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "a3450e02f3a359cd1b44ff4fa50a10466dbcd3f4e620318854f528f628c35191",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update function_call_expression('public func answer() -> Int { return 1 }') -> function_call_expression('public func result() -> Int { return 1 }')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func answer() -> Int { return 1 }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func result() -> Int { return 1 }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "703c5a5c8ff2e02386d19bf9615dcb93b3a217621026ae36623e9cac4ac64a42",
+              "children": []
+            },
+            "text_diff": "public func answer() -> Int { return 1 } -> public func result() -> Int { return 1 }"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "public func answer() -> Int { return 1 }"
+            ],
+            "new_labels": [
+              "public func result() -> Int { return 1 }"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.227772,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.39377079482439925,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.133308,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 84622,
+                "total_fuel_consumed": 84622,
+                "max_fuel_used_percent": 0.39104436229205175,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "efc2c769f7ba50ebddb30799c408441759d18f119c1f33cb5c3f05688b179c87",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func result() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "703c5a5c8ff2e02386d19bf9615dcb93b3a217621026ae36623e9cac4ac64a42",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 60.589
+    },
+    {
+      "id": "swift-body-operator",
+      "language_id": "swift",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ed6355dfa0f81c52d3465b0e60afdb404fb9b8475663c9586f26bbcc9eb4b5f0",
+      "new_sha256": "b8d4000d8fa456572b9b606114b34b5a5161f04a9fae99d9ff431da798e5cb1b",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-swift-parser#4"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update function_call_expression('public func combine(_ a: Int, _ b: Int) -> Int { return a + b }') -> function_call_expression('public func combine(_ a: Int, _ b: Int) -> Int { return a - b }')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func combine(_ a: Int, _ b: Int) -> Int { return a + b }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 63
+              },
+              "structural_hash": "62f347882da37b34c218f8f515a5e229e5d73d70f05e814f7863f7fcc406be61",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func combine(_ a: Int, _ b: Int) -> Int { return a - b }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 63
+              },
+              "structural_hash": "4b31b1541a98ca24e6391458d82f14642341dd16f7d15978882f901e34ca5b49",
+              "children": []
+            },
+            "text_diff": "public func combine(_ a: Int, _ b: Int) -> Int { return a + b } -> public func combine(_ a: Int, _ b: Int) -> Int { return a - b }"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "public func combine(_ a: Int, _ b: Int) -> Int { return a + b }"
+            ],
+            "new_labels": [
+              "public func combine(_ a: Int, _ b: Int) -> Int { return a - b }"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.21829600000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22560000,
+                "fuel_consumed": 86702,
+                "total_fuel_consumed": 86702,
+                "max_fuel_used_percent": 0.3843173758865248,
+                "input_bytes": 64,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.13281600000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22560000,
+                "fuel_consumed": 86112,
+                "total_fuel_consumed": 86112,
+                "max_fuel_used_percent": 0.3817021276595745,
+                "input_bytes": 64,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "1319ffb2f00b9efa97e045a7e24c5795197552cd1b5393783e612513b5492ac6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func combine(_ a: Int, _ b: Int) -> Int { return a + b }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 63
+                },
+                "structural_hash": "62f347882da37b34c218f8f515a5e229e5d73d70f05e814f7863f7fcc406be61",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "c4f0a43eae98edafb6de0578d3ffaacc95c3225abd17f84db2f5799664e32ba8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func combine(_ a: Int, _ b: Int) -> Int { return a - b }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 63
+                },
+                "structural_hash": "4b31b1541a98ca24e6391458d82f14642341dd16f7d15978882f901e34ca5b49",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 54.707
+    },
+    {
+      "id": "swift-identity",
+      "language_id": "swift",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.206053,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.39377079482439925,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.182109,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 84622,
+                "total_fuel_consumed": 84622,
+                "max_fuel_used_percent": 0.39104436229205175,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 54.959
+    },
+    {
+      "id": "swift-ordinary-comment",
+      "language_id": "swift",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "915e21b0d917e8d799d4e960e79ab07c1b8b9b6ad17fca50f4ace0cb38ca534e",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> expression_statement('// Ordinary comment')",
+            "new_node": {
+              "id": "0.0",
+              "node_type": "expression_statement",
+              "label": "// Ordinary comment",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "47d070d80ff7fea92227ef250ba3fee09f5d3e72ff949ca98511d87b3681f410",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "// Ordinary comment"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.219668,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.38662431941923775,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.197798,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 126416,
+                "total_fuel_consumed": 126416,
+                "max_fuel_used_percent": 0.5735753176043557,
+                "input_bytes": 61,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True",
+        "is_style_only: expected True, got False"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "b6c738e3356d6cff99041054440574b09e12182214e380a2d8942b66c7744132",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "// Ordinary comment",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 19
+                },
+                "structural_hash": "47d070d80ff7fea92227ef250ba3fee09f5d3e72ff949ca98511d87b3681f410",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 47.842
+    },
+    {
+      "id": "swift-layout",
+      "language_id": "swift",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "1058042346cc8098da5d7e80a8111c4b1da28cd1f93ea4899f861b01ecd19167",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "swift",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "swift",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                41,
+                41
+              ],
+              "new_span": [
+                42,
+                43
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "swift",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "swift",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                41,
+                41
+              ],
+              "new_span": [
+                42,
+                43
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.201345,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21680000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.39304428044280443,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.173502,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21680000,
+                "fuel_consumed": 87501,
+                "total_fuel_consumed": 87501,
+                "max_fuel_used_percent": 0.4036023985239852,
+                "input_bytes": 43,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 58.404
+    },
+    {
+      "id": "swift-incomplete",
+      "language_id": "swift",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb7b91e36f63a1bb4677e7923d5f0c32a188ec85269b8629207e57f0cc48e511",
+      "new_sha256": "183365a80758325b89a489a5dd362dcb80bb466336ae0f403bc1f1febd1b4245",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update function_call_expression('public func answer() -> Int { return 1 }') -> expression_statement('public func answer( -> Int {')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func answer() -> Int { return 1 }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "expression_statement",
+              "label": "public func answer( -> Int {",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 28
+              },
+              "structural_hash": "2d715046b5c5c4a622a533ab9025af969d33d2616ae2bfa7da743df1ff04c414",
+              "children": []
+            },
+            "text_diff": "public func answer() -> Int { return 1 } -> public func answer( -> Int {"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "public func answer() -> Int { return 1 }"
+            ],
+            "new_labels": [
+              "public func answer( -> Int {"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.37604899999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 85212,
+                "total_fuel_consumed": 85212,
+                "max_fuel_used_percent": 0.3981869158878505,
+                "input_bytes": 41,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.12243799999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 76178,
+                "total_fuel_consumed": 76178,
+                "max_fuel_used_percent": 0.3559719626168224,
+                "input_bytes": 29,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "992e00bd4a0f977ce70ba89edb6af989545be603884a0d81192d9aaf33fc1ef5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func answer() -> Int { return 1 }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "14257a232ab43625c7a30a6a54c7c9d42b6324d21e638890fdb69f6915414a09",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad9eb4b94f7e9f14f406bcbcff9db83f4decacb4fad929cb6b875bc61751b3e1",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "expression_statement",
+                "label": "public func answer( -> Int {",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "2d715046b5c5c4a622a533ab9025af969d33d2616ae2bfa7da743df1ff04c414",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 56.436
+    },
+    {
+      "id": "swift-unicode-payload",
+      "language_id": "swift",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d060fcd526e57a0000260b472135aef2f7d3c7d005a7d4bf6bb07819ec8b6e33",
+      "new_sha256": "5def64684ecf424bbfcb6faad4f907b2ace30b6b8d5c3321e13ba6d334c16262",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.swift",
+        "new_filename": "probe.swift",
+        "language": "swift",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update function_call_expression('public func message() -> String { return \"café\" }') -> function_call_expression('public func message() -> String { return \"cafe雪\" }')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func message() -> String { return \"café\" }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 50
+              },
+              "structural_hash": "65cda68045b599d4ad3f46c27ff06e066c04eb6db8699680aac57a817d866c77",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "function_call_expression",
+              "label": "public func message() -> String { return \"cafe雪\" }",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 52
+              },
+              "structural_hash": "8146a5b7ec39e12fb77c053696bd3ffd728aae1523578bd7735b399551b7eb02",
+              "children": []
+            },
+            "text_diff": "public func message() -> String { return \"café\" } -> public func message() -> String { return \"cafe雪\" }"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "public func message() -> String { return \"café\" }"
+            ],
+            "new_labels": [
+              "public func message() -> String { return \"cafe雪\" }"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.212485,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22080000,
+                "fuel_consumed": 85974,
+                "total_fuel_consumed": 85974,
+                "max_fuel_used_percent": 0.389375,
+                "input_bytes": 51,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "probe.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.13383899999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22080000,
+                "fuel_consumed": 85502,
+                "total_fuel_consumed": 85502,
+                "max_fuel_used_percent": 0.3872373188405797,
+                "input_bytes": 53,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "8fd3a61151923423e18645ec3f304c1804e67672c3ea74e02b935b8493173073",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func message() -> String { return \"café\" }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 50
+                },
+                "structural_hash": "65cda68045b599d4ad3f46c27ff06e066c04eb6db8699680aac57a817d866c77",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "dcf1c2e1519e8e85078c7c4888a7b1def3cbbf6b98512853f23f6d2ba3129514",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "function_call_expression",
+                "label": "public func message() -> String { return \"cafe雪\" }",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 52
+                },
+                "structural_hash": "8146a5b7ec39e12fb77c053696bd3ffd728aae1523578bd7735b399551b7eb02",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 56.849
+    },
+    {
+      "id": "swift-repo-fixture-identity",
+      "language_id": "swift",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "b58881752acf736662349a17c2373391e5e702b69844b1315c12b9439056d870",
+      "new_sha256": "b58881752acf736662349a17c2373391e5e702b69844b1315c12b9439056d870",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.swift",
+        "new_filename": "playground.swift",
+        "language": "swift",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "playground.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.435619,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27920000,
+                "fuel_consumed": 476235,
+                "total_fuel_consumed": 476235,
+                "max_fuel_used_percent": 1.7057127507163323,
+                "input_bytes": 198,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "swift",
+                "filename": "playground.swift",
+                "call_count": 1,
+                "elapsed_ms": 0.34015199999999995,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27920000,
+                "fuel_consumed": 475645,
+                "total_fuel_consumed": 475645,
+                "max_fuel_used_percent": 1.703599570200573,
+                "input_bytes": 198,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/swift_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "ba337c4ea85654bd97047ee5dad4ffae2d77ab0a083c9250e0631e248c07d505",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "import_declaration",
+                "label": "Foundation",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "a969a6199cf28b53727d3c280e5e6f0c8e5bd7894dec01940081591677d4a7a9",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "function_declaration",
+                "label": "greet",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 1
+                },
+                "structural_hash": "35c4025b020f08571e5f236007ae31f93a69615f0f20efc5745e99a9e4162864",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "signature",
+                    "label": "func greet(name: String) {",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 26
+                    },
+                    "structural_hash": "dc8a3c1063bdd81767ea60f17d060bd1e778e2c3db22fef7ee0b94024b781f98",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "function_call_expression",
+                    "label": "print(\"Hello, \\(name)!\")",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 28
+                    },
+                    "structural_hash": "eb30a72cd662042b213b87e4118e33fef9f834a5c74d138d49ea9e126e05aa6d",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "function_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "71f7ce92d06e2cfd39121cf77714db3d0e1ada6dfb063d735ddd04a3f8b4ef9a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "signature",
+                    "label": "func add(_ a: Int, _ b: Int) -> Int {",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 37
+                    },
+                    "structural_hash": "600449f129798d0498a82be19a22eb2aabb6c1f2feb882d392fc7ab5c21caf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "return_statement",
+                    "label": "return a + b",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "f6d379870ca8bef3324aad74f13105175c4be123f4e135339ad0ec9b50c31248",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "function_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "83bf412a07825c5efa96b52d1668841d8c5eb529b77c35c5c654043a255c0911",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "signature",
+                    "label": "func multiply(_ a: Int, _ b: Int) -> Int {",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 0,
+                      "end_line": 10,
+                      "end_col": 42
+                    },
+                    "structural_hash": "95b72ac9416f4fd5fa84f3114f7dc30e0bfb4869ecd29833ab837382e0947156",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "return_statement",
+                    "label": "return a * b",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c8738a019fbe4cf48bb0e4fb94702203452177ee520478fc179ae21655c7d4f3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "swift",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 13,
+              "end_col": 0
+            },
+            "structural_hash": "ba337c4ea85654bd97047ee5dad4ffae2d77ab0a083c9250e0631e248c07d505",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "import_declaration",
+                "label": "Foundation",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "a969a6199cf28b53727d3c280e5e6f0c8e5bd7894dec01940081591677d4a7a9",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "function_declaration",
+                "label": "greet",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 1
+                },
+                "structural_hash": "35c4025b020f08571e5f236007ae31f93a69615f0f20efc5745e99a9e4162864",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "signature",
+                    "label": "func greet(name: String) {",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 26
+                    },
+                    "structural_hash": "dc8a3c1063bdd81767ea60f17d060bd1e778e2c3db22fef7ee0b94024b781f98",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "function_call_expression",
+                    "label": "print(\"Hello, \\(name)!\")",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 28
+                    },
+                    "structural_hash": "eb30a72cd662042b213b87e4118e33fef9f834a5c74d138d49ea9e126e05aa6d",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "function_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 1
+                },
+                "structural_hash": "71f7ce92d06e2cfd39121cf77714db3d0e1ada6dfb063d735ddd04a3f8b4ef9a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "signature",
+                    "label": "func add(_ a: Int, _ b: Int) -> Int {",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 37
+                    },
+                    "structural_hash": "600449f129798d0498a82be19a22eb2aabb6c1f2feb882d392fc7ab5c21caf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "return_statement",
+                    "label": "return a + b",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "f6d379870ca8bef3324aad74f13105175c4be123f4e135339ad0ec9b50c31248",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "function_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 1
+                },
+                "structural_hash": "83bf412a07825c5efa96b52d1668841d8c5eb529b77c35c5c654043a255c0911",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "signature",
+                    "label": "func multiply(_ a: Int, _ b: Int) -> Int {",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 0,
+                      "end_line": 10,
+                      "end_col": 42
+                    },
+                    "structural_hash": "95b72ac9416f4fd5fa84f3114f7dc30e0bfb4869ecd29833ab837382e0947156",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "return_statement",
+                    "label": "return a * b",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 0,
+                      "end_line": 11,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c8738a019fbe4cf48bb0e4fb94702203452177ee520478fc179ae21655c7d4f3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 103.388
+    }
+  ],
+  "attempted_count": 9,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.288
+}

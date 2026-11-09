@@ -1,0 +1,3095 @@
+{
+  "language_id": "xml",
+  "options": {
+    "language_hint": "xml",
+    "strict_plugins": true
+  },
+  "completed_count": 8,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.xml.meaningful_1_value",
+      "language_id": "xml",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "2054f77fb76397fe7b7443c220561bdf89876f04f198651b9588cdd64cb4d36d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update text('8080') -> text('8081')",
+            "old_node": {
+              "id": "0.1.2.1.path_text",
+              "node_type": "text",
+              "label": "8080",
+              "position": {
+                "start_line": 6,
+                "start_col": 10,
+                "end_line": 6,
+                "end_col": 14
+              },
+              "structural_hash": "b9fc0a04073a882a19db63364d3d00a65a78bf069e4a48e4b01bc467021f7f99",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.2.1.path_text",
+              "node_type": "text",
+              "label": "8081",
+              "position": {
+                "start_line": 6,
+                "start_col": 10,
+                "end_line": 6,
+                "end_col": 14
+              },
+              "structural_hash": "eb9bcadf98aab8e2dae8aef346612fca36a8f61e69b2ba28207e59d8ebb75ed8",
+              "children": []
+            },
+            "text_diff": "8080 -> 8081"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "8080"
+            ],
+            "new_labels": [
+              "8081"
+            ],
+            "old_node_ids": [
+              "0.1.2.1.path_text"
+            ],
+            "new_node_ids": [
+              "0.1.2.1.path_text"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.281758,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32120000,
+                "fuel_consumed": 5118185,
+                "total_fuel_consumed": 5118185,
+                "max_fuel_used_percent": 15.934573474470733,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 1.723832,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32120000,
+                "fuel_consumed": 5117131,
+                "total_fuel_consumed": 5117131,
+                "max_fuel_used_percent": 15.931292029887919,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "319a3b45ac8e3fd58db5ace11f76f514f806dfe401ce6a45b1fb2354b225efc1",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "ba49728d2c9610d55d0bd097cc2426eff453d82ffc03a5b2fcec568bd0e80912",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "c52f425a14265f7db3e0531c41778e947724e4faf0a76acbaad0cf78c19f25bc",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "3d5967cbf43b4b4d51bf35cf0001a27355d8146170063b76560f15bb78818c64",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 15495.882
+    },
+    {
+      "id": "data_config.xml.meaningful_2_configuration",
+      "language_id": "xml",
+      "category": "configuration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "e169e27a2c9dda4247b8a27587c5e172d1dd7dcafa65f95cbd2259c2b67a82fc",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> attribute('mode=strict')",
+            "new_node": {
+              "id": "0.1.2.0",
+              "node_type": "attribute",
+              "label": "mode=strict",
+              "position": {
+                "start_line": 4,
+                "start_col": 10,
+                "end_line": 4,
+                "end_col": 23
+              },
+              "structural_hash": "8370ed43b3e050d8ed705164ee68448fb612e5f489b9209c1e6110b873631ae8",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "mode=strict"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.1.2.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.256471,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32400000,
+                "fuel_consumed": 5116810,
+                "total_fuel_consumed": 5116810,
+                "max_fuel_used_percent": 15.792623456790123,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 1.818468,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32400000,
+                "fuel_consumed": 5354883,
+                "total_fuel_consumed": 5354883,
+                "max_fuel_used_percent": 16.527416666666667,
+                "input_bytes": 317,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "b119d7ae74b1240c0b9d69347dd240b5887df3fff852c923417c3be36c715b53",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "c02af52e20851f1d8956f83b122a73a7f9292f9f840d8c0b11b6548fadd2d5d3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "910c0e7de55262127875f76642bc9f5fa0758733a01432c2a85abb1d67be771b",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "attribute",
+                        "label": "mode=strict",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 10,
+                          "end_line": 4,
+                          "end_col": 23
+                        },
+                        "structural_hash": "8370ed43b3e050d8ed705164ee68448fb612e5f489b9209c1e6110b873631ae8",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.3",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 99.849
+    },
+    {
+      "id": "data_config.xml.meaningful_3_significant_whitespace",
+      "language_id": "xml",
+      "category": "significant_whitespace",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "d18e98636c3452b965500d6ef57b807542fc6288a0ca9bf4be3f0d1618d9cfc5",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<name>MyApp</name>\\n"
+            ],
+            "new_labels": [
+              "<name> MyApp</name>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<name>MyApp</name>\\n",
+              "new_label": "<name> MyApp</name>\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                48,
+                69
+              ],
+              "new_span": [
+                48,
+                70
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<name>MyApp</name>\\n",
+              "new_label": "<name> MyApp</name>\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                48,
+                69
+              ],
+              "new_span": [
+                48,
+                70
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.056179,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32140000,
+                "fuel_consumed": 5118229,
+                "total_fuel_consumed": 5118229,
+                "max_fuel_used_percent": 15.924794648413194,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 1.553565,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32140000,
+                "fuel_consumed": 5118211,
+                "total_fuel_consumed": 5118211,
+                "max_fuel_used_percent": 15.92473864343497,
+                "input_bytes": 304,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "635d3009fe351c034551cfe0d6f4a00ec93383c2ace48009dc03e0496ce9bb20",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "c685dcd30cae2ba6238bd0a8656e3ecee23c012fb94a8aad8709f0ea05c202da",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 21
+                    },
+                    "structural_hash": "0f02e1bf2518dd441ba1e5b44a95549fb05d381f69ad4053619ab7a2f54005ad",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 92.06
+    },
+    {
+      "id": "data_config.xml.identity",
+      "language_id": "xml",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.3177139999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32120000,
+                "fuel_consumed": 5116108,
+                "total_fuel_consumed": 5116108,
+                "max_fuel_used_percent": 15.92810709838107,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 1.648331,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32120000,
+                "fuel_consumed": 5117426,
+                "total_fuel_consumed": 5117426,
+                "max_fuel_used_percent": 15.932210460772103,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 88.849
+    },
+    {
+      "id": "data_config.xml.safe_preservation",
+      "language_id": "xml",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "39735a217a0285975a49e25208a4e19382225212b172782a8ad3bbc8085fdd17",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<config>\\n"
+            ],
+            "new_labels": [
+              "<config >\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<config>\\n",
+              "new_label": "<config >\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                39,
+                48
+              ],
+              "new_span": [
+                39,
+                49
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<config>\\n",
+              "new_label": "<config >\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                39,
+                48
+              ],
+              "new_span": [
+                39,
+                49
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.183356,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32140000,
+                "fuel_consumed": 5117143,
+                "total_fuel_consumed": 5117143,
+                "max_fuel_used_percent": 15.921415681393903,
+                "input_bytes": 303,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 2.026735,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32140000,
+                "fuel_consumed": 5122233,
+                "total_fuel_consumed": 5122233,
+                "max_fuel_used_percent": 15.937252644679528,
+                "input_bytes": 304,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "a9e76e4dd42db851b75116536ea7a4091e18655bc28b35e9f28276898d27c117",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "prolog",
+                "label": "prolog",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "de6482ce1f8fe1ff6917407d9f76d8fe1e9cd10e4145f6c7d8114550e90eab73",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "XMLDecl",
+                    "label": "1.0 UTF-8",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 38
+                    },
+                    "structural_hash": "c8031e649f6e86feca5405ea93f800999f43e4992c448a277ba9987f8602d038",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "element",
+                "label": "config",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 9
+                },
+                "structural_hash": "526a32a0ae1c71c6fd340ef28208a6ab124ae63d1b7e1620b200108faf7cda2b",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "element",
+                    "label": "name",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 2,
+                      "end_line": 2,
+                      "end_col": 20
+                    },
+                    "structural_hash": "be2e5ed9d4a5bf835e97e80d3d765f830ab3868d7435e01fbba3e567dd2e7823",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "element",
+                    "label": "version",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 24
+                    },
+                    "structural_hash": "fb05d07b923ec704514ef36d04b76223df98b9805ab737b4b584a19b3b16ae36",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "element",
+                    "label": "server",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "b4df8de321378d8899044d8018bfb6a5ea7dc56515e4d1a6abcfc3089cff5eac",
+                    "children": [
+                      {
+                        "id": "0.1.2.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 4,
+                          "end_line": 5,
+                          "end_col": 24
+                        },
+                        "structural_hash": "b8c096a1d83e919b0a6feeb06cf7cd96efb3bd4d33d3ab8b017a72d0c005b4dc",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 4,
+                          "end_line": 6,
+                          "end_col": 21
+                        },
+                        "structural_hash": "412559e73f0c92b474589815032ad4c0508ad762ed78633ab8fda5fc5baeb399",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.2.2",
+                        "node_type": "element",
+                        "label": "timeout",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 4,
+                          "end_line": 7,
+                          "end_col": 25
+                        },
+                        "structural_hash": "f0b8d3efeae2701817c0cf59571f98e8a76478c3afb84c6eb5c48f0604d92dce",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "element",
+                    "label": "database",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 2,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "baa25da77c5d8d0273276e5708b099c505ca7de5f1121ee2d9b22bd80116e1f9",
+                    "children": [
+                      {
+                        "id": "0.1.3.0",
+                        "node_type": "element",
+                        "label": "host",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 4,
+                          "end_line": 10,
+                          "end_col": 31
+                        },
+                        "structural_hash": "94f1350b0a07f00257e69163af361a6c283a96e631a1dda03365aeef506e5da0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.1",
+                        "node_type": "element",
+                        "label": "port",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 4,
+                          "end_line": 11,
+                          "end_col": 21
+                        },
+                        "structural_hash": "4e569886b6ab900afd343bc92f162b4be720a83347cd24e9c70b5010c3e44ec0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.1.3.2",
+                        "node_type": "element",
+                        "label": "name",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 4,
+                          "end_line": 12,
+                          "end_col": 21
+                        },
+                        "structural_hash": "1a248991856d718c3af5d31ce93197f046a6bd84d24c7e21f6c921f7c5469d0d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 90.827
+    },
+    {
+      "id": "data_config.xml.incomplete",
+      "language_id": "xml",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "51edf5c47363f368a07ef45cbbf2aec85add51ecf5589b8383d057ab0aef1f69",
+      "new_sha256": "695273d671ba0dfed7028488830ca7f51fd1d642d76389d15c6c4ad5f18cc6bf",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "status": "bounded_explicit_fallback",
+      "oracle_evaluated": false,
+      "explicit_fallback": {
+        "fallback": "literal enrich (new): literal enrich tree: missing field `id` at line 1 column 31"
+      },
+      "classification_errors": [],
+      "elapsed_ms": 12.382
+    },
+    {
+      "id": "data_config.xml.unicode_value",
+      "language_id": "xml",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "285d98533d792304bc30c9ba5bf11bf7f7f12bdd0552ec9695ea93fac251e2d3",
+      "new_sha256": "f968220f4785f1f0b9ca65838f230bde097c85d8e4b547433c8dcc8521ce4c04",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update text('λ') -> text('μ')",
+            "old_node": {
+              "id": "0.0.path_text",
+              "node_type": "text",
+              "label": "λ",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "c9d625f6ea435f735dc4d4f1f07259589a7cb8eb920eeef1b98a434043d769d9",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_text",
+              "node_type": "text",
+              "label": "μ",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "279c86d08fe4937c7758f0f9630b0d2ad574704a498198c2708da5c25a04f15d",
+              "children": []
+            },
+            "text_diff": "λ -> μ"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "λ"
+            ],
+            "new_labels": [
+              "μ"
+            ],
+            "old_node_ids": [
+              "0.0.path_text"
+            ],
+            "new_node_ids": [
+              "0.0.path_text"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 0.47168600000000005,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 404452,
+                "total_fuel_consumed": 404452,
+                "max_fuel_used_percent": 1.951988416988417,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 0.22044,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 404418,
+                "total_fuel_consumed": 404418,
+                "max_fuel_used_percent": 1.9518243243243243,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "507341e42a195132be6638cc0105476163a34a998510acfc5b12a43caed3c376",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "label",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "ca2051892d56f9383a8c66d736f2db0fb8a4530ebf0e232ca8512b55e95f56db",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "b3847c796f928e6d52c15adb2a37a56bd6e0ad457aab526342028cc82bf61a5b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "label",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "b63b509649461700b0e235e8499ff8237acbced6921272e36393f4d8a0de7501",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 54.53
+    },
+    {
+      "id": "data_config.xml.known_text_whitespace",
+      "language_id": "xml",
+      "category": "significant_whitespace",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "23711a61db1a35f676a21c5dfb737c98a1871c6996d4109ffa0f6b913e620de8",
+      "new_sha256": "8d284dbcf126eff117b73122ebee66b15be5ebfb08a949f195a10024ff5a4506",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#247"
+      ],
+      "review": {
+        "old_filename": "playground.xml",
+        "new_filename": "playground.xml",
+        "language": "xml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<p>a b</p>\\n"
+            ],
+            "new_labels": [
+              "<p>a  b</p>\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>a b</p>\\n",
+              "new_label": "<p>a  b</p>\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                11
+              ],
+              "new_span": [
+                0,
+                12
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<p>a b</p>\\n",
+              "new_label": "<p>a  b</p>\\n",
+              "risk": "amber",
+              "language": "xml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                11
+              ],
+              "new_span": [
+                0,
+                12
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 0.5153679999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20460000,
+                "fuel_consumed": 399678,
+                "total_fuel_consumed": 399678,
+                "max_fuel_used_percent": 1.9534604105571847,
+                "input_bytes": 11,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "xml",
+                "filename": "playground.xml",
+                "call_count": 1,
+                "elapsed_ms": 0.236289,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20460000,
+                "fuel_consumed": 400132,
+                "total_fuel_consumed": 400132,
+                "max_fuel_used_percent": 1.9556793743890517,
+                "input_bytes": 12,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/xml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d2dbddfa8d7b59e93704b8ab79f3f642101f0b001b8359b6a2c9a8d847f60b33",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "fb841f356a8661febf6ed41f41cd10e28d9391d76bb22ca44750c03166f6136f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "xml",
+          "tree": {
+            "id": "0",
+            "node_type": "document",
+            "label": "document",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "b96e249f6847b3e33fcc3826e7b0aed345eb3b46139f42a36ccd60628c4dbb68",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "element",
+                "label": "p",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "300d42d5ada1ec3737b837d9d57da93d8be365b1517c928a97183e3f71cc19da",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 52.245
+    }
+  ],
+  "attempted_count": 8,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 17.123
+}

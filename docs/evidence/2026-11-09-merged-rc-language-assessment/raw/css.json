@@ -1,0 +1,2911 @@
+{
+  "language_id": "css",
+  "options": {
+    "language_hint": "css",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-css-value",
+      "language_id": "css",
+      "category": "meaningful_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "52c73586365bd199e492555bc66530cc31f821e18eba38d0e8a8df428ef3169d",
+      "new_sha256": "f8a2bf092397d0380dedcaea4c48910d5b3a49ae9db58e7887ceaf0465d7f61e",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('8px') -> property_value('12px')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "8px",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "f2d125a391916286af0aa04221ca64cf7a9c32a1cfe55d53953a146fc4289dcf",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "12px",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 20
+              },
+              "structural_hash": "8c8fe7438e3ea4107c115438374bca2999baaeddd3d811bf68030276f463e8aa",
+              "children": []
+            },
+            "text_diff": "8px -> 12px"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              ".card",
+              "8px"
+            ],
+            "new_labels": [
+              ".card",
+              "12px"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": ".card",
+              "new_entity_label": ".card",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.505068,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20940000,
+                "fuel_consumed": 581341,
+                "total_fuel_consumed": 581341,
+                "max_fuel_used_percent": 2.776222540592168,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.255996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20940000,
+                "fuel_consumed": 582410,
+                "total_fuel_consumed": 582410,
+                "max_fuel_used_percent": 2.7813276026743075,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5cbf1d066c7a2f1b7c0127969eb5f05379ca7616051cb461d9a850433f1db816",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "58105bebe56e6f3c4bf60ac7e12741abfa28f9191aa8c7d64331ff4c9e3642c7",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5cbf1d066c7a2f1b7c0127969eb5f05379ca7616051cb461d9a850433f1db816",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "58105bebe56e6f3c4bf60ac7e12741abfa28f9191aa8c7d64331ff4c9e3642c7",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 17875.958
+    },
+    {
+      "id": "web-css-selector",
+      "language_id": "css",
+      "category": "meaningful_selector",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7294bb502150d23e65f217d03d66f616caac96ed9c2ccb7235ee6a952c99e027",
+      "new_sha256": "09fa0b18938866a8f91adc4c6f4a6334eee8e6a62cd55f084ebb88a85b614720",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update rule_set('.card') -> rule_set('.notice')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "rule_set",
+              "label": ".card",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "41c5ff7d0d4ece780b02be3a63ba2261fb5ed73f9ab635c297adf83d2d566f09",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "selectors",
+                  "label": ".card",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 0,
+                    "end_line": 0,
+                    "end_col": 5
+                  },
+                  "structural_hash": "2d8b265ff8f3dd0978a99dd0193853fa70dad019ef1842a351d6e8c6a71e5504",
+                  "children": [
+                    {
+                      "id": "0.0.0.0",
+                      "node_type": "class_selector",
+                      "label": ".card",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 0,
+                        "end_line": 0,
+                        "end_col": 5
+                      },
+                      "structural_hash": "737af0aaa06fd3a2a4c7f49301d65d068d6e511c266c21761f515b7ea80584ba",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0.0.path_0",
+                  "node_type": "declaration",
+                  "label": "color",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 8,
+                    "end_line": 0,
+                    "end_col": 19
+                  },
+                  "structural_hash": "a4b8d4a5b31acd4949b679cac9a59cb58ab07d87d5fcc8956c0503bcbe12fca2",
+                  "children": [
+                    {
+                      "id": "0.0.path_0.value",
+                      "node_type": "property_value",
+                      "label": "red",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 15,
+                        "end_line": 0,
+                        "end_col": 18
+                      },
+                      "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "rule_set",
+              "label": ".notice",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 23
+              },
+              "structural_hash": "f35f04296c30cc9ce5683498e7d6714568bc0f90715426c93c097c7399b08456",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "selectors",
+                  "label": ".notice",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 0,
+                    "end_line": 0,
+                    "end_col": 7
+                  },
+                  "structural_hash": "f4740ad738e37c1b43771bdb2f9b975cd9ffc0d4ce8cf369696595df0e80cfac",
+                  "children": [
+                    {
+                      "id": "0.0.0.0",
+                      "node_type": "class_selector",
+                      "label": ".notice",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 0,
+                        "end_line": 0,
+                        "end_col": 7
+                      },
+                      "structural_hash": "fbdf68fc3cfb537bd58611c603a0103cf55aba1060aea093f3962b0631e9edf9",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0.0.path_0",
+                  "node_type": "declaration",
+                  "label": "color",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 10,
+                    "end_line": 0,
+                    "end_col": 21
+                  },
+                  "structural_hash": "a4b8d4a5b31acd4949b679cac9a59cb58ab07d87d5fcc8956c0503bcbe12fca2",
+                  "children": [
+                    {
+                      "id": "0.0.path_0.value",
+                      "node_type": "property_value",
+                      "label": "red",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 17,
+                        "end_line": 0,
+                        "end_col": 20
+                      },
+                      "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "MOVE",
+            "confidence": 1.0,
+            "description": "Move declaration('color') -> declaration('color')",
+            "old_node": {
+              "id": "0.0.path_0",
+              "node_type": "declaration",
+              "label": "color",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "a4b8d4a5b31acd4949b679cac9a59cb58ab07d87d5fcc8956c0503bcbe12fca2",
+              "children": [
+                {
+                  "id": "0.0.path_0.value",
+                  "node_type": "property_value",
+                  "label": "red",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 15,
+                    "end_line": 0,
+                    "end_col": 18
+                  },
+                  "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.path_0",
+              "node_type": "declaration",
+              "label": "color",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 21
+              },
+              "structural_hash": "a4b8d4a5b31acd4949b679cac9a59cb58ab07d87d5fcc8956c0503bcbe12fca2",
+              "children": [
+                {
+                  "id": "0.0.path_0.value",
+                  "node_type": "property_value",
+                  "label": "red",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 17,
+                    "end_line": 0,
+                    "end_col": 20
+                  },
+                  "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MOVED_CODE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "color",
+              "red"
+            ],
+            "new_labels": [
+              "color",
+              "red"
+            ],
+            "old_node_ids": [
+              "0.0.path_0",
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0",
+              "0.0.path_0.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_move_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0,
+              1
+            ],
+            "old_labels": [
+              ".card",
+              ".card",
+              ".card",
+              "color",
+              "red"
+            ],
+            "new_labels": [
+              ".notice",
+              ".notice",
+              ".notice",
+              "color",
+              "red"
+            ],
+            "old_node_ids": [
+              "0.0",
+              "0.0.0",
+              "0.0.0.0",
+              "0.0.path_0",
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0",
+              "0.0.0",
+              "0.0.0.0",
+              "0.0.path_0",
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.5786749999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 542224,
+                "total_fuel_consumed": 542224,
+                "max_fuel_used_percent": 2.5918929254302103,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.26020299999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 543823,
+                "total_fuel_consumed": 543823,
+                "max_fuel_used_percent": 2.599536328871893,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "290ded719482d5af4cef3575e4a80b2becc1168b93a309e868c5897983b6f084",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "669e4c4c9a7a3c3f8d515ddda30f67d5b644a850c9353520913514ca1bf1622c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "fe3024d4a65ce87696dd070665e25fe8eb2d65a532439582d87bcf021d8ca5b6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "238ab30905a0e626d3359b6f96c103f64f4516125fd731ba4d9fb3b13e972da9",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "365a41b9a24b3e4ce80fe222548355f4f3d0623dfa84cdb472c9b0728d70d64c",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "4a851bfa37200fb2609825e04b00af84eeae3a0b5acd215ad19fd5917ad63aeb",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 73.232
+    },
+    {
+      "id": "web-css-cascade_order",
+      "language_id": "css",
+      "category": "meaningful_cascade_order",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c234a8a41be729f0a65b850581ea7ffc662b3978a762995e0ad1c65621749650",
+      "new_sha256": "e92750971e7fc0a143972a2f5162010680a7b814df45dfd7bcd6a34b1a4bd36f",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MOVE",
+            "confidence": 1.0,
+            "description": "Move property_value('red') -> property_value('red')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 18
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_1.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 28,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            }
+          },
+          {
+            "change_type": "MOVE",
+            "confidence": 1.0,
+            "description": "Move property_value('blue') -> property_value('blue')",
+            "old_node": {
+              "id": "0.0.path_1.value",
+              "node_type": "property_value",
+              "label": "blue",
+              "position": {
+                "start_line": 0,
+                "start_col": 27,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "2d4b8c114c8abc580ab331032e091461f5b6fe3dec969e4c5dc3f66f582f7a6b",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "blue",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "2d4b8c114c8abc580ab331032e091461f5b6fe3dec969e4c5dc3f66f582f7a6b",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MOVED_CODE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "red"
+            ],
+            "new_labels": [
+              "red"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_1.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_move_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MOVED_CODE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "blue"
+            ],
+            "new_labels": [
+              "blue"
+            ],
+            "old_node_ids": [
+              "0.0.path_1.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_move_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.611946,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 689191,
+                "total_fuel_consumed": 689191,
+                "max_fuel_used_percent": 3.2205186915887847,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.300749,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21400000,
+                "fuel_consumed": 688683,
+                "total_fuel_consumed": 688683,
+                "max_fuel_used_percent": 3.218144859813084,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "89f4b7987907a2d36d1aca56f9822c37ea5ad5c9df978a9de36bd893f9bb2406",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "1c4cfdbaf4d2e104ea2e5c3f743821b44d1f6a2288a72d179f843dce39151fe8",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "dc027fb81d03fdadbf84bd84577329b9a293fe09710248d2a24ccaf8a4bc5d90",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "830d3e165596c399199984a68eceec0ac698a14e7f4a0d69152809a5476faa56",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.985
+    },
+    {
+      "id": "web-css-important",
+      "language_id": "css",
+      "category": "meaningful_important",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7294bb502150d23e65f217d03d66f616caac96ed9c2ccb7235ee6a952c99e027",
+      "new_sha256": "6f60630fd555a3bf64c35e95eb73c4b5e81e0362d3f81e564f102a047cb9d806",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('red') -> property_value('red !important')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "red",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 18
+              },
+              "structural_hash": "425df77b059ebff81436556ea27e679511c93ed2f2954c3861889d8842bc74b0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "red !important",
+              "position": {
+                "start_line": 0,
+                "start_col": 15,
+                "end_line": 0,
+                "end_col": 29
+              },
+              "structural_hash": "e9bb54f08c2cad2673d8a34cf7607bb2eff6ce4be80b87eb17cd0b0217dc38e8",
+              "children": []
+            },
+            "text_diff": "red -> red !important"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              ".card",
+              "red"
+            ],
+            "new_labels": [
+              ".card",
+              "red !important"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": ".card",
+              "new_entity_label": ".card",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.669605,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21100000,
+                "fuel_consumed": 542266,
+                "total_fuel_consumed": 542266,
+                "max_fuel_used_percent": 2.5699810426540286,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.32604500000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21100000,
+                "fuel_consumed": 588111,
+                "total_fuel_consumed": 588111,
+                "max_fuel_used_percent": 2.787255924170616,
+                "input_bytes": 33,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "290ded719482d5af4cef3575e4a80b2becc1168b93a309e868c5897983b6f084",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "669e4c4c9a7a3c3f8d515ddda30f67d5b644a850c9353520913514ca1bf1622c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "07e3aa1ef587645a61265449f4815f8ccdc27ae554ca4695a22b4749ed45fe3c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 32
+                },
+                "structural_hash": "9ba28d380178c577d628204a3dd9f91807092528efbd72b7c3d4b38501345128",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 82.028
+    },
+    {
+      "id": "web-css-identity",
+      "language_id": "css",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7294bb502150d23e65f217d03d66f616caac96ed9c2ccb7235ee6a952c99e027",
+      "new_sha256": "7294bb502150d23e65f217d03d66f616caac96ed9c2ccb7235ee6a952c99e027",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.594384,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 542159,
+                "total_fuel_consumed": 542159,
+                "max_fuel_used_percent": 2.5965469348659003,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.329492,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 542166,
+                "total_fuel_consumed": 542166,
+                "max_fuel_used_percent": 2.596580459770115,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "290ded719482d5af4cef3575e4a80b2becc1168b93a309e868c5897983b6f084",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "669e4c4c9a7a3c3f8d515ddda30f67d5b644a850c9353520913514ca1bf1622c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "290ded719482d5af4cef3575e4a80b2becc1168b93a309e868c5897983b6f084",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "669e4c4c9a7a3c3f8d515ddda30f67d5b644a850c9353520913514ca1bf1622c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.896
+    },
+    {
+      "id": "web-css-preservation",
+      "language_id": "css",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7294bb502150d23e65f217d03d66f616caac96ed9c2ccb7235ee6a952c99e027",
+      "new_sha256": "10cd201a10efedb310eeab58ca70488fe76e873babf055951627be5eb129b8dd",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              ".card { color: red; }\\n"
+            ],
+            "new_labels": [
+              ".card { /* note */ color: red; }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { color: red; }\\n",
+              "new_label": ".card { /* note */ color: red; }\\n",
+              "risk": "amber",
+              "language": "css",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                33
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { color: red; }\\n",
+              "new_label": ".card { /* note */ color: red; }\\n",
+              "risk": "amber",
+              "language": "css",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                33
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.789767,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21100000,
+                "fuel_consumed": 542066,
+                "total_fuel_consumed": 542066,
+                "max_fuel_used_percent": 2.5690331753554503,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.579958,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21100000,
+                "fuel_consumed": 587791,
+                "total_fuel_consumed": 587791,
+                "max_fuel_used_percent": 2.7857393364928913,
+                "input_bytes": 33,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "290ded719482d5af4cef3575e4a80b2becc1168b93a309e868c5897983b6f084",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "669e4c4c9a7a3c3f8d515ddda30f67d5b644a850c9353520913514ca1bf1622c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "1c3161688cfdb104d67f43ee28b80047b302f3f9a6ae49c1b4100657f31c065b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "class_selector",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 32
+                },
+                "structural_hash": "8a2e5b382674e029dd75c4c0565aa95675f2b0108d5147db41ab5616e62cf21c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "3d213ed505cef4007ac320ebc32d70e8507759b29b90ab0f50441985b5e9c31a",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "class_selector",
+                        "label": "class_selector",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 5
+                        },
+                        "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 181.012
+    },
+    {
+      "id": "web-css-incomplete",
+      "language_id": "css",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "8ec842cca93ccf40f348fb2cd4f330d0ca71e9ed7f7333054b1138b580c3aa9a",
+      "new_sha256": "eeafb12eda83901e76f46b7b666786af94a0c63da1ebb246edd12378f81f5e38",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              ".card { color: rgb("
+            ],
+            "new_labels": [
+              ".notice { color: rgb("
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { color: rgb(",
+              "new_label": ".notice { color: rgb(",
+              "risk": "amber",
+              "language": "css",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                19
+              ],
+              "new_span": [
+                0,
+                21
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": ".card { color: rgb(",
+              "new_label": ".notice { color: rgb(",
+              "risk": "amber",
+              "language": "css",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                19
+              ],
+              "new_span": [
+                0,
+                21
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.6830780000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20800000,
+                "fuel_consumed": 741284,
+                "total_fuel_consumed": 741284,
+                "max_fuel_used_percent": 3.5638653846153847,
+                "input_bytes": 19,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.257718,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20800000,
+                "fuel_consumed": 742859,
+                "total_fuel_consumed": 742859,
+                "max_fuel_used_percent": 3.5714375,
+                "input_bytes": 21,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 19
+            },
+            "structural_hash": "51cf2705f565ebc27d8dd140a25d974856cbaa5a45ecbf7793bd908b9227b7ce",
+            "children": []
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 21
+            },
+            "structural_hash": "c75dd4985465a74627efc683b7e851a65c32134b8b7335cb5de3bef1f20ff6aa",
+            "children": []
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 57.765
+    },
+    {
+      "id": "web-css-unicode",
+      "language_id": "css",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d53cce27a82ddc129b8b3ac84129a3a01bbb7c06ac7682f88539a2d77aa355a0",
+      "new_sha256": "2e0ae1b972de9439b0e902d37ed155abe7063a9cb89ab4392df769f8af916885",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('\"Café\"') -> property_value('\"Thé\"')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "\"Café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 25,
+                "end_line": 0,
+                "end_col": 32
+              },
+              "structural_hash": "4de52268d458808ba39f178959207cedf2da3933359d3e73dcd73ed5c287524e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "\"Thé\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 25,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "ab57b8d1fad854ff6a14095924a1c741d63c3c9f182f38b82a83a0e199d288fc",
+              "children": []
+            },
+            "text_diff": "\"Café\" -> \"Thé\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              ".card::before",
+              "\"Café\""
+            ],
+            "new_labels": [
+              ".card::before",
+              "\"Thé\""
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": ".card::before",
+              "new_entity_label": ".card::before",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.679341,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 695128,
+                "total_fuel_consumed": 695128,
+                "max_fuel_used_percent": 3.2452287581699344,
+                "input_bytes": 36,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.372822,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21420000,
+                "fuel_consumed": 693763,
+                "total_fuel_consumed": 693763,
+                "max_fuel_used_percent": 3.2388562091503266,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "7e08db242e1189fad2eb80229d7cb5ae3af31963f1e25928b73b578205760a35",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "::before",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 35
+                },
+                "structural_hash": "bb6ed9556d919df0f9c6049ac007bf538dced729cabfeed8754d301e68a29b84",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "006fcc36e1d9fca2004f125515cac875370ba91814433aaf1bfdeaf1952cabef",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "pseudo_element_selector",
+                        "label": "::before",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "0069fffad91c493d5d067d29b91f7400f196fb28a8a66fcb143cc19f082fdb23",
+                        "children": [
+                          {
+                            "id": "0.0.0.0.0",
+                            "node_type": "class_selector",
+                            "label": "class_selector",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 0,
+                              "end_line": 0,
+                              "end_col": 5
+                            },
+                            "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "23e8003362d7a1fb537652545198fb9b27a42ffe079e227116bfa6c6bca34234",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "::before",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 34
+                },
+                "structural_hash": "b6761647397a2ca133f047805753d45febad96030a15c39e9875eb106a026830",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "006fcc36e1d9fca2004f125515cac875370ba91814433aaf1bfdeaf1952cabef",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "pseudo_element_selector",
+                        "label": "::before",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 13
+                        },
+                        "structural_hash": "0069fffad91c493d5d067d29b91f7400f196fb28a8a66fcb143cc19f082fdb23",
+                        "children": [
+                          {
+                            "id": "0.0.0.0.0",
+                            "node_type": "class_selector",
+                            "label": "class_selector",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 0,
+                              "end_line": 0,
+                              "end_col": 5
+                            },
+                            "structural_hash": "2a5921cc9a4fbc9a079290303023b609fcc85215ca54c6efafe74e3f93dfbcca",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.243
+    },
+    {
+      "id": "web-css-external-computed-color",
+      "language_id": "css",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "2f1ca08691b438edef4bc7b8f26686ff58c55adcc3c40ce377103fbf6a553978",
+      "new_sha256": "11c4957be64bc6fc69db5d5290b6461a8a635bd06eccda4c2f126d4e140dea5e",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update property_value('black') -> property_value('white')",
+            "old_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "black",
+              "position": {
+                "start_line": 0,
+                "start_col": 17,
+                "end_line": 0,
+                "end_col": 22
+              },
+              "structural_hash": "6e2be966c23de86cf48067285e1ea444d4e3f64264978189c25e574f88b3ae39",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.path_0.value",
+              "node_type": "property_value",
+              "label": "white",
+              "position": {
+                "start_line": 0,
+                "start_col": 17,
+                "end_line": 0,
+                "end_col": 22
+              },
+              "structural_hash": "ab7c1225ea470dcd22d5da74925c5979dbb5b0dc3dc1fd7cd40b93ad41af1648",
+              "children": []
+            },
+            "text_diff": "black -> white"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "#target",
+              "black"
+            ],
+            "new_labels": [
+              "#target",
+              "white"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0",
+              "old_entity_node_id": "0.0",
+              "new_entity_node_id": "0.0",
+              "old_entity_label": "#target",
+              "new_entity_label": "#target",
+              "entity_type": "rule_set"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.510668,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21040000,
+                "fuel_consumed": 506980,
+                "total_fuel_consumed": 506980,
+                "max_fuel_used_percent": 2.409600760456274,
+                "input_bytes": 26,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.26595399999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21040000,
+                "fuel_consumed": 507164,
+                "total_fuel_consumed": 507164,
+                "max_fuel_used_percent": 2.4104752851711027,
+                "input_bytes": 26,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "80c66dd7ada577ee420c7cf0682411e3691992b8619b8b972ab71967e51776e0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "#target",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "cc1929fd76fcad6ca216768d56f99df336249ea30245253fcb81af91c53d0e42",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "7609657289388bfa4a32bd0e4fdb82404a90734b41db0dd37f3084a0d4309999",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "id_selector",
+                        "label": "#target",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "7c4a3bca044b6f1a48d95886addd8e07b8b4b2598d882ecc84ec211814e9ed8d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "b4348ff522bba4604a95295114e8fae9cfa65f6a4051ba983b062115f3695dae",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "#target",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "00527151923ed5eb3545dcb111f1f0954c8eddce505e95a134b7abe4a6204e64",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "7609657289388bfa4a32bd0e4fdb82404a90734b41db0dd37f3084a0d4309999",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "id_selector",
+                        "label": "#target",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "7c4a3bca044b6f1a48d95886addd8e07b8b4b2598d882ecc84ec211814e9ed8d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.21
+    },
+    {
+      "id": "web-css-external-keyword-case",
+      "language_id": "css",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "2f1ca08691b438edef4bc7b8f26686ff58c55adcc3c40ce377103fbf6a553978",
+      "new_sha256": "4dd697b4838f42f23ef4c234c33277d279b44b34535f764b2e8f3628cdd85fe9",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.css",
+        "new_filename": "assessment.css",
+        "language": "css",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "black"
+            ],
+            "new_labels": [
+              "BLACK"
+            ],
+            "old_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "new_node_ids": [
+              "0.0.path_0.value"
+            ],
+            "confidence": 1.0,
+            "rule_id": "css.color.canonical_equivalence",
+            "metadata": {
+              "index_space": "invariance_input",
+              "reason": "Both CSS color spellings resolve to the same canonical sRGB color.",
+              "equivalence_kind": "canonical_value_equivalence",
+              "canonical_old": "srgb(0,0,0,1)",
+              "canonical_new": "srgb(0,0,0,1)",
+              "old_label": "black",
+              "new_label": "BLACK",
+              "risk": "green",
+              "language": "css",
+              "occurrence": 0,
+              "old_span": [
+                17,
+                22
+              ],
+              "new_span": [
+                17,
+                22
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "invariance_input",
+              "reason": "Both CSS color spellings resolve to the same canonical sRGB color.",
+              "equivalence_kind": "canonical_value_equivalence",
+              "canonical_old": "srgb(0,0,0,1)",
+              "canonical_new": "srgb(0,0,0,1)",
+              "old_label": "black",
+              "new_label": "BLACK",
+              "risk": "green",
+              "language": "css",
+              "occurrence": 0,
+              "old_span": [
+                17,
+                22
+              ],
+              "new_span": [
+                17,
+                22
+              ],
+              "rule_id": "css.color.canonical_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.60868,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21040000,
+                "fuel_consumed": 507043,
+                "total_fuel_consumed": 507043,
+                "max_fuel_used_percent": 2.4099001901140684,
+                "input_bytes": 26,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "css",
+                "filename": "assessment.css",
+                "call_count": 1,
+                "elapsed_ms": 0.272996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21040000,
+                "fuel_consumed": 506829,
+                "total_fuel_consumed": 506829,
+                "max_fuel_used_percent": 2.4088830798479086,
+                "input_bytes": 26,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/css_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "80c66dd7ada577ee420c7cf0682411e3691992b8619b8b972ab71967e51776e0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "#target",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "cc1929fd76fcad6ca216768d56f99df336249ea30245253fcb81af91c53d0e42",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "7609657289388bfa4a32bd0e4fdb82404a90734b41db0dd37f3084a0d4309999",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "id_selector",
+                        "label": "#target",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "7c4a3bca044b6f1a48d95886addd8e07b8b4b2598d882ecc84ec211814e9ed8d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "css",
+          "tree": {
+            "id": "0",
+            "node_type": "stylesheet",
+            "label": "stylesheet",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e22c42cdeaeb66370334ee9af0046a046b08dff72e6ecfbcf289796ece3b23bc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule_set",
+                "label": "#target",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "1c8e249ed525a6cd3c20297bc5dfc0ef19ac8c80e69839d2330991e000ed6ec5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "selectors",
+                    "label": "selectors",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "7609657289388bfa4a32bd0e4fdb82404a90734b41db0dd37f3084a0d4309999",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "id_selector",
+                        "label": "#target",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 0,
+                          "end_line": 0,
+                          "end_col": 7
+                        },
+                        "structural_hash": "7c4a3bca044b6f1a48d95886addd8e07b8b4b2598d882ecc84ec211814e9ed8d",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.281
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 19.488
+}

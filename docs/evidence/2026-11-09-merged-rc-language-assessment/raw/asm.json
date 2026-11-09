@@ -1,0 +1,3385 @@
+{
+  "language_id": "asm",
+  "options": {
+    "language_hint": "asm",
+    "strict_plugins": true
+  },
+  "completed_count": 9,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "asm-literal-value",
+      "language_id": "asm",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "11e57ca096b8be00259bbaa28a1caa3659329d71ae0536b7c2c41b0738c69ecc",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update instruction('mov eax, 1') -> instruction('mov eax, 2')",
+            "old_node": {
+              "id": "0.6",
+              "node_type": "instruction",
+              "label": "mov eax, 1",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 14
+              },
+              "structural_hash": "bb0033d4d7f07d8bee2e5a1847249a81e51d91135fcfd9f44ba3575ce05c591f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.6",
+              "node_type": "instruction",
+              "label": "mov eax, 2",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 14
+              },
+              "structural_hash": "5c1260083513f5606e90e5ff56df1445607bb59e42be8625adcb1ffaf293b063",
+              "children": []
+            },
+            "text_diff": "mov eax, 1 -> mov eax, 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "mov eax, 1"
+            ],
+            "new_labels": [
+              "mov eax, 2"
+            ],
+            "old_node_ids": [
+              "0.6"
+            ],
+            "new_node_ids": [
+              "0.6"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.679502,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 3.056578711985689,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.341384,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683227,
+                "total_fuel_consumed": 683227,
+                "max_fuel_used_percent": 3.055576923076923,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 13133.461
+    },
+    {
+      "id": "asm-declaration-api",
+      "language_id": "asm",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "a471febc606cd3a37ba95eb5ef4b7d340431a0d751f226a284fed5438433436b",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 0.94,
+            "description": "Delete instruction(\"global answer\")",
+            "old_node": {
+              "id": "0.2",
+              "node_type": "instruction",
+              "label": "global answer",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 13
+              },
+              "structural_hash": "d4f30d4c03affd7904ad30c74ce85bd5bed6ad4842acd4ec19660577811a8ac8",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 0.94,
+            "description": "Insert -> instruction(\"global result\")",
+            "new_node": {
+              "id": "0.2",
+              "node_type": "instruction",
+              "label": "global result",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 13
+              },
+              "structural_hash": "d1e804fc79f7ff82abc035c44b1188872cd288cbe9650658b1dc608302607b82",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 0.94,
+            "description": "Delete label(\"answer\")",
+            "old_node": {
+              "id": "0.4",
+              "node_type": "label",
+              "label": "answer",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 7
+              },
+              "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 0.94,
+            "description": "Insert -> label(\"result\")",
+            "new_node": {
+              "id": "0.4",
+              "node_type": "label",
+              "label": "result",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 7
+              },
+              "structural_hash": "b36e8f7b4aec3aa412c96b6aaf235c5bad52386bd777ed62db7406050a172f2e",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "global answer"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.2"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "global result"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.2"
+            ],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              2
+            ],
+            "old_labels": [
+              "answer"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.4"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              3
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "result"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.4"
+            ],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.723424,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 3.056578711985689,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.376439,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683227,
+                "total_fuel_consumed": 683227,
+                "max_fuel_used_percent": 3.055576923076923,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "ada827cbc09abe2e6b661728170bbbb7ed298129bcf0ad31e53105fe26e91a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "result",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "b36e8f7b4aec3aa412c96b6aaf235c5bad52386bd777ed62db7406050a172f2e",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.978
+    },
+    {
+      "id": "asm-body-operator",
+      "language_id": "asm",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7ce6509bc2351a459565b502f4fd244213c46281662e1c2ef773ae8b6f1f6a34",
+      "new_sha256": "dde49c75be9557600d5ccdbbe97910e53c9752aaf4d192df1230eaf6b9843bb3",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 0.94,
+            "description": "Delete instruction(\"add eax, 2\")",
+            "old_node": {
+              "id": "0.8",
+              "node_type": "instruction",
+              "label": "add eax, 2",
+              "position": {
+                "start_line": 4,
+                "start_col": 4,
+                "end_line": 4,
+                "end_col": 14
+              },
+              "structural_hash": "77f68f45a0f37c2b2759a6769d37b2363c1fc19e920b781f9479f02c8ea9e4cf",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 0.94,
+            "description": "Insert -> instruction(\"sub eax, 2\")",
+            "new_node": {
+              "id": "0.8",
+              "node_type": "instruction",
+              "label": "sub eax, 2",
+              "position": {
+                "start_line": 4,
+                "start_col": 4,
+                "end_line": 4,
+                "end_col": 14
+              },
+              "structural_hash": "058b6ad7a2b56351a7f20ba42ab78bd4997542fdb044502046a3d4769a4e1483",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "add eax, 2"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.8"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "sub eax, 2"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.8"
+            ],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.6734910000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22960000,
+                "fuel_consumed": 841570,
+                "total_fuel_consumed": 841570,
+                "max_fuel_used_percent": 3.6653745644599307,
+                "input_bytes": 74,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.385727,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22960000,
+                "fuel_consumed": 841346,
+                "total_fuel_consumed": 841346,
+                "max_fuel_used_percent": 3.6643989547038327,
+                "input_bytes": 74,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "c50c18659d091cb8666acf43619ae08c2011ea5638803351aa73de53009ac748",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "add",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 14
+                },
+                "structural_hash": "094044193d7be924622a525234e451e7ff01a86a8668be2ee34606181bde93d5",
+                "children": []
+              },
+              {
+                "id": "0.10",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 4,
+                  "end_line": 5,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "7feb4a06db659adf4c6518d4f5ac9fd439dceb64382d3cc54cd56fa32380fc8d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "sub",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 14
+                },
+                "structural_hash": "b25a3c7423d8948bbdf46ed208021c38192dcaae908a66acce1e4808882b9fe3",
+                "children": []
+              },
+              {
+                "id": "0.10",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 4,
+                  "end_line": 5,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.525
+    },
+    {
+      "id": "asm-identity",
+      "language_id": "asm",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.52775,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 3.056578711985689,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.31324199999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 683227,
+                "total_fuel_consumed": 683227,
+                "max_fuel_used_percent": 3.055576923076923,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.493
+    },
+    {
+      "id": "asm-ordinary-comment",
+      "language_id": "asm",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "0652aa5888f53b8816ead9103a1089bf80a5f3bf0e7abcf602140610c52caa45",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> instruction('instruction')",
+            "new_node": {
+              "id": "0.1",
+              "node_type": "instruction",
+              "label": "instruction",
+              "position": {
+                "start_line": 0,
+                "start_col": 28,
+                "end_line": 0,
+                "end_col": 28
+              },
+              "structural_hash": "4db7fb06395fecbd221e6c82cc2ab9838c7342e3f2ddc5d2f1d2bc3a8de26058",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "instruction"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.6498069999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22940000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 2.9792981691368787,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.678441,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22940000,
+                "fuel_consumed": 1177011,
+                "total_fuel_consumed": 1177011,
+                "max_fuel_used_percent": 5.130823888404533,
+                "input_bytes": 88,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True",
+        "is_style_only: expected True, got False"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "0326dd66fa729cef8ac154c585864533e729b672d01f70678dd9a656b18eb188",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "instruction",
+                "label": "instruction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 28,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "4db7fb06395fecbd221e6c82cc2ab9838c7342e3f2ddc5d2f1d2bc3a8de26058",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.9",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.11",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 4,
+                  "end_line": 5,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 67.681
+    },
+    {
+      "id": "asm-layout",
+      "language_id": "asm",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "bdb98d9c63b3901edc6056a561c024602847febfeee47897caaffdfa4b3816b7",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> instruction('instruction')",
+            "new_node": {
+              "id": "0.0",
+              "node_type": "instruction",
+              "label": "instruction",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 0
+              },
+              "structural_hash": "4db7fb06395fecbd221e6c82cc2ab9838c7342e3f2ddc5d2f1d2bc3a8de26058",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "instruction"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.616155,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22400000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 3.0511205357142854,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.52757,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22400000,
+                "fuel_consumed": 1186599,
+                "total_fuel_consumed": 1186599,
+                "max_fuel_used_percent": 5.297316964285715,
+                "input_bytes": 61,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True",
+        "is_style_only: expected True, got False"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 7,
+              "end_col": 0
+            },
+            "structural_hash": "0326dd66fa729cef8ac154c585864533e729b672d01f70678dd9a656b18eb188",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "instruction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "4db7fb06395fecbd221e6c82cc2ab9838c7342e3f2ddc5d2f1d2bc3a8de26058",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.10",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 4,
+                  "end_line": 5,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 66.28
+    },
+    {
+      "id": "asm-incomplete",
+      "language_id": "asm",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3b62592f8672c342b134f25a24a21acbe644baeccf47613a98ebec01b99368dc",
+      "new_sha256": "c466fa557f286b2063b7be6f507788af0915819cbf24fdd9f1a63e479c566494",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update instruction('mov eax, 1') -> instruction('mov eax,')",
+            "old_node": {
+              "id": "0.6",
+              "node_type": "instruction",
+              "label": "mov eax, 1",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 14
+              },
+              "structural_hash": "bb0033d4d7f07d8bee2e5a1847249a81e51d91135fcfd9f44ba3575ce05c591f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.6",
+              "node_type": "instruction",
+              "label": "mov eax,",
+              "position": {
+                "start_line": 3,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 12
+              },
+              "structural_hash": "bc6a7fb7e8d7e146ee051d506eb068936471dc0fc6459905d9c0173dfd0345b6",
+              "children": []
+            },
+            "text_diff": "mov eax, 1 -> mov eax,"
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete instruction('ret')",
+            "old_node": {
+              "id": "0.8",
+              "node_type": "instruction",
+              "label": "ret",
+              "position": {
+                "start_line": 4,
+                "start_col": 4,
+                "end_line": 4,
+                "end_col": 7
+              },
+              "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "mov eax, 1"
+            ],
+            "new_labels": [
+              "mov eax,"
+            ],
+            "old_node_ids": [
+              "0.6"
+            ],
+            "new_node_ids": [
+              "0.6"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "ret"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.8"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.597039,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 683451,
+                "total_fuel_consumed": 683451,
+                "max_fuel_used_percent": 3.0841651624548736,
+                "input_bytes": 59,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.28432799999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 559200,
+                "total_fuel_consumed": 559200,
+                "max_fuel_used_percent": 2.523465703971119,
+                "input_bytes": 49,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "05cbcc77d5113b7324026eb1566c6577c408cf1171550d3db3a9252dbb5af6c6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "300cc0a433c0a5ccf4194352148f613192e8cc1c7981d9354aaa99a93bb03922",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "label",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 7
+                },
+                "structural_hash": "ad88c537aa24d6a2ec5e53a325ec93775e5fe6e9f8030b41563432f4c858fc9d",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 4,
+                  "end_line": 3,
+                  "end_col": 12
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 67.784
+    },
+    {
+      "id": "asm-unicode-payload",
+      "language_id": "asm",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "16409c27ae4a8787870992171680c01125eeb5f46f1ad4124efd9ab0fff3d689",
+      "new_sha256": "756225e9813a97c6d21e8369dd23c602d385852435caada71857165fedf203b8",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.asm",
+        "new_filename": "probe.asm",
+        "language": "asm",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 0.94,
+            "description": "Delete instruction(\"db \\\"café\\\", 0\")",
+            "old_node": {
+              "id": "0.4",
+              "node_type": "instruction",
+              "label": "db \"café\", 0",
+              "position": {
+                "start_line": 1,
+                "start_col": 9,
+                "end_line": 1,
+                "end_col": 22
+              },
+              "structural_hash": "9506dfb31d95fabb23fc31c49b7fc0d8e1c943b7ab7894fcf8e9b47be3906924",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 0.94,
+            "description": "Insert -> instruction(\"db \\\"cafe雪\\\", 0\")",
+            "new_node": {
+              "id": "0.4",
+              "node_type": "instruction",
+              "label": "db \"cafe雪\", 0",
+              "position": {
+                "start_line": 1,
+                "start_col": 9,
+                "end_line": 1,
+                "end_col": 24
+              },
+              "structural_hash": "0d78be6f4f4178ec9dac2be2d4659af119f26acb29cced47929604d8406d5400",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "db \"café\", 0"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.4"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "db \"cafe雪\", 0"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.4"
+            ],
+            "confidence": 0.94,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.603952,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 739639,
+                "total_fuel_consumed": 739639,
+                "max_fuel_used_percent": 3.4369842007434945,
+                "input_bytes": 37,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "probe.asm",
+                "call_count": 1,
+                "elapsed_ms": 0.325424,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 740531,
+                "total_fuel_consumed": 740531,
+                "max_fuel_used_percent": 3.441129182156134,
+                "input_bytes": 39,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5d8b770c984dab3122107b82f6543fc4bb97bd7b7bf2eb716fe86c5821277daa",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "label",
+                "label": "message",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 8
+                },
+                "structural_hash": "0e688f270a3b8c84795d486598693b751bdbbadea101bd1c0a163a613b7e8fec",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "instruction",
+                "label": "db",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 9,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "61e1daf3433a518aca7972a11efde0c3dd65f6b1753952fa456b17269853ef62",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5d8b770c984dab3122107b82f6543fc4bb97bd7b7bf2eb716fe86c5821277daa",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "label",
+                "label": "message",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 8
+                },
+                "structural_hash": "0e688f270a3b8c84795d486598693b751bdbbadea101bd1c0a163a613b7e8fec",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "instruction",
+                "label": "db",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 9,
+                  "end_line": 1,
+                  "end_col": 24
+                },
+                "structural_hash": "61e1daf3433a518aca7972a11efde0c3dd65f6b1753952fa456b17269853ef62",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.127
+    },
+    {
+      "id": "asm-repo-fixture-identity",
+      "language_id": "asm",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "baaa7523f42f98f3e94dab659a726e44603f8bd9b5894aceeed1d1aa56e3a36c",
+      "new_sha256": "baaa7523f42f98f3e94dab659a726e44603f8bd9b5894aceeed1d1aa56e3a36c",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.asm",
+        "new_filename": "playground.asm",
+        "language": "asm",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "playground.asm",
+                "call_count": 1,
+                "elapsed_ms": 1.8304610000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33600000,
+                "fuel_consumed": 4842362,
+                "total_fuel_consumed": 4842362,
+                "max_fuel_used_percent": 14.411791666666668,
+                "input_bytes": 340,
+                "input_lines": 25,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asm",
+                "filename": "playground.asm",
+                "call_count": 1,
+                "elapsed_ms": 1.541304,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33600000,
+                "fuel_consumed": 4842138,
+                "total_fuel_consumed": 4842138,
+                "max_fuel_used_percent": 14.411125,
+                "input_bytes": 340,
+                "input_lines": 25,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asm_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 25,
+              "end_col": 0
+            },
+            "structural_hash": "76891c66892ec0ac6141a5c8d16e6977eea9ef3b483f8d3a88f468e88c333a49",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "msg",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 4,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "ca2838ad0772e046b073828816e39f4da0528383d116bc2bcf4826f3ba2e38c2",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "instruction",
+                "label": "len",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "8f152dd36f94f7374618642ae7797dc366820fb646e24026942b0d5e4784e96f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 17
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.10",
+                "node_type": "label",
+                "label": "print_msg",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 10
+                },
+                "structural_hash": "80c604a27afcfc26fd20d9287a298d648c82b08d30eb67c83fbce7d0ad6685bf",
+                "children": []
+              },
+              {
+                "id": "0.12",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.14",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 4,
+                  "end_line": 7,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.16",
+                "node_type": "instruction",
+                "label": "lea",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 4,
+                  "end_line": 8,
+                  "end_col": 18
+                },
+                "structural_hash": "3236d477b0486a48a49c29ff01d2844f55312e11b3f576bc2eb2d74d33a481f9",
+                "children": []
+              },
+              {
+                "id": "0.18",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 4,
+                  "end_line": 9,
+                  "end_col": 16
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.20",
+                "node_type": "instruction",
+                "label": "syscall",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 4,
+                  "end_line": 10,
+                  "end_col": 11
+                },
+                "structural_hash": "96264adbc961d696522bec612c1de393812cf0c7694bf99391df9360a6cc25eb",
+                "children": []
+              },
+              {
+                "id": "0.22",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 4,
+                  "end_line": 11,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              },
+              {
+                "id": "0.24",
+                "node_type": "label",
+                "label": "_start",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 7
+                },
+                "structural_hash": "001132ece961cd1e1d79bc6a54bb8d2dbf4cd123a6911fbe0a5c971b86634d83",
+                "children": []
+              },
+              {
+                "id": "0.26",
+                "node_type": "instruction",
+                "label": "call",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 4,
+                  "end_line": 13,
+                  "end_col": 18
+                },
+                "structural_hash": "90f6f17f82f430b497c0abee2af6198948a7345ef5c1270aa3a851b496d07667",
+                "children": []
+              },
+              {
+                "id": "0.28",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 4,
+                  "end_line": 14,
+                  "end_col": 15
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.30",
+                "node_type": "instruction",
+                "label": "xor",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 4,
+                  "end_line": 15,
+                  "end_col": 16
+                },
+                "structural_hash": "6947453cd28eefb53ad36740aa685f035d6bce7aab9b734a758ce31f665d095f",
+                "children": []
+              },
+              {
+                "id": "0.32",
+                "node_type": "instruction",
+                "label": "syscall",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 4,
+                  "end_line": 16,
+                  "end_col": 11
+                },
+                "structural_hash": "96264adbc961d696522bec612c1de393812cf0c7694bf99391df9360a6cc25eb",
+                "children": []
+              },
+              {
+                "id": "0.35",
+                "node_type": "label",
+                "label": "scratch_pad",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 12
+                },
+                "structural_hash": "5f8a4608e9af5690eaaa2331bd3c6f31cae0d2e5c1e64db08809e9a07de99d1d",
+                "children": []
+              },
+              {
+                "id": "0.37",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 19,
+                  "start_col": 4,
+                  "end_line": 19,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.39",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 20,
+                  "start_col": 4,
+                  "end_line": 20,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              },
+              {
+                "id": "0.42",
+                "node_type": "label",
+                "label": "drain_queue",
+                "position": {
+                  "start_line": 22,
+                  "start_col": 0,
+                  "end_line": 22,
+                  "end_col": 12
+                },
+                "structural_hash": "90ce3df0d4998b34f8e288f7de9ef113632e512cd6f4900329a136df44eac039",
+                "children": []
+              },
+              {
+                "id": "0.44",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 23,
+                  "start_col": 4,
+                  "end_line": 23,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.46",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 24,
+                  "start_col": 4,
+                  "end_line": 24,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asm",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 25,
+              "end_col": 0
+            },
+            "structural_hash": "76891c66892ec0ac6141a5c8d16e6977eea9ef3b483f8d3a88f468e88c333a49",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "instruction",
+                "label": "msg",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 4,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "ca2838ad0772e046b073828816e39f4da0528383d116bc2bcf4826f3ba2e38c2",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "instruction",
+                "label": "len",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "8f152dd36f94f7374618642ae7797dc366820fb646e24026942b0d5e4784e96f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "instruction",
+                "label": "section",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                "structural_hash": "9353cea07fb3dedff684573aa7c21689ae8ba696bd553a712c32a0707e2fa889",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "instruction",
+                "label": "global",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 17
+                },
+                "structural_hash": "7ecdd75b02e6a7d50f882b9762f0c64f50b5eb6f7e2676c6ec670c2fc6686562",
+                "children": []
+              },
+              {
+                "id": "0.10",
+                "node_type": "label",
+                "label": "print_msg",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 10
+                },
+                "structural_hash": "80c604a27afcfc26fd20d9287a298d648c82b08d30eb67c83fbce7d0ad6685bf",
+                "children": []
+              },
+              {
+                "id": "0.12",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.14",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 4,
+                  "end_line": 7,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.16",
+                "node_type": "instruction",
+                "label": "lea",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 4,
+                  "end_line": 8,
+                  "end_col": 18
+                },
+                "structural_hash": "3236d477b0486a48a49c29ff01d2844f55312e11b3f576bc2eb2d74d33a481f9",
+                "children": []
+              },
+              {
+                "id": "0.18",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 4,
+                  "end_line": 9,
+                  "end_col": 16
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.20",
+                "node_type": "instruction",
+                "label": "syscall",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 4,
+                  "end_line": 10,
+                  "end_col": 11
+                },
+                "structural_hash": "96264adbc961d696522bec612c1de393812cf0c7694bf99391df9360a6cc25eb",
+                "children": []
+              },
+              {
+                "id": "0.22",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 4,
+                  "end_line": 11,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              },
+              {
+                "id": "0.24",
+                "node_type": "label",
+                "label": "_start",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 7
+                },
+                "structural_hash": "001132ece961cd1e1d79bc6a54bb8d2dbf4cd123a6911fbe0a5c971b86634d83",
+                "children": []
+              },
+              {
+                "id": "0.26",
+                "node_type": "instruction",
+                "label": "call",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 4,
+                  "end_line": 13,
+                  "end_col": 18
+                },
+                "structural_hash": "90f6f17f82f430b497c0abee2af6198948a7345ef5c1270aa3a851b496d07667",
+                "children": []
+              },
+              {
+                "id": "0.28",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 4,
+                  "end_line": 14,
+                  "end_col": 15
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.30",
+                "node_type": "instruction",
+                "label": "xor",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 4,
+                  "end_line": 15,
+                  "end_col": 16
+                },
+                "structural_hash": "6947453cd28eefb53ad36740aa685f035d6bce7aab9b734a758ce31f665d095f",
+                "children": []
+              },
+              {
+                "id": "0.32",
+                "node_type": "instruction",
+                "label": "syscall",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 4,
+                  "end_line": 16,
+                  "end_col": 11
+                },
+                "structural_hash": "96264adbc961d696522bec612c1de393812cf0c7694bf99391df9360a6cc25eb",
+                "children": []
+              },
+              {
+                "id": "0.35",
+                "node_type": "label",
+                "label": "scratch_pad",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 12
+                },
+                "structural_hash": "5f8a4608e9af5690eaaa2331bd3c6f31cae0d2e5c1e64db08809e9a07de99d1d",
+                "children": []
+              },
+              {
+                "id": "0.37",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 19,
+                  "start_col": 4,
+                  "end_line": 19,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.39",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 20,
+                  "start_col": 4,
+                  "end_line": 20,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              },
+              {
+                "id": "0.42",
+                "node_type": "label",
+                "label": "drain_queue",
+                "position": {
+                  "start_line": 22,
+                  "start_col": 0,
+                  "end_line": 22,
+                  "end_col": 12
+                },
+                "structural_hash": "90ce3df0d4998b34f8e288f7de9ef113632e512cd6f4900329a136df44eac039",
+                "children": []
+              },
+              {
+                "id": "0.44",
+                "node_type": "instruction",
+                "label": "mov",
+                "position": {
+                  "start_line": 23,
+                  "start_col": 4,
+                  "end_line": 23,
+                  "end_col": 14
+                },
+                "structural_hash": "374fcb0ef4b3a89ae4731ec10427b8f1a773134835dbeab4ac8cb5cd4a089b2c",
+                "children": []
+              },
+              {
+                "id": "0.46",
+                "node_type": "instruction",
+                "label": "ret",
+                "position": {
+                  "start_line": 24,
+                  "start_col": 4,
+                  "end_line": 24,
+                  "end_col": 7
+                },
+                "structural_hash": "e7f6670ecb915be166862b648f0c2b13175e1a5deea537579249724a2939a0d0",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 105.722
+    }
+  ],
+  "attempted_count": 9,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 14.838
+}

@@ -1,0 +1,1826 @@
+{
+  "language_id": "postscript",
+  "options": {
+    "language_hint": "postscript",
+    "strict_plugins": true
+  },
+  "completed_count": 8,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-postscript-inline_procedure",
+      "language_id": "postscript",
+      "category": "meaningful_inline_procedure",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "70a6dfb7b02ee46f18a18cf0e3759e1881c1470df6065ccec8f0c90bc5aff10b",
+      "new_sha256": "fda2a939e19229e8f75220ae4aed7cad7e8048c98bd41cc3f410989ef65545ea",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "/f { 1 } def\\n"
+            ],
+            "new_labels": [
+              "/f { 2 } def\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "/f { 1 } def\\n",
+              "new_label": "/f { 2 } def\\n",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                5,
+                18
+              ],
+              "new_span": [
+                5,
+                18
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "/f { 1 } def\\n",
+              "new_label": "/f { 2 } def\\n",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                5,
+                18
+              ],
+              "new_span": [
+                5,
+                18
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.33901899999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 119886,
+                "total_fuel_consumed": 119886,
+                "max_fuel_used_percent": 0.5730688336520077,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.166158,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 119296,
+                "total_fuel_consumed": 119296,
+                "max_fuel_used_percent": 0.5702485659655832,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 5272.535
+    },
+    {
+      "id": "web-postscript-closing_line_body",
+      "language_id": "postscript",
+      "category": "meaningful_closing_line_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "b78a85b70f6507971a36ab1d3211656b39dfb88e55477eaeb9a3bc35b22eb6c8",
+      "new_sha256": "20ed6fffe5a59b4de4f2bcc6a9f3197952a9c7c862bb2c6d7b77c7d055aac9fe",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "1 } def\\n"
+            ],
+            "new_labels": [
+              "2 } def\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "1 } def\\n",
+              "new_label": "2 } def\\n",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                10,
+                20
+              ],
+              "new_span": [
+                10,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "1 } def\\n",
+              "new_label": "2 } def\\n",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                10,
+                20
+              ],
+              "new_span": [
+                10,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.30890399999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21000000,
+                "fuel_consumed": 152314,
+                "total_fuel_consumed": 152314,
+                "max_fuel_used_percent": 0.7253047619047619,
+                "input_bytes": 25,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.17742999999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21000000,
+                "fuel_consumed": 151724,
+                "total_fuel_consumed": 151724,
+                "max_fuel_used_percent": 0.7224952380952382,
+                "input_bytes": 25,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 9
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "ps_statement",
+                    "label": "/f {",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "6522391cc1a87b33c08bb61ef0b7e2545857342438b21788a82c04a09dfd8ca1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 9
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "ps_statement",
+                    "label": "/f {",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "6522391cc1a87b33c08bb61ef0b7e2545857342438b21788a82c04a09dfd8ca1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 60.791
+    },
+    {
+      "id": "web-postscript-operator",
+      "language_id": "postscript",
+      "category": "meaningful_operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0e2092ce35b95c075b8df50d9b43b1acfb30f9160fe04f3ef3050f23a33ff7e2",
+      "new_sha256": "2fd18b37d55685860c57938b06234a7af500ede20830fba0378455192d49b849",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ps_statement('2 3 add ==') -> ps_statement('2 3 mul ==')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "2 3 add ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "d1a32e0a422c34277997040e10bd474c79db5a634964394021b967ba55371261",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "2 3 mul ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "5c72d9e4ded29e19f262451b20dd38554ed0df6c292a7a99a4cc5a01ad5ecab1",
+              "children": []
+            },
+            "text_diff": "2 3 add == -> 2 3 mul =="
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "2 3 add =="
+            ],
+            "new_labels": [
+              "2 3 mul =="
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.224918,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20640000,
+                "fuel_consumed": 77302,
+                "total_fuel_consumed": 77302,
+                "max_fuel_used_percent": 0.3745251937984496,
+                "input_bytes": 16,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.142905,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20640000,
+                "fuel_consumed": 76712,
+                "total_fuel_consumed": 76712,
+                "max_fuel_used_percent": 0.3716666666666667,
+                "input_bytes": 16,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 10
+            },
+            "structural_hash": "741ff3e98c6b450905482dbb99009aed234fd5a62ac3d9f22906d22884239944",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "2 3 add ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "d1a32e0a422c34277997040e10bd474c79db5a634964394021b967ba55371261",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 10
+            },
+            "structural_hash": "bb6132ecf7fa1b69fdd1860a4500e56656293806c592c7fde53ae7dbae16b0a6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "2 3 mul ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "5c72d9e4ded29e19f262451b20dd38554ed0df6c292a7a99a4cc5a01ad5ecab1",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.818
+    },
+    {
+      "id": "web-postscript-paint_color",
+      "language_id": "postscript",
+      "category": "meaningful_paint_color",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fa6e872d0759757e1441e35cf82bb4d72a7e84d8dbcf1aee4de83ec9a54e8e8c",
+      "new_sha256": "a8682fc711eacfc157f775128b3ae5427a6f49a5fb13d78789189637287b568c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ps_statement('0 0 0 setrgbcolor') -> ps_statement('1 0 0 setrgbcolor')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "0 0 0 setrgbcolor",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "d57f5673cf2dcb0c61fc4553fb50ec5cc3d0609d960197727e64472160fd654e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "1 0 0 setrgbcolor",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 17
+              },
+              "structural_hash": "2c5dee2dc35f41ea5a8844c3006cb116e6590668cd92b46eea0b53a3e2e99d8c",
+              "children": []
+            },
+            "text_diff": "0 0 0 setrgbcolor -> 1 0 0 setrgbcolor"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "0 0 0 setrgbcolor"
+            ],
+            "new_labels": [
+              "1 0 0 setrgbcolor"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.319333,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22120000,
+                "fuel_consumed": 162732,
+                "total_fuel_consumed": 162732,
+                "max_fuel_used_percent": 0.7356781193490054,
+                "input_bytes": 53,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.174144,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22120000,
+                "fuel_consumed": 162142,
+                "total_fuel_consumed": 162142,
+                "max_fuel_used_percent": 0.7330108499095841,
+                "input_bytes": 53,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 8
+            },
+            "structural_hash": "372cc6aff674ba5c94cca738d295b0ab8b4a5e622fe69b6116f11c65c2876838",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "0 0 0 setrgbcolor",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 17
+                },
+                "structural_hash": "d57f5673cf2dcb0c61fc4553fb50ec5cc3d0609d960197727e64472160fd654e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "72 72 40 40 rectfill",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 20
+                },
+                "structural_hash": "d01f7719b078230d3e5784e369929b14f1c9f96c61dddc2c527c26aa0dfa7528",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "ps_statement",
+                "label": "showpage",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 8
+                },
+                "structural_hash": "70613b5af2aa89515abb71c4ad36d067d97ab756dd08cd70949d35f138d9e25f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 8
+            },
+            "structural_hash": "11eb45aa114227e6fdddaf635473181417b10b02c3e52a2aef9208168f228522",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "1 0 0 setrgbcolor",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 17
+                },
+                "structural_hash": "2c5dee2dc35f41ea5a8844c3006cb116e6590668cd92b46eea0b53a3e2e99d8c",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "72 72 40 40 rectfill",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 20
+                },
+                "structural_hash": "d01f7719b078230d3e5784e369929b14f1c9f96c61dddc2c527c26aa0dfa7528",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "ps_statement",
+                "label": "showpage",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 8
+                },
+                "structural_hash": "70613b5af2aa89515abb71c4ad36d067d97ab756dd08cd70949d35f138d9e25f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 81.579
+    },
+    {
+      "id": "web-postscript-identity",
+      "language_id": "postscript",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "70a6dfb7b02ee46f18a18cf0e3759e1881c1470df6065ccec8f0c90bc5aff10b",
+      "new_sha256": "70a6dfb7b02ee46f18a18cf0e3759e1881c1470df6065ccec8f0c90bc5aff10b",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.25031499999999995,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 119886,
+                "total_fuel_consumed": 119886,
+                "max_fuel_used_percent": 0.5730688336520077,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.209288,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 119296,
+                "total_fuel_consumed": 119296,
+                "max_fuel_used_percent": 0.5702485659655832,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 4
+            },
+            "structural_hash": "8682535c011f16b87dfb1247143329c66e98dd789bc722cee279b9c171a4ca7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "procedure",
+                "label": "f",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "a6b97b7d48a1bc7046d6268d55e177bd49e7cc9b78beaeaf8aba1030b2920b0c",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "ps_statement",
+                "label": "f ==",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 4
+                },
+                "structural_hash": "41f86352c3f2fc9711a68b12f99a824fd44e37436fb38c2336dd5c93c79cf1cf",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 58.01
+    },
+    {
+      "id": "web-postscript-preservation",
+      "language_id": "postscript",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0e2092ce35b95c075b8df50d9b43b1acfb30f9160fe04f3ef3050f23a33ff7e2",
+      "new_sha256": "92359461f3f9b75d8ca81733f48e936b764f6dcb57916b0e28b8ab837802837a",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ps_statement('2 3 add ==') -> ps_statement('2  3   add  ==')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "2 3 add ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "d1a32e0a422c34277997040e10bd474c79db5a634964394021b967ba55371261",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "2  3   add  ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 14
+              },
+              "structural_hash": "789fc77ed1119a982497134c9fb6d8beec968d23e00fe5ee84dc58f3075aa36d",
+              "children": []
+            },
+            "text_diff": "2 3 add == -> 2  3   add  =="
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "2 3 add =="
+            ],
+            "new_labels": [
+              "2  3   add  =="
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.228925,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 77302,
+                "total_fuel_consumed": 77302,
+                "max_fuel_used_percent": 0.3730791505791506,
+                "input_bytes": 16,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.14460800000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 77611,
+                "total_fuel_consumed": 77611,
+                "max_fuel_used_percent": 0.3745704633204633,
+                "input_bytes": 20,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 10
+            },
+            "structural_hash": "741ff3e98c6b450905482dbb99009aed234fd5a62ac3d9f22906d22884239944",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "2 3 add ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "d1a32e0a422c34277997040e10bd474c79db5a634964394021b967ba55371261",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 14
+            },
+            "structural_hash": "9a94106610402122e880cdeabe5bc64253399b47904741cc040b5044b64b0208",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "2  3   add  ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "789fc77ed1119a982497134c9fb6d8beec968d23e00fe5ee84dc58f3075aa36d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 61.1
+    },
+    {
+      "id": "web-postscript-incomplete",
+      "language_id": "postscript",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1df243b74f30da6cf2f940abd44a53bddca0dcac1fe5a65274a8574e926f799c",
+      "new_sha256": "3c22170feb63f11ea369afe52ff26c2c386d9e5657e00d56cd61adfeb2d78cde",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "/f { 1"
+            ],
+            "new_labels": [
+              "/f { 2"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "/f { 1",
+              "new_label": "/f { 2",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                5,
+                11
+              ],
+              "new_span": [
+                5,
+                11
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "/f { 1",
+              "new_label": "/f { 2",
+              "risk": "amber",
+              "language": "postscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                5,
+                11
+              ],
+              "new_span": [
+                5,
+                11
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.22047899999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20440000,
+                "fuel_consumed": 54611,
+                "total_fuel_consumed": 54611,
+                "max_fuel_used_percent": 0.2671771037181996,
+                "input_bytes": 11,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.128389,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20440000,
+                "fuel_consumed": 54021,
+                "total_fuel_consumed": 54021,
+                "max_fuel_used_percent": 0.26429060665362036,
+                "input_bytes": 11,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 6
+            },
+            "structural_hash": "c78682e87c4d9933dbe33ab98274500f70081883f2e790bbf04d2c8129412764",
+            "children": []
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 6
+            },
+            "structural_hash": "c78682e87c4d9933dbe33ab98274500f70081883f2e790bbf04d2c8129412764",
+            "children": []
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 57.792
+    },
+    {
+      "id": "web-postscript-unicode",
+      "language_id": "postscript",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ddf65bdc43fe6fbf76073e81ce8fcc8f67850b156886384753992d495e0bb9e1",
+      "new_sha256": "e4d29b0bd2742f701097db5bfbc9d4072e1034ba60fabd5b35de5f12dec0ae31",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.ps",
+        "new_filename": "assessment.ps",
+        "language": "postscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ps_statement('(Café) ==') -> ps_statement('(Thé) ==')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "(Café) ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "eca2a70c5078b88743eab1606fb5c081e318a890eb6f9d886e8ad34cc78c1e25",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ps_statement",
+              "label": "(Thé) ==",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 9
+              },
+              "structural_hash": "b8ba3996551c339d1bebfa5e2d3273123a7c9b6a50ee2913f1cf9c708d141bda",
+              "children": []
+            },
+            "text_diff": "(Café) == -> (Thé) =="
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "(Café) =="
+            ],
+            "new_labels": [
+              "(Thé) =="
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.24361200000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 77622,
+                "total_fuel_consumed": 77622,
+                "max_fuel_used_percent": 0.37644034917555774,
+                "input_bytes": 16,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "postscript",
+                "filename": "assessment.ps",
+                "call_count": 1,
+                "elapsed_ms": 0.146332,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 76685,
+                "total_fuel_consumed": 76685,
+                "max_fuel_used_percent": 0.3718962172647915,
+                "input_bytes": 15,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/postscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 10
+            },
+            "structural_hash": "017a203fd02c42a00cde76f7acce54e68b63b47b70bb0d161e883e928c5e25ef",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "(Café) ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "eca2a70c5078b88743eab1606fb5c081e318a890eb6f9d886e8ad34cc78c1e25",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "postscript",
+          "tree": {
+            "id": "0",
+            "node_type": "postscript_file",
+            "label": "postscript_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 9
+            },
+            "structural_hash": "df4626234df588a927146678c3604da8425af4f13fcfa760da937446be70648f",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ps_statement",
+                "label": "(Thé) ==",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 9
+                },
+                "structural_hash": "b8ba3996551c339d1bebfa5e2d3273123a7c9b6a50ee2913f1cf9c708d141bda",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 61.49
+    }
+  ],
+  "attempted_count": 8,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.49
+}

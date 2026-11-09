@@ -1,0 +1,4311 @@
+{
+  "language_id": "abap",
+  "options": {
+    "language_hint": "abap",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "abap-literal-value",
+      "language_id": "abap",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "71f530ab792e3af2f1214e83784f7e80d97dbdb10f8c65a5f6c09b4ae5ed26dc",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update numeric_literal('1') -> numeric_literal('2')",
+            "old_node": {
+              "id": "0.2.1",
+              "node_type": "numeric_literal",
+              "label": "1",
+              "position": {
+                "start_line": 2,
+                "start_col": 11,
+                "end_line": 2,
+                "end_col": 13
+              },
+              "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.1",
+              "node_type": "numeric_literal",
+              "label": "2",
+              "position": {
+                "start_line": 2,
+                "start_col": 11,
+                "end_line": 2,
+                "end_col": 13
+              },
+              "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [
+              "2"
+            ],
+            "old_node_ids": [
+              "0.2.1"
+            ],
+            "new_node_ids": [
+              "0.2.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.824352,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22800000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.5402500000000003,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.578545,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22800000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.5402500000000003,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "c6401c669f510a816a6addfb4b36da2cd497ca50b955e950f0a2dabc52643bb7",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 2",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "40dffca1a64aa3a1aab10e0e48d6de50dcc9d99e2f3d3ddd1323611c01482eef",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "2",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 16079.245
+    },
+    {
+      "id": "abap-declaration-api",
+      "language_id": "abap",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "2e10e3530564f4528ee282f7ca6018b7a1741849db1c87ca9bd28d74031e39ee",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "DATA lv_result TYPE i.\\n"
+            ],
+            "new_labels": [
+              "DATA lv_result TYPE int8.\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "DATA lv_result TYPE i.\\n",
+              "new_label": "DATA lv_result TYPE int8.\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                38
+              ],
+              "new_span": [
+                15,
+                41
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "DATA lv_result TYPE i.\\n",
+              "new_label": "DATA lv_result TYPE int8.\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                38
+              ],
+              "new_span": [
+                15,
+                41
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.615173,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22860000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.530958005249344,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.35550000000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22860000,
+                "fuel_consumed": 810477,
+                "total_fuel_consumed": 810477,
+                "max_fuel_used_percent": 3.5453937007874017,
+                "input_bytes": 73,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 25
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 69.007
+    },
+    {
+      "id": "abap-body-operator",
+      "language_id": "abap",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "f71cf50de06c031fdcc840099d43cf02847ea7b0439fd1adfc22a0b3303680d6",
+      "new_sha256": "acd83636768235606c0a8e1a5ac88a4e9055ee626cb6b1124724f5ac6e4ff41c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update assignment_statement('lv_result = 3 + 2') -> assignment_statement('lv_result = 3 - 2')",
+            "old_node": {
+              "id": "0.2",
+              "node_type": "assignment_statement",
+              "label": "lv_result = 3 + 2",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 18
+              },
+              "structural_hash": "ab2a15fbc2ba3e30957bb178680838572a97b431c00c7851e5eb23af65f4dfaa",
+              "children": [
+                {
+                  "id": "0.2.0",
+                  "node_type": "identifier",
+                  "label": "LV_RESULT",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 0,
+                    "end_line": 2,
+                    "end_col": 9
+                  },
+                  "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                  "children": []
+                },
+                {
+                  "id": "0.2.op0",
+                  "node_type": "operator",
+                  "label": "=",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 10,
+                    "end_line": 2,
+                    "end_col": 11
+                  },
+                  "structural_hash": "f3f52a3fd93456e354ba7423c3d6b79a36eef302f47ebe813925afbff87934c6",
+                  "children": []
+                },
+                {
+                  "id": "0.2.1",
+                  "node_type": "arithmetic_expression",
+                  "label": "arithmetic_expression",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 11,
+                    "end_line": 2,
+                    "end_col": 17
+                  },
+                  "structural_hash": "0c8e40559a70200f156b3f83edb11fd4212b7bce7a91b9f50dd121eb009e6ca9",
+                  "children": [
+                    {
+                      "id": "0.2.1.0",
+                      "node_type": "numeric_literal",
+                      "label": "3",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 11,
+                        "end_line": 2,
+                        "end_col": 13
+                      },
+                      "structural_hash": "803540bc01db023463d99db75bc31174d55ed77edaecb42e37b83d3818a19a38",
+                      "children": []
+                    },
+                    {
+                      "id": "0.2.1.1",
+                      "node_type": "numeric_literal",
+                      "label": "2",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 15,
+                        "end_line": 2,
+                        "end_col": 17
+                      },
+                      "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.2",
+              "node_type": "assignment_statement",
+              "label": "lv_result = 3 - 2",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 18
+              },
+              "structural_hash": "cdd40db4562d4d406a01245aac390db7da87938fdbcffb6a49aa53d0401fa93b",
+              "children": [
+                {
+                  "id": "0.2.0",
+                  "node_type": "identifier",
+                  "label": "LV_RESULT",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 0,
+                    "end_line": 2,
+                    "end_col": 9
+                  },
+                  "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                  "children": []
+                },
+                {
+                  "id": "0.2.op0",
+                  "node_type": "operator",
+                  "label": "=",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 10,
+                    "end_line": 2,
+                    "end_col": 11
+                  },
+                  "structural_hash": "f3f52a3fd93456e354ba7423c3d6b79a36eef302f47ebe813925afbff87934c6",
+                  "children": []
+                },
+                {
+                  "id": "0.2.1",
+                  "node_type": "arithmetic_expression",
+                  "label": "arithmetic_expression",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 11,
+                    "end_line": 2,
+                    "end_col": 17
+                  },
+                  "structural_hash": "0c8e40559a70200f156b3f83edb11fd4212b7bce7a91b9f50dd121eb009e6ca9",
+                  "children": [
+                    {
+                      "id": "0.2.1.0",
+                      "node_type": "numeric_literal",
+                      "label": "3",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 11,
+                        "end_line": 2,
+                        "end_col": 13
+                      },
+                      "structural_hash": "803540bc01db023463d99db75bc31174d55ed77edaecb42e37b83d3818a19a38",
+                      "children": []
+                    },
+                    {
+                      "id": "0.2.1.1",
+                      "node_type": "numeric_literal",
+                      "label": "2",
+                      "position": {
+                        "start_line": 2,
+                        "start_col": 15,
+                        "end_line": 2,
+                        "end_col": 17
+                      },
+                      "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "lv_result = 3 + 2",
+              "LV_RESULT",
+              "=",
+              "arithmetic_expression",
+              "3",
+              "2"
+            ],
+            "new_labels": [
+              "lv_result = 3 - 2",
+              "LV_RESULT",
+              "=",
+              "arithmetic_expression",
+              "3",
+              "2"
+            ],
+            "old_node_ids": [
+              "0.2",
+              "0.2.0",
+              "0.2.op0",
+              "0.2.1",
+              "0.2.1.0",
+              "0.2.1.1"
+            ],
+            "new_node_ids": [
+              "0.2",
+              "0.2.0",
+              "0.2.op0",
+              "0.2.1",
+              "0.2.1.0",
+              "0.2.1.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.638216,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22960000,
+                "fuel_consumed": 930255,
+                "total_fuel_consumed": 930255,
+                "max_fuel_used_percent": 4.051633275261324,
+                "input_bytes": 74,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.45221999999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22960000,
+                "fuel_consumed": 930372,
+                "total_fuel_consumed": 930372,
+                "max_fuel_used_percent": 4.052142857142857,
+                "input_bytes": 74,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "22d555a2de11667061b3a38b572a91e39e469ad949866bcabb550c2d17a72db6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 3 + 2",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 18
+                },
+                "structural_hash": "32c82f82db01a2dde2e899a6cec776a00d8c3985453d51f4f737789d94a6c60c",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "arithmetic_expression",
+                    "label": "arithmetic_expression",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 17
+                    },
+                    "structural_hash": "0c8e40559a70200f156b3f83edb11fd4212b7bce7a91b9f50dd121eb009e6ca9",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "numeric_literal",
+                        "label": "3",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 11,
+                          "end_line": 2,
+                          "end_col": 13
+                        },
+                        "structural_hash": "803540bc01db023463d99db75bc31174d55ed77edaecb42e37b83d3818a19a38",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "numeric_literal",
+                        "label": "2",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 15,
+                          "end_line": 2,
+                          "end_col": 17
+                        },
+                        "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "237c6300ad19c2bb1e07a64e9ac5fd31dc3dc4393b543c1428692606a018f9e7",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 3 - 2",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 18
+                },
+                "structural_hash": "950d9130cb1f8c6579f53a4dd6a25285c4e8f0f6e1f8953431be3aeeddd408ea",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "arithmetic_expression",
+                    "label": "arithmetic_expression",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 17
+                    },
+                    "structural_hash": "0c8e40559a70200f156b3f83edb11fd4212b7bce7a91b9f50dd121eb009e6ca9",
+                    "children": [
+                      {
+                        "id": "0.2.1.0",
+                        "node_type": "numeric_literal",
+                        "label": "3",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 11,
+                          "end_line": 2,
+                          "end_col": 13
+                        },
+                        "structural_hash": "803540bc01db023463d99db75bc31174d55ed77edaecb42e37b83d3818a19a38",
+                        "children": []
+                      },
+                      {
+                        "id": "0.2.1.1",
+                        "node_type": "numeric_literal",
+                        "label": "2",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 15,
+                          "end_line": 2,
+                          "end_col": 17
+                        },
+                        "structural_hash": "debda409c8c673f1b03e4801d81fd2c0b34ed8c901cf70a54fe145bfc738057e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 81.168
+    },
+    {
+      "id": "abap-identity",
+      "language_id": "abap",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.61371,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22800000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.5402500000000003,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.41990099999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22800000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.5402500000000003,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 67.944
+    },
+    {
+      "id": "abap-ordinary-comment",
+      "language_id": "abap",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "b7b114c7b85f92e6ff2f9a6942fef944d027e5a5b7b6e6206be081164d46d652",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "\" Ordinary comment with no pragma\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "\" Ordinary comment with no pragma\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                34
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "\" Ordinary comment with no pragma\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                34
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.694651,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23480000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.437721465076661,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.404792,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23480000,
+                "fuel_consumed": 848282,
+                "total_fuel_consumed": 848282,
+                "max_fuel_used_percent": 3.6127853492333903,
+                "input_bytes": 104,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 11,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 5,
+                      "end_line": 4,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.022
+    },
+    {
+      "id": "abap-layout",
+      "language_id": "abap",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "7e60905973a36eb215343c89c0e6e011acee31908ef74ca169e157e3fccbcda3",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                70,
+                70
+              ],
+              "new_span": [
+                71,
+                72
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                70,
+                70
+              ],
+              "new_span": [
+                71,
+                72
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.6429940000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22840000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.5340499124343254,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.423607,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22840000,
+                "fuel_consumed": 810914,
+                "total_fuel_consumed": 810914,
+                "max_fuel_used_percent": 3.5504115586690017,
+                "input_bytes": 72,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 6,
+                      "end_line": 1,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 11,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 5,
+                      "end_line": 4,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.956
+    },
+    {
+      "id": "abap-incomplete",
+      "language_id": "abap",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c160022b3416bbda28a49d5a38d1eb3196ea1ef6a4f7d222e918204d9e999a7b",
+      "new_sha256": "43a1b6579e2523a41153d15e9ee4c0db0799be7637919fdd9dff57361d7630de",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete data_declaration('LV_RESULT')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "data_declaration",
+              "label": "LV_RESULT",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 22
+              },
+              "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+              "children": [
+                {
+                  "id": "0.1.0",
+                  "node_type": "identifier",
+                  "label": "LV_RESULT",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 4,
+                    "end_line": 1,
+                    "end_col": 14
+                  },
+                  "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete assignment_statement('lv_result = 1')",
+            "old_node": {
+              "id": "0.2",
+              "node_type": "assignment_statement",
+              "label": "lv_result = 1",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 14
+              },
+              "structural_hash": "a5da93ca01c817e207b9dec1f2a181cdc4ee2a4cc57e2d52681277b8f5efe7b1",
+              "children": [
+                {
+                  "id": "0.2.0",
+                  "node_type": "identifier",
+                  "label": "LV_RESULT",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 0,
+                    "end_line": 2,
+                    "end_col": 9
+                  },
+                  "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                  "children": []
+                },
+                {
+                  "id": "0.2.op0",
+                  "node_type": "operator",
+                  "label": "=",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 10,
+                    "end_line": 2,
+                    "end_col": 11
+                  },
+                  "structural_hash": "f3f52a3fd93456e354ba7423c3d6b79a36eef302f47ebe813925afbff87934c6",
+                  "children": []
+                },
+                {
+                  "id": "0.2.1",
+                  "node_type": "numeric_literal",
+                  "label": "1",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 11,
+                    "end_line": 2,
+                    "end_col": 13
+                  },
+                  "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete write_statement('WRITE lv_result')",
+            "old_node": {
+              "id": "0.3",
+              "node_type": "write_statement",
+              "label": "WRITE lv_result",
+              "position": {
+                "start_line": 3,
+                "start_col": 0,
+                "end_line": 3,
+                "end_col": 16
+              },
+              "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+              "children": [
+                {
+                  "id": "0.3.0",
+                  "node_type": "identifier",
+                  "label": "LV_RESULT",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 5,
+                    "end_line": 3,
+                    "end_col": 15
+                  },
+                  "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "LV_RESULT",
+              "LV_RESULT"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1",
+              "0.1.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "lv_result = 1",
+              "LV_RESULT",
+              "=",
+              "1"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.2",
+              "0.2.0",
+              "0.2.op0",
+              "0.2.1"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              2
+            ],
+            "old_labels": [
+              "WRITE lv_result",
+              "LV_RESULT"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.3",
+              "0.3.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.6392770000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22100000,
+                "fuel_consumed": 807177,
+                "total_fuel_consumed": 807177,
+                "max_fuel_used_percent": 3.652384615384616,
+                "input_bytes": 70,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.340102,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22100000,
+                "fuel_consumed": 522616,
+                "total_fuel_consumed": 522616,
+                "max_fuel_used_percent": 2.3647782805429864,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "5a713c1752b6e6c37299448ca0094f6495c9044f1c81962ee5e5e983fc15fbec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "assignment_statement",
+                "label": "lv_result = 1",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "73daf1767647dfa7b65189cd50b7f804bdd942e40e7b43355a6e490021cfb3af",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 9
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "numeric_literal",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 11,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "3b9b04312eee30e34c0ff1d6623f44076db3979499ca29c84dcc1a78b2a0a77a",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 5,
+                      "end_line": 3,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "f990234f7bb79581c9b6a4f0eae099133a63ee0b6f053f7a72299e6283565dbb",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 70.33
+    },
+    {
+      "id": "abap-unicode-payload",
+      "language_id": "abap",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "f59f29037fe1076b1cf334471a7707f8082212183c38a0c81991bb30e9413882",
+      "new_sha256": "50801ac93c582e4d26fe87526ac8b0b587bede3bcbaf40452c7c7d937d10f525",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "REFACTORING",
+            "confidence": 1.0,
+            "description": "Rename variable 'CAF' -> 'CAFE'",
+            "old_node": {
+              "id": "0.1.1",
+              "node_type": "identifier",
+              "label": "CAF",
+              "position": {
+                "start_line": 1,
+                "start_col": 7,
+                "end_line": 1,
+                "end_col": 10
+              },
+              "structural_hash": "91ef6f7d9c07329135dc226b29d66d0d2f0813e92a032493c0db22af03955a96",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.1",
+              "node_type": "identifier",
+              "label": "CAFE",
+              "position": {
+                "start_line": 1,
+                "start_col": 7,
+                "end_line": 1,
+                "end_col": 11
+              },
+              "structural_hash": "0f0b1fd7c63259fc5789745818142f3f60d8d2eb5c41dbb31d33708b0c2db0cd",
+              "children": []
+            },
+            "refactoring_kind": "RENAME_VARIABLE"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [
+              "CAF"
+            ],
+            "new_labels": [
+              "CAFE"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.82,
+            "rule_id": "presentation.compact_superseded_meaningful_group",
+            "metadata": {
+              "reason": "refactoring_groups_replace_lower_level_meaningful_changes",
+              "suppressed_count": 1
+            }
+          },
+          {
+            "kind": "REFACTORING",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "CAF"
+            ],
+            "new_labels": [
+              "CAFE"
+            ],
+            "old_node_ids": [
+              "0.1.1"
+            ],
+            "new_node_ids": [
+              "0.1.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_refactoring_group",
+            "metadata": {
+              "index_space": "final_changes"
+            },
+            "refactoring_kind": "RENAME_VARIABLE"
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.662341,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21240000,
+                "fuel_consumed": 1540746,
+                "total_fuel_consumed": 1540746,
+                "max_fuel_used_percent": 7.2539830508474585,
+                "input_bytes": 30,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.39054500000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21240000,
+                "fuel_consumed": 1543051,
+                "total_fuel_consumed": 1543051,
+                "max_fuel_used_percent": 7.2648352165725045,
+                "input_bytes": 32,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "c3e50fe64cb555d3b51bcb7412eaf204fc88bc7ce3bb599f9710f43261f7fdee",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "write_statement",
+                "label": "WRITE `café`",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "554d2b0809340da659c68b91cb5376edc6a6acabbe7ad176a8ac15aa337dc38d",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "CAF",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "91ef6f7d9c07329135dc226b29d66d0d2f0813e92a032493c0db22af03955a96",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ffb7634e8d846155e6de2b445fe096a463cab1f66d4b44a183ae45c2a0ba266c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "write_statement",
+                "label": "WRITE `cafe雪`",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 16
+                },
+                "structural_hash": "ad2f8e244175e780c7ffe13caa8335f20270482aedfdd61c3fa87c3ed32b92e8",
+                "children": [
+                  {
+                    "id": "0.1.1",
+                    "node_type": "identifier",
+                    "label": "CAFE",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 7,
+                      "end_line": 1,
+                      "end_col": 11
+                    },
+                    "structural_hash": "0f0b1fd7c63259fc5789745818142f3f60d8d2eb5c41dbb31d33708b0c2db0cd",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 67.519
+    },
+    {
+      "id": "abap-repo-fixture-identity",
+      "language_id": "abap",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "b1fe5b0b5511c412a19f379b6403273ed6a496cdccbb1908ee1a073d4ea4ec5b",
+      "new_sha256": "b1fe5b0b5511c412a19f379b6403273ed6a496cdccbb1908ee1a073d4ea4ec5b",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.abap",
+        "new_filename": "playground.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "playground.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.399112,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28520000,
+                "fuel_consumed": 433149,
+                "total_fuel_consumed": 433149,
+                "max_fuel_used_percent": 1.5187552594670406,
+                "input_bytes": 213,
+                "input_lines": 10,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "playground.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.89899,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28520000,
+                "fuel_consumed": 433149,
+                "total_fuel_consumed": 433149,
+                "max_fuel_used_percent": 1.5187552594670406,
+                "input_bytes": 213,
+                "input_lines": 10,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 9,
+              "end_col": 0
+            },
+            "structural_hash": "be61effc86bb636922399c8f72bf02f1fb787c3f3ae3c8b4f69af47c7057d81b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "Z_DEMO",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "62ec13704a41387f18d11ab6cd9702ae6fb9ff0a2482355e73898a784a03bc89",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "form",
+                "label": "GREET",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "ea2d61a7ecada03c78d495a948c0765e15d554ec38a40885f00709a1de65daa9",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "signature",
+                    "label": "USING LV_NAME TYPE STRING",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 37
+                    },
+                    "structural_hash": "a75006a6784f097fbe6edaadd0bd58cac167ff2fc0ae97eb39531fd476c984f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "data_declaration",
+                    "label": "LV_MSG",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 39
+                    },
+                    "structural_hash": "febcbdd19d10f98f092d49449a0967ef529e09d37e6e7ad5da5dff60490837a3",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "write_statement",
+                    "label": "lv_msg",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "2aaf145e63302db3e1cbaf0605256f39b96334b7da57ff4d1c41aff90b9b6314",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "form",
+                "label": "ADD_NUMBERS",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "14314ee74cfe92dce16fc8ee3f2841011305f62f2f1de8eed3aee53664668785",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "signature",
+                    "label": "USING A TYPE I B TYPE I CHANGING RESULT TYPE I",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 64
+                    },
+                    "structural_hash": "8bf56916451258f5ac645eeff1ecc1130aa0784bfb21b78c83e1d4258b149bb0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "assignment_statement",
+                    "label": "result = a + b",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 17
+                    },
+                    "structural_hash": "6d98a9ad2150faac005ff32aafb67b82cd5d6ef98a1bc99faf02ddc7a1ce1261",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 9,
+              "end_col": 0
+            },
+            "structural_hash": "be61effc86bb636922399c8f72bf02f1fb787c3f3ae3c8b4f69af47c7057d81b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "Z_DEMO",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "62ec13704a41387f18d11ab6cd9702ae6fb9ff0a2482355e73898a784a03bc89",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "form",
+                "label": "GREET",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "ea2d61a7ecada03c78d495a948c0765e15d554ec38a40885f00709a1de65daa9",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "signature",
+                    "label": "USING LV_NAME TYPE STRING",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 37
+                    },
+                    "structural_hash": "a75006a6784f097fbe6edaadd0bd58cac167ff2fc0ae97eb39531fd476c984f2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "data_declaration",
+                    "label": "LV_MSG",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 39
+                    },
+                    "structural_hash": "febcbdd19d10f98f092d49449a0967ef529e09d37e6e7ad5da5dff60490837a3",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "write_statement",
+                    "label": "lv_msg",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "2aaf145e63302db3e1cbaf0605256f39b96334b7da57ff4d1c41aff90b9b6314",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "form",
+                "label": "ADD_NUMBERS",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "14314ee74cfe92dce16fc8ee3f2841011305f62f2f1de8eed3aee53664668785",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "signature",
+                    "label": "USING A TYPE I B TYPE I CHANGING RESULT TYPE I",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 64
+                    },
+                    "structural_hash": "8bf56916451258f5ac645eeff1ecc1130aa0784bfb21b78c83e1d4258b149bb0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "assignment_statement",
+                    "label": "result = a + b",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 17
+                    },
+                    "structural_hash": "6d98a9ad2150faac005ff32aafb67b82cd5d6ef98a1bc99faf02ddc7a1ce1261",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 82.608
+    },
+    {
+      "id": "abap-data-initializer",
+      "language_id": "abap",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fb1bc54f0ba79062d6a83440978bd61da68f3e1fe890f15dbfba1621a2a2d07e",
+      "new_sha256": "4a6cd2ffc8e991944c591cfa5807aaa2409e0cdd10413223f894dd30786c55fa",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-abap-parser#7",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.abap",
+        "new_filename": "probe.abap",
+        "language": "abap",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "DATA lv_result TYPE i VALUE 1.\\n"
+            ],
+            "new_labels": [
+              "DATA lv_result TYPE i VALUE 2.\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "DATA lv_result TYPE i VALUE 1.\\n",
+              "new_label": "DATA lv_result TYPE i VALUE 2.\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                46
+              ],
+              "new_span": [
+                15,
+                46
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "DATA lv_result TYPE i VALUE 1.\\n",
+              "new_label": "DATA lv_result TYPE i VALUE 2.\\n",
+              "risk": "amber",
+              "language": "abap",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                46
+              ],
+              "new_span": [
+                15,
+                46
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.670987,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22520000,
+                "fuel_consumed": 842328,
+                "total_fuel_consumed": 842328,
+                "max_fuel_used_percent": 3.7403552397868562,
+                "input_bytes": 63,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "abap",
+                "filename": "probe.abap",
+                "call_count": 1,
+                "elapsed_ms": 0.71586,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22520000,
+                "fuel_consumed": 842328,
+                "total_fuel_consumed": 842328,
+                "max_fuel_used_percent": 3.7403552397868562,
+                "input_bytes": 63,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/abap_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "944184e2413da6851fdea01fc77d1c86716bf8450c8f60b4ea3271239af3acf4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 5,
+                      "end_line": 2,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "abap",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "944184e2413da6851fdea01fc77d1c86716bf8450c8f60b4ea3271239af3acf4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "report",
+                "label": "ZPROBE",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20a8d31a0ed384443b9447ae930001d0277512d90e035f98d3d05f75de3519c0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "ZPROBE",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "736e9ebe7426a79275097c114b2653dce794185e0fe7a582ec5811c65f57f3a1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_declaration",
+                "label": "LV_RESULT",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "cd86f60f60a300980f05fbb9810b59a4fd02407fc495efa35835decbc1bcaf62",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 14
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "write_statement",
+                "label": "WRITE lv_result",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 16
+                },
+                "structural_hash": "834a891a5376507dc660ac05bc581a556e5bea24fefc2338926e658858dc4287",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "LV_RESULT",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 5,
+                      "end_line": 2,
+                      "end_col": 15
+                    },
+                    "structural_hash": "49afa288b25b06f29d6659d5fdea17ab3db933fadf8697dc0011657438173332",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 78.067
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 17.578
+}

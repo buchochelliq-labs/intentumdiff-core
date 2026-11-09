@@ -1,0 +1,2668 @@
+{
+  "language_id": "generic",
+  "options": {
+    "language_hint": "generic",
+    "strict_plugins": true
+  },
+  "completed_count": 8,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-generic-number",
+      "language_id": "generic",
+      "category": "meaningful_number",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "772ac8fda6a3b41502c07fe5be061c5086c9cdd2f536ad0f437d5de8c06a2f6b",
+      "new_sha256": "386dd18cb9fad1a90fcb20bb639b7c8f451d99ffeba27f75e5fa67d4493bff16",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "Keep backups for 7 days.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 24
+              },
+              "structural_hash": "ff3d3227d43f571670d2b80d8a7254b2f12afc8e93cc5b3b1d98139b076d465e",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "Keep backups for 30 days.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 25
+              },
+              "structural_hash": "bee37c30b7b30f33df7b1c15eaa81f4dbbd661133c96a6ebb67f2618dc4a24a4",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"Keep backups for 7 days.\" -> \"Keep backups for 30 days.\"",
+            "text_diff": "Keep backups for [-7][+30] days."
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "fb64f0ae4f7762061acad3b62646f5c456a3d2ea122c2e5ed9ceb79d89fb03cc",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Keep backups for 7 days.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 24
+                },
+                "structural_hash": "be60fdda1cce5e6363928fc49664bb898edd8ded9294a6076e83f0f19e56cd52",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Keep",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a4547c2a0ff3bdb53b536d92a2a421a838643c3b1c5c407835fe5995f29a7e57",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "backups",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 5,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "a142f4073c87e785213aaf99973bf9f29373211c83c67cd6507b2f5d66ad3e65",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "for",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "0f15fb165290d09959f9ef0c2cb50f297397e37d26f992d71ed755ffaff4fecf",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "7",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 17,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "8e1b55e2003318e1b440ba9be37d08599410c7dbf2a404d5de82a23580d61383",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "days",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 19,
+                      "end_line": 0,
+                      "end_col": 23
+                    },
+                    "structural_hash": "062a12ac05ab13eeafa45a882daf92db8df5619728bf39c5c8a635be281e2e61",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "1ab71442d3e7234089b0043df36a2bc455e4f7e964e0ee86c8dcc08af616bf38",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Keep backups for 30 days.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "72ba0e0ec405a0f81ecf6fd554e3fea158fa2e97049db48887d85ef351e8b2ad",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Keep",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a4547c2a0ff3bdb53b536d92a2a421a838643c3b1c5c407835fe5995f29a7e57",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "backups",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 5,
+                      "end_line": 0,
+                      "end_col": 12
+                    },
+                    "structural_hash": "a142f4073c87e785213aaf99973bf9f29373211c83c67cd6507b2f5d66ad3e65",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "for",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 16
+                    },
+                    "structural_hash": "0f15fb165290d09959f9ef0c2cb50f297397e37d26f992d71ed755ffaff4fecf",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "30",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 17,
+                      "end_line": 0,
+                      "end_col": 19
+                    },
+                    "structural_hash": "b67a971f311b633d781886367d8cabf67152a1a25201ea9cdd7851fe0f426a43",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "days",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 20,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "062a12ac05ab13eeafa45a882daf92db8df5619728bf39c5c8a635be281e2e61",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4777.244
+    },
+    {
+      "id": "web-generic-negation",
+      "language_id": "generic",
+      "category": "meaningful_negation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6c261b2a7a30ece3bf5bab5102276a1f1e7fc047b77f0f53cafe4be6d3609427",
+      "new_sha256": "bd43345d231045753e6dfe538acdd0f37780c3c9aba990f6fbb0e3c05a5ef477",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "Deploy only after approval.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 27
+              },
+              "structural_hash": "c72fdb574233fd7d954f668925e233af7d3858e320679844743e526c6ce3a79f",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "Deploy before approval.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 23
+              },
+              "structural_hash": "b8ccb57f7b168aac1bad279de0ac831c64ebf6a7998f0299cd20329e4482dd60",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"Deploy only after approval.\" -> \"Deploy before approval.\"",
+            "text_diff": "Deploy [+bef]o[-nly aft][+r]e[-r] approval."
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "44f9f59294a616e749811aede804b5399a973c2cb54800ce78dc093f5b94eeed",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Deploy only after approval.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 27
+                },
+                "structural_hash": "aad8cd6c9befa5c09abee5f91ce8dd9b907ff1143065c12c52075c4e5cbe517d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Deploy",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 6
+                    },
+                    "structural_hash": "579c5a5f37bab2e981dc8656acfcc364eac819288f84726dea9c2698f41c512a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "only",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 11
+                    },
+                    "structural_hash": "48d351cf21225c4eb5acec7339a628db28dd4c49985eb4f0ddb9b6d6042293f5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "after",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 12,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "3abdd6c31e0346739506b472dc84817f11ff38445b210f59d11b461e3099b8df",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approval",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 26
+                    },
+                    "structural_hash": "3d279264e4ab041accb4a5e222e703723112ae0a48dc543f9fd671a8c8f559fd",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 26,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "351d44ea95b67b1022f54efacac9ec7b2dd59a73b2c0423b7f92b75ba44c0507",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Deploy before approval.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 23
+                },
+                "structural_hash": "6c8a022b702d4cdcd21a473748211daaf21877d2e0deb003cbb6ebd4fe88a59c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Deploy",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 6
+                    },
+                    "structural_hash": "579c5a5f37bab2e981dc8656acfcc364eac819288f84726dea9c2698f41c512a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "before",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 7,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "86018dbb6a6dc19188c0dff7b1f970878875854867369a99a9a9dc2ddb87dfd9",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "approval",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "3d279264e4ab041accb4a5e222e703723112ae0a48dc543f9fd671a8c8f559fd",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 22,
+                      "end_line": 0,
+                      "end_col": 23
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 37.706
+    },
+    {
+      "id": "web-generic-order",
+      "language_id": "generic",
+      "category": "meaningful_order",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d458008e824b8997fccd3e5c9b0362fe9e837a69819f7285298aaa5000ce8e85",
+      "new_sha256": "dabac749ba9eb1e481aea9e7a025ad38934fe0a75a84d7405391d9940ae4dee8",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "First validate the upload.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 26
+              },
+              "structural_hash": "c961ab9a2b70528a379d7f639472e6d3e581bca17b219bc109c87671e4400564",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "First publish the upload.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 25
+              },
+              "structural_hash": "e7e25ad982e808c9b262564e0446853d8be361b5e79f95d26b0888540d01f46d",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"First validate the upload.\" -> \"First publish the upload.\"",
+            "text_diff": "First [-va][+pub]li[-date][+sh] the upload."
+          },
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-1",
+              "node_type": "text_line",
+              "label": "Then publish the upload.",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 24
+              },
+              "structural_hash": "0af60444bb00663d5eac7e6a818b11b8263671f49c3d00243b5d9983dc511f6a",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-1",
+              "node_type": "text_line",
+              "label": "Then validate the upload.",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 25
+              },
+              "structural_hash": "36c668e5e883c06b20b69073d76276d13f04a9075aa3e429e3a3aa5e9b3768c0",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 2: \"Then publish the upload.\" -> \"Then validate the upload.\"",
+            "text_diff": "Then [-pub][+va]li[-sh][+date] the upload."
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "a34f0d3119ea93c8aaabef91ca3b274b0cf646bc82c01330ff3fd824e8406cf3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "First validate the upload.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "834af5b3d3f3d37210678ccdd69de3aa175847d8a78e8c1818b8af1c6cf97cc7",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "First",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "5332afd54b203c9e2656cb357083fce51b2edf7ed5b4d9f1a2b229826535f2ae",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "validate",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "4db27db3d1bc656142d40edc74e51c34266d217a1127ddd502341e447d16f906",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "the",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "10becaaa1fe2fad995d87b4165fc866c650fbc5fe273974db65e2e393c04826c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 19,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 25,
+                      "end_line": 0,
+                      "end_col": 26
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "statement",
+                "label": "Then publish the upload.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 24
+                },
+                "structural_hash": "2b4e810a1b4c8cf7a4bde7cd23812a86930a1004b816f745fce2c2be889d4d9c",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "token",
+                    "label": "Then",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "7c9f93a42a1a70f4c03049de71708ab7a257a7c594d63bce137becbc72d65def",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "token",
+                    "label": "publish",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "7d1e3201ed674b999b9363fbb9646bee1fc50d264162adf226568edf554b80a3",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "token",
+                    "label": "the",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 16
+                    },
+                    "structural_hash": "10becaaa1fe2fad995d87b4165fc866c650fbc5fe273974db65e2e393c04826c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 17,
+                      "end_line": 1,
+                      "end_col": 23
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 23,
+                      "end_line": 1,
+                      "end_col": 24
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "9bf6779a95f82b5c0f9beee3ead733082d3b3fb99880e8282e48465e585be5ac",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "First publish the upload.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "d7e2ccc6d1de6827a860c0de01ede0f06ccfb1d040442ad095f833b36ee9672d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "First",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 5
+                    },
+                    "structural_hash": "5332afd54b203c9e2656cb357083fce51b2edf7ed5b4d9f1a2b229826535f2ae",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "publish",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "7d1e3201ed674b999b9363fbb9646bee1fc50d264162adf226568edf554b80a3",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "the",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "10becaaa1fe2fad995d87b4165fc866c650fbc5fe273974db65e2e393c04826c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "statement",
+                "label": "Then validate the upload.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 25
+                },
+                "structural_hash": "67d2c48742fa8e103a7c7c0f920986d62f0d13272d32b69ff1c7d191de05b419",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "token",
+                    "label": "Then",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "7c9f93a42a1a70f4c03049de71708ab7a257a7c594d63bce137becbc72d65def",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "token",
+                    "label": "validate",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 13
+                    },
+                    "structural_hash": "4db27db3d1bc656142d40edc74e51c34266d217a1127ddd502341e447d16f906",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "token",
+                    "label": "the",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 14,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "10becaaa1fe2fad995d87b4165fc866c650fbc5fe273974db65e2e393c04826c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 18,
+                      "end_line": 1,
+                      "end_col": 24
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 24,
+                      "end_line": 1,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 41.134
+    },
+    {
+      "id": "web-generic-status",
+      "language_id": "generic",
+      "category": "meaningful_status",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d1123ea1a8e962b97e209955abf6500f72e278a334711c0df9300c9c202f6dbe",
+      "new_sha256": "34451cd4318a56566892533ef79d6410f997cc9e1acca35b79cf10eb8c2f89f8",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "Release status: blocked.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 24
+              },
+              "structural_hash": "e5f7b0ffae22b9a5c73ada94af6ba6052f0459303543101e57acebf3b159d526",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "Release status: approved.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 25
+              },
+              "structural_hash": "2e4c1202767bcf15ce4c8a1495d674c9afb5044008131c2a0df6d7ae4f74c77f",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"Release status: blocked.\" -> \"Release status: approved.\"",
+            "text_diff": "Release status: [-bl][+appr]o[-ck][+v]ed."
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "500bcf30d1a1e4a462d28bafbfc06d482ab1bb3089c4718033ba798139be4216",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: blocked.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 24
+                },
+                "structural_hash": "7d8e510045054de7c98c3734c18e87b65b1eafbd957ba2627f9f22b68f64fc9c",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "blocked",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 23
+                    },
+                    "structural_hash": "7ef761e0ce73d4e294de5fb6ca0e05a6489059130e7850395b5192eac3b1e869",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e95df19e5d10b15be2ee0a49ab03b30c92eb8ace182b5dc899818493805c471a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: approved.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "ad2db413216a1236c0ed36c956d4e1872237961a19a824eac2550ae7ec63eb2e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approved",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "f8fdf902808eb6d4abc7fbb11b889c4484102581ce827165577c16939f9eaf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 41.284
+    },
+    {
+      "id": "web-generic-identity",
+      "language_id": "generic",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "34451cd4318a56566892533ef79d6410f997cc9e1acca35b79cf10eb8c2f89f8",
+      "new_sha256": "34451cd4318a56566892533ef79d6410f997cc9e1acca35b79cf10eb8c2f89f8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [],
+        "change_groups": [],
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e95df19e5d10b15be2ee0a49ab03b30c92eb8ace182b5dc899818493805c471a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: approved.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "ad2db413216a1236c0ed36c956d4e1872237961a19a824eac2550ae7ec63eb2e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approved",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "f8fdf902808eb6d4abc7fbb11b889c4484102581ce827165577c16939f9eaf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e95df19e5d10b15be2ee0a49ab03b30c92eb8ace182b5dc899818493805c471a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: approved.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "ad2db413216a1236c0ed36c956d4e1872237961a19a824eac2550ae7ec63eb2e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approved",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "f8fdf902808eb6d4abc7fbb11b889c4484102581ce827165577c16939f9eaf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 39.073
+    },
+    {
+      "id": "web-generic-preservation",
+      "language_id": "generic",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d33cf180206138fb3a32487c86a3233b90d7fb9566f6bafb4629d3e053cfaf60",
+      "new_sha256": "472e3bedd303044696f7e93114bb671923544a4f969fd8b481899c0f711909b2",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "Release status: approved.\\r\\nKeep backups.\\r\\n"
+            ],
+            "new_labels": [
+              "Release status: approved.\\nKeep backups.\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Release status: approved.\\r\\nKeep backups.\\r\\n",
+              "new_label": "Release status: approved.\\nKeep backups.\\n",
+              "risk": "amber",
+              "language": "generic",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                42
+              ],
+              "new_span": [
+                0,
+                40
+              ]
+            }
+          }
+        ],
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Release status: approved.\\r\\nKeep backups.\\r\\n",
+              "new_label": "Release status: approved.\\nKeep backups.\\n",
+              "risk": "amber",
+              "language": "generic",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                42
+              ],
+              "new_span": [
+                0,
+                40
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "76a0314cc203b050183a1556a8459a3b19fb6f47b9df14c8c05d346d931ee353",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: approved.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "ad2db413216a1236c0ed36c956d4e1872237961a19a824eac2550ae7ec63eb2e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approved",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "f8fdf902808eb6d4abc7fbb11b889c4484102581ce827165577c16939f9eaf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "statement",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "53c4adc93aa5978d36b978e8d224ded818dd68191608fda88fbf1e61b5f4e6fb",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "token",
+                    "label": "Keep",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a4547c2a0ff3bdb53b536d92a2a421a838643c3b1c5c407835fe5995f29a7e57",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "token",
+                    "label": "backups",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "a142f4073c87e785213aaf99973bf9f29373211c83c67cd6507b2f5d66ad3e65",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 12,
+                      "end_line": 1,
+                      "end_col": 13
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "76a0314cc203b050183a1556a8459a3b19fb6f47b9df14c8c05d346d931ee353",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Release status: approved.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 25
+                },
+                "structural_hash": "ad2db413216a1236c0ed36c956d4e1872237961a19a824eac2550ae7ec63eb2e",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Release",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 7
+                    },
+                    "structural_hash": "978bc8055f972694970392cea6c7a688b84affb483530096e4df07f761767fee",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "status",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "a8a53bc3556a1d5efd05b6c369b365630d6ca23f12e69fee461f63facad56655",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "approved",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "f8fdf902808eb6d4abc7fbb11b889c4484102581ce827165577c16939f9eaf4f",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 24,
+                      "end_line": 0,
+                      "end_col": 25
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "statement",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "53c4adc93aa5978d36b978e8d224ded818dd68191608fda88fbf1e61b5f4e6fb",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "token",
+                    "label": "Keep",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a4547c2a0ff3bdb53b536d92a2a421a838643c3b1c5c407835fe5995f29a7e57",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "token",
+                    "label": "backups",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 5,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "a142f4073c87e785213aaf99973bf9f29373211c83c67cd6507b2f5d66ad3e65",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 12,
+                      "end_line": 1,
+                      "end_col": 13
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 43.361
+    },
+    {
+      "id": "web-generic-incomplete",
+      "language_id": "generic",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "150b126d442fa7274f3562eaed276b3bdcf020d5f87cdf711cc3285ebbe11acd",
+      "new_sha256": "923616d7623687859fdec05270b7aaea91d68a3662a1afac068d55918585c0aa",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "The upload is accepted when (",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 29
+              },
+              "structural_hash": "d519098cd2a55e378241c33ea927a5031e73093b5f3b79f1e5834e96f4d3d65c",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "The upload is accepted unless (",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "b924bcd7dffd59a17182b0088550c89643ea10ff5fa8d17748fccc30907294e3",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"The upload is accepted when (\" -> \"The upload is accepted unless (\"",
+            "text_diff": "The upload is accepted [-wh][+unl]e[-n][+ss] ("
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [
+        "old: 0: range outside source (1,0)",
+        "old: 0: range outside source (1,0)",
+        "new: 0: range outside source (1,0)",
+        "new: 0: range outside source (1,0)"
+      ],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ec147e81ade6b2dc8736fa1114c71b91b9539c24677d57946f44a7533ddd6d4b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "The upload is accepted when (",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 29
+                },
+                "structural_hash": "7d489498df4e195cd893967a1a41745c8dd83bdc987effec828a06879eecd829",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "The",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "71292f7ac108dab618485cbc4ede519bb65cab7ec9006f750152ba1695264aa2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "is",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 11,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "ce1db50754c48dbedfc295ebc1a06e68e6787bdf301b67aa1adf65d0b55c35e5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "accepted",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "ee46757c72d02323b7a4779e241c589ab8a3130254d4e9fb51161f50bc91e693",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "when",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "e3689f03f27318ca15d7611feef696841208384e144b325ca112c624cc032b2c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": "(",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 28,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "02d2a0598808f5286786d1619329a42434efcef46b8e7e42eeb0b495af2372f8",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "16d23fe5db5bc414c02b33045ec251bfa7c9b48a26c4ec68162a9bdd32cf2ea4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "The upload is accepted unless (",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "e906e38cfdbc546254efaddb7b3a3f3e86defe4056eaa31aa8ad8a29c82bed1a",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "The",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "71292f7ac108dab618485cbc4ede519bb65cab7ec9006f750152ba1695264aa2",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": "upload",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 4,
+                      "end_line": 0,
+                      "end_col": 10
+                    },
+                    "structural_hash": "0bea9d1492a00de34cca1e7ff5d0ed8d0567eada80f217c759eb157a46297927",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "is",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 11,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "ce1db50754c48dbedfc295ebc1a06e68e6787bdf301b67aa1adf65d0b55c35e5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "accepted",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 22
+                    },
+                    "structural_hash": "ee46757c72d02323b7a4779e241c589ab8a3130254d4e9fb51161f50bc91e693",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "unless",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 23,
+                      "end_line": 0,
+                      "end_col": 29
+                    },
+                    "structural_hash": "9de8be7df8b8ce89b2b46d6cf82250d15bd6ceb2cd2056cf499eef5aa8a0156a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": "(",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "02d2a0598808f5286786d1619329a42434efcef46b8e7e42eeb0b495af2372f8",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "invalid_result",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 39.342
+    },
+    {
+      "id": "web-generic-unicode",
+      "language_id": "generic",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "4ffb6e50ddd4761ffa44ca7667df4e955e63071ed9fb4c3eb07cd4a329f16de7",
+      "new_sha256": "5ed4a7417485b72e6004f06483cec1330ac1606be1d29cd8ac259c42748da015",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [],
+      "review": {
+        "old_filename": "assessment.txt",
+        "new_filename": "assessment.txt",
+        "language": "generic",
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "old_node": {
+              "id": "generic-old-mod-0",
+              "node_type": "text_line",
+              "label": "Résumé: Café opens at 08:00.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "82d1e22f650f68e0aeb9256a8456f8d7d3529973b4cf29305ec82c50e878add6",
+              "children": []
+            },
+            "new_node": {
+              "id": "generic-new-mod-0",
+              "node_type": "text_line",
+              "label": "Résumé: Café opens at 09:00.",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "9d20e793dc3fbc8b5aad5e6cf5e523236edf567d853839ba151923772f8e5fc0",
+              "children": []
+            },
+            "confidence": 0.98,
+            "description": "Change line 1: \"Résumé: Café opens at 08:00.\" -> \"Résumé: Café opens at 09:00.\"",
+            "text_diff": "Résumé: Café opens at 0[-8][+9]:00."
+          }
+        ],
+        "change_groups": [],
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "generic_text_review_native_v1",
+          "rust_core": {
+            "engine": "generic_text_review_native_v1",
+            "stage": "native_live_generic",
+            "used": true
+          },
+          "file_lifecycle": "modified"
+        }
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "a01272fb44aa82d5caf90c0c8333570660f0976098766ad8b80b546b4afb9588",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Résumé: Café opens at 08:00.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "e1d60f7616a67d569997d932e01d1b7893c79e93650a10d90c06e6c7f11e634a",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Résumé",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "df5ce00ff45e489b1d0d82ca26658ac497678b2e6e1fe45187f859d7c4b6d71e",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "Café",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "da83fede52221ae204b060af028f99390ac87d44fa261f80441c70beeda60363",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "opens",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 21
+                    },
+                    "structural_hash": "b5f5bdc27237e318d50829707fcfde329c63f38be478741a686b7537cfd8163b",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "at",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 22,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "40a5ca8945a6795da830fc3a41fe1396b65be1a7a6aa9393d05548edeb374f07",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": "08",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 25,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "dcb1250469f02acd1d9010a9306ff621b484d52dff88afe0e8472ec70f8432f7",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 27,
+                      "end_line": 0,
+                      "end_col": 28
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "token",
+                    "label": "00",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 28,
+                      "end_line": 0,
+                      "end_col": 30
+                    },
+                    "structural_hash": "368f80f541526c8222085086f77f9390d8768699fab215ca3612208a12301aed",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.8",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "generic",
+          "tree": {
+            "id": "0",
+            "node_type": "generic_file",
+            "label": "generic_file",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "437b3157cb3a8844e43c7a077e9b949b8b70bd6efbf1f576c3e218d9adf33b7a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "statement",
+                "label": "Résumé: Café opens at 09:00.",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 31
+                },
+                "structural_hash": "201422ddfb491c7e7e28b60d9c2b21554dd251a9957dfa2db927fc29d0e2473a",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "token",
+                    "label": "Résumé",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 8
+                    },
+                    "structural_hash": "df5ce00ff45e489b1d0d82ca26658ac497678b2e6e1fe45187f859d7c4b6d71e",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "token",
+                    "label": "Café",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 15
+                    },
+                    "structural_hash": "da83fede52221ae204b060af028f99390ac87d44fa261f80441c70beeda60363",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "token",
+                    "label": "opens",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 21
+                    },
+                    "structural_hash": "b5f5bdc27237e318d50829707fcfde329c63f38be478741a686b7537cfd8163b",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "token",
+                    "label": "at",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 22,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "40a5ca8945a6795da830fc3a41fe1396b65be1a7a6aa9393d05548edeb374f07",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "token",
+                    "label": "09",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 25,
+                      "end_line": 0,
+                      "end_col": 27
+                    },
+                    "structural_hash": "8377a9d26ba1030ca8245eed02b30f1692cec54bbe13a49b0265608ffc26cda4",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "token",
+                    "label": ":",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 27,
+                      "end_line": 0,
+                      "end_col": 28
+                    },
+                    "structural_hash": "590b8f2ea9bf1cb4b5fa599a16c70a96d40d81dce83e7e0d997ca985e5a86da5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "token",
+                    "label": "00",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 28,
+                      "end_line": 0,
+                      "end_col": 30
+                    },
+                    "structural_hash": "368f80f541526c8222085086f77f9390d8768699fab215ca3612208a12301aed",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.8",
+                    "node_type": "token",
+                    "label": ".",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "d000f568806531d0c9145551de76905b03285145991131a4f8eb57929d5354ea",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 42.194
+    }
+  ],
+  "attempted_count": 8,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 5.894
+}
