@@ -2222,6 +2222,16 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         .map(|pair| ((pair.old_node.id.clone(), pair.new_node.id.clone()),
             (pair.old_node.node_type.clone(), pair.new_node.node_type.clone())))
         .collect();
+    let mut relevant_parent_pairs = HashSet::new();
+    for change in changes.iter().filter(|change| change.change_type == "REORDER") {
+        if let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) {
+            if let (Some((old_parent, _)), Some((new_parent, _))) =
+                (sibling_position(&old_node.id), sibling_position(&new_node.id))
+            {
+                relevant_parent_pairs.insert((old_parent, new_parent));
+            }
+        }
+    }
     let mut matched_siblings: HashMap<(String, String), Vec<(String, String, usize, usize)>> = HashMap::new();
     for pair in matching {
         let Some((old_parent, old_index)) = sibling_position(&pair.old_node.id) else { continue; };
@@ -2231,17 +2241,24 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     }
     let mut relative_order: HashMap<(String, String), (bool, usize, bool)> = HashMap::new();
     for (parents, siblings) in matched_siblings.iter_mut() {
+        if !relevant_parent_pairs.contains(parents) {
+            continue;
+        }
         siblings.sort_by_key(|(_, _, old_index, _)| *old_index);
         let sequence: Vec<_> = siblings.iter().map(|(_, _, _, new_index)| *new_index).collect();
         let stationary = longest_increasing_subsequence_positions(&sequence);
         let sibling_count = siblings.len();
+        let mut suffix_min = vec![usize::MAX; sibling_count + 1];
+        for position in (0..sibling_count).rev() {
+            suffix_min[position] = suffix_min[position + 1].min(sequence[position]);
+        }
+        let mut prefix_max = None;
         for (position, (old_id, new_id, _, _)) in siblings.iter().enumerate() {
-            let participates_in_inversion = siblings.iter().enumerate().any(|(other_position, other)| {
-                (other_position < position && other.3 > siblings[position].3)
-                    || (other_position > position && other.3 < siblings[position].3)
-            });
+            let participates_in_inversion = prefix_max.is_some_and(|maximum| maximum > sequence[position])
+                || suffix_min[position + 1] < sequence[position];
             relative_order.insert((old_id.clone(), new_id.clone()),
                 (stationary.contains(&position), sibling_count, participates_in_inversion));
+            prefix_max = Some(prefix_max.map_or(sequence[position], |maximum: usize| maximum.max(sequence[position])));
         }
     }
     let order_sensitive_kind = |node: &SemanticNode, parent_type: Option<&str>| {
