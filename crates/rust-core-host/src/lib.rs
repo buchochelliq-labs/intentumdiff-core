@@ -9327,7 +9327,7 @@ fn finalize_python_review_drafts<'a>(
         changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));
     let (suppressed_reorders, promoted_indices) =
-        suppress_low_signal_reorders_drafts(changes);
+        suppress_low_signal_reorders_drafts(changes, matching);
     if !promoted_indices.is_empty() {
         // python refinement.entity_reorder_to_moved_code: the promoted entity reorders
         // are one review event of moved code.

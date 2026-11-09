@@ -2200,15 +2200,12 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
 
 pub(crate) fn suppress_low_signal_reorders_drafts(
     changes: &mut Vec<ChangeDraft<'_>>,
+    matching: &[MatchPair<'_>],
 ) -> (usize, Vec<usize>) {
-    // Same-identity sibling reorders are usually *positional shifts* (something was inserted or
-    // grew above the node) — noise to suppress. But a **genuine relocation** of a named entity
-    // (the user reordered two functions) must surface as moved code, not vanish into
-    // style-only output (issue #12). Distinguish them by relative order: within each parent,
-    // the reordered entities whose relative order is preserved (the longest increasing
-    // subsequence of new sibling indices, walked in old order) are insertion shifts; the rest
-    // genuinely moved and are promoted to MOVE drafts (mirroring the Python
-    // ``_suppress_low_signal_reorders`` entity promotion).
+    // Same-identity entity reorders use the existing LIS rule to suppress insertion displacement
+    // and promote genuine relocations to MOVE. Order-sensitive statements, arguments, and
+    // initializer children use matched sibling order as proof: an inversion is meaningful, a
+    // preserved rank is insertion displacement, and missing proof keeps a source-anchored edit.
     let rename_pairs: HashSet<(String, String)> = changes.iter()
         .filter(|c| c.refactoring_kind == Some("RENAME_SYMBOL"))
         .filter_map(|c| Some((c.old_node?.id.clone(), c.new_node?.id.clone())))
@@ -2221,8 +2218,92 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         rename_pairs.iter().any(|(o, n)| old.id.starts_with(&format!("{o}."))
             && new.id.starts_with(&format!("{n}.")))
     };
+    let parent_types: HashMap<(String, String), (String, String)> = matching.iter()
+        .map(|pair| ((pair.old_node.id.clone(), pair.new_node.id.clone()),
+            (pair.old_node.node_type.clone(), pair.new_node.node_type.clone())))
+        .collect();
+    let mut relevant_parent_pairs = HashSet::new();
+    for change in changes.iter().filter(|change| change.change_type == "REORDER") {
+        if let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) {
+            if let (Some((old_parent, _)), Some((new_parent, _))) =
+                (sibling_position(&old_node.id), sibling_position(&new_node.id))
+            {
+                relevant_parent_pairs.insert((old_parent, new_parent));
+            }
+        }
+    }
+    let mut matched_siblings: HashMap<(String, String), Vec<(String, String, usize, usize)>> = HashMap::new();
+    for pair in matching {
+        let Some((old_parent, old_index)) = sibling_position(&pair.old_node.id) else { continue; };
+        let Some((new_parent, new_index)) = sibling_position(&pair.new_node.id) else { continue; };
+        matched_siblings.entry((old_parent, new_parent)).or_default().push((
+            pair.old_node.id.clone(), pair.new_node.id.clone(), old_index, new_index));
+    }
+    let mut relative_order: HashMap<(String, String), (bool, usize, bool)> = HashMap::new();
+    for (parents, siblings) in matched_siblings.iter_mut() {
+        if !relevant_parent_pairs.contains(parents) {
+            continue;
+        }
+        siblings.sort_by_key(|(_, _, old_index, _)| *old_index);
+        let sequence: Vec<_> = siblings.iter().map(|(_, _, _, new_index)| *new_index).collect();
+        let stationary = longest_increasing_subsequence_positions(&sequence);
+        let sibling_count = siblings.len();
+        let mut suffix_min = vec![usize::MAX; sibling_count + 1];
+        for position in (0..sibling_count).rev() {
+            suffix_min[position] = suffix_min[position + 1].min(sequence[position]);
+        }
+        let mut prefix_max = None;
+        for (position, (old_id, new_id, _, _)) in siblings.iter().enumerate() {
+            let participates_in_inversion = prefix_max.is_some_and(|maximum| maximum > sequence[position])
+                || suffix_min[position + 1] < sequence[position];
+            relative_order.insert((old_id.clone(), new_id.clone()),
+                (stationary.contains(&position), sibling_count, participates_in_inversion));
+            prefix_max = Some(prefix_max.map_or(sequence[position], |maximum: usize| maximum.max(sequence[position])));
+        }
+    }
+    let order_sensitive_kind = |node: &SemanticNode, parent_type: Option<&str>| {
+        let node_type = node.node_type.as_str();
+        if node_type.ends_with("_statement") {
+            Some("statement")
+        } else if matches!(node_type,
+            "argument" | "named_argument" | "positional_argument" | "spread_element")
+            || matches!(parent_type.or(node.parent_type.as_deref()), Some("arguments" | "argument_list"))
+        {
+            Some("argument")
+        } else if matches!(parent_type.or(node.parent_type.as_deref()),
+            Some("initializer_list" | "array_initializer"))
+        {
+            Some("initializer")
+        } else {
+            None
+        }
+    };
+    let insertion_displacement_proven = |change: &ChangeDraft<'_>, old_parent: &str, new_parent: &str| {
+        let (Some(old_index), Some(new_index)) = (change.old_index, change.new_index) else {
+            return false;
+        };
+        let mut displacement = 0isize;
+        for sibling in changes.iter() {
+            if sibling.change_type == "ADDITION" {
+                let added_before = sibling.new_node.and_then(|node| node.id.rsplit_once('.'))
+                    .is_some_and(|(parent, _)| parent == new_parent)
+                    && sibling.new_index.is_some_and(|index| index < new_index);
+                displacement += if added_before { 1 } else { 0 };
+            } else if sibling.change_type == "DELETION" {
+                let deleted_before = sibling.old_node.and_then(|node| node.id.rsplit_once('.'))
+                    .is_some_and(|(parent, _)| parent == old_parent)
+                    && sibling.old_index.is_some_and(|index| index < old_index);
+                displacement -= if deleted_before { 1 } else { 0 };
+            }
+        }
+        displacement != 0 && new_index as isize - old_index as isize == displacement
+    };
     let before = changes.len();
     let mut group_members: HashMap<String, Vec<(usize, usize, usize)>> = HashMap::new();
+    let mut order_sensitive_reorders: HashMap<(String, String), Vec<usize>> = HashMap::new();
+    let mut inversion_participants: HashSet<usize> = HashSet::new();
+    let mut genuine_movers: HashSet<usize> = HashSet::new();
+    let mut unproven_order_sensitive: HashSet<usize> = HashSet::new();
     for (idx, change) in changes.iter().enumerate() {
         if change.change_type != "REORDER" {
             continue;
@@ -2253,9 +2334,44 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                         || ct.contains("class")
                 })
         };
-        if !same_identity(old_node, new_node) || !(reorder_entity(old_node)
-            || old_node.node_type == "decorator" || inside_rename(old_node, new_node))
-        {
+        if !same_identity(old_node, new_node) {
+            continue;
+        }
+        let old_parent = old_node.id.rsplit_once('.').map(|(parent, _)| parent.to_owned());
+        let new_parent = new_node.id.rsplit_once('.').map(|(parent, _)| parent.to_owned());
+        let parent_pair = old_parent.zip(new_parent);
+        let parent_type = parent_pair.as_ref().and_then(|pair| parent_types
+            .get(&(pair.0.clone(), pair.1.clone())))
+            .map(|types| types.0.as_str());
+        let order_kind = order_sensitive_kind(old_node, parent_type);
+        if let Some(_kind) = order_kind {
+            if let Some(parent_pair) = parent_pair.as_ref() {
+                order_sensitive_reorders.entry(parent_pair.clone()).or_default().push(idx);
+            }
+            if let Some((stationary, sibling_count, participates_in_inversion)) = relative_order
+                .get(&(old_node.id.clone(), new_node.id.clone())).copied()
+            {
+                if participates_in_inversion {
+                    inversion_participants.insert(idx);
+                }
+                if !stationary {
+                    genuine_movers.insert(idx);
+                } else if sibling_count == 1 && !insertion_displacement_proven(
+                    change, &parent_pair.as_ref().unwrap().0, &parent_pair.as_ref().unwrap().1,
+                ) {
+                    // A singleton rank cannot prove that an index change came from insertion
+                    // displacement. Keep the edit unless a matched sibling establishes order.
+                    unproven_order_sensitive.insert(idx);
+                }
+                // With peers and no inversion, ordered matching proves displacement only.
+            } else {
+                // Missing IDs/positions or a missing matched parent are not evidence of noise.
+                unproven_order_sensitive.insert(idx);
+            }
+            continue;
+        }
+        if !(reorder_entity(old_node) || old_node.node_type == "decorator"
+            || inside_rename(old_node, new_node)) {
             continue;
         }
         let (Some(old_index), Some(new_index)) = (change.old_index, change.new_index) else {
@@ -2271,7 +2387,18 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             .or_default()
             .push((idx, old_index, new_index));
     }
-    let mut genuine_movers: HashSet<usize> = HashSet::new();
+    for (_parents, indices) in order_sensitive_reorders {
+        let has_surviving_mover = indices.iter().any(|index| genuine_movers.contains(index));
+        let has_unproven_change = indices.iter().any(|index| unproven_order_sensitive.contains(index));
+        if !has_surviving_mover && !has_unproven_change {
+            // LIS can choose either side of a two-item swap as stationary. If the other side
+            // arrived as a MODIFICATION (rather than a REORDER draft), retain one explicit
+            // order change so that the inversion is never erased altogether.
+            if let Some(index) = indices.iter().find(|index| inversion_participants.contains(index)) {
+                genuine_movers.insert(*index);
+            }
+        }
+    }
     for members in group_members.values_mut() {
         members.sort_by_key(|(_, old_index, _)| *old_index);
         let sequence: Vec<usize> = members.iter().map(|(_, _, new_index)| *new_index).collect();
@@ -2306,11 +2433,25 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             // Reordering executable children within a renamed callable can change
             // behavior (e.g. increment then multiply). The rename only owns its name.
             let decorator_reorder = old_node.node_type == "decorator";
-            let behavior_reorder = decorator_reorder || change.new_node.is_some_and(|new_node|
-                inside_rename(old_node, new_node) && !is_named_entity_type(&old_node.node_type));
+            let parent_type = old_node.id.rsplit_once('.').and_then(|(parent, _)| {
+                change.new_node.and_then(|new_node| new_node.id.rsplit_once('.')
+                    .and_then(|(new_parent, _)| parent_types.get(&(parent.to_owned(), new_parent.to_owned())))
+                    .map(|types| types.0.as_str()))
+            });
+            let reorder_label = order_sensitive_kind(old_node, parent_type).unwrap_or("statement");
+            let behavior_reorder = decorator_reorder || (!is_named_entity_type(&old_node.node_type)
+                && (inside_rename(old_node, change.new_node.unwrap())
+                    || order_sensitive_kind(old_node, parent_type).is_some()));
+            let action = if decorator_reorder {
+                "Reorder decorator".to_owned()
+            } else if behavior_reorder {
+                format!("Reorder {reorder_label}")
+            } else {
+                "Move".to_owned()
+            };
             let description = format!(
                 "{} {}('{}') from sibling {} to {}",
-                if decorator_reorder { "Reorder decorator" } else if behavior_reorder { "Reorder statement" } else { "Move" },
+                action,
                 old_node.node_type,
                 old_node.label,
                 change.old_index.map(|i| i.to_string()).unwrap_or_default(),
@@ -2327,11 +2468,31 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             });
             continue;
         }
+        if unproven_order_sensitive.contains(&idx) {
+            let old_node = change.old_node.expect("order-sensitive reorder carries an old node");
+            let parent_type = old_node.id.rsplit_once('.').and_then(|(parent, _)| {
+                change.new_node.and_then(|new_node| new_node.id.rsplit_once('.')
+                    .and_then(|(new_parent, _)| parent_types.get(&(parent.to_owned(), new_parent.to_owned())))
+                    .map(|types| types.0.as_str()))
+            });
+            let kind = order_sensitive_kind(old_node, parent_type).unwrap_or("statement");
+            result.push(ChangeDraft {
+                change_type: "MODIFICATION",
+                description: format!("Reorder {kind} {}('{}') with unproven sibling order", old_node.node_type, old_node.label),
+                ..change
+            });
+            continue;
+        }
         // Insertion shift (or an index-less same-identity reorder): suppressed as noise.
     }
     let suppressed = before.saturating_sub(result.len());
     *changes = result;
     (suppressed, promoted_indices)
+}
+
+fn sibling_position(id: &str) -> Option<(String, usize)> {
+    let (parent, index) = id.rsplit_once('.')?;
+    Some((parent.to_owned(), index.parse().ok()?))
 }
 
 #[cfg(all(test, feature = "tier-c-wasm"))]
