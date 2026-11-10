@@ -148,34 +148,45 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         // This fast path is only for a parameter binder whose callable has the
         // corresponding old/new parameter names. Body references are handled
         // later by scope-correlated rename inference.
-        let (Some(old_scope), Some(new_scope)) = (
+        let is_changed_parameter = match (
             enclosing_callable_id(old_tree, old_node.id.as_str()),
             enclosing_callable_id(new_tree, new_node.id.as_str()),
-        ) else {
-            continue;
+        ) {
+            (Some(old_scope), Some(new_scope)) if old_scope == new_scope => {
+                match (old_by_id.get(old_scope.as_str()), new_by_id.get(new_scope.as_str())) {
+                    (Some(old_callable), Some(new_callable)) => {
+                        let old_params = parameter_identifier_nodes(old_callable);
+                        let new_params = parameter_identifier_nodes(new_callable);
+                        old_params.iter().zip(new_params.iter()).any(|(old_param, new_param)| {
+                            old_param.id == old_node.id
+                                && new_param.id == new_node.id
+                                && old_param.label == old_node.label
+                                && new_param.label == new_node.label
+                                && old_param.label != new_param.label
+                        })
+                    }
+                    _ => false,
+                }
+            }
+            _ => false,
         };
-        if old_scope != new_scope {
-            continue;
-        }
-        let (Some(old_callable), Some(new_callable)) = (
-            old_by_id.get(old_scope.as_str()),
-            new_by_id.get(new_scope.as_str()),
-        ) else {
-            continue;
-        };
-        let old_params = parameter_identifier_nodes(old_callable);
-        let new_params = parameter_identifier_nodes(new_callable);
-        let is_changed_parameter = old_params
-            .iter()
-            .zip(new_params.iter())
-            .any(|(old_param, new_param)| {
-                old_param.id == old_node.id
-                    && new_param.id == new_node.id
-                    && old_param.label == old_node.label
-                    && new_param.label == new_node.label
-                    && old_param.label != new_param.label
+        let old_declaration_parent = direct_parent_of_id(old_tree, old_node.id.as_str());
+        let new_declaration_parent = direct_parent_of_id(new_tree, new_node.id.as_str());
+        let is_same_declaration_binder = old_declaration_parent
+            .zip(new_declaration_parent)
+            .is_some_and(|(old_parent, new_parent)| {
+                old_parent.id == new_parent.id
+                    && old_parent.node_type == new_parent.node_type
+                    && matches!(
+                        old_parent.node_type.as_str(),
+                        "variable_declarator"
+                            | "variable_declaration"
+                            | "let_declaration"
+                            | "const_declaration"
+                            | "local_variable_declaration"
+                    )
             });
-        if !is_changed_parameter {
+        if !is_changed_parameter && !is_same_declaration_binder {
             continue;
         }
         promoted_ids.insert(old_node.id.clone());
@@ -208,6 +219,18 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     });
     changes.extend(promoted);
     suppress_modifications_covered_by_refactoring_ids(changes, &promoted_ids);
+}
+
+fn direct_parent_of_id<'a>(tree: &'a SemanticNode, target_id: &str) -> Option<&'a SemanticNode> {
+    for child in &tree.children {
+        if child.id == target_id {
+            return Some(tree);
+        }
+        if let Some(parent) = direct_parent_of_id(child, target_id) {
+            return Some(parent);
+        }
+    }
+    None
 }
 
 pub(crate) fn suppress_modifications_covered_by_refactoring_ids(
