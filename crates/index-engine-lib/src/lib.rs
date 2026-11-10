@@ -702,12 +702,33 @@ fn unique_unmatched_cross_file_move<'a>(
 ) -> Option<(&'a SymbolDefinition, &'a SymbolDefinition)> {
     let mut old_matched = vec![false; old_defs.len()];
     let mut new_matched = vec![false; new_defs.len()];
+    let mut old_by_identity: HashMap<(String, String, String), usize> = HashMap::new();
     let mut new_by_identity: HashMap<(String, String, String), Vec<usize>> = HashMap::new();
+    for old_def in old_defs {
+        *old_by_identity
+            .entry((old_def.file.clone(), old_def.language.clone(), old_def.node_type.clone()))
+            .or_default() += 1;
+    }
     for (new_index, new_def) in new_defs.iter().enumerate() {
         new_by_identity
             .entry((new_def.file.clone(), new_def.language.clone(), new_def.node_type.clone()))
             .or_default()
             .push(new_index);
+    }
+    // A changed multiplicity in a duplicate file-local bucket cannot tell us
+    // whether a definition moved, was copied, or was deleted. Refuse to infer
+    // a move even if the arbitrary remainder would otherwise be one-to-one.
+    for (identity, &old_count) in &old_by_identity {
+        let new_count = new_by_identity.get(identity).map_or(0, Vec::len);
+        if old_count.max(new_count) > 1 && old_count != new_count {
+            return None;
+        }
+    }
+    for (identity, new_indices) in &new_by_identity {
+        let old_count = old_by_identity.get(identity).copied().unwrap_or(0);
+        if old_count.max(new_indices.len()) > 1 && old_count != new_indices.len() {
+            return None;
+        }
     }
     for (old_index, old_def) in old_defs.iter().enumerate() {
         let identity = (old_def.file.clone(), old_def.language.clone(), old_def.node_type.clone());
@@ -829,6 +850,14 @@ mod tests {
             ),
             json!([]),
             "an unmatched duplicate-name group is ambiguous",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "a1"), definition("a.py", "a2")]}),
+                json!({"f": [definition("a.py", "retained"), definition("b.py", "possible-copy")]}),
+            ),
+            json!([]),
+            "a duplicate same-file bucket with an imbalanced count cannot identify a moved occurrence",
         );
     }
 
