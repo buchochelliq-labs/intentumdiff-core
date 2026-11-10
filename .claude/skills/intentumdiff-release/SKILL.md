@@ -11,13 +11,13 @@ description: How IntentumDiff ships a release — the release-candidate branch, 
 branch**, and PRs target *that*. `main` only moves when the RC is released.
 
 ```
-feature branch  ──PR──▶  release/v0.0.2-rc  ──PR──▶  main  ──tag──▶  published
+feature branch  ──PR──▶  release/v0.0.3-rc  ──PR──▶  main  ──tag──▶  published
 ```
 
-**The next release is `0.0.2`**, so today's RC branch is:
+**The next release is `0.0.3`**, so today's RC branch is:
 
 ```
-release/v0.0.2-rc
+release/v0.0.3-rc
 ```
 
 ## Why
@@ -38,7 +38,7 @@ the combination.
 
 ```bash
 git fetch origin
-git checkout -b feat/my-change origin/release/v0.0.2-rc   # base on the RC, NOT main
+git checkout -b feat/my-change origin/release/v0.0.3-rc   # base on the RC, NOT main
 ```
 
 Basing on `main` when the RC has moved ahead produces a PR carrying every RC commit. That
@@ -48,7 +48,7 @@ plus a cherry-pick is the recovery.
 **Opening the PR**
 
 ```bash
-gh pr create --base release/v0.0.2-rc --head feat/my-change
+gh pr create --base release/v0.0.3-rc --head feat/my-change
 ```
 
 Branch protection requires a PR and passing checks; approvals are set to **0** because this
@@ -57,7 +57,7 @@ impossible.
 
 **Cutting the release**
 
-1. RC is green and complete → PR `release/v0.0.2-rc` → `main`
+1. RC is green and complete → PR `release/v0.0.3-rc` → `main`
 2. Verify `main` is green **before** tagging — this is the step that has caught every real
    release bug so far
 3. Tag from `main`; the tag triggers publication
