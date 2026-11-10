@@ -519,32 +519,36 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     let mut changes: Vec<CrossFileChange> = Vec::new();
 
     // --- Pass 1: MOVE_TO_MODULE -------------------------------------------
-    for (qname, old_defs) in &old_table {
+    // Consume definitions that remain in the same file first. A qualified
+    // name is not unique: taking the Cartesian product of duplicate names
+    // invents moves (and grows quadratically) even when the project is
+    // unchanged. Only one unmatched old/new pair is strong enough evidence
+    // for a move; duplicate unmatched groups stay ambiguous.
+    let mut qnames: Vec<&String> = old_table.keys().collect();
+    qnames.sort();
+    for qname in qnames {
+        let old_defs = &old_table[qname];
         if let Some(new_defs) = new_table.get(qname) {
-            for old_def in old_defs {
-                for new_def in new_defs {
-                    if old_def.file != new_def.file {
-                        changes.push(CrossFileChange {
-                            change_type: "MOVE_TO_MODULE",
-                            symbol_name: qname.clone(),
-                            old_file: old_def.file.clone(),
-                            new_file: new_def.file.clone(),
-                            old_node_id: Some(old_def.node_id.clone()),
-                            new_node_id: Some(new_def.node_id.clone()),
-                            old_position: Some(position_from_definition(old_def)),
-                            new_position: Some(position_from_definition(new_def)),
-                            old_language: old_def.language.clone(),
-                            new_language: new_def.language.clone(),
-                            node_type: old_def.node_type.clone(),
-                            symbol_kind: symbol_kind(&old_def.node_type).to_string(),
-                            confidence: 1.0,
-                            description: format!(
-                                "'{}' moved from '{}' to '{}'",
-                                qname, old_def.file, new_def.file
-                            ),
-                        });
-                    }
-                }
+            if let Some((old_def, new_def)) = unique_unmatched_cross_file_move(old_defs, new_defs) {
+                changes.push(CrossFileChange {
+                    change_type: "MOVE_TO_MODULE",
+                    symbol_name: qname.to_string(),
+                    old_file: old_def.file.clone(),
+                    new_file: new_def.file.clone(),
+                    old_node_id: Some(old_def.node_id.clone()),
+                    new_node_id: Some(new_def.node_id.clone()),
+                    old_position: Some(position_from_definition(old_def)),
+                    new_position: Some(position_from_definition(new_def)),
+                    old_language: old_def.language.clone(),
+                    new_language: new_def.language.clone(),
+                    node_type: old_def.node_type.clone(),
+                    symbol_kind: symbol_kind(&old_def.node_type).to_string(),
+                    confidence: 1.0,
+                    description: format!(
+                        "'{}' moved from '{}' to '{}'",
+                        qname, old_def.file, new_def.file
+                    ),
+                });
             }
         }
     }
@@ -692,6 +696,48 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     }
 }
 
+fn unique_unmatched_cross_file_move<'a>(
+    old_defs: &'a [SymbolDefinition],
+    new_defs: &'a [SymbolDefinition],
+) -> Option<(&'a SymbolDefinition, &'a SymbolDefinition)> {
+    let mut old_matched = vec![false; old_defs.len()];
+    let mut new_matched = vec![false; new_defs.len()];
+    let mut new_by_identity: HashMap<(String, String, String), Vec<usize>> = HashMap::new();
+    for (new_index, new_def) in new_defs.iter().enumerate() {
+        new_by_identity
+            .entry((new_def.file.clone(), new_def.language.clone(), new_def.node_type.clone()))
+            .or_default()
+            .push(new_index);
+    }
+    for (old_index, old_def) in old_defs.iter().enumerate() {
+        let identity = (old_def.file.clone(), old_def.language.clone(), old_def.node_type.clone());
+        if let Some(new_index) = new_by_identity.get_mut(&identity).and_then(|indices| indices.pop()) {
+            old_matched[old_index] = true;
+            new_matched[new_index] = true;
+        }
+    }
+
+    let old_unmatched: Vec<&SymbolDefinition> = old_defs
+        .iter()
+        .zip(old_matched)
+        .filter_map(|(definition, matched)| (!matched).then_some(definition))
+        .collect();
+    let new_unmatched: Vec<&SymbolDefinition> = new_defs
+        .iter()
+        .zip(new_matched)
+        .filter_map(|(definition, matched)| (!matched).then_some(definition))
+        .collect();
+    if let ([old_def], [new_def]) = (old_unmatched.as_slice(), new_unmatched.as_slice()) {
+        if old_def.file != new_def.file
+            && old_def.language == new_def.language
+            && old_def.node_type == new_def.node_type
+        {
+            return Some((*old_def, *new_def));
+        }
+    }
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -718,6 +764,72 @@ mod tests {
 
     fn symbol_table(language: &str, tree: Value) -> Value {
         serde_json::from_str(&build_symbol_table_impl(&file(language, tree))).unwrap()
+    }
+
+    #[test]
+    fn unchanged_duplicate_names_are_not_reported_as_module_moves() {
+        for count in [2usize, 8, 32] {
+            let definitions: Vec<Value> = (0..count)
+                .map(|index| json!({
+                    "qualified_name": "f",
+                    "file": format!("module_{index}.py"),
+                    "node_type": "function_definition",
+                    "node_id": format!("node_{index}"),
+                    "start_line": 0,
+                    "start_col": 0,
+                    "end_line": 1,
+                    "end_col": 1,
+                    "language": "python"
+                }))
+                .collect();
+            let table = json!({"f": definitions});
+            let changes: Value = serde_json::from_str(&diff_symbol_tables_impl(
+                &table.to_string(),
+                &table.to_string(),
+            ))
+            .unwrap();
+            assert_eq!(changes, json!([]), "identical {count}-definition tables");
+        }
+    }
+
+    #[test]
+    fn duplicate_name_matching_preserves_copies_and_only_reports_unique_moves() {
+        let definition = |file: &str, node_id: &str| json!({
+            "qualified_name": "f",
+            "file": file,
+            "node_type": "function_definition",
+            "node_id": node_id,
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 1,
+            "end_col": 1,
+            "language": "python"
+        });
+        let identity = |old: Value, new: Value| -> Value {
+            serde_json::from_str(&diff_symbol_tables_impl(&old.to_string(), &new.to_string())).unwrap()
+        };
+
+        assert_eq!(
+            identity(json!({"f": [definition("a.py", "a")]}), json!({"f": [definition("b.py", "b")]})).as_array().unwrap().len(),
+            1,
+            "one unmatched old and new definition is a unique move",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "old")]}),
+                json!({"f": [definition("a.py", "retained"), definition("b.py", "copy")]}),
+            ),
+            json!([]),
+            "a same-file definition plus a new copy is not a move",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "a"), definition("b.py", "b")]}),
+                json!({"f": [definition("c.py", "c")]}),
+            ),
+            json!([]),
+            "an unmatched duplicate-name group is ambiguous",
+        );
     }
 
     fn reference_table(language: &str, tree: Value) -> Value {
