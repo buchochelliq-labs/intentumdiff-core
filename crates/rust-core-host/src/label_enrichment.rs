@@ -698,14 +698,6 @@ pub(crate) fn enrich_style_children(
 }
 
 /// python path_profiles._attribute_parts / _attribute_name.
-pub(crate) fn attribute_name_of(label: &str) -> String {
-    let text = label.trim();
-    match text.find('=') {
-        Some(eq) => path_normalize_text(&text[..eq]),
-        None => path_normalize_text(text),
-    }
-}
-
 fn attribute_name_for_language(label: &str, language: &str) -> String {
     let text = label.trim();
     let name = match text.find('=') {
