@@ -187,6 +187,11 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
                     && matches!(old_parent.node_type.as_str(), "call" | "call_expression")
                     && old_index == 0
                     && new_index == 0
+                    // A declaration form (Elixir `def`/`defp`/`defmacro`/`defmodule`, ...) is a
+                    // call whose target is the declaring macro keyword, not a reference to a
+                    // binding: swapping `def` -> `defp` changes visibility, it renames nothing.
+                    && !is_declaration_form_call(old_parent, old_node)
+                    && !is_declaration_form_call(new_parent, new_node)
                     && enclosing_callable_id(old_tree, old_node.id.as_str())
                         == enclosing_callable_id(new_tree, new_node.id.as_str())
             });
@@ -223,6 +228,23 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     });
     changes.extend(promoted);
     suppress_modifications_covered_by_refactoring_ids(changes, &promoted_ids);
+}
+
+/// True when *call* is a declaration form headed by *target*: the call is named after the
+/// entity it declares (its label is neither the callee's name nor the generic node type) and
+/// that declared name reappears as the head of its arguments (`def value(), do: ...` labels the
+/// call `value` with head call `value`; `defmodule Answer` has head alias `Answer`). The callee
+/// of such a call is the declaring keyword (`def`, `defp`, `defmacro`, ...): replacing it is a
+/// declaration/visibility change, never evidence of a renamed variable binder or reference.
+fn is_declaration_form_call(call: &SemanticNode, target: &SemanticNode) -> bool {
+    let declared = call.label.as_str();
+    if declared.is_empty() || declared == call.node_type || declared == target.label {
+        return false;
+    }
+    call.children.iter().skip(1).any(|arguments| {
+        arguments.label == declared
+            || arguments.children.first().is_some_and(|head| head.label == declared)
+    })
 }
 
 fn direct_child_index<'a>(
@@ -2657,6 +2679,10 @@ fn sibling_position(id: &str) -> Option<(String, usize)> {
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "clojure_rename_source_tests.rs"]
 mod clojure_rename_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "elixir_visibility_source_tests.rs"]
+mod elixir_visibility_source_tests;
 
 #[cfg(test)]
 mod clojure_interop_rename_tests {
