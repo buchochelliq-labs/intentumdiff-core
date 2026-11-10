@@ -1720,45 +1720,26 @@ fn enriched_structural_hash(node: &SemanticNode, label: &str, children: &[Semant
 }
 
 /// python statement_profiles._source_slice + _compact_source: the node's source span,
-/// whitespace-collapsed. asm/delphi parsers emit 1-based lines (python parity).
+/// whitespace-collapsed. All parsers emit 0-based rows and UTF-8 byte columns (#52, #249).
+/// A span running past its line or the source is clamped, but a column that splits a code
+/// point yields no snippet (the parser label is kept).
 fn profile_source_snippet(source_lines: &[&str], node: &SemanticNode) -> String {
-    if source_lines.is_empty() {
-        return String::new();
-    }
     let pos = &node.position;
-    // All parsers emit 0-based rows (issue #52); the asm/delphi one_based
-    // compensation that lived here died with their 1-based emission.
-    let start_line = pos.start_line as i64;
-    let end_line = pos.end_line as i64;
-    if start_line < 0 || start_line as usize >= source_lines.len() {
+    let start_line = pos.start_line as usize;
+    if start_line >= source_lines.len() {
         return String::new();
     }
-    let start_line = start_line as usize;
-    let end_line = (end_line.max(start_line as i64) as usize).min(source_lines.len() - 1);
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let chars: Vec<char> = line.chars().collect();
-        let from = from.unwrap_or(0).min(chars.len());
-        let to = to.unwrap_or(chars.len()).min(chars.len());
-        if from >= to {
-            return String::new();
-        }
-        chars[from..to].iter().collect()
-    };
-    let raw = if start_line == end_line {
-        clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        )
+    let requested_end = (pos.end_line as usize).max(start_line);
+    let (end_line, end_col) = if requested_end < source_lines.len() {
+        (requested_end, pos.end_col as usize)
     } else {
-        let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
-        for line in &source_lines[start_line + 1..end_line] {
-            parts.push((*line).to_string());
-        }
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
-        parts.join("\n")
+        let last = source_lines.len() - 1;
+        (last, source_lines[last].len())
     };
-    raw.split_whitespace().collect::<Vec<_>>().join(" ")
+    let end_col = if end_line == start_line { end_col.max(pos.start_col as usize) } else { end_col };
+    label_enrichment::utf8_source_span(source_lines, start_line, pos.start_col as usize, end_line, end_col)
+        .map(|raw| raw.split_whitespace().collect::<Vec<_>>().join(" "))
+        .unwrap_or_default()
 }
 
 /// python statement_profiles._bash_command_label_from_children.

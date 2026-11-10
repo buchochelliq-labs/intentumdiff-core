@@ -73,41 +73,56 @@ pub(crate) fn enrich_statement_profile_labels_node(
 // python analysis/path_profiles.py enrich_path_profile_labels + helpers. Hand-rolled
 // scanners replace the python regexes (repo norm: no regex crate in 22k lines).
 
-/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
-pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
-    let pos = &node.position;
-    let start_line = pos.start_line as usize;
-    if start_line >= source_lines.len() {
-        return String::new();
-    }
-    // Tree-sitter columns are UTF-8 BYTE offsets, not Unicode scalar indexes.
-    // Slicing by chars shifted every nested markup node after a non-ASCII
-    // character and silently lost meaningful XML text modifications.
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let from = from.unwrap_or(0).min(line.len());
+/// Exact source text for a parser span. Tree-sitter columns are UTF-8 BYTE offsets, not
+/// Unicode scalar indexes: slicing by chars shifted every node after a non-ASCII character
+/// (#249: `printf '😀'; echo safe` labelled the second command `o safe`). A column past the
+/// end of its line is clamped to the line end, as before: that loses no text. A column that
+/// falls inside a code point is not recoverable by guessing, so the whole span is rejected
+/// (`None`) rather than shifted onto a neighbouring character.
+pub(crate) fn utf8_source_span(
+    source_lines: &[&str],
+    start_line: usize,
+    start_col: usize,
+    end_line: usize,
+    end_col: usize,
+) -> Option<String> {
+    let clip = |line: &str, from: usize, to: Option<usize>| -> Option<String> {
+        let from = from.min(line.len());
         let to = to.unwrap_or(line.len()).min(line.len());
         if from >= to {
-            return String::new();
+            // Empty (or inverted) after clamping; still reject a split code point.
+            return (line.is_char_boundary(from) && line.is_char_boundary(to)).then(String::new);
         }
-        // Invalid byte boundaries are not recoverable by char-index guessing.
-        line.get(from..to).unwrap_or("").to_string()
+        line.get(from..to).map(str::to_string)
     };
-    let end_line = pos.end_line as usize;
+    let first = *source_lines.get(start_line)?;
     if start_line == end_line {
-        return clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        );
+        return clip(first, start_col, Some(end_col));
     }
-    let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
+    if end_line < start_line {
+        return None;
+    }
+    let mut parts = vec![clip(first, start_col, None)?];
     for line in &source_lines[start_line + 1..end_line.min(source_lines.len())] {
         parts.push((*line).to_string());
     }
-    if end_line < source_lines.len() {
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
+    if let Some(last) = source_lines.get(end_line) {
+        parts.push(clip(last, 0, Some(end_col))?);
     }
-    parts.join("\n")
+    Some(parts.join("\n"))
+}
+
+/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
+pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
+    let pos = &node.position;
+    utf8_source_span(
+        source_lines,
+        pos.start_line as usize,
+        pos.start_col as usize,
+        pos.end_line as usize,
+        pos.end_col as usize,
+    )
+    .unwrap_or_default()
 }
 
 pub(crate) fn compact_ws(text: &str) -> String {
@@ -1936,5 +1951,64 @@ mod mdx_unclosed_fence_regression_tests {
              body.position.end_line, body.position.end_col),
             (1, 2, 1, 12),
         );
+    }
+}
+
+#[cfg(test)]
+mod utf8_span_tests {
+    use super::*;
+    use serde_json::{json, Value};
+
+    fn enrich(source: &str, language: &str, node_type: &str, span: (u32, u32, u32, u32)) -> Value {
+        let (start_line, start_col, end_line, end_col) = span;
+        let tree = json!({
+            "id": "0.1", "node_type": node_type, "label": node_type, "structural_hash": "h",
+            "position": {"start_line": start_line, "start_col": start_col,
+                         "end_line": end_line, "end_col": end_col},
+            "children": [],
+        });
+        let out = crate::enrich_profile_labels_impl(&tree.to_string(), source, language, None)
+            .expect("enrichment succeeds");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    // #249: the audit reproduction. Bytes 15..24 of the line are exactly `echo safe`.
+    #[test]
+    fn bash_label_uses_byte_columns_after_emoji() {
+        let source = "printf '😀'; echo safe";
+        assert_eq!(&source[15..24], "echo safe");
+        let node = enrich(source, "bash", "command", (0, 15, 0, 24));
+        assert_eq!(node["label"], "echo safe");
+        let same_label_elsewhere = enrich("echo safe", "bash", "command", (0, 0, 0, 9));
+        assert_eq!(node["structural_hash"], same_label_elsewhere["structural_hash"]);
+    }
+
+    #[test]
+    fn exact_spans_after_combining_marks_and_multibyte_identifiers() {
+        // "é" as e + U+0301 (3 bytes total) and a 2-byte identifier character.
+        let source = "x=\"e\u{301}\"; ñame=1";
+        let start = source.find("ñame").unwrap() as u32;
+        let node = enrich(source, "bash", "variable_assignment", (0, start, 0, source.len() as u32));
+        assert_eq!(node["label"], "ñame=1");
+        let asm = "mov eax, 1 ; 😀\nadd eax, 2";
+        let node = enrich(asm, "asm", "instruction", (1, 0, 1, 10));
+        assert_eq!(node["label"], "add eax, 2");
+    }
+
+    #[test]
+    fn mid_codepoint_and_missing_line_spans_keep_the_parser_label() {
+        let source = "printf '😀'; echo safe";
+        // Byte 9 is inside the 4-byte emoji that starts at byte 8.
+        assert_eq!(enrich(source, "bash", "command", (0, 9, 0, 24))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (0, 8, 0, 10))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (5, 0, 5, 3))["label"], "command");
+        // A column past the line end is clamped: no text is lost or invented.
+        assert_eq!(enrich(source, "bash", "command", (0, 15, 0, 99))["label"], "echo safe");
+        assert_eq!(
+            utf8_source_span(&["a😀b"], 0, 0, 0, 2),
+            None,
+            "end inside a code point"
+        );
+        assert_eq!(utf8_source_span(&["a😀b"], 0, 1, 0, 5).as_deref(), Some("😀"));
     }
 }
