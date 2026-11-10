@@ -859,6 +859,15 @@ mod tests {
             json!([]),
             "a duplicate same-file bucket with an imbalanced count cannot identify a moved occurrence",
         );
+        let retained_and_moved = identity(
+            json!({"f": [definition("a.py", "retained-old"), definition("b.py", "old-move")]}),
+            json!({"f": [definition("a.py", "retained-new"), definition("c.py", "new-move")]}),
+        );
+        assert!(retained_and_moved.as_array().unwrap().iter().any(|change| {
+            change["change_type"] == "MOVE_TO_MODULE"
+                && change["old_file"] == "b.py"
+                && change["new_file"] == "c.py"
+        }), "same-file occurrences must be consumed before matching a unique move");
     }
 
     fn reference_table(language: &str, tree: Value) -> Value {
