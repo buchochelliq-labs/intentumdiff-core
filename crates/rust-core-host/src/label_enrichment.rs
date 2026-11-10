@@ -193,7 +193,7 @@ pub(crate) fn attribute_label_from_source(snippet: &str) -> String {
 
 /// python path_profiles._attributes_from_opening_tag: attrs between the tag name and
 /// the first `>` (no angle brackets inside), tokens `name(="v"|'v'|bare)?`.
-pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)> {
+pub(crate) fn attributes_from_opening_tag(snippet: &str, language: &str) -> Vec<(String, String)> {
     let chars: Vec<char> = snippet.chars().collect();
     let mut i = 0;
     let mut attr_region: Option<String> = None;
@@ -251,7 +251,12 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
         while i < chars.len() && is_ident_char(chars[i]) {
             i += 1;
         }
-        let name = path_normalize_text(&chars[start..i].iter().collect::<String>());
+        let raw_name = chars[start..i].iter().collect::<String>();
+        let name = if language == "xml" {
+            raw_name
+        } else {
+            path_normalize_text(&raw_name)
+        };
         let mut j = i;
         while j < chars.len() && chars[j].is_whitespace() {
             j += 1;
@@ -693,11 +698,16 @@ pub(crate) fn enrich_style_children(
 }
 
 /// python path_profiles._attribute_parts / _attribute_name.
-pub(crate) fn attribute_name_of(label: &str) -> String {
+fn attribute_name_for_language(label: &str, language: &str) -> String {
     let text = label.trim();
-    match text.find('=') {
-        Some(eq) => path_normalize_text(&text[..eq]),
-        None => path_normalize_text(text),
+    let name = match text.find('=') {
+        Some(eq) => text[..eq].trim(),
+        None => text,
+    };
+    if language == "xml" {
+        name.to_string()
+    } else {
+        path_normalize_text(name)
     }
 }
 
@@ -706,21 +716,37 @@ pub(crate) fn attribute_name_of(label: &str) -> String {
 pub(crate) fn enrich_existing_markup_attributes(
     nodes: Vec<SemanticNode>,
     attr_values: &HashMap<String, String>,
+    language: &str,
 ) -> Vec<SemanticNode> {
     nodes
         .into_iter()
         .map(|node| {
-            let children = enrich_existing_markup_attributes(node.children.clone(), attr_values);
-            let mut label = node.label.clone();
-            if node.node_type.eq_ignore_ascii_case("attribute") {
-                let name = attribute_name_of(&node.label);
-                if let Some(value) = attr_values.get(&name) {
-                    if !value.is_empty() && *value != name {
-                        label = format!("{name}={value}");
-                    } else {
-                        label = name;
-                    }
-                }
+            // Only attributes owned by this opening tag may consume its values.
+            // Recursing through element descendants lets an ancestor's `id`,
+            // `class`, etc. overwrite the nested element's own source value.
+            let label = enriched_markup_attribute_label(&node, attr_values, language);
+            let mut children = node.children.clone();
+            if matches!(node.node_type.to_lowercase().as_str(), "start_tag" | "self_closing_tag") {
+                children = children
+                    .into_iter()
+                    .map(|child| {
+                        if child.node_type.eq_ignore_ascii_case("attribute") {
+                            let child_label = enriched_markup_attribute_label(&child, attr_values, language);
+                            if child_label != child.label {
+                                let structural_hash = synthetic_structural_hash(
+                                    &child.node_type,
+                                    &child_label,
+                                    &child.children,
+                                );
+                                let mut updated = child;
+                                updated.label = child_label;
+                                updated.structural_hash = structural_hash;
+                                return updated;
+                            }
+                        }
+                        child
+                    })
+                    .collect();
             }
             let children_changed = children.len() != node.children.len()
                 || children
@@ -741,6 +767,22 @@ pub(crate) fn enrich_existing_markup_attributes(
         .collect()
 }
 
+fn enriched_markup_attribute_label(
+    node: &SemanticNode,
+    attr_values: &HashMap<String, String>,
+    language: &str,
+) -> String {
+    if !node.node_type.eq_ignore_ascii_case("attribute") {
+        return node.label.clone();
+    }
+    let name = attribute_name_for_language(&node.label, language);
+    match attr_values.get(&name) {
+        Some(value) if !value.is_empty() && *value != name => format!("{name}={value}"),
+        Some(_) => name,
+        None => node.label.clone(),
+    }
+}
+
 /// python path_profiles._enrich_markup_attributes: re-inject attributes parsed from the
 /// opening tag as synthetic `attribute` children (skipping xmlns/xmlns:*), preferring an
 /// existing start/self-closing tag child; otherwise a synthetic start_tag is prepended.
@@ -749,9 +791,10 @@ pub(crate) fn enrich_markup_attributes(
     source_lines: &[&str],
     children: Vec<SemanticNode>,
     label: &str,
+    language: &str,
 ) -> Vec<SemanticNode> {
     let snippet = path_source_slice(source_lines, node);
-    let attrs: Vec<(String, String)> = attributes_from_opening_tag(&snippet)
+    let attrs: Vec<(String, String)> = attributes_from_opening_tag(&snippet, language)
         .into_iter()
         .filter(|(name, _)| name != "xmlns" && !name.starts_with("xmlns:"))
         .collect();
@@ -759,14 +802,19 @@ pub(crate) fn enrich_markup_attributes(
         return children;
     }
     let attr_values: HashMap<String, String> = attrs.iter().cloned().collect();
-    let children = enrich_existing_markup_attributes(children, &attr_values);
+    let children = enrich_existing_markup_attributes(children, &attr_values, language);
     let existing_names: HashSet<String> = children
         .iter()
         .flat_map(|child| {
             std::iter::once(child)
-                .chain(child.descendants())
-                .filter(|d| d.node_type.eq_ignore_ascii_case("attribute"))
-                .map(|d| attribute_name_of(&d.label))
+                .chain(
+                    matches!(child.node_type.to_lowercase().as_str(), "start_tag" | "self_closing_tag")
+                        .then_some(child.children.iter())
+                        .into_iter()
+                        .flatten(),
+                )
+                .filter(|candidate| candidate.node_type.eq_ignore_ascii_case("attribute"))
+                .map(|candidate| attribute_name_for_language(&candidate.label, language))
                 .collect::<Vec<_>>()
         })
         .collect();
@@ -869,7 +917,7 @@ pub(crate) fn enrich_markup_children(
     ) {
         return children;
     }
-    let mut children = enrich_markup_attributes(node, source_lines, children, label);
+    let mut children = enrich_markup_attributes(node, source_lines, children, label, language);
     if children.iter().any(|c| {
         matches!(c.node_type.to_lowercase().as_str(), "text" | "chardata" | "content")
     }) {
@@ -1417,6 +1465,97 @@ mod markup_text_span_tests {
     use super::*;
 
     #[test]
+    fn nested_and_sibling_attributes_keep_their_own_values() {
+        fn attr(id: &str, value: &str) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "attribute",
+                format!("id={value}"),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![],
+            )
+        }
+        fn start(id: &str, name: &str, value: &str) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "start_tag",
+                name.into(),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![attr(&format!("{id}.0"), value)],
+            )
+        }
+        fn element(id: &str, name: &str, value: &str, children: Vec<SemanticNode>) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "element",
+                name.into(),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![start(&format!("{id}.0"), name, value), children.into_iter().next().unwrap_or_else(|| path_synthetic_node(
+                    format!("{id}.1"), "text", "text".into(),
+                    NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![],
+                ))],
+            )
+        }
+        let source = "<root id=\"outer-é\"><child id=\"before\"><leaf id=\"deep\"/></child><child id=\"sibling\"/></root>";
+        let leaf = element("0.0.0.0", "leaf", "deep", vec![]);
+        let nested = element("0.0.0", "child", "before", vec![leaf]);
+        let sibling = element("0.0.1", "child", "sibling", vec![]);
+        let root = path_synthetic_node(
+            "0".into(),
+            "element",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![],
+        );
+        let children = enrich_markup_attributes(
+            &root,
+            &[source],
+            vec![start("0.0", "root", "stale"), nested, sibling],
+            "root",
+            "html",
+        );
+        let root_start = &children[0];
+        assert_eq!(root_start.children.iter().find(|n| n.node_type == "attribute").unwrap().label, "id=outer-é");
+        let nested_id = &children[1].children[0].children[0];
+        assert_eq!(nested_id.label, "id=before");
+        let leaf_id = &children[1].children[1].children[0].children[0];
+        assert_eq!(leaf_id.label, "id=deep");
+        let sibling_id = &children[2].children[0].children[0];
+        assert_eq!(sibling_id.label, "id=sibling");
+    }
+
+    #[test]
+    fn xml_attribute_names_remain_case_sensitive() {
+        let source = "<root Foo=\"outer\" foo=\"lower\"><child Foo=\"inner\"/></root>";
+        assert_eq!(
+            attributes_from_opening_tag(source, "xml"),
+            vec![("Foo".to_string(), "outer".to_string()), ("foo".to_string(), "lower".to_string())],
+        );
+        assert_eq!(attribute_name_for_language("Foo=outer", "xml"), "Foo");
+        assert_eq!(attribute_name_for_language("Foo=outer", "html"), "foo");
+        let root = path_synthetic_node(
+            "0".into(),
+            "element",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![],
+        );
+        let tag = path_synthetic_node(
+            "0.0".into(),
+            "start_tag",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            vec![
+                path_synthetic_node("0.0.0".into(), "attribute", "Foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+                path_synthetic_node("0.0.1".into(), "attribute", "foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+            ],
+        );
+        let children = enrich_markup_attributes(&root, &[source], vec![tag], "root", "xml");
+        assert_eq!(children[0].children[0].label, "Foo=outer");
+        assert_eq!(children[0].children[1].label, "foo=lower");
+    }
+
+    #[test]
     fn nested_xml_text_points_to_the_value_not_the_opening_tag() {
         let source = "<root><value>1</value></root>";
         let node = path_synthetic_node(
@@ -1488,7 +1627,7 @@ mod markup_text_span_tests {
         ] {
             assert_eq!(direct_markup_text(source, "value"), value);
             assert_eq!(
-                attributes_from_opening_tag(source),
+                attributes_from_opening_tag(source, "xml"),
                 vec![("note".to_string(), attribute.to_string())]
             );
             let node = path_synthetic_node(
