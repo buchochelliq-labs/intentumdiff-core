@@ -1496,7 +1496,7 @@ mod markup_text_span_tests {
                 ))],
             )
         }
-        let source = "<root id=\"outer\"><child id=\"before\"><leaf id=\"deep\"/></child><child id=\"sibling\"/></root>";
+        let source = "<root id=\"outer-é\"><child id=\"before\"><leaf id=\"deep\"/></child><child id=\"sibling\"/></root>";
         let leaf = element("0.0.0.0", "leaf", "deep", vec![]);
         let nested = element("0.0.0", "child", "before", vec![leaf]);
         let sibling = element("0.0.1", "child", "sibling", vec![]);
@@ -1515,7 +1515,7 @@ mod markup_text_span_tests {
             "html",
         );
         let root_start = &children[0];
-        assert_eq!(root_start.children.iter().find(|n| n.node_type == "attribute").unwrap().label, "id=outer");
+        assert_eq!(root_start.children.iter().find(|n| n.node_type == "attribute").unwrap().label, "id=outer-é");
         let nested_id = &children[1].children[0].children[0];
         assert_eq!(nested_id.label, "id=before");
         let leaf_id = &children[1].children[1].children[0].children[0];
@@ -1533,6 +1533,26 @@ mod markup_text_span_tests {
         );
         assert_eq!(attribute_name_for_language("Foo=outer", "xml"), "Foo");
         assert_eq!(attribute_name_for_language("Foo=outer", "html"), "foo");
+        let root = path_synthetic_node(
+            "0".into(),
+            "element",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![],
+        );
+        let tag = path_synthetic_node(
+            "0.0".into(),
+            "start_tag",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            vec![
+                path_synthetic_node("0.0.0".into(), "attribute", "Foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+                path_synthetic_node("0.0.1".into(), "attribute", "foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+            ],
+        );
+        let children = enrich_markup_attributes(&root, &[source], vec![tag], "root", "xml");
+        assert_eq!(children[0].children[0].label, "Foo=outer");
+        assert_eq!(children[0].children[1].label, "foo=lower");
     }
 
     #[test]
