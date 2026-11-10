@@ -2442,9 +2442,39 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             prefix_max = Some(prefix_max.map_or(sequence[position], |maximum: usize| maximum.max(sequence[position])));
         }
     }
+    // Entity gate (python _is_entity_container subset): named entities, doc-component
+    // leaf entities (mdx jsx_component / markdown section — python _LEAF_ENTITY_TYPES),
+    // and export wrappers around an entity (ts `export function …` reorders as the
+    // export_statement node — python _is_exported_entity_wrapper). The ts/mdx pure-swap
+    // scenarios yielded ZERO changes routed because none of these passed the gate
+    // (the exact powershell issue #66 failure mode, wider vocabulary).
+    let reorder_entity = |node: &SemanticNode| -> bool {
+        let node_type = node.node_type.as_str();
+        if is_named_entity_type(node_type) {
+            return true;
+        }
+        if matches!(node_type, "jsx_component" | "section" | "markdown_section") {
+            return true;
+        }
+        matches!(node_type, "export_statement" | "export_default_declaration")
+            && node.children.iter().any(|child| {
+                let ct = child.node_type.to_lowercase();
+                is_named_entity_type(child.node_type.as_str())
+                    || ct.contains("function")
+                    || ct.contains("method")
+                    || ct.contains("class")
+            })
+    };
+    // An entity is a declaration, not an executable statement, even when its node type ends in
+    // `_statement` (`export_statement` wrapping a function/class, Lua/PowerShell
+    // `function_statement`): function and class declarations are hoisted / order-independent,
+    // so their reorder is a MOVE decided by the entity LIS below, never a behaviour change.
+    // Only non-entity statements, arguments and initializer children are order-sensitive.
     let order_sensitive_kind = |node: &SemanticNode, parent_type: Option<&str>| {
         let node_type = node.node_type.as_str();
-        if node_type.ends_with("_statement") {
+        if reorder_entity(node) {
+            None
+        } else if node_type.ends_with("_statement") {
             Some("statement")
         } else if matches!(node_type,
             "argument" | "named_argument" | "positional_argument" | "spread_element")
@@ -2491,29 +2521,6 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         }
         let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
             continue;
-        };
-        // Entity gate (python _is_entity_container subset): named entities, doc-component
-        // leaf entities (mdx jsx_component / markdown section — python _LEAF_ENTITY_TYPES),
-        // and export wrappers around an entity (ts `export function …` reorders as the
-        // export_statement node — python _is_exported_entity_wrapper). The ts/mdx pure-swap
-        // scenarios yielded ZERO changes routed because none of these passed the gate
-        // (the exact powershell issue #66 failure mode, wider vocabulary).
-        let reorder_entity = |node: &SemanticNode| -> bool {
-            let node_type = node.node_type.as_str();
-            if is_named_entity_type(node_type) {
-                return true;
-            }
-            if matches!(node_type, "jsx_component" | "section" | "markdown_section") {
-                return true;
-            }
-            matches!(node_type, "export_statement" | "export_default_declaration")
-                && node.children.iter().any(|child| {
-                    let ct = child.node_type.to_lowercase();
-                    is_named_entity_type(child.node_type.as_str())
-                        || ct.contains("function")
-                        || ct.contains("method")
-                        || ct.contains("class")
-                })
         };
         if !same_identity(old_node, new_node) {
             continue;
@@ -2620,7 +2627,7 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
                     .map(|types| types.0.as_str()))
             });
             let reorder_label = order_sensitive_kind(old_node, parent_type).unwrap_or("statement");
-            let behavior_reorder = decorator_reorder || (!is_named_entity_type(&old_node.node_type)
+            let behavior_reorder = decorator_reorder || (!reorder_entity(old_node)
                 && (inside_rename(old_node, change.new_node.unwrap())
                     || order_sensitive_kind(old_node, parent_type).is_some()));
             let action = if decorator_reorder {
@@ -2683,6 +2690,10 @@ mod clojure_rename_source_tests;
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "elixir_visibility_source_tests.rs"]
 mod elixir_visibility_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "reorder_rename_source_tests.rs"]
+mod reorder_rename_source_tests;
 
 #[cfg(test)]
 mod clojure_interop_rename_tests {
