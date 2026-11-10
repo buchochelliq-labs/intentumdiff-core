@@ -4791,6 +4791,21 @@ fn fuel_budget(floor: u64, candidate: u64) -> u64 {
     }
 }
 
+/// `Err("plugin returned error (<side>): <message>")` when a parser returned the in-band error
+/// envelope instead of a tree. Non-JSON or tree output is left to the stage that decodes it.
+fn reject_plugin_error_envelope(raw: &str, side: &str) -> Result<(), String> {
+    match serde_json::from_str::<Value>(raw) {
+        Ok(value) => match value.get("error") {
+            Some(error) => Err(format!(
+                "plugin returned error ({side}): {}",
+                error.as_str().map(str::to_string).unwrap_or_else(|| error.to_string())
+            )),
+            None => Ok(()),
+        },
+        Err(_) => Ok(()),
+    }
+}
+
 fn parse_semantic_tree_json(raw: &str) -> Result<SemanticNode, String> {
     let value: Value = serde_json::from_str(raw)
         .map_err(|exc| format!("parse plugin SemanticNode JSON: {exc}"))?;
@@ -5362,6 +5377,11 @@ pub(crate) fn native_wasm_single_diff(
     // Stage 4-7 literal-label enrichment (differ.py:1604) BEFORE the profile pass: string
     // literals carry their decoded VALUE as label — keyed enrichment + guardrail semantic paths
     // key off them (unlabeled pairs = zero guardrail paths).
+    // A parser that cannot parse a side returns the WIT `{"error": ...}` envelope. Report it as
+    // the parser's error before any stage decodes the output as a tree; decoding it first
+    // surfaced a misleading "literal enrich ...: missing field `id`" (core #280).
+    reject_plugin_error_envelope(&old_tree_json, "old")?;
+    reject_plugin_error_envelope(&new_tree_json, "new")?;
     let old_tree_json = enrich_literal_labels_json_str(&old_tree_json, old_source)
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
@@ -11217,3 +11237,26 @@ mod native_commit_index_fail_closed_tests {
 #[cfg(test)]
 #[path = "commit_index_partial_tests.rs"]
 mod commit_index_partial_tests;
+
+#[cfg(test)]
+mod plugin_error_envelope_tests {
+    use super::reject_plugin_error_envelope;
+
+    // core #280: an incomplete source makes the parser return the WIT error envelope; it must be
+    // reported as the parser's error, not decoded as a tree ("missing field `id`").
+    #[test]
+    fn error_envelope_is_reported_as_the_plugin_error() {
+        let err = reject_plugin_error_envelope(r#"{"error":"Unclosed script or style block"}"#, "old")
+            .unwrap_err();
+        assert_eq!(err, "plugin returned error (old): Unclosed script or style block");
+        assert!(!err.contains("missing field"));
+        let err = reject_plugin_error_envelope(r#"{"error":{"code":"x"}}"#, "new").unwrap_err();
+        assert_eq!(err, r#"plugin returned error (new): {"code":"x"}"#);
+    }
+
+    #[test]
+    fn trees_and_non_json_pass_through() {
+        assert!(reject_plugin_error_envelope(r#"{"id":"0","node_type":"module"}"#, "old").is_ok());
+        assert!(reject_plugin_error_envelope("not json", "old").is_ok());
+    }
+}
