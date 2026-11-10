@@ -179,12 +179,14 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
                     && old_index == 0
                     && new_index == 0
             });
-        let is_same_call_target = direct_parent_of_id(old_tree, old_node.id.as_str())
-            .zip(direct_parent_of_id(new_tree, new_node.id.as_str()))
-            .is_some_and(|(old_parent, new_parent)| {
+        let is_same_call_target = direct_child_index(old_tree, old_node.id.as_str())
+            .zip(direct_child_index(new_tree, new_node.id.as_str()))
+            .is_some_and(|((old_parent, old_index), (new_parent, new_index))| {
                 old_parent.id == new_parent.id
                     && old_parent.node_type == new_parent.node_type
                     && matches!(old_parent.node_type.as_str(), "call" | "call_expression")
+                    && old_index == 0
+                    && new_index == 0
                     && enclosing_callable_id(old_tree, old_node.id.as_str())
                         == enclosing_callable_id(new_tree, new_node.id.as_str())
             });
