@@ -951,6 +951,23 @@ struct XmlTextRun {
 /// separated by child elements; text nested in children belongs to those children.
 /// Returns `None` when the snippet is not a well-formed `<tag ...>...</tag>` element.
 fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    markup_direct_text_runs(snippet, false)
+}
+
+/// HTML void elements (no end tag, no content).
+fn is_html_void_element(name: &str) -> bool {
+    matches!(
+        name.to_ascii_lowercase().as_str(),
+        "area" | "base" | "br" | "col" | "embed" | "hr" | "img" | "input" | "keygen" | "link"
+            | "meta" | "param" | "source" | "track" | "wbr"
+    )
+}
+
+/// Shared lexical scan behind [`xml_direct_text_runs`]. With `html`, void elements
+/// (`<br>`) open no nesting level and character references stay as written (HTML text
+/// labels are not entity-decoded elsewhere either).
+fn markup_direct_text_runs(snippet: &str, html: bool) -> Option<(Vec<XmlTextRun>, bool)> {
+    let decode = |text: &str| if html { text.to_string() } else { decode_xml_entities(text) };
     let open_end = markup_opening_tag_end(snippet)?;
     if snippet[..open_end].ends_with("/>") {
         return Some((Vec::new(), false));
@@ -971,7 +988,7 @@ fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
                  span: &mut Option<std::ops::Range<usize>>,
                  runs: &mut Vec<XmlTextRun>,
                  between_children: bool| {
-        text.push_str(&decode_xml_entities(pending));
+        text.push_str(&decode(pending));
         pending.clear();
         if let Some(range) = span.take() {
             runs.push(XmlTextRun { span: range, text: std::mem::take(text), between_children });
@@ -991,7 +1008,7 @@ fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
             // An unterminated CDATA section is malformed: decline rather than guess.
             let end = rest.find("]]>")? + 3;
             if depth == 0 {
-                text.push_str(&decode_xml_entities(&pending_entities));
+                text.push_str(&decode(&pending_entities));
                 pending_entities.clear();
                 text.push_str(&rest["<![CDATA[".len()..end - 3]);
                 extend(&mut span, open_end + i..open_end + i + end);
@@ -1008,7 +1025,9 @@ fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
                 flush(&mut text, &mut pending_entities, &mut span, &mut runs, has_child_element);
                 has_child_element = true;
             }
-            if !rest[..tag_len].ends_with("/>") {
+            if !rest[..tag_len].ends_with("/>")
+                && !(html && is_html_void_element(&tag_name_from_source(&rest[..tag_len])))
+            {
                 depth += 1;
             }
             i += tag_len;
@@ -1062,12 +1081,25 @@ fn collapse_xml_space(text: &str) -> String {
 fn enrich_xml_text_children(
     node: &SemanticNode,
     snippet: &str,
-    mut children: Vec<SemanticNode>,
+    children: Vec<SemanticNode>,
     xml_preserve: bool,
 ) -> Vec<SemanticNode> {
     let Some((runs, has_child_element)) = xml_direct_text_runs(snippet) else {
         return children;
     };
+    emit_markup_text_runs(node, snippet, children, runs, has_child_element, xml_preserve)
+}
+
+/// Insert synthetic `text` children for direct character-data runs (shared by XML and
+/// HTML preformatted content). `preserve` keeps every run verbatim.
+fn emit_markup_text_runs(
+    node: &SemanticNode,
+    snippet: &str,
+    mut children: Vec<SemanticNode>,
+    runs: Vec<XmlTextRun>,
+    has_child_element: bool,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
     let has_data = runs.iter().any(|run| run.text.chars().any(|c| !is_xml_space(c)));
     let runs: Vec<(XmlTextRun, String)> = runs
         .into_iter()
@@ -1132,6 +1164,53 @@ fn enrich_xml_text_children(
     children
 }
 
+/// HTML elements whose content whitespace is rendered verbatim: `pre`/`listing` (UA style
+/// `white-space: pre`, inherited by descendants) and the raw-text `textarea`/`plaintext`.
+fn is_html_preformatted_element(tag: &str) -> bool {
+    matches!(tag.to_ascii_lowercase().as_str(), "pre" | "listing" | "textarea" | "plaintext")
+}
+
+/// Direct text runs of an HTML element inside a preformatted scope, kept verbatim. Outside
+/// such scopes HTML whitespace collapses and the compacted `direct_markup_text` label stands.
+fn html_preformatted_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    let tag = tag_name_from_source(snippet).to_ascii_lowercase();
+    let open_end = markup_opening_tag_end(snippet)?;
+    let (mut runs, has_child_element) = if matches!(tag.as_str(), "textarea" | "plaintext") {
+        // Raw text: no child elements, the content runs to the end tag.
+        let close_start = snippet.rfind("</")?;
+        if close_start < open_end {
+            return None;
+        }
+        let text = &snippet[open_end..close_start];
+        let runs = if text.is_empty() {
+            Vec::new()
+        } else {
+            vec![XmlTextRun {
+                span: open_end..close_start,
+                text: text.to_string(),
+                between_children: false,
+            }]
+        };
+        (runs, false)
+    } else {
+        markup_direct_text_runs(snippet, true)?
+    };
+    // HTML parsing drops a single newline immediately after a pre/listing/textarea start tag.
+    if matches!(tag.as_str(), "pre" | "listing" | "textarea") {
+        if let Some(first) = runs.first_mut().filter(|run| run.span.start == open_end) {
+            let skip = if first.text.starts_with("\r\n") {
+                2
+            } else {
+                usize::from(first.text.starts_with('\n'))
+            };
+            first.text.drain(..skip);
+            first.span.start += skip;
+        }
+        runs.retain(|run| !run.text.is_empty());
+    }
+    Some((runs, has_child_element))
+}
+
 /// python path_profiles._enrich_markup_children: attributes + a synthetic `text` child
 /// so text-value changes surface as element-level MODIFICATIONs (xml decodes entities).
 #[cfg(test)]
@@ -1168,6 +1247,13 @@ fn enrich_markup_children_scoped(
     let snippet = path_source_slice(source_lines, node);
     if language == "xml" {
         return enrich_xml_text_children(node, &snippet, children, xml_preserve);
+    }
+    // For HTML, `xml_preserve` is the inherited preformatted scope (`<pre>` and friends):
+    // there every whitespace run is data, mixed content included.
+    if language == "html" && xml_preserve {
+        if let Some((runs, has_child_element)) = html_preformatted_text_runs(&snippet) {
+            return emit_markup_text_runs(node, &snippet, children, runs, has_child_element, true);
+        }
     }
     let mut text = direct_markup_text(&snippet, label);
     if language == "xml" && !text.is_empty() {
@@ -1270,7 +1356,9 @@ pub(crate) fn enrich_path_profile_labels_node(
 }
 
 /// `xml_preserve` is the inherited `xml:space` scope (XML 1.0 §2.10): an element's own
-/// `xml:space="preserve"|"default"` overrides it for itself and its descendants.
+/// `xml:space="preserve"|"default"` overrides it for itself and its descendants. For HTML
+/// the same flag is the preformatted scope opened by `<pre>`, `<listing>`, `<textarea>` and
+/// `<plaintext>` (HTML whitespace is otherwise collapsible).
 fn enrich_path_profile_labels_scoped(
     node: &SemanticNode,
     source_lines: &[&str],
@@ -1279,6 +1367,10 @@ fn enrich_path_profile_labels_scoped(
 ) -> SemanticNode {
     let xml_preserve = if language == "xml" && node.node_type.eq_ignore_ascii_case("element") {
         xml_space_override(&path_source_slice(source_lines, node)).unwrap_or(inherited_xml_preserve)
+    } else if language == "html" && node.node_type.eq_ignore_ascii_case("element") {
+        // HTML has no xml:space; whitespace significance comes from preformatted elements.
+        inherited_xml_preserve
+            || is_html_preformatted_element(&tag_name_from_source(&path_source_slice(source_lines, node)))
     } else {
         inherited_xml_preserve
     };
@@ -2304,3 +2396,7 @@ mod utf8_span_tests {
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "xml_whitespace_source_tests.rs"]
 mod xml_whitespace_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "html_whitespace_source_tests.rs"]
+mod html_whitespace_source_tests;
