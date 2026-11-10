@@ -83,6 +83,35 @@ names with the `_json` suffix dropped (the two commit functions keep it).
 - Go: [`intentumdiff-go`](https://github.com/buchochelliq-labs/intentumdiff-go)
 - Java: [`intentumdiff-java`](https://github.com/buchochelliq-labs/intentumdiff-java)
 
+### Commit cross-file index completeness (core #298)
+
+One changed file that cannot be indexed (parser fuel exhausted, parser error, malformed tree)
+no longer discards the commit's cross-file analysis. The file is excluded from **both** symbol
+tables (so none of its symbols are reported as moved/deleted), and the result says so
+explicitly. Every commit-level producer publishes the same four fields:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `cross_file_index_status` | `"complete"` \| `"partial"` | `"partial"` whenever `index_errors` is non-empty |
+| `cross_file_index_complete` | boolean | `true` only when every changed file was indexed |
+| `indexed_file_count` | integer | changed files that contributed to the index |
+| `index_errors` | array | one object per unindexed file (below) |
+
+Each `index_errors` entry: `{"path", "old_filename", "new_filename", "language", "side"
+("old" \| "new" \| "both"), "code", "reason"}`. `code` is stable and machine-readable —
+`fuel_exceeded`, `output_limit_exceeded`, `malformed_tree` or `parser_error` — so callers never
+parse `reason` text. `cross_file_changes` proves "no cross-file change" only when the status is
+`"complete"`; with `"partial"` it covers the indexed files only. A missing/unloadable parser
+component or a table/diff fault is not per-file and still fails the call.
+
+- `live_handle_review` puts the four fields in the response `metadata` (next to
+  `review_fuel_capped`), beside the unchanged `commit_diff`.
+- `commit_cross_file_index(files_json)` serves hosts that parse each file themselves (Python
+  `CommitDiffer.finalize_commit_diff`). `files_json` is an array of `{old_filename,
+  new_filename, language, old_tree, new_tree, old_error, new_error}`: a tree is a SemanticNode
+  object or `null` (empty side), an error is the host's parse-failure text or `null`. A file with
+  a side error is excluded and reported. Result: the four fields plus `cross_file_changes`.
+
 ### Incomplete-source review (core #21)
 
 `parse_errors_present(source, tree_json, language)` returns a boolean. It examines

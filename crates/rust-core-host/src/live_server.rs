@@ -932,9 +932,19 @@ pub fn live_handle_review_impl(
     // Cross-file changes (MOVE_TO_MODULE / SPLIT_MODULE / CROSS_FILE_RENAME) — mirror
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
-    // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let (cross_file_changes, mut index_telemetry) =
-        crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
+    // native review matches `CommitDiffer.diff_commit`. A file that cannot be indexed (e.g. fuel
+    // exhausted) is excluded and reported (#298): the response metadata then carries
+    // `cross_file_index_status: "partial"` plus structured `index_errors`, never a silent
+    // "complete". Bundle/table faults still fail the review.
+    let commit_index = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
+    let mut review_metadata = review_metadata;
+    if let (Some(target), Value::Object(fields)) =
+        (review_metadata.as_object_mut(), commit_index.completeness())
+    {
+        target.extend(fields);
+    }
+    let cross_file_changes = commit_index.changes;
+    let mut index_telemetry = commit_index.telemetry;
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).
