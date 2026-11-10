@@ -170,14 +170,16 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
             }
             _ => false,
         };
-        let is_same_declaration_binder = direct_child_index(old_tree, old_node.id.as_str())
-            .zip(direct_child_index(new_tree, new_node.id.as_str()))
-            .is_some_and(|((old_parent, old_index), (new_parent, new_index))| {
-                old_parent.id == new_parent.id
-                    && old_parent.node_type == new_parent.node_type
-                    && old_parent.node_type == "variable_declarator"
-                    && old_index == 0
-                    && new_index == 0
+        // A local binder (JS declarator / loop binder, Python assignment / loop target, Go
+        // `:=` / `var` / `range` names) in the same declaring node of the same callable. Reads
+        // (an initializer, a loop iterable, an assignment value) are never binder slots.
+        let is_same_declaration_binder = local_binder_owner(old_tree, old_node.id.as_str())
+            .zip(local_binder_owner(new_tree, new_node.id.as_str()))
+            .is_some_and(|(old_owner, new_owner)| {
+                old_owner.id == new_owner.id
+                    && old_owner.node_type == new_owner.node_type
+                    && enclosing_callable_id(old_tree, old_node.id.as_str())
+                        == enclosing_callable_id(new_tree, new_node.id.as_str())
             });
         let is_same_call_target = direct_child_index(old_tree, old_node.id.as_str())
             .zip(direct_child_index(new_tree, new_node.id.as_str()))
@@ -195,7 +197,29 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
                     && enclosing_callable_id(old_tree, old_node.id.as_str())
                         == enclosing_callable_id(new_tree, new_node.id.as_str())
             });
-        if !is_changed_parameter && !is_same_declaration_binder && !is_same_call_target {
+        // A read of a binder that was itself renamed in the same callable: the binder pair
+        // (old label -> new label at one binder slot) is the rename proof, so this same-id read
+        // is its use. A read with no such binder in its own callable (an outer/global name, a
+        // name bound by another callable) is never promoted.
+        let is_read_of_renamed_binder = !is_changed_parameter
+            && !is_same_declaration_binder
+            && !is_same_call_target
+            && matches!(
+                (
+                    enclosing_callable_id(old_tree, old_node.id.as_str()),
+                    enclosing_callable_id(new_tree, new_node.id.as_str()),
+                ),
+                (Some(old_scope), Some(new_scope)) if old_scope == new_scope
+                    && renamed_binder_in_callable(
+                        old_tree, new_tree, &old_by_id, &new_by_id, old_scope.as_str(),
+                        old_node, new_node,
+                    )
+            );
+        if !is_changed_parameter
+            && !is_same_declaration_binder
+            && !is_same_call_target
+            && !is_read_of_renamed_binder
+        {
             continue;
         }
         promoted_ids.insert(old_node.id.clone());
@@ -245,6 +269,74 @@ fn is_declaration_form_call(call: &SemanticNode, target: &SemanticNode) -> bool 
         arguments.label == declared
             || arguments.children.first().is_some_and(|head| head.label == declared)
     })
+}
+
+/// True when callable *scope* (same id on both sides) binds `old_read.label` at a parameter or
+/// local binder slot in the old tree, and the same binder node binds `new_read.label` in the new
+/// tree: the binder was renamed within this callable. Binders of nested callables do not count.
+fn renamed_binder_in_callable(
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    old_by_id: &HashMap<&str, &SemanticNode>,
+    new_by_id: &HashMap<&str, &SemanticNode>,
+    scope: &str,
+    old_read: &SemanticNode,
+    new_read: &SemanticNode,
+) -> bool {
+    let (Some(old_callable), Some(new_callable)) = (old_by_id.get(scope), new_by_id.get(scope)) else {
+        return false;
+    };
+    let old_params: HashSet<&str> = parameter_identifier_nodes(old_callable).into_iter()
+        .map(|param| param.id.as_str()).collect();
+    let new_params: HashSet<&str> = parameter_identifier_nodes(new_callable).into_iter()
+        .map(|param| param.id.as_str()).collect();
+    old_callable.descendants().into_iter().any(|old_binder| {
+        old_binder.node_type == "identifier"
+            && old_binder.id != old_read.id
+            && old_binder.label == old_read.label
+            && (old_params.contains(old_binder.id.as_str())
+                || local_binder_owner(old_tree, old_binder.id.as_str()).is_some())
+            && new_by_id.get(old_binder.id.as_str()).is_some_and(|new_binder| {
+                new_binder.node_type == "identifier"
+                    && new_binder.label == new_read.label
+                    && (new_params.contains(new_binder.id.as_str())
+                        || local_binder_owner(new_tree, new_binder.id.as_str()).is_some())
+            })
+            && enclosing_callable_id(old_tree, old_binder.id.as_str()).as_deref() == Some(scope)
+            && enclosing_callable_id(new_tree, old_binder.id.as_str()).as_deref() == Some(scope)
+    })
+}
+
+/// The declaring node that binds the identifier *target_id*, when the identifier sits in a binder
+/// slot of a local declaration form: JS `variable_declarator` name; Python `assignment` /
+/// `augmented_assignment` target; JS `for_in_statement` and Python `for_statement` loop binder;
+/// Go `short_var_declaration` / `range_clause` left-hand names and `var_spec` names. A destructuring
+/// container (`pattern_list`, `array_pattern`, Go's left `expression_list`, ...) in the binder slot
+/// binds each identifier inside it. Values, iterables and initializers are never binder slots.
+fn local_binder_owner<'a>(tree: &'a SemanticNode, target_id: &str) -> Option<&'a SemanticNode> {
+    fn binder_slot(owner: &SemanticNode, index: usize) -> bool {
+        match owner.node_type.as_str() {
+            "variable_declarator" | "assignment" | "augmented_assignment" | "for_in_statement"
+            | "for_statement" | "short_var_declaration" | "range_clause" => index == 0,
+            // Go `var a, b T = ...`: the names are the leading identifier children; the type and
+            // the value `expression_list` follow them.
+            "var_spec" => owner.children.iter().take(index + 1)
+                .all(|child| child.node_type == "identifier"),
+            _ => false,
+        }
+    }
+    let (parent, index) = direct_child_index(tree, target_id)?;
+    if binder_slot(parent, index) {
+        return Some(parent);
+    }
+    if !matches!(parent.node_type.as_str(),
+        "pattern_list" | "tuple_pattern" | "list_pattern" | "array_pattern" | "expression_list")
+    {
+        return None;
+    }
+    let (owner, container_index) = direct_child_index(tree, parent.id.as_str())?;
+    // `var_spec` values live in an `expression_list` after the names: not a binder slot.
+    (owner.node_type != "var_spec" && binder_slot(owner, container_index)).then_some(owner)
 }
 
 fn direct_child_index<'a>(
@@ -843,6 +935,39 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
             ));
         }
     }
+    // A local binder updated in place (Go `x := 1` -> `count := 1`, whose identifier churn was
+    // folded into its container's DELETE/ADD and resurfaces as a same-id leaf update) is the
+    // same proof as a renamed parameter: it corroborates reads of that name in its own callable.
+    for change in changes.iter() {
+        if change.change_type != "MODIFICATION" {
+            continue;
+        }
+        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+            continue;
+        };
+        if old_node.node_type != "identifier"
+            || new_node.node_type != "identifier"
+            || old_node.id != new_node.id
+            || old_node.label == new_node.label
+        {
+            continue;
+        }
+        let same_binder = local_binder_owner(old_tree, old_node.id.as_str())
+            .zip(local_binder_owner(new_tree, new_node.id.as_str()))
+            .is_some_and(|(old_owner, new_owner)| old_owner.id == new_owner.id
+                && old_owner.node_type == new_owner.node_type);
+        if !same_binder {
+            continue;
+        }
+        if let (Some(old_scope), Some(new_scope)) = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        ) {
+            if old_scope == new_scope {
+                inferred.insert((old_node.label.clone(), new_node.label.clone(), old_scope, new_scope));
+            }
+        }
+    }
     if inferred.is_empty() {
         return;
     }
@@ -899,17 +1024,14 @@ fn enclosing_callable_id(tree: &SemanticNode, target_id: &str) -> Option<String>
     visit(tree, target_id, None)
 }
 
+/// Parameter binder identifiers of a callable, across every grammar's parameter-list spelling
+/// (`is_parameter_list_type`: Python `parameters`, Go `parameter_list`, JS/TS
+/// `formal_parameters`, ...), in source order.
 pub(crate) fn parameter_identifier_nodes(node: &SemanticNode) -> Vec<&SemanticNode> {
-    let Some(parameters) = node
-        .children
+    node.children
         .iter()
-        .find(|child| child.node_type == "parameters")
-    else {
-        return Vec::new();
-    };
-    parameters
-        .descendants()
-        .into_iter()
+        .filter(|child| is_parameter_list_type(child.node_type.as_str()))
+        .flat_map(|parameters| parameters.descendants())
         .filter(|descendant| descendant.node_type == "identifier")
         .filter(|descendant| !matches!(descendant.label.as_str(), "int" | "str" | "None"))
         .collect()
@@ -2092,7 +2214,10 @@ pub(crate) fn suppress_modifications_covered_by_refactoring_labels(
     old_tree: &SemanticNode,
     new_tree: &SemanticNode,
 ) {
-    let refactoring_pairs: HashSet<(String, String, String, String)> = changes
+    // Scopes are the enclosing callables; `None` is the module/top-level scope, so a top-level
+    // binder rename (`for (const file of d)`) covers its top-level uses and nothing inside a
+    // callable, and a callable's rename covers only that callable's edits.
+    let refactoring_pairs: HashSet<(String, String, Option<String>, Option<String>)> = changes
         .iter()
         .filter(|change| {
             change.change_type == "REFACTORING"
@@ -2104,8 +2229,8 @@ pub(crate) fn suppress_modifications_covered_by_refactoring_labels(
             Some((
                 old.label.clone(),
                 new.label.clone(),
-                enclosing_callable_id(old_tree, old.id.as_str())?,
-                enclosing_callable_id(new_tree, new.id.as_str())?,
+                enclosing_callable_id(old_tree, old.id.as_str()),
+                enclosing_callable_id(new_tree, new.id.as_str()),
             ))
         })
         .collect();
@@ -2122,18 +2247,12 @@ pub(crate) fn suppress_modifications_covered_by_refactoring_labels(
         let Some(new_node) = change.new_node else {
             return true;
         };
-        let scope_pair = (
+        if refactoring_pairs.contains(&(
+            old_node.label.clone(),
+            new_node.label.clone(),
             enclosing_callable_id(old_tree, old_node.id.as_str()),
             enclosing_callable_id(new_tree, new_node.id.as_str()),
-        );
-        if scope_pair.0.as_ref().zip(scope_pair.1.as_ref()).is_some_and(|(old_scope, new_scope)| {
-            refactoring_pairs.contains(&(
-                old_node.label.clone(),
-                new_node.label.clone(),
-                old_scope.clone(),
-                new_scope.clone(),
-            ))
-        }) {
+        )) {
             return false;
         }
         !all_leaf_deltas_are_scoped_refactoring_pairs(
@@ -2151,7 +2270,7 @@ fn all_leaf_deltas_are_scoped_refactoring_pairs(
     new_node: &SemanticNode,
     old_tree: &SemanticNode,
     new_tree: &SemanticNode,
-    pairs: &HashSet<(String, String, String, String)>,
+    pairs: &HashSet<(String, String, Option<String>, Option<String>)>,
 ) -> bool {
     let old_leaves = leaf_nodes(old_node);
     let new_leaves = leaf_nodes(new_node);
@@ -2161,18 +2280,11 @@ fn all_leaf_deltas_are_scoped_refactoring_pairs(
             continue;
         }
         deltas += 1;
-        let scope_pair = (
-            enclosing_callable_id(old_tree, old_leaf.id.as_str()),
-            enclosing_callable_id(new_tree, new_leaf.id.as_str()),
-        );
-        let Some((old_scope, new_scope)) = scope_pair.0.as_ref().zip(scope_pair.1.as_ref()) else {
-            return false;
-        };
         if !pairs.contains(&(
             old_leaf.label.clone(),
             new_leaf.label.clone(),
-            old_scope.clone(),
-            new_scope.clone(),
+            enclosing_callable_id(old_tree, old_leaf.id.as_str()),
+            enclosing_callable_id(new_tree, new_leaf.id.as_str()),
         )) {
             return false;
         }
