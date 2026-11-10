@@ -85,14 +85,16 @@ fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
     }
     let old_binder = node("0.0.0", "identifier", "hasCloseElements", vec![]);
     let new_binder = node("0.0.0", "identifier", "nearbyElements", vec![]);
+    let old_initializer = node("0.0.1", "identifier", "sourceName", vec![]);
+    let new_initializer = node("0.0.1", "identifier", "renamedSource", vec![]);
     let old_read = node("0.1.1", "identifier", "hasCloseElements", vec![]);
     let new_read = node("0.1.1", "identifier", "nearbyElements", vec![]);
     let old_tree = node("0", "module", "module", vec![
-        node("0.0", "variable_declarator", "declarator", vec![old_binder.clone()]),
+        node("0.0", "variable_declarator", "declarator", vec![old_binder.clone(), old_initializer.clone()]),
         node("0.1", "function_definition", "g", vec![old_read.clone()]),
     ]);
     let new_tree = node("0", "module", "module", vec![
-        node("0.0", "variable_declarator", "declarator", vec![new_binder.clone()]),
+        node("0.0", "variable_declarator", "declarator", vec![new_binder.clone(), new_initializer.clone()]),
         node("0.1", "function_definition", "g", vec![new_read.clone()]),
     ]);
     let mut changes = vec![
@@ -100,6 +102,12 @@ fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
             old_index: None, new_index: None, confidence: 1.0, description: String::new(),
             refactoring_kind: None, text_diff: None },
         ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_binder),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_initializer), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_initializer),
             old_index: None, new_index: None, confidence: 1.0, description: String::new(),
             refactoring_kind: None, text_diff: None },
         ChangeDraft { change_type: "DELETION", old_node: Some(&old_read), new_node: None,
@@ -112,7 +120,7 @@ fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
 
     promote_same_id_identifier_renames_from_add_delete_drafts(&mut changes, &old_tree, &new_tree);
 
-    assert_eq!(changes.len(), 3, "only the actual binder pair is promoted");
+    assert_eq!(changes.len(), 5, "only the actual binder pair is promoted");
     assert!(changes.iter().any(|change| change.change_type == "REFACTORING"
         && change.refactoring_kind == Some("RENAME_VARIABLE")
         && change.old_node.is_some_and(|node| node.id == "0.0.0")));
@@ -120,6 +128,10 @@ fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
         && change.old_node.is_some_and(|node| node.id == "0.1.1")));
     assert!(changes.iter().any(|change| change.change_type == "ADDITION"
         && change.new_node.is_some_and(|node| node.id == "0.1.1")));
+    assert!(changes.iter().any(|change| change.change_type == "DELETION"
+        && change.old_node.is_some_and(|node| node.id == "0.0.1")));
+    assert!(changes.iter().any(|change| change.change_type == "ADDITION"
+        && change.new_node.is_some_and(|node| node.id == "0.0.1")));
 }
 
 #[test]
