@@ -69,6 +69,60 @@ fn python_global_read_survives_parameter_rename_in_another_function() {
 }
 
 #[test]
+fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
+    fn node(id: &str, kind: &str, label: &str, children: Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode {
+            id: id.to_owned(),
+            node_type: kind.to_owned(),
+            label: label.to_owned(),
+            position: NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            structural_hash: id.to_owned(),
+            children,
+            parent_type: None,
+            type_info: None,
+            facts: None,
+        }
+    }
+    let old_binder = node("0.0.0", "identifier", "hasCloseElements", vec![]);
+    let new_binder = node("0.0.0", "identifier", "nearbyElements", vec![]);
+    let old_read = node("0.1.1", "identifier", "hasCloseElements", vec![]);
+    let new_read = node("0.1.1", "identifier", "nearbyElements", vec![]);
+    let old_tree = node("0", "module", "module", vec![
+        node("0.0", "variable_declarator", "declarator", vec![old_binder.clone()]),
+        node("0.1", "function_definition", "g", vec![old_read.clone()]),
+    ]);
+    let new_tree = node("0", "module", "module", vec![
+        node("0.0", "variable_declarator", "declarator", vec![new_binder.clone()]),
+        node("0.1", "function_definition", "g", vec![new_read.clone()]),
+    ]);
+    let mut changes = vec![
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_binder), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_binder),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_read), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_read),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+    ];
+
+    promote_same_id_identifier_renames_from_add_delete_drafts(&mut changes, &old_tree, &new_tree);
+
+    assert_eq!(changes.len(), 3, "only the actual binder pair is promoted");
+    assert!(changes.iter().any(|change| change.change_type == "REFACTORING"
+        && change.refactoring_kind == Some("RENAME_VARIABLE")
+        && change.old_node.is_some_and(|node| node.id == "0.0.0")));
+    assert!(changes.iter().any(|change| change.change_type == "DELETION"
+        && change.old_node.is_some_and(|node| node.id == "0.1.1")));
+    assert!(changes.iter().any(|change| change.change_type == "ADDITION"
+        && change.new_node.is_some_and(|node| node.id == "0.1.1")));
+}
+
+#[test]
 fn rename_prefers_unique_exact_body_over_position() {
     for (old, new) in [
         ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
