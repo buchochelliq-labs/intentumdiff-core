@@ -1,5 +1,6 @@
 mod source_fallback;
 mod operator_tokens;
+mod atx_heading;
 mod opaque_payload;
 mod python_literals;
 #[cfg(all(test, feature = "tier-c-wasm"))]
@@ -1449,6 +1450,10 @@ fn finalize_review_impl(
     // Idempotent for trees whose labels already carry the operator. Retire with core#230.
     operator_tokens::recover_operator_tokens(&mut old_tree, old_source, language);
     operator_tokens::recover_operator_tokens(&mut new_tree, new_source, language);
+    // #275: ATX heading level and optional closing sequence are re-derived from the heading
+    // line (the components drop the level and keep `#` closers in the label).
+    atx_heading::normalize_atx_headings(&mut old_tree, old_source, language);
+    atx_heading::normalize_atx_headings(&mut new_tree, new_source, language);
 
     if config.fallback_to_token_diff && (
         source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
