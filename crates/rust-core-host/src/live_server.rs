@@ -111,17 +111,39 @@ pub fn live_normalise_request_path_impl(path: &str) -> String {
 /// python `LiveServer._request_seq` — `int(request.get("seq", 0))` with the try/except guard.
 /// Absent seq -> 0; a JSON number (float truncates toward zero) or numeric string parses;
 /// null / list / object -> `invalid_seq`.
+///
+/// Every accepted seq must be the exact i64 the client sent (#258): a value outside
+/// [i64::MIN, i64::MAX] is `invalid_seq`, never clamped onto another request's identity.
 fn parse_seq(req: &Value) -> Result<i64, ()> {
     match req.get("seq") {
         None => Ok(0),
-        Some(Value::Number(n)) => n
-            .as_i64()
-            .or_else(|| n.as_f64().map(|f| f.trunc() as i64))
-            .ok_or(()),
+        Some(Value::Number(n)) => {
+            if let Some(i) = n.as_i64() {
+                return Ok(i);
+            }
+            if n.is_u64() {
+                return Err(()); // an integer above i64::MAX
+            }
+            float_seq(n.as_f64().ok_or(())?)
+        }
         Some(Value::String(s)) => s.trim().parse::<i64>().map_err(|_| ()),
         Some(Value::Bool(b)) => Ok(i64::from(*b)), // Python: int(True)==1, int(False)==0
         _ => Err(()), // null / array / object -> TypeError in Python
     }
+}
+
+/// A fractional JSON seq truncates toward zero (Python `int(4.9) == 4`), but only inside the
+/// range where every integer is exactly representable as f64 (|n| <= 2^53). serde_json parses
+/// an integer literal beyond i64/u64 (e.g. -9223372036854775809) into the nearest f64, so a
+/// larger float can no longer be told apart from a neighbouring request id; `as i64` would also
+/// saturate 1e30 to i64::MAX. Exact integers of any i64 size arrive through `as_i64` instead.
+fn float_seq(f: f64) -> Result<i64, ()> {
+    const MAX_EXACT: f64 = 9_007_199_254_740_992.0; // 2^53
+    let t = f.trunc();
+    if !t.is_finite() || t.abs() > MAX_EXACT {
+        return Err(());
+    }
+    Ok(t as i64)
 }
 
 /// python `LiveServer._request_seq` -> `{"seq": N}` or `{"error": <response>}` (pure Rust).
@@ -164,10 +186,26 @@ pub fn live_parse_diff_request_impl(request_json: &str, default_ref: &str) -> Re
         _ => return err("invalid_path", "path must be a string"),
     };
 
-    // content (optional, default ""; must be a string; UTF-8 byte cap)
+    // deltas (optional list; count cap; per-entry validation stays in the Python shell)
+    let deltas = match req.get("deltas") {
+        None | Some(Value::Null) => Vec::new(),
+        Some(Value::Array(a)) => a.clone(),
+        Some(_) => return err("invalid_deltas", "deltas must be a list"),
+    };
+
+    // content (required string; UTF-8 byte cap). An omitted buffer is not an empty one (#257):
+    // treating it as "" reported the user's edit as deletion of the whole file. Deltas are
+    // incremental-parse hints over the full buffer, so a delta-only request is unsupported on
+    // every transport rather than a way to describe the new content.
     let content = match req.get("content") {
-        None => String::new(),
         Some(Value::String(s)) => s.clone(),
+        None if !deltas.is_empty() => {
+            return err(
+                "unsupported_feature",
+                "delta-only diff requests are not supported; send the full buffer as content",
+            )
+        }
+        None => return err("invalid_content", "content is required"),
         Some(_) => return err("invalid_content", "content must be a string"),
     };
     if content.len() as u64 > MAX_CONTENT_BYTES {
@@ -192,12 +230,6 @@ pub fn live_parse_diff_request_impl(request_json: &str, default_ref: &str) -> Re
         Some(_) => return err("invalid_stream", "stream must be a boolean"),
     };
 
-    // deltas (optional list; count cap; per-entry validation stays in the Python shell)
-    let deltas = match req.get("deltas") {
-        None | Some(Value::Null) => Vec::new(),
-        Some(Value::Array(a)) => a.clone(),
-        Some(_) => return err("invalid_deltas", "deltas must be a list"),
-    };
     if deltas.len() as u64 > MAX_DELTAS {
         return err(
             "too_many_deltas",
@@ -1454,6 +1486,69 @@ mod tests {
         // absent -> 0
         let v = parse(r#"{"path":"a.py","content":"x"}"#);
         assert_eq!(v["parsed"]["seq"], 0);
+    }
+
+    // #258: an accepted seq is exactly the client's value; out-of-range values are rejected
+    // instead of being clamped onto i64::MIN/MAX, where distinct requests would collide.
+    #[test]
+    fn seq_out_of_range_is_rejected_not_saturated() {
+        let seq = |raw: &str| parse(&format!(r#"{{"path":"a.py","content":"x","seq":{raw}}}"#));
+        for (raw, expected) in [
+            ("9223372036854775807", i64::MAX),
+            ("9223372036854775806", i64::MAX - 1),
+            ("-9223372036854775808", i64::MIN),
+            ("-9223372036854775807", i64::MIN + 1),
+            ("9007199254740992.5", 9_007_199_254_740_992),
+            ("\"9223372036854775807\"", i64::MAX),
+            ("-0.5", 0),
+        ] {
+            assert_eq!(seq(raw)["parsed"]["seq"], expected, "{raw}");
+        }
+        for raw in [
+            "9223372036854775808",
+            "18446744073709551615",
+            "1000000000000000000000000000000",
+            "-9223372036854775809",
+            "9.223372036854775808e18",
+            "-9.223372036854775808e18",
+            "9007199254740994.0",
+            "1e300",
+            "-1e300",
+            "\"9223372036854775808\"",
+            "\"-9223372036854775809\"",
+        ] {
+            assert_eq!(seq(raw)["error"]["error"]["code"], "invalid_seq", "{raw}");
+        }
+        let distinct = |raw: &str| {
+            serde_json::from_str::<Value>(&live_request_seq_impl(&format!(r#"{{"seq":{raw}}}"#)).unwrap())
+                .unwrap()
+        };
+        assert_eq!(distinct("9223372036854775807")["seq"], i64::MAX);
+        assert!(distinct("9223372036854775808").get("error").is_some());
+    }
+
+    // #257: omitted content is not an empty replacement buffer.
+    #[test]
+    fn delta_only_and_missing_content_are_explicit_errors() {
+        let v = parse(
+            r#"{"op":"diff","seq":33,"path":"a.py","deltas":[{"range":{"start":{"line":0,"character":4},"end":{"line":0,"character":5}},"text":"3"}]}"#,
+        );
+        assert_eq!(v["error"]["error"]["code"], "unsupported_feature");
+        assert_eq!(v["error"]["seq"], 33);
+        assert_eq!(v["error"]["op"], "diff");
+        let v = parse(r#"{"op":"diff","seq":34,"path":"a.py"}"#);
+        assert_eq!(v["error"]["error"]["code"], "invalid_content");
+        let v = parse(r#"{"op":"diff","seq":35,"path":"a.py","deltas":[]}"#);
+        assert_eq!(v["error"]["error"]["code"], "invalid_content");
+        // An explicit empty buffer is still a valid full-buffer deletion.
+        let v = parse(r#"{"op":"diff","seq":36,"path":"a.py","content":""}"#);
+        assert_eq!(v["parsed"]["content"], "");
+        // Full content with deltas still parses: deltas remain incremental-parse hints.
+        let v = parse(
+            r#"{"op":"diff","seq":37,"path":"a.py","content":"x = 3\n","deltas":[{"range":{"start":{"line":0,"character":4},"end":{"line":0,"character":5}},"text":"3"}]}"#,
+        );
+        assert_eq!(v["parsed"]["content"], "x = 3\n");
+        assert_eq!(v["parsed"]["deltas"].as_array().unwrap().len(), 1);
     }
 
     // ── asset_diff (intentumdiff-vscode#25) ────────────────────────────────────────────────
