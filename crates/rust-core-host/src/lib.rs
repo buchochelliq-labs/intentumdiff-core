@@ -9286,7 +9286,7 @@ fn finalize_python_review_drafts<'a>(
 ) {
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
-    probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes));
+    probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_clojure_defn_parameter_renames", promote_clojure_defn_parameter_renames(changes, old_tree, new_tree, language));
     probed!(changes, "promote_python_signature_changes", promote_python_signature_changes_from_sources(
         changes, old_tree, new_tree, old_source, new_source,
@@ -9310,7 +9310,7 @@ fn finalize_python_review_drafts<'a>(
     // One review event per rename: entity anchoring matches every occurrence of a renamed
     // identifier (issue #57 anchors port), and each matched occurrence would otherwise promote to
     // its own RENAME_VARIABLE — the python side reports a scoped rename ONCE.
-    probed!(changes, "dedupe_variable_renames", dedupe_variable_rename_drafts(changes));
+    probed!(changes, "dedupe_variable_renames", dedupe_variable_rename_drafts(changes, old_tree, new_tree));
     probed!(changes, "suppress_add_delete_by_signature", suppress_add_delete_noise_covered_by_signature_refactorings(changes));
     probed!(changes, "suppress_deletions_by_literal_mods", suppress_deletions_covered_by_literal_modifications(changes));
     // The no-delta filter must run BEFORE the pairings suppression: a same-label
@@ -9321,7 +9321,7 @@ fn finalize_python_review_drafts<'a>(
         changes, old_source, new_source, language));
     probed!(changes, "suppress_add_delete_by_pairings", suppress_add_delete_drafts_covered_by_pairings(changes));
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
-    probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes));
+    probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes, old_tree, new_tree));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
         changes, language, Some((old_source,new_source))));
