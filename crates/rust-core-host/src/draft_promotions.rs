@@ -170,23 +170,25 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
             }
             _ => false,
         };
-        let old_declaration_parent = direct_parent_of_id(old_tree, old_node.id.as_str());
-        let new_declaration_parent = direct_parent_of_id(new_tree, new_node.id.as_str());
-        let is_same_declaration_binder = old_declaration_parent
-            .zip(new_declaration_parent)
+        let is_same_declaration_binder = direct_child_index(old_tree, old_node.id.as_str())
+            .zip(direct_child_index(new_tree, new_node.id.as_str()))
+            .is_some_and(|((old_parent, old_index), (new_parent, new_index))| {
+                old_parent.id == new_parent.id
+                    && old_parent.node_type == new_parent.node_type
+                    && old_parent.node_type == "variable_declarator"
+                    && old_index == 0
+                    && new_index == 0
+            });
+        let is_same_call_target = direct_parent_of_id(old_tree, old_node.id.as_str())
+            .zip(direct_parent_of_id(new_tree, new_node.id.as_str()))
             .is_some_and(|(old_parent, new_parent)| {
                 old_parent.id == new_parent.id
                     && old_parent.node_type == new_parent.node_type
-                    && matches!(
-                        old_parent.node_type.as_str(),
-                        "variable_declarator"
-                            | "variable_declaration"
-                            | "let_declaration"
-                            | "const_declaration"
-                            | "local_variable_declaration"
-                    )
+                    && matches!(old_parent.node_type.as_str(), "call" | "call_expression")
+                    && enclosing_callable_id(old_tree, old_node.id.as_str())
+                        == enclosing_callable_id(new_tree, new_node.id.as_str())
             });
-        if !is_changed_parameter && !is_same_declaration_binder {
+        if !is_changed_parameter && !is_same_declaration_binder && !is_same_call_target {
             continue;
         }
         promoted_ids.insert(old_node.id.clone());
@@ -219,6 +221,21 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     });
     changes.extend(promoted);
     suppress_modifications_covered_by_refactoring_ids(changes, &promoted_ids);
+}
+
+fn direct_child_index<'a>(
+    tree: &'a SemanticNode,
+    target_id: &str,
+) -> Option<(&'a SemanticNode, usize)> {
+    for (index, child) in tree.children.iter().enumerate() {
+        if child.id == target_id {
+            return Some((tree, index));
+        }
+        if let Some(parent) = direct_child_index(child, target_id) {
+            return Some(parent);
+        }
+    }
+    None
 }
 
 fn direct_parent_of_id<'a>(tree: &'a SemanticNode, target_id: &str) -> Option<&'a SemanticNode> {
