@@ -1,7 +1,8 @@
 //! Issue #247: significant XML text whitespace must survive path-profile
 //! normalization, through the real XML parser component. Whitespace inside
-//! `xml:space="preserve"` scopes is data; in mixed content, inter-word whitespace
-//! present vs absent is data; indentation between child elements is layout.
+//! `xml:space="preserve"` scopes is data; any text holding character data keeps its
+//! whitespace exactly (XML never collapses text); indentation between child elements
+//! is layout.
 use crate::*;
 use serde_json::Value;
 
@@ -32,6 +33,13 @@ fn xml_significant_text_whitespace_changes_are_semantic() {
         // ... including CDATA content and line breaks inside the value.
         ("<r xml:space=\"preserve\"><v><![CDATA[a  b]]></v></r>\n", "<r xml:space=\"preserve\"><v><![CDATA[a b]]></v></r>\n"),
         ("<r xml:space=\"preserve\"><v>a\nb</v></r>\n", "<r xml:space=\"preserve\"><v>a b</v></r>\n"),
+        // XML does not collapse character data: the amount of inter-word whitespace,
+        // boundary whitespace of a value and whitespace next to a child are data
+        // (assessment case data_config.xml.known_text_whitespace).
+        ("<p>a b</p>\n", "<p>a  b</p>\n"),
+        ("<r>\n  <v>a  b</v>\n</r>\n", "<r>\n  <v>a b</v>\n</r>\n"),
+        ("<r>\n  <v>\n    alpha\n  </v>\n</r>\n", "<r>\n    <v>\n        alpha\n    </v>\n</r>\n"),
+        ("<r>\n  <p>a <b>b</b>\n    c</p>\n</r>\n", "<r>\n  <p>a   <b>b</b> c</p>\n</r>\n"),
         // A no-break space is not XML whitespace: it never collapses.
         ("<r>\n  <v>a\u{a0}b</v>\n</r>\n", "<r>\n  <v>a b</v>\n</r>\n"),
     ];
@@ -51,15 +59,13 @@ fn xml_formatting_only_whitespace_stays_style_only() {
     let cases = [
         // Indentation and blank lines between child elements (element-only content).
         ("<r>\n  <a>1</a>\n  <b>2</b>\n</r>\n", "<r>\n    <a>1</a>\n\n    <b>2</b>\n</r>\n"),
-        // Re-indenting a multi-line text value keeps its boundary whitespace present.
-        ("<r>\n  <v>\n    alpha\n  </v>\n</r>\n", "<r>\n    <v>\n        alpha\n    </v>\n</r>\n"),
-        // Default space handling: the amount of inter-word whitespace is layout.
-        ("<r>\n  <v>a  b</v>\n</r>\n", "<r>\n  <v>a b</v>\n</r>\n"),
-        ("<r>\n  <p>a <b>b</b>\n    c</p>\n</r>\n", "<r>\n  <p>a   <b>b</b> c</p>\n</r>\n"),
-        // xml:space="default" resets an inherited preserve scope.
+        // Re-indenting element-only content around unchanged values.
+        ("<r>\n  <a>x  y</a>\n  <b>2</b>\n</r>\n", "<r>\n\t<a>x  y</a>\n\t<b>2</b>\n</r>\n"),
+        // xml:space="default" resets an inherited preserve scope: indentation between
+        // its children is layout again.
         (
-            "<r xml:space=\"preserve\"><s xml:space=\"default\"><v>a  b</v></s></r>\n",
-            "<r xml:space=\"preserve\"><s xml:space=\"default\"><v>a b</v></s></r>\n",
+            "<r xml:space=\"preserve\"><s xml:space=\"default\">\n  <v>a</v>\n</s></r>\n",
+            "<r xml:space=\"preserve\"><s xml:space=\"default\">\n      <v>a</v>\n</s></r>\n",
         ),
         // Whitespace-only content of a leaf element without preserve is layout.
         ("<r>\n  <v>\n  </v>\n</r>\n", "<r>\n  <v>  </v>\n</r>\n"),

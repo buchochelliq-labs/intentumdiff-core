@@ -1075,9 +1075,10 @@ fn collapse_xml_space(text: &str) -> String {
 ///   (indentation, blank lines) and whitespace at the element's own boundaries is layout;
 ///   only an inline (single-line) whitespace run separating two sibling elements is kept,
 ///   as inter-word space (`<b>a</b> <i>b</i>` vs `<b>a</b><i>b</i>`);
-/// - otherwise (text-only or mixed content) every run is kept with whitespace runs
-///   collapsed to a single space, so inter-word whitespace present vs absent differs
-///   while re-indentation does not.
+/// - otherwise a run containing any non-whitespace character data is kept exactly
+///   (XML does not collapse text; `<p>a b</p>` vs `<p>a  b</p>` differ), and in mixed
+///   content a whitespace-only run is kept collapsed to one space (presence vs absence
+///   separates words). Indentation in element-only content stays layout.
 fn enrich_xml_text_children(
     node: &SemanticNode,
     snippet: &str,
@@ -1108,9 +1109,16 @@ fn emit_markup_text_runs(
             if xml_preserve {
                 let label = run.text.clone();
                 Some((run, label))
+            } else if run.text.chars().any(|c| !is_xml_space(c)) {
+                // XML never collapses character data: xml:space="default" leaves whitespace
+                // to the application, it does not make its amount layout. A run holding
+                // data keeps every whitespace character exactly.
+                let label = run.text.clone();
+                Some((run, label))
             } else if has_data
                 || (run.between_children && !run.text.contains(['\n', '\r']))
             {
+                // Whitespace-only run between children: its presence separates words.
                 let label = collapse_xml_space(&run.text);
                 Some((run, label))
             } else {
@@ -1940,10 +1948,9 @@ mod markup_text_span_tests {
         let lines: Vec<&str> = source.lines().collect();
         let children = enrich_markup_children(&node, &lines, vec![], "value", "xml");
         let text = children.iter().find(|c| c.node_type == "text").expect("text child");
-        // Issue #247: the boundary line breaks are character data; default space
-        // handling collapses them to one space but keeps their presence. The
-        // evidence span still points at the value itself.
-        assert_eq!(text.label, " alpha ");
+        // Issue #247: the boundary line breaks and indentation are character data and
+        // XML keeps them exactly. The evidence span still points at the value itself.
+        assert_eq!(text.label, "\n    alpha\n");
         assert_eq!(
             (text.position.start_line, text.position.start_col,
              text.position.end_line, text.position.end_col),
@@ -2028,7 +2035,7 @@ mod markup_text_span_tests {
     }
 
     #[test]
-    fn xml_preserve_scope_keeps_text_verbatim_and_default_collapses() {
+    fn xml_text_with_data_is_verbatim_in_both_space_scopes() {
         let source = "<v>\ta  b\n</v>";
         let node = path_synthetic_node("0".into(), "element", "v".into(),
             NodePosition { start_line: 0, start_col: 0, end_line: 1, end_col: 4 }, vec![]);
@@ -2038,7 +2045,8 @@ mod markup_text_span_tests {
                 .into_iter().find(|c| c.node_type == "text").expect("text child").label
         };
         assert_eq!(text_of(true), "\ta  b\n");
-        assert_eq!(text_of(false), " a b ");
+        // Character data is never collapsed, whatever the xml:space scope.
+        assert_eq!(text_of(false), "\ta  b\n");
         assert_eq!(xml_space_override("<v xml:space='preserve'>x</v>"), Some(true));
         assert_eq!(xml_space_override("<v xml:space=\"default\">x</v>"), Some(false));
         assert_eq!(xml_space_override("<v space=\"preserve\"><w xml:space=\"preserve\"/></v>"), None);
@@ -2048,8 +2056,8 @@ mod markup_text_span_tests {
     fn xml_entities_and_cdata_preserve_original_byte_ranges() {
         for (source, label, start, end) in [
             ("<value>A&amp;B</value>", "A&B", 7, 14),
-            // Issue #247: CDATA whitespace is data (collapsed, not dropped).
-            ("<value><![CDATA[  one  ]]></value>", " one ", 18, 21),
+            // Issue #247: CDATA whitespace is data, kept exactly.
+            ("<value><![CDATA[  one  ]]></value>", "  one  ", 18, 21),
             ("<value>café</value>", "café", 7, 12),
         ] {
             let node = path_synthetic_node(
