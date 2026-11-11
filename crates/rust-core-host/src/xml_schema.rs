@@ -74,12 +74,21 @@ pub(crate) const MSBUILD_INCLUDE_TAGS: &[&str] = &[
     "Using",
 ];
 
+/// The value of an MSBuild attribute label (`Name=value`, source case kept) when its
+/// name is `name`. MSBuild attribute names are case-insensitive (`Include`, `include`
+/// and `INCLUDE` are one attribute); XML labels keep their source case (#246), so the
+/// name is compared case-insensitively and the label itself is never rewritten.
+fn msbuild_attribute_value<'a>(label: &'a str, name: &str) -> Option<&'a str> {
+    let (attr, value) = label.split_once('=')?;
+    attr.trim().eq_ignore_ascii_case(name).then_some(value)
+}
+
 pub(crate) fn xml_tree_is_msbuild(tree: &SemanticNode) -> bool {
     tree.children.iter().any(|top| {
         top.node_type == "element"
             && top.label == "Project"
             && top.children.iter().any(|c| {
-                (c.node_type == "attribute" && c.label.starts_with("sdk="))
+                (c.node_type == "attribute" && msbuild_attribute_value(&c.label, "Sdk").is_some())
                     || (c.node_type == "element"
                         && matches!(c.label.as_str(), "ItemGroup" | "PropertyGroup" | "Target"))
             })
@@ -95,10 +104,9 @@ pub(crate) fn msbuild_coordinate_key(node: &SemanticNode) -> Option<Vec<String>>
         if c.node_type != "attribute" {
             return None;
         }
-        c.label
-            .strip_prefix("include=")
-            .or_else(|| c.label.strip_prefix("update=") )
-            .map(|v| v.to_string())
+        msbuild_attribute_value(&c.label, "Include")
+            .or_else(|| msbuild_attribute_value(&c.label, "Update"))
+            .map(str::to_string)
     })?;
     Some(vec![
         "xml".to_string(),
@@ -280,3 +288,7 @@ pub(crate) fn matching_user_xml_dialect(
         })
         .cloned()
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "msbuild_attribute_case_source_tests.rs"]
+mod msbuild_attribute_case_source_tests;

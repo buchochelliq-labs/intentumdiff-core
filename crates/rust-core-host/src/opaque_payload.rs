@@ -32,10 +32,41 @@ fn gaps(node: &SemanticNode, source: &str) -> Option<Vec<String>> {
 }
 
 fn gap_tokens(node: &SemanticNode, source: &str, language: &str) -> Option<Vec<Vec<String>>> {
-    gaps(node, source)?
+    let mut result = gaps(node, source)?
         .iter()
         .map(|gap| tokens(gap, language))
-        .collect()
+        .collect::<Option<Vec<_>>>()?;
+    if let Some(last) = result.last_mut() {
+        drop_insignificant_punctuation(last, node, language);
+    }
+    Some(result)
+}
+
+/// The grammar's own hash already ignores a JS/TS statement-final `;` and a
+/// trailing separator comma; a child edit moves the parent's hash, so without
+/// this its own-source gaps would report that punctuation as parser payload.
+/// Only the last gap (directly after the last exported child) is normalised.
+fn drop_insignificant_punctuation(last: &mut Vec<String>, node: &SemanticNode, language: &str) {
+    const CLOSERS: [&str; 3] = ["token:)", "token:]", "token:}"];
+    let children = node.children.len();
+    // `a, b,)` == `a, b)`. One element before `)` keeps its comma: Python's
+    // `(x,)` is a tuple, not a parenthesised `x`. Python's `x[1,]` indexes by
+    // the tuple `(1,)`, so a subscript keeps its comma too. A hole (`[1,,]`)
+    // is never dropped because the comma must be followed directly by the closer.
+    if children >= 1
+        && !(language == "python" && node.node_type == "subscript")
+        && last.first().is_some_and(|t| t == "token:,")
+        && last
+            .get(1)
+            .is_some_and(|t| CLOSERS.contains(&t.as_str()) && (children >= 2 || t != "token:)"))
+    {
+        last.remove(0);
+    }
+    if matches!(language, "javascript" | "typescript" | "tsx")
+        && last.last().is_some_and(|t| t == "token:;")
+    {
+        last.pop();
+    }
 }
 
 pub(crate) fn changed(
@@ -323,3 +354,7 @@ fn literal_token(raw: &str, language: &str) -> Option<String> {
     };
     Some(format!("{kind}:{inner}"))
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "opaque_payload_punctuation_source_tests.rs"]
+mod opaque_payload_punctuation_source_tests;

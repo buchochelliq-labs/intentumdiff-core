@@ -36,7 +36,7 @@ pub(crate) fn markdown_sections(source: &str, side: &str) -> Vec<MarkdownSection
             fence = Some((first, count));
             continue;
         }
-        if first == '#' && (1..=6).contains(&count) && trimmed[count..].starts_with(' ') {
+        if first == '#' && crate::atx_heading::parse_atx_heading(line).is_some() {
             heading_indices.push(index);
         }
     }
@@ -46,7 +46,15 @@ pub(crate) fn markdown_sections(source: &str, side: &str) -> Vec<MarkdownSection
             .get(order + 1)
             .copied()
             .unwrap_or(lines.len());
-        let text = lines[start..end].join("\n");
+        // #275: the heading line is compared in its CommonMark-canonical form, so an
+        // optional closing sequence (`# Guide #`) is not a heading rename.
+        let heading = crate::atx_heading::parse_atx_heading(lines[start])
+            .map(|heading| heading.canonical())
+            .unwrap_or_else(|| lines[start].trim().to_string());
+        let text = std::iter::once(heading.as_str())
+            .chain(lines[start + 1..end].iter().copied())
+            .collect::<Vec<_>>()
+            .join("\n");
         let text = text.trim();
         if text.is_empty() {
             continue;
@@ -66,7 +74,7 @@ pub(crate) fn markdown_sections(source: &str, side: &str) -> Vec<MarkdownSection
         };
         sections.push(MarkdownSection {
             id: format!("markdown-{side}-{order}"),
-            label: lines[start].trim().to_string(),
+            label: heading.clone(),
             start_line: start,
             end_line,
             end_col,
@@ -283,3 +291,7 @@ pub fn reconcile(
     presentation.changes = retained;
     Ok(presentation)
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "atx_heading_source_tests.rs"]
+mod atx_heading_source_tests;

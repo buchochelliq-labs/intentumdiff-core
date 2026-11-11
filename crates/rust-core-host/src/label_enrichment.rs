@@ -73,41 +73,56 @@ pub(crate) fn enrich_statement_profile_labels_node(
 // python analysis/path_profiles.py enrich_path_profile_labels + helpers. Hand-rolled
 // scanners replace the python regexes (repo norm: no regex crate in 22k lines).
 
-/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
-pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
-    let pos = &node.position;
-    let start_line = pos.start_line as usize;
-    if start_line >= source_lines.len() {
-        return String::new();
-    }
-    // Tree-sitter columns are UTF-8 BYTE offsets, not Unicode scalar indexes.
-    // Slicing by chars shifted every nested markup node after a non-ASCII
-    // character and silently lost meaningful XML text modifications.
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let from = from.unwrap_or(0).min(line.len());
+/// Exact source text for a parser span. Tree-sitter columns are UTF-8 BYTE offsets, not
+/// Unicode scalar indexes: slicing by chars shifted every node after a non-ASCII character
+/// (#249: `printf '😀'; echo safe` labelled the second command `o safe`). A column past the
+/// end of its line is clamped to the line end, as before: that loses no text. A column that
+/// falls inside a code point is not recoverable by guessing, so the whole span is rejected
+/// (`None`) rather than shifted onto a neighbouring character.
+pub(crate) fn utf8_source_span(
+    source_lines: &[&str],
+    start_line: usize,
+    start_col: usize,
+    end_line: usize,
+    end_col: usize,
+) -> Option<String> {
+    let clip = |line: &str, from: usize, to: Option<usize>| -> Option<String> {
+        let from = from.min(line.len());
         let to = to.unwrap_or(line.len()).min(line.len());
         if from >= to {
-            return String::new();
+            // Empty (or inverted) after clamping; still reject a split code point.
+            return (line.is_char_boundary(from) && line.is_char_boundary(to)).then(String::new);
         }
-        // Invalid byte boundaries are not recoverable by char-index guessing.
-        line.get(from..to).unwrap_or("").to_string()
+        line.get(from..to).map(str::to_string)
     };
-    let end_line = pos.end_line as usize;
+    let first = *source_lines.get(start_line)?;
     if start_line == end_line {
-        return clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        );
+        return clip(first, start_col, Some(end_col));
     }
-    let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
+    if end_line < start_line {
+        return None;
+    }
+    let mut parts = vec![clip(first, start_col, None)?];
     for line in &source_lines[start_line + 1..end_line.min(source_lines.len())] {
         parts.push((*line).to_string());
     }
-    if end_line < source_lines.len() {
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
+    if let Some(last) = source_lines.get(end_line) {
+        parts.push(clip(last, 0, Some(end_col))?);
     }
-    parts.join("\n")
+    Some(parts.join("\n"))
+}
+
+/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
+pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
+    let pos = &node.position;
+    utf8_source_span(
+        source_lines,
+        pos.start_line as usize,
+        pos.start_col as usize,
+        pos.end_line as usize,
+        pos.end_col as usize,
+    )
+    .unwrap_or_default()
 }
 
 pub(crate) fn compact_ws(text: &str) -> String {
@@ -902,14 +917,328 @@ fn markup_text_position(node: &SemanticNode, snippet: &str) -> Option<NodePositi
     Some(style_position(node, snippet, start..end))
 }
 
+/// XML whitespace (production `S`): space, tab, CR, LF. Deliberately not Unicode
+/// whitespace: a no-break space is character data and never collapses.
+fn is_xml_space(c: char) -> bool {
+    matches!(c, ' ' | '\t' | '\r' | '\n')
+}
+
+/// An element's own `xml:space` declaration (issue #247): `Some(true)` = preserve,
+/// `Some(false)` = default, `None` = undeclared/invalid, so the inherited scope applies.
+fn xml_space_override(snippet: &str) -> Option<bool> {
+    attributes_from_opening_tag(snippet, "xml")
+        .into_iter()
+        .find(|(name, _)| name == "xml:space")
+        .and_then(|(_, value)| match value.trim_matches(is_xml_space) {
+            "preserve" => Some(true),
+            "default" => Some(false),
+            _ => None,
+        })
+}
+
+/// One run of an XML element's *direct* character data: the text between its own
+/// tags and child elements (comments and processing instructions are transparent,
+/// CDATA contributes its content verbatim, entities are decoded).
+struct XmlTextRun {
+    /// Byte range in the element snippet, from the run's first to its last data byte.
+    span: std::ops::Range<usize>,
+    text: String,
+    /// Whether child elements sit on both sides of the run (sibling separator).
+    between_children: bool,
+}
+
+/// Lexically split an element's content into direct character-data runs. Runs are
+/// separated by child elements; text nested in children belongs to those children.
+/// Returns `None` when the snippet is not a well-formed `<tag ...>...</tag>` element.
+fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    markup_direct_text_runs(snippet, false)
+}
+
+/// HTML void elements (no end tag, no content).
+fn is_html_void_element(name: &str) -> bool {
+    matches!(
+        name.to_ascii_lowercase().as_str(),
+        "area" | "base" | "br" | "col" | "embed" | "hr" | "img" | "input" | "keygen" | "link"
+            | "meta" | "param" | "source" | "track" | "wbr"
+    )
+}
+
+/// Shared lexical scan behind [`xml_direct_text_runs`]. With `html`, void elements
+/// (`<br>`) open no nesting level and character references stay as written (HTML text
+/// labels are not entity-decoded elsewhere either).
+fn markup_direct_text_runs(snippet: &str, html: bool) -> Option<(Vec<XmlTextRun>, bool)> {
+    let decode = |text: &str| if html { text.to_string() } else { decode_xml_entities(text) };
+    let open_end = markup_opening_tag_end(snippet)?;
+    if snippet[..open_end].ends_with("/>") {
+        return Some((Vec::new(), false));
+    }
+    let close_start = snippet.rfind("</")?;
+    if close_start < open_end {
+        return None;
+    }
+    let content = &snippet[open_end..close_start];
+    let mut runs = Vec::new();
+    let mut has_child_element = false;
+    let mut depth = 0usize;
+    let mut text = String::new();
+    let mut pending_entities = String::new();
+    let mut span: Option<std::ops::Range<usize>> = None;
+    let flush = |text: &mut String,
+                 pending: &mut String,
+                 span: &mut Option<std::ops::Range<usize>>,
+                 runs: &mut Vec<XmlTextRun>,
+                 between_children: bool| {
+        text.push_str(&decode(pending));
+        pending.clear();
+        if let Some(range) = span.take() {
+            runs.push(XmlTextRun { span: range, text: std::mem::take(text), between_children });
+        }
+        text.clear();
+    };
+    let extend = |span: &mut Option<std::ops::Range<usize>>, range: std::ops::Range<usize>| {
+        let start = span.as_ref().map_or(range.start, |s| s.start);
+        *span = Some(start..range.end);
+    };
+    let mut i = 0;
+    while i < content.len() {
+        let rest = &content[i..];
+        if rest.starts_with("<!--") {
+            i += rest.find("-->").map_or(rest.len(), |end| end + 3);
+        } else if rest.starts_with("<![CDATA[") {
+            // An unterminated CDATA section is malformed: decline rather than guess.
+            let end = rest.find("]]>")? + 3;
+            if depth == 0 {
+                text.push_str(&decode(&pending_entities));
+                pending_entities.clear();
+                text.push_str(&rest["<![CDATA[".len()..end - 3]);
+                extend(&mut span, open_end + i..open_end + i + end);
+            }
+            i += end;
+        } else if rest.starts_with("<?") {
+            i += rest.find("?>").map_or(rest.len(), |end| end + 2);
+        } else if rest.starts_with("</") {
+            depth = depth.checked_sub(1)?;
+            i += rest.find('>').map_or(rest.len(), |end| end + 1);
+        } else if rest.starts_with('<') {
+            let tag_len = markup_opening_tag_end(rest)?;
+            if depth == 0 {
+                flush(&mut text, &mut pending_entities, &mut span, &mut runs, has_child_element);
+                has_child_element = true;
+            }
+            if !rest[..tag_len].ends_with("/>")
+                && !(html && is_html_void_element(&tag_name_from_source(&rest[..tag_len])))
+            {
+                depth += 1;
+            }
+            i += tag_len;
+        } else {
+            let ch = rest.chars().next()?;
+            if depth == 0 {
+                pending_entities.push(ch);
+                extend(&mut span, open_end + i..open_end + i + ch.len_utf8());
+            }
+            i += ch.len_utf8();
+        }
+    }
+    if depth != 0 {
+        return None;
+    }
+    flush(&mut text, &mut pending_entities, &mut span, &mut runs, false);
+    Some((runs, has_child_element))
+}
+
+/// Collapse each run of XML whitespace to one space, keeping it at the boundaries:
+/// under default space handling the *amount* of whitespace is layout, but its
+/// presence vs absence (`<v> x</v>` vs `<v>x</v>`, `a <b/>` vs `a<b/>`) is data.
+fn collapse_xml_space(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut in_space = false;
+    for ch in text.chars() {
+        if is_xml_space(ch) {
+            if !in_space {
+                out.push(' ');
+            }
+            in_space = true;
+        } else {
+            out.push(ch);
+            in_space = false;
+        }
+    }
+    out
+}
+
+/// Synthetic `text` children for an XML element's direct character data (issue #247).
+/// Significance follows XML 1.0 §2.10:
+/// - inside an `xml:space="preserve"` scope every run is kept verbatim, whitespace-only
+///   runs included;
+/// - otherwise, in content with no non-whitespace direct text, line-broken whitespace
+///   (indentation, blank lines) and whitespace at the element's own boundaries is layout;
+///   only an inline (single-line) whitespace run separating two sibling elements is kept,
+///   as inter-word space (`<b>a</b> <i>b</i>` vs `<b>a</b><i>b</i>`);
+/// - otherwise a run containing any non-whitespace character data is kept exactly
+///   (XML does not collapse text; `<p>a b</p>` vs `<p>a  b</p>` differ), and in mixed
+///   content a whitespace-only run is kept collapsed to one space (presence vs absence
+///   separates words). Indentation in element-only content stays layout.
+fn enrich_xml_text_children(
+    node: &SemanticNode,
+    snippet: &str,
+    children: Vec<SemanticNode>,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
+    let Some((runs, has_child_element)) = xml_direct_text_runs(snippet) else {
+        return children;
+    };
+    emit_markup_text_runs(node, snippet, children, runs, has_child_element, xml_preserve)
+}
+
+/// Insert synthetic `text` children for direct character-data runs (shared by XML and
+/// HTML preformatted content). `preserve` keeps every run verbatim.
+fn emit_markup_text_runs(
+    node: &SemanticNode,
+    snippet: &str,
+    mut children: Vec<SemanticNode>,
+    runs: Vec<XmlTextRun>,
+    has_child_element: bool,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
+    let has_data = runs.iter().any(|run| run.text.chars().any(|c| !is_xml_space(c)));
+    let runs: Vec<(XmlTextRun, String)> = runs
+        .into_iter()
+        .filter(|run| !run.text.is_empty())
+        .filter_map(|run| {
+            if xml_preserve {
+                let label = run.text.clone();
+                Some((run, label))
+            } else if run.text.chars().any(|c| !is_xml_space(c)) {
+                // XML never collapses character data: xml:space="default" leaves whitespace
+                // to the application, it does not make its amount layout. A run holding
+                // data keeps every whitespace character exactly.
+                let label = run.text.clone();
+                Some((run, label))
+            } else if has_data
+                || (run.between_children && !run.text.contains(['\n', '\r']))
+            {
+                // Whitespace-only run between children: its presence separates words.
+                let label = collapse_xml_space(&run.text);
+                Some((run, label))
+            } else {
+                None
+            }
+        })
+        .collect();
+    let single = runs.len() == 1 && !has_child_element;
+    for (index, (run, label)) in runs.into_iter().enumerate() {
+        let position = if single {
+            markup_text_position(node, snippet)
+        } else {
+            None
+        }
+        .unwrap_or_else(|| {
+            // Point at the run's data, not its surrounding layout, when it has any.
+            let raw = &snippet[run.span.clone()];
+            let lead = raw.len() - raw.trim_start_matches(is_xml_space).len();
+            let trail = raw.len() - raw.trim_end_matches(is_xml_space).len();
+            let range = if lead + trail < raw.len() {
+                run.span.start + lead..run.span.end - trail
+            } else {
+                run.span.clone()
+            };
+            style_position(node, snippet, range)
+        });
+        let id = if index == 0 {
+            format!("{}.path_text", node.id)
+        } else {
+            format!("{}.path_text_{index}", node.id)
+        };
+        let text = path_synthetic_node(id, "text", label, position, Vec::new());
+        // Keep document order among the element's children so mixed-content runs
+        // align with their neighbouring child elements.
+        let at = if single {
+            children.len()
+        } else {
+            children
+                .iter()
+                .position(|child| {
+                    !matches!(
+                        child.node_type.to_lowercase().as_str(),
+                        "attribute" | "start_tag" | "self_closing_tag"
+                    ) && (child.position.start_line, child.position.start_col)
+                        > (text.position.start_line, text.position.start_col)
+                })
+                .unwrap_or(children.len())
+        };
+        children.insert(at, text);
+    }
+    children
+}
+
+/// HTML elements whose content whitespace is rendered verbatim: `pre`/`listing` (UA style
+/// `white-space: pre`, inherited by descendants) and the raw-text `textarea`/`plaintext`.
+fn is_html_preformatted_element(tag: &str) -> bool {
+    matches!(tag.to_ascii_lowercase().as_str(), "pre" | "listing" | "textarea" | "plaintext")
+}
+
+/// Direct text runs of an HTML element inside a preformatted scope, kept verbatim. Outside
+/// such scopes HTML whitespace collapses and the compacted `direct_markup_text` label stands.
+fn html_preformatted_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    let tag = tag_name_from_source(snippet).to_ascii_lowercase();
+    let open_end = markup_opening_tag_end(snippet)?;
+    let (mut runs, has_child_element) = if matches!(tag.as_str(), "textarea" | "plaintext") {
+        // Raw text: no child elements, the content runs to the end tag.
+        let close_start = snippet.rfind("</")?;
+        if close_start < open_end {
+            return None;
+        }
+        let text = &snippet[open_end..close_start];
+        let runs = if text.is_empty() {
+            Vec::new()
+        } else {
+            vec![XmlTextRun {
+                span: open_end..close_start,
+                text: text.to_string(),
+                between_children: false,
+            }]
+        };
+        (runs, false)
+    } else {
+        markup_direct_text_runs(snippet, true)?
+    };
+    // HTML parsing drops a single newline immediately after a pre/listing/textarea start tag.
+    if matches!(tag.as_str(), "pre" | "listing" | "textarea") {
+        if let Some(first) = runs.first_mut().filter(|run| run.span.start == open_end) {
+            let skip = if first.text.starts_with("\r\n") {
+                2
+            } else {
+                usize::from(first.text.starts_with('\n'))
+            };
+            first.text.drain(..skip);
+            first.span.start += skip;
+        }
+        runs.retain(|run| !run.text.is_empty());
+    }
+    Some((runs, has_child_element))
+}
+
 /// python path_profiles._enrich_markup_children: attributes + a synthetic `text` child
 /// so text-value changes surface as element-level MODIFICATIONs (xml decodes entities).
+#[cfg(test)]
 pub(crate) fn enrich_markup_children(
     node: &SemanticNode,
     source_lines: &[&str],
     children: Vec<SemanticNode>,
     label: &str,
     language: &str,
+) -> Vec<SemanticNode> {
+    enrich_markup_children_scoped(node, source_lines, children, label, language, false)
+}
+
+fn enrich_markup_children_scoped(
+    node: &SemanticNode,
+    source_lines: &[&str],
+    children: Vec<SemanticNode>,
+    label: &str,
+    language: &str,
+    xml_preserve: bool,
 ) -> Vec<SemanticNode> {
     if !matches!(
         node.node_type.to_lowercase().as_str(),
@@ -924,6 +1253,16 @@ pub(crate) fn enrich_markup_children(
         return children;
     }
     let snippet = path_source_slice(source_lines, node);
+    if language == "xml" {
+        return enrich_xml_text_children(node, &snippet, children, xml_preserve);
+    }
+    // For HTML, `xml_preserve` is the inherited preformatted scope (`<pre>` and friends):
+    // there every whitespace run is data, mixed content included.
+    if language == "html" && xml_preserve {
+        if let Some((runs, has_child_element)) = html_preformatted_text_runs(&snippet) {
+            return emit_markup_text_runs(node, &snippet, children, runs, has_child_element, true);
+        }
+    }
     let mut text = direct_markup_text(&snippet, label);
     if language == "xml" && !text.is_empty() {
         text = decode_xml_entities(&text);
@@ -1021,12 +1360,35 @@ pub(crate) fn enrich_path_profile_labels_node(
     source_lines: &[&str],
     language: &str,
 ) -> SemanticNode {
+    enrich_path_profile_labels_scoped(node, source_lines, language, false)
+}
+
+/// `xml_preserve` is the inherited `xml:space` scope (XML 1.0 §2.10): an element's own
+/// `xml:space="preserve"|"default"` overrides it for itself and its descendants. For HTML
+/// the same flag is the preformatted scope opened by `<pre>`, `<listing>`, `<textarea>` and
+/// `<plaintext>` (HTML whitespace is otherwise collapsible).
+fn enrich_path_profile_labels_scoped(
+    node: &SemanticNode,
+    source_lines: &[&str],
+    language: &str,
+    inherited_xml_preserve: bool,
+) -> SemanticNode {
+    let xml_preserve = if language == "xml" && node.node_type.eq_ignore_ascii_case("element") {
+        xml_space_override(&path_source_slice(source_lines, node)).unwrap_or(inherited_xml_preserve)
+    } else if language == "html" && node.node_type.eq_ignore_ascii_case("element") {
+        // HTML has no xml:space; whitespace significance comes from preformatted elements.
+        inherited_xml_preserve
+            || is_html_preformatted_element(&tag_name_from_source(&path_source_slice(source_lines, node)))
+    } else {
+        inherited_xml_preserve
+    };
     let mut children_changed = false;
     let children: Vec<SemanticNode> = node
         .children
         .iter()
         .map(|child| {
-            let enriched = enrich_path_profile_labels_node(child, source_lines, language);
+            let enriched =
+                enrich_path_profile_labels_scoped(child, source_lines, language, xml_preserve);
             if enriched.structural_hash != child.structural_hash
                 || enriched.label != child.label
             {
@@ -1092,7 +1454,9 @@ pub(crate) fn enrich_path_profile_labels_node(
         }
         let before_hashes: Vec<String> =
             children.iter().map(|c| c.structural_hash.clone()).collect();
-        children = enrich_markup_children(node, source_lines, children, &label, language);
+        children = enrich_markup_children_scoped(
+            node, source_lines, children, &label, language, xml_preserve,
+        );
         if children.len() != before_hashes.len()
             || children
                 .iter()
@@ -1584,7 +1948,9 @@ mod markup_text_span_tests {
         let lines: Vec<&str> = source.lines().collect();
         let children = enrich_markup_children(&node, &lines, vec![], "value", "xml");
         let text = children.iter().find(|c| c.node_type == "text").expect("text child");
-        assert_eq!(text.label, "alpha");
+        // Issue #247: the boundary line breaks and indentation are character data and
+        // XML keeps them exactly. The evidence span still points at the value itself.
+        assert_eq!(text.label, "\n    alpha\n");
         assert_eq!(
             (text.position.start_line, text.position.start_col,
              text.position.end_line, text.position.end_col),
@@ -1651,10 +2017,47 @@ mod markup_text_span_tests {
     }
 
     #[test]
+    fn xml_mixed_content_text_runs_keep_document_order_and_spans() {
+        // Issue #247: direct text around child elements is data, in document order;
+        // text nested inside a child belongs to that child.
+        let source = "<p>a <b>b</b> c</p>";
+        let b = path_synthetic_node("0.0".into(), "element", "b".into(),
+            NodePosition { start_line: 0, start_col: 5, end_line: 0, end_col: 13 }, vec![]);
+        let node = path_synthetic_node("0".into(), "element", "p".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![b]);
+        let children = enrich_markup_children_scoped(
+            &node, &[source], node.children.clone(), "p", "xml", false);
+        let shape: Vec<(&str, &str, u32, u32)> = children.iter()
+            .map(|c| (c.node_type.as_str(), c.label.as_str(), c.position.start_col, c.position.end_col))
+            .collect();
+        assert_eq!(shape, vec![("text", "a ", 3, 4), ("element", "b", 5, 13), ("text", " c", 14, 15)]);
+    }
+
+    #[test]
+    fn xml_text_with_data_is_verbatim_in_both_space_scopes() {
+        let source = "<v>\ta  b\n</v>";
+        let node = path_synthetic_node("0".into(), "element", "v".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 1, end_col: 4 }, vec![]);
+        let lines: Vec<&str> = source.lines().collect();
+        let text_of = |preserve| {
+            enrich_markup_children_scoped(&node, &lines, vec![], "v", "xml", preserve)
+                .into_iter().find(|c| c.node_type == "text").expect("text child").label
+        };
+        assert_eq!(text_of(true), "\ta  b\n");
+        // Character data is never collapsed, whatever the xml:space scope.
+        assert_eq!(text_of(false), "\ta  b\n");
+        assert_eq!(xml_space_override("<v xml:space='preserve'>x</v>"), Some(true));
+        assert_eq!(xml_space_override("<v xml:space=\"default\">x</v>"), Some(false));
+        assert_eq!(xml_space_override("<v space=\"preserve\"><w xml:space=\"preserve\"/></v>"), None);
+    }
+
+    #[test]
     fn xml_entities_and_cdata_preserve_original_byte_ranges() {
         for (source, label, start, end) in [
             ("<value>A&amp;B</value>", "A&B", 7, 14),
-            ("<value><![CDATA[  one  ]]></value>", "one", 18, 21),
+            // Issue #247: CDATA whitespace is data, kept exactly.
+            ("<value><![CDATA[  one  ]]></value>", "  one  ", 18, 21),
             ("<value>café</value>", "café", 7, 12),
         ] {
             let node = path_synthetic_node(
@@ -1938,3 +2341,70 @@ mod mdx_unclosed_fence_regression_tests {
         );
     }
 }
+
+#[cfg(test)]
+mod utf8_span_tests {
+    use super::*;
+    use serde_json::{json, Value};
+
+    fn enrich(source: &str, language: &str, node_type: &str, span: (u32, u32, u32, u32)) -> Value {
+        let (start_line, start_col, end_line, end_col) = span;
+        let tree = json!({
+            "id": "0.1", "node_type": node_type, "label": node_type, "structural_hash": "h",
+            "position": {"start_line": start_line, "start_col": start_col,
+                         "end_line": end_line, "end_col": end_col},
+            "children": [],
+        });
+        let out = crate::enrich_profile_labels_impl(&tree.to_string(), source, language, None)
+            .expect("enrichment succeeds");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    // #249: the audit reproduction. Bytes 15..24 of the line are exactly `echo safe`.
+    #[test]
+    fn bash_label_uses_byte_columns_after_emoji() {
+        let source = "printf '😀'; echo safe";
+        assert_eq!(&source[15..24], "echo safe");
+        let node = enrich(source, "bash", "command", (0, 15, 0, 24));
+        assert_eq!(node["label"], "echo safe");
+        let same_label_elsewhere = enrich("echo safe", "bash", "command", (0, 0, 0, 9));
+        assert_eq!(node["structural_hash"], same_label_elsewhere["structural_hash"]);
+    }
+
+    #[test]
+    fn exact_spans_after_combining_marks_and_multibyte_identifiers() {
+        // "é" as e + U+0301 (3 bytes total) and a 2-byte identifier character.
+        let source = "x=\"e\u{301}\"; ñame=1";
+        let start = source.find("ñame").unwrap() as u32;
+        let node = enrich(source, "bash", "variable_assignment", (0, start, 0, source.len() as u32));
+        assert_eq!(node["label"], "ñame=1");
+        let asm = "mov eax, 1 ; 😀\nadd eax, 2";
+        let node = enrich(asm, "asm", "instruction", (1, 0, 1, 10));
+        assert_eq!(node["label"], "add eax, 2");
+    }
+
+    #[test]
+    fn mid_codepoint_and_missing_line_spans_keep_the_parser_label() {
+        let source = "printf '😀'; echo safe";
+        // Byte 9 is inside the 4-byte emoji that starts at byte 8.
+        assert_eq!(enrich(source, "bash", "command", (0, 9, 0, 24))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (0, 8, 0, 10))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (5, 0, 5, 3))["label"], "command");
+        // A column past the line end is clamped: no text is lost or invented.
+        assert_eq!(enrich(source, "bash", "command", (0, 15, 0, 99))["label"], "echo safe");
+        assert_eq!(
+            utf8_source_span(&["a😀b"], 0, 0, 0, 2),
+            None,
+            "end inside a code point"
+        );
+        assert_eq!(utf8_source_span(&["a😀b"], 0, 1, 0, 5).as_deref(), Some("😀"));
+    }
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "xml_whitespace_source_tests.rs"]
+mod xml_whitespace_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "html_whitespace_source_tests.rs"]
+mod html_whitespace_source_tests;

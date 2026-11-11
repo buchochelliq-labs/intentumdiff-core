@@ -16,7 +16,7 @@
 //!   type annotations).
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 // ---------------------------------------------------------------------------
 // Input schema: matches SemanticNode JSON produced by the host
@@ -556,7 +556,8 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     // --- Pass 1.5: SPLIT_MODULE ------------------------------------------
     // Aggregate exact symbol moves when one old file fans out into multiple
     // new files. Only unambiguous one-definition symbols contribute.
-    let mut split_candidates: HashMap<String, Vec<CrossFileChange>> = HashMap::new();
+    // BTreeMap, not HashMap: SPLIT_MODULE changes are emitted in iteration order (#251).
+    let mut split_candidates: BTreeMap<String, Vec<CrossFileChange>> = BTreeMap::new();
     for change in &changes {
         if change.change_type != "MOVE_TO_MODULE" {
             continue;
@@ -632,8 +633,8 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     }
 
     // --- Pass 2: CROSS_FILE_RENAME ----------------------------------------
-    let old_names: std::collections::HashSet<&str> = old_table.keys().map(|s| s.as_str()).collect();
-    let new_names: std::collections::HashSet<&str> = new_table.keys().map(|s| s.as_str()).collect();
+    let old_names: BTreeSet<&str> = old_table.keys().map(|s| s.as_str()).collect();
+    let new_names: BTreeSet<&str> = new_table.keys().map(|s| s.as_str()).collect();
 
     let removed: Vec<&str> = old_names.difference(&new_names).cloned().collect();
     let added: Vec<&str> = new_names.difference(&old_names).cloned().collect();
@@ -645,7 +646,7 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
         format!("{}|{}|{}", defn.file, defn.node_type, parent)
     }
 
-    let mut removed_by_key: HashMap<String, Vec<(&str, &SymbolDefinition)>> = HashMap::new();
+    let mut removed_by_key: BTreeMap<String, Vec<(&str, &SymbolDefinition)>> = BTreeMap::new();
     for qname in &removed {
         let defs = &old_table[*qname];
         let key = group_key(qname, defs);
@@ -655,7 +656,7 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
             .push((qname, &defs[0]));
     }
 
-    let mut added_by_key: HashMap<String, Vec<(&str, &SymbolDefinition)>> = HashMap::new();
+    let mut added_by_key: BTreeMap<String, Vec<(&str, &SymbolDefinition)>> = BTreeMap::new();
     for qname in &added {
         let defs = &new_table[*qname];
         let key = group_key(qname, defs);
@@ -690,10 +691,38 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
         }
     }
 
+    sort_cross_file_changes(&mut changes);
     match serde_json::to_string(&changes) {
         Ok(s) => s,
         Err(e) => format!(r#"{{"error":"Serialisation error: {}"}}"#, e),
     }
+}
+
+/// The documented total order of `diff_symbol_tables` output (#251): pass (moves, splits,
+/// renames), then symbol, files, node ids and positions. Identical inputs therefore produce
+/// identical arrays across calls and processes. The sort is stable and only reorders, so no
+/// distinct change is merged or dropped.
+fn sort_cross_file_changes(changes: &mut [CrossFileChange]) {
+    fn pass(change_type: &str) -> u8 {
+        match change_type {
+            "MOVE_TO_MODULE" => 0,
+            "SPLIT_MODULE" => 1,
+            "CROSS_FILE_RENAME" => 2,
+            _ => 3,
+        }
+    }
+    fn position(p: &Option<ReferencePosition>) -> Option<(u32, u32, u32, u32)> {
+        p.as_ref().map(|p| (p.start_line, p.start_col, p.end_line, p.end_col))
+    }
+    changes.sort_by(|a, b| {
+        (pass(a.change_type), &a.symbol_name, &a.old_file, &a.new_file)
+            .cmp(&(pass(b.change_type), &b.symbol_name, &b.old_file, &b.new_file))
+            .then_with(|| (&a.old_node_id, &a.new_node_id).cmp(&(&b.old_node_id, &b.new_node_id)))
+            .then_with(|| {
+                (position(&a.old_position), position(&a.new_position))
+                    .cmp(&(position(&b.old_position), position(&b.new_position)))
+            })
+    });
 }
 
 fn unique_unmatched_cross_file_move<'a>(
@@ -763,6 +792,44 @@ fn unique_unmatched_cross_file_move<'a>(
 mod tests {
     use super::*;
     use serde_json::{json, Value};
+
+    // #251: identical inputs give byte-identical change arrays. The old code appended
+    // SPLIT_MODULE and CROSS_FILE_RENAME changes while iterating randomly seeded HashMaps.
+    #[test]
+    fn diff_symbol_tables_output_order_is_deterministic() {
+        fn def(qname: &str, file: &str, line: u32) -> Value {
+            json!({"qualified_name": qname, "file": file, "node_id": format!("{file}:{line}"),
+                   "node_type": "function_definition", "language": "python",
+                   "start_line": line, "start_col": 0, "end_line": line + 1, "end_col": 0})
+        }
+        let mut old = serde_json::Map::new();
+        let mut new = serde_json::Map::new();
+        for i in 0..8 {
+            // A unique move per name, plus a same-scope rename per file pair.
+            old.insert(format!("f{i}"), json!([def(&format!("f{i}"), &format!("old{i}.py"), i)]));
+            new.insert(format!("f{i}"), json!([def(&format!("f{i}"), &format!("new{i}.py"), i)]));
+            old.insert(format!("g{i}"), json!([def(&format!("g{i}"), &format!("r{i}.py"), 40 + i)]));
+            new.insert(format!("h{i}"), json!([def(&format!("h{i}"), &format!("r{i}.py"), 40 + i)]));
+        }
+        // One old file split into two new files.
+        for (name, target) in [("s0", "split_a.py"), ("s1", "split_b.py")] {
+            old.insert(name.into(), json!([def(name, "whole.py", 90)]));
+            new.insert(name.into(), json!([def(name, target, 90)]));
+        }
+        let (old, new) = (Value::Object(old).to_string(), Value::Object(new).to_string());
+        let first = diff_symbol_tables_impl(&old, &new);
+        let changes: Vec<Value> = serde_json::from_str(&first).unwrap();
+        let kinds = |kind: &str| changes.iter().filter(|c| c["change_type"] == kind).count();
+        assert_eq!((kinds("MOVE_TO_MODULE"), kinds("SPLIT_MODULE"), kinds("CROSS_FILE_RENAME")), (10, 1, 8));
+        for _ in 0..30 {
+            // Re-parsing re-seeds every HashMap, so each call iterates in a fresh order.
+            assert_eq!(diff_symbol_tables_impl(&old, &new), first);
+        }
+        let names: Vec<&str> = changes.iter().map(|c| c["symbol_name"].as_str().unwrap()).collect();
+        let mut moves: Vec<&str> = names[..10].to_vec();
+        moves.sort();
+        assert_eq!(names[..10], moves[..], "moves are ordered by symbol name");
+    }
 
     fn pos() -> Value {
         json!({"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0})

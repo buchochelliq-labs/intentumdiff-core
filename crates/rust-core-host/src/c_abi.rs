@@ -408,6 +408,10 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 0, "old_json")?,
             arg_str(args, 1, "new_json")?,
         )),
+        // Commit-wide cross-file analysis with the partial-index policy (#298).
+        "commit_cross_file_index" => {
+            crate::commit_cross_file_index_impl(arg_str(args, 0, "files_json")?)
+        }
         "apply_invariances" => {
             value_request(args, crate::invariance_groups::rust_apply_invariances_value)
         }
@@ -1398,6 +1402,70 @@ mod tests {
 
         let _ = call("analytics_close", json!([path]));
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    /// #298: a host-side parse failure (e.g. fuel) on one file is reported structurally and
+    /// marks the index partial, while a real move between the other two files is still found.
+    #[test]
+    fn commit_cross_file_index_reports_unindexed_file_and_keeps_other_moves() {
+        let func = |name: &str, line: u64| json!({
+            "id": format!("0.{line}"), "node_type": "function_definition", "label": name,
+            "position": {"start_line": line, "start_col": 0, "end_line": line + 1, "end_col": 0},
+            "children": []
+        });
+        let module = |children: Vec<Value>| json!({
+            "id": "0", "node_type": "module", "label": "",
+            "position": {"start_line": 0, "start_col": 0, "end_line": 9, "end_col": 0},
+            "children": children
+        });
+        let files = json!([
+            {"old_filename": "pkg/big.py", "new_filename": "pkg/big.py", "language": "python",
+             "old_tree": null, "new_tree": null,
+             "old_error": "FUEL_EXCEEDED: 100.0M fuel budget exhausted", "new_error": null},
+            {"old_filename": "pkg/a.py", "new_filename": "pkg/a.py", "language": "python",
+             "old_tree": module(vec![func("moved", 0), func("keep", 3)]),
+             "new_tree": module(vec![func("keep", 0)])},
+            {"old_filename": "pkg/b.py", "new_filename": "pkg/b.py", "language": "python",
+             "old_tree": module(vec![func("other", 0)]),
+             "new_tree": module(vec![func("other", 0), func("moved", 3)])},
+        ]);
+        let env = call("commit_cross_file_index", json!([files.to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        let result = &env["result"];
+        assert_eq!(result["cross_file_index_status"], "partial", "{result:#}");
+        assert_eq!(result["cross_file_index_complete"], false);
+        assert_eq!(result["indexed_file_count"], 2);
+        let errors = result["index_errors"].as_array().unwrap();
+        assert_eq!(errors.len(), 1, "{result:#}");
+        assert_eq!(errors[0]["path"], "pkg/big.py");
+        assert_eq!(errors[0]["side"], "old");
+        assert_eq!(errors[0]["code"], "fuel_exceeded");
+        let moves: Vec<&Value> = result["cross_file_changes"].as_array().unwrap().iter()
+            .filter(|c| c["change_type"] == "MOVE_TO_MODULE").collect();
+        assert_eq!(moves.len(), 1, "{result:#}");
+        assert!(moves[0].to_string().contains("moved"), "{result:#}");
+
+        // Same input with every file indexed: complete, no errors.
+        let mut clean = files.clone();
+        clean[0] = json!({"old_filename": "pkg/big.py", "new_filename": "pkg/big.py",
+            "language": "python", "old_tree": module(vec![func("f0", 0)]),
+            "new_tree": module(vec![func("f0", 0)])});
+        let env = call("commit_cross_file_index", json!([clean.to_string()]));
+        assert_eq!(env["result"]["cross_file_index_status"], "complete", "{env}");
+        assert_eq!(env["result"]["cross_file_index_complete"], true);
+        assert_eq!(env["result"]["index_errors"], json!([]));
+        assert_eq!(env["result"]["indexed_file_count"], 3);
+
+        // An error-envelope tree is a malformed_tree index error, never a silent omission.
+        let mut malformed = clean.clone();
+        malformed[0]["new_tree"] = json!({"error": "boom"});
+        let env = call("commit_cross_file_index", json!([malformed.to_string()]));
+        assert_eq!(env["result"]["cross_file_index_status"], "partial", "{env}");
+        assert_eq!(env["result"]["index_errors"][0]["code"], "malformed_tree");
+        assert_eq!(env["result"]["index_errors"][0]["side"], "new");
+        // Malformed request shapes stay error envelopes.
+        assert_eq!(call("commit_cross_file_index", json!(["{}"]))["ok"], false);
+        assert_eq!(call("commit_cross_file_index", json!([r#"[{"language":"python"}]"#]))["ok"], false);
     }
 
     #[test]

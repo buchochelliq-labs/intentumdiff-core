@@ -1,5 +1,7 @@
 mod source_fallback;
 mod operator_tokens;
+mod atx_heading;
+mod markdown_code_block;
 mod opaque_payload;
 mod python_literals;
 #[cfg(all(test, feature = "tier-c-wasm"))]
@@ -1449,6 +1451,13 @@ fn finalize_review_impl(
     // Idempotent for trees whose labels already carry the operator. Retire with core#230.
     operator_tokens::recover_operator_tokens(&mut old_tree, old_source, language);
     operator_tokens::recover_operator_tokens(&mut new_tree, new_source, language);
+    // #275: ATX heading level and optional closing sequence are re-derived from the heading
+    // line (the components drop the level and keep `#` closers in the label).
+    atx_heading::normalize_atx_headings(&mut old_tree, old_source, language);
+    atx_heading::normalize_atx_headings(&mut new_tree, new_source, language);
+    // #274: CommonMark code blocks compare by rendered content + info string, not form.
+    markdown_code_block::normalize_code_blocks(&mut old_tree, old_source, language);
+    markdown_code_block::normalize_code_blocks(&mut new_tree, new_source, language);
 
     if config.fallback_to_token_diff && (
         source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
@@ -1720,45 +1729,26 @@ fn enriched_structural_hash(node: &SemanticNode, label: &str, children: &[Semant
 }
 
 /// python statement_profiles._source_slice + _compact_source: the node's source span,
-/// whitespace-collapsed. asm/delphi parsers emit 1-based lines (python parity).
+/// whitespace-collapsed. All parsers emit 0-based rows and UTF-8 byte columns (#52, #249).
+/// A span running past its line or the source is clamped, but a column that splits a code
+/// point yields no snippet (the parser label is kept).
 fn profile_source_snippet(source_lines: &[&str], node: &SemanticNode) -> String {
-    if source_lines.is_empty() {
-        return String::new();
-    }
     let pos = &node.position;
-    // All parsers emit 0-based rows (issue #52); the asm/delphi one_based
-    // compensation that lived here died with their 1-based emission.
-    let start_line = pos.start_line as i64;
-    let end_line = pos.end_line as i64;
-    if start_line < 0 || start_line as usize >= source_lines.len() {
+    let start_line = pos.start_line as usize;
+    if start_line >= source_lines.len() {
         return String::new();
     }
-    let start_line = start_line as usize;
-    let end_line = (end_line.max(start_line as i64) as usize).min(source_lines.len() - 1);
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let chars: Vec<char> = line.chars().collect();
-        let from = from.unwrap_or(0).min(chars.len());
-        let to = to.unwrap_or(chars.len()).min(chars.len());
-        if from >= to {
-            return String::new();
-        }
-        chars[from..to].iter().collect()
-    };
-    let raw = if start_line == end_line {
-        clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        )
+    let requested_end = (pos.end_line as usize).max(start_line);
+    let (end_line, end_col) = if requested_end < source_lines.len() {
+        (requested_end, pos.end_col as usize)
     } else {
-        let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
-        for line in &source_lines[start_line + 1..end_line] {
-            parts.push((*line).to_string());
-        }
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
-        parts.join("\n")
+        let last = source_lines.len() - 1;
+        (last, source_lines[last].len())
     };
-    raw.split_whitespace().collect::<Vec<_>>().join(" ")
+    let end_col = if end_line == start_line { end_col.max(pos.start_col as usize) } else { end_col };
+    label_enrichment::utf8_source_span(source_lines, start_line, pos.start_col as usize, end_line, end_col)
+        .map(|raw| raw.split_whitespace().collect::<Vec<_>>().join(" "))
+        .unwrap_or_default()
 }
 
 /// python statement_profiles._bash_command_label_from_children.
@@ -4805,6 +4795,21 @@ fn fuel_budget(floor: u64, candidate: u64) -> u64 {
     }
 }
 
+/// `Err("plugin returned error (<side>): <message>")` when a parser returned the in-band error
+/// envelope instead of a tree. Non-JSON or tree output is left to the stage that decodes it.
+fn reject_plugin_error_envelope(raw: &str, side: &str) -> Result<(), String> {
+    match serde_json::from_str::<Value>(raw) {
+        Ok(value) => match value.get("error") {
+            Some(error) => Err(format!(
+                "plugin returned error ({side}): {}",
+                error.as_str().map(str::to_string).unwrap_or_else(|| error.to_string())
+            )),
+            None => Ok(()),
+        },
+        Err(_) => Ok(()),
+    }
+}
+
 fn parse_semantic_tree_json(raw: &str) -> Result<SemanticNode, String> {
     let value: Value = serde_json::from_str(raw)
         .map_err(|exc| format!("parse plugin SemanticNode JSON: {exc}"))?;
@@ -5376,6 +5381,11 @@ pub(crate) fn native_wasm_single_diff(
     // Stage 4-7 literal-label enrichment (differ.py:1604) BEFORE the profile pass: string
     // literals carry their decoded VALUE as label — keyed enrichment + guardrail semantic paths
     // key off them (unlabeled pairs = zero guardrail paths).
+    // A parser that cannot parse a side returns the WIT `{"error": ...}` envelope. Report it as
+    // the parser's error before any stage decodes the output as a tree; decoding it first
+    // surfaced a misleading "literal enrich ...: missing field `id`" (core #280).
+    reject_plugin_error_envelope(&old_tree_json, "old")?;
+    reject_plugin_error_envelope(&new_tree_json, "new")?;
     let old_tree_json = enrich_literal_labels_json_str(&old_tree_json, old_source)
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
@@ -5535,8 +5545,10 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// sides parse to trees the SAME way `differ.parse` does — Python through the bundled Wasm parser
 /// in interpret-cst mode (fed the trivia-stripped CST), other languages through their full-parse
 /// Wasm parser — so the symbol tables (and thus the cross-file changes) match the differ's. Builds
-/// the two symbol tables and diffs them. Every required parse/index failure aborts the
-/// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
+/// the two symbol tables and diffs them. A per-file parse/index failure excludes only that file
+/// and is reported in `index_errors` with `cross_file_index_status: "partial"` (#298); an empty
+/// cross-file result proves "no cross-file change" only when the status is "complete". Bundle
+/// and table faults still abort. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
 // A symbol named "error" is valid source data: only the typed table schema
 // distinguishes it from the index engine's string-valued error envelope.
@@ -5584,15 +5596,187 @@ mod symbol_index_error_name_tests {
     }
 }
 
+/// `cross_file_index_status` when every changed file contributed to the commit symbol index.
+pub(crate) const CROSS_FILE_INDEX_COMPLETE: &str = "complete";
+/// `cross_file_index_status` when at least one changed file could not be indexed (#298).
+pub(crate) const CROSS_FILE_INDEX_PARTIAL: &str = "partial";
+
+/// Outcome of commit-wide symbol indexing (#298). One changed file that cannot be indexed (fuel
+/// exhausted, parser error, malformed tree) no longer discards the cross-file analysis of the
+/// others: the file is left out of BOTH side tables — so none of its symbols can masquerade as
+/// moved or deleted — and is reported in `index_errors`. Fail-closed honesty is kept by the
+/// explicit `cross_file_index_status` ("partial" whenever `index_errors` is non-empty): an
+/// empty or short `cross_file_changes` list only proves "no cross-file change" when the status
+/// is "complete".
+pub(crate) struct CommitCrossFileIndex {
+    pub(crate) changes: Value,
+    pub(crate) index_errors: Vec<Value>,
+    pub(crate) indexed_file_count: usize,
+    pub(crate) telemetry: HashMap<(String, String), Vec<Value>>,
+}
+
+impl CommitCrossFileIndex {
+    pub(crate) fn status(&self) -> &'static str {
+        if self.index_errors.is_empty() { CROSS_FILE_INDEX_COMPLETE } else { CROSS_FILE_INDEX_PARTIAL }
+    }
+
+    /// The structured completeness fields every commit-level caller publishes (live review
+    /// response metadata, `commit_cross_file_index` C ABI result).
+    pub(crate) fn completeness(&self) -> Value {
+        json!({
+            "cross_file_index_status": self.status(),
+            "cross_file_index_complete": self.index_errors.is_empty(),
+            "indexed_file_count": self.indexed_file_count,
+            "index_errors": self.index_errors,
+        })
+    }
+}
+
+/// Stable machine code for a per-file index failure, so callers never parse error text.
+fn commit_index_error_code(reason: &str) -> &'static str {
+    let lower = reason.to_ascii_lowercase();
+    if lower.contains("fuel_exceeded") || lower.contains("all fuel consumed")
+        || lower.contains("out of fuel") || lower.contains("outoffuel")
+    {
+        "fuel_exceeded"
+    } else if lower.contains("exceeds") && lower.contains("limit") {
+        "output_limit_exceeded"
+    } else {
+        "parser_error"
+    }
+}
+
+fn commit_index_error(
+    old_filename: &str,
+    new_filename: &str,
+    language: &str,
+    side: &str,
+    code: &str,
+    reason: &str,
+) -> Value {
+    let path = if new_filename.is_empty() { old_filename } else { new_filename };
+    json!({"path": path, "old_filename": old_filename, "new_filename": new_filename,
+        "language": language, "side": side, "code": code, "reason": reason})
+}
+
+/// A parser tree is indexable only as a SemanticNode object, never an error envelope.
+fn commit_index_tree(raw: &str) -> Result<Value, String> {
+    let tree: Value = serde_json::from_str(raw).map_err(|reason| format!("invalid tree: {reason}"))?;
+    if !tree.is_object() || tree.get("error").is_some() {
+        return Err(format!("malformed tree: {}", tree.get("error").unwrap_or(&tree)));
+    }
+    Ok(tree)
+}
+
+/// Build both side tables from the indexed files and diff them. Table/diff failures are not
+/// per-file input problems and still abort (fail closed).
+fn diff_commit_symbol_tables(old_files: Vec<Value>, new_files: Vec<Value>) -> Result<Value, String> {
+    let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
+    let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
+    for (side, table) in [("old", &old_table), ("new", &new_table)] {
+        validate_symbol_index_table(table, side)?;
+    }
+    let changes: Value = serde_json::from_str(
+        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
+    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
+    if !changes.is_array() {
+        return Err(format!("symbol-index diff did not return changes: {changes}"));
+    }
+    Ok(changes)
+}
+
+/// C ABI `commit_cross_file_index` (#298): the commit-wide cross-file analysis for hosts that
+/// parse each changed file themselves (Python `CommitDiffer.finalize_commit_diff`). *files_json*
+/// is an array of `{old_filename, new_filename, language, old_tree, new_tree, old_error,
+/// new_error}`; a side's tree is a SemanticNode object or null (empty side: add/delete), and a
+/// side's error is the host's parse failure text or null. The partial-index policy lives here,
+/// not in the binding: a file with any side error (or a malformed tree) is excluded from both
+/// tables and reported in `index_errors`, and the result carries `cross_file_index_status`.
+pub(crate) fn commit_cross_file_index_impl(files_json: &str) -> Result<String, String> {
+    let files: Vec<Value> = serde_json::from_str(files_json)
+        .map_err(|reason| format!("files_json must be a JSON array: {reason}"))?;
+    let mut old_files = Vec::with_capacity(files.len());
+    let mut new_files = Vec::with_capacity(files.len());
+    let mut index_errors = Vec::new();
+    let mut indexed_file_count = 0;
+    for (position, file) in files.iter().enumerate() {
+        if !file.is_object() {
+            return Err(format!("files_json[{position}] must be an object"));
+        }
+        let text = |snake: &str, camel: &str| -> Result<&str, String> {
+            match file.get(snake).or_else(|| file.get(camel)) {
+                None | Some(Value::Null) => Ok(""),
+                Some(Value::String(s)) => Ok(s.as_str()),
+                Some(_) => Err(format!("files_json[{position}].{snake} must be a string or null")),
+            }
+        };
+        let (old_p, new_p) = (text("old_filename", "oldFilename")?, text("new_filename", "newFilename")?);
+        let language = text("language", "language")?;
+        if old_p.is_empty() && new_p.is_empty() {
+            return Err(format!("files_json[{position}] requires old_filename or new_filename"));
+        }
+        let mut failure: Option<Value> = None;
+        let mut sides: [Option<Value>; 2] = [None, None];
+        for (slot, (side, tree_key, tree_camel, error_key, error_camel)) in [
+            ("old", "old_tree", "oldTree", "old_error", "oldError"),
+            ("new", "new_tree", "newTree", "new_error", "newError"),
+        ].into_iter().enumerate() {
+            if failure.is_some() { break; }
+            let error = text(error_key, error_camel)?;
+            if !error.is_empty() {
+                failure = Some(commit_index_error(old_p, new_p, language, side,
+                    commit_index_error_code(error), error));
+                continue;
+            }
+            match file.get(tree_key).or_else(|| file.get(tree_camel)) {
+                None | Some(Value::Null) => {}
+                Some(tree) if tree.is_object() && tree.get("error").is_none() => {
+                    sides[slot] = Some(tree.clone());
+                }
+                Some(tree) => {
+                    failure = Some(commit_index_error(old_p, new_p, language, side, "malformed_tree",
+                        &format!("malformed tree: {}", tree.get("error").unwrap_or(tree))));
+                }
+            }
+        }
+        if let Some(error) = failure {
+            index_errors.push(error);
+            continue;
+        }
+        let [old_tree, new_tree] = sides;
+        if old_tree.is_none() && new_tree.is_none() {
+            continue;
+        }
+        indexed_file_count += 1;
+        if let Some(tree) = old_tree {
+            old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
+        }
+        if let Some(tree) = new_tree {
+            new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
+        }
+    }
+    let index = CommitCrossFileIndex {
+        changes: diff_commit_symbol_tables(old_files, new_files)?,
+        index_errors,
+        indexed_file_count,
+        telemetry: HashMap::new(),
+    };
+    let mut result = index.completeness();
+    result["cross_file_changes"] = index.changes;
+    Ok(result.to_string())
+}
+
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
+) -> Result<CommitCrossFileIndex, String> {
     let config = RustCoreConfig::from_json(config_json)?;
     let mut telemetry = HashMap::new();
+    let mut index_errors: Vec<Value> = Vec::new();
+    let mut indexed_file_count = 0;
     if files.is_empty() {
-        return Ok((json!([]), telemetry));
+        return Ok(CommitCrossFileIndex { changes: json!([]), index_errors, indexed_file_count, telemetry });
     }
     if wasm_dir.is_empty() {
         return Err("commit symbol indexing requires the verified parser bundle".to_owned());
@@ -5644,17 +5828,34 @@ pub(crate) fn compute_commit_cross_file_changes(
         if parse_old_src.is_empty() && parse_new_src.is_empty() {
             continue;
         }
+        // A component that cannot be loaded at all is a bundle/deployment fault for every file of
+        // that language, not a property of this file's input: keep failing closed on it.
+        cached_parser_component(parser_path, fuel != u64::MAX)
+            .map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        // Per-file input failures (#298) — CST, fuel, parser error, malformed tree — exclude
+        // this file from BOTH tables and are reported, so the other files still get cross-file
+        // analysis and the result is explicitly partial rather than silently complete.
         let (old_side_cst, new_side_cst) = if wasm_path.is_empty() {
-            (
-                python_wasm_filtered_cst(parse_old_src)
-                    .map_err(|reason| format!("symbol-index CST for {old_p}: {reason}"))?,
-                python_wasm_filtered_cst(parse_new_src)
-                    .map_err(|reason| format!("symbol-index CST for {new_p}: {reason}"))?,
-            )
+            let mut csts = Vec::with_capacity(2);
+            for (side, source) in [("old", parse_old_src), ("new", parse_new_src)] {
+                match python_wasm_filtered_cst(source) {
+                    Ok(cst) => csts.push(cst),
+                    Err(reason) => {
+                        index_errors.push(commit_index_error(old_p, new_p, language, side,
+                            commit_index_error_code(&reason), &format!("symbol-index CST: {reason}")));
+                        break;
+                    }
+                }
+            }
+            if csts.len() != 2 {
+                continue;
+            }
+            let new_cst = csts.pop().unwrap_or_default();
+            (csts.pop().unwrap_or_default(), new_cst)
         } else {
             (String::new(), String::new())
         };
-        let mut pair = run_python_wasm_process_pair_detailed(
+        let mut pair = match run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5665,41 +5866,60 @@ pub(crate) fn compute_commit_cross_file_changes(
             fuel,
             config.max_plugin_output_bytes,
             language,
-        ).map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        ) {
+            Ok(pair) => pair,
+            Err(reason) => {
+                // The pair runner names the side it was processing; a lone side is parsed as
+                // both pair sides, so attribute the failure to the side that actually exists.
+                let side = if !both {
+                    if old_parse.is_some() { "old" } else { "new" }
+                } else if reason.contains("new source") || reason.contains("new parser") {
+                    "new"
+                } else if reason.contains("old source") || reason.contains("old parser") {
+                    "old"
+                } else {
+                    "both"
+                };
+                index_errors.push(commit_index_error(old_p, new_p, language, side,
+                    commit_index_error_code(&reason), &format!("symbol-index parser: {reason}")));
+                continue;
+            }
+        };
         for call in &mut pair.calls {
             call["plugin"] = json!(parser_path);
             call["purpose"] = json!("symbol_index");
         }
         telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
-        if both || old_parse.is_some() {
-            let tree: Value = serde_json::from_str(&pair.old_tree)
-                .map_err(|reason| format!("symbol-index invalid old tree for {old_p}: {reason}"))?;
-            if !tree.is_object() || tree.get("error").is_some() {
-                return Err(format!("symbol-index malformed old tree for {old_p}"));
+        let old_tree = match old_parse.map(|_| commit_index_tree(&pair.old_tree)).transpose() {
+            Ok(tree) => tree,
+            Err(reason) => {
+                index_errors.push(commit_index_error(old_p, new_p, language, "old",
+                    "malformed_tree", &format!("symbol-index {reason}")));
+                continue;
             }
+        };
+        let new_tree = match new_parse.map(|_| commit_index_tree(&pair.new_tree)).transpose() {
+            Ok(tree) => tree,
+            Err(reason) => {
+                index_errors.push(commit_index_error(old_p, new_p, language, "new",
+                    "malformed_tree", &format!("symbol-index {reason}")));
+                continue;
+            }
+        };
+        indexed_file_count += 1;
+        if let Some(tree) = old_tree {
             old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
         }
-        if both || new_parse.is_some() {
-            let tree: Value = serde_json::from_str(&pair.new_tree)
-                .map_err(|reason| format!("symbol-index invalid new tree for {new_p}: {reason}"))?;
-            if !tree.is_object() || tree.get("error").is_some() {
-                return Err(format!("symbol-index malformed new tree for {new_p}"));
-            }
+        if let Some(tree) = new_tree {
             new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
         }
     }
-    let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
-    let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    for (side, table) in [("old", &old_table), ("new", &new_table)] {
-        validate_symbol_index_table(table, side)?;
-    }
-    let changes: Value = serde_json::from_str(
-        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
-    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
-    if !changes.is_array() {
-        return Err(format!("symbol-index diff did not return changes: {changes}"));
-    }
-    Ok((changes, telemetry))
+    Ok(CommitCrossFileIndex {
+        changes: diff_commit_symbol_tables(old_files, new_files)?,
+        index_errors,
+        indexed_file_count,
+        telemetry,
+    })
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -10995,9 +11215,11 @@ mod native_commit_index_fail_closed_tests {
             "old_filename": "changed.py", "new_filename": "changed.py",
             "language": "python", "parser_wasm_path": ""
         })];
-        let error = compute_commit_cross_file_changes(&changed, "{}", "").unwrap_err();
+        let error = compute_commit_cross_file_changes(&changed, "{}", "").err().unwrap();
         assert!(error.contains("parser bundle"), "{error}");
-        assert!(compute_commit_cross_file_changes(&[], "{}", "").unwrap().0.as_array().unwrap().is_empty());
+        let empty = compute_commit_cross_file_changes(&[], "{}", "").unwrap();
+        assert!(empty.changes.as_array().unwrap().is_empty());
+        assert_eq!(empty.status(), CROSS_FILE_INDEX_COMPLETE);
     }
 
     #[test]
@@ -11010,8 +11232,35 @@ mod native_commit_index_fail_closed_tests {
             "parser_wasm_path": "/__intentumdiff_missing__/parser.wasm"
         })];
         let error = compute_commit_cross_file_changes(&changed, "{}", "/__intentumdiff_missing__")
-            .unwrap_err();
+            .err().unwrap();
         assert!(error.contains("broken.js"), "{error}");
         assert!(error.contains("symbol-index parser"), "{error}");
+    }
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "commit_index_partial_tests.rs"]
+mod commit_index_partial_tests;
+
+#[cfg(test)]
+mod plugin_error_envelope_tests {
+    use super::reject_plugin_error_envelope;
+
+    // core #280: an incomplete source makes the parser return the WIT error envelope; it must be
+    // reported as the parser's error, not decoded as a tree ("missing field `id`").
+    #[test]
+    fn error_envelope_is_reported_as_the_plugin_error() {
+        let err = reject_plugin_error_envelope(r#"{"error":"Unclosed script or style block"}"#, "old")
+            .unwrap_err();
+        assert_eq!(err, "plugin returned error (old): Unclosed script or style block");
+        assert!(!err.contains("missing field"));
+        let err = reject_plugin_error_envelope(r#"{"error":{"code":"x"}}"#, "new").unwrap_err();
+        assert_eq!(err, r#"plugin returned error (new): {"code":"x"}"#);
+    }
+
+    #[test]
+    fn trees_and_non_json_pass_through() {
+        assert!(reject_plugin_error_envelope(r#"{"id":"0","node_type":"module"}"#, "old").is_ok());
+        assert!(reject_plugin_error_envelope("not json", "old").is_ok());
     }
 }
