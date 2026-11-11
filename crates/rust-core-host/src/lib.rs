@@ -52,6 +52,7 @@ pub mod schema_profiles;
 mod schema_context;
 pub mod host_utils;
 pub mod guardrail_policy;
+mod declaration_facts;
 pub mod routed_review;
 pub mod patch_source;
 /// Shared typed symbol/reference API for native Rust consumers.
@@ -208,6 +209,8 @@ pub(crate) fn diff_python_cst_impl(
     // compute. Without this call the two entry points disagreed about the same source.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", "python");
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", "python");
     validate_unique_ids(&old_tree).map_err(|exc| format!("old semantic tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new semantic tree: {exc}"))?;
 
@@ -286,6 +289,8 @@ fn diff_semantic_tree_impl(
     // path) are left untouched. Only changes labels/facts, not structure.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", language);
 
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
@@ -1488,6 +1493,9 @@ fn finalize_review_impl(
     // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    // Declaration visibility + stub sentinel (language rules; header re-read from source).
+    declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, language);
 
     // Source absence, not child count, determines a lifecycle boundary. Leaf trees
     // may represent populated files. Never expose the empty placeholder as a change.
@@ -3443,6 +3451,8 @@ fn diff_python_sources_final_impl(
     probe.measure("rust_semantic_facts_enrich", || {
         enrich_tree_facts(&mut old_tree);
         enrich_tree_facts(&mut new_tree);
+        declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, "python");
+        declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, "python");
         Ok::<(), String>(())
     })?;
     let old_index = TreeIndex::new(&old_tree);
