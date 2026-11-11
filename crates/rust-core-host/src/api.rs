@@ -136,3 +136,10 @@ pub fn review_sources(
     }
     serde_json::from_value(envelope["diff"].take()).map_err(ReviewError::InvalidResult)
 }
+
+/// The complete guardrail check verdict (counts + strict gate) for a set of reviews or a
+/// violation list. See [`crate::guardrail_policy::check_result`] for the request shape and the
+/// gate rule; bindings render this result and never recompute `passed`.
+pub fn guardrail_check_result(request: &Value) -> Result<Value, ReviewError> {
+    crate::guardrail_policy::check_result(request).map_err(ReviewError::Engine)
+}

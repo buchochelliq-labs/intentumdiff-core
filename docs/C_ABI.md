@@ -19,6 +19,7 @@ Additional semantic helpers:
 | `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
 | `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
+| `guardrail_check_result` | request JSON string: `diffs` XOR `violations`, required `strict`, optional `checked_files`, `metadata` | complete guardrail check verdict (see below) |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
 
@@ -188,6 +189,26 @@ Hosts discover/read policy files; Rust interprets root `protected` and nested `g
 forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
 Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
 Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+### Guardrail check verdict (`guardrail_check_result`)
+
+`api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)
+produce the one authoritative check verdict; bindings and the CLI render it and never recompute
+counts or the gate. Request: exactly one of `"diffs": [SemanticDiff…]` (their
+`guardrail_violations` are concatenated in order; an absent/null list counts as none) or
+`"violations": [GuardrailViolation…]`, plus `"strict": bool` (required), `"checked_files":
+int|null` (default: the number of diffs, or `null` for a bare violation list) and `"metadata":
+object|null` (passed through). Result, exactly:
+
+```json
+{"violations": [...], "violation_count": 3, "immutable_count": 1, "important_count": 2,
+ "checked_files": 4, "strict": true, "passed": false, "metadata": null}
+```
+
+**Gate rule:** under `strict`, ANY violation — `important` or `immutable` — fails the check;
+a non-strict check is advisory and always passes. Unknown/missing severity, a missing or
+non-boolean `strict`, both or neither of `diffs`/`violations`, and malformed counts/metadata
+are errors. The native CLI's `guardrails --strict` exit status (2) uses the same function.
 
 Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
 It owns invariance suppression, generic/Markdown replacement, group indices, style decisions

@@ -149,3 +149,74 @@ fn invalid_physical_filename_override_is_not_ignored() {
         assert!(intentumdiff_rust_core::guardrail_policy::apply_policy(&request).is_err());
     }
 }
+
+fn violation(severity: &str, rule: &str) -> serde_json::Value {
+    serde_json::json!({"rule_id": rule, "severity": severity, "file": "a.json", "language": "json",
+        "semantic_path": "secret", "node_type": "pair", "old_node_id": null, "new_node_id": null,
+        "old_value": "1", "new_value": "2", "message": "Protected path secret changed"})
+}
+
+#[test]
+fn guardrail_check_result_is_the_single_gate_for_diffs_and_violations() {
+    use intentumdiff_rust_core::api::guardrail_check_result;
+    use serde_json::json;
+    let diffs = json!([
+        {"guardrail_violations": [violation("important", "a"), violation("immutable", "b")]},
+        {"guardrail_violations": []},
+        {"changes": []},
+        {"guardrail_violations": [violation("important", "c")]},
+    ]);
+    // Under strict, ANY violation fails, important included; the order is the diffs' order.
+    let strict = guardrail_check_result(&json!({"diffs": diffs, "strict": true})).unwrap();
+    assert_eq!(strict["violation_count"], 3);
+    assert_eq!(strict["immutable_count"], 1);
+    assert_eq!(strict["important_count"], 2);
+    assert_eq!(strict["checked_files"], 4);
+    assert_eq!(strict["passed"], false);
+    assert_eq!(strict["metadata"], json!(null));
+    let rules: Vec<_> = strict["violations"].as_array().unwrap().iter().map(|v| v["rule_id"].clone()).collect();
+    assert_eq!(rules, vec![json!("a"), json!("b"), json!("c")]);
+    let mut keys: Vec<_> = strict.as_object().unwrap().keys().cloned().collect();
+    keys.sort();
+    assert_eq!(keys, ["checked_files", "immutable_count", "important_count", "metadata", "passed",
+        "strict", "violation_count", "violations"]);
+    // Non-strict is advisory and always passes.
+    let advisory = guardrail_check_result(&json!({"diffs": diffs, "strict": false, "checked_files": 9,
+        "metadata": {"source": "cli"}})).unwrap();
+    assert_eq!(advisory["passed"], true);
+    assert_eq!(advisory["strict"], false);
+    assert_eq!(advisory["checked_files"], 9);
+    assert_eq!(advisory["metadata"], json!({"source": "cli"}));
+    // Important-only violations fail under strict.
+    let important = guardrail_check_result(&json!({"violations": [violation("important", "x")],
+        "strict": true})).unwrap();
+    assert_eq!(important["passed"], false);
+    assert_eq!(important["checked_files"], json!(null));
+    let clean = guardrail_check_result(&json!({"violations": [], "strict": true, "checked_files": 2})).unwrap();
+    assert_eq!(clean["passed"], true);
+    assert_eq!(clean["violation_count"], 0);
+}
+
+#[test]
+fn guardrail_check_result_rejects_malformed_evidence() {
+    use intentumdiff_rust_core::api::guardrail_check_result;
+    use serde_json::json;
+    for request in [
+        json!({"violations": []}),
+        json!({"violations": [], "strict": "yes"}),
+        json!({"strict": true}),
+        json!({"diffs": [], "violations": [], "strict": true}),
+        json!({"violations": [violation("critical", "x")], "strict": false}),
+        json!({"violations": [{"rule_id": "x"}], "strict": false}),
+        json!({"violations": [42], "strict": false}),
+        json!({"violations": {}, "strict": false}),
+        json!({"diffs": [{"guardrail_violations": {}}], "strict": false}),
+        json!({"diffs": [42], "strict": false}),
+        json!({"violations": [], "strict": false, "checked_files": -1}),
+        json!({"violations": [], "strict": false, "checked_files": "2"}),
+        json!({"violations": [], "strict": false, "metadata": []}),
+        json!([]),
+    ] {
+        assert!(guardrail_check_result(&request).is_err(), "{request}");
+    }
+}

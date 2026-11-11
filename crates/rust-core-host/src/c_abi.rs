@@ -474,6 +474,11 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             serde_json::to_string(&crate::guardrail_policy::apply_policy(&request)?)
                 .map_err(|e| format!("serialize: {e}"))
         }
+        "guardrail_check_result" => {
+            let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
+                .map_err(|e| format!("request_json is not valid JSON: {e}"))?;
+            serde_json::to_string(&crate::guardrail_policy::check_result(&request)?).map_err(|e| e.to_string())
+        }
         "parse_guardrail_policy" => {
             serde_json::to_string(&crate::guardrail_policy::parse_policy(arg_str(args, 0, "source")?)?)
                 .map_err(|e| format!("serialize: {e}"))
@@ -1012,6 +1017,28 @@ mod tests {
         assert_eq!(applied["ok"], true, "{applied}");
         assert_eq!(applied["result"]["metadata"]["guardrails"]["immutable_count"], 1);
         assert_eq!(call("apply_guardrail_policy", json!(["{}"]))["ok"], false);
+    }
+
+    #[test]
+    fn guardrail_check_result_round_trips_the_abi() {
+        let violation = json!({"rule_id":"r","severity":"important","file":"a.json","language":"json",
+            "semantic_path":"secret","node_type":"pair","old_node_id":null,"new_node_id":null,
+            "old_value":"1","new_value":"2","message":"m"});
+        let request = json!({"diffs":[{"guardrail_violations":[violation]},{}],"strict":true});
+        let env = call("guardrail_check_result", json!([request.to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        assert_eq!(env["result"], crate::api::guardrail_check_result(&request).unwrap());
+        assert_eq!(env["result"]["passed"], false);
+        assert_eq!(env["result"]["checked_files"], 2);
+        assert_eq!(env["result"]["important_count"], 1);
+        let advisory = call("guardrail_check_result",
+            json!([json!({"violations":[violation],"strict":false}).to_string()]));
+        assert_eq!(advisory["result"]["passed"], true);
+        for bad in [json!(["{\"violations\":[]}"]), json!(["not json"]), json!([])] {
+            let env = call("guardrail_check_result", bad);
+            assert_eq!(env["ok"], false, "{env}");
+            assert_eq!(env["error_type"], "value_error");
+        }
     }
 
     #[test]
