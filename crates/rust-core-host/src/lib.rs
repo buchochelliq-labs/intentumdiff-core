@@ -52,6 +52,9 @@ pub mod schema_profiles;
 mod schema_context;
 pub mod host_utils;
 pub mod guardrail_policy;
+mod declaration_facts;
+mod source_text;
+pub mod content_class;
 pub mod routed_review;
 pub mod patch_source;
 /// Shared typed symbol/reference API for native Rust consumers.
@@ -208,6 +211,8 @@ pub(crate) fn diff_python_cst_impl(
     // compute. Without this call the two entry points disagreed about the same source.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", "python");
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", "python");
     validate_unique_ids(&old_tree).map_err(|exc| format!("old semantic tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new semantic tree: {exc}"))?;
 
@@ -286,6 +291,8 @@ fn diff_semantic_tree_impl(
     // path) are left untouched. Only changes labels/facts, not structure.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", language);
 
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
@@ -1488,6 +1495,9 @@ fn finalize_review_impl(
     // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    // Declaration visibility + stub sentinel (language rules; header re-read from source).
+    declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, language);
 
     // Source absence, not child count, determines a lifecycle boundary. Leaf trees
     // may represent populated files. Never expose the empty placeholder as a change.
@@ -2507,10 +2517,24 @@ impl RustCoreConfig {
     }
 }
 
+/// Marker every size-limit error carries, so the C ABI can classify it (`size_limit`)
+/// however a caller prefixes the message.
+pub(crate) const SIZE_LIMIT_MARKER: &str = "size limit exceeded";
+
+pub(crate) fn is_size_limit_error(message: &str) -> bool {
+    message.contains(SIZE_LIMIT_MARKER)
+}
+
+/// Enforce a configured byte limit (#301). The error names the diff-config setting that
+/// raises it: parser output is bounded by `max_plugin_output_bytes`, sources/CSTs/trees by
+/// `max_cst_bytes`.
 fn check_byte_limit(label: &str, text: &str, limit: usize) -> Result<(), String> {
     let size = text.len();
     if size > limit {
-        Err(format!("{label} is {size} bytes; limit is {limit} bytes"))
+        let setting = if label.contains("parser output") { "max_plugin_output_bytes" } else { "max_cst_bytes" };
+        Err(format!(
+            "{SIZE_LIMIT_MARKER}: {label} is {size} bytes; limit is {limit} bytes (raise diff config `{setting}`)"
+        ))
     } else {
         Ok(())
     }
@@ -2941,8 +2965,82 @@ struct WasmProcessPair {
     cache_key: String,
 }
 
-static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserComponent>>>> =
+static PARSER_COMPONENT_CACHE: OnceLock<Mutex<BoundedComponentCache<Arc<CachedParserComponent>>>> =
     OnceLock::new();
+
+/// Most compiled parser components kept per process (#259): every bundled grammar in both
+/// metering modes fits, while churn through distinct paths stops growing at this ceiling.
+const MAX_CACHED_PARSER_COMPONENTS: usize = 192;
+/// Budget on the summed component file sizes the cache retains (compiled code is roughly
+/// proportional), so a few huge components cannot pin unbounded memory either.
+const MAX_CACHED_PARSER_COMPONENT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
+
+/// Process-global compiled-component cache with deterministic bounds (#259). Keys are
+/// `path|len=..|mtime=..|metered=..`; a new revision of a path (same path + metering,
+/// different len/mtime) replaces the old one, and beyond the entry/byte budgets the least
+/// recently used entry is evicted. Evicted values stay valid for holders of their `Arc`.
+struct BoundedComponentCache<V> {
+    entries: HashMap<String, (V, u64, u64)>,
+    tick: u64,
+    max_entries: usize,
+    max_bytes: u64,
+}
+
+impl<V: Clone> BoundedComponentCache<V> {
+    fn new(max_entries: usize, max_bytes: u64) -> Self {
+        Self { entries: HashMap::new(), tick: 0, max_entries, max_bytes }
+    }
+
+    fn get(&mut self, key: &str) -> Option<V> {
+        self.tick += 1;
+        let tick = self.tick;
+        self.entries.get_mut(key).map(|(value, _, used)| {
+            *used = tick;
+            value.clone()
+        })
+    }
+
+    /// The identity of a key without its revision (`path` + metering).
+    fn identity(key: &str) -> (&str, &str) {
+        let path = key.split("|len=").next().unwrap_or(key);
+        let metered = key.rsplit("|metered=").next().unwrap_or("");
+        (path, metered)
+    }
+
+    fn bytes_of(key: &str) -> u64 {
+        key.split("|len=").nth(1).and_then(|rest| rest.split('|').next())
+            .and_then(|n| n.parse().ok()).unwrap_or(0)
+    }
+
+    /// Insert unless present; returns the value now cached for `key`.
+    fn insert(&mut self, key: String, value: V) -> V {
+        self.tick += 1;
+        if let Some((existing, _, used)) = self.entries.get_mut(&key) {
+            *used = self.tick;
+            return existing.clone();
+        }
+        let identity = Self::identity(&key);
+        let stale: Vec<String> = self.entries.keys()
+            .filter(|k| Self::identity(k) == identity).cloned().collect();
+        for k in stale {
+            self.entries.remove(&k);
+        }
+        let bytes = Self::bytes_of(&key);
+        self.entries.insert(key, (value.clone(), bytes, self.tick));
+        while self.entries.len() > self.max_entries
+            || (self.entries.len() > 1 && self.entries.values().map(|(_, b, _)| *b).sum::<u64>() > self.max_bytes)
+        {
+            let Some(oldest) = self.entries.iter().min_by_key(|(k, (_, _, used))| (*used, (*k).clone()))
+                .map(|(k, _)| k.clone()) else { break };
+            self.entries.remove(&oldest);
+        }
+        value
+    }
+
+    fn len(&self) -> usize {
+        self.entries.len()
+    }
+}
 
 impl ParserHostState {
     fn new() -> Self {
@@ -3443,6 +3541,8 @@ fn diff_python_sources_final_impl(
     probe.measure("rust_semantic_facts_enrich", || {
         enrich_tree_facts(&mut old_tree);
         enrich_tree_facts(&mut new_tree);
+        declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, "python");
+        declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, "python");
         Ok::<(), String>(())
     })?;
     let old_index = TreeIndex::new(&old_tree);
@@ -4675,12 +4775,11 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
         }
     }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
+    // The full text: it is identity (structural hashing and literal semantics read it), so a
+    // cap made a suffix-only edit past it hash-equal and the review fell back (#289). Display
+    // labels apply their own bounds downstream.
     let text = if keep_text {
-        node.utf8_text(source)
-            .unwrap_or("")
-            .chars()
-            .take(4096)
-            .collect()
+        node.utf8_text(source).unwrap_or("").to_owned()
     } else {
         String::new()
     };
@@ -4865,14 +4964,16 @@ fn cached_parser_component(
         None
     };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
-    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
+    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| {
+        Mutex::new(BoundedComponentCache::new(MAX_CACHED_PARSER_COMPONENTS, MAX_CACHED_PARSER_COMPONENT_BYTES))
+    });
     {
-        let guard = cache
+        let mut guard = cache
             .lock()
             .map_err(|_| "parser component cache lock poisoned".to_owned())?;
         if let Some(cached) = guard.get(&cache_key) {
             return Ok(ParserComponentLookup {
-                cached: Arc::clone(cached),
+                cached,
                 cache_hit: true,
                 cache_key,
             });
@@ -4891,9 +4992,9 @@ fn cached_parser_component(
     let mut guard = cache
         .lock()
         .map_err(|_| "parser component cache lock poisoned".to_owned())?;
-    let cached = guard.entry(cache_key.clone()).or_insert_with(|| cached);
+    let cached = guard.insert(cache_key.clone(), cached);
     Ok(ParserComponentLookup {
-        cached: Arc::clone(cached),
+        cached,
         cache_hit: false,
         cache_key,
     })
@@ -9557,6 +9658,7 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes, old_tree, new_tree));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
+    probed!(changes, "suppress_subexpression_moves_in_modified_statement", suppress_subexpression_moves_inside_modified_statement_drafts(changes));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
         changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));
@@ -9630,6 +9732,9 @@ fn finalize_python_review_drafts<'a>(
     // not a proven rename or ignored formatting. Run after all suppression.
     probed!(changes, "preserve_clojure_ordered_parameter_permutations",
         preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
+    // #300: say WHAT changed — bounded source text for statement modifications and the
+    // deleted/added text of unlabelled nodes. Evidence only; runs after every decision.
+    source_text::annotate_source_text_drafts(changes, old_source, new_source);
     sort_candidate_drafts(changes);
 }
 
@@ -10903,6 +11008,8 @@ fn infer_file_lifecycle_from_file(file: &Value) -> &'static str {
 }
 
 fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str) {
+    // Every served diff passes through here; stamp the content class alongside the lifecycle.
+    content_class::attach(diff);
     if !diff.get("metadata").is_some_and(Value::is_object) {
         diff["metadata"] = json!({});
     }
@@ -11276,5 +11383,87 @@ mod plugin_error_envelope_tests {
     fn trees_and_non_json_pass_through() {
         assert!(reject_plugin_error_envelope(r#"{"id":"0","node_type":"module"}"#, "old").is_ok());
         assert!(reject_plugin_error_envelope("not json", "old").is_ok());
+    }
+}
+
+#[cfg(test)]
+#[path = "size_limit_tests.rs"]
+mod size_limit_tests;
+
+#[cfg(test)]
+mod component_cache_tests {
+    use super::*;
+
+    fn key(path: &str, len: u64, mtime: u64, metered: bool) -> String {
+        format!("{path}|len={len}|mtime={mtime}.0|metered={metered}")
+    }
+
+    #[test]
+    fn churn_stops_at_the_entry_ceiling_and_evicts_least_recently_used() {
+        let mut cache = BoundedComponentCache::new(3, u64::MAX);
+        for i in 0..10 {
+            cache.insert(key(&format!("/p{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 3);
+        assert_eq!(cache.get(&key("/p9.wasm", 10, 1, true)), Some(9));
+        assert_eq!(cache.get(&key("/p0.wasm", 10, 1, true)), None);
+        // Touching p7 keeps it; the next insert evicts p8 (least recently used).
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        cache.insert(key("/q.wasm", 10, 1, true), 100);
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        assert_eq!(cache.get(&key("/p8.wasm", 10, 1, true)), None);
+    }
+
+    #[test]
+    fn a_new_revision_replaces_the_old_one_per_metering_mode() {
+        let mut cache = BoundedComponentCache::new(100, u64::MAX);
+        for mtime in 0..20 {
+            cache.insert(key("/a.wasm", 10 + mtime, mtime, true), mtime);
+        }
+        cache.insert(key("/a.wasm", 99, 99, false), 99);
+        assert_eq!(cache.len(), 2, "one revision per path and metering mode");
+        assert_eq!(cache.get(&key("/a.wasm", 29, 19, true)), Some(19));
+        // Same key: the first cached value wins and is returned (identical identity).
+        assert_eq!(cache.insert(key("/a.wasm", 29, 19, true), 1000), 19);
+    }
+
+    #[test]
+    fn byte_budget_bounds_retained_component_bytes() {
+        let mut cache = BoundedComponentCache::new(100, 25);
+        for i in 0..5 {
+            cache.insert(key(&format!("/b{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 2);
+        // A single component larger than the budget is still cached (never zero entries).
+        let mut tiny = BoundedComponentCache::new(100, 5);
+        tiny.insert(key("/huge.wasm", 50, 1, true), 1);
+        assert_eq!(tiny.len(), 1);
+    }
+
+    #[cfg(feature = "tier-c-wasm")]
+    #[test]
+    fn real_component_revisions_do_not_accumulate() {
+        let staged = std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components");
+        let source = std::path::Path::new(&staged).join("json_parser.wasm");
+        let dir = std::env::temp_dir().join(format!("intentumdiff-cache-{}-{}", std::process::id(),
+            std::time::SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let copy = dir.join("json_parser.wasm");
+        std::fs::copy(&source, &copy).unwrap();
+        let path = copy.to_string_lossy().into_owned();
+        let identity = |key: &str| BoundedComponentCache::<()>::identity(key).0.to_owned();
+        let first = cached_parser_component(&path, true).unwrap();
+        let file = std::fs::File::options().write(true).open(&copy).unwrap();
+        file.set_modified(std::time::SystemTime::now() + std::time::Duration::from_secs(5)).unwrap();
+        drop(file);
+        let second = cached_parser_component(&path, true).unwrap();
+        assert_ne!(first.cache_key, second.cache_key);
+        let guard = PARSER_COMPONENT_CACHE.get().unwrap().lock().unwrap();
+        let held = guard.entries.keys().filter(|k| identity(k) == identity(&second.cache_key)).count();
+        assert_eq!(held, 1, "the older revision was replaced");
+        drop(guard);
+        // The evicted revision stays usable by its holder.
+        assert!(Arc::strong_count(&first.cached) >= 1);
+        std::fs::remove_dir_all(&dir).ok();
     }
 }

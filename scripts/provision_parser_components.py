@@ -62,6 +62,10 @@ TIER_C_COMPONENTS = [
     "elixir", "html", "xml", "markdown", "mdx",
     # #297 definition-level signature changes across Java, Rust and C#.
     "java", "rust", "csharp",
+    # Declaration visibility / stub-sentinel NodeFacts (Kotlin and Swift defaults).
+    "kotlin", "swift",
+    # #270 Perl spacing, #272 Astro/Svelte embedded JS quotes, #273 CSS comments.
+    "perl", "astro", "svelte",
 ]
 
 

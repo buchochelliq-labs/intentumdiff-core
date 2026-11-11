@@ -19,6 +19,8 @@ Additional semantic helpers:
 | `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
 | `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
+| `live_negotiate_protocol` | hello request JSON string | hello success (`protocol_version`, `supported_protocol_versions`) or a protocol error: absent/null version = current (2); a supported integer is accepted; another integer → `unsupported_protocol_version`; a non-integer → `invalid_protocol_version` |
+| `guardrail_check_result` | request JSON string: `diffs` XOR `violations`, required `strict`, optional `checked_files`, `metadata` | complete guardrail check verdict (see below) |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
 
@@ -54,6 +56,7 @@ lists — are their JSON forms).
 | `not_found` | an absent path / blob / working-tree file | `FileNotFoundError` / `fs.ErrNotExist` |
 | `value_error` | invalid input — including a **missing positional argument** (`"missing argument 0 (language)"`) | `ValueError` |
 | `bad_request` | the **args_json itself is malformed** (not a JSON array, e.g. `null`) | `ValueError` |
+| `size_limit` | an input, CST/tree or parser output exceeded a configured byte limit; the message names the diff-config setting that raises it (`max_cst_bytes` or `max_plugin_output_bytes`) and contains `size limit exceeded` | `ValueError` subclass / a "too large" file error |
 | `internal` | an engine panic caught at the boundary | `RuntimeError` |
 
 Two pinned behaviors binding authors rely on (see the Go/Java scaffold tests):
@@ -188,6 +191,34 @@ Hosts discover/read policy files; Rust interprets root `protected` and nested `g
 forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
 Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
 Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+### Content class
+
+Every served review (`SemanticDiff`) carries `content_class`: `code` | `docs` | `config` |
+`data` | `text`, from the routed language (`content_class::content_class`; Markdown files on the
+generic text route are `docs`). It describes what was reviewed, never a risk. `ChangeGroup`
+carries no `impact`: group `kind` and `refactoring_kind` already state everything the engine
+has decided about a group, and an impact level would be a risk claim the engine cannot derive.
+
+### Guardrail check verdict (`guardrail_check_result`)
+
+`api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)
+produce the one authoritative check verdict; bindings and the CLI render it and never recompute
+counts or the gate. Request: exactly one of `"diffs": [SemanticDiff…]` (their
+`guardrail_violations` are concatenated in order; an absent/null list counts as none) or
+`"violations": [GuardrailViolation…]`, plus `"strict": bool` (required), `"checked_files":
+int|null` (default: the number of diffs, or `null` for a bare violation list) and `"metadata":
+object|null` (passed through). Result, exactly:
+
+```json
+{"violations": [...], "violation_count": 3, "immutable_count": 1, "important_count": 2,
+ "checked_files": 4, "strict": true, "passed": false, "metadata": null}
+```
+
+**Gate rule:** under `strict`, ANY violation — `important` or `immutable` — fails the check;
+a non-strict check is advisory and always passes. Unknown/missing severity, a missing or
+non-boolean `strict`, both or neither of `diffs`/`violations`, and malformed counts/metadata
+are errors. The native CLI's `guardrails --strict` exit status (2) uses the same function.
 
 Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
 It owns invariance suppression, generic/Markdown replacement, group indices, style decisions

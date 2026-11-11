@@ -52,6 +52,7 @@ pub(crate) fn source_fallback_diff_impl(old: &str, new: &str, old_filename: &str
     let mut diff = crate::semantic_diff_payload(old_filename,new_filename,changes,changed,crate::COMPLETE,json!({"engine":"rust_source_fallback_v1", "certification":"rust_source_fallback_v1", "trust_tier":"first_party_core_builder", "python_parser_backend":"source_comparison", "wasm_boundary":"not_applicable"}));
     diff["language"] = json!(language);
     diff["is_fallback"] = json!(true);
+    crate::content_class::attach(&mut diff);
     diff["metadata"]["rust_core"]["supported_language"] = json!(language);
     diff["metadata"]["engine_owner"] = json!("rust");
     diff["metadata"]["semantic_contract"] = json!("rust_source_fallback_v1");

@@ -74,6 +74,9 @@ pub struct Review {
     pub has_semantic_changes: bool,
     pub is_style_only: bool,
     pub is_fallback: bool,
+    /// `code` | `docs` | `config` | `data` | `text`, from the routed language.
+    #[serde(default)]
+    pub content_class: Option<String>,
     #[serde(default)]
     pub metadata: Map<String, Value>,
     #[serde(flatten)]
@@ -135,4 +138,11 @@ pub fn review_sources(
         return Err(ReviewError::Unsupported(reason.to_owned()));
     }
     serde_json::from_value(envelope["diff"].take()).map_err(ReviewError::InvalidResult)
+}
+
+/// The complete guardrail check verdict (counts + strict gate) for a set of reviews or a
+/// violation list. See [`crate::guardrail_policy::check_result`] for the request shape and the
+/// gate rule; bindings render this result and never recompute `passed`.
+pub fn guardrail_check_result(request: &Value) -> Result<Value, ReviewError> {
+    crate::guardrail_policy::check_result(request).map_err(ReviewError::Engine)
 }

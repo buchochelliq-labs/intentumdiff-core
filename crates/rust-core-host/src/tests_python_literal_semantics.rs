@@ -150,3 +150,27 @@ fn python_literal_native_hash_preserves_prefix_before_finalization() {
         serialize_ts_node(parse_python_tree(new).unwrap().root_node(), new.as_bytes()).unwrap();
     assert_ne!(structural_hash_cst(&old_cst), structural_hash_cst(&new_cst));
 }
+
+#[test]
+fn python_literal_suffix_edit_beyond_4096_chars_is_meaningful() {
+    // #289: the native converter truncated literal text at 4096 chars, so a suffix-only edit
+    // hashed identically and the review fell back instead of reporting the change.
+    let long = "a".repeat(4200);
+    assert_meaningful_literal_change(&format!("\"{long}x\""), &format!("\"{long}y\""));
+    // Multi-byte characters straddling the old cap (chars vs bytes).
+    let wide = "é".repeat(4095);
+    assert_meaningful_literal_change(&format!("\"{wide}xé\""), &format!("\"{wide}yé\""));
+    // A long but unchanged literal stays unchanged next to an unrelated edit.
+    let diff = native_source_diff(&format!("value = \"{long}\"\nother = 1\n"), &format!("value = \"{long}\"\nother = 2\n"));
+    assert_eq!(diff["has_semantic_changes"], true, "{diff}");
+}
+
+#[test]
+fn python_native_hash_covers_literal_suffix_beyond_4096_chars() {
+    let long = "a".repeat(4200);
+    let old = format!("value = \"{long}x\"\n");
+    let new = format!("value = \"{long}y\"\n");
+    let old_cst = serialize_ts_node(parse_python_tree(&old).unwrap().root_node(), old.as_bytes()).unwrap();
+    let new_cst = serialize_ts_node(parse_python_tree(&new).unwrap().root_node(), new.as_bytes()).unwrap();
+    assert_ne!(structural_hash_cst(&old_cst), structural_hash_cst(&new_cst));
+}

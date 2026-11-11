@@ -97,6 +97,7 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             "changes":changes,"change_groups":groups,"metadata":metadata,
             "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]})
     };
+    crate::content_class::attach(&mut diff);
     diff["metadata"]["engine_owner"] = json!("rust");
     diff["metadata"]["semantic_contract"] = json!("rust_finalize_review_v1");
     diff["metadata"]["rust_core"] = json!({"engine":"rust_finalize_review_v1", "stage":"per_stage_finalize_routing", "used":true});

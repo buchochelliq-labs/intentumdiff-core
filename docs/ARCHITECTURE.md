@@ -18,7 +18,13 @@ source pair ──► parse ──► SemanticNode trees ──► match ──�
    Component Model) loaded by the wasmtime host with fuel + memory limits.
 2. **SemanticNode trees.** Parsers emit deterministic trees: `id` (dotted path), `node_type`,
    `label`, 0-based positions, structural hashes, and privacy-safe `NodeFacts` (counts/enums/
-   flags — never source text) computed natively.
+   flags — never source text) computed natively. Declarations in Python, Go, Java, C#,
+   Kotlin, Swift, Rust and JS/TS also carry `visibility` (`public` | `internal` | `private` |
+   `protected` | `special` | `unknown`; explicit modifiers where the language has them, naming
+   conventions only where the language defines them — Python `_x`/`__x`/`__x__`, Go
+   capitalisation — and `unknown` rather than a guess); a `body: "stub"` carries
+   `stub_sentinel` (`pass` | `ellipsis` | `not_implemented` | `docstring_only` | `todo_macro` |
+   `panic`). Rules: `crates/rust-core-host/src/declaration_facts.rs`.
 3. **Match.** Hash-based subtree matching, entity anchoring, rename/move promotion, cross-file
    symbol/reference matching (via `index-engine-lib`, linked natively).
 4. **Classify.** Each change becomes MEANINGFUL / REFACTORING / MOVED / IGNORED_STYLE / NOISE

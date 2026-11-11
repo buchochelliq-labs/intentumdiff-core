@@ -28,6 +28,66 @@ pub fn live_error_response_impl(seq: i64, code: &str, message: &str, op: &str) -
     error_obj(seq, code, message, op).to_string()
 }
 
+/// The live protocol version this engine speaks, and every version it accepts (#260).
+pub const LIVE_PROTOCOL_VERSION: i64 = 2;
+pub const LIVE_SUPPORTED_PROTOCOL_VERSIONS: &[i64] = &[2];
+
+/// Negotiate a `hello` request's `protocol_version` (#260). One rule for every transport:
+/// - absent or null: the client takes the current version (`protocol_version` 2);
+/// - an integer in `LIVE_SUPPORTED_PROTOCOL_VERSIONS`: accepted as requested;
+/// - any other integer: rejected with `unsupported_protocol_version` (never silently
+///   answered with a different version);
+/// - anything else (string, float, bool, negative): rejected as `invalid_protocol_version`.
+/// Returns either `{"op":"hello","seq",ok:true,"protocol_version",
+/// "supported_protocol_versions"}` or the standard protocol error object, which also carries
+/// `supported_protocol_versions` so a client can retry.
+pub fn live_negotiate_protocol_impl(hello: &Value) -> Value {
+    let seq = hello.get("seq").and_then(Value::as_i64).unwrap_or(0);
+    let supported = json!(LIVE_SUPPORTED_PROTOCOL_VERSIONS);
+    let reject = |code: &str, message: String| {
+        let mut response = error_obj(seq, code, &message, "hello");
+        response["error"]["supported_protocol_versions"] = supported.clone();
+        response
+    };
+    let version = match hello.get("protocol_version") {
+        None | Some(Value::Null) => LIVE_PROTOCOL_VERSION,
+        Some(Value::Number(n)) if n.is_u64() => i64::try_from(n.as_u64().unwrap_or(u64::MAX)).unwrap_or(i64::MAX),
+        Some(value) => return reject("invalid_protocol_version",
+            format!("protocol_version must be a non-negative integer, got {value}")),
+    };
+    if !LIVE_SUPPORTED_PROTOCOL_VERSIONS.contains(&version) {
+        return reject("unsupported_protocol_version",
+            format!("protocol_version {version} is not supported; supported: {LIVE_SUPPORTED_PROTOCOL_VERSIONS:?}"));
+    }
+    json!({"op": "hello", "seq": seq, "ok": true, "protocol_version": version,
+        "supported_protocol_versions": supported})
+}
+
+#[cfg(test)]
+mod protocol_negotiation_tests {
+    use super::*;
+
+    #[test]
+    fn hello_versions_have_deterministic_outcomes() {
+        let ok = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 1, "protocol_version": 2}));
+        assert_eq!(ok["ok"], true);
+        assert_eq!(ok["protocol_version"], 2);
+        let missing = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 2}));
+        assert_eq!(missing["ok"], true);
+        assert_eq!(missing["protocol_version"], LIVE_PROTOCOL_VERSION);
+        let unsupported = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 3, "protocol_version": 999}));
+        assert_eq!(unsupported["ok"], false, "999 must not be answered as accepted: {unsupported}");
+        assert_eq!(unsupported["seq"], 3);
+        assert_eq!(unsupported["error"]["code"], "unsupported_protocol_version");
+        assert_eq!(unsupported["error"]["supported_protocol_versions"], json!([2]));
+        assert!(unsupported.get("protocol_version").is_none());
+        for bad in [json!("2"), json!(2.5), json!(2.0), json!(-1), json!(true), json!([2])] {
+            let r = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 4, "protocol_version": bad}));
+            assert_eq!(r["error"]["code"], "invalid_protocol_version", "{bad}: {r}");
+        }
+    }
+}
+
 /// python `LiveServer._limits` (pure Rust).
 pub fn live_limits_impl() -> String {
     json!({
