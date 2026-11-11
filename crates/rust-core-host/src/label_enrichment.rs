@@ -2408,3 +2408,7 @@ mod xml_whitespace_source_tests;
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "html_whitespace_source_tests.rs"]
 mod html_whitespace_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "web_dynamic_equivalence_source_tests.rs"]
+mod web_dynamic_equivalence_source_tests;

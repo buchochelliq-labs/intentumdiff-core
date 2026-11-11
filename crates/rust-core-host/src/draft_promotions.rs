@@ -2550,11 +2550,23 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
             return true;
         }
         if old_node.label != new_node.label {
-            return true;
+            // #270: a container whose structural hash is unchanged and whose raw label differs
+            // only by token-separating whitespace (`my $x=1+2` -> `my $x = 1 + 2`) carries no
+            // semantic delta — the hash already covers its children. Anything the hash or the
+            // opaque-payload check can see still survives.
+            let spacing_only = !old_node.is_leaf()
+                && !new_node.is_leaf()
+                && old_node.structural_hash == new_node.structural_hash
+                && strip_whitespace(&old_node.label) == strip_whitespace(&new_node.label);
+            return !spacing_only || opaque_payload::changed(old_node, new_node, old_source, new_source, language);
         }
         subtree_has_leaf_label_delta(old_node, new_node)
             || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
+}
+
+fn strip_whitespace(text: &str) -> String {
+    text.chars().filter(|c| !c.is_whitespace()).collect()
 }
 
 pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {

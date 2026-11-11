@@ -64,6 +64,8 @@ TIER_C_COMPONENTS = [
     "java", "rust", "csharp",
     # Declaration visibility / stub-sentinel NodeFacts (Kotlin and Swift defaults).
     "kotlin", "swift",
+    # #270 Perl spacing, #272 Astro/Svelte embedded JS quotes, #273 CSS comments.
+    "perl", "astro", "svelte",
 ]
 
 
