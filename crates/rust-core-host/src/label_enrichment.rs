@@ -423,6 +423,46 @@ pub(crate) fn decode_xml_entities(text: &str) -> String {
     out
 }
 
+/// Byte ranges (in `snippet`) of the element's opening tag and of each attribute in it, in
+/// source order (#256). Mirrors `attributes_from_opening_tag`'s scan: quotes are honoured,
+/// a value may be quoted or bare, `/` before `>` closes a self-closing tag.
+fn opening_tag_spans(snippet: &str) -> Option<(std::ops::Range<usize>, Vec<(String, std::ops::Range<usize>)>)> {
+    let bytes = snippet.as_bytes();
+    let open = snippet.find('<')?;
+    let mut i = open + 1;
+    while i < bytes.len() && bytes[i].is_ascii_whitespace() { i += 1; }
+    while i < bytes.len() && !bytes[i].is_ascii_whitespace() && !matches!(bytes[i], b'>' | b'/') { i += 1; }
+    let mut attrs = Vec::new();
+    loop {
+        while i < bytes.len() && (bytes[i].is_ascii_whitespace() || bytes[i] == b'/') { i += 1; }
+        if i >= bytes.len() { return None; }
+        if bytes[i] == b'>' { return Some((open..i + 1, attrs)); }
+        if bytes[i] == b'<' { return None; }
+        let start = i;
+        while i < bytes.len() && !bytes[i].is_ascii_whitespace() && !matches!(bytes[i], b'=' | b'>' | b'/') { i += 1; }
+        let name = snippet[start..i].to_owned();
+        let mut end = i;
+        let mut j = i;
+        while j < bytes.len() && bytes[j].is_ascii_whitespace() { j += 1; }
+        if j < bytes.len() && bytes[j] == b'=' {
+            j += 1;
+            while j < bytes.len() && bytes[j].is_ascii_whitespace() { j += 1; }
+            if j < bytes.len() && matches!(bytes[j], b'"' | b'\'') {
+                let quote = bytes[j];
+                j += 1;
+                while j < bytes.len() && bytes[j] != quote { j += 1; }
+                j = (j + 1).min(bytes.len());
+            } else {
+                while j < bytes.len() && !bytes[j].is_ascii_whitespace() && bytes[j] != b'>' { j += 1; }
+            }
+            end = j;
+            i = j;
+        }
+        if name.is_empty() { i += 1; continue; }
+        attrs.push((name, start..end));
+    }
+}
+
 pub(crate) fn path_synthetic_position(node: &SemanticNode) -> NodePosition {
     NodePosition {
         start_line: node.position.start_line,
@@ -833,6 +873,17 @@ pub(crate) fn enrich_markup_attributes(
                 .collect::<Vec<_>>()
         })
         .collect();
+    // Real source ranges for the synthetic nodes (#256): the opening tag and each attribute's
+    // own bytes, matched to the parsed attributes in order by name.
+    let spans = opening_tag_spans(&snippet);
+    let mut attr_spans = spans.as_ref().map(|(_, a)| a.iter()).into_iter().flatten();
+    let mut positions: Vec<NodePosition> = Vec::with_capacity(attrs.len());
+    for (name, _) in &attrs {
+        let found = attr_spans.by_ref().find(|(span_name, _)| {
+            attribute_name_for_language(span_name, language) == attribute_name_for_language(name, language)
+        });
+        positions.push(found.map_or_else(|| path_synthetic_position(node), |(_, range)| style_position(node, &snippet, range.clone())));
+    }
     let synthetic_attrs: Vec<SemanticNode> = attrs
         .iter()
         .enumerate()
@@ -847,7 +898,7 @@ pub(crate) fn enrich_markup_attributes(
                 format!("{}.path_attr_{}", node.id, index),
                 "attribute",
                 attr_label,
-                path_synthetic_position(node),
+                positions[index].clone(),
                 Vec::new(),
             )
         })
@@ -872,11 +923,14 @@ pub(crate) fn enrich_markup_attributes(
             return result;
         }
     }
+    let start_position = spans
+        .as_ref()
+        .map_or_else(|| path_synthetic_position(node), |(open, _)| style_position(node, &snippet, open.clone()));
     let start_tag = path_synthetic_node(
         format!("{}.path_start", node.id),
         "start_tag",
         label.to_string(),
-        path_synthetic_position(node),
+        start_position,
         synthetic_attrs,
     );
     let mut result = vec![start_tag];
@@ -1827,6 +1881,32 @@ pub(crate) fn enrich_query_profile_labels_node(
 #[cfg(test)]
 mod markup_text_span_tests {
     use super::*;
+
+    /// #256: synthetic start tags and attributes point at their own source bytes (multiline
+    /// opening tags and multi-byte values included), never a zero-width span at the element.
+    #[test]
+    fn synthetic_start_tags_and_attributes_have_real_source_ranges() {
+        let source = "<div>\n  <p class=\"café\"\n     data-x='1 2' hidden>hi</p>\n</div>";
+        let lines: Vec<&str> = source.split('\n').collect();
+        // The <p> element: line 1 col 2 .. line 2 end.
+        let p = path_synthetic_node("0.0".into(), "element", "p".into(),
+            NodePosition { start_line: 1, start_col: 2, end_line: 2, end_col: 31 }, vec![]);
+        let children = enrich_markup_attributes(&p, &lines, vec![], "p", "html");
+        let start = &children[0];
+        assert_eq!(start.node_type, "start_tag");
+        let slice = |pos: &NodePosition| {
+            let snippet = path_source_slice(&lines, &path_synthetic_node("x".into(), "x", String::new(), pos.clone(), vec![]));
+            snippet
+        };
+        assert_eq!(slice(&start.position), "<p class=\"café\"\n     data-x='1 2' hidden>");
+        let attrs: Vec<(String, String)> = start.children.iter()
+            .map(|a| (a.label.clone(), slice(&a.position))).collect();
+        assert_eq!(attrs, vec![
+            ("class=café".to_string(), "class=\"café\"".to_string()),
+            ("data-x=1 2".to_string(), "data-x='1 2'".to_string()),
+            ("hidden".to_string(), "hidden".to_string()),
+        ]);
+    }
 
     #[test]
     fn nested_and_sibling_attributes_keep_their_own_values() {
