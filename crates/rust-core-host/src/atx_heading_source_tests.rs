@@ -79,3 +79,54 @@ fn atx_heading_text_changes_stay_semantic() {
     }
     assert_semantic(&mdx("# hi!", "# bye!"), "mdx text change");
 }
+
+/// The binding chains `enrich_node_facts` before `finalize_review`; the native review enriches
+/// only after normalising. Both orders must give identical output: the heading-level leaf
+/// (#275) and rebuilt code blocks (#274) change `child_count`, and stale facts from the earlier
+/// enrichment must not survive normalisation (found by the Python migration-parity gate).
+#[test]
+fn finalize_output_does_not_depend_on_fact_enrichment_order() {
+    let wasm = std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components");
+    let staged = tempfile::tempdir().expect("isolated parser staging");
+    for name in ["markdown_parser.wasm", "mdx_parser.wasm"] {
+        std::fs::copy(std::path::Path::new(&wasm).join(name), staged.path().join(name))
+            .expect("copy exact verified parser bytes");
+    }
+    std::fs::write(
+        staged.path().join("parser_manifest.json"),
+        serde_json::json!({
+            "schema_version": 1,
+            "parsers": {
+                "markdown": {"plugin_id": "markdown", "wasm": "markdown_parser.wasm", "extensions": [".md"]},
+                "mdx": {"plugin_id": "mdx", "wasm": "mdx_parser.wasm", "extensions": [".mdx"]}
+            },
+            "extension_index": {".md": "markdown", ".mdx": "mdx"}
+        })
+        .to_string(),
+    )
+    .expect("test-only manifest for already-pinned components");
+    let dir = staged.path().to_str().expect("UTF-8 fixture path");
+    let doc = "# Getting Started\n\nWelcome.\n\n## Installation ##\n\n```bash\nnpm install x\n```\n\n    indented\n";
+    for (filename, language) in [("doc.md", "markdown"), ("doc.mdx", "mdx")] {
+        let tree = |content: &str| -> String {
+            let parsed: Value = serde_json::from_str(&parse_to_tree(filename, content, "{}", dir).expect("parse"))
+                .expect("parse JSON");
+            parsed["tree"].to_string()
+        };
+        let enriched = |tree_json: &str| -> String {
+            let mut node: SemanticNode = serde_json::from_str(tree_json).expect("tree");
+            enrich_tree_facts(&mut node);
+            serde_json::to_string(&node).expect("tree JSON")
+        };
+        for (old, new) in [("", doc), (doc, &doc.replace("## Installation", "### Installation")[..])] {
+            let (old_tree, new_tree) = (tree(old), tree(new));
+            let raw = finalize_review_impl(&old_tree, &new_tree, old, new, language, "{}").expect("finalize");
+            let pre = finalize_review_impl(&enriched(&old_tree), &enriched(&new_tree), old, new, language, "{}")
+                .expect("finalize pre-enriched");
+            let (raw, pre): (Value, Value) = (serde_json::from_str(&raw).unwrap(), serde_json::from_str(&pre).unwrap());
+            assert_eq!(raw["changes"], pre["changes"], "{language}: enrichment order changed the output");
+            assert_eq!(raw["change_groups"], pre["change_groups"], "{language}");
+            assert!(raw["changes"].to_string().contains("heading_level"), "{language}: {raw}");
+        }
+    }
+}
