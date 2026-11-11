@@ -299,6 +299,9 @@ fn normalize_block(node: &mut SemanticNode, lines: &[&str]) -> bool {
     node.structural_hash = crate::synthetic_structural_hash(CODE_BLOCK, &label, &children);
     node.label = label;
     node.children = children;
+    // The children were rebuilt: drop facts derived from the parser's tree (see
+    // atx_heading::normalize_node) so finalize re-derives them.
+    node.facts = None;
     true
 }
 

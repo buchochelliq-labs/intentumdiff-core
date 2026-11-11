@@ -147,6 +147,11 @@ fn normalize_node(node: &mut SemanticNode, lines: &[&str], mdx: bool) -> bool {
     }
     if changed {
         node.structural_hash = crate::enriched_structural_hash(node, &node.label, &node.children);
+        // Derived facts (`child_count`, ...) describe the parser's tree, which this pass has
+        // just changed. Drop them so `finalize_review` re-derives them from the normalised
+        // tree; `merge_facts` never overwrites, so a caller that enriched facts before
+        // finalizing would otherwise keep the stale pre-normalisation counts.
+        node.facts = None;
     }
     changed
 }
