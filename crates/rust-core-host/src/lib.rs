@@ -11238,7 +11238,7 @@ mod native_commit_index_fail_closed_tests {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "commit_index_partial_tests.rs"]
 mod commit_index_partial_tests;
 

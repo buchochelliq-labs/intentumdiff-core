@@ -6,10 +6,44 @@
 //! native live review path.
 use serde_json::{json, Value};
 
+/// Stage only the registry-pinned component this review needs, with a test-only manifest,
+/// as the other source-judged regressions do: the provisioned directory carries the
+/// verified bytes but no `parser_manifest.json`.
+fn staged_parsers(path: &str) -> tempfile::TempDir {
+    let staged_dir = std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+        .expect("mandatory release CI provisions verified parser components");
+    let (language, wasm, extension) = match std::path::Path::new(path)
+        .extension()
+        .and_then(|e| e.to_str())
+    {
+        Some("js") => ("javascript", "js_ts_parser.wasm", ".js"),
+        Some("py") => ("python", "python_parser.wasm", ".py"),
+        other => panic!("no staged component for extension {other:?}"),
+    };
+    let staged = std::path::Path::new(&staged_dir).join(wasm);
+    assert!(staged.is_file(), "registry-pinned component absent: {}", staged.display());
+    let fixture = tempfile::tempdir().expect("isolated parser staging");
+    std::fs::copy(&staged, fixture.path().join(wasm)).expect("copy exact verified parser bytes");
+    std::fs::write(
+        fixture.path().join("parser_manifest.json"),
+        json!({
+            "schema_version": 1,
+            "parsers": {
+                language: {"plugin_id": language, "wasm": wasm, "extensions": [extension]}
+            },
+            "extension_index": {extension: language}
+        })
+        .to_string(),
+    )
+    .expect("test-only manifest for already-pinned component");
+    fixture
+}
+
 fn review(path: &str, old: &str, new: &str) -> Value {
-    let wasm = std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components");
+    let parsers = staged_parsers(path);
     let raw = crate::live_server::live_diff_contents_impl(
-        env!("CARGO_MANIFEST_DIR"), path, old, new, "{}", &wasm,
+        env!("CARGO_MANIFEST_DIR"), path, old, new, "{}",
+        parsers.path().to_str().expect("UTF-8 fixture path"),
     )
     .expect("native review");
     let response: Value = serde_json::from_str(&raw).expect("valid native response");

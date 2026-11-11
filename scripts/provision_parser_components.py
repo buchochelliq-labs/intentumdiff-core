@@ -57,6 +57,9 @@ API = "https://api.github.com"
 TIER_C_COMPONENTS = [
     "python", "go", "js-ts", "ini", "asm", "json", "clojure", "assemblyscript",
     "css", "scss", "yaml", "make", "proto", "puppet", "toml",
+    # 0.0.3 source-judged regressions (#247 XML/HTML whitespace, #271 Elixir visibility,
+    # #274/#275 Markdown code blocks and ATX headings, MDX headings).
+    "elixir", "html", "xml", "markdown", "mdx",
 ]
 
 
