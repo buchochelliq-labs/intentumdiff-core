@@ -1326,18 +1326,10 @@ fn augment_html_path_matching<'a>(
     let key_fn: Box<dyn Fn(&SemanticNode, &HashMap<&str, &SemanticNode>) -> Option<Vec<String>>> =
         match language {
             "html" => Box::new(html_path_key),
-            "xml" if xml_tree_is_pom(old_tree) || xml_tree_is_pom(new_tree) => {
-                Box::new(xml_pom_key)
-            }
-            "xml" if xml_tree_is_msbuild(old_tree) || xml_tree_is_msbuild(new_tree) => {
-                Box::new(xml_msbuild_key)
-            }
-            // User-registered dialects (issue #86): interpreted through the same
-            // xml_schema_key body; bundled dialects above outrank them.
-            "xml" => match matching_user_xml_dialect(old_tree, new_tree) {
-                Some(dialect) => Box::new(move |node, by_id| {
-                    xml_schema_key(node, by_id, &|n| user_dialect_coordinate_key(&dialect, n))
-                }),
+            // Bundled POM/MSBuild outrank user-registered dialects (issue #86); all are
+            // interpreted through the same xml_schema_key body.
+            "xml" => match xml_schema_coordinate_fn(old_tree, new_tree) {
+                Some(coordinate_fn) => Box::new(move |node, by_id| xml_schema_key(node, by_id, &*coordinate_fn)),
                 None => return matching,
             },
             _ => return matching,
@@ -9658,7 +9650,8 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes, old_tree, new_tree));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
-    probed!(changes, "suppress_subexpression_moves_in_modified_statement", suppress_subexpression_moves_inside_modified_statement_drafts(changes));
+    probed!(changes, "suppress_subexpression_moves_in_modified_statement", suppress_subexpression_moves_inside_modified_statement_drafts(
+        changes, old_tree, new_tree, language));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
         changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));

@@ -87,3 +87,46 @@ fn source_text_is_bounded_and_whitespace_collapsed() {
         }
     }
 }
+
+/// An identity-keyed element (schema coordinate key) is an entity boundary for #299: a MOVE
+/// whose path from the modified ancestor runs through `book[isbn]` changed identity, so it is
+/// kept. The same drafts without the dialect fold as before (non-vacuity).
+#[test]
+fn moves_through_identity_keyed_elements_are_kept() {
+    fn node(id: &str, node_type: &str, label: &str, children: Vec<Value>) -> Value {
+        json!({"id": id, "node_type": node_type, "label": label, "structural_hash": format!("{id}:{label}"),
+            "position": {"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0}, "children": children})
+    }
+    fn catalog(isbn: &str) -> SemanticNode {
+        serde_json::from_value(node("0", "document", "", vec![node("0.0", "element", "catalog", vec![
+            node("0.0.0", "element", "book", vec![
+                node("0.0.0.0", "element", "isbn", vec![node("0.0.0.0.0", "text", isbn, vec![])]),
+                node("0.0.0.1", "element", "price", vec![node("0.0.0.1.0", "text", "10.99", vec![])]),
+            ]),
+        ])])).unwrap()
+    }
+    fn find<'n>(n: &'n SemanticNode, id: &str) -> &'n SemanticNode {
+        fn walk<'n>(n: &'n SemanticNode, id: &str) -> Option<&'n SemanticNode> {
+            if n.id == id { return Some(n); }
+            n.children.iter().find_map(|c| walk(c, id))
+        }
+        walk(n, id).unwrap()
+    }
+    let (old_tree, new_tree) = (catalog("978-0"), catalog("978-9"));
+    let run = |dialects: Vec<UserXmlDialect>| {
+        let _scope = xml_schema::scoped_xml_dialects(dialects);
+        let draft = |change_type: &'static str, id: &str| ChangeDraft {
+            change_type, old_node: Some(find(&old_tree, id)), new_node: Some(find(&new_tree, id)),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None,
+        };
+        // The catalog root is the (non-keyed) modification; <price> re-parents between books.
+        let mut changes = vec![draft("MODIFICATION", "0.0"), draft("MOVE", "0.0.0.1")];
+        suppress_subexpression_moves_inside_modified_statement_drafts(&mut changes, &old_tree, &new_tree, "xml");
+        changes.iter().map(|c| c.change_type).collect::<Vec<_>>()
+    };
+    let dialect: UserXmlDialect = serde_json::from_value(json!({
+        "language_id": "acme-catalog", "root_element": "catalog", "keyed_elements": {"book": ["isbn"]}})).unwrap();
+    assert_eq!(run(vec![dialect]), ["MODIFICATION", "MOVE"], "a move across book identities is kept");
+    assert_eq!(run(Vec::new()), ["MODIFICATION"], "unkeyed, the move folds into the modification");
+}

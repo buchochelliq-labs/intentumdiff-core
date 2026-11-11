@@ -1055,12 +1055,32 @@ pub(crate) fn suppress_child_moves_under_refactoring_pair_drafts(changes: &mut V
 /// operand removed around it), not moved code. Fold it into the modification by dropping the
 /// MOVE. Moves that cross a block/body boundary (statement reorders inside a modified
 /// function, branch-to-branch moves) and modifications of entities/containers are left alone.
-pub(crate) fn suppress_subexpression_moves_inside_modified_statement_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
+///
+/// An identity-keyed node (an element with its own XML schema coordinate key: bundled POM /
+/// MSBuild, or a user-registered dialect) is an entity boundary too: the profile forbids
+/// pairing across identities, so a MOVE through one (`<price>` leaving `book[isbn=978-0]` for
+/// `book[isbn=978-9]`) is the identity change the profile exists to surface, never a
+/// sub-expression of the enclosing modification.
+pub(crate) fn suppress_subexpression_moves_inside_modified_statement_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    language: &str,
+) {
+    if !changes.iter().any(|change| change.change_type == "MOVE") {
+        return;
+    }
+    let coordinate_fn = if language == "xml" { xml_schema_coordinate_fn(old_tree, new_tree) } else { None };
+    let old_keyed = identity_keyed_node_ids(old_tree, coordinate_fn.as_ref());
+    let new_keyed = identity_keyed_node_ids(new_tree, coordinate_fn.as_ref());
+    // A keyed modification root is an entity (refinement may pair book[978-0] with
+    // book[978-9] after the matcher refused to): never a statement to fold moves into.
     let modified: Vec<(&SemanticNode, &SemanticNode)> = changes
         .iter()
         .filter(|change| change.change_type == "MODIFICATION")
         .filter_map(|change| Some((change.old_node?, change.new_node?)))
         .filter(|(old, new)| !is_move_container_type(&old.node_type) && !is_move_container_type(&new.node_type))
+        .filter(|(old, new)| !old_keyed.contains(&old.id) && !new_keyed.contains(&new.id))
         .collect();
     if modified.is_empty() {
         return;
@@ -1073,9 +1093,27 @@ pub(crate) fn suppress_subexpression_moves_inside_modified_statement_drafts(chan
             return true;
         };
         !modified.iter().any(|(old_parent, new_parent)| {
-            expression_path_within(old_parent, &old_node.id) && expression_path_within(new_parent, &new_node.id)
+            expression_path_within(old_parent, &old_node.id, &old_keyed)
+                && expression_path_within(new_parent, &new_node.id, &new_keyed)
         })
     });
+}
+
+/// Ids of the nodes in `tree` that carry their own schema identity key under the profile
+/// claiming the diffed pair (empty when no identity profile applies).
+fn identity_keyed_node_ids(tree: &SemanticNode, coordinate_fn: Option<&XmlCoordinateFn>) -> HashSet<String> {
+    let mut ids = HashSet::new();
+    let Some(coordinate_fn) = coordinate_fn else {
+        return ids;
+    };
+    let mut stack = vec![tree];
+    while let Some(node) = stack.pop() {
+        if coordinate_fn(node).is_some() {
+            ids.insert(node.id.clone());
+        }
+        stack.extend(node.children.iter());
+    }
+    ids
 }
 
 /// Entities, bodies and other statement containers: a move inside one is a real move.
@@ -1092,23 +1130,24 @@ fn is_move_container_type(node_type: &str) -> bool {
             | "case_clause" | "except_clause" | "finally_clause")
 }
 
-/// `target_id` is a strict descendant of `root` reached without passing a container.
-fn expression_path_within(root: &SemanticNode, target_id: &str) -> bool {
-    fn walk(node: &SemanticNode, target_id: &str) -> Option<bool> {
+/// `target_id` is a strict descendant of `root` reached without passing a container or an
+/// identity-keyed node (`keyed`); a keyed target is itself an entity, so it never qualifies.
+fn expression_path_within(root: &SemanticNode, target_id: &str, keyed: &HashSet<String>) -> bool {
+    fn walk(node: &SemanticNode, target_id: &str, keyed: &HashSet<String>) -> Option<bool> {
         for child in &node.children {
             if child.id == target_id {
-                return Some(true);
+                return Some(!keyed.contains(&child.id));
             }
             if target_id.starts_with(&format!("{}.", child.id)) {
-                if is_move_container_type(&child.node_type) {
+                if is_move_container_type(&child.node_type) || keyed.contains(&child.id) {
                     return Some(false);
                 }
-                return walk(child, target_id);
+                return walk(child, target_id, keyed);
             }
         }
         None
     }
-    target_id.starts_with(&format!("{}.", root.id)) && walk(root, target_id) == Some(true)
+    target_id.starts_with(&format!("{}.", root.id)) && walk(root, target_id, keyed) == Some(true)
 }
 
 pub(crate) fn suppress_child_modifications_under_preferred_parent_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
@@ -1401,3 +1440,7 @@ mod rename_body_tests {
 #[cfg(test)]
 #[path = "moved_subexpression_tests.rs"]
 mod moved_subexpression_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "identity_key_move_source_tests.rs"]
+mod identity_key_move_source_tests;
