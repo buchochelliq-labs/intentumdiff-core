@@ -5158,6 +5158,7 @@ fn native_generic_text_diff(
             "old_source": old_source,
             "new_source": new_source,
             "language": language,
+            "evidence_source": "text_lines",
         })) {
             if let Some(groups) = evidence.get("change_groups").and_then(Value::as_array) {
                 change_groups.extend(groups.iter().cloned());
@@ -6309,9 +6310,9 @@ fn python_node_facts_value(node: &CstNode) -> Option<Value> {
                     _ => {}
                 }
             }
-            if default_count > 0 {
-                facts.insert("default_count".to_owned(), json!(default_count));
-            }
+            // Always present with a parameter list (#297): 0 means "no defaults", which a
+            // consumer must be able to tell apart from "unknown".
+            facts.insert("default_count".to_owned(), json!(default_count));
             if keyword_only_count > 0 {
                 facts.insert("keyword_only_count".to_owned(), json!(keyword_only_count));
             }
@@ -6834,15 +6835,26 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         // Anything after `*args` or a bare `*` is keyword-only.
         let mut after_splat = false;
         for p in &params.children {
+            // C# keeps `int n = 0` as a `parameter` whose pruned default value follows its
+            // name; a parameter pattern can never contain a literal, so no other grammar
+            // spelling is mistaken for one.
+            let csharp_default = p.node_type == "parameter"
+                && p.children.iter().skip_while(|c| c.node_type != "identifier").skip(1)
+                    .any(|c| semantic_literal_kind(&c.node_type).is_some());
+            if csharp_default {
+                default_count += 1;
+                continue;
+            }
             match p.node_type.as_str() {
+                // `assignment_pattern` is a JavaScript `x = 1` parameter default.
                 "default_parameter" | "typed_default_parameter" | "optional_parameter"
-                | "default_value" => {
+                | "default_value" | "assignment_pattern" => {
                     default_count += 1;
                     if after_splat {
                         keyword_only_count += 1;
                     }
                 }
-                "list_splat_pattern" | "variadic_parameter" | "rest_parameter" => {
+                "list_splat_pattern" | "variadic_parameter" | "rest_parameter" | "rest_pattern" => {
                     has_variadic = true;
                     after_splat = true;
                 }
@@ -6856,9 +6868,9 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
                 _ => {}
             }
         }
-        if default_count > 0 {
-            facts.insert("default_count".to_owned(), json!(default_count));
-        }
+        // Always present with a parameter list (#297): 0 means "no defaults", which a
+        // consumer must be able to tell apart from "unknown".
+        facts.insert("default_count".to_owned(), json!(default_count));
         if keyword_only_count > 0 {
             facts.insert("keyword_only_count".to_owned(), json!(keyword_only_count));
         }
@@ -9516,6 +9528,8 @@ fn finalize_python_review_drafts<'a>(
     ));
     probed!(changes, "promote_parameter_renames", promote_parameter_renames_from_signature_changes(changes));
     probed!(changes, "promote_parameter_identifier_renames", promote_parameter_identifier_modification_renames(changes, old_tree, new_tree));
+    // After the rename promoters: a shape change must not feed the positional param zip.
+    probed!(changes, "promote_parameter_shape_signature_changes", promote_parameter_shape_signature_changes_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_moved_empty_read_condition", promote_moved_empty_read_condition_updates(changes));
     probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes, matching));
     probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language, matching));

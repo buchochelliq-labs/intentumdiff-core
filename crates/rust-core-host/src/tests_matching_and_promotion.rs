@@ -526,12 +526,19 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         );
     }
     #[test]
-    fn generic_text_reordered_lines_net_to_zero() {
+    fn generic_text_reordered_lines_are_one_move() {
+        // #14 pairs the relocated line instead of add+delete; #248 keeps it visible.
         let old = "line one\nline two\nline three\n";
         let new = "line two\nline one\nline three\n";
         let payload: Value =
             serde_json::from_str(&generic_text_review_json(old, new, 0).unwrap()).unwrap();
-        assert_eq!(payload["changes"].as_array().unwrap().len(), 0);
+        let changes = payload["changes"].as_array().unwrap();
+        assert_eq!(changes.len(), 1, "{changes:?}");
+        assert_eq!(changes[0]["change_type"], "MOVE");
+        assert_ne!(
+            changes[0]["old_node"]["position"]["start_line"],
+            changes[0]["new_node"]["position"]["start_line"]
+        );
         assert!(payload["group"].is_null(), "no raw churn -> no audit group");
     }
     #[test]

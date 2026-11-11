@@ -58,26 +58,27 @@ churn.** Markdown additionally gets section-aware presentation. All verified in
   never read as runtime "Behavior" or "New public API", and a genuine insert must never be buried
   as suppressed noise (see the change-group index-space contract).
 
-## Prose line reorder (fixed 2026-07-06, issue #14)
+## Prose line reorder (issue #14, revised 2026-11-11 by issue #248)
 
 | Scenario | Input (old → new) | Expected |
 |---|---|---|
-| Adjacent line swap | lines 1↔2 swapped, rest unchanged | exact_total = 0 — identical content whose position changed nets out (`_net_out_relocated_generic_lines`); prose has no execution order. Non-identical lines and unpaired adds/deletes pass through untouched. |
+| Adjacent line swap | lines 1↔2 swapped, rest unchanged | exact_total = 1 — ONE line `MOVE` (old + new location), never add+delete and never style-only: reordered instructions ("First disconnect power." / "Then service equipment.") can change meaning (#248). Non-identical lines and unpaired adds/deletes pass through untouched. |
+| Layout-only text edit | blank line added, CRLF vs LF | zero changes, style-only; the evidence reason names the line-level text comparison, never "parser-normalized tree" (this route builds no tree). |
 
 ## Markdown section move (fixed 2026-07-06, issue #15)
 
 | Scenario | Input (old → new) | Expected |
 |---|---|---|
-| Section swap | `## A` and `## B` (with bodies) swap order | exact_total = 1 — ONE section MOVE (LIS insertion-shift discrimination, the #12/#32 rule applied to section order); the body travels with the section (relocated identical lines net out per #14); blank-separator churn suppressed (deleted blank lines skipped symmetrically with added ones). |
+| Section swap | `## A` and `## B` (with bodies) swap order | exact_total = 1 — ONE section MOVE (LIS insertion-shift discrimination, the #12/#32 rule applied to section order); the body travels with the section (its relocated body lines are owned by the section MOVE, not reported again); blank-separator churn suppressed (deleted blank lines skipped symmetrically with added ones). |
 
 ## Generic-text stage: PORTED TO RUST (2026-07-06, issue #35)
 
-The generic text review (line diff, relocated-line netting #14, blank symmetry #15, inline
+The generic text review (line diff, relocated-line pairing #14/#248, blank symmetry #15, inline
 char detail, and the `presentation.generic_text_diff` suppression AUDIT group) now runs in
 the Rust core (`generic_text_review_json`, strangler pattern per `apply_invariances_json`).
 Python (`_generic_text_changes` et al.) remains ONLY as the size-cap fallback (LCS table
 > 4M cells). All rows in this file are enforced by BOTH layers: the Python scenario suites
-and four Rust `#[cfg(test)]` pins (added-line+audit-group, reorder-nets-to-zero,
+and four Rust `#[cfg(test)]` pins (added-line+audit-group, reorder-is-one-move,
 one-modification-with-inline-detail, blank-deletion symmetry).
 
 ## Markdown section stage: PORTED TO RUST (2026-07-06, issue #36)

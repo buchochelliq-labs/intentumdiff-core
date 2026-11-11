@@ -265,6 +265,27 @@ use crate::*;
                 "description": "Move function_definition('discount') -> function_definition('discount')"
             },
             {
+                // #297: `discount` gained an optional parameter (`vip=False`), so the moved
+                // definition also carries ONE definition-level signature change.
+                "old_filename": "billing.py",
+                "new_filename": "billing.py",
+                "change_type": "REFACTORING",
+                "old": {
+                    "id": "0.0.2.0",
+                    "node_type": "function_definition",
+                    "label": "discount",
+                    "position": {"start_line": 1, "start_col": 4, "end_line": 4, "end_col": 16}
+                },
+                "new": {
+                    "id": "0.0",
+                    "node_type": "function_definition",
+                    "label": "discount",
+                    "position": {"start_line": 0, "start_col": 0, "end_line": 5, "end_col": 12}
+                },
+                "refactoring_kind": "CHANGE_SIGNATURE",
+                "description": "Change signature function_definition('discount')"
+            },
+            {
                 "old_filename": "billing.py",
                 "new_filename": "billing.py",
                 "change_type": "MODIFICATION",

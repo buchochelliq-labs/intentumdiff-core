@@ -771,7 +771,7 @@ use crate::*;
         assert_eq!(f["has_variadic"], true);
         assert_eq!(f["has_kwargs"], true);
 
-        // A plain `def g(a, b)` reports none of the kind facts.
+        // A plain `def g(a, b)` reports no kind flags, and zero defaults (#297: 0, not unknown).
         let plain: CstNode = serde_json::from_value(json!({
             "type": "function_definition",
             "children": [
@@ -785,7 +785,7 @@ use crate::*;
         .unwrap();
         let g = python_node_facts_value(&plain).expect("fn facts");
         assert_eq!(g["param_count"], 2);
-        assert!(g.get("default_count").is_none());
+        assert_eq!(g["default_count"], 0);
         assert!(g.get("has_variadic").is_none());
     }
     #[test]

@@ -1331,6 +1331,112 @@ pub(crate) fn promote_signature_changes_from_annotations_drafts<'a>(
     }
 }
 
+/// The parameter facts that decide call compatibility (#297): counts/flags only, derived
+/// from the normalised tree so every parser that exposes a parameter list gets them.
+fn parameter_shape(fn_node: &SemanticNode) -> Option<Vec<(&'static str, Value)>> {
+    fn_node.children.iter().find(|c| is_parameter_list_type(c.node_type.as_str()))?;
+    let facts = derive_node_facts(fn_node)?;
+    Some(
+        ["param_count", "default_count", "keyword_only_count", "has_variadic", "has_kwargs"]
+            .into_iter()
+            .map(|key| (key, facts.get(key).cloned().unwrap_or(Value::Null)))
+            .collect(),
+    )
+}
+
+/// Definition-level CHANGE_SIGNATURE for parameter-list edits (#297). A uniquely named
+/// function whose parameter shape (count, defaults, keyword-only, variadics) changed is
+/// promoted to ONE member-level refactoring whose old/new nodes carry the parameter facts,
+/// so a consumer can tell "required parameter added" from "optional parameter added"
+/// without knowing each grammar's parameter node names. The raw parameter-list drafts
+/// become that refactoring's detail and are suppressed, as for annotation signature
+/// changes. A rename keeps the shape and stays a RENAME_VARIABLE (handled earlier).
+pub(crate) fn promote_parameter_shape_signature_changes_drafts<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+) {
+    fn unique_by_key(root: &SemanticNode) -> HashMap<(&str, &str), Option<&SemanticNode>> {
+        let mut by_key: HashMap<(&str, &str), Option<&SemanticNode>> = HashMap::new();
+        for node in all_function_type_nodes(root) {
+            by_key
+                .entry((node.node_type.as_str(), node.label.as_str()))
+                .and_modify(|slot| *slot = None)
+                .or_insert(Some(node));
+        }
+        by_key
+    }
+    let old_functions = unique_by_key(old_tree);
+    let new_functions = unique_by_key(new_tree);
+    let mut promotions: Vec<(&SemanticNode, &SemanticNode)> = Vec::new();
+    let mut suppress_old_ids: HashSet<String> = HashSet::new();
+    let mut suppress_new_ids: HashSet<String> = HashSet::new();
+    let mut keys: Vec<&(&str, &str)> = new_functions.keys().collect();
+    keys.sort();
+    for key in keys {
+        let (Some(Some(old_fn)), Some(new_fn)) = (old_functions.get(key), new_functions[key])
+        else {
+            continue;
+        };
+        if old_fn.structural_hash == new_fn.structural_hash
+            || new_fn.label.is_empty()
+            || new_fn.label == "(anonymous)"
+        {
+            continue;
+        }
+        let (Some(old_shape), Some(new_shape)) = (parameter_shape(old_fn), parameter_shape(new_fn))
+        else {
+            continue;
+        };
+        if old_shape == new_shape
+            || change_pair_exists_drafts(
+                changes,
+                "REFACTORING",
+                Some(old_fn.id.as_str()),
+                Some(new_fn.id.as_str()),
+            )
+        {
+            continue;
+        }
+        let param_ids = |fn_node: &SemanticNode| -> HashSet<String> {
+            fn_node
+                .children
+                .iter()
+                .filter(|c| is_parameter_list_type(c.node_type.as_str()))
+                .flat_map(|list| std::iter::once(list).chain(list.descendants()))
+                .map(|node| node.id.clone())
+                .collect()
+        };
+        promotions.push((old_fn, new_fn));
+        suppress_old_ids.extend(param_ids(old_fn));
+        suppress_new_ids.extend(param_ids(new_fn));
+    }
+    if promotions.is_empty() {
+        return;
+    }
+    changes.retain(|change| {
+        if !matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION") {
+            return true;
+        }
+        let old_in = change.old_node.is_some_and(|n| suppress_old_ids.contains(&n.id));
+        let new_in = change.new_node.is_some_and(|n| suppress_new_ids.contains(&n.id));
+        !(old_in || new_in)
+    });
+    for (old_fn, new_fn) in promotions {
+        changes.push(ChangeDraft {
+            change_type: "REFACTORING",
+            old_node: Some(old_fn),
+            new_node: Some(new_fn),
+            old_index: None,
+            new_index: None,
+            confidence: 0.9,
+            description: format!("Change signature {}", format_node_ref(new_fn)),
+            refactoring_kind: Some("CHANGE_SIGNATURE"),
+            text_diff: None,
+        });
+    }
+}
+
 pub(crate) fn function_nodes(root: &SemanticNode) -> Vec<&SemanticNode> {
     let mut result = Vec::new();
     if matches!(
@@ -2867,3 +2973,7 @@ mod clojure_interop_rename_tests {
         assert_eq!(changes[0].refactoring_kind, Some("RENAME_VARIABLE"));
     }
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "signature_change_source_tests.rs"]
+mod signature_change_source_tests;
