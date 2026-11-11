@@ -277,6 +277,11 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         ).map(|v|json!(v).to_string()),
 
         "live_capabilities" => Ok(crate::live_server::live_capabilities_impl()),
+        "live_negotiate_protocol" => {
+            let hello: Value = serde_json::from_str(arg_str(args, 0, "hello_json")?)
+                .map_err(|e| format!("hello_json is not valid JSON: {e}"))?;
+            Ok(crate::live_server::live_negotiate_protocol_impl(&hello).to_string())
+        }
         "live_limits" => Ok(crate::live_server::live_limits_impl()),
         "live_normalise_request_path" => Ok(crate::live_server::live_normalise_request_path_impl(
             arg_str(args, 0, "path")?,
@@ -1019,6 +1024,17 @@ mod tests {
         assert_eq!(applied["ok"], true, "{applied}");
         assert_eq!(applied["result"]["metadata"]["guardrails"]["immutable_count"], 1);
         assert_eq!(call("apply_guardrail_policy", json!(["{}"]))["ok"], false);
+    }
+
+    #[test]
+    fn live_protocol_negotiation_round_trips_the_abi() {
+        let env = call("live_negotiate_protocol", json!([json!({"op":"hello","seq":1,"protocol_version":999}).to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        assert_eq!(env["result"]["ok"], false);
+        assert_eq!(env["result"]["error"]["code"], "unsupported_protocol_version");
+        let env = call("live_negotiate_protocol", json!([json!({"op":"hello","seq":1}).to_string()]));
+        assert_eq!(env["result"]["protocol_version"], 2);
+        assert_eq!(call("live_negotiate_protocol", json!(["{"]))["ok"], false);
     }
 
     #[test]

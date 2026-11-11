@@ -19,6 +19,7 @@ Additional semantic helpers:
 | `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
 | `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
+| `live_negotiate_protocol` | hello request JSON string | hello success (`protocol_version`, `supported_protocol_versions`) or a protocol error: absent/null version = current (2); a supported integer is accepted; another integer → `unsupported_protocol_version`; a non-integer → `invalid_protocol_version` |
 | `guardrail_check_result` | request JSON string: `diffs` XOR `violations`, required `strict`, optional `checked_files`, `metadata` | complete guardrail check verdict (see below) |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
