@@ -53,6 +53,7 @@ mod schema_context;
 pub mod host_utils;
 pub mod guardrail_policy;
 mod declaration_facts;
+mod source_text;
 pub mod content_class;
 pub mod routed_review;
 pub mod patch_source;
@@ -9641,6 +9642,9 @@ fn finalize_python_review_drafts<'a>(
     // not a proven rename or ignored formatting. Run after all suppression.
     probed!(changes, "preserve_clojure_ordered_parameter_permutations",
         preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
+    // #300: say WHAT changed — bounded source text for statement modifications and the
+    // deleted/added text of unlabelled nodes. Evidence only; runs after every decision.
+    source_text::annotate_source_text_drafts(changes, old_source, new_source);
     sort_candidate_drafts(changes);
 }
 

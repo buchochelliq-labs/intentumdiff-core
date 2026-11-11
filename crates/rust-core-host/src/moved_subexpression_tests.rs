@@ -57,3 +57,33 @@ fn reordered_statements_are_still_moves() {
     assert!(kinds(&diff).iter().any(|k| k == "MOVED_CODE"), "{diff:#}");
 }
 
+/// #300: a statement modification says WHAT changed (bounded source text), and a deletion
+/// of an unlabelled node names the deleted text instead of its node type twice.
+#[test]
+fn statement_modifications_carry_bounded_source_text() {
+    let diff = native(
+        &format!("def paginate(items, page, per_page):\n    start = page * per_page + 1\n{TAIL}"),
+        &format!("def paginate(items, page, per_page):\n    start = page * per_page\n{TAIL}"));
+    let changes = diff["changes"].as_array().unwrap();
+    let modification = changes.iter().find(|c| c["change_type"] == "MODIFICATION").unwrap_or_else(|| panic!("{diff:#}"));
+    assert_eq!(modification["text_diff"], "start = page * per_page + 1 -> start = page * per_page", "{modification:#}");
+    let deletion = changes.iter().find(|c| c["change_type"] == "DELETION").unwrap_or_else(|| panic!("{diff:#}"));
+    assert_eq!(deletion["description"], "Delete binary_operator('page * per_page + 1')", "{deletion:#}");
+}
+
+#[test]
+fn source_text_is_bounded_and_whitespace_collapsed() {
+    let long = (0..25).map(|i| format!("value_number_{i}")).collect::<Vec<_>>().join(" +\n        ");
+    let diff = native(&format!("def f():\n    total = ({long})\n    return total\n"),
+        &format!("def f():\n    total = ({long} + 1)\n    return total\n"));
+    let texts: Vec<&str> = diff["changes"].as_array().unwrap().iter().filter_map(|c| c["text_diff"].as_str()).collect();
+    assert!(texts.iter().any(|t| t.contains('…')), "a long statement is bounded, not dropped: {diff:#}");
+    for change in diff["changes"].as_array().unwrap() {
+        if let Some(text) = change["text_diff"].as_str() {
+            assert!(!text.contains('\n'), "{text}");
+            for side in text.split(" -> ") {
+                assert!(side.chars().count() <= crate::source_text::MAX_TEXT_CHARS, "{side}");
+            }
+        }
+    }
+}

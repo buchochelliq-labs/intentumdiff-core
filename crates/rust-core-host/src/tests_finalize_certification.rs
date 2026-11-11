@@ -334,7 +334,7 @@ use crate::*;
                     }
                 },
                 "refactoring_kind": "",
-                "description": "Insert -> call('call')"
+                "description": "Insert -> call('order.get(\"vip\", False)')"
             }
         ]);
 
@@ -441,7 +441,7 @@ use crate::*;
                     }
                 },
                 "refactoring_kind": "",
-                "description": "Insert -> import_from_statement('import_from_statement')"
+                "description": "Insert -> import_from_statement('from src.pricing import calculate_discount_for_customer')"
             },
             {
                 "old_filename": "src/billing.py",
