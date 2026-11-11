@@ -60,6 +60,8 @@ TIER_C_COMPONENTS = [
     # 0.0.3 source-judged regressions (#247 XML/HTML whitespace, #271 Elixir visibility,
     # #274/#275 Markdown code blocks and ATX headings, MDX headings).
     "elixir", "html", "xml", "markdown", "mdx",
+    # #297 definition-level signature changes across Java, Rust and C#.
+    "java", "rust", "csharp",
 ]
 
 
