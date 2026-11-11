@@ -2965,8 +2965,82 @@ struct WasmProcessPair {
     cache_key: String,
 }
 
-static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserComponent>>>> =
+static PARSER_COMPONENT_CACHE: OnceLock<Mutex<BoundedComponentCache<Arc<CachedParserComponent>>>> =
     OnceLock::new();
+
+/// Most compiled parser components kept per process (#259): every bundled grammar in both
+/// metering modes fits, while churn through distinct paths stops growing at this ceiling.
+const MAX_CACHED_PARSER_COMPONENTS: usize = 192;
+/// Budget on the summed component file sizes the cache retains (compiled code is roughly
+/// proportional), so a few huge components cannot pin unbounded memory either.
+const MAX_CACHED_PARSER_COMPONENT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
+
+/// Process-global compiled-component cache with deterministic bounds (#259). Keys are
+/// `path|len=..|mtime=..|metered=..`; a new revision of a path (same path + metering,
+/// different len/mtime) replaces the old one, and beyond the entry/byte budgets the least
+/// recently used entry is evicted. Evicted values stay valid for holders of their `Arc`.
+struct BoundedComponentCache<V> {
+    entries: HashMap<String, (V, u64, u64)>,
+    tick: u64,
+    max_entries: usize,
+    max_bytes: u64,
+}
+
+impl<V: Clone> BoundedComponentCache<V> {
+    fn new(max_entries: usize, max_bytes: u64) -> Self {
+        Self { entries: HashMap::new(), tick: 0, max_entries, max_bytes }
+    }
+
+    fn get(&mut self, key: &str) -> Option<V> {
+        self.tick += 1;
+        let tick = self.tick;
+        self.entries.get_mut(key).map(|(value, _, used)| {
+            *used = tick;
+            value.clone()
+        })
+    }
+
+    /// The identity of a key without its revision (`path` + metering).
+    fn identity(key: &str) -> (&str, &str) {
+        let path = key.split("|len=").next().unwrap_or(key);
+        let metered = key.rsplit("|metered=").next().unwrap_or("");
+        (path, metered)
+    }
+
+    fn bytes_of(key: &str) -> u64 {
+        key.split("|len=").nth(1).and_then(|rest| rest.split('|').next())
+            .and_then(|n| n.parse().ok()).unwrap_or(0)
+    }
+
+    /// Insert unless present; returns the value now cached for `key`.
+    fn insert(&mut self, key: String, value: V) -> V {
+        self.tick += 1;
+        if let Some((existing, _, used)) = self.entries.get_mut(&key) {
+            *used = self.tick;
+            return existing.clone();
+        }
+        let identity = Self::identity(&key);
+        let stale: Vec<String> = self.entries.keys()
+            .filter(|k| Self::identity(k) == identity).cloned().collect();
+        for k in stale {
+            self.entries.remove(&k);
+        }
+        let bytes = Self::bytes_of(&key);
+        self.entries.insert(key, (value.clone(), bytes, self.tick));
+        while self.entries.len() > self.max_entries
+            || (self.entries.len() > 1 && self.entries.values().map(|(_, b, _)| *b).sum::<u64>() > self.max_bytes)
+        {
+            let Some(oldest) = self.entries.iter().min_by_key(|(k, (_, _, used))| (*used, (*k).clone()))
+                .map(|(k, _)| k.clone()) else { break };
+            self.entries.remove(&oldest);
+        }
+        value
+    }
+
+    fn len(&self) -> usize {
+        self.entries.len()
+    }
+}
 
 impl ParserHostState {
     fn new() -> Self {
@@ -4890,14 +4964,16 @@ fn cached_parser_component(
         None
     };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
-    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
+    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| {
+        Mutex::new(BoundedComponentCache::new(MAX_CACHED_PARSER_COMPONENTS, MAX_CACHED_PARSER_COMPONENT_BYTES))
+    });
     {
-        let guard = cache
+        let mut guard = cache
             .lock()
             .map_err(|_| "parser component cache lock poisoned".to_owned())?;
         if let Some(cached) = guard.get(&cache_key) {
             return Ok(ParserComponentLookup {
-                cached: Arc::clone(cached),
+                cached,
                 cache_hit: true,
                 cache_key,
             });
@@ -4916,9 +4992,9 @@ fn cached_parser_component(
     let mut guard = cache
         .lock()
         .map_err(|_| "parser component cache lock poisoned".to_owned())?;
-    let cached = guard.entry(cache_key.clone()).or_insert_with(|| cached);
+    let cached = guard.insert(cache_key.clone(), cached);
     Ok(ParserComponentLookup {
-        cached: Arc::clone(cached),
+        cached,
         cache_hit: false,
         cache_key,
     })
@@ -11313,3 +11389,81 @@ mod plugin_error_envelope_tests {
 #[cfg(test)]
 #[path = "size_limit_tests.rs"]
 mod size_limit_tests;
+
+#[cfg(test)]
+mod component_cache_tests {
+    use super::*;
+
+    fn key(path: &str, len: u64, mtime: u64, metered: bool) -> String {
+        format!("{path}|len={len}|mtime={mtime}.0|metered={metered}")
+    }
+
+    #[test]
+    fn churn_stops_at_the_entry_ceiling_and_evicts_least_recently_used() {
+        let mut cache = BoundedComponentCache::new(3, u64::MAX);
+        for i in 0..10 {
+            cache.insert(key(&format!("/p{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 3);
+        assert_eq!(cache.get(&key("/p9.wasm", 10, 1, true)), Some(9));
+        assert_eq!(cache.get(&key("/p0.wasm", 10, 1, true)), None);
+        // Touching p7 keeps it; the next insert evicts p8 (least recently used).
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        cache.insert(key("/q.wasm", 10, 1, true), 100);
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        assert_eq!(cache.get(&key("/p8.wasm", 10, 1, true)), None);
+    }
+
+    #[test]
+    fn a_new_revision_replaces_the_old_one_per_metering_mode() {
+        let mut cache = BoundedComponentCache::new(100, u64::MAX);
+        for mtime in 0..20 {
+            cache.insert(key("/a.wasm", 10 + mtime, mtime, true), mtime);
+        }
+        cache.insert(key("/a.wasm", 99, 99, false), 99);
+        assert_eq!(cache.len(), 2, "one revision per path and metering mode");
+        assert_eq!(cache.get(&key("/a.wasm", 29, 19, true)), Some(19));
+        // Same key: the first cached value wins and is returned (identical identity).
+        assert_eq!(cache.insert(key("/a.wasm", 29, 19, true), 1000), 19);
+    }
+
+    #[test]
+    fn byte_budget_bounds_retained_component_bytes() {
+        let mut cache = BoundedComponentCache::new(100, 25);
+        for i in 0..5 {
+            cache.insert(key(&format!("/b{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 2);
+        // A single component larger than the budget is still cached (never zero entries).
+        let mut tiny = BoundedComponentCache::new(100, 5);
+        tiny.insert(key("/huge.wasm", 50, 1, true), 1);
+        assert_eq!(tiny.len(), 1);
+    }
+
+    #[cfg(feature = "tier-c-wasm")]
+    #[test]
+    fn real_component_revisions_do_not_accumulate() {
+        let staged = std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components");
+        let source = std::path::Path::new(&staged).join("json_parser.wasm");
+        let dir = std::env::temp_dir().join(format!("intentumdiff-cache-{}-{}", std::process::id(),
+            std::time::SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let copy = dir.join("json_parser.wasm");
+        std::fs::copy(&source, &copy).unwrap();
+        let path = copy.to_string_lossy().into_owned();
+        let identity = |key: &str| BoundedComponentCache::<()>::identity(key).0.to_owned();
+        let first = cached_parser_component(&path, true).unwrap();
+        let file = std::fs::File::options().write(true).open(&copy).unwrap();
+        file.set_modified(std::time::SystemTime::now() + std::time::Duration::from_secs(5)).unwrap();
+        drop(file);
+        let second = cached_parser_component(&path, true).unwrap();
+        assert_ne!(first.cache_key, second.cache_key);
+        let guard = PARSER_COMPONENT_CACHE.get().unwrap().lock().unwrap();
+        let held = guard.entries.keys().filter(|k| identity(k) == identity(&second.cache_key)).count();
+        assert_eq!(held, 1, "the older revision was replaced");
+        drop(guard);
+        // The evicted revision stays usable by its holder.
+        assert!(Arc::strong_count(&first.cached) >= 1);
+        std::fs::remove_dir_all(&dir).ok();
+    }
+}
