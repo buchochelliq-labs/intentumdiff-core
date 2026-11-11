@@ -190,6 +190,14 @@ forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml
 Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
 Applicable rules require both semantic trees. Errors must propagate through bindings.
 
+### Content class
+
+Every served review (`SemanticDiff`) carries `content_class`: `code` | `docs` | `config` |
+`data` | `text`, from the routed language (`content_class::content_class`; Markdown files on the
+generic text route are `docs`). It describes what was reviewed, never a risk. `ChangeGroup`
+carries no `impact`: group `kind` and `refactoring_kind` already state everything the engine
+has decided about a group, and an impact level would be a risk claim the engine cannot derive.
+
 ### Guardrail check verdict (`guardrail_check_result`)
 
 `api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)

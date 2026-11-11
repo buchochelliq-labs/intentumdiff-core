@@ -74,6 +74,9 @@ pub struct Review {
     pub has_semantic_changes: bool,
     pub is_style_only: bool,
     pub is_fallback: bool,
+    /// `code` | `docs` | `config` | `data` | `text`, from the routed language.
+    #[serde(default)]
+    pub content_class: Option<String>,
     #[serde(default)]
     pub metadata: Map<String, Value>,
     #[serde(flatten)]

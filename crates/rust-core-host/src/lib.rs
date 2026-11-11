@@ -53,6 +53,7 @@ mod schema_context;
 pub mod host_utils;
 pub mod guardrail_policy;
 mod declaration_facts;
+pub mod content_class;
 pub mod routed_review;
 pub mod patch_source;
 /// Shared typed symbol/reference API for native Rust consumers.
@@ -10913,6 +10914,8 @@ fn infer_file_lifecycle_from_file(file: &Value) -> &'static str {
 }
 
 fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str) {
+    // Every served diff passes through here; stamp the content class alongside the lifecycle.
+    content_class::attach(diff);
     if !diff.get("metadata").is_some_and(Value::is_object) {
         diff["metadata"] = json!({});
     }
