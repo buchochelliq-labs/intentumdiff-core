@@ -2517,10 +2517,24 @@ impl RustCoreConfig {
     }
 }
 
+/// Marker every size-limit error carries, so the C ABI can classify it (`size_limit`)
+/// however a caller prefixes the message.
+pub(crate) const SIZE_LIMIT_MARKER: &str = "size limit exceeded";
+
+pub(crate) fn is_size_limit_error(message: &str) -> bool {
+    message.contains(SIZE_LIMIT_MARKER)
+}
+
+/// Enforce a configured byte limit (#301). The error names the diff-config setting that
+/// raises it: parser output is bounded by `max_plugin_output_bytes`, sources/CSTs/trees by
+/// `max_cst_bytes`.
 fn check_byte_limit(label: &str, text: &str, limit: usize) -> Result<(), String> {
     let size = text.len();
     if size > limit {
-        Err(format!("{label} is {size} bytes; limit is {limit} bytes"))
+        let setting = if label.contains("parser output") { "max_plugin_output_bytes" } else { "max_cst_bytes" };
+        Err(format!(
+            "{SIZE_LIMIT_MARKER}: {label} is {size} bytes; limit is {limit} bytes (raise diff config `{setting}`)"
+        ))
     } else {
         Ok(())
     }
@@ -11295,3 +11309,7 @@ mod plugin_error_envelope_tests {
         assert!(reject_plugin_error_envelope("not json", "old").is_ok());
     }
 }
+
+#[cfg(test)]
+#[path = "size_limit_tests.rs"]
+mod size_limit_tests;

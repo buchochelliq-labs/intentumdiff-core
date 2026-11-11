@@ -886,6 +886,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
     })();
     match outcome {
         Ok(output) => success_envelope(&output),
+        // Size limits (#301) are their own kind so callers can say why a file was not reviewed.
+        Err(message) if crate::is_size_limit_error(&message) => error_envelope(&message, "size_limit"),
         Err(message) => error_envelope(&message, "value_error"),
     }
 }

@@ -55,6 +55,7 @@ lists — are their JSON forms).
 | `not_found` | an absent path / blob / working-tree file | `FileNotFoundError` / `fs.ErrNotExist` |
 | `value_error` | invalid input — including a **missing positional argument** (`"missing argument 0 (language)"`) | `ValueError` |
 | `bad_request` | the **args_json itself is malformed** (not a JSON array, e.g. `null`) | `ValueError` |
+| `size_limit` | an input, CST/tree or parser output exceeded a configured byte limit; the message names the diff-config setting that raises it (`max_cst_bytes` or `max_plugin_output_bytes`) and contains `size limit exceeded` | `ValueError` subclass / a "too large" file error |
 | `internal` | an engine panic caught at the boundary | `RuntimeError` |
 
 Two pinned behaviors binding authors rely on (see the Go/Java scaffold tests):
