@@ -4686,12 +4686,11 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
         }
     }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
+    // The full text: it is identity (structural hashing and literal semantics read it), so a
+    // cap made a suffix-only edit past it hash-equal and the review fell back (#289). Display
+    // labels apply their own bounds downstream.
     let text = if keep_text {
-        node.utf8_text(source)
-            .unwrap_or("")
-            .chars()
-            .take(4096)
-            .collect()
+        node.utf8_text(source).unwrap_or("").to_owned()
     } else {
         String::new()
     };
