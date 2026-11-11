@@ -30,3 +30,15 @@ fn perl_assignment_spacing_is_not_a_semantic_change() {
     assert_meaningful("perl", "a.pl", "my $x=1+2; print $x;\n", "my $x=1*2; print $x;\n");
 }
 
+#[test]
+fn embedded_javascript_quote_spelling_is_not_a_semantic_change() {
+    assert_preserved("astro", "a.astro", "---\nconst title = 'Ready';\n---\n<h1>{title}</h1>\n",
+        "---\nconst title = \"Ready\";\n---\n<h1>{title}</h1>\n");
+    assert_meaningful("astro", "a.astro", "---\nconst title = 'Ready';\n---\n<h1>{title}</h1>\n",
+        "---\nconst title = \"Steady\";\n---\n<h1>{title}</h1>\n");
+    assert_preserved("svelte", "a.svelte", "<script>const title = 'Ready';</script>\n<h1>{title}</h1>\n",
+        "<script>const title = \"Ready\";</script>\n<h1>{title}</h1>\n");
+    assert_meaningful("svelte", "a.svelte", "<script>const title = 'Ready';</script>\n<h1>{title}</h1>\n",
+        "<script>const title = 'Ready!';</script>\n<h1>{title}</h1>\n");
+}
+

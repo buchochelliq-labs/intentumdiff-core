@@ -75,7 +75,7 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         changes = kept;
     }
 
-    if !changes.is_empty() && rust_literal_invariance_language(language) {
+    if !changes.is_empty() && (rust_literal_invariance_language(language) || embedded_script_value_language(language)) {
         let (kept, groups, ignored) =
             rust_apply_literal_equivalences(changes, old_source, new_source, language);
         changes = kept;
@@ -290,6 +290,13 @@ fn decode_style_string(raw: &str) -> Option<String> {
     Some(value)
 }
 
+/// Component languages whose embedded JavaScript declaration initializers reach the core as
+/// `declaration_value` leaves (#272). Only the leaf-literal equivalence applies to them; the
+/// whole-source literal scans stay off, since their template markup is not JavaScript.
+pub(crate) fn embedded_script_value_language(language: &str) -> bool {
+    matches!(language, "astro" | "svelte")
+}
+
 pub(crate) fn rust_literal_invariance_language(language: &str) -> bool {
     matches!(
         language,
@@ -454,7 +461,11 @@ pub(crate) fn rust_string_literal_equivalence_group(
     }
     let (old_node, new_node) = rust_first_literal_pair(change, "string")
         .or_else(|| rust_first_literal_pair(change, "string_literal"))
-        .or_else(|| rust_first_literal_pair(change, "character_literal"))?;
+        .or_else(|| rust_first_literal_pair(change, "character_literal"))
+        // #272: Astro frontmatter / Svelte <script> declarations project the initializer as a
+        // `declaration_value` leaf; decode it as the JavaScript string it is.
+        .or_else(|| embedded_script_value_language(language)
+            .then(|| rust_first_literal_pair(change, "declaration_value")).flatten())?;
     if !(old_node.is_leaf() && new_node.is_leaf()) {
         return None;
     }
@@ -609,7 +620,7 @@ pub(crate) fn decode_invariance_string_literal(raw: &str, language: &str) -> Opt
         {
             return None;
         }
-    } else if matches!(language, "javascript" | "typescript" | "tsx" | "csharp") {
+    } else if matches!(language, "javascript" | "typescript" | "tsx" | "csharp") || embedded_script_value_language(language) {
         if !prefix.is_empty() || trimmed.starts_with(['@', '$']) {
             return None;
         }
