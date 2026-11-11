@@ -42,3 +42,9 @@ fn embedded_javascript_quote_spelling_is_not_a_semantic_change() {
         "<script>const title = 'Ready!';</script>\n<h1>{title}</h1>\n");
 }
 
+#[test]
+fn css_comment_is_not_part_of_the_property_name() {
+    assert_preserved("css", "a.css", ".card { color: red; }\n", ".card { /* note */ color: red; }\n");
+    assert_meaningful("css", "a.css", ".card { color: red; }\n", ".card { /* note */ color: blue; }\n");
+    assert_meaningful("css", "a.css", ".card { color: red; }\n", ".card { /* note */ background: red; }\n");
+}
