@@ -1050,6 +1050,67 @@ pub(crate) fn suppress_child_moves_under_refactoring_pair_drafts(changes: &mut V
     });
 }
 
+/// #299: a MOVE whose old and new nodes both sit inside the matched old/new pair of one
+/// MODIFICATION of a statement/expression is the surviving sub-expression of that edit (an
+/// operand removed around it), not moved code. Fold it into the modification by dropping the
+/// MOVE. Moves that cross a block/body boundary (statement reorders inside a modified
+/// function, branch-to-branch moves) and modifications of entities/containers are left alone.
+pub(crate) fn suppress_subexpression_moves_inside_modified_statement_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
+    let modified: Vec<(&SemanticNode, &SemanticNode)> = changes
+        .iter()
+        .filter(|change| change.change_type == "MODIFICATION")
+        .filter_map(|change| Some((change.old_node?, change.new_node?)))
+        .filter(|(old, new)| !is_move_container_type(&old.node_type) && !is_move_container_type(&new.node_type))
+        .collect();
+    if modified.is_empty() {
+        return;
+    }
+    changes.retain(|change| {
+        if change.change_type != "MOVE" {
+            return true;
+        }
+        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+            return true;
+        };
+        !modified.iter().any(|(old_parent, new_parent)| {
+            expression_path_within(old_parent, &old_node.id) && expression_path_within(new_parent, &new_node.id)
+        })
+    });
+}
+
+/// Entities, bodies and other statement containers: a move inside one is a real move.
+fn is_move_container_type(node_type: &str) -> bool {
+    is_entity_container_type(node_type)
+        || is_function_entity_type(node_type)
+        || is_class_entity_type(node_type)
+        || node_type.ends_with("block")
+        || node_type.ends_with("body")
+        || node_type.ends_with("_list") && node_type.starts_with("statement")
+        || matches!(node_type, "module" | "program" | "source_file" | "compilation_unit" | "suite"
+            | "compound_statement" | "if_statement" | "else_clause" | "elif_clause" | "for_statement"
+            | "while_statement" | "try_statement" | "with_statement" | "match_statement" | "switch_statement"
+            | "case_clause" | "except_clause" | "finally_clause")
+}
+
+/// `target_id` is a strict descendant of `root` reached without passing a container.
+fn expression_path_within(root: &SemanticNode, target_id: &str) -> bool {
+    fn walk(node: &SemanticNode, target_id: &str) -> Option<bool> {
+        for child in &node.children {
+            if child.id == target_id {
+                return Some(true);
+            }
+            if target_id.starts_with(&format!("{}.", child.id)) {
+                if is_move_container_type(&child.node_type) {
+                    return Some(false);
+                }
+                return walk(child, target_id);
+            }
+        }
+        None
+    }
+    target_id.starts_with(&format!("{}.", root.id)) && walk(root, target_id) == Some(true)
+}
+
 pub(crate) fn suppress_child_modifications_under_preferred_parent_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
     let mut preferred_old_ids: HashSet<String> = HashSet::new();
     let mut preferred_new_ids: HashSet<String> = HashSet::new();
@@ -1336,3 +1397,7 @@ mod rename_body_tests {
         assert!(!rename_body_is_unchanged(&a, &b));
     }
 }
+
+#[cfg(test)]
+#[path = "moved_subexpression_tests.rs"]
+mod moved_subexpression_tests;

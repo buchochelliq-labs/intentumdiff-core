@@ -9567,6 +9567,7 @@ fn finalize_python_review_drafts<'a>(
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
     probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes, old_tree, new_tree));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
+    probed!(changes, "suppress_subexpression_moves_in_modified_statement", suppress_subexpression_moves_inside_modified_statement_drafts(changes));
     probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
         changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));
