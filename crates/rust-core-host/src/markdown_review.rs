@@ -231,6 +231,11 @@ pub fn reconcile(
             && moves.iter().any(|m| match kind {
                 "DELETION" => contained(&change["old_node"], &m["old_node"], false),
                 "ADDITION" => contained(&change["new_node"], &m["new_node"], false),
+                // A relocated line that travels with its section is part of that move.
+                "MOVE" => {
+                    contained(&change["old_node"], &m["old_node"], false)
+                        && contained(&change["new_node"], &m["new_node"], false)
+                }
                 _ => false,
             });
         let rename_owned = use_renames

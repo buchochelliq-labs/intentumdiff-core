@@ -5158,6 +5158,7 @@ fn native_generic_text_diff(
             "old_source": old_source,
             "new_source": new_source,
             "language": language,
+            "evidence_source": "text_lines",
         })) {
             if let Some(groups) = evidence.get("change_groups").and_then(Value::as_array) {
                 change_groups.extend(groups.iter().cloned());

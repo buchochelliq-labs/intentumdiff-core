@@ -133,6 +133,13 @@ pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, S
         }
     }
 
+    // Name the comparison that actually established equivalence (#248): the generic text
+    // route compares lines and never builds a parser tree.
+    let reason = if request.get("evidence_source").and_then(Value::as_str) == Some("text_lines") {
+        "The line-level text comparison found no added, removed, changed or relocated content lines, so only blank-line or line-ending layout edits were ignored while preserving source-span evidence."
+    } else {
+        "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence."
+    };
     for (occurrence, evidence) in rust_changed_source_evidence(old_source, new_source)
         .into_iter()
         .filter(|item| !rust_evidence_covered_by_literal(item, &literal_spans))
@@ -141,7 +148,7 @@ pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, S
         let (group, ignored_item) = rust_source_group(
             &evidence,
             "generic.style_only_shortcut.source_equivalence",
-            "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+            reason,
             "syntactic_trivia",
             "amber",
             language,

@@ -337,8 +337,10 @@ fn generic_text_changes_excluding(
     Some(net_out_relocated_lines(changes))
 }
 
-/// A line deleted here and inserted verbatim there is a reorder, not add+delete —
-/// prose has no execution order (issue #14). Greedy pairing by line proximity.
+/// A line deleted here and inserted verbatim there is a relocation, not add+delete
+/// (issue #14) — but it is still a change: reordered instructions can change meaning
+/// (issue #248). Each greedy (line-proximity) pair becomes ONE `MOVE` carrying both
+/// locations, in place of the deletion; the matching addition is dropped.
 pub(crate) fn net_out_relocated_lines(changes: Vec<Value>) -> Vec<Value> {
     fn label_line(change: &Value, side: &str) -> Option<(String, i64)> {
         let node = change.get(side)?;
@@ -365,11 +367,12 @@ pub(crate) fn net_out_relocated_lines(changes: Vec<Value>) -> Vec<Value> {
             label_line(change, "new_node").map(|(label, line)| (idx, label, line))
         })
         .collect();
-    let mut netted: HashSet<usize> = HashSet::new();
+    let mut moved_to: HashMap<usize, usize> = HashMap::new();
+    let mut consumed: HashSet<usize> = HashSet::new();
     for (del_idx, del_label, del_line) in &deletions {
         let mut best: Option<(usize, i64)> = None;
         for (add_idx, add_label, add_line) in &additions {
-            if netted.contains(add_idx) || add_label != del_label {
+            if consumed.contains(add_idx) || add_label != del_label {
                 continue;
             }
             let distance = (add_line - del_line).abs();
@@ -378,17 +381,40 @@ pub(crate) fn net_out_relocated_lines(changes: Vec<Value>) -> Vec<Value> {
             }
         }
         if let Some((add_idx, _)) = best {
-            netted.insert(*del_idx);
-            netted.insert(add_idx);
+            moved_to.insert(*del_idx, add_idx);
+            consumed.insert(add_idx);
         }
     }
-    if netted.is_empty() {
+    if moved_to.is_empty() {
         return changes;
     }
+    let new_nodes: HashMap<usize, Value> = consumed
+        .iter()
+        .map(|&idx| (idx, changes[idx]["new_node"].clone()))
+        .collect();
     changes
         .into_iter()
         .enumerate()
-        .filter_map(|(idx, change)| (!netted.contains(&idx)).then_some(change))
+        .filter_map(|(idx, change)| {
+            if consumed.contains(&idx) {
+                return None;
+            }
+            let Some(add_idx) = moved_to.get(&idx) else {
+                return Some(change);
+            };
+            let old_node = change["old_node"].clone();
+            let new_node = new_nodes[add_idx].clone();
+            let line = |node: &Value| node["position"]["start_line"].as_u64().unwrap_or(0) + 1;
+            Some(serde_json::json!({
+                "change_type": "MOVE",
+                "description": format!(
+                    "Move line {} -> {}: {:?}", line(&old_node), line(&new_node),
+                    old_node["label"].as_str().unwrap_or_default()),
+                "old_node": old_node,
+                "new_node": new_node,
+                "confidence": 0.95,
+            }))
+        })
         .collect()
 }
 
@@ -482,6 +508,60 @@ mod relocation_regressions {
             assert!(diff.has_semantic_changes && !diff.is_style_only);
         }
     }
+    #[test]
+    fn headingless_instruction_reorder_is_a_move_not_style() {
+        // #248: the exact audit repro through the public review_text route.
+        let old = "First disconnect power.\nThen service equipment.\n";
+        let new = "Then service equipment.\nFirst disconnect power.\n";
+        for filename in ["guide.txt", "guide.md"] {
+            let diff = crate::api::review_text(old, new, filename, filename).unwrap();
+            assert!(diff.has_semantic_changes && !diff.is_style_only, "{filename}: {diff:?}");
+            assert_eq!(diff.changes.len(), 1, "{filename}: {diff:?}");
+            let moved = &diff.changes[0];
+            assert_eq!(moved.change_type, "MOVE", "{filename}: {diff:?}");
+            let (old_node, new_node) =
+                (moved.old_node.as_ref().unwrap(), moved.new_node.as_ref().unwrap());
+            assert_eq!(old_node.label, new_node.label);
+            assert_ne!(old_node.position.start_line, new_node.position.start_line);
+            assert!(diff.change_groups.iter().all(|g| g.kind != "IGNORED_STYLE"), "{diff:?}");
+        }
+    }
+
+    #[test]
+    fn section_moves_still_own_their_relocated_body_lines() {
+        let old = "# A\none\n# B\ntwo\n";
+        let new = "# B\ntwo\n# A\none\n";
+        let diff = crate::api::review_text(old, new, "doc.md", "doc.md").unwrap();
+        assert_eq!(diff.changes.len(), 1, "{diff:?}");
+        assert_eq!(diff.changes[0].change_type, "MOVE");
+        assert!(diff.changes[0].old_node.as_ref().unwrap().label.starts_with("# "), "{diff:?}");
+        // Unchanged paragraphs around a relocated line stay unreported.
+        let diff = crate::api::review_text(
+            "intro\nstep a\nstep b\noutro\n", "intro\nstep b\nstep a\noutro\n",
+            "doc.txt", "doc.txt",
+        ).unwrap();
+        assert_eq!(diff.changes.len(), 1, "{diff:?}");
+        let labels: Vec<&str> = diff.changes.iter()
+            .flat_map(|c| [c.old_node.as_ref(), c.new_node.as_ref()].into_iter().flatten())
+            .map(|n| n.label.as_str()).collect();
+        assert!(!labels.contains(&"intro") && !labels.contains(&"outro"), "{diff:?}");
+    }
+
+    #[test]
+    fn text_layout_equivalence_names_the_line_comparison() {
+        for filename in ["guide.txt", "guide.md"] {
+            let diff =
+                crate::api::review_text("a\nb\n", "a\n\nb\r\n", filename, filename).unwrap();
+            assert!(diff.is_style_only && diff.changes.is_empty(), "{diff:?}");
+            let reasons: Vec<String> = diff.change_groups.iter()
+                .filter_map(|g| g.attributes.get("metadata").and_then(|m| m.get("reason")).and_then(|r| r.as_str()).map(str::to_owned))
+                .collect();
+            assert!(!reasons.is_empty(), "style evidence is recorded: {diff:?}");
+            assert!(reasons.iter().all(|r| r.contains("line-level text comparison")
+                && !r.contains("parser-normalized tree")), "{reasons:?}");
+        }
+    }
+
     #[test]
     fn stable_context_value_swaps_remain_modifications() {
         let old = "A\nred\nB\nC\nblue\n";
