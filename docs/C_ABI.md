@@ -237,6 +237,27 @@ unparseable `manifest_json` string is a `value_error` envelope. Rules (patterns 
   present must still be well-formed — a git `ref` must pass the non-strict
   `validate_registry_ref` traversal guard, a pypi `ref` is empty (latest) or a version.
 
+### Parser allowlist identifiers (`parser_allowlist_matches`)
+
+One rule decides whether an `allowed_plugins` list admits a parser, used by
+`filename_selection_next`, `content_detection_plan/finish`, the native bundled resolver
+(`allowed_plugins` diff-config key) and bindings' discovery/inventory listings:
+
+- `null`/absent: **every** parser is allowed.
+- `[]`: **no** parser is allowed (distinct from `null`).
+- otherwise a parser is allowed when an entry exactly equals (case-sensitive; empty strings never
+  match) its **grammar id** (loaded `grammar-id`), its **plugin id** (catalogue/opaque plugin
+  identity, e.g. `acme/python`), one of its catalogue **aliases**, or one of its declared
+  **language ids**. Unknown identifiers select nothing; they are not errors.
+
+`parser_allowlist_matches(allowed_plugins, identity_json)` → `{"matches": bool, "matched_by":
+"unrestricted"|"grammar_id"|"plugin_id"|"alias"|"language"|null}` evaluates it for one parser.
+`allowed_plugins` is a JSON array of strings or `null` (not a JSON string); `identity_json` is a
+JSON string `{"plugin_id", "grammar_id", "languages": [..], "aliases": [..]}` (all optional).
+Native: `filename_selection::parser_allowlist_match(Option<&[String]>, &ParserIdentity)`.
+Grammar-id allowlists behave exactly as before; plugin, alias and language ids were previously
+ignored (selected nothing) and now select their parser.
+
 ## Shared guardrail policy
 
 Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
@@ -370,7 +391,7 @@ requested number of results is reached, without a finite over-fetch window.
 `content_detection_plan(request_json)` and `content_detection_finish(input_json)`
 delegate to supported Rust `content_detection::{plan, finish}`. The request carries
 loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
-optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+optional `allowed_plugins` (see *Parser allowlist identifiers*), `candidates`, `plugin_id`, and
 `preferred_plugins` (language to plugin ID). A plan returns eligible source indices
 and a sample ending at the last complete UTF-8 character within 4096 bytes.
 
@@ -394,7 +415,7 @@ component loader or filename `detect_parser` failure/fallback policy (#108).
 to public Rust `filename_selection::next_action`. Request fields are catalogue
 `entries` (the candidate-planner DTO), `filename`, `content`, optional
 `old_content` (defaults to an empty string), optional
-`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+`language_hint`/`plugin_id`/`allowed_plugins` (see *Parser allowlist identifiers*), and boolean `strict`.
 For comparisons, hosts send the new source in `content` and previous source in
 `old_content`. Rust probes the new source whenever it is nonempty (including
 whitespace); only an exactly empty new source uses `old_content`. Single-source

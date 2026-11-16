@@ -860,6 +860,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
         "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
+        "parser_allowlist_matches" => crate::filename_selection::parser_allowlist_matches_json_impl(
+            arg_opt_json(args, 0, "allowed_plugins")?, arg_str(args, 1, "identity_json")?),
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
@@ -976,6 +978,17 @@ mod tests {
             assert_eq!(out["ok"], false, "{bad}");
             assert_eq!(out["error_type"], "value_error", "{bad}");
         }
+    }
+
+    #[test]
+    fn parser_allowlist_envelopes() {
+        let identity = json!({"plugin_id":"acme/py","grammar_id":"python","languages":["python","py3"],"aliases":["py"]}).to_string();
+        assert_eq!(call("parser_allowlist_matches", json!([null, identity])), json!({"ok":true,"result":{"matches":true,"matched_by":"unrestricted"}}));
+        assert_eq!(call("parser_allowlist_matches", json!([[], identity]))["result"], json!({"matches":false,"matched_by":null}));
+        assert_eq!(call("parser_allowlist_matches", json!([["py3"], identity]))["result"], json!({"matches":true,"matched_by":"language"}));
+        assert_eq!(call("parser_allowlist_matches", json!([["acme/py"], identity]))["result"]["matched_by"], "plugin_id");
+        assert_eq!(call("parser_allowlist_matches", json!([["x", 1], identity]))["ok"], false);
+        assert_eq!(call("parser_allowlist_matches", json!([null, "[]"]))["ok"], false);
     }
 
     #[test]
