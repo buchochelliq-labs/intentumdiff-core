@@ -2,13 +2,85 @@
 use crate::*;
 
 pub(crate) fn validate_certified_semantic_diff(diff: &Value) -> Result<(), String> {
+    validate_certified_semantic_diff_with_sources(diff, None)
+}
+
+/// The certification guarantee (#254). Beyond the envelope, a certified diff must have:
+/// - every change's REQUIRED sides (ADDITION: new only; DELETION: old only; MODIFICATION /
+///   MOVE / REORDER: both; REFACTORING / STYLE_ONLY: at least one);
+/// - on every node, recursively through `children`: non-empty id/node_type, a string label and
+///   a valid position (end >= start); when the exact old/new buffers are supplied, every
+///   position lies inside its side's source (0-based line, UTF-8 byte column <= line length);
+/// - every `change_groups[].raw_change_indices` entry an in-range integer;
+/// - explicit boolean flags with `has_semantic_changes == !changes.is_empty()` and
+///   `is_style_only` implying no changes.
+///
+/// It certifies evidence integrity, not that the semantics are right.
+pub(crate) fn validate_certified_semantic_diff_with_sources(
+    diff: &Value,
+    sources: Option<(&str, &str)>,
+) -> Result<(), String> {
     validate_certified_semantic_diff_envelope(diff)?;
     let changes = diff
         .get("changes")
         .and_then(Value::as_array)
         .ok_or_else(|| "SemanticDiff changes must be an array".to_owned())?;
+    let bounds = sources.map(|(old, new)| (line_lengths(old), line_lengths(new)));
     for change in changes {
         validate_certified_change(change)?;
+        if let Some((old_lines, new_lines)) = &bounds {
+            for (side, lines, name) in [("old_node", old_lines, "old"), ("new_node", new_lines, "new")] {
+                if let Some(node) = change.get(side).filter(|value| !value.is_null()) {
+                    validate_node_within_source(node, lines, name, 0)?;
+                }
+            }
+        }
+    }
+    let flag = |key: &str| diff.get(key).and_then(Value::as_bool)
+        .ok_or_else(|| format!("SemanticDiff {key} must be a boolean"));
+    let (semantic, style_only) = (flag("has_semantic_changes")?, flag("is_style_only")?);
+    if semantic != !changes.is_empty() {
+        return Err("SemanticDiff has_semantic_changes must equal whether changes exist".to_owned());
+    }
+    if style_only && !changes.is_empty() {
+        return Err("SemanticDiff is_style_only cannot carry changes".to_owned());
+    }
+    if let Some(groups) = diff.get("change_groups").filter(|value| !value.is_null()) {
+        let groups = groups.as_array().ok_or_else(|| "SemanticDiff change_groups must be an array".to_owned())?;
+        for group in groups {
+            let indices = group.get("raw_change_indices").and_then(Value::as_array)
+                .ok_or_else(|| "change group raw_change_indices must be an array".to_owned())?;
+            if !indices.iter().all(|index| index.as_u64().is_some_and(|i| (i as usize) < changes.len())) {
+                return Err("change group raw_change_indices must be in-range change indices".to_owned());
+            }
+        }
+    }
+    Ok(())
+}
+
+fn line_lengths(source: &str) -> Vec<u64> {
+    source.split('\n').map(|line| line.len() as u64).collect()
+}
+
+fn validate_node_within_source(node: &Value, lines: &[u64], side: &str, depth: usize) -> Result<(), String> {
+    if depth > 4096 {
+        return Err("semantic node nesting too deep".to_owned());
+    }
+    let position = &node["position"];
+    for (line_key, col_key) in [("start_line", "start_col"), ("end_line", "end_col")] {
+        let (line, col) = (position_u64(position, line_key)?, position_u64(position, col_key)?);
+        let fits = usize::try_from(line).ok().and_then(|line| lines.get(line)).is_some_and(|len| col <= *len);
+        if !fits {
+            return Err(format!(
+                "semantic node {} position {line}:{col} is outside the {side} source",
+                node.get("id").and_then(Value::as_str).unwrap_or_default()
+            ));
+        }
+    }
+    if let Some(children) = node.get("children").and_then(Value::as_array) {
+        for child in children {
+            validate_node_within_source(child, lines, side, depth + 1)?;
+        }
     }
     Ok(())
 }
@@ -170,6 +242,18 @@ pub(crate) fn validate_certified_change(change: &Value) -> Result<(), String> {
     if change_type == "DELETION" && change.get("new_node").is_some_and(|value| !value.is_null()) {
         return Err("DELETION must not have a new_node".to_owned());
     }
+    let present = |side: &str| change.get(side).is_some_and(|value| !value.is_null());
+    match (change_type, present("old_node"), present("new_node")) {
+        ("ADDITION", _, false) => return Err("ADDITION requires a new_node".to_owned()),
+        ("DELETION", false, _) => return Err("DELETION requires an old_node".to_owned()),
+        ("MODIFICATION" | "MOVE" | "REORDER", old, new) if !(old && new) => {
+            return Err(format!("{change_type} requires both old_node and new_node"));
+        }
+        ("REFACTORING" | "STYLE_ONLY", false, false) => {
+            return Err(format!("{change_type} requires an old_node or a new_node"));
+        }
+        _ => {}
+    }
     if change_type == "REFACTORING"
         && change
             .get("refactoring_kind")
@@ -189,6 +273,16 @@ pub(crate) fn validate_certified_change(change: &Value) -> Result<(), String> {
 }
 
 pub(crate) fn validate_certified_node(node: &Value) -> Result<(), String> {
+    validate_certified_node_at(node, 0)
+}
+
+fn validate_certified_node_at(node: &Value, depth: usize) -> Result<(), String> {
+    if depth > 4096 {
+        return Err("semantic node nesting too deep".to_owned());
+    }
+    if !node.is_object() {
+        return Err("semantic node must be an object".to_owned());
+    }
     for field in ["id", "node_type"] {
         if node
             .get(field)
@@ -199,8 +293,22 @@ pub(crate) fn validate_certified_node(node: &Value) -> Result<(), String> {
             return Err(format!("semantic node {field} must not be empty"));
         }
     }
-    if let Some(position) = node.get("position").filter(|value| !value.is_null()) {
-        validate_certified_position(position)?;
+    if !node.get("label").is_some_and(Value::is_string) {
+        return Err("semantic node label must be a string".to_owned());
+    }
+    let position = node
+        .get("position")
+        .filter(|value| value.is_object())
+        .ok_or_else(|| "semantic node position must be an object".to_owned())?;
+    validate_certified_position(position)?;
+    match node.get("children") {
+        None | Some(Value::Null) => {}
+        Some(Value::Array(children)) => {
+            for child in children {
+                validate_certified_node_at(child, depth + 1)?;
+            }
+        }
+        Some(_) => return Err("semantic node children must be an array".to_owned()),
     }
     Ok(())
 }
@@ -307,3 +415,7 @@ pub(crate) fn update_signature_field(hasher: &mut Sha256, value: &str) {
     hasher.update(value.as_bytes());
     hasher.update(b"\0");
 }
+
+#[cfg(test)]
+#[path = "certified_validation_tests.rs"]
+mod certified_validation_tests;
