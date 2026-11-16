@@ -4886,6 +4886,24 @@ fn fuel_budget(floor: u64, candidate: u64) -> u64 {
     }
 }
 
+/// The content-scaled parser fuel policy every single-source / pair parse uses: the configured
+/// `plugin_fuel` is a documented MINIMUM that scales to `20_000_000 + 20_000 * content_len` for
+/// real-world files; `u64::MAX` (any negative `plugin_fuel`) stays unlimited; a deliberately
+/// tight budget below 1M is kept exactly (fuel-exhaustion tests). Saturating, so an arbitrary
+/// binding-supplied length cannot wrap into a small budget (or saturate into unlimited).
+pub(crate) fn content_fuel_budget(plugin_fuel: u64, content_len: u64) -> u64 {
+    // Capped below u64::MAX: a saturated candidate must never turn a bounded config unlimited.
+    let candidate = 20_000_000u64.saturating_add(content_len.saturating_mul(20_000)).min(u64::MAX - 1);
+    fuel_budget(plugin_fuel, candidate)
+}
+
+/// C ABI / API `fuel_budget`: the effective Wasm fuel for `content_len` bytes of source under
+/// `config_json` (same validation as every diff config). `None` = unlimited.
+pub(crate) fn fuel_budget_for_content(config_json: &str, content_len: u64) -> Result<Option<u64>, String> {
+    let fuel = content_fuel_budget(RustCoreConfig::from_json(config_json)?.plugin_fuel, content_len);
+    Ok((fuel != u64::MAX).then_some(fuel))
+}
+
 /// `Err("plugin returned error (<side>): <message>")` when a parser returned the in-band error
 /// envelope instead of a tree. Non-JSON or tree output is left to the stage that decodes it.
 fn reject_plugin_error_envelope(raw: &str, side: &str) -> Result<(), String> {
@@ -5336,7 +5354,7 @@ pub fn parse_to_tree(
     } else if !resolved.wasm_path.is_empty() {
         // Non-Python: parse via the resolved full-parse Wasm grammar. Both pair sides are the same
         // content (one wasted parse — cheaper than a single-side parser API); take one tree.
-        let fuel = fuel_budget(config.plugin_fuel, 20_000_000 + content.len() as u64 * 20_000);
+        let fuel = content_fuel_budget(config.plugin_fuel, content.len() as u64);
         let (tree, _) = run_python_wasm_process_pair(
             &resolved.wasm_path,
             content,
@@ -5413,10 +5431,8 @@ pub(crate) fn native_wasm_single_diff(
     // yields the python-parity DELETION+ADDITION shape.
     // Size-scaled budget (the flat 20M floor starved real-world files — a ~25KB .rs blob
     // traps with "all fuel consumed"; the batch scales ~200k fuel per CST node, ~20k/byte).
-    let adaptive_fuel = fuel_budget(
-        config.plugin_fuel,
-        20_000_000 + (old_source.len() + new_source.len()) as u64 * 20_000,
-    );
+    let adaptive_fuel =
+        content_fuel_budget(config.plugin_fuel, (old_source.len() + new_source.len()) as u64);
     let mut parser_calls = Vec::new();
     let (old_tree_json, new_tree_json) = if old_source.is_empty() && new_source.is_empty() {
         (
@@ -5888,10 +5904,7 @@ pub(crate) fn compute_commit_cross_file_changes(
         let language = get("language", "language");
         let wasm_path = get("parser_wasm_path", "parserWasmPath");
         // Size-scaled like the diff chain — the flat 20M floor trapped on real-world files.
-        let fuel = fuel_budget(
-            config.plugin_fuel,
-            20_000_000 + (old_c.len() + new_c.len()) as u64 * 20_000,
-        );
+        let fuel = content_fuel_budget(config.plugin_fuel, (old_c.len() + new_c.len()) as u64);
         // Python (empty wasm_path in the manifest -> native diff, but for indexing we need the
         // differ-matching tree): the interpret-cst Wasm parser fed the trivia-stripped CST
         // (computed below for the sides actually parsed). Other languages: full-parse.
@@ -11259,6 +11272,13 @@ mod native_parser_telemetry_tests {
         assert_eq!(fuel_budget(999_999, 100_000_000), 999_999);
         assert_eq!(fuel_budget(1_000_000, 100_000_000), 100_000_000);
         assert_eq!(fuel_budget(u64::MAX, 100_000_000), u64::MAX);
+        // The content-scaled policy the `fuel_budget` C ABI op exposes (#308).
+        assert_eq!(content_fuel_budget(10_000_000, 0), 20_000_000);
+        assert_eq!(content_fuel_budget(10_000_000, 1_000), 40_000_000);
+        assert_eq!(content_fuel_budget(500_000_000, 1_000), 500_000_000);
+        assert_eq!(content_fuel_budget(999_999, 1_000_000), 999_999);
+        assert_eq!(content_fuel_budget(u64::MAX, 1_000), u64::MAX);
+        assert_eq!(content_fuel_budget(10_000_000, u64::MAX), u64::MAX - 1, "saturates, never wraps or turns unlimited");
     }
 
     #[test]

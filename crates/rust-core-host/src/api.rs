@@ -146,3 +146,11 @@ pub fn review_sources(
 pub fn guardrail_check_result(request: &Value) -> Result<Value, ReviewError> {
     crate::guardrail_policy::check_result(request).map_err(ReviewError::Engine)
 }
+
+/// The effective parser Wasm fuel for `content_len` bytes under a diff config JSON object (the
+/// same policy the engine applies to every parse; `None` = unlimited, i.e. `plugin_fuel < 0`).
+/// Bindings that run their own components (renderers, probes) use this instead of re-deriving
+/// the scaling, so the unlimited sentinel and the minimum-scaling rule stay in one place.
+pub fn fuel_budget(config_json: &str, content_len: u64) -> Result<Option<u64>, ReviewError> {
+    crate::fuel_budget_for_content(config_json, content_len).map_err(ReviewError::Engine)
+}

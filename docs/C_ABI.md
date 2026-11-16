@@ -184,6 +184,29 @@ are open strings for forward compatibility. `ReviewOptions::settings` accepts th
 same configuration keys as native live review. Lower-level Rust operations remain
 public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
 
+## Binding policy operations (0.0.3)
+
+Small, pure policy ops a binding needs so it never re-derives an engine rule locally.
+
+### Parser fuel budget (`fuel_budget`)
+
+`fuel_budget(config_json, content_len)` → `{"fuel": <u64>}` or `{"fuel": null}`; native
+`api::fuel_budget(config_json, content_len) -> Result<Option<u64>, ReviewError>`.
+`config_json` is a diff-config JSON object string (empty string = `{}`) validated exactly as
+every diff call validates it; `content_len` is a non-negative integer byte count (the source
+being parsed, or the payload handed to a renderer). The policy is the one the engine applies to
+every parse:
+
+- `plugin_fuel < 0` (either spelling) is **unlimited** → `{"fuel": null}`. Bindings pass this
+  through as "no fuel metering"; they must not substitute a positive budget.
+- `plugin_fuel` below 1,000,000 is a deliberate tight budget and is returned unchanged.
+- Otherwise `plugin_fuel` (default 10,000,000) is a **minimum**:
+  `fuel = max(plugin_fuel, 20_000_000 + 20_000 * content_len)` (saturating; a bounded config
+  never becomes unlimited).
+
+Malformed configs, a negative or non-integer `content_len`, or missing arguments return a
+`value_error` envelope.
+
 ## Shared guardrail policy
 
 Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.

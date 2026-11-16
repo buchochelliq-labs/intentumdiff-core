@@ -540,6 +540,15 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 2, "ref_a")?,
             arg_str(args, 3, "ref_b")?,
         ),
+        // The content-scaled parser fuel policy (python #308): `{"fuel": u64}` or `{"fuel": null}`
+        // (unlimited — a negative `plugin_fuel`). Bindings forward this budget unchanged.
+        "fuel_budget" => {
+            let content_len = arg_i64(args, 1, "content_len")?;
+            let content_len = u64::try_from(content_len)
+                .map_err(|_| "argument 1 (content_len) must be a non-negative integer".to_owned())?;
+            crate::fuel_budget_for_content(arg_str(args, 0, "config_json")?, content_len)
+                .map(|fuel| json!({"fuel": fuel}).to_string())
+        }
         // Registry-client #88 security validators. validate_registry_ref returns null on a
         // clean ref (the guard passed); validate_dep_hashes returns the JSON list of errors.
         "validate_registry_ref" => crate::registry::validate_registry_ref_impl(
@@ -948,6 +957,21 @@ mod tests {
         assert!(style_only.contains("Formatting changed"));
         assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
         assert_eq!(call("render_cli_review", json!([]))["ok"], false);
+    }
+
+    #[test]
+    fn fuel_budget_envelopes() {
+        assert_eq!(call("fuel_budget", json!(["{}", 0])), json!({"ok":true,"result":{"fuel":20_000_000}}));
+        assert_eq!(call("fuel_budget", json!(["", 1000]))["result"], json!({"fuel":40_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":500000000}"#, 1000]))["result"], json!({"fuel":500_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":999}"#, 1000]))["result"], json!({"fuel":999}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":-1}"#, 1000]))["result"], json!({"fuel":null}));
+        assert_eq!(call("fuel_budget", json!([r#"{"pluginFuel":-1}"#, 0]))["result"], json!({"fuel":null}));
+        for bad in [json!(["{}", -1]), json!(["{}", "1"]), json!(["{}"]), json!([r#"{"plugin_fuel":"x"}"#, 1]), json!(["[]", 1])] {
+            let out = call("fuel_budget", bad.clone());
+            assert_eq!(out["ok"], false, "{bad}");
+            assert_eq!(out["error_type"], "value_error", "{bad}");
+        }
     }
 
     #[test]
