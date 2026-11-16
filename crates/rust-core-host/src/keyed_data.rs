@@ -417,20 +417,185 @@ pub(crate) fn yaml_representation_equivalent_sources(old_source: &str, new_sourc
             _ => true,
         }
     }
+    fn has_float(value: &serde_yaml::Value) -> bool {
+        match value {
+            serde_yaml::Value::Number(number) => number.is_f64(),
+            serde_yaml::Value::Sequence(items) => items.iter().any(has_float),
+            serde_yaml::Value::Mapping(mapping) => mapping.iter().any(|(k, v)| has_float(k) || has_float(v)),
+            serde_yaml::Value::Tagged(tagged) => has_float(&tagged.value),
+            _ => false,
+        }
+    }
     // Value decoding preserves scalar types, ordered sequence multiplicity, and full mapping
     // payloads. Duplicate keys, invalid input and multi-document streams return errors: none
     // may be treated as an equivalence proof.
-    let (Ok(old), Ok(new)) = (
-        serde_yaml::from_str::<serde_yaml::Value>(old_source),
-        serde_yaml::from_str::<serde_yaml::Value>(new_source),
-    ) else {
+    let decode = |source: &str| serde_yaml::from_str::<serde_yaml::Value>(source).ok();
+    let (Some(mut old), Some(mut new)) = (decode(old_source), decode(new_source)) else {
         return false;
     };
+    // #285: floats are compared EXACTLY. Each plain scalar the decoder itself resolves to a
+    // float is replaced, in the source, by a quoted placeholder carrying its exact canonical
+    // decimal (sign, significant digits, exponent), then the documents are decoded again.
+    // f64 rounding can therefore never equate distinct decimals, while `1.5` / `1.50` /
+    // `15e-1` (one YAML 1.2 core value) still compare equal across block/flow restyles. Any
+    // float the scanner cannot place (block scalars, multi-line quotes) declines the proof.
+    if has_float(&old) || has_float(&new) {
+        let (Some(old_exact), Some(new_exact)) = (exact_float_source(old_source), exact_float_source(new_source)) else {
+            return false;
+        };
+        let (Some(o), Some(n)) = (decode(&old_exact), decode(&new_exact)) else {
+            return false;
+        };
+        // A placeholder is only sound as a WHOLE scalar. One that landed inside a longer
+        // plain scalar (`apples 1.5`, a multi-line plain continuation) would equate distinct
+        // strings (`1.5` vs `1.50`), so any embedded marker declines the proof.
+        fn placeholders_whole(value: &serde_yaml::Value) -> bool {
+            match value {
+                serde_yaml::Value::String(text) => !text.contains(EXACT_FLOAT_MARK)
+                    || (text.starts_with(EXACT_FLOAT_MARK) && text.matches(EXACT_FLOAT_MARK).count() == 1
+                        && exact_decimal_form(&text[EXACT_FLOAT_MARK.len_utf8()..])),
+                serde_yaml::Value::Sequence(items) => items.iter().all(placeholders_whole),
+                serde_yaml::Value::Mapping(mapping) => mapping.iter().all(|(k, v)| placeholders_whole(k) && placeholders_whole(v)),
+                serde_yaml::Value::Tagged(_) => false,
+                _ => true,
+            }
+        }
+        if !placeholders_whole(&o) || !placeholders_whole(&n) {
+            return false;
+        }
+        (old, new) = (o, n);
+    }
     // The decoder also maps an empty/comment-only stream (zero documents) to Null. Decline
     // top-level nulls rather than conflating that stream with a document whose root is null.
     !matches!(&old, serde_yaml::Value::Null)
         && !matches!(&new, serde_yaml::Value::Null)
         && supported(&old) && supported(&new) && old == new
+}
+
+/// Marker that starts an exact-float placeholder; sources already containing it decline.
+const EXACT_FLOAT_MARK: char = '\u{E000}';
+
+/// The exact canonical decimal of a YAML 1.2 core float spelling: `[-]digits e exponent` with
+/// leading/trailing zeros removed (negative zero keeps its sign; `.inf`/`.nan` spelled out).
+/// `None` for anything that is not a core-schema float spelling.
+fn exact_decimal(token: &str) -> Option<String> {
+    let lower = token.to_ascii_lowercase();
+    let (negative, body) = match lower.as_bytes().first()? {
+        b'-' => (true, &lower[1..]),
+        b'+' => (false, &lower[1..]),
+        _ => (false, lower.as_str()),
+    };
+    let sign = if negative { "-" } else { "" };
+    if body == ".inf" {
+        return Some(format!("{sign}inf"));
+    }
+    if body == ".nan" && sign.is_empty() && !token.starts_with('+') {
+        return Some("nan".to_owned());
+    }
+    let (mantissa, exponent) = match body.split_once('e') {
+        Some((m, e)) => (m, e.parse::<i64>().ok()?),
+        None => (body, 0),
+    };
+    let (int, frac) = mantissa.split_once('.').unwrap_or((mantissa, ""));
+    if (int.is_empty() && frac.is_empty()) || !int.chars().chain(frac.chars()).all(|c| c.is_ascii_digit()) {
+        return None;
+    }
+    let digits = format!("{int}{frac}");
+    let leading = digits.len() - digits.trim_start_matches('0').len();
+    let significant = digits.trim_start_matches('0').trim_end_matches('0');
+    if significant.is_empty() {
+        return Some(format!("{sign}0"));
+    }
+    let trailing = digits.len() - leading - significant.len();
+    // value = digits * 10^(exponent - frac.len()); drop trailing zeros into the exponent.
+    let exp = exponent.checked_sub(frac.len() as i64)?.checked_add(trailing as i64)?;
+    Some(format!("{sign}{significant}e{exp}"))
+}
+
+/// Whether `text` is exactly an `exact_decimal` output (`[-]digits e [-]digits`, `[-]0`,
+/// `[-]inf`, `nan`).
+fn exact_decimal_form(text: &str) -> bool {
+    static FORM: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    FORM.get_or_init(|| regex::Regex::new(r"^(?:-?(?:[1-9][0-9]*e-?[0-9]+|0|inf)|nan)$").expect("valid exact decimal form"))
+        .is_match(text)
+}
+
+/// `source` with every plain scalar that the YAML decoder resolves to a float replaced by a
+/// double-quoted exact placeholder. `None` when the scan cannot be certain: block scalars,
+/// quotes left open at end of line, or the marker already present.
+fn exact_float_source(source: &str) -> Option<String> {
+    if source.contains(EXACT_FLOAT_MARK) {
+        return None;
+    }
+    let mut out = String::with_capacity(source.len() + 16);
+    for line in source.split_inclusive('\n') {
+        let chars: Vec<char> = line.chars().collect();
+        let mut i = 0;
+        let mut token_start = true;
+        while i < chars.len() {
+            let c = chars[i];
+            if token_start && (c == '"' || c == '\'') {
+                // A quoted scalar: copied verbatim, never a float.
+                let mut j = i + 1;
+                loop {
+                    let Some(&q) = chars.get(j) else { return None }; // open at end of line
+                    if c == '"' && q == '\\' { j += 2; continue; }
+                    if q == c {
+                        if c == '\'' && chars.get(j + 1) == Some(&'\'') { j += 2; continue; }
+                        break;
+                    }
+                    j += 1;
+                }
+                out.extend(&chars[i..=j]);
+                i = j + 1;
+                token_start = false;
+                continue;
+            }
+            if c == '#' && token_start {
+                out.extend(&chars[i..]); // comment to end of line
+                break;
+            }
+            if token_start && (c == '|' || c == '>') {
+                return None; // block scalar content is not scanned
+            }
+            if c.is_whitespace() || matches!(c, ',' | '[' | ']' | '{' | '}') {
+                out.push(c);
+                i += 1;
+                token_start = true;
+                continue;
+            }
+            if !token_start {
+                out.push(c);
+                i += 1;
+                continue;
+            }
+            // A plain token: up to whitespace / flow indicator; a trailing ':' is a key marker.
+            let mut j = i;
+            while j < chars.len() && !chars[j].is_whitespace() && !matches!(chars[j], ',' | '[' | ']' | '{' | '}') {
+                j += 1;
+            }
+            let raw: String = chars[i..j].iter().collect();
+            let (token, suffix) = match raw.strip_suffix(':') {
+                Some(token) => (token, ":"),
+                None => (raw.as_str(), ""),
+            };
+            let decoded_float = serde_yaml::from_str::<serde_yaml::Value>(token)
+                .is_ok_and(|v| matches!(v, serde_yaml::Value::Number(ref n) if n.is_f64()));
+            match exact_decimal(token).filter(|_| decoded_float) {
+                Some(exact) => {
+                    out.push('"');
+                    out.push(EXACT_FLOAT_MARK);
+                    out.push_str(&exact);
+                    out.push('"');
+                    out.push_str(suffix);
+                }
+                None => out.push_str(&raw),
+            }
+            i = j;
+            token_start = false;
+        }
+    }
+    Some(out)
 }
 
 /// python presentation._suppress_yaml_representation_equivalent_modifications (issue #57 yaml):
