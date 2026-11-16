@@ -9515,7 +9515,7 @@ fn refine_candidate_drafts<'a>(
     measure_value_optional(
         probe.as_deref_mut(),
         "rust_refine_suppress_same_label_delete",
-        || suppress_same_label_function_delete_for_addition_drafts(changes),
+        || suppress_same_label_function_delete_for_addition_drafts(changes, matching),
     );
     finalize_debug_probe("refine:suppress_same_label_delete", changes);
     measure_value_optional(
