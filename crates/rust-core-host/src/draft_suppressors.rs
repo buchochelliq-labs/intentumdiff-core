@@ -60,12 +60,33 @@ impl<'a> DeltaCoverage<'a> {
         if old.label != new.label && !self.label_explained(old, new) {
             return false;
         }
-        let old_kids: Vec<&SemanticNode> =
-            old.children.iter().filter(|c| !self.old_ids.contains(c.id.as_str())).collect();
-        let new_kids: Vec<&SemanticNode> =
-            new.children.iter().filter(|c| !self.new_ids.contains(c.id.as_str())).collect();
-        old_kids.len() == new_kids.len()
-            && old_kids.iter().zip(&new_kids).all(|(o, n)| self.covers_at(o, n, depth + 1))
+        let (old_kids, old_reported): (Vec<&SemanticNode>, Vec<&SemanticNode>) =
+            old.children.iter().partition(|c| !self.old_ids.contains(c.id.as_str()));
+        let (new_kids, new_reported): (Vec<&SemanticNode>, Vec<&SemanticNode>) =
+            new.children.iter().partition(|c| !self.new_ids.contains(c.id.as_str()));
+        // Align the unreported children in order. A child may also be absorbed by a REPORTED
+        // sibling on the other side that contains an exact copy of it — wrapping
+        // (`x` -> reported `abs(x)`) or unwrapping (reported `f(x)` -> `x`). Anything else
+        // left over is an unreported delta.
+        let absorbed = |node: &SemanticNode, wrappers: &[&SemanticNode], old_side: bool| {
+            wrappers.iter().any(|wrapper| wrapper.descendants().into_iter().any(|inner| {
+                if old_side { self.covers_at(node, inner, depth + 1) } else { self.covers_at(inner, node, depth + 1) }
+            }))
+        };
+        let (mut i, mut j) = (0, 0);
+        while i < old_kids.len() || j < new_kids.len() {
+            if i < old_kids.len() && j < new_kids.len() && self.covers_at(old_kids[i], new_kids[j], depth + 1) {
+                i += 1;
+                j += 1;
+            } else if i < old_kids.len() && absorbed(old_kids[i], &new_reported, true) {
+                i += 1;
+            } else if j < new_kids.len() && absorbed(new_kids[j], &old_reported, false) {
+                j += 1;
+            } else {
+                return false;
+            }
+        }
+        true
     }
 
     /// A label change is explained by a reported rename of that exact label, or when applying
@@ -73,6 +94,13 @@ impl<'a> DeltaCoverage<'a> {
     /// label yields exactly the new label.
     fn label_explained(&self, old: &SemanticNode, new: &SemanticNode) -> bool {
         if self.renames.contains(&(old.label.as_str(), new.label.as_str())) {
+            return true;
+        }
+        // A label that is only the grammar placeholder or a copy of one of its own children's
+        // labels carries nothing the (recursively compared) children do not.
+        let derived = |node: &SemanticNode| node.label == node.node_type
+            || node.children.iter().any(|child| child.label == node.label);
+        if derived(old) && derived(new) {
             return true;
         }
         let (old_prefix, new_prefix) = (format!("{}.", old.id), format!("{}.", new.id));
@@ -85,6 +113,15 @@ impl<'a> DeltaCoverage<'a> {
             .collect();
         if edits.is_empty() {
             return false;
+        }
+        // A name extracted from an edited descendant (`function 'Answer'` from its signature
+        // `function Answer() : Int`): the descendant edit is exactly this name change.
+        let (old_name, new_name) = (old.label.to_lowercase(), new.label.to_lowercase());
+        if !old_name.is_empty() && edits.iter().any(|(from, to)| {
+            let from = from.to_lowercase();
+            from.contains(&old_name) && from.replacen(&old_name, &new_name, 1) == to.to_lowercase()
+        }) {
+            return true;
         }
         edits.sort_by_key(|(o, _)| std::cmp::Reverse(o.len()));
         let mut text = old.label.clone();

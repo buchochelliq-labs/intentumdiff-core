@@ -2517,7 +2517,23 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
 pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
     changes: &mut Vec<ChangeDraft<'_>>, old_source: &str, new_source: &str, language: &str,
 ) {
+    // #253: a same-label modification whose unpaired leaves are a real delta is still
+    // redundant when OTHER surviving drafts report that whole delta (a reported `abs(...)`
+    // wrapper around a moved operand). Proven per draft with DeltaCoverage.
+    let reported_elsewhere: Vec<bool> = (0..changes.len()).map(|index| {
+        let change = &changes[index];
+        match (change.change_type, change.old_node, change.new_node) {
+            ("MODIFICATION", Some(old), Some(new)) if old.node_type == new.node_type && old.label == new.label
+                && (!old.is_leaf() || !new.is_leaf()) => {
+                DeltaCoverage::of(changes, &std::iter::once(index).collect()).covers(old, new)
+            }
+            _ => false,
+        }
+    }).collect();
+    let mut index = 0;
     changes.retain(|change| {
+        let covered = reported_elsewhere[index];
+        index += 1;
         if change.change_type != "MODIFICATION" {
             return true;
         }
@@ -2541,7 +2557,10 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
                 && strip_whitespace(&old_node.label) == strip_whitespace(&new_node.label);
             return !spacing_only || opaque_payload::changed(old_node, new_node, old_source, new_source, language);
         }
-        subtree_has_leaf_label_delta(old_node, new_node)
+        // An id-aligned leaf edit always keeps the modification (unchanged rule); a delta made
+        // only of unpaired leaves keeps it unless other surviving drafts report it all.
+        leaf_label_delta(old_node, new_node, false)
+            || (leaf_label_delta(old_node, new_node, true) && !covered)
             || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
 }
@@ -2551,6 +2570,12 @@ fn strip_whitespace(text: &str) -> String {
 }
 
 pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    leaf_label_delta(old_node, new_node, true)
+}
+
+/// `include_unpaired = false` is the pre-#253 rule (id-aligned leaf label edits, or the
+/// positional fallback); `true` also counts unpaired leaves as a delta.
+fn leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode, include_unpaired: bool) -> bool {
     if old_node.is_leaf() && new_node.is_leaf() {
         return old_node.label != new_node.label;
     }
@@ -2571,6 +2596,9 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     });
     if id_delta {
         return true;
+    }
+    if any_id_aligned && !include_unpaired {
+        return false;
     }
     if any_id_aligned {
         // #253: one aligned, unchanged leaf is not proof that the REST is unchanged. Leaves
@@ -2599,6 +2627,11 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     let mut new_leaves = Vec::new();
     collect_leaf_refs(old_node, &mut old_leaves);
     collect_leaf_refs(new_node, &mut new_leaves);
+    if include_unpaired && old_leaves.len() != new_leaves.len() {
+        // #253: a different number of leaves is itself a delta (a wrapper or operand was
+        // added/removed); whether other drafts report it is the caller's coverage question.
+        return true;
+    }
     old_leaves.len() == new_leaves.len()
         && old_leaves.iter().zip(&new_leaves).any(|(old_leaf, new_leaf)| {
             old_leaf.node_type == new_leaf.node_type && old_leaf.label != new_leaf.label

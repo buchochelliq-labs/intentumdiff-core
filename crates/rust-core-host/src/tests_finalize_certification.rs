@@ -315,6 +315,39 @@ use crate::*;
                 "description": "Update integer('100') -> integer('150')"
             },
             {
+                // #253: the new `if vip: return subtotal * 0.2` branch is matched to the old
+                // `return 0`. The same-label return MODIFICATION was discarded as "no leaf
+                // delta" because the leaf counts differ, which left the new branch with no
+                // evidence at all. A different leaf count is a delta no other draft reports.
+                "old_filename": "billing.py",
+                "new_filename": "billing.py",
+                "change_type": "MODIFICATION",
+                "old": {
+                    "id": "0.0.2.0.2.1",
+                    "node_type": "return_statement",
+                    "label": "return_statement",
+                    "position": {
+                        "start_line": 4,
+                        "start_col": 8,
+                        "end_line": 4,
+                        "end_col": 16
+                    }
+                },
+                "new": {
+                    "id": "0.0.2.0.1.0",
+                    "node_type": "return_statement",
+                    "label": "return_statement",
+                    "position": {
+                        "start_line": 2,
+                        "start_col": 8,
+                        "end_line": 2,
+                        "end_col": 29
+                    }
+                },
+                "refactoring_kind": "",
+                "description": "Update return_statement('return_statement') -> return_statement('return_statement')"
+            },
+            {
                 // The call site gained a new argument (`order.get("vip", False)`). Before the
                 // label-match parent-anchoring fix (issue #31) this real addition was hidden
                 // by a bogus cross-scope label match; the signature now reports it.

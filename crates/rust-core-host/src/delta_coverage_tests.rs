@@ -151,3 +151,63 @@ fn a_same_label_entity_addition_only_absorbs_a_deletion_in_the_same_scope() {
     suppress_same_label_function_delete_for_addition_drafts(&mut twice, &matching);
     assert_eq!(twice.len(), 2, "{:?}", kinds(&twice));
 }
+
+/// Real parser shapes from the language assessment (cpp/java `abs(...)` repair, qsharp/sas
+/// renames, yaml scalar restyle): coverage accepts a child absorbed by a reported wrapper and
+/// labels derived from children, but not an unreported sibling edit next to them.
+#[test]
+fn coverage_accepts_reported_wrappers_and_derived_labels_only() {
+    let diff = |a: &str, b: &str| n("x.0", "binary_expression", "binary_expression", vec![
+        n("x.0.0", "identifier", a, vec![]), n("x.0.1", "identifier", b, vec![])]);
+    let old = n("1", "condition", "threshold", vec![diff("p", "q"), n("1.1", "identifier", "threshold", vec![])]);
+    let wrapped = n("2", "condition", "threshold", vec![
+        n("2.0", "call_expression", "abs", vec![n("2.0.0", "argument_list", "argument_list", vec![diff("p", "q")])]),
+        n("2.1", "identifier", "threshold", vec![])]);
+    let wrapped_and_edited = n("2", "condition", "threshold", vec![
+        n("2.0", "call_expression", "abs", vec![n("2.0.0", "argument_list", "argument_list", vec![diff("p", "q")])]),
+        n("2.1", "identifier", "limit", vec![])]);
+    let addition = draft("ADDITION", None, Some(&wrapped.children[0]));
+    assert!(DeltaCoverage::of(&[addition.clone()], &HashSet::new()).covers(&old, &wrapped));
+    let addition = draft("ADDITION", None, Some(&wrapped_and_edited.children[0]));
+    assert!(!DeltaCoverage::of(&[addition], &HashSet::new()).covers(&old, &wrapped_and_edited));
+
+    // A declaration name extracted from its edited signature line (case-insensitively).
+    let decl = |name: &str, line: &str, body: &str| n("0.1", "data_step", name, vec![
+        n("0.1.0", "sas_statement", line, vec![]), n("0.1.1", "sas_statement", body, vec![])]);
+    let (old, new) = (decl("WORK.GREETING", "data work.greeting", "x = 1"), decl("WORK.SALUTATION", "data work.salutation", "x = 1"));
+    let edit = [draft("MODIFICATION", Some(&old.children[0]), Some(&new.children[0]))];
+    assert!(DeltaCoverage::of(&edit, &HashSet::new()).covers(&old, &new));
+    let edited_body = decl("WORK.SALUTATION", "data work.salutation", "x = 2");
+    let edit = [draft("MODIFICATION", Some(&old.children[0]), Some(&edited_body.children[0]))];
+    assert!(!DeltaCoverage::of(&edit, &HashSet::new()).covers(&old, &edited_body));
+
+    // A placeholder label vs a label copied from a child: derived, the child decides.
+    let old = n("0.2", "flow_node", "flow_node", vec![n("0.2.0", "plain_scalar", "8080", vec![])]);
+    let new = n("0.2", "flow_node", "8080", vec![n("0.2.0", "double_quote_scalar", "8080", vec![])]);
+    let edit = [draft("MODIFICATION", Some(&old.children[0]), Some(&new.children[0]))];
+    assert!(DeltaCoverage::of(&edit, &HashSet::new()).covers(&old, &new));
+    assert!(!DeltaCoverage::of(&[], &HashSet::new()).covers(&old, &new), "the child restyle itself must be reported");
+}
+
+/// (2b) A same-label modification made only of unpaired leaves dies only when other
+/// surviving drafts report that whole delta; an id-aligned leaf edit always keeps it.
+#[test]
+fn same_label_modification_with_unpaired_leaves_needs_reported_coverage() {
+    let operand = |id: &str| n(id, "binary_expression", "binary_expression", vec![
+        n(&format!("{id}.0"), "identifier", "p", vec![]), n(&format!("{id}.1"), "identifier", "q", vec![])]);
+    let old = n("0.1", "if_statement", "if_statement", vec![operand("0.1.0")]);
+    let new = n("0.1", "if_statement", "if_statement", vec![
+        n("0.1.0", "call_expression", "abs", vec![n("0.1.0.0", "callee", "abs", vec![]), operand("0.1.0.1")])]);
+    let mut alone = vec![draft("MODIFICATION", Some(&old), Some(&new))];
+    suppress_same_label_modifications_without_leaf_label_delta(&mut alone, "", "", "cpp");
+    assert_eq!(alone.len(), 1, "the wrapper is reported by nothing else");
+    let mut with_wrapper = vec![draft("MODIFICATION", Some(&old), Some(&new)), draft("ADDITION", None, Some(&new.children[0]))];
+    suppress_same_label_modifications_without_leaf_label_delta(&mut with_wrapper, "", "", "cpp");
+    assert_eq!(kinds(&with_wrapper), vec!["ADDITION abs"]);
+    let edited = n("0.1", "if_statement", "if_statement", vec![n("0.1.0", "binary_expression", "binary_expression", vec![
+        n("0.1.0.0", "identifier", "p", vec![]), n("0.1.0.1", "identifier", "r", vec![])])]);
+    let mut aligned = vec![draft("MODIFICATION", Some(&old), Some(&edited)),
+        draft("MODIFICATION", Some(&old.children[0].children[1]), Some(&edited.children[0].children[1]))];
+    suppress_same_label_modifications_without_leaf_label_delta(&mut aligned, "", "", "cpp");
+    assert_eq!(aligned.len(), 2, "id-aligned leaf edits keep the modification (unchanged rule)");
+}
