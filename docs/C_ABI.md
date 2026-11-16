@@ -207,6 +207,36 @@ every parse:
 Malformed configs, a negative or non-integer `content_len`, or missing arguments return a
 `value_error` envelope.
 
+### Registry manifest validation (`validate_registry_manifest`)
+
+`validate_registry_manifest(manifest_json)` → `{"ok": bool, "errors": [{"path": str, "message": str}]}`;
+native `api::validate_registry_manifest(&Value) -> Vec<(path, message)>`. The host parses
+`registry.yaml` (or JSON) and passes the document as a JSON string. `path` is an RFC 6901 JSON
+Pointer into the manifest (`""` = root, `/plugins/<name>/ref`, `/plugins/<name>/capabilities/1`).
+Every problem is reported in one pass; wrong JSON types are errors, never exceptions. Only an
+unparseable `manifest_json` string is a `value_error` envelope. Rules (patterns are full-string):
+
+- Top level: object with `version` (integer ≥ 1), `plugins` (object keyed by package-safe name
+  `^(?:intentumdiff-)?[A-Za-z0-9][A-Za-z0-9._-]{0,127}$`), optional `renderer_components`; no
+  other keys. `renderer_components` needs `repository: "intentumdiff-core"`,
+  `artifact: "renderer-components"`, a 40-hex lowercase `ref` and exactly the four renderer pins.
+- Entry fields: `source` ∈ {`git`, `pypi`} (default `git`), `trust_tier` ∈ {`official`,
+  `community`} (default `official`); `ref`/`repo`/`description`/`abi_target`/
+  `provenance_manifest_ref` strings; `wasm_checksums` `{<name>.wasm: <64 lowercase hex>}`;
+  `dep_hashes` `{package==version: "sha256:<64 lowercase hex>"}`; `allowed_dependencies` string
+  array; unknown fields rejected. `abi_target`, when present, is `MAJOR.MINOR.PATCH`
+  (no leading zeros). Compatibility with the host contract is still decided at load time.
+- `capabilities`: a duplicate-free array drawn from the closed vocabulary derived from the
+  pinned WIT — the interface each `world` exports: `parser`, `renderer`, `enricher`,
+  `index-engine`, `diff-analyzer` (`host-utils` is an import, not a capability).
+- **Official tier** (the default): `git` entries need an immutable 40-hex lowercase commit
+  `ref`; `pypi` entries need an exact version `ref` (`^[0-9][A-Za-z0-9.+!-]{0,63}$`);
+  non-empty `wasm_checksums`, non-empty `capabilities` and an `abi_target` are required; a
+  custom `repo` is rejected (a custom source is community tier by definition).
+- **Community tier**: every field is optional (listed, installs unverified); any field that is
+  present must still be well-formed — a git `ref` must pass the non-strict
+  `validate_registry_ref` traversal guard, a pypi `ref` is empty (latest) or a version.
+
 ## Shared guardrail policy
 
 Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.

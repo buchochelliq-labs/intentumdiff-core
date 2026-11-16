@@ -154,3 +154,10 @@ pub fn guardrail_check_result(request: &Value) -> Result<Value, ReviewError> {
 pub fn fuel_budget(config_json: &str, content_len: u64) -> Result<Option<u64>, ReviewError> {
     crate::fuel_budget_for_content(config_json, content_len).map_err(ReviewError::Engine)
 }
+
+/// Validate an `intentumdiff-registry` manifest (parsed from YAML/JSON) against the registry
+/// schema and trust policy. Returns every `(json_pointer_path, message)` problem; empty = valid.
+/// See docs/C_ABI.md "Registry manifest validation" for the official/community rules.
+pub fn validate_registry_manifest(manifest: &Value) -> Vec<(String, String)> {
+    crate::registry::validate_registry_manifest(manifest)
+}

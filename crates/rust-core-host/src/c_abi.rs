@@ -563,6 +563,10 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 3, "install_target")?,
         ))
         .map_err(|e| format!("serialize dep-hash errors: {e}")),
+        // Registry-manifest validator (python #329): `{"ok": bool, "errors": [{"path","message"}]}`.
+        "validate_registry_manifest" => crate::registry::validate_registry_manifest_json_impl(
+            arg_str(args, 0, "manifest_json")?,
+        ),
         // Deterministic cache-key derivation — the shared, binding-agnostic key module. A key is a
         // SHA-256 hex string (never valid JSON), so the envelope carries it verbatim.
         "cache_make_key" => Ok(crate::cache_keys::cache_make_key(arg_json(args, 0, "parts")?)),

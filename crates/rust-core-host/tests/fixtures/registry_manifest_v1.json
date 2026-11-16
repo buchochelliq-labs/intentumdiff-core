@@ -1,0 +1,913 @@
+{
+ "plugins": {
+  "intentumdiff-abap-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "ABAP (SAP) parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "832e64a5bd44f0051486fee381832a44f4c98a6a",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "abap_parser.wasm": "a00561ca1dd7c774e7a586c9fdb7b56bcaf268c2e56c0d8d3d0eff82e80c0554"
+   }
+  },
+  "intentumdiff-adf-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Azure Data Factory pipeline parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "c74e01a8f8187e9afc2af33866791f9a99c8c0b7",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "adf_parser.wasm": "941113f3bff97f3e9c670a4c77d33acbd83752a781c7b4caf0a48bc77364f7db"
+   }
+  },
+  "intentumdiff-asciidoc-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight AsciiDoc full-parse parser plugin for IntentumDiff",
+   "ref": "e869d850dfdac758a04b578d793124ae8ff22f68",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "asciidoc_parser.wasm": "f87cb7a74f3159c23811b16eb531edbb7cfceabaecedcbc1c037d1986162d306"
+   }
+  },
+  "intentumdiff-asm-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Assembly parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "457411a27d3d928313ea7cda1dae97ddf68a533e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "asm_parser.wasm": "54fcd474826b4b392715027c1732b8c7e95f6b7472ea07930c17002c52853baf"
+   }
+  },
+  "intentumdiff-assemblyscript-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "AssemblyScript parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "7ffce519cf4a2a57f25ed0f9cfd0ac4ab5c69ddc",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "assemblyscript_parser.wasm": "48ffe441dfa4ede797417428bcb1dc5ad17756b029f5ea9aebf5967970c0314d"
+   }
+  },
+  "intentumdiff-astro-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Astro component parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "092a2ad15e9bec51192d259c1b5c241f96d6561d",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "astro_parser.wasm": "87b9522ecb7b59163fe38e128edd5c1250c4a923035ff05928bfb179660fa533"
+   }
+  },
+  "intentumdiff-bash-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Bash/Shell parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "3e743d8e556161697d4fb7bcc009eaaec5e83095",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "bash_parser.wasm": "a040ede7a7ab725bc6a8f067f28b615eff9b3ce9218c966246ea755e7bd075c0"
+   }
+  },
+  "intentumdiff-clojure-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Clojure parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "3272ccc662f29ba810f082770488a7f4151c8458",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "clojure_parser.wasm": "b7b9389e242e0c679a945a80a969991e40350648444bcccb6d58fbcd593ac392"
+   }
+  },
+  "intentumdiff-cmake-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "CMake parser plugin for IntentumDiff (tree-sitter-cmake grammar, full-parse mode)",
+   "ref": "478a125ce0d2f1a9c798f3fe95dea952ef07d589",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "cmake_parser.wasm": "f3074dd3e4a6b0bb55f7330b156ae7d703bc633e887e27b1a8a492a868b4aa59"
+   }
+  },
+  "intentumdiff-cpp-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "C/C++ parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "64c822173e1f2285df6a56fc3f38630ff269bb82",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "cpp_parser.wasm": "9af46c8b31ba636c00139b8b91bc10e3e118c156edee824aa8a2a60e671db6c2"
+   }
+  },
+  "intentumdiff-csharp-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "C# parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "b73bd6e080e05cbdcf9cb0fa0ee02f2e39db588c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "csharp_parser.wasm": "1ad282ea4b8f5efe94e546726901bd62d40800bae9d457ee35e79dd6e9776a10"
+   }
+  },
+  "intentumdiff-css-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "CSS parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "c860706f3b691033c5022417e5acee7bb302d201",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "css_parser.wasm": "014c28541deb9d9285b22dca1510f447ebb299eca2a93ecb25cad9e30785b845"
+   }
+  },
+  "intentumdiff-dart-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Dart parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "ada80502365bdacb15b898f382920c730e19806c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "dart_parser.wasm": "ef6ab5470a9d41ee445c6cebbb012d4106ff5e3cb7100d085ee28c63d8d025ae"
+   }
+  },
+  "intentumdiff-databricks-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Databricks Workflows parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "0b09ca49c308b34560d750b33674fce51e3e979b",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "databricks_parser.wasm": "ea55a6394bde264fd032c70b688d14434cf02a78885b93702bb15344c91d0ce7"
+   }
+  },
+  "intentumdiff-dax-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "DAX / Power Query M parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "3c89f2d878bacede27fa6b76a3502070ba25ab38",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "dax_parser.wasm": "2b58916887a2805fc98ab69f60956791cb5eeecd65fe715893f22b424c4343c5"
+   }
+  },
+  "intentumdiff-delphi-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Delphi/Object Pascal parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "3a0a7041c24cb4f7fc914e85656180ef9d98802c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "delphi_parser.wasm": "091734b404007f999b82bbb438477d2c798b5035f8da3e1812f1a66e07a5d424"
+   }
+  },
+  "intentumdiff-dockerfile-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Dockerfile parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "f2e71c7dbf9c2adbe92986054561b935a7e59e6c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "dockerfile_parser.wasm": "34a607e721b2f3dd1354f281e5220c14ea1d8cb9dec198f6557558c52f377e11"
+   }
+  },
+  "intentumdiff-elixir-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Elixir parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "9687df99046ba44e19150738977345f6e6c70fb1",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "elixir_parser.wasm": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf"
+   }
+  },
+  "intentumdiff-freebasic-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "FreeBASIC parser plugin for IntentumDiff (full-parse lightweight mode)",
+   "ref": "466f57b049afba283f22cec3bd12a14dc29e4b6f",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "freebasic_parser.wasm": "1ae3ff97fcc112bbc8c38f4159f606b72ea099c1b3c44529d42e47555593734f"
+   }
+  },
+  "intentumdiff-generic-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Generic (token-level) fallback parser plugin for IntentumDiff",
+   "ref": "526975336161d4df7c96f92cb11c3ce944f98646",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "generic_parser.wasm": "6c7f7de7c9d88f4f5795bf6f6f99a3cc9d19c169cfb006b77f59e150423f746d"
+   }
+  },
+  "intentumdiff-gitignore-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Dedicated .gitignore / ignore-family full-parse parser plugin for IntentumDiff",
+   "ref": "7a25598d2d6185ea78e9b5d4cbbca4d2a77c2bc8",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "gitignore_parser.wasm": "a468265461647408a591851dcdd09817b38f1fb266a45e12267ad1286d2fe6b7"
+   }
+  },
+  "intentumdiff-go-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Go parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "b7564c6ee82b997de2fe17d1ac77ec03550ea3fd",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "go_parser.wasm": "4b60216e2b6b58c7ca894fda6b724bce57eb6056959510d9996e18541116a285"
+   }
+  },
+  "intentumdiff-gomod-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "go.mod parser plugin for IntentumDiff (tree-sitter-gomod grammar, full-parse mode)",
+   "ref": "ef9715cbfbf0121ba34f87e1a6271b5a9a5bf329",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "gomod_parser.wasm": "f818e01d364f9f247ff9850120c56882b29f954523166b49c14276cc022ce577"
+   }
+  },
+  "intentumdiff-graphql-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight GraphQL full-parse parser plugin for IntentumDiff",
+   "ref": "4b3a76f7864132db0e13e53b894982ad14e95ce2",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "graphql_parser.wasm": "b01f0a4b3f19ace3cd125f1a9e863cf097ee9c35c35b1f5539f2ed129c8fc4e2"
+   }
+  },
+  "intentumdiff-groovy-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Groovy parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "9f75620e9a70cb8929d7cf9197698204a8a78c1a",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "groovy_parser.wasm": "802b390f22e4d4b6e46433ce076bbd690a3cce889ce5898daf2af878060e28f0"
+   }
+  },
+  "intentumdiff-haskell-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Haskell parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "0f14fe3d42e7c9f123dc72ccff68ec17d0c9ad5b",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "haskell_parser.wasm": "c24869c7d7a1c71f8fd0574107ffe88bcb816f3ba89243cf9ad20756b2c427ca"
+   }
+  },
+  "intentumdiff-html-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "HTML parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "1f2ca38666d9a2ef02988fa282553949c8bfd0e2",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "html_parser.wasm": "3aad4e0b71c4089902f40c650210925ff696ffebde025f3562a17834191be56c"
+   }
+  },
+  "intentumdiff-ini-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "INI parser plugin for IntentumDiff (tree-sitter-ini grammar, full-parse mode)",
+   "ref": "339ec28e9f2ffdc5d18cd41ecf0911daf244f108",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "ini_parser.wasm": "dc665e8970a8922f70e76ef572297293db36d6802a98d5ac13a74bb519e538d0"
+   }
+  },
+  "intentumdiff-java-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Java parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "ca221ebe32c9f6c8061fe1f706203e25b1ea00fa",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "java_parser.wasm": "580021fc83c32f3fc11711eace069aeefa30c5b81ab0440dd93d05ab5eb1fcb6"
+   }
+  },
+  "intentumdiff-js-ts-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "JavaScript / TypeScript parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "eacbac4135e918552388c0e7f51eff614d4ba62e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "js_ts_parser.wasm": "3677a9f5770395a9c3be7d1610e87c1d3cae1820bd9783f6bb65a78899ca5e46"
+   }
+  },
+  "intentumdiff-json-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "JSON parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "2bc6d7fbadcd1c3df6258e46ac42d1301d0cfbd1",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "json_parser.wasm": "8edbe1a6d532c63cca819710093dadc2f3ad25cf10b58a095ca652b778177e89"
+   }
+  },
+  "intentumdiff-kotlin-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Kotlin parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "62699fabf203b9de08c525b596c2062f9d7d2f9c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "kotlin_parser.wasm": "cf1f86d749ba8ee10754709f59c3aa1613b8465c071b97837924ed8d7e2b9025"
+   }
+  },
+  "intentumdiff-latex-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight LaTeX full-parse parser plugin for IntentumDiff",
+   "ref": "039e202ccf81079f9f6f5059a89d2b2a5cb45745",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "latex_parser.wasm": "b9c83976e79d4970e30b293e873713ed4759a9188f49474916fcac53ba2538cf"
+   }
+  },
+  "intentumdiff-lua-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lua parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "20d72d7b94f0bf8e911a58bb3dde989443192c4e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "lua_parser.wasm": "e9fab17743ef283b49218dab633242aacb1028e04570f323e0a0fbd34ca2adcb"
+   }
+  },
+  "intentumdiff-make-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Makefile parser plugin for IntentumDiff (tree-sitter-make grammar, full-parse mode)",
+   "ref": "0bc2889d3382d6f0e202ccd2451a53d19c77903e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "make_parser.wasm": "0dd92dab1c57d2c4191b9c14d9f0ddd96e39808b41880211862f225796207529"
+   }
+  },
+  "intentumdiff-markdown-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Markdown parser plugin for IntentumDiff (tree-sitter-md block grammar, full-parse mode)",
+   "ref": "0c96f276a4b0bef2260202412f92fa06a0878759",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "markdown_parser.wasm": "05415ec27989e8eba2651f7440725a865670bb3248a648c2e456b4f6d7502e9d"
+   }
+  },
+  "intentumdiff-mdx-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "MDX (Markdown + JSX) parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "dca8689687b674134526be727b8b3253fe115d68",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "mdx_parser.wasm": "1bb9e1aa2d5b58b973c4ea5f680e08581e6cd362079f17e2928d317bfdd0ec71"
+   }
+  },
+  "intentumdiff-ocaml-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight OCaml full-parse parser plugin for IntentumDiff",
+   "ref": "e602a8d357e7179866a35e1d03dc381176157cec",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "ocaml_parser.wasm": "5c0933950a9250824bf09f5328e8a51da6ab36a6549f8ed2f820fff01f70c82b"
+   }
+  },
+  "intentumdiff-odin-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Odin parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "7cb297cc9e4e6af0f7dc2f368b428243516f3462",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "odin_parser.wasm": "f80f5ea40d7c86bf43850de4ed2b4e60caed933c7a2975dd7edcd3f2bcad20ed"
+   }
+  },
+  "intentumdiff-perl-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Perl parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "1db6ec979493068b0b62e32fe7d01e86902dadb6",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "perl_parser.wasm": "0e82e6ca637f892c96c0f347e92d47108b77a7ea41714723d1e1ea3baf0687ed"
+   }
+  },
+  "intentumdiff-php-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "PHP parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "dcfd9c7ecaff2549534019cc8a0379cea6a997cc",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "php_parser.wasm": "9b7dc0bf853f95fe55850ac8b340b3657d44bca70946c2a2be836cdceac42b37"
+   }
+  },
+  "intentumdiff-plsql-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "PL/SQL (Oracle) parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "01d2d606e4e967cc95e403793b5049cacf564c7d",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "plsql_parser.wasm": "26decdd220d4fdd8ac4501a0c8be0306b35a0476a207e691c43ad792816a8ffb"
+   }
+  },
+  "intentumdiff-po-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight PO/gettext full-parse parser plugin for IntentumDiff",
+   "ref": "e1387c13dd42125104492fb9121740fcd60967d6",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "po_parser.wasm": "092800f8e61e4b6d62ca914be56c850478913c798dece3fea02ee49be9fc970c"
+   }
+  },
+  "intentumdiff-postscript-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "PostScript parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "c48a58ab0c497dbf47a36706c3e8eb49afdf2a52",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "postscript_parser.wasm": "2f9dfc5f869ae4ec8cd03818977b7ae7c4565a901e2943fd096536476d771a1b"
+   }
+  },
+  "intentumdiff-powershell-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "PowerShell parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "9b8bd6d868e993f7dbc1ad268751f23713fa9aa6",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "powershell_parser.wasm": "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15"
+   }
+  },
+  "intentumdiff-proto-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Protocol Buffers parser plugin for IntentumDiff (tree-sitter-proto grammar, full-parse mode)",
+   "ref": "7576a59b3246ce55745854b014cf0fb9ebbc21bd",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "proto_parser.wasm": "d692e7aad9a759b2d5567d7dc5eeb2c5f6bc2e54d8e61d908dfa576f04df586a"
+   }
+  },
+  "intentumdiff-puppet-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Puppet parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "468a7c636a8f709e5d612949af4e81479e6bd97a",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "puppet_parser.wasm": "378e7c4e2abce858bed1bfd4fb08027559d5438d834a478f2d9c2c21c2066945"
+   }
+  },
+  "intentumdiff-python-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Python parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "4d825be9e26f96871539b990d1171b1815b8538f",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "python_parser.wasm": "627326a48a950f18fc2355aa00ef392f87a8f4e32f42965a7dd36be0a1f24b24"
+   }
+  },
+  "intentumdiff-qsharp-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Q# (Microsoft Quantum) parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "87663e057f4c37b2ebc3e292211c219e18771891",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "qsharp_parser.wasm": "7ee18d2ea51b991a0d6ee866da54b9e514a4952c77b221f9c1aac7261bc4e06c"
+   }
+  },
+  "intentumdiff-r-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "R parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "8d1426c8d189b6694211c9a4f9ec37ea25277599",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "r_parser.wasm": "a8e48efe3403a92b1484072e88c33cf633dd0e4e5fd4564c1f6a369afcfe0c87"
+   }
+  },
+  "intentumdiff-reasonml-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Lightweight ReasonML full-parse parser plugin for IntentumDiff",
+   "ref": "8ad1bb18cb6ff8b22ca2d530817848395b6ac843",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "reasonml_parser.wasm": "a0b779b30af24eb1147a19adc174891fa47667b41809e6dc82ab432faba5574b"
+   }
+  },
+  "intentumdiff-ruby-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Ruby parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "11e72b93a39bfe659011160846186f4df70f3345",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "ruby_parser.wasm": "a1f251608c22e32876e0b06ac0e49d9b3a31f30c9d4ecafd3af986fbed298087"
+   }
+  },
+  "intentumdiff-rust-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Rust parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "526fe183accd594c9acfd594c7811e554e5c5060",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "rust_parser.wasm": "5575a9798c4f28caf80aa2ca2b0572e82c0626bec9bf5c1bdb45b573645872a8"
+   }
+  },
+  "intentumdiff-sas-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "SAS parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "d39eb80f09efa3fd445638b14d289f0a98c434dc",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "sas_parser.wasm": "9e97d5e32ab2f98e008b76bd429aca8ff3cce501f18c8b04e7bc65ff0948fbb4"
+   }
+  },
+  "intentumdiff-scala-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Scala parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "48ea347470fc89db245feeeb37591a0a4e3404af",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "scala_parser.wasm": "e169a5618a3b6b4d973d57e02819bf8ff04ec7b15cddfbe19ab6293c98ced6de"
+   }
+  },
+  "intentumdiff-scss-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "SCSS parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "61138c973d14cf595e6439077b61f28b69b48707",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "scss_parser.wasm": "0bde9a9cacee1526e50b4a618d09c73e37a1d1553c7ab352328877c230fca3bc"
+   }
+  },
+  "intentumdiff-sql-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "SQL parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "16fd12eddd71f37ecea6557e6051c49a52ba22aa",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "sql_parser.wasm": "4dc57fb84c187c530a09030114973112083cbfedc7d6a201c7ab545a98deb2da"
+   }
+  },
+  "intentumdiff-squirrel-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Squirrel parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "5c24f0a01c8a160875da89eae8feac0b79a9a44e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "squirrel_parser.wasm": "17905c03c109d5eebed80a1222fc025086c8cce4b25658b34ab20be4eee9dee2"
+   }
+  },
+  "intentumdiff-svelte-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Svelte component parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "bdc9a3fb48bb97e0f60229a2c55d8333d062059d",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "svelte_parser.wasm": "4112804bcdc30b3aed3311c16d4bb56caa293ac879228cc1f119d54ccb412ad2"
+   }
+  },
+  "intentumdiff-swift-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Swift parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "a798176579e952be1f22fcbd29686fc8dd6fd86c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "swift_parser.wasm": "d15cf1448851ffdc7994a24c3458ea369201f74060ff5edac0f92b177fa3ed47"
+   }
+  },
+  "intentumdiff-terraform-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Terraform/HCL parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "4c53dfd04d06bcb7d9f7c6461092e55565b43590",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "terraform_parser.wasm": "78b3c62d6bd701c0d67870fd280e93e72e3072ea08d559b6b7a507892858e490"
+   }
+  },
+  "intentumdiff-toml-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "TOML parser plugin for IntentumDiff (tree-sitter-toml-ng grammar, full-parse mode)",
+   "ref": "847d75ebba563635a534752d2bf3dffff802842a",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "toml_parser.wasm": "af1ec51b47ebb327400e2c799ff73a991b3e2dedb8bf20a86fdc089d45845876"
+   }
+  },
+  "intentumdiff-tsql-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "T-SQL (Microsoft SQL Server) parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "817aab03ec13d694617c60504e03276e7452189b",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "tsql_parser.wasm": "704340850e7ece143507f17f92dd32695118a90328e0538a0baece1fcce1a290"
+   }
+  },
+  "intentumdiff-vbnet-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Visual Basic .NET parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "8266dfc920fc3a42215b7fc55952ed413ddebef1",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "vbnet_parser.wasm": "35de0e7db4775794cce83ff7c79d78720247bf2c9bb769e256ea1b8605a14b8f"
+   }
+  },
+  "intentumdiff-vue-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Vue SFC parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "75de71b8c566f4de8a7f201dde8b315a40fe822c",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "vue_parser.wasm": "16a2dfc6ca30bf8a7741acb804496bf2d9a7b7f4c4918f3776ffe953b24a80dd"
+   }
+  },
+  "intentumdiff-wat-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "WebAssembly Text (WAT) parser plugin for IntentumDiff (interpret-cst mode)",
+   "ref": "46120b369d06965ee3cf01cbd3a9cb63c90c40a9",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "wat_parser.wasm": "11458443ab73ac7079827f9c13f899600057687fe7381df6000b745028eb7254"
+   }
+  },
+  "intentumdiff-xml-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "XML parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "4312757d68b2001fa59b1461097967425b4e9a94",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "xml_parser.wasm": "2bd8f26bae4f9fd0e5a4528efa6d019a128bacd60721401609f63801b10e8a8a"
+   }
+  },
+  "intentumdiff-yaml-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "YAML parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "74b1af3536cf9369e77fac12815d722b3d63de0e",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "yaml_parser.wasm": "6b0f380250cec04e7f78b92596783751882583c76dc85e117f70c2f9ddb0f4a0"
+   }
+  },
+  "intentumdiff-zig-parser": {
+   "abi_target": "1.0.0",
+   "capabilities": [
+    "parser"
+   ],
+   "description": "Zig parser plugin for IntentumDiff (full-parse mode)",
+   "ref": "dae4da92f4f666adc8823651d472fd744917403b",
+   "source": "git",
+   "trust_tier": "official",
+   "wasm_checksums": {
+    "zig_parser.wasm": "8520545894161d06c302558f7b0a7e3d7a3127a420c927aca5fc0f508ba125e6"
+   }
+  }
+ },
+ "renderer_components": {
+  "artifact": "renderer-components",
+  "ref": "7aa72761d4034cdff4ec6ee59dee8f28392cb767",
+  "repository": "intentumdiff-core",
+  "wasm_checksums": {
+   "html_renderer.wasm": "40794e2365f4f960cfd125089907b09cdb46b1d72cf79ec030516c46282e228c",
+   "llm_renderer.wasm": "691a45a62055fc8a13cfa21f58d024f577ed119c06dabf54e8aa137b40e3d99a",
+   "patch_renderer.wasm": "0d59e4316aa7b8aae70b2cf94a46567eb54c8ed28484d58f457a083ed6b388ca",
+   "terminal_renderer.wasm": "818e5c99e5f90c1761424b13ecd7f90e8421f495d4d7979d9391e427bdc37cd8"
+  }
+ },
+ "version": 1
+}
