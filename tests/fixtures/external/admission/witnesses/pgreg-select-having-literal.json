@@ -1,0 +1,88 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "pgreg-select-having-literal",
+  "comparison": {
+    "order": "ordered",
+    "values": "text rendering per engine; NULL distinct from empty"
+  },
+  "engines": [
+    {
+      "name": "postgresql",
+      "version": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit"
+    },
+    {
+      "name": "sqlite",
+      "version": "SQLite 3.53.1 (Python sqlite3 module)"
+    }
+  ],
+  "new_sha256": "1e172861bdb2fb611712d880188b35817c47ab05b8bd5ac1d43ab6dc293ff800",
+  "old_sha256": "8bd028712896e94b905454bbc207d57b703e0f416e649e0314ddb6f1b59b68c4",
+  "oracle": "final_statement_result_set_comparison",
+  "results": {
+    "postgresql": {
+      "conclusion": "different",
+      "new": {
+        "outcome": "ok",
+        "rows": [
+          [
+            "4",
+            "CCCC    "
+          ],
+          [
+            "4",
+            "cccc    "
+          ]
+        ]
+      },
+      "new_rows_sha256": "0a45be76c1450f163838dcfd423d3a00e58b4bb9afc63863ee213cc4ca337fd0",
+      "old": {
+        "outcome": "ok",
+        "rows": [
+          [
+            "3",
+            "BBBB    "
+          ],
+          [
+            "3",
+            "bbbb    "
+          ]
+        ]
+      },
+      "old_rows_sha256": "1dd34705d4bd77dd87cb5f19bf447a91293d559d990f8be37a6021b013536e88"
+    },
+    "sqlite": {
+      "conclusion": "different",
+      "new": {
+        "outcome": "ok",
+        "rows": [
+          [
+            4,
+            "CCCC"
+          ],
+          [
+            4,
+            "cccc"
+          ]
+        ]
+      },
+      "new_rows_sha256": "089ee85a65b8bfe5b87d225750a5a3151e62f18bb78e3ee6d0e833a86840deaa",
+      "old": {
+        "outcome": "ok",
+        "rows": [
+          [
+            3,
+            "BBBB"
+          ],
+          [
+            3,
+            "bbbb"
+          ]
+        ]
+      },
+      "old_rows_sha256": "b4c996538abff657162a07b653b56d013829c2a7533d51583968196e506da939"
+    }
+  },
+  "schema_version": 1,
+  "status": "executed",
+  "verdict": "supports_claim"
+}

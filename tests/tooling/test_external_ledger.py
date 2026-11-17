@@ -277,3 +277,56 @@ def test_runner_gate_regressions_only_for_previous_upstream_gold_passes():
     assert [g[0] for g in R.gate_failures(ok)] == ['g2']
     assert R.gate_failures([row('g2', 'upstream_gold', 'failed', 'https://x/1')]) == []
     assert {g[0] for g in R.gate_failures(ok, strict=True)} == {'g2', 'd1'}
+
+
+# --- parser-fidelity statement inventory (#262) ---------------------------------------
+
+def _node(start, end, children=()):
+    return {'label': 'n', 'position': {'start_line': 0, 'start_col': start, 'end_line': 0, 'end_col': end},
+            'children': list(children)}
+
+
+def _parse_case(starts):
+    return {'expected': {'parse': {'side': 'old', 'statement_inventory': {
+        'count': len(starts), 'starts': starts, 'evidence': 'reference engine'}}}}
+
+
+def test_parse_inventory_matches_top_level_units_and_expands_containers():
+    source = b'SELECT 1; BEGIN; SELECT 2; SELECT 3; END;'
+    flat = {'old': {'tree': _node(0, 41, [_node(0, 9), _node(10, 41, [_node(17, 26), _node(27, 36)])])}}
+    # The second root child spans two reference starts, so it is a container and is expanded.
+    assert L.judge_parse(_parse_case([0, 17, 27]), flat, source) == []
+    errors = L.judge_parse(_parse_case([0, 10, 17, 27]), flat, source)
+    assert any('expected 4 top-level statements, got 3' in e for e in errors)
+    assert any('not matched, first at byte 10' in e for e in errors)
+    merged = {'old': {'tree': _node(0, 41, [_node(0, 41)])}}
+    assert any('got 0' in e or 'not matched' in e for e in L.judge_parse(_parse_case([0, 17, 27]), merged, source))
+    assert L.judge_parse(_parse_case([0]), {}, source) == ['parse: no old tree returned']
+    assert L.judge_parse({'expected': {'parse': {'side': 'old', 'statement_inventory': None}}}, {}, source) == []
+
+
+@pytest.mark.parametrize('parse, message', [
+    ({'side': 'both', 'statement_inventory': None}, 'side must be'),
+    ({'side': 'old', 'statement_inventory': {'count': 2, 'starts': [0], 'evidence': 'e'}}, 'increasing byte offsets'),
+    ({'side': 'old', 'statement_inventory': {'count': 2, 'starts': [5, 1], 'evidence': 'e'}}, 'increasing byte offsets'),
+    ({'side': 'old', 'statement_inventory': {'count': 1, 'starts': [999], 'evidence': 'e'}}, 'outside source'),
+])
+def test_validator_rejects_bad_parse_inventory(tmp_path, parse, message):
+    root, ledger = make_root(tmp_path)
+    ledger['cases'][1]['expected']['parse'] = parse
+    with pytest.raises(L.LedgerError, match=message):
+        L.validate(root, ledger)
+
+
+def test_runner_applies_parse_inventory(tmp_path):
+    R = _runner()
+    root, ledger = make_root(tmp_path)
+    identity = ledger['cases'][1]
+    identity['expected']['parse'] = {'side': 'old', 'statement_inventory': {'count': 1, 'starts': [0], 'evidence': 'e'}}
+    good = {'status': 'passed', 'classification_errors': [], 'tree_errors': [], 'review_errors': [],
+            'parse_errors': [], 'deterministic': True, 'review': _review([], False, None),
+            'trees': {'old': {'tree': _node(0, 22, [_node(0, 21)])}}}
+    assert R.classify(identity, good, root) == ('passed', [])
+    lost = dict(good, trees={'old': {'tree': _node(0, 22, [])}})
+    status, errors = R.classify(identity, lost, root)
+    assert status == 'failed' and any('statement inventory' in e for e in errors)

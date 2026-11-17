@@ -1,0 +1,93 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-SelectStatementTests160-baseline",
+  "claim_tested": "both sides parse with 0 TSql160 errors and Sql160ScriptGenerator renders identical scripts from both parse trees (syntactic equivalence under ScriptDom)",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "generated_equal": true,
+  "new_sha256": "639173e80bbd87ad2834b0472f9fa59e68cf4b312ed13c69d866d1b5e47db851",
+  "old_sha256": "d0df31d487c1db03e3f05c473485801093cbf571cb15bd8a68ca701e89c9a872",
+  "oracle": "scriptdom_parse_and_regenerate_equal",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 5,
+      "errors160": 0,
+      "generated160_sha256": "88e29a60ac53cfbda1389bec4940099e87793e8edda6e0a8ff15f88a054c59ae",
+      "statement_count": 12,
+      "statement_starts": [
+        43,
+        123,
+        199,
+        282,
+        361,
+        430,
+        573,
+        667,
+        760,
+        854,
+        952,
+        1049
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    },
+    {
+      "errors150": 8,
+      "errors160": 0,
+      "generated160_sha256": "88e29a60ac53cfbda1389bec4940099e87793e8edda6e0a8ff15f88a054c59ae",
+      "statement_count": 12,
+      "statement_starts": [
+        0,
+        88,
+        172,
+        245,
+        322,
+        399,
+        472,
+        605,
+        738,
+        871,
+        1012,
+        1153
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "verdict": "supports_claim"
+}

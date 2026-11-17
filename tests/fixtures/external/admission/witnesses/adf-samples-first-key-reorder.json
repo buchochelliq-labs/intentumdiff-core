@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "adf-samples-first-key-reorder",
+  "eligibility_differs": false,
+  "eligibility_new": {
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Failed": false,
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Skipped": false,
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Succeeded": true
+  },
+  "eligibility_old": {
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Failed": false,
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Skipped": false,
+    "FileSystemtoBlob <- Validate_adf_FileSystemInput_activity=Succeeded": true
+  },
+  "engines": [
+    {
+      "name": "python json (strict: duplicate keys and NaN/Infinity rejected)",
+      "version": "Python 3.13.18"
+    },
+    {
+      "name": "ADF dependency-condition model (documented semantics; predecessor outcomes Succeeded/Failed/Skipped injected)",
+      "version": "1"
+    }
+  ],
+  "new_sha256": "da321c36c22590047de7ccf2762cc80ba5d829548cacebbe0b46ad763f8616c9",
+  "old_sha256": "58b34f3f9b6634a45c274e45149345d2d8ca4d61e873b49783ba6d8d8abf7b25",
+  "oracle": "strict_json_value_equality_and_adf_dependency_matrix",
+  "schema_version": 1,
+  "status": "executed",
+  "values_equal": true,
+  "verdict": "supports_claim"
+}

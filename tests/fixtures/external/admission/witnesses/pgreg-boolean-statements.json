@@ -1,0 +1,522 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "pgreg-boolean-statements",
+  "claim_tested": "every statement is accepted by the PostgreSQL parser (no SQLSTATE 42601), each statement is located in the exact bytes",
+  "engines": [
+    {
+      "name": "postgresql",
+      "version": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit"
+    }
+  ],
+  "new_sha256": "0af0482f0a6685cda6172e9506d3ae4262ca0279f6911a7e601e4ddc02f2b69a",
+  "old_sha256": "0af0482f0a6685cda6172e9506d3ae4262ca0279f6911a7e601e4ddc02f2b69a",
+  "oracle": "postgresql_regress_transcript_and_statement_inventory",
+  "schema_version": 1,
+  "settings": {
+    "database": [
+      "lc_messages TO 'C'",
+      "lc_monetary TO 'C'",
+      "lc_numeric TO 'C'",
+      "lc_time TO 'C'",
+      "bytea_output TO 'hex'",
+      "timezone_abbreviations TO 'Default'"
+    ],
+    "env": {
+      "LC_MESSAGES": "C",
+      "PGDATESTYLE": "Postgres, MDY",
+      "PGTZ": "America/Los_Angeles"
+    },
+    "psql": [
+      "-X",
+      "-a",
+      "-q",
+      "-v",
+      "HIDE_TABLEAM=on",
+      "-v",
+      "HIDE_TOAST_COMPRESSION=on"
+    ]
+  },
+  "statement_count": 95,
+  "statements": [
+    {
+      "end_byte": 83,
+      "start_byte": 67,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 203,
+      "start_byte": 183,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 227,
+      "start_byte": 205,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 253,
+      "start_byte": 229,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 294,
+      "start_byte": 255,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 323,
+      "start_byte": 296,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 353,
+      "start_byte": 325,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 384,
+      "start_byte": 355,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 413,
+      "start_byte": 386,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 439,
+      "start_byte": 415,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 467,
+      "start_byte": 441,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 497,
+      "start_byte": 469,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 524,
+      "start_byte": 499,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 552,
+      "start_byte": 526,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 581,
+      "start_byte": 554,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 608,
+      "start_byte": 583,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 637,
+      "start_byte": 610,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 665,
+      "start_byte": 639,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 692,
+      "start_byte": 667,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 721,
+      "start_byte": 694,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 751,
+      "start_byte": 723,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 777,
+      "start_byte": 753,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 805,
+      "start_byte": 779,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 832,
+      "start_byte": 807,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 861,
+      "start_byte": 834,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 887,
+      "start_byte": 863,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 973,
+      "start_byte": 932,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1015,
+      "start_byte": 974,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1066,
+      "start_byte": 1016,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1139,
+      "start_byte": 1103,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1179,
+      "start_byte": 1141,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1209,
+      "start_byte": 1181,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1247,
+      "start_byte": 1211,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1285,
+      "start_byte": 1249,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1322,
+      "start_byte": 1287,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1360,
+      "start_byte": 1324,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1397,
+      "start_byte": 1362,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1435,
+      "start_byte": 1399,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1538,
+      "start_byte": 1468,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1628,
+      "start_byte": 1539,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1695,
+      "start_byte": 1629,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1741,
+      "start_byte": 1697,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1790,
+      "start_byte": 1754,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1844,
+      "start_byte": 1812,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1890,
+      "start_byte": 1846,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1939,
+      "start_byte": 1892,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 1988,
+      "start_byte": 1941,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2074,
+      "start_byte": 2042,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2138,
+      "start_byte": 2077,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2204,
+      "start_byte": 2141,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2275,
+      "start_byte": 2206,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2321,
+      "start_byte": 2277,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2385,
+      "start_byte": 2323,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2420,
+      "start_byte": 2388,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2466,
+      "start_byte": 2422,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2516,
+      "start_byte": 2468,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2566,
+      "start_byte": 2518,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2616,
+      "start_byte": 2568,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2764,
+      "start_byte": 2715,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2850,
+      "start_byte": 2818,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 2946,
+      "start_byte": 2853,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3047,
+      "start_byte": 2949,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3173,
+      "start_byte": 3050,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3334,
+      "start_byte": 3176,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3504,
+      "start_byte": 3457,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3558,
+      "start_byte": 3506,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3608,
+      "start_byte": 3560,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3661,
+      "start_byte": 3610,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3710,
+      "start_byte": 3663,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3764,
+      "start_byte": 3712,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3814,
+      "start_byte": 3766,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3867,
+      "start_byte": 3816,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 3946,
+      "start_byte": 3900,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4003,
+      "start_byte": 3947,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4062,
+      "start_byte": 4004,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4119,
+      "start_byte": 4063,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4346,
+      "start_byte": 4121,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4554,
+      "start_byte": 4493,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4603,
+      "start_byte": 4555,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4750,
+      "start_byte": 4701,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4800,
+      "start_byte": 4751,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4850,
+      "start_byte": 4801,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4901,
+      "start_byte": 4851,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 4952,
+      "start_byte": 4902,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5003,
+      "start_byte": 4953,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5145,
+      "start_byte": 5096,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5195,
+      "start_byte": 5146,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5245,
+      "start_byte": 5196,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5294,
+      "start_byte": 5246,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5343,
+      "start_byte": 5295,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5392,
+      "start_byte": 5344,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5590,
+      "start_byte": 5569,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5613,
+      "start_byte": 5592,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5636,
+      "start_byte": 5615,
+      "syntax_error": false
+    },
+    {
+      "end_byte": 5659,
+      "start_byte": 5638,
+      "syntax_error": false
+    }
+  ],
+  "status": "executed",
+  "syntax_error_count": 0,
+  "transcript_sha256": "990606ad189f18a43149beb1d485ae292da62e5fc61723bd8cf0f51342f22a6f",
+  "unlocated_count": 0,
+  "verdict": "supports_claim"
+}

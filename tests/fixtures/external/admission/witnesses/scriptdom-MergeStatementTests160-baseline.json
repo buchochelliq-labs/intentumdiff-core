@@ -1,0 +1,65 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-MergeStatementTests160-baseline",
+  "claim_tested": "both sides parse with 0 TSql160 errors and Sql160ScriptGenerator renders identical scripts from both parse trees (syntactic equivalence under ScriptDom)",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "generated_equal": true,
+  "new_sha256": "472e043b1582ee175641f5f307d00261161d4c864bdfac34a71aacacf4acfd5f",
+  "old_sha256": "48067636c27e34c38df8639877a2e77480056f392324163002d6c34e4f3dee54",
+  "oracle": "scriptdom_parse_and_regenerate_equal",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 5,
+      "errors160": 0,
+      "generated160_sha256": "7f064f18ec98f4daba0e490eeccaecc8b585a03ac38a77f45ce46aaf9713631c",
+      "statement_count": 5,
+      "statement_starts": [
+        45,
+        173,
+        368,
+        554,
+        768
+      ],
+      "statement_types": [
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement"
+      ]
+    },
+    {
+      "errors150": 4,
+      "errors160": 0,
+      "generated160_sha256": "7f064f18ec98f4daba0e490eeccaecc8b585a03ac38a77f45ce46aaf9713631c",
+      "statement_count": 5,
+      "statement_starts": [
+        0,
+        131,
+        335,
+        512,
+        804
+      ],
+      "statement_types": [
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement",
+        "MergeStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "verdict": "supports_claim"
+}

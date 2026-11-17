@@ -1,0 +1,20 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "pqparser-helloworld-helloworld-query-parse",
+  "claim_tested": "TaskUtils.tryLexParse(DefaultSettings) reaches an OK parse stage, as the upstream lexParseResource test asserts; section members inventoried from the upstream AST",
+  "engines": [
+    {
+      "name": "@microsoft/powerquery-parser",
+      "runtime": "Node.js v22.23.4",
+      "version": "4.0.1"
+    }
+  ],
+  "new_sha256": "ac4646ff33f9bd6966b73963624b137a2702389acd4bdd89f88cb7e91e14517f",
+  "old_sha256": "ac4646ff33f9bd6966b73963624b137a2702389acd4bdd89f88cb7e91e14517f",
+  "oracle": "powerquery_parser_lex_parse_and_member_inventory",
+  "parse_ok": true,
+  "root_kind": "RecursivePrimaryExpression",
+  "schema_version": 1,
+  "status": "executed",
+  "verdict": "supports_claim"
+}

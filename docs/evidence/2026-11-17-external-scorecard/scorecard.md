@@ -6,17 +6,17 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 
 ## Identity
 
-- Ledger SHA-256: `33163b7af06e83c6ddbaf6c27f1c4c213aa3a35783eca4adefd3edeba4cd2339`
-- Core commit: `74618c311836983b4f60ae2d8389edfdd14f7793` (crates dirty: False)
+- Ledger SHA-256: `89a3646a28a23466ef576aa51eb13d060c2ad79b39f5bb3227e88286af694419`
+- Core commit: `bbdec7c948258be3eaebedbd921163accbfa0dc0` (crates dirty: False)
 - C ABI library SHA-256: `ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b`
 - Staged parser manifest SHA-256: `23c390a898f252d919d9a348b13337c98198980cdf693682747faff630d0b69f`
 - Interface: production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)
-- Run (UTC): 2026-11-17T19:55:17+00:00
+- Run (UTC): 2026-11-17T20:30:39+00:00
 
 ## Summary
 
 - Registered language IDs: 74.
-- With at least one measured external lane: 6; gaps: 68.
+- With at least one measured external lane: 10; gaps: 64.
 - Handwritten regressions are shown in their own rows and never count toward a lane.
 
 ## Per-language lane status (all registered IDs)
@@ -24,7 +24,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | Language | Change understanding | Parser fidelity | Robustness/scaling | Selected primary source (evidence class) |
 |---|---|---|---|---|
 | `abap` | GAP | GAP | GAP | <https://github.com/abaplint/abaplint/blob/main/docs/development.md> (established community / compatibility suite) |
-| `adf` | GAP | GAP | GAP | <https://github.com/Azure/Azure-DataFactory> (qualified external candidate; admission gap) |
+| `adf` | 4/4 (100%) | 2/2 (100%) | GAP | <https://github.com/Azure/Azure-DataFactory> (qualified external candidate; admission gap) |
 | `asciidoc` | GAP | GAP | GAP | <https://github.com/asciidoctor-contrib/asciidoctor-doctest> (established community / compatibility suite) |
 | `asm` | GAP | GAP | GAP | <https://llvm.org/docs/TestingGuide.html> (official upstream regression suite) |
 | `assemblyscript` | GAP | GAP | GAP | <https://github.com/AssemblyScript/assemblyscript/blob/main/package.json> (official upstream regression suite) |
@@ -59,7 +59,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `kotlin` | GAP | GAP | GAP | <https://github.com/JetBrains/kotlin/blob/master/kotlin-native/HACKING.md> (official upstream regression suite) |
 | `latex` | GAP | GAP | GAP | <https://github.com/latex3/latex2e/tree/develop/base/testfiles> (official upstream regression suite) |
 | `lua` | GAP | GAP | GAP | <https://www.lua.org/tests/> (official upstream regression suite) |
-| `m` | GAP | GAP | GAP | <https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md> (official upstream regression suite) |
+| `m` | GAP | 2/9 (22%) | GAP | <https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md> (official upstream regression suite) |
 | `make` | GAP | GAP | GAP | <https://github.com/mirror/make/blob/master/tests/scripts/variables/flavors> (official upstream regression suite) |
 | `markdown` | GAP | GAP | GAP | <https://github.com/commonmark/commonmark-spec> (standards / conformance suite) |
 | `mdx` | GAP | GAP | GAP | <https://github.com/mdx-js/mdx/blob/main/packages/mdx/test/compile.js> (official upstream regression suite) |
@@ -82,12 +82,12 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `sas` | GAP | GAP | GAP | <https://github.com/HMS-Analytical-Software/SASUnit> (established community / compatibility suite) |
 | `scala` | GAP | GAP | GAP | <https://github.com/scala/scala/blob/2.13.x/CONTRIBUTING.md> (official upstream regression suite) |
 | `scss` | GAP | GAP | GAP | <https://github.com/sass/sass-spec> (official upstream regression suite) |
-| `sql` | GAP | GAP | GAP | <https://www.sqlite.org/sqllogictest/dir?name=test> (official upstream regression suite) |
+| `sql` | 9/12 (75%) | 3/4 (75%) | GAP | <https://www.sqlite.org/sqllogictest/dir?name=test> (official upstream regression suite) |
 | `squirrel` | GAP | GAP | GAP | <https://github.com/albertodemichelis/squirrel> (qualified external candidate; admission gap) |
 | `svelte` | GAP | GAP | GAP | <https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests> (official upstream regression suite) |
 | `swift` | GAP | GAP | GAP | <https://www.swift.org/contributing/> (official upstream regression suite) |
 | `toml` | GAP | GAP | GAP | <https://github.com/toml-lang/toml-test> (established community / compatibility suite) |
-| `tsql` | GAP | GAP | GAP | <https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md> (official upstream regression suite) |
+| `tsql` | 0/5 (0%) | 0/5 (0%) | GAP | <https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md> (official upstream regression suite) |
 | `tsx` | GAP | GAP | GAP | <https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md> (official upstream regression suite) |
 | `typescript` | GAP | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `vbnet` | GAP | GAP | GAP | <https://github.com/dotnet/roslyn/blob/main/Compilers.slnf> (official upstream regression suite) |
@@ -102,6 +102,9 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 
 | Language | Suite | Class | Lane | Disc. | Elig. | Adm. | Exec. | Pass | Fail | Unsup. | Skip | Blocked | Pass rate | Change recall | Preservation false alarms |
 |---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|
+| `adf` | azure-datafactory-samples | reviewed_external_derived | change_understanding | 4 | 4 | 4 | 4 | 4 | 0 | 0 | 0 | 0 | 4/4 (100%) | 2/2 (100%) | 0/2 (0%) |
+| `adf` | azure-datafactory-samples | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) |
+| `adf` | azure-datafactory-samples | upstream_gold | parser_fidelity | 2 | 2 | 2 | 2 | 2 | 0 | 0 | 0 | 0 | 2/2 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/2 (0%) |
 | `c` | intentumdiff-literal-regressions | handwritten_regression | change_understanding | 4 | 4 | 4 | 4 | 4 | 0 | 0 | 0 | 0 | 4/4 (100%) | 4/4 (100%) | N/A (0 of 0: no executed preservation controls) |
 | `cpp` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 14 | 1 | 0 | 0 | 0 | 14/15 (93%) | N/A (0 of 0: no executed behavior-changing cases) | 1/15 (7%) |
 | `cpp` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 12/12 (100%) | N/A (0 of 0: no executed preservation controls) |
@@ -113,14 +116,45 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `java` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 12/12 (100%) | N/A (0 of 0: no executed preservation controls) |
 | `javascript` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 15/15 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/15 (0%) |
 | `javascript` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 11 | 1 | 0 | 0 | 0 | 11/12 (92%) | 11/12 (92%) | N/A (0 of 0: no executed preservation controls) |
+| `m` | powerquery-parser | upstream_gold | parser_fidelity | 78 | 78 | 9 | 9 | 2 | 7 | 0 | 0 | 0 | 2/9 (22%) | N/A (0 of 0: no executed behavior-changing cases) | 7/9 (78%) |
+| `plsql` | utplsql | external_seed_only | parser_fidelity | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) |
+| `plsql` | utplsql | upstream_gold | parser_fidelity | 489 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) |
 | `python` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 14 | 1 | 0 | 0 | 0 | 14/15 (93%) | N/A (0 of 0: no executed behavior-changing cases) | 1/15 (7%) |
 | `python` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 11 | 1 | 0 | 0 | 0 | 11/12 (92%) | 11/12 (92%) | N/A (0 of 0: no executed preservation controls) |
 | `rust` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 15/15 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/15 (0%) |
 | `rust` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 12/12 (100%) | N/A (0 of 0: no executed preservation controls) |
+| `sql` | postgresql-regress | external_seed_only | parser_fidelity | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) |
+| `sql` | postgresql-regress | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 9 | 3 | 0 | 0 | 0 | 9/12 (75%) | 6/6 (100%) | 3/6 (50%) |
+| `sql` | postgresql-regress | reviewed_external_derived | parser_fidelity | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1/1 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/1 (0%) |
+| `sql` | postgresql-regress | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) |
+| `sql` | postgresql-regress | upstream_gold | parser_fidelity | 222 | 5 | 4 | 3 | 2 | 1 | 1 | 0 | 0 | 2/3 (67%) | N/A (0 of 0: no executed behavior-changing cases) | 1/3 (33%) |
+| `tsql` | sqlscriptdom | upstream_gold | change_understanding | 41 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: no executed behavior-changing cases) | 5/5 (100%) |
+| `tsql` | sqlscriptdom | upstream_gold | parser_fidelity | 492 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: no executed behavior-changing cases) | 5/5 (100%) |
 
 ## Failed admitted cases
 
 - `cpp` `hep-cpp-00-local-rename`: forbidden ADDITION reported: a local rename does not add or delete an entity; forbidden DELETION reported: a local rename does not add or delete an entity
 - `javascript` `hep-js-06-repair`: missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 258..262 (old) / 258..258 (new)
+- `m` `pqparser-helloworld-helloworld-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 24; statement starts: 1 reported statement(s) start where the reference has none, first at byte 144
+- `m` `pqparser-helloworldwithdocs-helloworldwithdocs-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 32; statement starts: 1 reported statement(s) start where the reference has none, first at byte 1382
+- `m` `pqparser-navigationtable-navigationtable-parse`: statement inventory: expected 11 top-level statements, got 5; statement starts: 11 reference statement start(s) not matched, first at byte 77; statement starts: 5 reported statement(s) start where the reference has none, first at byte 195
+- `m` `pqparser-oauthpkce-pkcesample-parse`: statement inventory: expected 5 top-level statements, got 3; statement starts: 5 reference statement start(s) not matched, first at byte 230; statement starts: 3 reported statement(s) start where the reference has none, first at byte 326
+- `m` `pqparser-trippin-1-odata-trippin-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 202
+- `m` `pqparser-trippin-2-rest-trippin-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 405
+- `m` `pqparser-trippin-3-navtables-trippin-parse`: statement inventory: expected 10 top-level statements, got 5; statement starts: 10 reference statement start(s) not matched, first at byte 74; statement starts: 5 reported statement(s) start where the reference has none, first at byte 894
 - `python` `hep-python-00-local-rename`: forbidden ADDITION reported: a local rename does not add or delete an entity; forbidden DELETION reported: a local rename does not add or delete an entity
 - `python` `hep-python-06-repair`: missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 309..313 (old) / 309..309 (new)
+- `sql` `pgreg-select-having-keyword-case`: has_semantic_changes: expected False, got True; is_style_only: expected True, got False; completeness: style-only review must be equivalent, got complete
+- `sql` `pgreg-select-having-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: a comment is not a code edit
+- `sql` `pgreg-select-implicit-alias-rename`: forbidden ADDITION reported: an alias rename does not add or delete an entity; forbidden DELETION reported: an alias rename does not add or delete an entity
+- `sql` `pgreg-case-statements`: statement inventory: expected 64 top-level statements, got 54; statement starts: 10 reference statement start(s) not matched, first at byte 4160
+- `tsql` `scriptdom-MergeStatementTests160-baseline`: old: 0: range outside source (30,0); new: 0: range outside source (34,0)
+- `tsql` `scriptdom-SelectStatementTests160-baseline`: has_semantic_changes: expected False, got True
+- `tsql` `scriptdom-ShiftOperatorTests160-baseline`: old: 0: range outside source (14,0); new: 0: range outside source (15,0)
+- `tsql` `scriptdom-StringConcatOperatorTests160-baseline`: old: 0: range outside source (23,0); new: 0: range outside source (51,0)
+- `tsql` `scriptdom-WindowClauseTests160-baseline`: has_semantic_changes: expected False, got True; old: 0: range outside source (90,0); new: 0: range outside source (118,0)
+- `tsql` `scriptdom-MergeStatementTests160-statements`: old: 0: range outside source (30,0); new: 0: range outside source (30,0); statement inventory: expected 5 top-level statements, got 0
+- `tsql` `scriptdom-SelectStatementTests160-statements`: statement inventory: expected 12 top-level statements, got 0; statement starts: 12 reference statement start(s) not matched, first at byte 43
+- `tsql` `scriptdom-ShiftOperatorTests160-statements`: old: 0: range outside source (14,0); new: 0: range outside source (14,0); statement inventory: expected 3 top-level statements, got 0
+- `tsql` `scriptdom-StringConcatOperatorTests160-statements`: old: 0: range outside source (23,0); new: 0: range outside source (23,0); statement inventory: expected 12 top-level statements, got 0
+- `tsql` `scriptdom-WindowClauseTests160-statements`: old: 0: range outside source (90,0); new: 0: range outside source (90,0); statement inventory: expected 16 top-level statements, got 0

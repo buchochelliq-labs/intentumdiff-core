@@ -1,0 +1,57 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-ShiftOperatorTests160-baseline",
+  "claim_tested": "both sides parse with 0 TSql160 errors and Sql160ScriptGenerator renders identical scripts from both parse trees (syntactic equivalence under ScriptDom)",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "generated_equal": true,
+  "new_sha256": "e7f3bcde5e6a272c9cb71ae4fbb30d1f7d6a54e4d8752321ea232e32f70a34e3",
+  "old_sha256": "b6c0c814c2300b599c114cdef197f11630d40b8df98899c4f65f28987814db26",
+  "oracle": "scriptdom_parse_and_regenerate_equal",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 3,
+      "errors160": 0,
+      "generated160_sha256": "b26a367817570834072941614a21887cb42b5243c0a987336e6d5c2dfb10c4b9",
+      "statement_count": 3,
+      "statement_starts": [
+        3,
+        26,
+        60
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "SelectStatement",
+        "CreateProcedureStatement"
+      ]
+    },
+    {
+      "errors150": 3,
+      "errors160": 0,
+      "generated160_sha256": "b26a367817570834072941614a21887cb42b5243c0a987336e6d5c2dfb10c4b9",
+      "statement_count": 3,
+      "statement_starts": [
+        3,
+        28,
+        64
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "SelectStatement",
+        "CreateProcedureStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "verdict": "supports_claim"
+}

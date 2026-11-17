@@ -68,6 +68,9 @@ def classify(case, row, root):
         return 'failed', errors or ['no review returned']
     old = (root / case['old']['path']).read_bytes(); new = (root / case['new']['path']).read_bytes()
     errors += ledger_lib.judge(case, review, old, new)
+    if case['expected'].get('parse'):
+        side = case['expected']['parse']['side']
+        errors += ledger_lib.judge_parse(case, row.get('trees'), old if side == 'old' else new)
     # Deduplicate while preserving order: classification is checked by both layers.
     seen = set(); errors = [e for e in errors if not (e in seen or seen.add(e))]
     return ('passed' if not errors else 'failed'), errors
