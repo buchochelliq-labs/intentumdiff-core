@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-encguide-comment_line",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "f372999f944dd2f2a4ddeb256e21f8158512e029309eb3affebdd5e8bb404912",
+  "observations": {
+    "new": {
+      "error": "! Font \\X=wnr10 not loadable: Metric (TFM) file not found.",
+      "missing": [
+        "wnr10"
+      ]
+    },
+    "old": {
+      "error": "! Font \\X=wnr10 not loadable: Metric (TFM) file not found.",
+      "missing": [
+        "wnr10"
+      ]
+    }
+  },
+  "old_sha256": "514ebf9ce8d63fbac91fb19342d95eda05b9e4b77aaebbad50a830a099bfb5b8",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

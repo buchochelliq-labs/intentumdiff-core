@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-svelte-component",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "9e050612b8c13e4f1c0beb3cb5a23440355b80e1f2956452b6a055021288d748",
+  "observations": {
+    "crash": "TypeError: Component is not a function\n    at file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c12.mjs:28:3\n    at file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:413:11\n    at Renderer.child (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-9"
+  },
+  "old_sha256": "3c5104d967501b41728e6589859701c878671b1ffbf0500b0181dbf1ea4078b5",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

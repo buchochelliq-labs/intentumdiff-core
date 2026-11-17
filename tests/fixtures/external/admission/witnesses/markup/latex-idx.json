@@ -1,0 +1,15 @@
+{
+  "case_id": "latex-idx",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "6f851fa3772f633b3e2e56c1fcabf22f325c92a339a574edf7027db213ec688b",
+  "observations": {
+    "error": "! Emergency stop.",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "6f851fa3772f633b3e2e56c1fcabf22f325c92a339a574edf7027db213ec688b",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

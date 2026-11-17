@@ -1,0 +1,31 @@
+{
+  "enumeration": {
+    "complete": true,
+    "method": "fixed upstream test modules; SFC sources are extracted from their template literals"
+  },
+  "files": {
+    "LICENSE": {
+      "bytes": 1112,
+      "sha256": "49190d1f742dd61e47fe816df4963e5186a2a62100d9122f9883a60ea32973ac",
+      "url": "https://raw.githubusercontent.com/vuejs/core/8b479a89445868d474f17e2d837765e7c9ece5e4/LICENSE"
+    },
+    "packages/compiler-sfc/__tests__/compileScript.spec.ts": {
+      "bytes": 45278,
+      "sha256": "688b8f1ccd78a5888fb136b2f8ad9c31bc58762121283a139f3f1e015e71ee72",
+      "url": "https://raw.githubusercontent.com/vuejs/core/8b479a89445868d474f17e2d837765e7c9ece5e4/packages/compiler-sfc/__tests__/compileScript.spec.ts"
+    },
+    "packages/compiler-sfc/__tests__/parse.spec.ts": {
+      "bytes": 13958,
+      "sha256": "21bab35ab4f501c06a3e662c3b5ed63ae71b1d7a30be8594b54840b6f823cacc",
+      "url": "https://raw.githubusercontent.com/vuejs/core/8b479a89445868d474f17e2d837765e7c9ece5e4/packages/compiler-sfc/__tests__/parse.spec.ts"
+    }
+  },
+  "notes": [],
+  "probed_absent": [],
+  "ref": "v3.5.45",
+  "repository": "vuejs/core",
+  "revision": "8b479a89445868d474f17e2d837765e7c9ece5e4",
+  "revision_resolution": "git ls-remote https://github.com/vuejs/core for v3.5.45 (2026-11-17); bytes fetched only at that commit",
+  "schema_version": 1,
+  "suite_id": "vue-compiler-sfc-tests"
+}

@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-append",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "5517f45e7e727f7e104ccc83a8aff8fdbe358d4a487f2ad889cdf5fb3e59ffff",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "5517f45e7e727f7e104ccc83a8aff8fdbe358d4a487f2ad889cdf5fb3e59ffff",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

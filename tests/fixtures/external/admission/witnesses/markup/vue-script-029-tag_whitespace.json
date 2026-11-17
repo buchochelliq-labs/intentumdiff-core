@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-029-tag_whitespace",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "90cff6270aa1b6743a8f4d4bb928dbf1cebba51e80238e2bd691442fdf86dcd8",
+  "observations": {
+    "crash": "ReferenceError: ref is not defined\n    at setup (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/v12.mjs:10:23)\n    at callWithErrorHandling (/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19)\n    at setupStatefulComponent (/tmp/claude-0/-hom"
+  },
+  "old_sha256": "95910238984ebd1318c9134a9621572b651486ae83932ce7f83f0855dbcc3a30",
+  "oracle": "vue_ssr_equal",
+  "reference": "vue_ssr_equal: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

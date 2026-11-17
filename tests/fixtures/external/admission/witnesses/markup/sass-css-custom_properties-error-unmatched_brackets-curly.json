@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-css-custom_properties-error-unmatched_brackets-curly",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "711811f4958cd6054d2b12e6cf72ddaaee12ae5436f53430f95d96dd0382779c",
+  "observations": {
+    "error": "unmatched \"}\"."
+  },
+  "old_sha256": "711811f4958cd6054d2b12e6cf72ddaaee12ae5436f53430f95d96dd0382779c",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass rejects, but not with a syntax error",
+  "verdict": "inconclusive"
+}

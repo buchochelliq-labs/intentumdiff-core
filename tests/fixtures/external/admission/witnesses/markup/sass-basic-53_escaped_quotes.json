@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-basic-53_escaped_quotes",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "9abeefb7e0519fc57adb6bd3317aea7f5f85bf5f043a8524527069d55a32c9a3",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "9abeefb7e0519fc57adb6bd3317aea7f5f85bf5f043a8524527069d55a32c9a3",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

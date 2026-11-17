@@ -1,0 +1,1 @@
+<div in:style="{{opacity: 0}}">fadesx in</div>

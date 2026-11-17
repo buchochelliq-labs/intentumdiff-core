@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-css-unicode_range-question_mark",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "b6dbf94ad760617e8592857672bfef5b87abe6a4e680d2cfbc4a030dad7e9bba",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "b6dbf94ad760617e8592857672bfef5b87abe6a4e680d2cfbc4a030dad7e9bba",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

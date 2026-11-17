@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-css_unary_ops",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "8c1ce0c636bb8628ba6f48b6ed69d68ac3cb464b7211a51a6827e8b4a543e6f4",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "8c1ce0c636bb8628ba6f48b6ed69d68ac3cb464b7211a51a6827e8b4a543e6f4",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,16 @@
+{
+  "case_id": "adoc-document-footnotes",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "519190021e6d32afe8eb12fa3f936f1a048a31502adf606b698bceeacc0e4fa9",
+  "observations": {
+    "html_sha256": "5d5035a99b0a8fc36cfc1bb9af8daa495b1b13182ba409e4ccc333756e04fb10",
+    "reference_accepts": false,
+    "stderr": "asciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer,Opinions are my own.]; use footnote macro with target instead\nasciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer]; use footnote macro with target instead\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "519190021e6d32afe8eb12fa3f936f1a048a31502adf606b698bceeacc0e4fa9",
+  "oracle": "asciidoctor_convert",
+  "reference": "asciidoctor_convert: Asciidoctor 2.0.26 [https://asciidoctor.org]",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

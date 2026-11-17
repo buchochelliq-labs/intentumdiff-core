@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-feature-queries-nested",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "30bb330ef6342d90fce58d0af8728e1026a0c895a88e5ef1d23576d18bf9c9dd",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "30bb330ef6342d90fce58d0af8728e1026a0c895a88e5ef1d23576d18bf9c9dd",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

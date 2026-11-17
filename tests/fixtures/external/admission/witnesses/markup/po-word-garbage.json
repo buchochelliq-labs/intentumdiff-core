@@ -1,0 +1,16 @@
+{
+  "case_id": "po-word-garbage",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "6e4c1c83742c0d3baf9f805783d3c6b2f94627e46f3c7cca4bbcd18c7a3c1910",
+  "observations": {
+    "mo_sha256": "71e10060d8b7473007f52d09aa289c71440cc6e6a495eb7d1a6e94744ac521c6",
+    "reference_accepts": true,
+    "stderr": "ader field 'PO-Revision-Date' missing in header\nf.po:2: warning: header field 'Last-Translator' missing in header\nf.po:2: warning: header field 'Language-Team' missing in header\nf.po:2: warning: header field 'MIME-Version' missing in header\nf.po:2: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": false
+  },
+  "old_sha256": "6e4c1c83742c0d3baf9f805783d3c6b2f94627e46f3c7cca4bbcd18c7a3c1910",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

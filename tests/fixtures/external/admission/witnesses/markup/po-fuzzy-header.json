@@ -1,0 +1,16 @@
+{
+  "case_id": "po-fuzzy-header",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c8a8e21f3bc76d6e628558a681ab24e5e3834fe194a42c40abaab678b09643bf",
+  "observations": {
+    "mo_sha256": "b287c45b6274b49e52adbd87310291dda720be76ed7da8e4fccd1fbacf48a2c5",
+    "reference_accepts": true,
+    "stderr": "rning: header field 'PO-Revision-Date' still has the initial default value\nf.po:5: warning: header field 'Last-Translator' still has the initial default value\nf.po:5: warning: header field 'Language-Team' still has the initial default value\nf.po:5: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "c8a8e21f3bc76d6e628558a681ab24e5e3834fe194a42c40abaab678b09643bf",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

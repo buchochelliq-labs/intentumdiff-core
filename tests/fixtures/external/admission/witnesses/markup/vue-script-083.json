@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-083",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "1803297b74fc7dcfdd8e188f9d01ff17449078cca6028a1a7d8723e333f4db47",
+  "observations": {
+    "crash": "SyntaxError: [vue/compiler-sfc] The `assert` keyword in import attributes is deprecated and it has been replaced by the `with` keyword. You can enable the `deprecatedImportAssert` parser plugin to suppress this error. (2:39)\n\nFixture.vue\n1  |  \n2  |          <script setup>\n3  |          import { foo } from './foo.js' assert { type: 'foobar' }\n   |                                         ^\n4  |    "
+  },
+  "old_sha256": "1803297b74fc7dcfdd8e188f9d01ff17449078cca6028a1a7d8723e333f4db47",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

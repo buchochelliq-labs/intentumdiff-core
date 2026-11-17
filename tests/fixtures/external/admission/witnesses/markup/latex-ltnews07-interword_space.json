@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-ltnews07-interword_space",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "5f93eba64e38506623e503598945671797f2a94971a56c29bee60b8f1cb2f259",
+  "observations": {
+    "new": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    },
+    "old": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    }
+  },
+  "old_sha256": "5e16e0f689c9dbb12cb78b33ccb2732fc27f5bbeada6e0b831e6fdd63e411721",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

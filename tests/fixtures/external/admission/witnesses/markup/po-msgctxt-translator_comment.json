@@ -1,0 +1,18 @@
+{
+  "case_id": "po-msgctxt-translator_comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "75b494a00f905bbca94797a95bef0205781c59c5844d9e38a5dc432a4ec2a44e",
+  "observations": {
+    "new": {
+      "stderr": "f.po:8:1: syntax error\nf.po:17: duplicate message definition...\nf.po:9: ...this is the location of the first definition\nmsgfmt: found 2 fatal errors\n"
+    },
+    "old": {
+      "stderr": "n header\nf.po:3: warning: header field 'Language-Team' missing in header\nf.po:3: warning: header field 'MIME-Version' missing in header\nf.po:3: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:3: warning: header field 'Language' missing in header\nmsgfmt: found 2 fatal errors\n"
+    }
+  },
+  "old_sha256": "9b299de3122c5d80e0baf7a67b1cc78c93c294ee24bca5a1e00bb5e9112aa197",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-scss-multiple-operators-variable_value",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "7f7d62dc32ba9fc62f38358628a32fa8852aab4ea6082b1dc47074277e30398d",
+  "observations": {
+    "reference_equal": true
+  },
+  "old_sha256": "d6b5e5fb6b389372e5d881be6b2052edc847a68db4ccd9a89b2af28399bb0181",
+  "oracle": "sass_equal",
+  "reference": "sass_equal: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference says equal; claim changed",
+  "verdict": "contradicts_claim"
+}

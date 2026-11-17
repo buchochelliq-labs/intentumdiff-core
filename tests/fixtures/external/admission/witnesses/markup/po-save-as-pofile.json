@@ -1,0 +1,16 @@
+{
+  "case_id": "po-save-as-pofile",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "57619596f3f5859d66ed27311a9a92fd9033b40c69789700cfb761059a18ffcc",
+  "observations": {
+    "mo_sha256": "f56cf074e04586dfedf799846bb21f2274ffd1060eb44b8107f9e8564cca4709",
+    "reference_accepts": true,
+    "stderr": "f.po:2: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "57619596f3f5859d66ed27311a9a92fd9033b40c69789700cfb761059a18ffcc",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

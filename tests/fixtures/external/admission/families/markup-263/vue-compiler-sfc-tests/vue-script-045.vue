@@ -1,0 +1,1 @@
+<script lang="ts">const a = 1</script><script setup lang="tsx">const Comp = () => <p>test</p></script>

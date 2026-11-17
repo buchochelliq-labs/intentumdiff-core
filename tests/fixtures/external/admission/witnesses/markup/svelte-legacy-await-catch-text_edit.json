@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-await-catch-text_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "01cca73694eb683e00d35eb211c697c32407306e0f1dea4f4e3585d306900a63",
+  "observations": {
+    "crash": "ReferenceError: thePromise is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c2.mjs:6:3)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/10"
+  },
+  "old_sha256": "0c93e6fbfa53616603b64009aa1d81b5176307caca0e140ff62e2254d0f0ddfd",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

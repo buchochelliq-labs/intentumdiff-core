@@ -1,0 +1,118 @@
+export const info = {
+  author: [
+    {github: 'wooorm', name: 'Titus Wormer'}
+  ],
+  modified: new Date('2025-01-27'),
+  published: new Date('2021-10-06')
+}
+export const navSortSelf = 2
+
+# Frontmatter
+
+This guide explores how to support YAML frontmatter in MDX. {/* more */}
+MDX supports standard markdown syntax ([CommonMark][]).
+That means frontmatter is not supported by default.
+
+MDX comes with a powerful and dynamic alternative to frontmatter, namely ESM
+(`import`/`export`).
+These exports:
+
+```mdx path="example.mdx"
+export const name = 'World'
+export const title = 'Hi, ' + name + '!'
+
+# {title}
+```
+
+Can be used like so:
+
+```js twoslash path="example.js"
+// @filename: types.d.ts
+declare module '*.mdx' {
+  export {MDXContent as default} from 'mdx/types'
+  export const name: string
+  export const title: string
+}
+// @filename: example.js
+/// <reference types="node" />
+// ---cut---
+import * as Post from './example.mdx' // Assumes an integration is used to compile MDX -> JS.
+
+console.log(Post.title) // Prints 'Hi, World!'
+```
+
+You might prefer frontmatter though, as it lets you define data that can be
+extracted from the file system *before* compiling.
+Say our MDX with frontmatter looked like this:
+
+```mdx path="example.mdx"
+---
+title: Hi, World!
+---
+
+# Hi, World!
+```
+
+Then without compiling or evaluating the metadata can be accessed like so:
+
+```js twoslash path="example.js"
+/// <reference types="node" />
+// ---cut---
+import {read} from 'to-vfile'
+import {matter} from 'vfile-matter'
+
+const file = await read('example.mdx')
+matter(file)
+
+console.log(file.data.matter)
+```
+
+Our compiler, `@mdx-js/mdx`, doesn’t understand YAML frontmatter by default but
+it can be enabled by using a remark plugin,
+[`remark-frontmatter`][remark-frontmatter]:
+
+```js twoslash path="example.js"
+// @filename: example.js
+/// <reference types="node" />
+// ---cut---
+import fs from 'node:fs/promises'
+import {compile} from '@mdx-js/mdx'
+import remarkFrontmatter from 'remark-frontmatter'
+
+const file = await compile(await fs.readFile('example.mdx'), {
+  remarkPlugins: [remarkFrontmatter]
+})
+
+console.log(file)
+```
+
+Now it “works”.
+The frontmatter is not rendered as if it was markdown.
+But the data embedded in the frontmatter isn’t available from *inside* the MDX.
+What if we wanted that too?
+Like so:
+
+```mdx path="example.mdx"
+---
+title: Hi, World!
+---
+
+# {title}
+```
+
+That’s exactly what the remark plugin
+[`remark-mdx-frontmatter`][remark-mdx-frontmatter] does.
+
+That plugin, like all remark plugins, can be passed as
+[`remarkPlugins` in `ProcessorOptions`][processor-options].
+More info on plugins is available in [§ Extending MDX][extend]
+
+[commonmark]: https://spec.commonmark.org/current/
+
+[extend]: /docs/extending-mdx/
+
+[processor-options]: /packages/mdx/#processoroptions
+
+[remark-frontmatter]: https://github.com/remarkjs/remark-frontmatter
+
+[remark-mdx-frontmatter]: https://github.com/remcohaszing/remark-mdx-frontmatter

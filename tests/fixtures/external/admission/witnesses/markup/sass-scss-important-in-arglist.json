@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-important-in-arglist",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "0672881c9c4addcddb482b8a1075f3e2a3d12d52be14d73d1652df3e1c18d8e3",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "0672881c9c4addcddb482b8a1075f3e2a3d12d52be14d73d1652df3e1c18d8e3",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

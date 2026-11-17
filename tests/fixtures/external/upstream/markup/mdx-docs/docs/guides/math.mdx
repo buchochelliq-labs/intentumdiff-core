@@ -1,0 +1,105 @@
+import {Note} from '../_component/note.jsx'
+
+export const info = {
+  author: [
+    {github: 'wooorm', name: 'Titus Wormer'}
+  ],
+  modified: new Date('2025-01-27'),
+  published: new Date('2021-10-06')
+}
+export const navSortSelf = 3
+
+# Math
+
+This guide explores how to support math (LaTeX) in MDX. {/* more */}
+MDX supports standard markdown syntax ([CommonMark][]).
+That means math is not supported by default.
+Math can be enabled by using a remark plugin: [`remark-math`][remark-math],
+combined with a rehype plugin: either
+[`rehype-katex`][rehype-katex] (KaTeX) or [`rehype-mathjax`][rehype-mathjax]
+(MathJax).
+Like other remark and rehype plugins, they can be passed in [`remarkPlugins`
+and `rehypePlugins`, respectively, in `ProcessorOptions`][processor-options].
+More info on plugins is available in [§ Extending MDX][extend]
+
+Say we have an MDX file like this:
+
+```mdx path="example.mdx"
+# $$\sqrt{a^2 + b^2}$$
+```
+
+The above MDX with math can be transformed with the following module:
+
+```js twoslash path="example.js"
+// @filename: example.js
+/// <reference types="node" />
+// ---cut---
+import fs from 'node:fs/promises'
+import {compile} from '@mdx-js/mdx'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
+
+console.log(
+  String(
+    await compile(await fs.readFile('example.mdx'), {
+      rehypePlugins: [rehypeKatex],
+      remarkPlugins: [remarkMath]
+    })
+  )
+)
+```
+
+<details>
+  <summary>Expand equivalent JSX</summary>
+
+  ```jsx path="output.jsx"
+  <>
+    <h1>
+      <span className="katex">
+        <span className="katex-mathml">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">…</math>
+        </span>
+        <span className="katex-html" aria-hidden="true">
+          …
+        </span>
+      </span>
+    </h1>
+  </>
+  ```
+</details>
+
+<Note type="important">
+  **Important**: if you chose `rehype-katex`, you should also use `katex.css`
+  somewhere on the page to style math properly.
+  At the time of writing, the last version is:
+
+  ```html
+  <!-- Get the latest one from: https://katex.org/docs/browser -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+  ```
+
+  To get the latest link to the stylesheet, go to [`katex docs`][katex-browser].
+
+  {/* to do: once in a while, get the latest. */}
+</Note>
+
+<Note type="info">
+  **Note:** see also
+  [`remark-mdx-math-enhanced`](https://github.com/goodproblems/remark-mdx-math-enhanced),
+  which you can use to support JavaScript expressions inside of math (such as to
+  access properties or to make calculations)
+</Note>
+
+[commonmark]: https://spec.commonmark.org/current/
+
+[extend]: /docs/extending-mdx/
+
+[katex-browser]: https://katex.org/docs/browser#loading-as-global
+
+[processor-options]: /packages/mdx/#processoroptions
+
+[rehype-katex]: https://github.com/remarkjs/remark-math/tree/main/packages/rehype-katex
+
+[rehype-mathjax]: https://github.com/remarkjs/remark-math/tree/main/packages/rehype-mathjax
+
+[remark-math]: https://github.com/remarkjs/remark-math/tree/main/packages/remark-math
