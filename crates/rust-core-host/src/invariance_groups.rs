@@ -75,6 +75,25 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         changes = kept;
     }
 
+    // Number respellings (`9` -> `9.0`) in JSON-number routes: each proved pair leaves the
+    // review; a review it empties must also carry the whole-document proof, else every number
+    // change is kept (suppression alone never claims equivalence, core #252).
+    let mut equivalence_proof = None;
+    if !changes.is_empty() && number_respelling_language(language) {
+        let (kept, groups, ignored) =
+            rust_apply_number_respelling_equivalences(&changes, old_source, new_source, language);
+        if !groups.is_empty() && (!kept.is_empty()
+            || number_respelling_equivalent(&old_tree, &new_tree, old_source, new_source, language))
+        {
+            if kept.is_empty() {
+                equivalence_proof = Some(NUMBER_RESPELLING_RULE);
+            }
+            changes = kept;
+            change_groups.extend(groups);
+            ignored_style_changes.extend(ignored);
+        }
+    }
+
     if !changes.is_empty() && (rust_literal_invariance_language(language) || embedded_script_value_language(language)) {
         let (kept, groups, ignored) =
             rust_apply_literal_equivalences(changes, old_source, new_source, language);
@@ -87,7 +106,67 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         "changes": changes,
         "change_groups": change_groups,
         "ignored_style_changes": ignored_style_changes,
+        "equivalence_proof": equivalence_proof,
     }))
+}
+
+/// `keyed_data.number_exact_decimal_respelling`: a MODIFICATION between two whole `number`
+/// leaf tokens whose spellings differ but whose exact decimals (`exact_json_number`) agree.
+/// Only that label-only respelling is removed, so a mixed edit keeps its real change; a value,
+/// sign or precision change, a number<->string change and any spelling the strict RFC 8259
+/// grammar does not prove all stay meaningful. Equal hashes alone are never used as proof.
+pub(crate) fn rust_apply_number_respelling_equivalences(
+    changes: &[Value],
+    old_source: &str,
+    new_source: &str,
+    language: &str,
+) -> (Vec<Value>, Vec<Value>, Vec<Value>) {
+    let (old_starts, new_starts) = (source_line_starts(old_source), source_line_starts(new_source));
+    let mut kept = Vec::new();
+    let mut groups = Vec::new();
+    let mut ignored = Vec::new();
+    for change in changes {
+        let proved = (rust_change_type(change) == "MODIFICATION")
+            .then(|| Some((rust_change_node(change, "old_node")?, rust_change_node(change, "new_node")?)))
+            .flatten()
+            .and_then(|(old, new)| {
+                let canonical = number_respelling_pair(
+                    &old, &new, old_source, new_source, &old_starts, &new_starts)?;
+                Some((old, new, canonical))
+            });
+        let Some((old, new, canonical)) = proved else {
+            kept.push(change.clone());
+            continue;
+        };
+        let metadata = json!({
+            "index_space": "invariance_input",
+            "reason": "Both number spellings denote the same exact decimal value; only the spelling changed.",
+            "equivalence_kind": "canonical_value_equivalence",
+            "canonical_old": format!("decimal({canonical})"),
+            "canonical_new": format!("decimal({canonical})"),
+            "old_label": old.label,
+            "new_label": new.label,
+            "old_node_type": old.node_type,
+            "new_node_type": new.node_type,
+            "risk": "green",
+            "language": language,
+        });
+        groups.push(json!({
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [old.label],
+            "new_labels": [new.label],
+            "old_node_ids": [old.id],
+            "new_node_ids": [new.id],
+            "confidence": 1.0,
+            "rule_id": NUMBER_RESPELLING_RULE,
+            "metadata": metadata.clone(),
+        }));
+        let mut item = metadata;
+        item["rule_id"] = json!(NUMBER_RESPELLING_RULE);
+        ignored.push(item);
+    }
+    (kept, groups, ignored)
 }
 
 pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, String> {

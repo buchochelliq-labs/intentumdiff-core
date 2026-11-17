@@ -74,7 +74,7 @@ fn validate(raw: &str) -> Result<Vec<Value>, String> {
 #[test]
 fn pinned_catalogue_has_unique_valid_rule_contracts() {
     let rules = validate(CATALOGUE).expect("versioned Rust invariance catalogue");
-    assert_eq!(rules.len(), 10, "investigate rule changes before activating them");
+    assert_eq!(rules.len(), 11, "investigate rule changes before activating them");
     assert!(rules.iter().any(|v| v["id"] == "generic.style_only_shortcut.source_equivalence"));
     assert!(rules.iter().any(|v| v["id"] == "catalog.parser_only_languages"
         && v["enabled"] == false));

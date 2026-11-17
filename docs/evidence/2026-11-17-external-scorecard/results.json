@@ -18093,52 +18093,25 @@
       "suite_id": "jsontestsuite"
     },
     {
-      "assess_status": "failed",
+      "assess_status": "passed",
       "behavior_claim": "preserved",
       "case_id": "jts-y_number_0e1-reformat",
       "change_family": "whitespace",
       "class": "reviewed_external_derived",
-      "completeness": "complete",
+      "completeness": "equivalent",
       "elapsed_ms": 5.001,
-      "errors": [
-        "has_semantic_changes: expected False, got True",
-        "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-      ],
+      "errors": [],
       "known_issue": null,
       "lane": "change_understanding",
       "language_id": "json",
       "review_summary": {
-        "changes": [
-          {
-            "change_type": "MODIFICATION",
-            "new_node": {
-              "label": "0.0",
-              "position": {
-                "end_col": 5,
-                "end_line": 1,
-                "start_col": 2,
-                "start_line": 1
-              },
-              "type": "number"
-            },
-            "old_node": {
-              "label": "0e1",
-              "position": {
-                "end_col": 4,
-                "end_line": 0,
-                "start_col": 1,
-                "start_line": 0
-              },
-              "type": "number"
-            }
-          }
-        ],
-        "completeness": "complete",
-        "has_semantic_changes": true,
+        "changes": [],
+        "completeness": "equivalent",
+        "has_semantic_changes": false,
         "is_style_only": false,
         "language": "json"
       },
-      "status": "failed",
+      "status": "passed",
       "suite_id": "jsontestsuite"
     },
     {
@@ -18164,101 +18137,47 @@
       "suite_id": "jsontestsuite"
     },
     {
-      "assess_status": "failed",
+      "assess_status": "passed",
       "behavior_claim": "preserved",
       "case_id": "jts-y_number_double_close_to_zero-reformat",
       "change_family": "whitespace",
       "class": "reviewed_external_derived",
-      "completeness": "complete",
+      "completeness": "equivalent",
       "elapsed_ms": 5.82,
-      "errors": [
-        "has_semantic_changes: expected False, got True",
-        "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-      ],
+      "errors": [],
       "known_issue": null,
       "lane": "change_understanding",
       "language_id": "json",
       "review_summary": {
-        "changes": [
-          {
-            "change_type": "MODIFICATION",
-            "new_node": {
-              "label": "-1e-78",
-              "position": {
-                "end_col": 8,
-                "end_line": 1,
-                "start_col": 2,
-                "start_line": 1
-              },
-              "type": "number"
-            },
-            "old_node": {
-              "label": "-0.000000000000000000000000000000000000000000000000000000000000000000000000000001",
-              "position": {
-                "end_col": 82,
-                "end_line": 0,
-                "start_col": 1,
-                "start_line": 0
-              },
-              "type": "number"
-            }
-          }
-        ],
-        "completeness": "complete",
-        "has_semantic_changes": true,
+        "changes": [],
+        "completeness": "equivalent",
+        "has_semantic_changes": false,
         "is_style_only": false,
         "language": "json"
       },
-      "status": "failed",
+      "status": "passed",
       "suite_id": "jsontestsuite"
     },
     {
-      "assess_status": "failed",
+      "assess_status": "passed",
       "behavior_claim": "preserved",
       "case_id": "jts-y_number_int_with_exp-reformat",
       "change_family": "whitespace",
       "class": "reviewed_external_derived",
-      "completeness": "complete",
+      "completeness": "equivalent",
       "elapsed_ms": 5.416,
-      "errors": [
-        "has_semantic_changes: expected False, got True",
-        "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-      ],
+      "errors": [],
       "known_issue": null,
       "lane": "change_understanding",
       "language_id": "json",
       "review_summary": {
-        "changes": [
-          {
-            "change_type": "MODIFICATION",
-            "new_node": {
-              "label": "200.0",
-              "position": {
-                "end_col": 7,
-                "end_line": 1,
-                "start_col": 2,
-                "start_line": 1
-              },
-              "type": "number"
-            },
-            "old_node": {
-              "label": "20e1",
-              "position": {
-                "end_col": 5,
-                "end_line": 0,
-                "start_col": 1,
-                "start_line": 0
-              },
-              "type": "number"
-            }
-          }
-        ],
-        "completeness": "complete",
-        "has_semantic_changes": true,
+        "changes": [],
+        "completeness": "equivalent",
+        "has_semantic_changes": false,
         "is_style_only": false,
         "language": "json"
       },
-      "status": "failed",
+      "status": "passed",
       "suite_id": "jsontestsuite"
     },
     {
@@ -18453,52 +18372,25 @@
       "suite_id": "jsontestsuite"
     },
     {
-      "assess_status": "failed",
+      "assess_status": "passed",
       "behavior_claim": "preserved",
       "case_id": "jts-y_number_real_capital_e_neg_exp-reformat",
       "change_family": "whitespace",
       "class": "reviewed_external_derived",
-      "completeness": "complete",
+      "completeness": "equivalent",
       "elapsed_ms": 5.179,
-      "errors": [
-        "has_semantic_changes: expected False, got True",
-        "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-      ],
+      "errors": [],
       "known_issue": null,
       "lane": "change_understanding",
       "language_id": "json",
       "review_summary": {
-        "changes": [
-          {
-            "change_type": "MODIFICATION",
-            "new_node": {
-              "label": "0.01",
-              "position": {
-                "end_col": 6,
-                "end_line": 1,
-                "start_col": 2,
-                "start_line": 1
-              },
-              "type": "number"
-            },
-            "old_node": {
-              "label": "1E-2",
-              "position": {
-                "end_col": 5,
-                "end_line": 0,
-                "start_col": 1,
-                "start_line": 0
-              },
-              "type": "number"
-            }
-          }
-        ],
-        "completeness": "complete",
-        "has_semantic_changes": true,
+        "changes": [],
+        "completeness": "equivalent",
+        "has_semantic_changes": false,
         "is_style_only": false,
         "language": "json"
       },
-      "status": "failed",
+      "status": "passed",
       "suite_id": "jsontestsuite"
     },
     {
@@ -28783,7 +28675,7 @@
               "type": "double_quote_scalar"
             },
             "old_node": {
-              "label": "love ♥ and peace ☮",
+              "label": "love \u2665 and peace \u262e",
               "position": {
                 "end_col": 30,
                 "end_line": 1,
@@ -31432,7 +31324,7 @@
               "type": "block_scalar"
             },
             "old_node": {
-              "label": "# Empty header↓",
+              "label": "# Empty header\u2193",
               "position": {
                 "end_col": 8,
                 "end_line": 1,
@@ -31455,7 +31347,7 @@
               "type": "block_scalar"
             },
             "old_node": {
-              "label": "# Indentation indicator↓",
+              "label": "# Indentation indicator\u2193",
               "position": {
                 "end_col": 8,
                 "end_line": 3,
@@ -31478,7 +31370,7 @@
               "type": "block_scalar"
             },
             "old_node": {
-              "label": "# Chomping indicator↓",
+              "label": "# Chomping indicator\u2193",
               "position": {
                 "end_col": 5,
                 "end_line": 5,
@@ -31501,7 +31393,7 @@
               "type": "block_scalar"
             },
             "old_node": {
-              "label": "# Both indicators↓",
+              "label": "# Both indicators\u2193",
               "position": {
                 "end_col": 0,
                 "end_line": 9,

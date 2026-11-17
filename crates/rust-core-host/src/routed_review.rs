@@ -19,6 +19,8 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         let mut ignored = fin.get("ignored_style_changes").and_then(Value::as_array).cloned().unwrap_or_default();
         let mut style = fin.get("is_style_only").and_then(Value::as_bool).unwrap_or(false);
         let mut suppression_trace = fin.get("suppression_trace").cloned().unwrap_or(Value::Null);
+        // Rule id of a proof that the sources are equivalent although not style-only (#252).
+        let mut proof = fin.get("equivalence_proof").filter(|p| p.is_string()).cloned();
         let kinds = |changes: &[Value]| -> Vec<Value> {
             let mut counts: std::collections::BTreeMap<(String, String), u64> = Default::default();
             for change in changes {
@@ -74,7 +76,15 @@ pub fn complete(request: &Value) -> Result<Value, String> {
                     group["raw_change_indices"] = json!(mapped);
                     true
                 });
-                if kept.is_empty() && old_source != new_source { style = true; }
+                // An invariance that proved value equivalence names its rule instead of
+                // claiming style-only (e.g. a number respelling, `9` -> `9.0`).
+                let inv_proof = inv.get("equivalence_proof").filter(|p| p.is_string()).cloned();
+                if kept.is_empty() && old_source != new_source {
+                    match inv_proof {
+                        Some(rule) => proof = Some(rule),
+                        None => style = true,
+                    }
+                }
                 if kept.is_empty() {
                     // Record the pass for an incomplete report (the invariances removed every change).
                     let mut passes = suppression_trace.as_array().cloned().unwrap_or_default();
@@ -88,7 +98,7 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             specific.extend(ignored);
             ignored = specific;
         }
-        if changes.is_empty() && !style {
+        if changes.is_empty() && !style && proof.is_none() {
             style = old_source == new_source || crate::opaque_payload::trees_equivalent(
                 &serde_json::from_value(request["old_tree"].clone()).map_err(|e| format!("old tree: {e}"))?,
                 &serde_json::from_value(request["new_tree"].clone()).map_err(|e| format!("new tree: {e}"))?,
@@ -110,8 +120,8 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         }
         // A suppressor that proved equivalence names its rule; completeness reads it (#252).
         if changes.is_empty() && !style {
-            if let Some(proof) = fin.get("equivalence_proof").filter(|p| p.is_string()) {
-                metadata["equivalence_proof"] = proof.clone();
+            if let Some(proof) = proof {
+                metadata["equivalence_proof"] = proof;
                 metadata.as_object_mut().unwrap().remove("no_surviving_changes");
             }
         }
