@@ -540,6 +540,15 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 2, "ref_a")?,
             arg_str(args, 3, "ref_b")?,
         ),
+        // The content-scaled parser fuel policy (python #308): `{"fuel": u64}` or `{"fuel": null}`
+        // (unlimited — a negative `plugin_fuel`). Bindings forward this budget unchanged.
+        "fuel_budget" => {
+            let content_len = arg_i64(args, 1, "content_len")?;
+            let content_len = u64::try_from(content_len)
+                .map_err(|_| "argument 1 (content_len) must be a non-negative integer".to_owned())?;
+            crate::fuel_budget_for_content(arg_str(args, 0, "config_json")?, content_len)
+                .map(|fuel| json!({"fuel": fuel}).to_string())
+        }
         // Registry-client #88 security validators. validate_registry_ref returns null on a
         // clean ref (the guard passed); validate_dep_hashes returns the JSON list of errors.
         "validate_registry_ref" => crate::registry::validate_registry_ref_impl(
@@ -554,6 +563,10 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 3, "install_target")?,
         ))
         .map_err(|e| format!("serialize dep-hash errors: {e}")),
+        // Registry-manifest validator (python #329): `{"ok": bool, "errors": [{"path","message"}]}`.
+        "validate_registry_manifest" => crate::registry::validate_registry_manifest_json_impl(
+            arg_str(args, 0, "manifest_json")?,
+        ),
         // Deterministic cache-key derivation — the shared, binding-agnostic key module. A key is a
         // SHA-256 hex string (never valid JSON), so the envelope carries it verbatim.
         "cache_make_key" => Ok(crate::cache_keys::cache_make_key(arg_json(args, 0, "parts")?)),
@@ -847,6 +860,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
         "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
+        "parser_allowlist_matches" => crate::filename_selection::parser_allowlist_matches_json_impl(
+            arg_opt_json(args, 0, "allowed_plugins")?, arg_str(args, 1, "identity_json")?),
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
@@ -948,6 +963,32 @@ mod tests {
         assert!(style_only.contains("Formatting changed"));
         assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
         assert_eq!(call("render_cli_review", json!([]))["ok"], false);
+    }
+
+    #[test]
+    fn fuel_budget_envelopes() {
+        assert_eq!(call("fuel_budget", json!(["{}", 0])), json!({"ok":true,"result":{"fuel":20_000_000}}));
+        assert_eq!(call("fuel_budget", json!(["", 1000]))["result"], json!({"fuel":40_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":500000000}"#, 1000]))["result"], json!({"fuel":500_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":999}"#, 1000]))["result"], json!({"fuel":999}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":-1}"#, 1000]))["result"], json!({"fuel":null}));
+        assert_eq!(call("fuel_budget", json!([r#"{"pluginFuel":-1}"#, 0]))["result"], json!({"fuel":null}));
+        for bad in [json!(["{}", -1]), json!(["{}", "1"]), json!(["{}"]), json!([r#"{"plugin_fuel":"x"}"#, 1]), json!(["[]", 1])] {
+            let out = call("fuel_budget", bad.clone());
+            assert_eq!(out["ok"], false, "{bad}");
+            assert_eq!(out["error_type"], "value_error", "{bad}");
+        }
+    }
+
+    #[test]
+    fn parser_allowlist_envelopes() {
+        let identity = json!({"plugin_id":"acme/py","grammar_id":"python","languages":["python","py3"],"aliases":["py"]}).to_string();
+        assert_eq!(call("parser_allowlist_matches", json!([null, identity])), json!({"ok":true,"result":{"matches":true,"matched_by":"unrestricted"}}));
+        assert_eq!(call("parser_allowlist_matches", json!([[], identity]))["result"], json!({"matches":false,"matched_by":null}));
+        assert_eq!(call("parser_allowlist_matches", json!([["py3"], identity]))["result"], json!({"matches":true,"matched_by":"language"}));
+        assert_eq!(call("parser_allowlist_matches", json!([["acme/py"], identity]))["result"]["matched_by"], "plugin_id");
+        assert_eq!(call("parser_allowlist_matches", json!([["x", 1], identity]))["ok"], false);
+        assert_eq!(call("parser_allowlist_matches", json!([null, "[]"]))["ok"], false);
     }
 
     #[test]

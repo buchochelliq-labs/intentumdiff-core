@@ -506,11 +506,8 @@ pub(crate) fn commit_json_from_items(
             let diff = item
                 .get("diff")
                 .ok_or_else(|| "complete batch item did not include diff".to_owned())?;
-            if config.profile_phases {
-                validate_certified_semantic_diff(&diff)?;
-            } else {
-                validate_certified_semantic_diff_envelope(diff)?;
-            }
+            // #254: every certified item is validated in full against its exact buffers.
+            validate_certified_semantic_diff_with_sources(diff, item_sources(files.get(index)))?;
             if let Some(hasher) = signature_hasher.as_mut() {
                 update_semantic_signature_hash_from_diff(hasher, diff);
             }
@@ -565,6 +562,14 @@ pub(crate) fn commit_json_from_items(
     Ok((control, Some(commit_json)))
 }
 
+/// The exact old/new buffers a commit file record carries (both present as strings), so
+/// certification can check every position against the source it claims to describe.
+fn item_sources(file: Option<&Value>) -> Option<(&str, &str)> {
+    let file = file?;
+    let text = |snake: &str, camel: &str| file.get(snake).or_else(|| file.get(camel)).and_then(Value::as_str);
+    Some((text("old_source", "oldSource")?, text("new_source", "newSource")?))
+}
+
 pub(crate) fn commit_json_from_owned_items(
     request: &Value,
     files: &[Value],
@@ -598,11 +603,8 @@ pub(crate) fn commit_json_from_owned_items(
                 .as_object_mut()
                 .and_then(|object| object.remove("diff"))
                 .ok_or_else(|| "complete batch item did not include diff".to_owned())?;
-            if config.profile_phases {
-                validate_certified_semantic_diff(&diff)?;
-            } else {
-                validate_certified_semantic_diff_envelope(&diff)?;
-            }
+            // #254: every certified item is validated in full against its exact buffers.
+            validate_certified_semantic_diff_with_sources(&diff, item_sources(files.get(index)))?;
             if let Some(hasher) = signature_hasher.as_mut() {
                 update_semantic_signature_hash_from_diff(hasher, &diff);
             }

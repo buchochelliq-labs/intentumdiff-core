@@ -86,7 +86,18 @@ pub(crate) fn lcs_opcodes<T: PartialEq>(
     Some(merged)
 }
 
+/// Comparison cells (old chars x new chars, summed over the recursion) one inline diff may
+/// spend (#255). Beyond it the remaining span is reported as one honest `[-old][+new]`
+/// replacement instead of a finer placement — never dropped, never an empty "no change".
+pub(crate) const INLINE_DIFF_CELL_BUDGET: usize = 16_000_000;
+/// The rendered inline diff is cut to this many characters (197 + "...").
+const INLINE_DIFF_MAX_CHARS: usize = 200;
+
 pub(crate) fn inline_char_diff(old_line: &str, new_line: &str) -> String {
+    inline_char_diff_with_budget(old_line, new_line, INLINE_DIFF_CELL_BUDGET)
+}
+
+pub(crate) fn inline_char_diff_with_budget(old_line: &str, new_line: &str, mut budget: usize) -> String {
     let old_chars: Vec<char> = old_line.chars().collect();
     let new_chars: Vec<char> = new_line.chars().collect();
     // difflib-parity placement: Ratcliff-Obershelp longest-matching-block recursion
@@ -122,6 +133,7 @@ pub(crate) fn inline_char_diff(old_line: &str, new_line: &str) -> String {
         }
         (best_i, best_j, best_size)
     }
+    #[allow(clippy::too_many_arguments)]
     fn walk(
         old: &[char],
         new: &[char],
@@ -130,8 +142,21 @@ pub(crate) fn inline_char_diff(old_line: &str, new_line: &str) -> String {
         blo: usize,
         bhi: usize,
         parts: &mut String,
+        budget: &mut usize,
     ) {
-        let (i, j, size) = longest_match(old, new, alo, ahi, blo, bhi);
+        // Output is emitted strictly left to right, so once more than the rendered maximum
+        // exists, the truncated result is final: stop spending work on text nobody sees.
+        // (A UTF-8 char is at most 4 bytes, so this byte test is a cheap sufficient bound.)
+        if parts.len() > 4 * (INLINE_DIFF_MAX_CHARS + 1) {
+            return;
+        }
+        let cells = (ahi - alo).saturating_mul(bhi - blo);
+        let (i, j, size) = if cells > *budget {
+            (alo, blo, 0) // budget exhausted: report the span as one replacement
+        } else {
+            *budget -= cells;
+            longest_match(old, new, alo, ahi, blo, bhi)
+        };
         if size == 0 {
             let old_slice: String = old[alo..ahi].iter().collect();
             let new_slice: String = new[blo..bhi].iter().collect();
@@ -144,10 +169,10 @@ pub(crate) fn inline_char_diff(old_line: &str, new_line: &str) -> String {
             }
             return;
         }
-        walk(old, new, alo, i, blo, j, parts);
+        walk(old, new, alo, i, blo, j, parts, budget);
         let equal: String = old[i..i + size].iter().collect();
         parts.push_str(&equal);
-        walk(old, new, i + size, ahi, j + size, bhi, parts);
+        walk(old, new, i + size, ahi, j + size, bhi, parts, budget);
     }
     let mut parts = String::new();
     walk(
@@ -158,9 +183,10 @@ pub(crate) fn inline_char_diff(old_line: &str, new_line: &str) -> String {
         0,
         new_chars.len(),
         &mut parts,
+        &mut budget,
     );
     let chars: Vec<char> = parts.chars().collect();
-    if chars.len() > 200 {
+    if chars.len() > INLINE_DIFF_MAX_CHARS {
         let head: String = chars[..197].iter().collect();
         format!("{head}...")
     } else {
@@ -596,3 +622,7 @@ mod relocation_regressions {
         assert!(diff.has_semantic_changes && !diff.is_style_only);
     }
 }
+
+#[cfg(test)]
+#[path = "native_work_budget_tests.rs"]
+mod native_work_budget_tests;

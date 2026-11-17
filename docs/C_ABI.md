@@ -184,6 +184,80 @@ are open strings for forward compatibility. `ReviewOptions::settings` accepts th
 same configuration keys as native live review. Lower-level Rust operations remain
 public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
 
+## Binding policy operations (0.0.3)
+
+Small, pure policy ops a binding needs so it never re-derives an engine rule locally.
+
+### Parser fuel budget (`fuel_budget`)
+
+`fuel_budget(config_json, content_len)` → `{"fuel": <u64>}` or `{"fuel": null}`; native
+`api::fuel_budget(config_json, content_len) -> Result<Option<u64>, ReviewError>`.
+`config_json` is a diff-config JSON object string (empty string = `{}`) validated exactly as
+every diff call validates it; `content_len` is a non-negative integer byte count (the source
+being parsed, or the payload handed to a renderer). The policy is the one the engine applies to
+every parse:
+
+- `plugin_fuel < 0` (either spelling) is **unlimited** → `{"fuel": null}`. Bindings pass this
+  through as "no fuel metering"; they must not substitute a positive budget.
+- `plugin_fuel` below 1,000,000 is a deliberate tight budget and is returned unchanged.
+- Otherwise `plugin_fuel` (default 10,000,000) is a **minimum**:
+  `fuel = max(plugin_fuel, 20_000_000 + 20_000 * content_len)` (saturating; a bounded config
+  never becomes unlimited).
+
+Malformed configs, a negative or non-integer `content_len`, or missing arguments return a
+`value_error` envelope.
+
+### Registry manifest validation (`validate_registry_manifest`)
+
+`validate_registry_manifest(manifest_json)` → `{"ok": bool, "errors": [{"path": str, "message": str}]}`;
+native `api::validate_registry_manifest(&Value) -> Vec<(path, message)>`. The host parses
+`registry.yaml` (or JSON) and passes the document as a JSON string. `path` is an RFC 6901 JSON
+Pointer into the manifest (`""` = root, `/plugins/<name>/ref`, `/plugins/<name>/capabilities/1`).
+Every problem is reported in one pass; wrong JSON types are errors, never exceptions. Only an
+unparseable `manifest_json` string is a `value_error` envelope. Rules (patterns are full-string):
+
+- Top level: object with `version` (integer ≥ 1), `plugins` (object keyed by package-safe name
+  `^(?:intentumdiff-)?[A-Za-z0-9][A-Za-z0-9._-]{0,127}$`), optional `renderer_components`; no
+  other keys. `renderer_components` needs `repository: "intentumdiff-core"`,
+  `artifact: "renderer-components"`, a 40-hex lowercase `ref` and exactly the four renderer pins.
+- Entry fields: `source` ∈ {`git`, `pypi`} (default `git`), `trust_tier` ∈ {`official`,
+  `community`} (default `official`); `ref`/`repo`/`description`/`abi_target`/
+  `provenance_manifest_ref` strings; `wasm_checksums` `{<name>.wasm: <64 lowercase hex>}`;
+  `dep_hashes` `{package==version: "sha256:<64 lowercase hex>"}`; `allowed_dependencies` string
+  array; unknown fields rejected. `abi_target`, when present, is `MAJOR.MINOR.PATCH`
+  (no leading zeros). Compatibility with the host contract is still decided at load time.
+- `capabilities`: a duplicate-free array drawn from the closed vocabulary derived from the
+  pinned WIT — the interface each `world` exports: `parser`, `renderer`, `enricher`,
+  `index-engine`, `diff-analyzer` (`host-utils` is an import, not a capability).
+- **Official tier** (the default): `git` entries need an immutable 40-hex lowercase commit
+  `ref`; `pypi` entries need an exact version `ref` (`^[0-9][A-Za-z0-9.+!-]{0,63}$`);
+  non-empty `wasm_checksums`, non-empty `capabilities` and an `abi_target` are required; a
+  custom `repo` is rejected (a custom source is community tier by definition).
+- **Community tier**: every field is optional (listed, installs unverified); any field that is
+  present must still be well-formed — a git `ref` must pass the non-strict
+  `validate_registry_ref` traversal guard, a pypi `ref` is empty (latest) or a version.
+
+### Parser allowlist identifiers (`parser_allowlist_matches`)
+
+One rule decides whether an `allowed_plugins` list admits a parser, used by
+`filename_selection_next`, `content_detection_plan/finish`, the native bundled resolver
+(`allowed_plugins` diff-config key) and bindings' discovery/inventory listings:
+
+- `null`/absent: **every** parser is allowed.
+- `[]`: **no** parser is allowed (distinct from `null`).
+- otherwise a parser is allowed when an entry exactly equals (case-sensitive; empty strings never
+  match) its **grammar id** (loaded `grammar-id`), its **plugin id** (catalogue/opaque plugin
+  identity, e.g. `acme/python`), one of its catalogue **aliases**, or one of its declared
+  **language ids**. Unknown identifiers select nothing; they are not errors.
+
+`parser_allowlist_matches(allowed_plugins, identity_json)` → `{"matches": bool, "matched_by":
+"unrestricted"|"grammar_id"|"plugin_id"|"alias"|"language"|null}` evaluates it for one parser.
+`allowed_plugins` is a JSON array of strings or `null` (not a JSON string); `identity_json` is a
+JSON string `{"plugin_id", "grammar_id", "languages": [..], "aliases": [..]}` (all optional).
+Native: `filename_selection::parser_allowlist_match(Option<&[String]>, &ParserIdentity)`.
+Grammar-id allowlists behave exactly as before; plugin, alias and language ids were previously
+ignored (selected nothing) and now select their parser.
+
 ## Shared guardrail policy
 
 Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
@@ -317,7 +391,7 @@ requested number of results is reached, without a finite over-fetch window.
 `content_detection_plan(request_json)` and `content_detection_finish(input_json)`
 delegate to supported Rust `content_detection::{plan, finish}`. The request carries
 loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
-optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+optional `allowed_plugins` (see *Parser allowlist identifiers*), `candidates`, `plugin_id`, and
 `preferred_plugins` (language to plugin ID). A plan returns eligible source indices
 and a sample ending at the last complete UTF-8 character within 4096 bytes.
 
@@ -341,7 +415,7 @@ component loader or filename `detect_parser` failure/fallback policy (#108).
 to public Rust `filename_selection::next_action`. Request fields are catalogue
 `entries` (the candidate-planner DTO), `filename`, `content`, optional
 `old_content` (defaults to an empty string), optional
-`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+`language_hint`/`plugin_id`/`allowed_plugins` (see *Parser allowlist identifiers*), and boolean `strict`.
 For comparisons, hosts send the new source in `content` and previous source in
 `old_content`. Rust probes the new source whenever it is nonempty (including
 whitespace); only an exactly empty new source uses `old_content`. Single-source

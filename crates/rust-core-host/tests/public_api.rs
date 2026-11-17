@@ -81,3 +81,11 @@ fn source_review_rejects_unsupported_refactoring_override() {
         "{error}"
     );
 }
+
+#[test]
+fn fuel_budget_is_the_engine_policy_with_unlimited_as_none() {
+    use intentumdiff_rust_core::api::fuel_budget;
+    assert_eq!(fuel_budget("{}", 1_000).unwrap(), Some(40_000_000));
+    assert_eq!(fuel_budget(r#"{"plugin_fuel":-1}"#, 1_000).unwrap(), None);
+    assert!(fuel_budget(r#"{"plugin_fuel":true}"#, 0).is_err());
+}

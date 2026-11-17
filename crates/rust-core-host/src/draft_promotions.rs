@@ -2043,8 +2043,16 @@ pub(crate) fn suppress_add_delete_drafts_covered_by_pairings(changes: &mut Vec<C
                         })
                 });
                 if let (Some(delete_idx), Some(add_idx)) = (covering_delete, covering_add) {
-                    drop_indices.insert(delete_idx);
-                    drop_indices.insert(add_idx);
+                    // #253: one contained leaf pair is not proof — the containers may carry
+                    // further, unrelated edits. Drop them only when surviving evidence (the
+                    // leaf pairs and every other draft) reports their WHOLE delta.
+                    let (Some(old_container), Some(new_container)) =
+                        (changes[delete_idx].old_node, changes[add_idx].new_node) else { continue };
+                    let skip: HashSet<usize> = [delete_idx, add_idx].into_iter().collect();
+                    if DeltaCoverage::of(changes, &skip).covers(old_container, new_container) {
+                        drop_indices.insert(delete_idx);
+                        drop_indices.insert(add_idx);
+                    }
                 }
             }
             if !drop_indices.is_empty() {
@@ -2452,38 +2460,18 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
         return;
     }
     // Truthiness guard (tighter than the python pass): the pair is only churn when the
-    // subtree CONTENT matches too — either identical descendant labels, or a delta fully
-    // covered by separately-reported renames (the js `fs.readdirSync(dir)` ->
-    // `fs.readdirSync(directory)` call around a reported dir->directory rename). Without
-    // this, a same-label container pair that is the ONLY representation of a real edit
-    // (go error-wrapping `return err` -> `return fmt.Errorf(...)`) would be erased —
-    // pinned by dying_no_delta_modification_cannot_swallow_its_add_delete_pair.
-    let rename_old_labels: HashSet<&str> = changes
-        .iter()
-        .filter(|c| c.change_type == "REFACTORING" || c.change_type == "MODIFICATION")
-        .filter_map(|c| Some((c.old_node?, c.new_node?)))
-        .map(|(o, _)| o.label.as_str())
-        .collect();
-    let rename_new_labels: HashSet<&str> = changes
-        .iter()
-        .filter(|c| c.change_type == "REFACTORING" || c.change_type == "MODIFICATION")
-        .filter_map(|c| Some((c.old_node?, c.new_node?)))
-        .map(|(_, n)| n.label.as_str())
-        .collect();
-    let label_set = |node: &SemanticNode| -> HashSet<String> {
-        std::iter::once(node)
-            .chain(node.descendants())
-            .filter(|n| !n.label.is_empty())
-            .map(|n| n.label.clone())
-            .collect()
-    };
+    // subtree CONTENT matches too — identical structure, or a delta fully covered by
+    // separately-reported evidence (the js `fs.readdirSync(dir)` -> `fs.readdirSync(directory)`
+    // call around a reported dir->directory rename). Without this, a same-label container pair
+    // that is the ONLY representation of a real edit (go error-wrapping `return err` ->
+    // `return fmt.Errorf(...)`) would be erased — pinned by
+    // dying_no_delta_modification_cannot_swallow_its_add_delete_pair. #253: the proof is
+    // positional (DeltaCoverage); equal label SETS hid reorders and changed multiplicity.
     let mut suppressed: HashSet<usize> = HashSet::new();
     let mut used_additions: HashSet<usize> = HashSet::new();
-    for (idx, change) in changes.iter().enumerate() {
-        if change.change_type != "DELETION" {
-            continue;
-        }
-        let Some(old_node) = change.old_node else {
+    let deletions: Vec<usize> = (0..changes.len()).filter(|&i| changes[i].change_type == "DELETION").collect();
+    for idx in deletions {
+        let Some(old_node) = changes[idx].old_node else {
             continue;
         };
         if is_root(old_node) || old_node.label.is_empty() {
@@ -2494,7 +2482,6 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
         else {
             continue;
         };
-        let old_labels = label_set(old_node);
         let mut chosen: Option<usize> = None;
         for &add_idx in candidates.iter() {
             if used_additions.contains(&add_idx) {
@@ -2503,14 +2490,8 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
             let Some(new_node) = changes[add_idx].new_node else {
                 continue;
             };
-            let new_labels = label_set(new_node);
-            let delta_covered = old_labels
-                .difference(&new_labels)
-                .all(|label| rename_old_labels.contains(label.as_str()))
-                && new_labels
-                    .difference(&old_labels)
-                    .all(|label| rename_new_labels.contains(label.as_str()));
-            if delta_covered {
+            let skip: HashSet<usize> = [idx, add_idx].into_iter().chain(suppressed.iter().copied()).collect();
+            if DeltaCoverage::of(changes, &skip).covers(old_node, new_node) {
                 chosen = Some(add_idx);
                 break;
             }
@@ -2536,7 +2517,23 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
 pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
     changes: &mut Vec<ChangeDraft<'_>>, old_source: &str, new_source: &str, language: &str,
 ) {
+    // #253: a same-label modification whose unpaired leaves are a real delta is still
+    // redundant when OTHER surviving drafts report that whole delta (a reported `abs(...)`
+    // wrapper around a moved operand). Proven per draft with DeltaCoverage.
+    let reported_elsewhere: Vec<bool> = (0..changes.len()).map(|index| {
+        let change = &changes[index];
+        match (change.change_type, change.old_node, change.new_node) {
+            ("MODIFICATION", Some(old), Some(new)) if old.node_type == new.node_type && old.label == new.label
+                && (!old.is_leaf() || !new.is_leaf()) => {
+                DeltaCoverage::of(changes, &std::iter::once(index).collect()).covers(old, new)
+            }
+            _ => false,
+        }
+    }).collect();
+    let mut index = 0;
     changes.retain(|change| {
+        let covered = reported_elsewhere[index];
+        index += 1;
         if change.change_type != "MODIFICATION" {
             return true;
         }
@@ -2560,7 +2557,10 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
                 && strip_whitespace(&old_node.label) == strip_whitespace(&new_node.label);
             return !spacing_only || opaque_payload::changed(old_node, new_node, old_source, new_source, language);
         }
-        subtree_has_leaf_label_delta(old_node, new_node)
+        // An id-aligned leaf edit always keeps the modification (unchanged rule); a delta made
+        // only of unpaired leaves keeps it unless other surviving drafts report it all.
+        leaf_label_delta(old_node, new_node, false)
+            || (leaf_label_delta(old_node, new_node, true) && !covered)
             || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
 }
@@ -2570,6 +2570,12 @@ fn strip_whitespace(text: &str) -> String {
 }
 
 pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    leaf_label_delta(old_node, new_node, true)
+}
+
+/// `include_unpaired = false` is the pre-#253 rule (id-aligned leaf label edits, or the
+/// positional fallback); `true` also counts unpaired leaves as a delta.
+fn leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode, include_unpaired: bool) -> bool {
     if old_node.is_leaf() && new_node.is_leaf() {
         return old_node.label != new_node.label;
     }
@@ -2591,8 +2597,26 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     if id_delta {
         return true;
     }
-    if any_id_aligned {
+    if any_id_aligned && !include_unpaired {
         return false;
+    }
+    if any_id_aligned {
+        // #253: one aligned, unchanged leaf is not proof that the REST is unchanged. Leaves
+        // with no id-aligned partner (added, removed or re-identified) must match as an
+        // ordered (type, label) sequence on both sides, or they are a delta.
+        let old_by_id = all_descendant_node_refs_by_id(old_node);
+        let aligned = |leaf: &SemanticNode, other: &HashMap<&str, &SemanticNode>| {
+            other.get(leaf.id.as_str()).is_some_and(|o| o.is_leaf() && o.node_type == leaf.node_type)
+        };
+        let mut old_leaves = Vec::new();
+        let mut new_leaves = Vec::new();
+        collect_leaf_refs(old_node, &mut old_leaves);
+        collect_leaf_refs(new_node, &mut new_leaves);
+        let unpaired = |leaves: &[&SemanticNode], other: &HashMap<&str, &SemanticNode>| -> Vec<(String, String)> {
+            leaves.iter().filter(|leaf| !aligned(leaf, other))
+                .map(|leaf| (leaf.node_type.clone(), leaf.label.clone())).collect()
+        };
+        return unpaired(&old_leaves, &new_by_id) != unpaired(&new_leaves, &old_by_id);
     }
     // No leaf pairs align by id at all — a move across nesting levels renumbers the whole
     // subtree (csharp block -> file-scoped namespace), and the id-based comparison was
@@ -2603,6 +2627,11 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     let mut new_leaves = Vec::new();
     collect_leaf_refs(old_node, &mut old_leaves);
     collect_leaf_refs(new_node, &mut new_leaves);
+    if include_unpaired && old_leaves.len() != new_leaves.len() {
+        // #253: a different number of leaves is itself a delta (a wrapper or operand was
+        // added/removed); whether other drafts report it is the caller's coverage question.
+        return true;
+    }
     old_leaves.len() == new_leaves.len()
         && old_leaves.iter().zip(&new_leaves).any(|(old_leaf, new_leaf)| {
             old_leaf.node_type == new_leaf.node_type && old_leaf.label != new_leaf.label

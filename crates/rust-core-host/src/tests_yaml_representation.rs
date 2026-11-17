@@ -75,10 +75,75 @@ fn yaml_representation_proof_rejects_rounded_float_values_and_keys() {
         );
         assert!(!yaml_representation_equivalent_sources(old, new));
     }
-    assert!(!yaml_representation_equivalent_sources(
+    // #285: the exact proof now recognises a genuine float restyle (previously declined).
+    assert!(yaml_representation_equivalent_sources(
         "value:\n- 1.5\n",
         "value: [1.5]\n"
     ));
+}
+
+/// #285: floats are compared as exact decimals, so restyles prove equal while any decimal,
+/// type, order, cardinality or key-type edit does not — in both directions.
+#[test]
+fn yaml_float_restyles_are_proven_exactly() {
+    for (old, new) in [
+        ("values:\n- 1.5\n", "values: [1.5]\n"),
+        ("values:\n  - 1.5\n  - -2.25e3\n  - .5\n", "values: [1.5, -2.25e3, .5]\n"),
+        ("1.5: one\nother: 2.0\n", "{1.5: one, other: 2.0}\n"),
+        ("x: 1.5\n", "{x: 1.50}\n"),
+        ("x: 1.5 # trailing comment\n", "{x: 15e-1}\n"),
+        ("x: .inf\ny: .nan\n", "{x: .Inf, y: .NaN}\n"),
+        ("x: 9007199254740993.0\n", "{x: 9007199254740993.0}\n"),
+    ] {
+        for (a, b) in [(old, new), (new, old)] {
+            assert!(yaml_representation_equivalent_sources(a, b), "restyle: {a:?} -> {b:?}");
+        }
+    }
+    for (old, new) in [
+        ("x: 9007199254740992.0\n", "{x: 9007199254740993.0}\n"),
+        ("9007199254740992.0: v\n", "{9007199254740993.0: v}\n"),
+        ("x: 0.1\n", "{x: 0.10000000000000001}\n"),
+        ("x: 1.5\n", "{x: '1.5'}\n"),
+        ("1.5: v\n", "{'1.5': v}\n"),
+        ("x: 1.5\n", "{x: 1.6}\n"),
+        ("values:\n- 1.5\n- 2.5\n", "values: [2.5, 1.5]\n"),
+        ("values:\n- 1.5\n", "values: [1.5, 1.5]\n"),
+        ("values:\n- 1.5\n- x\n", "values: [1.6, x]\n"),
+        ("x: 0.0\n", "{x: -0.0}\n"),
+        ("x: apples 1.5\n", "{x: apples 1.50}\n"),
+        ("x: apples\n  1.5\n", "{x: apples 1.50}\n"),
+        ("x: 1.5\ny: |\n  2.5\n", "{x: 1.5, y: \"2.5\\n\"}\n"),
+        ("x: 1e999\n", "{x: '1e999'}\n"),
+    ] {
+        for (a, b) in [(old, new), (new, old)] {
+            assert!(!yaml_representation_equivalent_sources(a, b), "edit: {a:?} -> {b:?}");
+        }
+    }
+}
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged YAML component")]
+fn yaml_float_restyle_reviews_without_semantic_changes() {
+    for (old, new) in [("values:\n- 1.5\n", "values: [1.5]\n"), ("ratio: 0.25\nscale: 2.0\n", "{ratio: 0.25, scale: 2.0}\n")] {
+        for (a, b) in [(old, new), (new, old)] {
+            let diff = yaml_diff(a, b);
+            assert_eq!(diff["has_semantic_changes"], false, "{a:?} -> {b:?}: {diff}");
+            assert!(diff["changes"].as_array().unwrap().is_empty(), "{diff}");
+        }
+    }
+    for (old, new) in [
+        ("values:\n- 9007199254740992.0\n", "values: [9007199254740993.0]\n"),
+        ("values:\n- 1.5\n", "values: ['1.5']\n"),
+        ("values:\n- 1.5\n- 2.5\n", "values: [2.5, 1.5]\n"),
+        ("values:\n- 1.5\n- x\n", "values: [1.6, x]\n"),
+        ("1.5: v\n", "{'1.5': v}\n"),
+    ] {
+        for (a, b) in [(old, new), (new, old)] {
+            let diff = yaml_diff(a, b);
+            assert_eq!(diff["has_semantic_changes"], true, "{a:?} -> {b:?}: {diff}");
+            assert!(!diff["changes"].as_array().unwrap().is_empty(), "{diff}");
+        }
+    }
 }
 
 #[test]
