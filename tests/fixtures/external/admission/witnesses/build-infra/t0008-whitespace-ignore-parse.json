@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "t0008-whitespace-ignore-parse",
+  "engines": [
+    {
+      "name": "git",
+      "version": "git version 2.43.0"
+    }
+  ],
+  "new_sha256": "98204b0d107372485d2b6c8369c00730039e39b221412ae325a3b49e316389e7",
+  "old_sha256": "98204b0d107372485d2b6c8369c00730039e39b221412ae325a3b49e316389e7",
+  "oracle": "git_t0008_reproduction",
+  "reference_accepts": true,
+  "review": "git reproduces the t0008 `correct handling of backslashes` expectation with this file in place.",
+  "schema_version": 1,
+  "t0008": {
+    "actual": "whitespace/untracked\n",
+    "command": "git ls-files -o -X ignore whitespace",
+    "exit_status": 0,
+    "expected": "whitespace/untracked\n",
+    "stderr": ""
+  },
+  "verdict": "supports_claim"
+}

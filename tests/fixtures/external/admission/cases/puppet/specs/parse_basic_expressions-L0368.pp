@@ -1,0 +1,1 @@
+$a = "yo${var.foo}yo"

@@ -1,0 +1,69 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-cpuguy83-nagios-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "ccd24e513af6da113b5e6e411546acc0cc946a342c9ba0d427083781407c4123",
+  "old_sha256": "ccd24e513af6da113b5e6e411546acc0cc946a342c9ba0d427083781407c4123",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0,
+    21,
+    49,
+    72,
+    96,
+    122,
+    149,
+    182,
+    210,
+    237,
+    265,
+    290,
+    357,
+    554,
+    706,
+    901,
+    1130,
+    1570,
+    1645,
+    1785,
+    1842,
+    1982,
+    2144,
+    2297,
+    2433,
+    2511,
+    2590,
+    2651,
+    2798,
+    2844,
+    2953,
+    2988,
+    3023,
+    3060,
+    3101,
+    3143,
+    3172,
+    3209,
+    3220,
+    3334
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

@@ -62,7 +62,7 @@ SUITES = {
     'buildkit-dockerfile-parser': {
         'kind': 'gomod', 'module': 'github.com/moby/buildkit', 'version': 'v0.17.3',
         'revision': 'dc30e8355a4691bb34a23dd7161306977eecd5d8',
-        'select': lambda p: p in ('LICENSE', 'NOTICE') or p.startswith('frontend/dockerfile/parser/testfiles')},
+        'select': lambda p: p in ('LICENSE', 'NOTICE') or p.startswith('frontend/dockerfile/parser/testfile')},
     'hcl-specsuite': {
         'kind': 'gomod', 'module': 'github.com/hashicorp/hcl/v2', 'version': 'v2.23.0',
         'revision': '56a9aee5207dbaed7f061cd926b96fc159d26ea0',

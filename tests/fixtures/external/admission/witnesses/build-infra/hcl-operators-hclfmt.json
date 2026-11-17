@@ -1,0 +1,588 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hcl-operators-hclfmt",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {
+            "exactly": {
+              "type": "bool",
+              "value": true
+            },
+            "not": {
+              "type": "bool",
+              "value": false
+            },
+            "type_mismatch_bool": {
+              "type": "bool",
+              "value": false
+            },
+            "type_mismatch_number": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "=="
+        ],
+        "type": "equality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "exactly": {
+              "type": "bool",
+              "value": false
+            },
+            "not": {
+              "type": "bool",
+              "value": true
+            },
+            "type_mismatch_bool": {
+              "type": "bool",
+              "value": true
+            },
+            "type_mismatch_number": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "!="
+        ],
+        "type": "equality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": false
+            },
+            "gt": {
+              "type": "bool",
+              "value": false
+            },
+            "lt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "<"
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": true
+            },
+            "gt": {
+              "type": "bool",
+              "value": false
+            },
+            "lt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "<="
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": false
+            },
+            "gt": {
+              "type": "bool",
+              "value": true
+            },
+            "lt": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          ">"
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": true
+            },
+            "gt": {
+              "type": "bool",
+              "value": true
+            },
+            "lt": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          ">="
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "add": {
+              "type": "number",
+              "value": 5.5
+            },
+            "add_big": {
+              "type": "number",
+              "value": 4.141592653589793
+            },
+            "div": {
+              "type": "number",
+              "value": 0.1
+            },
+            "mod": {
+              "type": "number",
+              "value": 1
+            },
+            "mod_frac": {
+              "type": "number",
+              "value": 0.8
+            },
+            "mul": {
+              "type": "number",
+              "value": 9
+            },
+            "sub": {
+              "type": "number",
+              "value": 1.5
+            },
+            "sub_neg": {
+              "type": "number",
+              "value": -1.5
+            }
+          },
+          "blocks": null
+        },
+        "labels": null,
+        "type": "arithmetic"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ff": {
+              "type": "bool",
+              "value": false
+            },
+            "ft": {
+              "type": "bool",
+              "value": false
+            },
+            "tf": {
+              "type": "bool",
+              "value": false
+            },
+            "tt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "&&"
+        ],
+        "type": "logical_binary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ff": {
+              "type": "bool",
+              "value": false
+            },
+            "ft": {
+              "type": "bool",
+              "value": true
+            },
+            "tf": {
+              "type": "bool",
+              "value": true
+            },
+            "tt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "||"
+        ],
+        "type": "logical_binary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "f": {
+              "type": "bool",
+              "value": true
+            },
+            "t": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "!"
+        ],
+        "type": "logical_unary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "f": {
+              "type": "string",
+              "value": "b"
+            },
+            "t": {
+              "type": "string",
+              "value": "a"
+            }
+          },
+          "blocks": null
+        },
+        "labels": null,
+        "type": "conditional"
+      }
+    ]
+  },
+  "new_sha256": "64493888bf6706c1ec3f54515303b440e2f13ac2bbc0c0b57909bdc08bf321f5",
+  "old_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {
+            "exactly": {
+              "type": "bool",
+              "value": true
+            },
+            "not": {
+              "type": "bool",
+              "value": false
+            },
+            "type_mismatch_bool": {
+              "type": "bool",
+              "value": false
+            },
+            "type_mismatch_number": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "=="
+        ],
+        "type": "equality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "exactly": {
+              "type": "bool",
+              "value": false
+            },
+            "not": {
+              "type": "bool",
+              "value": true
+            },
+            "type_mismatch_bool": {
+              "type": "bool",
+              "value": true
+            },
+            "type_mismatch_number": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "!="
+        ],
+        "type": "equality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": false
+            },
+            "gt": {
+              "type": "bool",
+              "value": false
+            },
+            "lt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "<"
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": true
+            },
+            "gt": {
+              "type": "bool",
+              "value": false
+            },
+            "lt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "<="
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": false
+            },
+            "gt": {
+              "type": "bool",
+              "value": true
+            },
+            "lt": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          ">"
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "eq": {
+              "type": "bool",
+              "value": true
+            },
+            "gt": {
+              "type": "bool",
+              "value": true
+            },
+            "lt": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          ">="
+        ],
+        "type": "inequality"
+      },
+      {
+        "body": {
+          "attributes": {
+            "add": {
+              "type": "number",
+              "value": 5.5
+            },
+            "add_big": {
+              "type": "number",
+              "value": 4.141592653589793
+            },
+            "div": {
+              "type": "number",
+              "value": 0.1
+            },
+            "mod": {
+              "type": "number",
+              "value": 1
+            },
+            "mod_frac": {
+              "type": "number",
+              "value": 0.8
+            },
+            "mul": {
+              "type": "number",
+              "value": 9
+            },
+            "sub": {
+              "type": "number",
+              "value": 1.5
+            },
+            "sub_neg": {
+              "type": "number",
+              "value": -1.5
+            }
+          },
+          "blocks": null
+        },
+        "labels": null,
+        "type": "arithmetic"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ff": {
+              "type": "bool",
+              "value": false
+            },
+            "ft": {
+              "type": "bool",
+              "value": false
+            },
+            "tf": {
+              "type": "bool",
+              "value": false
+            },
+            "tt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "&&"
+        ],
+        "type": "logical_binary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ff": {
+              "type": "bool",
+              "value": false
+            },
+            "ft": {
+              "type": "bool",
+              "value": true
+            },
+            "tf": {
+              "type": "bool",
+              "value": true
+            },
+            "tt": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "||"
+        ],
+        "type": "logical_binary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "f": {
+              "type": "bool",
+              "value": true
+            },
+            "t": {
+              "type": "bool",
+              "value": false
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "!"
+        ],
+        "type": "logical_unary"
+      },
+      {
+        "body": {
+          "attributes": {
+            "f": {
+              "type": "string",
+              "value": "b"
+            },
+            "t": {
+              "type": "string",
+              "value": "a"
+            }
+          },
+          "blocks": null
+        },
+        "labels": null,
+        "type": "conditional"
+      }
+    ]
+  },
+  "old_sha256": "6ea90205fed2db7cc34dce9d8404ae898fdb5d0c3dc9893001b71d07fa78686d",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": true,
+  "review": "hclsyntax v2.23.0: the information-model projections equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

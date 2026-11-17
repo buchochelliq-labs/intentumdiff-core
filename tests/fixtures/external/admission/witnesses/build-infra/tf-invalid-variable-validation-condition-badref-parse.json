@@ -1,0 +1,31 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-invalid-variable-validation-condition-badref-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "d101af2e56a308b0e84ffafd72a8e69ec5ebd1136b955e6931f518be57c2c50a",
+  "old_sha256": "d101af2e56a308b0e84ffafd72a8e69ec5ebd1136b955e6931f518be57c2c50a",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax). Upstream directory label: invalid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    1,
+    23,
+    203
+  ],
+  "verdict": "supports_claim"
+}

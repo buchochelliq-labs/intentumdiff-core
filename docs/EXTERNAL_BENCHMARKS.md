@@ -170,7 +170,7 @@ ledger:
 1. **Code families**: `scripts/external_families/*.py`, in sorted file-name order. Each module exposes
    `contribute(ctx)` and returns `{'suites', 'discovery', 'cases'}`, built with the builder's own helpers.
    Upstream bytes are vendored under `tests/fixtures/external/upstream/<suite_id>/`, and derived bytes go
-   under `admission/cases/<language>/`. #262 uses this mechanism.
+   under `admission/cases/<language>/`. #262 and #267 use this mechanism.
 2. **Fragment families**: `tests/fixtures/external/admission/families/*.json`, in sorted file-name order.
    The family's own deterministic tool generates each fragment and checks it with `--check`; the builder
    merges it verbatim. #265 uses this mechanism.
@@ -258,3 +258,35 @@ The W3C XML suite is a blocked acquisition (www.w3.org is unreachable), so `xml`
 
 The combined results for the first slice, #262 and #265, with minimised failures and blocked sources,
 are in `docs/evidence/2026-11-17-external-scorecard/README.md`.
+
+### #267 (build, configuration and infrastructure: dockerfile, hcl, gomod, gitignore, cmake, make, puppet)
+
+The family module is `scripts/external_families/family_267_build_infra.py`. Its `plan()` lists every case and is
+shared with the witness tool. `bash` and `powershell` are left to #266.
+
+```sh
+python scripts/acquire_build_infra_benchmarks.py          # network: Go module zips (sum.golang.org) and raw files
+(cd scripts/witness_tools/buildinfra && go build -o "$BUILDINFRA_TOOL" .)   # BuildKit v0.17.3, hcl v2.23.0, x/mod v0.22.0
+GEM_HOME=<gems with puppet 8.10.0> BUILDINFRA_TOOL=... \
+  python scripts/build_infra_witness.py extract           # GNU Make harness makefiles + puppet spec manifests
+GEM_HOME=... BUILDINFRA_TOOL=... python scripts/build_infra_witness.py witness
+python scripts/build_external_admission.py [--check]
+```
+
+The witness tool also needs go1.24.7, git 2.43.0, cmake 3.28.3, GNU Make 4.3 and Perl. A missing tool
+produces a `blocked` record, and a blocked record never admits a case.
+
+The oracles run outside IntentumDiff:
+
+- **dockerfile:** BuildKit `parser.Parse`, which must reproduce each upstream `result` dump, and
+  `instructions.Parse` typed instruction lists for pairs.
+- **hcl:** `hclsyntax.ParseConfig` acceptance, and an information-model projection for pairs (`hclwrite.Format`
+  makes the canonical-format pairs).
+- **gomod:** `modfile.Parse` and `go mod edit -json`.
+- **gitignore:** git reproducing the t0008 expectations, and `check-ignore` sets over a fixed universe for pairs.
+- **cmake:** the upstream RunCMake harness, and configure-output equality for pairs.
+- **make:** the upstream `run_make_tests.pl` harness, and make-output equality for pairs.
+- **puppet:** `Parser#parse_string` as the specs call it, and normalised catalog equality for pairs.
+
+IaC-Eval and Shipwright are blocked acquisitions. Results, minimised failures and gaps are in
+`docs/evidence/2026-11-17-external-scorecard-267/README.md`.

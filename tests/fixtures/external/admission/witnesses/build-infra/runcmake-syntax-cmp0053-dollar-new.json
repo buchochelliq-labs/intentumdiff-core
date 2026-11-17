@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-cmp0053-dollar-new",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "eb4cdf7a7c9e2ec183f5ec19800c94a6c53beb73fd3213c3c4e7e67693150d90",
+  "old_sha256": "eb4cdf7a7c9e2ec183f5ec19800c94a6c53beb73fd3213c3c4e7e67693150d90",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(CMP0053-Dollar-NEW) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

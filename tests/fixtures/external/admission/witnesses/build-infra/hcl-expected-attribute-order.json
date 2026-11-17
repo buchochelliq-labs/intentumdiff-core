@@ -1,0 +1,58 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hcl-expected-attribute-order",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {
+      "a": {
+        "type": "string",
+        "value": "a value"
+      },
+      "b": {
+        "type": "string",
+        "value": "b value"
+      },
+      "c": {
+        "type": "string",
+        "value": "c value"
+      }
+    },
+    "blocks": null
+  },
+  "new_sha256": "c5db0689f735330d269bafbfa73d0643e00ad34315808f7836e19917d299c69b",
+  "old_observation": {
+    "attributes": {
+      "a": {
+        "type": "string",
+        "value": "a value"
+      },
+      "b": {
+        "type": "string",
+        "value": "b value"
+      },
+      "c": {
+        "type": "string",
+        "value": "c value"
+      }
+    },
+    "blocks": null
+  },
+  "old_sha256": "733fc4a3708b6a8a20b023fe49c67a41ea3b3e3e3575724aeea8ffa2779fb5e6",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": true,
+  "review": "hclsyntax v2.23.0: the information-model projections equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

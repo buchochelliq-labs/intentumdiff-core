@@ -1,0 +1,5 @@
+module example.com/retract/ambiguous/nested
+
+go 1.16
+
+retract v1.9.0-bad // nested modules are bad

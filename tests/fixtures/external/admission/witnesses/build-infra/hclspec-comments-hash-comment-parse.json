@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hclspec-comments-hash-comment-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "1e11d7519d36607a9ba48a0a86dfeff5e87366cd9f504de3ae0b432c6c29dad8",
+  "old_sha256": "1e11d7519d36607a9ba48a0a86dfeff5e87366cd9f504de3ae0b432c6c29dad8",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax).",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [],
+  "verdict": "supports_claim"
+}

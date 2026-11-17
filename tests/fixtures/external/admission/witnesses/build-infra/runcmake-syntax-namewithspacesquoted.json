@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-namewithspacesquoted",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "70455a798ac8d0c67e55076fd2913dae1cdc732b763db8028364cbbe83b6fc2e",
+  "old_sha256": "70455a798ac8d0c67e55076fd2913dae1cdc732b763db8028364cbbe83b6fc2e",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(NameWithSpacesQuoted) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,1 @@
+$a = $b ? {default => wat, banana => fruit, grape => berry}

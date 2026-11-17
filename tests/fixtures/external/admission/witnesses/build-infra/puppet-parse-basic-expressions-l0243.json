@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-basic-expressions-l0243",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "3717cdcbc536ba8ac7aee90bb0cc8286bb680714f7543ff3c71d489cc93b07ea",
+  "old_sha256": "3717cdcbc536ba8ac7aee90bb0cc8286bb680714f7543ff3c71d489cc93b07ea",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseErrorWithIssue: Syntax error at ',' (line: 1, column: 12)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseErrorWithIssue: Syntax error at ',' (line: 1, column: 12), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-containers-l0099",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "8213c8f901e57055c0786381dcf2376f1acd07ca3c848d8da345a7d76088c124",
+  "old_sha256": "8213c8f901e57055c0786381dcf2376f1acd07ca3c848d8da345a7d76088c124",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseError: 'class' keyword not allowed at this location (line: 1, column: 7)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseError: 'class' keyword not allowed at this location (line: 1, column: 7), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

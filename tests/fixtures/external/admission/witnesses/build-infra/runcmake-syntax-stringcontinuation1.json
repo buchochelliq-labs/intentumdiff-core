@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-stringcontinuation1",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "4c1c0c43cf0c7da6a97c8ab6bbe49c9812b271a4e9cdb6b9e98ce7f1f30a2bf4",
+  "old_sha256": "4c1c0c43cf0c7da6a97c8ab6bbe49c9812b271a4e9cdb6b9e98ce7f1f30a2bf4",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(StringContinuation1) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -104,7 +104,8 @@ func dockerfile(src []byte) out {
 		for _, s := range stages {
 			var cmds []interface{}
 			for _, c := range s.Commands {
-				cmds = append(cmds, map[string]interface{}{"type": fmt.Sprintf("%T", c), "name": c.Name(), "fields": typed(c)})
+				// The instruction keyword is dispatched case-insensitively; its spelling is not observed.
+				cmds = append(cmds, map[string]interface{}{"type": fmt.Sprintf("%T", c), "fields": typed(c)})
 			}
 			st = append(st, map[string]interface{}{"name": s.Name, "base": s.BaseName, "platform": s.Platform, "commands": cmds})
 		}

@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-define-11",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "hello\necho world\nworld\nhello\nworld\n",
+    "line": 262,
+    "options": "",
+    "script": "variables/define"
+  },
+  "new_sha256": "797589d20a59a680e412e632ded71b30a9689d3ee3a046967feb365a9f59cf95",
+  "old_sha256": "797589d20a59a680e412e632ded71b30a9689d3ee3a046967feb365a9f59cf95",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

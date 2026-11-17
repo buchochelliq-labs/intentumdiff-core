@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-containers-l0031",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "3fd4b49077bf1d1aee7dcbf8c2e82b97f1b7c4f330aa0f734bb0e74205a2b100",
+  "old_sha256": "3fd4b49077bf1d1aee7dcbf8c2e82b97f1b7c4f330aa0f734bb0e74205a2b100",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

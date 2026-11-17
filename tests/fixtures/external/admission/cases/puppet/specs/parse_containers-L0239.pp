@@ -1,0 +1,1 @@
+node foo inherits bar {$a = 10 $b = 20}

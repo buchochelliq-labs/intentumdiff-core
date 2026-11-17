@@ -1,0 +1,368 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hcl-resources-hclfmt",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {},
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "create_before_destroy": {
+                    "type": "bool",
+                    "value": true
+                  },
+                  "ignore_changes": {
+                    "expr_tokens": "[ description , ]"
+                  },
+                  "prevent_destroy": {
+                    "type": "bool",
+                    "value": true
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "lifecycle"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "host": {
+                    "type": "string",
+                    "value": "127.0.0.1"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "connection"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "command": {
+                    "type": "string",
+                    "value": "echo hello"
+                  }
+                },
+                "blocks": [
+                  {
+                    "body": {
+                      "attributes": {
+                        "host": {
+                          "type": "string",
+                          "value": "10.1.2.1"
+                        }
+                      },
+                      "blocks": null
+                    },
+                    "labels": null,
+                    "type": "connection"
+                  }
+                ]
+              },
+              "labels": [
+                "local-exec"
+              ],
+              "type": "provisioner"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "command": {
+                    "type": "string",
+                    "value": "echo hello"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": [
+                "local-exec"
+              ],
+              "type": "provisioner"
+            }
+          ]
+        },
+        "labels": [
+          "aws_security_group",
+          "firewall"
+        ],
+        "type": "resource"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ami": {
+              "type": "string",
+              "value": "ami-1234"
+            },
+            "count": {
+              "type": "number",
+              "value": 2
+            },
+            "depends_on": {
+              "expr_tokens": "[ aws_security_group . firewall , ]"
+            },
+            "security_groups": {
+              "type": [
+                "tuple",
+                [
+                  "string",
+                  "string"
+                ]
+              ],
+              "value": [
+                "foo",
+                "bar"
+              ]
+            }
+          },
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "description": {
+                    "type": "string",
+                    "value": "Main network interface"
+                  },
+                  "device_index": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "network_interface"
+            }
+          ]
+        },
+        "labels": [
+          "aws_instance",
+          "web"
+        ],
+        "type": "resource"
+      },
+      {
+        "body": {
+          "attributes": {},
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "replace_triggered_by": {
+                    "expr_tokens": "[ aws_instance . web [ 1 ] , aws_security_group . firewall . id ]"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "lifecycle"
+            }
+          ]
+        },
+        "labels": [
+          "aws_instance",
+          "depends"
+        ],
+        "type": "resource"
+      }
+    ]
+  },
+  "new_sha256": "3ccd429c3427f86c8f7dfcfee50cbc6d14017cbed33fb6a6bdcc1f4b04f53a85",
+  "old_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {},
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "create_before_destroy": {
+                    "type": "bool",
+                    "value": true
+                  },
+                  "ignore_changes": {
+                    "expr_tokens": "[ description , ]"
+                  },
+                  "prevent_destroy": {
+                    "type": "bool",
+                    "value": true
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "lifecycle"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "host": {
+                    "type": "string",
+                    "value": "127.0.0.1"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "connection"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "command": {
+                    "type": "string",
+                    "value": "echo hello"
+                  }
+                },
+                "blocks": [
+                  {
+                    "body": {
+                      "attributes": {
+                        "host": {
+                          "type": "string",
+                          "value": "10.1.2.1"
+                        }
+                      },
+                      "blocks": null
+                    },
+                    "labels": null,
+                    "type": "connection"
+                  }
+                ]
+              },
+              "labels": [
+                "local-exec"
+              ],
+              "type": "provisioner"
+            },
+            {
+              "body": {
+                "attributes": {
+                  "command": {
+                    "type": "string",
+                    "value": "echo hello"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": [
+                "local-exec"
+              ],
+              "type": "provisioner"
+            }
+          ]
+        },
+        "labels": [
+          "aws_security_group",
+          "firewall"
+        ],
+        "type": "resource"
+      },
+      {
+        "body": {
+          "attributes": {
+            "ami": {
+              "type": "string",
+              "value": "ami-1234"
+            },
+            "count": {
+              "type": "number",
+              "value": 2
+            },
+            "depends_on": {
+              "expr_tokens": "[ aws_security_group . firewall , ]"
+            },
+            "security_groups": {
+              "type": [
+                "tuple",
+                [
+                  "string",
+                  "string"
+                ]
+              ],
+              "value": [
+                "foo",
+                "bar"
+              ]
+            }
+          },
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "description": {
+                    "type": "string",
+                    "value": "Main network interface"
+                  },
+                  "device_index": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "network_interface"
+            }
+          ]
+        },
+        "labels": [
+          "aws_instance",
+          "web"
+        ],
+        "type": "resource"
+      },
+      {
+        "body": {
+          "attributes": {},
+          "blocks": [
+            {
+              "body": {
+                "attributes": {
+                  "replace_triggered_by": {
+                    "expr_tokens": "[ aws_instance . web [ 1 ] , aws_security_group . firewall . id ]"
+                  }
+                },
+                "blocks": null
+              },
+              "labels": null,
+              "type": "lifecycle"
+            }
+          ]
+        },
+        "labels": [
+          "aws_instance",
+          "depends"
+        ],
+        "type": "resource"
+      }
+    ]
+  },
+  "old_sha256": "ed3f9c222dc095ecfe287c33ba2cee7f566e661852217a66c3019ef16d4b1120",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": true,
+  "review": "hclsyntax v2.23.0: the information-model projections equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

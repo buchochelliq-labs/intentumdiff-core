@@ -1,0 +1,54 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "puppet-parse-resource-l0246-changed-94a77a",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_observation": {
+    "ordering": [],
+    "refresh": [],
+    "resources": {
+      "Class[Settings]": {
+        "name": "\"Settings\""
+      },
+      "Class[main]": {
+        "name": "\"main\""
+      },
+      "Notify[thisisa[bug]]": {
+        "message": "\"hello\"",
+        "name": "\"thisisa[bug]\""
+      },
+      "Stage[main]": {
+        "name": "\"main\""
+      }
+    }
+  },
+  "new_sha256": "bc19d3de46d5ae4717babdc4f4c0f50e99909880b96061502ae0a2cf15a7edbc",
+  "old_observation": {
+    "ordering": [],
+    "refresh": [],
+    "resources": {
+      "Class[Settings]": {
+        "name": "\"Settings\""
+      },
+      "Class[main]": {
+        "name": "\"main\""
+      },
+      "Notify[thisisa[bug]]": {
+        "name": "\"thisisa[bug]\""
+      },
+      "Stage[main]": {
+        "name": "\"main\""
+      }
+    }
+  },
+  "old_sha256": "44eaeba474f7a6ce7e303d40bd408ff87166c08fa0915b4172541536977ae6e0",
+  "oracle": "puppet_catalog_equality",
+  "projection_equal": false,
+  "review": "Puppet 8.10.0 catalog: the normalised catalogs differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-basic-expressions-l0043",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "52f5f1a3f4b9362694a3997dd44b470e67ed70ccb38ee8ab10ea97ce8a91f6ac",
+  "old_sha256": "52f5f1a3f4b9362694a3997dd44b470e67ed70ccb38ee8ab10ea97ce8a91f6ac",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

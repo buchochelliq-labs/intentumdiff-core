@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-special-01",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "one: BAR FOO\ntwo: BAZ FOO\n",
+    "line": 23,
+    "options": "",
+    "script": "variables/special"
+  },
+  "new_sha256": "b31c84c2c3947d250838f77f678e05c22f45f5e6ae22deb1b7e0e7c38e52cfd1",
+  "old_sha256": "b31c84c2c3947d250838f77f678e05c22f45f5e6ae22deb1b7e0e7c38e52cfd1",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

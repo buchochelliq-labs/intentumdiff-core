@@ -1,0 +1,23 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "t0008-dirs-gitignore-parse",
+  "engines": [
+    {
+      "name": "git",
+      "version": "git version 2.43.0"
+    }
+  ],
+  "new_sha256": "fececf4a735443a187b2edbe19e797994d563035e650e3054d2baa6fc0b98cb1",
+  "old_sha256": "fececf4a735443a187b2edbe19e797994d563035e650e3054d2baa6fc0b98cb1",
+  "oracle": "git_t0008_reproduction",
+  "reference_accepts": true,
+  "review": "git reproduces the t0008 `directories and ** matches` expectation with this file in place.",
+  "schema_version": 1,
+  "t0008": {
+    "actual": "data/file\ndata/data1/file1\ndata/data2/file2\n",
+    "command": "git check-ignore file data/file data/data1/file1 data/data1/file1.txt data/data2/file2 data/data2/file2.txt",
+    "exit_status": 0,
+    "expected": "data/file\ndata/data1/file1\ndata/data2/file2\n"
+  },
+  "verdict": "supports_claim"
+}

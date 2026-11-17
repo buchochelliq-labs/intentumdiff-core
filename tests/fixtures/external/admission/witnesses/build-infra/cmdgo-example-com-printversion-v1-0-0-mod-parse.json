@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "cmdgo-example-com-printversion-v1-0-0-mod-parse",
+  "cmd_go_error": "go: errors parsing go.mod:\n<TMP>/go.mod:4: replacement module directory path \"../oops\" cannot have version",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "500f80a1e8b61a17081534198a44031717cd32a04c267b244a869282850e5c82",
+  "old_sha256": "500f80a1e8b61a17081534198a44031717cd32a04c267b244a869282850e5c82",
+  "oracle": "gomod_parse",
+  "reference_accepts": false,
+  "review": "the reference rejects the file: go.mod:4: replacement module directory path \"../oops\" cannot have version",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [],
+  "verdict": "contradicts_claim",
+  "xmod_error": "go.mod:4: replacement module directory path \"../oops\" cannot have version"
+}

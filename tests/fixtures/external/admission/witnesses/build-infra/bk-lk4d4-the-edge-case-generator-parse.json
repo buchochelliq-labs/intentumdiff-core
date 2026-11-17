@@ -1,0 +1,58 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-lk4d4-the-edge-case-generator-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "15c93ceb73fb003a3e159f3301ce9a4785dda36c2431eaea1e2b114376a70c8d",
+  "old_sha256": "15c93ceb73fb003a3e159f3301ce9a4785dda36c2431eaea1e2b114376a70c8d",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0,
+    32,
+    76,
+    105,
+    127,
+    188,
+    206,
+    229,
+    245,
+    259,
+    313,
+    371,
+    418,
+    437,
+    467,
+    488,
+    502,
+    518,
+    534,
+    567,
+    579,
+    602,
+    614,
+    632,
+    649,
+    676,
+    691,
+    706,
+    714
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

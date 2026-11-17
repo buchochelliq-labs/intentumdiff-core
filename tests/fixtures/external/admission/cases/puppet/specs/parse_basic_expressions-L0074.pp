@@ -1,0 +1,1 @@
+$a = (false or true) and true

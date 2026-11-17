@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-conditionals-00",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "arg1 NOT equal arg2\narg2 equals arg5\narg3 NOT equal arg4\nvariable is undefined\narg4 is defined\n",
+    "line": 6,
+    "options": "",
+    "script": "features/conditionals"
+  },
+  "new_sha256": "58354023a0042ac5780db855e1281cc38d381a3e0ab5361e9a0a643163929b94",
+  "old_sha256": "58354023a0042ac5780db855e1281cc38d381a3e0ab5361e9a0a643163929b94",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

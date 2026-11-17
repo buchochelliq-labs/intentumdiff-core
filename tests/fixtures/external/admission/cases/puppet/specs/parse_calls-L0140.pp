@@ -1,0 +1,1 @@
+notice Hash.assert_type(a => 42)
