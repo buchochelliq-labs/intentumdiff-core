@@ -752,6 +752,22 @@ fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -
 /// The shared compute tail: resolve the parser, load the guardrail policy, and serve via
 /// the native wasm chain (non-Python) or the certified batch (Python). Returns the
 /// `{"diff"}` / `{"fallback"}` JSON both public entry points emit.
+/// Name the parser plugin of an incomplete review in its repro outline (core #252): the
+/// manifest id plus the component's SHA-256 (the manifest records no version), or `builtin`
+/// for the native parser compiled into the core. Never a path.
+fn annotate_incomplete_plugin(diff: &mut Value, resolved: &crate::parser_registry::ResolvedParser) {
+    if diff.get("completeness").and_then(Value::as_str) != Some(crate::completeness::INCOMPLETE) {
+        return;
+    }
+    let version = if resolved.wasm_path.is_empty() {
+        Some("builtin".to_owned())
+    } else {
+        use sha2::Digest;
+        std::fs::read(&resolved.wasm_path).ok().map(|bytes| format!("sha256:{}", hex::encode(sha2::Sha256::digest(&bytes))))
+    };
+    crate::completeness::annotate_plugin(diff, &resolved.plugin_id, version.as_deref());
+}
+
 fn diff_resolved_sources(
     repo_path: &str,
     path: &str,
@@ -798,6 +814,7 @@ fn diff_resolved_sources(
             guardrail_rules.as_deref(),
         ) {
             Ok(mut diff) => {
+                annotate_incomplete_plugin(&mut diff, &resolved);
                 if let Some(context) = crate::compile_context::discover(path, &resolved.language, std::path::Path::new(repo_path))? {
                     diff["metadata"]["compile_commands"] = context;
                 }
@@ -841,7 +858,11 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
+                    Some(diff) => {
+                        let mut diff = diff.clone();
+                        annotate_incomplete_plugin(&mut diff, &resolved);
+                        Ok(certified_live_diff_response(diff, path))
+                    }
                     None => fallback("batch item missing diff"),
                 }
             }
@@ -1139,6 +1160,7 @@ pub fn live_handle_review_impl(
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
         };
+        annotate_incomplete_plugin(&mut diff, &f.resolved);
         // An incomplete/malformed per-file parse declines the ENTIRE commit,
         // preserving the file and parser cause rather than manufacturing
         // commit-level parse_errors: [] (#193). The native transport is a relay.

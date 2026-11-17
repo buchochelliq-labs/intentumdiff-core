@@ -43,7 +43,7 @@ pub(crate) fn classify(has_changes: bool, identical: Option<bool>, is_style_only
 }
 
 /// Language ids are routed identifiers; anything else is withheld from the message.
-fn safe_id(value: &str) -> &str {
+pub(crate) fn safe_id(value: &str) -> &str {
     let ok = !value.is_empty() && value.len() <= 64
         && value.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '+' | '.' | '#'));
     if ok { value } else { "unknown" }
@@ -66,37 +66,50 @@ fn line_of(source: &str, offset: usize) -> usize {
     source.as_bytes()[..offset.min(source.len())].iter().filter(|b| **b == b'\n').count()
 }
 
-/// Changed byte/line hunks (zero-based lines; end bytes exclusive). Reuses the invariance
-/// source-evidence diff; only the spans are retained.
-pub(crate) fn source_ranges(old_source: &str, new_source: &str) -> (Vec<Value>, bool) {
+/// Changed byte hunks `((old), (new))`, capped, from the invariance source-evidence diff.
+fn changed_spans(old_source: &str, new_source: &str) -> (Vec<((usize, usize), (usize, usize))>, bool) {
     let evidence = crate::invariance_groups::rust_changed_source_evidence(old_source, new_source);
     let truncated = evidence.len() > MAX_RANGES;
-    let ranges = evidence.iter().take(MAX_RANGES).map(|hunk| {
-        let ((os, oe), (ns, ne)) = (hunk.old_span, hunk.new_span);
-        json!({"old_start_byte":os,"old_end_byte":oe,"new_start_byte":ns,"new_end_byte":ne,
-            "old_start_line":line_of(old_source, os),"old_end_line":line_of(old_source, oe),
-            "new_start_line":line_of(new_source, ns),"new_end_line":line_of(new_source, ne)})
-    }).collect();
-    (ranges, truncated)
+    (evidence.iter().take(MAX_RANGES).map(|hunk| (hunk.old_span, hunk.new_span)).collect(), truncated)
 }
 
-fn incomplete_payload(language: &str, sources: Option<(&str, &str)>) -> Value {
-    let (ranges, truncated) = sources.map_or((Vec::new(), false), |(old, new)| source_ranges(old, new));
+/// Changed byte/line hunks (zero-based lines; end bytes exclusive). Only spans are retained.
+fn range_values(old_source: &str, new_source: &str, spans: &[((usize, usize), (usize, usize))]) -> Vec<Value> {
+    spans.iter().map(|((os, oe), (ns, ne))| json!({"old_start_byte":os,"old_end_byte":oe,
+        "new_start_byte":ns,"new_end_byte":ne,
+        "old_start_line":line_of(old_source, *os),"old_end_line":line_of(old_source, *oe),
+        "new_start_line":line_of(new_source, *ns),"new_end_line":line_of(new_source, *ne)})).collect()
+}
+
+fn incomplete_payload(language: &str, sources: Option<(&str, &str)>,
+    context: Option<&crate::repro_outline::ReproContext<'_>>) -> Value {
+    let (old, new) = sources.unwrap_or(("", ""));
+    let (spans, truncated) = if sources.is_some() { changed_spans(old, new) } else { (Vec::new(), false) };
+    let report = crate::repro_outline::render(
+        crate::repro_outline::outline(language, old, new, &spans, truncated, context));
     json!({
         "reason": REASON_UNEXPLAINED_SOURCE_DELTA,
         "message": incomplete_message(language),
-        "report_url": REPORT_URL,
+        "report_url": report["issue_url"],
         "language": safe_id(language),
         "core_version": crate::VERSION,
-        "source_ranges": ranges,
+        "source_ranges": range_values(old, new, &spans),
         "source_ranges_truncated": truncated,
         "source_ranges_available": sources.is_some(),
+        "report": report,
     })
 }
 
 /// Stamp `completeness` + `incomplete` on a served diff (idempotent). With sources the state
 /// is derived from byte identity; without them an existing sourced state is kept.
 pub(crate) fn attach(diff: &mut Value, sources: Option<(&str, &str)>) {
+    attach_with_context(diff, sources, None);
+}
+
+/// [`attach`] with the trees and suppression record of a routed review, so an incomplete
+/// report carries the structural skeleton and the passes that removed drafts.
+pub(crate) fn attach_with_context(diff: &mut Value, sources: Option<(&str, &str)>,
+    context: Option<&crate::repro_outline::ReproContext<'_>>) {
     let Some(object) = diff.as_object() else { return };
     let has_changes = object.get("changes").and_then(Value::as_array).is_some_and(|c| !c.is_empty());
     let style = object.get("is_style_only").and_then(Value::as_bool).unwrap_or(false);
@@ -117,17 +130,33 @@ pub(crate) fn attach(diff: &mut Value, sources: Option<(&str, &str)>) {
         },
     };
     let language = object.get("language").and_then(Value::as_str).unwrap_or("").to_owned();
-    let keep_evidence = sources.is_none() && previous == Some(INCOMPLETE)
-        && object.get("incomplete").is_some_and(Value::is_object);
+    let existing = object.get("incomplete").filter(|v| v.is_object()).cloned();
+    // Later stages without trees keep the richer report an earlier stage built.
+    let keep_existing = previous == Some(INCOMPLETE) && existing.is_some()
+        && (sources.is_none() || context.is_none());
     let incomplete = if state != INCOMPLETE {
         Value::Null
-    } else if keep_evidence {
-        object["incomplete"].clone()
+    } else if keep_existing {
+        existing.unwrap()
     } else {
-        incomplete_payload(&language, sources)
+        incomplete_payload(&language, sources, context)
     };
     diff["completeness"] = json!(state);
     diff["incomplete"] = incomplete;
+}
+
+/// Record the parser plugin that served an incomplete review and re-render its report.
+/// The id and version are sanitized identifiers; no paths are recorded.
+pub(crate) fn annotate_plugin(diff: &mut Value, plugin_id: &str, version: Option<&str>) {
+    let Some(report) = diff.get_mut("incomplete").and_then(|i| i.get_mut("report")) else { return };
+    let mut outline = report["outline"].take();
+    if !outline.is_object() { return; }
+    let version = version.filter(|v| !v.is_empty() && v.len() <= 80
+        && v.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_' | '+' | ':')));
+    outline["plugin"] = json!({"id": safe_id(plugin_id), "version": version});
+    let rendered = crate::repro_outline::render(outline);
+    diff["incomplete"]["report_url"] = rendered["issue_url"].clone();
+    diff["incomplete"]["report"] = rendered;
 }
 
 #[cfg(test)]
@@ -158,7 +187,8 @@ mod tests {
         assert_eq!(lost["completeness"], INCOMPLETE);
         let incomplete = &lost["incomplete"];
         assert_eq!(incomplete["reason"], REASON_UNEXPLAINED_SOURCE_DELTA);
-        assert_eq!(incomplete["report_url"], REPORT_URL);
+        assert!(incomplete["report_url"].as_str().unwrap().starts_with(&format!("{REPORT_URL}?title=")));
+        assert_eq!(incomplete["report_url"], incomplete["report"]["issue_url"]);
         let message = incomplete["message"].as_str().unwrap();
         assert!(message.contains(REPORT_URL) && message.contains("python") && message.contains(crate::VERSION));
         assert!(!message.contains("secret"), "{message}");

@@ -18,6 +18,17 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         let mut groups = fin.get("change_groups").and_then(Value::as_array).cloned().unwrap_or_default();
         let mut ignored = fin.get("ignored_style_changes").and_then(Value::as_array).cloned().unwrap_or_default();
         let mut style = fin.get("is_style_only").and_then(Value::as_bool).unwrap_or(false);
+        let mut suppression_trace = fin.get("suppression_trace").cloned().unwrap_or(Value::Null);
+        let kinds = |changes: &[Value]| -> Vec<Value> {
+            let mut counts: std::collections::BTreeMap<(String, String), u64> = Default::default();
+            for change in changes {
+                let node = if change["new_node"].is_object() { &change["new_node"] } else { &change["old_node"] };
+                *counts.entry((change["change_type"].as_str().unwrap_or("").to_owned(),
+                    node["node_type"].as_str().unwrap_or("").to_owned())).or_default() += 1;
+            }
+            counts.into_iter().map(|((change_type, node_type), count)|
+                json!({"change_type":change_type,"node_type":node_type,"count":count})).collect()
+        };
         if !changes.is_empty() {
             let inv = crate::invariance_groups::rust_apply_invariances_value(&json!({
                 "changes":changes,"old_tree":request["old_tree"],"new_tree":request["new_tree"],
@@ -64,6 +75,12 @@ pub fn complete(request: &Value) -> Result<Value, String> {
                     true
                 });
                 if kept.is_empty() && old_source != new_source { style = true; }
+                if kept.is_empty() {
+                    // Record the pass for an incomplete report (the invariances removed every change).
+                    let mut passes = suppression_trace.as_array().cloned().unwrap_or_default();
+                    passes.push(json!({"pass":"routed_review:invariances","removed":kinds(&changes),"added":[]}));
+                    suppression_trace = json!(passes);
+                }
             }
             changes = kept;
             groups.extend(inv["change_groups"].as_array().cloned().unwrap_or_default());
@@ -99,14 +116,18 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             }
         }
         reconcile_groups_to_final_changes(&changes, &mut groups);
-        json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
+        let mut diff = json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
             "has_semantic_changes":!changes.is_empty() && !style,"is_style_only":style,
             "changes":changes,"change_groups":groups,"metadata":metadata,
-            "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]})
+            "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]});
+        // The shared completeness boundary (#252): every routed review states whether its
+        // changes explain the source delta, with a sanitised repro outline when they do not.
+        let context = crate::repro_outline::ReproContext { old_tree: &request["old_tree"],
+            new_tree: &request["new_tree"], suppression_trace: &suppression_trace };
+        crate::completeness::attach_with_context(&mut diff, Some((old_source, new_source)), Some(&context));
+        diff
     };
     crate::content_class::attach(&mut diff);
-    // The shared completeness boundary (#252): every routed review states whether its
-    // changes explain the source delta, with report-a-bug evidence when they do not.
     crate::completeness::attach(&mut diff, Some((old_source, new_source)));
     diff["metadata"]["engine_owner"] = json!("rust");
     diff["metadata"]["semantic_contract"] = json!("rust_finalize_review_v1");

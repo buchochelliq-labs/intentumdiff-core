@@ -186,3 +186,77 @@ fn unchanged_style_and_changed_states_agree_across_paths() {
     let fallback = call("source_fallback_diff", json!(["def f(", "def g(", "a.py", "a.py", "python", "parse_errors"]));
     assert_eq!(fallback["completeness"], "complete", "{fallback}");
 }
+
+const SECRETS: [&str; 6] = ["SECRET_TOKEN_xyz", "hunter2", "private note", "Private docstring", "helper_qq", "4242"];
+
+fn assert_private(value: &Value, what: &str) {
+    let text = value.to_string();
+    for secret in SECRETS {
+        assert!(!text.contains(secret), "{what} leaks {secret:?}: {text}");
+    }
+    // Percent-encoding must not smuggle them either.
+    let decoded = value["report_url"].as_str().map(decode).unwrap_or_default();
+    for secret in SECRETS {
+        assert!(!decoded.contains(secret), "{what} URL leaks {secret:?}: {decoded}");
+    }
+}
+
+fn decode(url: &str) -> String {
+    let bytes = url.as_bytes();
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'%' && i + 2 < bytes.len() + 0 && i + 2 <= bytes.len() - 1 {
+            out.push(u8::from_str_radix(&url[i + 1..i + 3], 16).unwrap());
+            i += 3;
+        } else {
+            out.push(bytes[i]);
+            i += 1;
+        }
+    }
+    String::from_utf8(out).unwrap()
+}
+
+/// The repro outline: sanitised, consistent placeholders, deterministic, plugin-attributed.
+#[test]
+fn incomplete_report_outline_is_private_consistent_and_deterministic() {
+    let old = "package m\n\n// private note\nfunc helper_qq() {\n\tSECRET_TOKEN_xyz(\"hunter2\", 4242)\n\thelper_qq()\n}\n";
+    let new = "package m\n\n// private note\nfunc helper_qq() {\n\thelper_qq()\n\tSECRET_TOKEN_xyz(\"hunter2\", 4242)\n}\n";
+    let served = live("a.go", "go", old, new);
+    assert_incomplete(&served, "go");
+    let incomplete = &served["incomplete"];
+    assert_private(incomplete, "go incomplete");
+    let report = &incomplete["report"];
+    let outline = &report["outline"];
+    assert_eq!(outline["plugin"]["id"], "go", "{outline}");
+    assert!(outline["plugin"]["version"].as_str().unwrap().starts_with("sha256:"), "{outline}");
+    assert_eq!(outline["core_version"], crate::VERSION);
+    assert_eq!(report["truncated"], false);
+    let url = incomplete["report_url"].as_str().unwrap();
+    assert_eq!(url, report["issue_url"].as_str().unwrap());
+    assert!(url.len() <= crate::repro_outline::MAX_ISSUE_URL_BYTES);
+    assert!(decode(url).ends_with(report["body_markdown"].as_str().unwrap()), "URL carries the body");
+    let region = &outline["regions"][0];
+    let shapes = format!("{} {}", region["old_shape"], region["new_shape"]);
+    assert!(region["old_skeleton"].as_str().unwrap().contains("function_declaration"), "{region}");
+    assert!(shapes.contains("string(9)"), "literal reduced to type and length: {shapes}");
+    // One placeholder per identifier across both sides of the report.
+    let ids: std::collections::BTreeSet<&str> = shapes.split(|c: char| !c.is_ascii_alphanumeric())
+        .filter(|t| t.starts_with("id") && t[2..].chars().all(|c| c.is_ascii_digit()) && t.len() > 2).collect();
+    assert_eq!(ids.len(), 2, "SECRET_TOKEN_xyz and helper_qq: {shapes}");
+    assert_eq!(outline["placeholder_count"], 2, "{outline}");
+    let suppressions = outline["suppressions"].as_array().expect("finalize records its passes");
+    assert!(suppressions.iter().any(|p| !p["removed"].as_array().unwrap().is_empty()), "{outline}");
+    // Byte-identical on repeat.
+    assert_eq!(live("a.go", "go", old, new)["incomplete"].to_string(), incomplete.to_string());
+
+    // Python via the routed boundary (a regressed suppressor), with docstrings and comments.
+    let old = "def helper_qq():\n    \"\"\"Private docstring.\"\"\"\n    SECRET_TOKEN_xyz = \"hunter2\"  # private note\n    return SECRET_TOKEN_xyz\n";
+    let new = "def helper_qq():\n    \"\"\"Private docstring.\"\"\"\n    SECRET_TOKEN_xyz = \"hunter2!\"  # private note\n    return SECRET_TOKEN_xyz\n";
+    let regressed = complete_with("a.py", "python", old, new,
+        json!({"changes":[],"change_groups":[],"is_style_only":false,"no_surviving_changes":true,"suppression_trace":[]}));
+    assert_incomplete(&regressed, "python");
+    assert_private(&regressed["incomplete"], "python incomplete");
+    let shape = regressed["incomplete"]["report"]["outline"]["regions"][0]["old_shape"].to_string();
+    assert!(shape.contains("string(9)") && !shape.contains("string(21)"), "docstring dropped, literal typed: {shape}");
+}

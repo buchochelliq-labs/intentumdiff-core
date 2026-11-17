@@ -311,6 +311,10 @@ semantic changes. It is not a clean review, and bindings must not render it as "
 }
 ```
 
+The `report_url` above is shown without its query for brevity: it is the pre-filled
+`https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…` URL of
+`report.issue_url` (described below).
+
 - `reason` is a stable code; `message` is core-authored text that every binding (Python,
   VS Code, LSP, live server, CLI) shows verbatim. It names only the routed language id and
   the core version: no filename, label, identifier or source text.
@@ -318,7 +322,57 @@ semantic changes. It is not a clean review, and bindings must not render it as "
   capped at 64 with `source_ranges_truncated`. `source_ranges_available=false` only when a
   source-less stage (`finalize_file_lifecycle` on a DTO without a prior verdict) had to
   classify from `metadata.no_surviving_changes` alone.
-- `api::Review` exposes `completeness: Option<String>` and `incomplete: Option<Incomplete>`.
+- `api::Review` exposes `completeness: Option<String>` and `incomplete: Option<Incomplete>`
+  (`Incomplete.attributes` carries `report`).
+
+#### Sanitised repro outline (`incomplete.report`)
+
+Core builds one bug-report outline so every binding scrubs identically:
+
+```json
+"report": {
+  "title": "Incomplete review: unexplained_source_delta (go, core 0.1.0)",
+  "body_markdown": "### IntentumDiff could not explain a change\n…",
+  "truncated": false,
+  "issue_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…",
+  "outline": {
+    "schema_version": 1, "reason": "unexplained_source_delta", "core_version": "0.1.0",
+    "language": "go", "plugin": {"id": "go", "version": "sha256:4b60…"},
+    "regions": [{"index": 1,
+      "old": {"start_line": 4, "start_col": 0, "end_line": 4, "end_col": 0, "bytes": 0},
+      "new": {"start_line": 4, "start_col": 0, "end_line": 5, "end_col": 0, "bytes": 13},
+      "old_skeleton": "source_file > function_declaration > block",
+      "old_shape": "block(statement_list(expression_statement(call_expression[id1](id1, argument_list(string(9), int))), …))",
+      "new_skeleton": "…", "new_shape": "…"}],
+    "regions_truncated": false, "structure_available": true,
+    "suppressions": [{"pass": "refine:suppress_descendant_noise",
+      "removed": [{"change_type": "MOVE", "node_type": "call_expression", "count": 2}], "added": []}],
+    "placeholder_count": 2
+  }
+}
+```
+
+- **Contents.** Core version, routed language id, parser plugin id and version (the
+  component's SHA-256, since the manifest records no version; `builtin` for the native
+  parser compiled into the core; `null` when the route did not resolve a plugin), the
+  node-kind skeleton (ancestors) and shape (nesting, depth ≤ 5, ≤ 8 children per node)
+  around each changed region, the passes that removed or added draft changes (pass names,
+  change types, node kinds; `suppressions: null` when the route records no trace), and
+  zero-based line/byte-column offsets plus byte sizes of each region.
+- **Privacy.** No source text: identifiers become placeholders (`id1`, `id2`, …) that are
+  consistent within one report and never hashed; literals become their type and length
+  (`string(12)`, `int`, `float`, `number`, `bool`, `null`); comments and docstrings are
+  dropped. A node kind that is not lowercase grammar vocabulary, or that equals an
+  identifier's text, is shown as `node`. No filename or path appears.
+- **URL.** `issue_url` (= `incomplete.report_url`) is at most 8000 bytes. When the body does
+  not fit, the URL carries a deterministic prefix of whole body lines plus a truncation note,
+  `truncated` is `true`, and `body_markdown` stays complete so a binding can offer
+  copy-to-clipboard.
+- **Determinism.** The same inputs produce a byte-identical `report`.
+- **Binding obligations.** Core never sends anything. A binding MUST show the user the
+  `title` and `body_markdown` for preview and MUST require explicit user confirmation before
+  opening `issue_url` (or copying the body). Never open the URL automatically, and never
+  add filenames, source text or other local data to it.
 - The CLI presentation (`render_cli_review`) shows an "Incomplete review" panel with
   `message` instead of "No changes detected".
 
