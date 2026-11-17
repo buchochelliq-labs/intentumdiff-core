@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-2JQS",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "ecd8d4ad8333dfa1d3e7ef5245afd8c578366c7cf555f30830233a3ce7b51aef",
+  "observations": {
+    "error": "DuplicateKeyError: while constructing a mapping\n  in \"<unicode string>\", line 1, column 1:\n    : a\n    ^ (line: 1)\nfound duplicate key \"None\" with value \"b\" (original value: \"a\")\n  in \"<unicode string>\", line 2, column 1:\n    : b\n    ^ (line: 2)\n\nTo suppress this check see:\n    https://yaml.dev/doc/ruamel.yaml/api/#Du",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "ecd8d4ad8333dfa1d3e7ef5245afd8c578366c7cf555f30830233a3ce7b51aef",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

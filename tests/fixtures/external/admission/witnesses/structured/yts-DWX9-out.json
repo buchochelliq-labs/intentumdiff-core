@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-DWX9-out",
+  "executed_utc": "2026-11-17T20:20:27+00:00",
+  "new_sha256": "b04a5890997eef9ebdca5f00e73982f8dd4c259e32fc39f729475e720deb2da9",
+  "observations": {
+    "new": null,
+    "old": "ScannerError: more indented follow up line than first in a block scalar\n  in \"<unicode string>\", line 4, column 3:\n      literal\n      ^ (line: 4)"
+  },
+  "old_sha256": "c987ce5d8f091a7f4bf2e7d05493032a9e6881f2f5d092c7ca204edc4c5ef9f6",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

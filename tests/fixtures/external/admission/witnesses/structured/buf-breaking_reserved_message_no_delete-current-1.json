@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_reserved_message_no_delete-current-1",
+  "executed_utc": "2026-11-17T20:20:38+00:00",
+  "new_sha256": "c779e07c72f823dede3457148f6c1dcbe5735b230df2b82fe7791a5fdff33cec",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "c779e07c72f823dede3457148f6c1dcbe5735b230df2b82fe7791a5fdff33cec",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

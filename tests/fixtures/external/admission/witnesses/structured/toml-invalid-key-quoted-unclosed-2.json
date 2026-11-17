@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-key-quoted-unclosed-2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "5445b826891be6d6d0692a154f081f15d5af3ce4c38ac8f1108a1bfdb3583058",
+  "observations": {
+    "error": "Illegal character '\\n' (at line 1, column 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "5445b826891be6d6d0692a154f081f15d5af3ce4c38ac8f1108a1bfdb3583058",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

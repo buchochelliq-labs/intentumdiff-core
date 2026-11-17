@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-table-overwrite-bool-with-array",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "be27ffe50f8af7891aa1e2273d3c0768a73c9f2a9a7e5c2fe534fe6b0c4a0aa1",
+  "observations": {
+    "error": "Cannot overwrite a value (at line 2, column 4)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "be27ffe50f8af7891aa1e2273d3c0768a73c9f2a9a7e5c2fe534fe6b0c4a0aa1",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

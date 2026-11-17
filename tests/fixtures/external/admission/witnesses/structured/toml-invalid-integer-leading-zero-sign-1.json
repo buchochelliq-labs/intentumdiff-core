@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-integer-leading-zero-sign-1",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "31c70cc1bf8321cc8e9f955f0059510204a230fa43563ddfc023df05454731ec",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 25)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "31c70cc1bf8321cc8e9f955f0059510204a230fa43563ddfc023df05454731ec",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

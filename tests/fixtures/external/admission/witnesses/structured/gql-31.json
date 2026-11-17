@@ -1,0 +1,61 @@
+{
+  "case_id": "gql-31",
+  "executed_utc": "2026-11-17T20:20:42+00:00",
+  "new_sha256": "a8ab62f9fbf43381687b40d74bcfcde0887a699b03cf719b8365cf1359fb294a",
+  "observations": {
+    "reference": {
+      "Breaking": [],
+      "Dangerous": [
+        [
+          "ARG_DEFAULT_VALUE_CHANGE",
+          "Type1.field1 arg argThatChangesDefaultValue has changed defaultValue from \"test\" to \"Test\"."
+        ],
+        [
+          "IMPLEMENTED_INTERFACE_ADDED",
+          "Interface1 added to interfaces implemented by TypeThatGainsInterface1."
+        ],
+        [
+          "TYPE_ADDED_TO_UNION",
+          "TypeInUnion2 was added to union type UnionTypeThatGainsAType."
+        ],
+        [
+          "VALUE_ADDED_TO_ENUM",
+          "VALUE2 was added to enum type EnumType1."
+        ]
+      ]
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Dangerous",
+        [
+          [
+            "Dangerous",
+            "VALUE_ADDED_TO_ENUM",
+            "VALUE2 was added to enum type EnumType1."
+          ],
+          [
+            "Dangerous",
+            "ARG_DEFAULT_VALUE_CHANGE",
+            "Type1.field1 arg argThatChangesDefaultValue has changed defaultValue from \"test\" to \"Test\"."
+          ],
+          [
+            "Dangerous",
+            "IMPLEMENTED_INTERFACE_ADDED",
+            "Interface1 added to interfaces implemented by TypeThatGainsInterface1."
+          ],
+          [
+            "Dangerous",
+            "TYPE_ADDED_TO_UNION",
+            "TypeInUnion2 was added to union type UnionTypeThatGainsAType."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "bbcf9b7e39e3dbb639bd2725991c6f9ec4b46749ddb4a1ca8e382ce9d65f0f66",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

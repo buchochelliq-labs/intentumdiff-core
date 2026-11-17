@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-float-nan-incomplete-1",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "6ad35e009c504f25ff1570391b431fbf4860bfbf07b957675c344208b973bfc1",
+  "observations": {
+    "error": "Invalid value (at line 1, column 20)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "6ad35e009c504f25ff1570391b431fbf4860bfbf07b957675c344208b973bfc1",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

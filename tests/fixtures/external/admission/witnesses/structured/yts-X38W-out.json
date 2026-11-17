@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-X38W-out",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "64f0d449ec1f2cc803b6db47a7378dae0c0e83f055c7155fedbd5fcaa72e7696",
+  "observations": {
+    "new": "DuplicateKeyError: while constructing a mapping\n  in \"<unicode string>\", line 1, column 1:\n    ? &a\n    ^ (line: 1)\nfound duplicate key \"('a', 'b')\" with value \"[]\" (original value: \"b\")\n  in \"<unicode string>\", line 1, column 3:\n    ? &a\n      ^ (line: 1)\n\nTo suppress this check see:\n    https://yaml.dev/doc/ruamel.y",
+    "old": "DuplicateKeyError: while constructing a mapping\n  in \"<unicode string>\", line 1, column 1:\n    { &a [a, &b b]: *b, *a : [c, *b, d]}\n    ^ (line: 1)\nfound duplicate key \"('a', 'b')\" with value \"[]\" (original value: \"b\")\n  in \"<unicode string>\", line 1, column 3:\n    { &a [a, &b b]: *b, *a : [c, *b, d]}\n      ^ (line: 1"
+  },
+  "old_sha256": "020e50de93c1b42b4e39e998ebadd5ea9b68cd50942e9bf6e63ff66e317e34cd",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

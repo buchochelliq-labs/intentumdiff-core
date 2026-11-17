@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-VJP3-01-out",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "3b0f07e9abc869302be1c48938198112a3ed731953301af6a83066e9e7c31fcb",
+  "observations": {
+    "new": null,
+    "old": "ParserError: while parsing a flow mapping\n  in \"<unicode string>\", line 1, column 4:\n    k: {\n       ^ (line: 1)\nexpected ',' or '}', but got ':'\n  in \"<unicode string>\", line 3, column 2:\n     :\n     ^ (line: 3)"
+  },
+  "old_sha256": "85dd2a8a3108535efc8f92cd52942791a2ca5cdfe23b1614f5d86559ae9849ff",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

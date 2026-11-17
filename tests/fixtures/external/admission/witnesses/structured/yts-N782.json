@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-N782",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "d7b8b4cf01da10d38ddd73ebb0aad728cd5d466315031482eeb1053b4f3bbd2e",
+  "observations": {
+    "error": "ParserError: while parsing a flow node\nexpected the node content, but found '<document start>'\n  in \"<unicode string>\", line 2, column 1:\n    --- ,\n    ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "d7b8b4cf01da10d38ddd73ebb0aad728cd5d466315031482eeb1053b4f3bbd2e",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

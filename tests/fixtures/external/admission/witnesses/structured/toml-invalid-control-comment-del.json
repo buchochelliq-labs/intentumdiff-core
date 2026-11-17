@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-control-comment-del",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "4616a169a7ca839c76033ac1fa431f753012a996f6123395304ce34747ab0c34",
+  "observations": {
+    "error": "Found invalid character '\\x7f' (at line 1, column 27)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "4616a169a7ca839c76033ac1fa431f753012a996f6123395304ce34747ab0c34",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

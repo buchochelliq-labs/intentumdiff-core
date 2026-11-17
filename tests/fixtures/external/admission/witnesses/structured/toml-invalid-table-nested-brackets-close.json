@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-table-nested-brackets-close",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "991e1210f81e24abcd735988f0d960d4ee94d2ec3b133c6fea6e24932d91c507",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 4)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "991e1210f81e24abcd735988f0d960d4ee94d2ec3b133c6fea6e24932d91c507",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_structure_open_array_object",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "48b232fcd18ce2f714a16651ea9f27c04498dcd31ea1329a288c7aa981e1b531",
+  "observations": {
+    "error": "maximum recursion depth exceeded while decoding a JSON array from a unicode string",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "48b232fcd18ce2f714a16651ea9f27c04498dcd31ea1329a288c7aa981e1b531",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

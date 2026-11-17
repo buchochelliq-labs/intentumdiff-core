@@ -1,0 +1,99 @@
+{
+  "case_id": "buf-breaking_message_int-1",
+  "executed_utc": "2026-11-17T20:21:24+00:00",
+  "new_sha256": "7fac64a36a77095ae008b7b9d0b1813815d75aa43f15ad98cba3f1242f681fc9",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          15
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          6
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          17
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          8
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          15
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          6
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          17
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          8
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "e86ea825dd21c6b4076d5dc0fcc19158d8b1991f320a7959c6bfeee293e771f4",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

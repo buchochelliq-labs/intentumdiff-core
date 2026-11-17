@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_ignore_unstable_packages_false-previous-2",
+  "executed_utc": "2026-11-17T20:20:36+00:00",
+  "new_sha256": "490161f108e053441f4996dd01e952c52c6eef5e5553d6822ce2153e84ffd9bb",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "490161f108e053441f4996dd01e952c52c6eef5e5553d6822ce2153e84ffd9bb",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

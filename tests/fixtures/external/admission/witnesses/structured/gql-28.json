@@ -1,0 +1,34 @@
+{
+  "case_id": "gql-28",
+  "executed_utc": "2026-11-17T20:20:42+00:00",
+  "new_sha256": "401b4e450fc023bf4a5073f81f7d2e51b75b6f967cbd3c573b1a5d9bcefaeead",
+  "observations": {
+    "reference": {
+      "Breaking": [],
+      "Dangerous": [
+        [
+          "IMPLEMENTED_INTERFACE_ADDED",
+          "NewInterface added to interfaces implemented by Interface1."
+        ]
+      ]
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Dangerous",
+        [
+          [
+            "Dangerous",
+            "IMPLEMENTED_INTERFACE_ADDED",
+            "NewInterface added to interfaces implemented by Interface1."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "c4f6c41a82345b2f0d55cd247061f070630e65456a18085286f7b13a352cad3d",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

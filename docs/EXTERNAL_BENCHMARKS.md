@@ -112,7 +112,7 @@ under a stated `eligibility_rule`, the imported rows and the holdout policy.
 | `class` | `upstream_gold`, `reviewed_external_derived`, `external_seed_only` or `handwritten_regression` |
 | `lane` | `parser_fidelity`, `change_understanding` or `robustness_scaling` |
 | `behavior` | `claim` (`changed` / `preserved` / `unknown`) and its `assumptions` — separate from IntentumDiff classification |
-| `expected` | `classification` (each of `has_semantic_changes`, `is_style_only`, `changes_empty`, `completeness`; `null` = unconstrained), `required`, `alternatives`, `forbidden` |
+| `expected` | `classification` (each of `has_semantic_changes`, `is_style_only`, `changes_empty`, `completeness`; `null` = unconstrained), `required`, `alternatives`, `forbidden`, and on parser-fidelity cases `parse` (see below) |
 | `oracle` | `basis` (`executable_witness`, `curated_annotation`, `specification_review`, `byte_identity`, `source_review`, `candidate_only`), witness record, notes |
 | `admission` | `admitted` / `candidate` / `rejected` with the review reason |
 | `licence`, `attribution`, `known_issue` | per-case provenance and any linked bug |
@@ -148,8 +148,10 @@ lane entries; a lane with no executed admitted external case is `gap` (or `block
 never 100%. No pooled average is computed.
 
 ```sh
+python scripts/import_external_benchmarks.py --validate
 python scripts/external_ledger.py validate
-python scripts/build_external_admission.py --check
+python scripts/structured_family.py build --check      # the #265 fragment is current
+python scripts/build_external_admission.py --check     # the ledger is current
 PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
   --parsers build/benchmark-inputs --native-library <libintentumdiff_rust_core.so> \
   --report build/benchmarks/ledger-results.json \
@@ -157,3 +159,102 @@ PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
 python scripts/external_ledger.py scorecard --results build/benchmarks/ledger-results.json \
   --out-json build/benchmarks/scorecard.json --out-md build/benchmarks/scorecard.md
 ```
+
+## Language-family contributions
+
+Each family task (#262–#267) contributes its suites, discovery rows, cases and optional
+`blocked_acquisitions` to the one ledger. `build_external_admission.py` supports two mechanisms and merges
+them after the first slice in a fixed order, so independently added families rebuild one deterministic
+ledger:
+
+1. **Code families**: `scripts/external_families/*.py`, in sorted file-name order. Each module exposes
+   `contribute(ctx)` and returns `{'suites', 'discovery', 'cases'}`, built with the builder's own helpers.
+   Upstream bytes are vendored under `tests/fixtures/external/upstream/<suite_id>/`, and derived bytes go
+   under `admission/cases/<language>/`. #262 uses this mechanism.
+2. **Fragment families**: `tests/fixtures/external/admission/families/*.json`, in sorted file-name order.
+   The family's own deterministic tool generates each fragment and checks it with `--check`; the builder
+   merges it verbatim. #265 uses this mechanism.
+
+The ledger and each fragment are deterministic build outputs, and both stay committed. Every consumer
+reads the committed ledger directly: the validator, the runner, the witness tools and the tooling tests.
+The CI baseline and the evidence also pin its SHA-256. The `--check` gates (`structured_family.py build
+--check`, then `build_external_admission.py --check`) prove that the committed files match their inputs.
+
+A blocked acquisition (the ledger's top-level `blocked_acquisitions`) names the language, suite, lanes and reason. A blocked lane is shown as BLOCKED with
+that reason. It is never shown as a gap or a pass.
+
+## The parser-fidelity lane
+
+A parser-fidelity case judges one document: the verbatim upstream bytes on both sides (old == new). It
+carries `expected.parse`, which has one schema for both families and up to two independent claims:
+
+| Field | Claim |
+|---|---|
+| `accepts` (bool, #265) | Conformance. `true` = must accept, `false` = must reject. |
+| `statement_inventory` (`{count, starts, evidence}` or `null`, #262) | The reference engine's top-level statements in the `side` document. |
+| `side` (`old` / `new`) | The judged document. It is required without `accepts`; with `accepts` it defaults to `old`. |
+
+The validator requires `accepts` or `side` on every admitted parser-fidelity case. A must-reject case
+cannot carry an inventory or constrain a review. The runner (`run_external_ledger.py`) applies these
+rules:
+
+- **Must-accept** (`accepts: true`): the case fails on any explicit fallback, parse diagnostic, tree or
+  determinism error, or invented change. A rejected valid document is a failure, not `unsupported`.
+- **Must-reject** (`accepts: false`): the case passes only when the C ABI reports the problem, through an
+  explicit fallback/error or `parse_errors`. Silent acceptance fails.
+- **Statement inventory without `accepts`**: the reference acceptance is a precondition, so a fallback
+  leaves the case `unsupported`. Otherwise `external_ledger.judge_parse` compares the inventory with the
+  parse tree:
+  - The top-level units are the root's children.
+  - A node that spans more than one reference start is a container and is replaced by its own children.
+  - The unit count and each unit's start byte must match the reference.
+
+  A `null` inventory only checks acceptance: no parse errors, no fallback and no invented changes. The
+  inventory comes from the reference engine or parser, never from IntentumDiff.
+
+Parser-fidelity rows report the valid-acceptance and invalid-rejection rates; an inventory case counts
+as a must-accept document. Change-fact rates for these rows are N/A.
+
+### #262 (SQL and data-platform: sql, tsql, plsql, m, adf)
+
+The family module is `scripts/external_families/family_262_sql_data.py`. Its witnesses are written by
+`scripts/data_family_witness.py ledger`, which reads each case's `witness_plan`. It needs:
+
+- a PostgreSQL server with `logging_collector=on`, `log_destination=csvlog`, `log_statement=all` and
+  `log_min_error_statement=error`, reached through `PGHOST`, `PGPORT` and `PGUSER`, with `--csvlog`;
+- `dotnet` and the built `scripts/witness_tools/scriptdom` tool, passed as `--tool`;
+- `node` with `@microsoft/powerquery-parser@4.0.1` in `--node-path`.
+
+CI does not rerun these witnesses. It validates the committed records and rebuilds the ledger with
+`--check`.
+
+### #265 (structured: yaml, json, toml, xml, ini, proto, graphql)
+
+The family contributes the fragment `tests/fixtures/external/admission/families/structured-265.json`.
+
+```sh
+python scripts/acquire_structured_benchmarks.py           # network: raw.githubusercontent.com at pinned commits
+STRUCTURED_REF_PYTHON=<python with ruamel.yaml 0.18.16 + jsonpatch 1.33> \
+STRUCTURED_REF_NODE_MODULES=<node_modules with graphql@16.15.0 + @bufbuild/buf@1.75.0> \
+  python scripts/structured_family.py witness             # executes the reference oracles
+python scripts/structured_family.py build [--check]       # offline, deterministic fragment
+python scripts/build_external_admission.py [--check]
+```
+
+Parser-fidelity cases carry `expected.parse.accepts`. Change-understanding upstream pairs are admitted
+as `upstream_gold`. They come from buf `previous/`→`current/`, graphql-js `oldSchema`/`newSchema`
+template literals (extracted byte-exact) and YAML `in.yaml`→`out.yaml`. Every other pair is
+`reviewed_external_derived`, with its derivation recorded on the case. Derived pairs come from JSON Patch
+`doc`/`expected` serialisations, key reorders, re-serialisations, scalar value/type edits, comments,
+delimiter spacing and literal respelling. Each claim is witnessed by a reference implementation run
+outside IntentumDiff:
+
+- typed value equality: json, tomllib, ruamel.yaml, configparser;
+- buf image equality and `breaking`, reproducing the exact upstream annotation set;
+- graphql-js `findBreakingChanges`/`findDangerousChanges`, matching the upstream assertions, and sorted
+  `printSchema` equality.
+
+The W3C XML suite is a blocked acquisition (www.w3.org is unreachable), so `xml` is BLOCKED.
+
+The combined results for the first slice, #262 and #265, with minimised failures and blocked sources,
+are in `docs/evidence/2026-11-17-external-scorecard/README.md`.

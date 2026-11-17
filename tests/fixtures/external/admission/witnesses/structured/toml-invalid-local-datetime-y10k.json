@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-local-datetime-y10k",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "7cb2738c2fca329f17f3e75c655378f2141aac5ba439d95e7e136190cdb459b5",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 2, column 10)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "7cb2738c2fca329f17f3e75c655378f2141aac5ba439d95e7e136190cdb459b5",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

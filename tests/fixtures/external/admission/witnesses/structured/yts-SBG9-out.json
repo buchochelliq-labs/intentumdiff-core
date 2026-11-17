@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-SBG9-out",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "888bae60e071ab738b166bb93fb0c2f0a78c09de704af3e1816ee60917913088",
+  "observations": {
+    "new": "~~~~^^^^^\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\nTypeError: keys must be str, int, float, bool or None, not tuple\n",
+    "old": "~~~~^^^^^\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\nTypeError: keys must be str, int, float, bool or None, not tuple\n"
+  },
+  "old_sha256": "e25ae66617e25a5879736b0144d175877d56a27ddd8bf29d9d9af79d506b396a",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

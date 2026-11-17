@@ -33,3 +33,27 @@ pins executed upstream-test witness records under `admission/witnesses/`. It is 
 `scripts/build_external_admission.py` and validated by `scripts/external_ledger.py validate`. Pilot seed
 repairs promoted there are admitted only where the witness actually ran and supported the claim; see
 `docs/EXTERNAL_BENCHMARKS.md` and `docs/evidence/2026-11-17-external-scorecard/README.md`.
+
+### #262 SQL and data-platform bytes
+
+These directories hold verbatim upstream files at pinned commits. Each file's SHA-256 was checked against
+`raw.githubusercontent.com`, and each licence file is retained:
+
+- `upstream/postgresql-regress/` (REL_16_15, PostgreSQL Licence);
+- `upstream/sqlscriptdom/` (MIT);
+- `upstream/powerquery-parser/` (MIT);
+- `upstream/azure-datafactory-samples/` (MIT);
+- `upstream/utplsql/` (Apache-2.0, seed only).
+
+`admission/cases/sql/` and `admission/cases/adf/` hold the reviewed derived pairs, written by
+`scripts/external_families/family_262_sql_data.py`.
+
+### #265 structured bytes
+
+`upstream/structured/<suite>/` holds the verbatim upstream files for the #265 family at pinned commits.
+Each suite records its bytes, SHA-256 and acquisition steps in `ACQUISITION.json`, written by
+`scripts/acquire_structured_benchmarks.py`, with the licence evidence named in the suite record. The derived pairs live under
+`admission/families/structured-265/`, the witness records under `admission/witnesses/structured/`, and
+the generated fragment `admission/families/structured-265.json` is merged into `admission/ledger.json`
+by `scripts/build_external_admission.py`. Both generated files are committed and `--check`-ed.
+

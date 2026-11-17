@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-KS4U",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "4e18db69502ccf34b1dc2fa8eeafec3391dcd845557fc5e6910be00337cd7387",
+  "observations": {
+    "error": "ParserError: expected '<document start>', but found ('<scalar>',)\n  in \"<unicode string>\", line 5, column 1:\n    invalid item\n    ^ (line: 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "4e18db69502ccf34b1dc2fa8eeafec3391dcd845557fc5e6910be00337cd7387",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

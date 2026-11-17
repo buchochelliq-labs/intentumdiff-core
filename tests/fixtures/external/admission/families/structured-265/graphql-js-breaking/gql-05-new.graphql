@@ -1,0 +1,8 @@
+
+      input InputType1 {
+        field1: String
+        requiredField: Int!
+        optionalField1: Boolean
+        optionalField2: Boolean! = false
+      }
+    

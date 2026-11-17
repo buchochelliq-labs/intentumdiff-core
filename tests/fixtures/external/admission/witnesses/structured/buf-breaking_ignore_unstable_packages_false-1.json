@@ -1,0 +1,148 @@
+{
+  "case_id": "buf-breaking_ignore_unstable_packages_false-1",
+  "executed_utc": "2026-11-17T20:21:23+00:00",
+  "new_sha256": "80d3dca6869309115dd1d8a3f4546418883d3077f0f07b43cacb4bd489c4665f",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          7,
+          1,
+          16,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          8,
+          3,
+          12,
+          4
+        ]
+      ]
+    ],
+    "exit": 100,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          7,
+          1,
+          16,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          8,
+          3,
+          12,
+          4
+        ]
+      ],
+      [
+        "a/v1/1.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "a/v1/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          9,
+          1,
+          18,
+          2
+        ]
+      ],
+      [
+        "a/v1/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          10,
+          3,
+          14,
+          4
+        ]
+      ],
+      [
+        "a/v1beta1/1.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "a/v1beta1/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          9,
+          1,
+          18,
+          2
+        ]
+      ],
+      [
+        "a/v1beta1/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          10,
+          3,
+          14,
+          4
+        ]
+      ],
+      [
+        "b/1.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "b/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          9,
+          1,
+          18,
+          2
+        ]
+      ],
+      [
+        "b/1.proto",
+        "ENUM_NO_DELETE",
+        [
+          10,
+          3,
+          14,
+          4
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "00e5fdea7ead298c1d9a687d7b167ad24673bcb8f4ae3d453ee2eafa746c86d8",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "buf does not reproduce the upstream assertion set",
+  "verdict": "inconclusive"
+}

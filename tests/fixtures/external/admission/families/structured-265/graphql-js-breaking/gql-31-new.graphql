@@ -1,0 +1,18 @@
+
+      enum EnumType1 {
+        VALUE0
+        VALUE1
+        VALUE2
+      }
+
+      type Type1 {
+        field1(argThatChangesDefaultValue: String = "Test"): String
+      }
+
+      interface Interface1
+      type TypeThatGainsInterface1 implements Interface1
+
+      type TypeInUnion1
+      type TypeInUnion2
+      union UnionTypeThatGainsAType = TypeInUnion1 | TypeInUnion2
+    

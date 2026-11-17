@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-HS5T",
+  "executed_utc": "2026-11-17T20:20:27+00:00",
+  "new_sha256": "13a4857396c70db3b5d21ef69a82697489ec97c4ec91936c4826163af980a7f8",
+  "observations": {
+    "error": "ScannerError: while scanning for the next token\nfound character '\\t' that cannot start any token\n  in \"<unicode string>\", line 4, column 1:\n    \t3rd non-empty\n    ^ (line: 4)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "13a4857396c70db3b5d21ef69a82697489ec97c4ec91936c4826163af980a7f8",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

@@ -1,0 +1,124 @@
+{
+  "case_id": "gql-04",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "977df3e2ad86a81f70f4f34af72e105ab1006d1ffeb74e309cc08cdda9a96a72",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field1 changed type from String to Int."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field11 changed type from [Int] to [[Int]]."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field12 changed type from [[Int]] to [Int]."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field13 changed type from Int! to [Int]!."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field15 changed type from [[Int]!] to [[Int!]!]."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field3 changed type from [String] to String."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field5 changed type from String to String!."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field6 changed type from [Int] to [Int]!."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field8 changed type from Int to [Int]!."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "InputType1.field9 changed type from [Int] to [Int!]."
+        ],
+        [
+          "FIELD_REMOVED",
+          "InputType1.field2 was removed."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "FIELD_REMOVED",
+            "InputType1.field2 was removed."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field1 changed type from String to Int."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field3 changed type from [String] to String."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field5 changed type from String to String!."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field6 changed type from [Int] to [Int]!."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field8 changed type from Int to [Int]!."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field9 changed type from [Int] to [Int!]."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field11 changed type from [Int] to [[Int]]."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field12 changed type from [[Int]] to [Int]."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field13 changed type from Int! to [Int]!."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "InputType1.field15 changed type from [[Int]!] to [[Int!]!]."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "67a24519954cbcae0767293c25e6763a9b687ffcf4a6dc38b267dbbb393bf5f0",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

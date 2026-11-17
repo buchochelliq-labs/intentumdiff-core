@@ -1,0 +1,74 @@
+{
+  "case_id": "buf-breaking_message_no_delete-1",
+  "executed_utc": "2026-11-17T20:21:24+00:00",
+  "new_sha256": "f225b9da57be1fc8213edd8f433030c756dfc719617520e326403b10ebc4958f",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        [
+          7,
+          1,
+          12,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        [
+          8,
+          3,
+          10,
+          4
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        null
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        [
+          7,
+          1,
+          12,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_DELETE",
+        [
+          8,
+          3,
+          10,
+          4
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "a9c838b274c860cd457a5a135adcf33f3cec74c878f6c92542ca61880b05aea7",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

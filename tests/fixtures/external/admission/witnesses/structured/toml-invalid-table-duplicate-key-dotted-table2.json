@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-table-duplicate-key-dotted-table2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "a1546105ed32e1a5037ee91ac127b8ae57a491cb553f3f1c7197a251d22ee3ab",
+  "observations": {
+    "error": "Cannot declare ('fruit', 'apple', 'taste') twice (at line 4, column 19)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "a1546105ed32e1a5037ee91ac127b8ae57a491cb553f3f1c7197a251d22ee3ab",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

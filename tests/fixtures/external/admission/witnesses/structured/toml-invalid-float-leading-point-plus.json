@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-float-leading-point-plus",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "64e1f203679c1b176505eacaee5c8b0fd4ec2255880defb8737680d1517e17bd",
+  "observations": {
+    "error": "Invalid value (at line 1, column 22)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "64e1f203679c1b176505eacaee5c8b0fd4ec2255880defb8737680d1517e17bd",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

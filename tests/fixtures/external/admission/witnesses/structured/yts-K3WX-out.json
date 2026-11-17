@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-K3WX-out",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "f1d02769dafd622cf4e1ad6af8b031599064ba6f024f05cd2289be996706b9e7",
+  "observations": {
+    "new": null,
+    "old": "ParserError: while parsing a flow mapping\n  in \"<unicode string>\", line 2, column 1:\n    { \"foo\" # comment\n    ^ (line: 2)\nexpected ',' or '}', but got ':'\n  in \"<unicode string>\", line 3, column 3:\n      :bar }\n      ^ (line: 3)"
+  },
+  "old_sha256": "d85b27c1d2166d9ce652d53cd9d6535deb8208b4bb1bd028d4c8c81f070185e3",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

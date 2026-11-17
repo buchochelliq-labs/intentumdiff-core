@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_object_missing_value",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "ffb38b22ee3e0ca90325ebce953a9846990f292faf44c50498771602e31cb61f",
+  "observations": {
+    "error": "Expecting value: line 1 column 6 (char 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "ffb38b22ee3e0ca90325ebce953a9846990f292faf44c50498771602e31cb61f",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

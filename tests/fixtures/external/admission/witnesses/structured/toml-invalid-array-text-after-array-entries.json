@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-array-text-after-array-entries",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "2530cace13292313983b90b01d63e4b8ac484809e7ef0ac79904923573eda7ec",
+  "observations": {
+    "error": "Invalid value (at line 2, column 46)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "2530cace13292313983b90b01d63e4b8ac484809e7ef0ac79904923573eda7ec",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

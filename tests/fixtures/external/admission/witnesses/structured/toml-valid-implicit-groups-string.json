@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-implicit-groups-string",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "7e4d0c0f3b486d249f3e0cd402227a0802a6b571e0c5b7c1aca15c71fa3c3e14",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "248b3e8272ec43ce4af872981acde10628eeae73537ed6763a1f4245f5a9610c",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

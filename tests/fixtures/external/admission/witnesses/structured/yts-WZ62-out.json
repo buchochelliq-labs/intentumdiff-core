@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-WZ62-out",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "13029288116d958f768f253d32b06bee69529e694733f5f41a095b6ef9dd8c79",
+  "observations": {
+    "new": null,
+    "old": "ParserError: while parsing a flow mapping\n  in \"<unicode string>\", line 1, column 1:\n    {\n    ^ (line: 1)\nexpected ',' or '}', but got '<tag>'\n  in \"<unicode string>\", line 3, column 3:\n      !!str : bar,\n      ^ (line: 3)"
+  },
+  "old_sha256": "ef352176db32daa642df5c6c3d717fb1da0ab5b1947d47e7214dc5b5bf95223a",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

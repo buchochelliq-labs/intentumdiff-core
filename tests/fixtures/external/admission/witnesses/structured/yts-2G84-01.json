@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-2G84-01",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "12a2dfb722e8d1b638f0ff0dff12bee5a8cd6cb6ff3ea650c63120c4fbcde5de",
+  "observations": {
+    "error": "ScannerError: while scanning a block scalar\n  in \"<unicode string>\", line 1, column 5:\n    --- |10\n        ^ (line: 1)\nexpected chomping or indentation indicators, but found '0'\n  in \"<unicode string>\", line 1, column 7:\n    --- |10\n          ^ (line: 1)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "12a2dfb722e8d1b638f0ff0dff12bee5a8cd6cb6ff3ea650c63120c4fbcde5de",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

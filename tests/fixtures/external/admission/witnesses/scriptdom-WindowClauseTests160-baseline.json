@@ -1,0 +1,109 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-WindowClauseTests160-baseline",
+  "claim_tested": "both sides parse with 0 TSql160 errors and Sql160ScriptGenerator renders identical scripts from both parse trees (syntactic equivalence under ScriptDom)",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "generated_equal": true,
+  "new_sha256": "48cfd1a92fcc624fda41a7b5dc0a374d3b59430f160e4de129da1f066a1d6c2b",
+  "old_sha256": "982dc0994107177ee59996d7790dfe8a14ef6478de5344abf15fc9917a62efc0",
+  "oracle": "scriptdom_parse_and_regenerate_equal",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 15,
+      "errors160": 0,
+      "generated160_sha256": "26a38cea8429a7b83d15d6e80a94e61b474295804d906ce7aa17948b52f88f50",
+      "statement_count": 16,
+      "statement_starts": [
+        43,
+        113,
+        275,
+        359,
+        479,
+        588,
+        733,
+        842,
+        1023,
+        1109,
+        1273,
+        1349,
+        1525,
+        1641,
+        1833,
+        1993
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    },
+    {
+      "errors150": 15,
+      "errors160": 0,
+      "generated160_sha256": "26a38cea8429a7b83d15d6e80a94e61b474295804d906ce7aa17948b52f88f50",
+      "statement_count": 16,
+      "statement_starts": [
+        0,
+        72,
+        190,
+        276,
+        408,
+        519,
+        676,
+        787,
+        944,
+        1032,
+        1166,
+        1247,
+        1374,
+        1435,
+        1544,
+        1618
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "verdict": "supports_claim"
+}

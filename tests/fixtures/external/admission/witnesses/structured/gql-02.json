@@ -1,0 +1,52 @@
+{
+  "case_id": "gql-02",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "f87c7511ae8fbe48415d1584d0c419f5c1de9d10c383022a2c67509a7a121a76",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "TYPE_CHANGED_KIND",
+          "TypeWasInterfaceBecomesUnion changed from an Interface type to a Union type."
+        ],
+        [
+          "TYPE_CHANGED_KIND",
+          "TypeWasObjectBecomesInputObject changed from an Object type to an Input type."
+        ],
+        [
+          "TYPE_CHANGED_KIND",
+          "TypeWasScalarBecomesEnum changed from a Scalar type to an Enum type."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "TYPE_CHANGED_KIND",
+            "TypeWasScalarBecomesEnum changed from a Scalar type to an Enum type."
+          ],
+          [
+            "Breaking",
+            "TYPE_CHANGED_KIND",
+            "TypeWasInterfaceBecomesUnion changed from an Interface type to a Union type."
+          ],
+          [
+            "Breaking",
+            "TYPE_CHANGED_KIND",
+            "TypeWasObjectBecomesInputObject changed from an Object type to an Input type."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "dcd16ac31b82c5ba5a7e94d0278e5397e8fdcb4d6598c7c8fc19d0c606238edd",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

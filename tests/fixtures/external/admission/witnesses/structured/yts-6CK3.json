@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-6CK3",
+  "executed_utc": "2026-11-17T20:20:24+00:00",
+  "new_sha256": "a33f4a56306ec3f4d255fa9218fe5149f903eb714f1e10491e0af0b0b9e7ce19",
+  "observations": {
+    "error": "ConstructorError: could not determine a constructor for the tag '!local'\n  in \"<unicode string>\", line 3, column 3:\n    - !local foo\n      ^ (line: 3)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "a33f4a56306ec3f4d255fa9218fe5149f903eb714f1e10491e0af0b0b9e7ce19",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

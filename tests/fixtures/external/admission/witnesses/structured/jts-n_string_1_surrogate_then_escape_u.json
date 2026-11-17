@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_string_1_surrogate_then_escape_u",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "3a5b06d8fc9190c4f382a094bc372f39539ccd34ef3c917db4c5e10284c2e3d0",
+  "observations": {
+    "error": "Invalid \\uXXXX escape: line 1 column 10 (char 9)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "3a5b06d8fc9190c4f382a094bc372f39539ccd34ef3c917db4c5e10284c2e3d0",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

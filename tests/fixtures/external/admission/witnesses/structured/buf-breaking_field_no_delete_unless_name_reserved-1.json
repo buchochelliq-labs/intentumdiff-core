@@ -1,0 +1,139 @@
+{
+  "case_id": "buf-breaking_field_no_delete_unless_name_reserved-1",
+  "executed_utc": "2026-11-17T20:21:20+00:00",
+  "new_sha256": "78123f98563e10624391ca7efa4bb3f3cac68eafaacf8811cc772e519901a924",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          11,
+          1,
+          35,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          11,
+          1,
+          35,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          24,
+          3,
+          28,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          57,
+          1,
+          61,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          11,
+          1,
+          35,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          11,
+          1,
+          35,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          24,
+          3,
+          28,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          57,
+          1,
+          61,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "60fd6585f5a7add8540cc275b68cfc4084378d67a7c55dcb07bd78d0eb4fbb5b",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

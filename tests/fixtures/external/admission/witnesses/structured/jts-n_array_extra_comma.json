@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_array_extra_comma",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "20f9fd883ff8af1cf1a64b7bb00f233d64a590cfd08efda89fc96a170bcbe17c",
+  "observations": {
+    "error": "Illegal trailing comma before end of array: line 1 column 4 (char 3)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "20f9fd883ff8af1cf1a64b7bb00f233d64a590cfd08efda89fc96a170bcbe17c",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}
