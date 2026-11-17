@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-QT73-out",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "observations": {
+    "new": null,
+    "old": "ParserError: while parsing a block node\nexpected the node content, but found '<document end>'\n  in \"<unicode string>\", line 2, column 1:\n    ...\n    ^ (line: 2)"
+  },
+  "old_sha256": "60a2eb213c2397fb3cfb1858e05826759dff4ea1fcaa770a4fc216218df117da",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

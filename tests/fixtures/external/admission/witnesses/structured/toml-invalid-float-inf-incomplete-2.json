@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-float-inf-incomplete-2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "85bf44cbfb7b2a6ab1bb44fb6f34e3385679ab3b334ce797518c221fa25c0467",
+  "observations": {
+    "error": "Invalid value (at line 1, column 20)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "85bf44cbfb7b2a6ab1bb44fb6f34e3385679ab3b334ce797518c221fa25c0467",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

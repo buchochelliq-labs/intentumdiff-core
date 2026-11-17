@@ -1,0 +1,37 @@
+
+      directive @DirectiveThatIsRemoved on FIELD_DEFINITION
+
+      directive @DirectiveThatRemovesArg(arg1: String) on FIELD_DEFINITION
+
+      directive @NonNullDirectiveAdded on FIELD_DEFINITION
+
+      directive @DirectiveThatWasRepeatable repeatable on FIELD_DEFINITION
+
+      directive @DirectiveName on FIELD_DEFINITION | QUERY
+
+      type ArgThatChanges {
+        field1(id: Float): String
+      }
+
+      enum EnumTypeThatLosesAValue {
+        VALUE0
+        VALUE1
+        VALUE2
+      }
+
+      interface Interface1
+      type TypeThatLooseInterface1 implements Interface1
+
+      type TypeInUnion1
+      type TypeInUnion2
+      union UnionTypeThatLosesAType = TypeInUnion1 | TypeInUnion2
+
+      type TypeThatChangesType
+
+      type TypeThatGetsRemoved
+
+      interface TypeThatHasBreakingFieldChanges {
+        field1: String
+        field2: String
+      }
+    

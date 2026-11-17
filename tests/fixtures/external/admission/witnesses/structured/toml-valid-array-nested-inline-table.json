@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-valid-array-nested-inline-table",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "cc3f4efb9a6bbab28f0d7d82d727434d56eebdcd188fca0767987975c6a89fbc",
+  "observations": {
+    "reference_accepts": true,
+    "typed_json_equal": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "cc3f4efb9a6bbab28f0d7d82d727434d56eebdcd188fca0767987975c6a89fbc",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

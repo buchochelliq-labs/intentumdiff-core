@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-9MMW-out",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "d056599146028b15be27fdc5fe6c35e7da4eb4d50d709c51df25e3e5435766b6",
+  "observations": {
+    "new": "ConstructorError: while constructing a mapping\n  in \"<unicode string>\", line 3, column 5:\n    - - ? JSON: like\n        ^ (line: 3)\nfound unhashable key\n  in \"<unicode string>\", line 3, column 7:\n    - - ? JSON: like\n          ^ (line: 3)",
+    "old": "ParserError: while parsing a flow sequence\n  in \"<unicode string>\", line 2, column 3:\n    - [ \"JSON like\":adjacent ]\n      ^ (line: 2)\nexpected ',' or ']', but got '<scalar>'\n  in \"<unicode string>\", line 2, column 16:\n    - [ \"JSON like\":adjacent ]\n                   ^ (line: 2)"
+  },
+  "old_sha256": "1bf1070f7fc220aa46a74522a4ebe66acdafc08b78916c51ca05323b574ba6b4",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

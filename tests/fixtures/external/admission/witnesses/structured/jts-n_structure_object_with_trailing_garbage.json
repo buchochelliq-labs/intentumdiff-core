@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_structure_object_with_trailing_garbage",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "ae13f955e8b401cc5c6ab62569f4239f38676019e023097e3e811f6ef41f9a60",
+  "observations": {
+    "error": "Extra data: line 1 column 13 (char 12)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "ae13f955e8b401cc5c6ab62569f4239f38676019e023097e3e811f6ef41f9a60",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

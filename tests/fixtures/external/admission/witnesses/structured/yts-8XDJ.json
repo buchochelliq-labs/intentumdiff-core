@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-8XDJ",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "989d12119839315d766f0fff50acccdaa54120a35bc4638d700540a6ac8eac32",
+  "observations": {
+    "error": "ParserError: while parsing a block mapping\n  in \"<unicode string>\", line 1, column 1:\n    key: word1\n    ^ (line: 1)\nexpected <block end>, but found '<scalar>'\n  in \"<unicode string>\", line 3, column 3:\n      word2\n      ^ (line: 3)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "989d12119839315d766f0fff50acccdaa54120a35bc4638d700540a6ac8eac32",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

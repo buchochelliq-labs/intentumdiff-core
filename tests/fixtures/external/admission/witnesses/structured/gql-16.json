@@ -1,0 +1,151 @@
+{
+  "case_id": "gql-16",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "15b259cc1553c905b177eefee463cd2181feaef8ce412a412fe4a3518e8a0fd0",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "ARG_CHANGED_KIND",
+          "ArgThatChanges.field1 arg id has changed type from Float to String."
+        ],
+        [
+          "DIRECTIVE_ARG_REMOVED",
+          "arg1 was removed from DirectiveThatRemovesArg."
+        ],
+        [
+          "DIRECTIVE_LOCATION_REMOVED",
+          "QUERY was removed from DirectiveName."
+        ],
+        [
+          "DIRECTIVE_REMOVED",
+          "DirectiveThatIsRemoved was removed."
+        ],
+        [
+          "DIRECTIVE_REPEATABLE_REMOVED",
+          "Repeatable flag was removed from DirectiveThatWasRepeatable."
+        ],
+        [
+          "FIELD_CHANGED_KIND",
+          "TypeThatHasBreakingFieldChanges.field2 changed type from String to Boolean."
+        ],
+        [
+          "FIELD_REMOVED",
+          "TypeThatHasBreakingFieldChanges.field1 was removed."
+        ],
+        [
+          "IMPLEMENTED_INTERFACE_REMOVED",
+          "TypeThatLooseInterface1 no longer implements interface Interface1."
+        ],
+        [
+          "REQUIRED_DIRECTIVE_ARG_ADDED",
+          "A required arg arg1 on directive NonNullDirectiveAdded was added."
+        ],
+        [
+          "TYPE_CHANGED_KIND",
+          "TypeThatChangesType changed from an Object type to an Interface type."
+        ],
+        [
+          "TYPE_REMOVED",
+          "Standard scalar Float was removed because it is not referenced anymore."
+        ],
+        [
+          "TYPE_REMOVED",
+          "TypeThatGetsRemoved was removed."
+        ],
+        [
+          "TYPE_REMOVED_FROM_UNION",
+          "TypeInUnion2 was removed from union type UnionTypeThatLosesAType."
+        ],
+        [
+          "VALUE_REMOVED_FROM_ENUM",
+          "VALUE0 was removed from enum type EnumTypeThatLosesAValue."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "TYPE_REMOVED",
+            "Standard scalar Float was removed because it is not referenced anymore."
+          ],
+          [
+            "Breaking",
+            "TYPE_REMOVED",
+            "TypeThatGetsRemoved was removed."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "ArgThatChanges.field1 arg id has changed type from Float to String."
+          ],
+          [
+            "Breaking",
+            "VALUE_REMOVED_FROM_ENUM",
+            "VALUE0 was removed from enum type EnumTypeThatLosesAValue."
+          ],
+          [
+            "Breaking",
+            "IMPLEMENTED_INTERFACE_REMOVED",
+            "TypeThatLooseInterface1 no longer implements interface Interface1."
+          ],
+          [
+            "Breaking",
+            "TYPE_REMOVED_FROM_UNION",
+            "TypeInUnion2 was removed from union type UnionTypeThatLosesAType."
+          ],
+          [
+            "Breaking",
+            "TYPE_CHANGED_KIND",
+            "TypeThatChangesType changed from an Object type to an Interface type."
+          ],
+          [
+            "Breaking",
+            "FIELD_REMOVED",
+            "TypeThatHasBreakingFieldChanges.field1 was removed."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "TypeThatHasBreakingFieldChanges.field2 changed type from String to Boolean."
+          ],
+          [
+            "Breaking",
+            "DIRECTIVE_REMOVED",
+            "DirectiveThatIsRemoved was removed."
+          ],
+          [
+            "Breaking",
+            "DIRECTIVE_ARG_REMOVED",
+            "arg1 was removed from DirectiveThatRemovesArg."
+          ],
+          [
+            "Breaking",
+            "REQUIRED_DIRECTIVE_ARG_ADDED",
+            "A required arg arg1 on directive NonNullDirectiveAdded was added."
+          ],
+          [
+            "Breaking",
+            "DIRECTIVE_REPEATABLE_REMOVED",
+            "Repeatable flag was removed from DirectiveThatWasRepeatable."
+          ],
+          [
+            "Breaking",
+            "DIRECTIVE_LOCATION_REMOVED",
+            "QUERY was removed from DirectiveName."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "e86fdcf06b0c555cdecf276197030009184f4c3f15a58fda98e709e9944ff852",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

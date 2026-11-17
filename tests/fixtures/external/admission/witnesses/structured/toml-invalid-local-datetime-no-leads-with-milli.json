@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-local-datetime-no-leads-with-milli",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "77402e51c842b4b8ef2dfb044894e23963d1cc30cbfd1def2515acbfa63516b2",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 2, column 18)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "77402e51c842b4b8ef2dfb044894e23963d1cc30cbfd1def2515acbfa63516b2",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

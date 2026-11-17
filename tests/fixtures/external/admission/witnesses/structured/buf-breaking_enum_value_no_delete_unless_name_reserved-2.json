@@ -1,0 +1,119 @@
+{
+  "case_id": "buf-breaking_enum_value_no_delete_unless_name_reserved-2",
+  "executed_utc": "2026-11-17T20:21:19+00:00",
+  "new_sha256": "b729d76ba72ba948751bd31be260dc288dc16b53cae74d63b28ffe8d88e26151",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          24,
+          3,
+          28,
+          4
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          43,
+          1,
+          45,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          48,
+          1,
+          52,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          24,
+          3,
+          28,
+          4
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          43,
+          1,
+          45,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED",
+        [
+          48,
+          1,
+          52,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "44446e6f772bb00c595353a7805f59f5e5282857151af5b6236bb1346d478eed",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

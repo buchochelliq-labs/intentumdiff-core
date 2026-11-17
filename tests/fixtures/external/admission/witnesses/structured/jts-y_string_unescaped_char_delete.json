@@ -1,0 +1,14 @@
+{
+  "case_id": "jts-y_string_unescaped_char_delete",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "2366f354a28f19c40b4994ae5a341137807c954180c52cbc9d56a75722dcdeed",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "2366f354a28f19c40b4994ae5a341137807c954180c52cbc9d56a75722dcdeed",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

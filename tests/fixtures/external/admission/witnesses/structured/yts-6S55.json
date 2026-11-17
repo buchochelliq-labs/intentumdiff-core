@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-6S55",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "fad6dfe7b3f151569b9e0012cb11e3d31e8c113aab22d83aa8ad0d55c6bbadee",
+  "observations": {
+    "error": "ScannerError: while scanning a simple key\n  in \"<unicode string>\", line 4, column 2:\n     invalid\n     ^ (line: 4)\ncould not find expected ':'\n  in \"<unicode string>\", line 5, column 1:\n    \n    ^ (line: 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "fad6dfe7b3f151569b9e0012cb11e3d31e8c113aab22d83aa8ad0d55c6bbadee",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

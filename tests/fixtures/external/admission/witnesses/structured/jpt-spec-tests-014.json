@@ -1,0 +1,15 @@
+{
+  "case_id": "jpt-spec-tests-014",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "6dd6f8cc423a32a7526049916bfd970375b79003f1b960e69f878d1cc032a438",
+  "observations": {
+    "applied_equals_upstream_expected": true,
+    "case_bytes_match_upstream": true,
+    "reference_equal": true
+  },
+  "old_sha256": "6dd6f8cc423a32a7526049916bfd970375b79003f1b960e69f878d1cc032a438",
+  "oracle": "json_patch",
+  "reference": "jsonpatch 1.33 apply_patch + CPython json typed equality",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

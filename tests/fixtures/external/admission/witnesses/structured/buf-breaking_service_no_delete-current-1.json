@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_service_no_delete-current-1",
+  "executed_utc": "2026-11-17T20:20:38+00:00",
+  "new_sha256": "a7f0b581929691a240edbd7e506c6ae78532abdf3c06163fd3db2331b7d79578",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "a7f0b581929691a240edbd7e506c6ae78532abdf3c06163fd3db2331b7d79578",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-DC7X-out",
+  "executed_utc": "2026-11-17T20:20:27+00:00",
+  "new_sha256": "e8d706b2363b76dd422bfd13e0b53bd1e3191a798141efa143badea27380c9fe",
+  "observations": {
+    "new": null,
+    "old": "ScannerError: while scanning for the next token\nfound character '\\t' that cannot start any token\n  in \"<unicode string>\", line 1, column 5:\n    a: b\t\n        ^ (line: 1)"
+  },
+  "old_sha256": "6fb009f89a24caf491696438b30139ade8704856ebc303262be32ffc1342bf16",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

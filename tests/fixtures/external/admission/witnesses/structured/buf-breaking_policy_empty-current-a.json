@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_policy_empty-current-a",
+  "executed_utc": "2026-11-17T20:20:38+00:00",
+  "new_sha256": "2fce40d952d3ccf77e639cf1055b3316dcebc4288e10fcd9a1529bb2d20d7a22",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "2fce40d952d3ccf77e639cf1055b3316dcebc4288e10fcd9a1529bb2d20d7a22",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-RZP5",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "6067933977ec2d492b7e36617a1eb0dfe88ad22d53109ed6cd3b339cff103db8",
+  "observations": {
+    "error": "~~~~^^^^^\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\nTypeError: keys must be str, int, float, bool or None, not tuple\n",
+    "ok": null
+  },
+  "old_sha256": "6067933977ec2d492b7e36617a1eb0dfe88ad22d53109ed6cd3b339cff103db8",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference loader crashed",
+  "verdict": "inconclusive"
+}

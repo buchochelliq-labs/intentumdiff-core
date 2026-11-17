@@ -49,11 +49,41 @@ def to_probe(case, root):
             'provenance': {'class': case['class']}, 'related_issues': [case['known_issue']] if case.get('known_issue') else []}
 
 
+def classify_parse(case, row):
+    """Parser-fidelity adapter (#265): judge acceptance/rejection of one upstream document.
+
+    A must-accept document has to be reviewed without fallback, parse diagnostics, tree or
+    determinism errors, and with no invented change (the identity review is also judged by
+    ``external_ledger.judge``). A must-reject document passes only when the C ABI reports
+    it: an explicit fallback/error, or parse diagnostics. Silent acceptance fails.
+    """
+    status = row.get('status')
+    if case['expected']['parse']['accepts']:
+        if row.get('explicit_fallback') is not None:
+            return 'failed', ['valid document rejected: explicit fallback ' + json.dumps(row['explicit_fallback'])[:300]]
+        return None
+    if status in ('bounded_explicit_fallback', 'bounded_explicit_error'):
+        return 'passed', []
+    if status == 'bounded_incomplete_observation':
+        if row.get('handling') == 'diagnostics_present':
+            return 'passed', []
+        return 'failed', ['invalid document accepted without diagnostics (no parse_errors, no fallback)']
+    errors = list(row.get('tree_errors') or []) + list(row.get('review_errors') or []) \
+        + list(row.get('classification_errors') or [])
+    if row.get('parse_errors'):
+        errors.insert(0, 'diagnostics present, but the review/tree is invalid')
+    return 'failed', errors or [f'unexpected worker status {status}: {row.get("error")}']
+
+
 def classify(case, row, root):
     """Map one assess_languages observation plus the ledger oracle to a run status."""
     status = row.get('status')
     if status == 'not_executed':
         return 'blocked', [row.get('error') or 'worker did not report this case']
+    if case['lane'] == 'parser_fidelity':
+        verdict = classify_parse(case, row)
+        if verdict is not None:
+            return verdict
     if row.get('explicit_fallback') is not None:
         return 'unsupported', ['explicit fallback: ' + json.dumps(row['explicit_fallback'])[:300]]
     if status == 'runtime_error':

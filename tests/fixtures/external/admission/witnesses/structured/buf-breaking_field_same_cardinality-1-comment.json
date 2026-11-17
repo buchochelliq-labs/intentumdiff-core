@@ -1,0 +1,16 @@
+{
+  "case_id": "buf-breaking_field_same_cardinality-1-comment",
+  "executed_utc": "2026-11-17T20:20:40+00:00",
+  "new_sha256": "22062ccae5d848ab60983e224534f8c50bc8d935961e308a1d5e1db270619c33",
+  "observations": {
+    "breaking_exit": 0,
+    "breaking_output": null,
+    "image_equal": true,
+    "reference_equal": true
+  },
+  "old_sha256": "4a0cbb0c57731038a0295d530fca1fa6fd4ead22c4a34c6a4c75e092bb56ec28",
+  "oracle": "proto_equivalent",
+  "reference": "buf 1.75.0 build --exclude-source-info image equality + breaking (FILE, WIRE_JSON)",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

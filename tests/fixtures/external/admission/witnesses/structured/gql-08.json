@@ -1,0 +1,52 @@
+{
+  "case_id": "gql-08",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "44ec2cec69b9d1822a8e95c226b021b4c67649d8f0663185975c9b4cc079ecf4",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "ARG_REMOVED",
+          "Interface1.field1 arg arg1 was removed."
+        ],
+        [
+          "ARG_REMOVED",
+          "Interface1.field1 arg objectArg was removed."
+        ],
+        [
+          "ARG_REMOVED",
+          "Type1.field1 arg name was removed."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "ARG_REMOVED",
+            "Interface1.field1 arg arg1 was removed."
+          ],
+          [
+            "Breaking",
+            "ARG_REMOVED",
+            "Interface1.field1 arg objectArg was removed."
+          ],
+          [
+            "Breaking",
+            "ARG_REMOVED",
+            "Type1.field1 arg name was removed."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "3fbefbc3649dd379652eb052e74bb751cabc4ded519d3751736fd43e75ae99bb",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-key-special-word-bump",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "7e5906f15a55123b0f97bce24696f34f7a6c69c5a83d1a55d173da688b209d75",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "fae155bc552573181a14cfe7cb877947bffd714ce5cf5f1ca87ce18486dbccc6",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

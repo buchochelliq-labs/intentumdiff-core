@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-UGM3-quote",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "8ed13e66fd26c5f15bf8871203e495f1c5f6306e3622ed82883b09766639da73",
+  "observations": {
+    "new": "ConstructorError: could not determine a constructor for the tag 'tag:clarkevans.com,2002:invoice'\n  in \"<unicode string>\", line 1, column 5:\n    --- !<tag:clarkevans.com,2002:invoice>\n        ^ (line: 1)",
+    "old": "ConstructorError: could not determine a constructor for the tag 'tag:clarkevans.com,2002:invoice'\n  in \"<unicode string>\", line 1, column 5:\n    --- !<tag:clarkevans.com,2002:invoice>\n        ^ (line: 1)"
+  },
+  "old_sha256": "62d944c87f29b2cca39530a5c57db20038a96902d662531c45330c8ba6bac8af",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

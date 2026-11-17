@@ -1,0 +1,99 @@
+{
+  "case_id": "buf-breaking_oneof_no_delete-1",
+  "executed_utc": "2026-11-17T20:21:25+00:00",
+  "new_sha256": "18fb82005920ebfb1ddaa287763c1a259401f5308ef84855ceed68928cfa31ad",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          26,
+          3,
+          30,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "ONEOF_NO_DELETE",
+        [
+          76,
+          1,
+          80,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          5,
+          1,
+          9,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          13,
+          5,
+          17,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ONEOF_NO_DELETE",
+        [
+          26,
+          3,
+          30,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "ONEOF_NO_DELETE",
+        [
+          76,
+          1,
+          80,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "a1d2b8e556542dda7edb31784fdda796a6a8f963b3c06a9703dbec82d239ee39",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,74 @@
+{
+  "case_id": "buf-breaking_int_enum-2",
+  "executed_utc": "2026-11-17T20:21:23+00:00",
+  "new_sha256": "817858de8983266816ed9a4765dd5d9ae3116b3271f46fa39534ab3a35ad1234",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          8
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          7
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          8
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          7
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "8085ea9bb072511e150800dad60e552c71fd6dc628ace5dc44c1a063b7178d69",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_array_unclosed_with_new_lines",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "75b121d21dda317ab9e7c72844ff11ea4e05a48f118c90c4fd1e42e139f9d542",
+  "observations": {
+    "error": "Expecting ',' delimiter: line 3 column 3 (char 8)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "75b121d21dda317ab9e7c72844ff11ea4e05a48f118c90c4fd1e42e139f9d542",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

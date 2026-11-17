@@ -1,0 +1,43 @@
+{
+  "case_id": "gql-01",
+  "executed_utc": "2026-11-17T20:20:40+00:00",
+  "new_sha256": "8c7ba2cba508ef056fbe95068c54f5fa0164f08e9e3b37f76a1877e96aa0585c",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "FIELD_CHANGED_KIND",
+          "Query.foo changed type from Float to String."
+        ],
+        [
+          "TYPE_REMOVED",
+          "Standard scalar Float was removed because it is not referenced anymore."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "TYPE_REMOVED",
+            "Standard scalar Float was removed because it is not referenced anymore."
+          ],
+          [
+            "Breaking",
+            "FIELD_CHANGED_KIND",
+            "Query.foo changed type from Float to String."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "a3223efe56330d5d9115c18244e50ec37b474a0b8505399c5f0e9d98c96b5b5d",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

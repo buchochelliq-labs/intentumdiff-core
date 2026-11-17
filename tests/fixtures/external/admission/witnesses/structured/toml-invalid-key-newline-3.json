@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-key-newline-3",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "790a4eb491dc29d516192068df9b0ac8cf1b9312a245122578073eb218673274",
+  "observations": {
+    "error": "Found invalid character '\\n' (at line 1, column 8)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "790a4eb491dc29d516192068df9b0ac8cf1b9312a245122578073eb218673274",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

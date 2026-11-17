@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-array-no-close-7",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "2ebb52ab403fc7c6b79d6e9eee6aed59aa7cc4b0f8cb285761d22d7880b9226f",
+  "observations": {
+    "error": "Unclosed array (at end of document)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "2ebb52ab403fc7c6b79d6e9eee6aed59aa7cc4b0f8cb285761d22d7880b9226f",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,22 @@
+{
+  "case_id": "cpy-cfgparser-3",
+  "executed_utc": "2026-11-17T20:21:18+00:00",
+  "new_sha256": "5ba95511417ebecef59e8f548925709e0b099469b0224406290158aad1ffad78",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true,
+    "upstream_assertions": [
+      [
+        "more interpolation",
+        "lets",
+        "go shopping",
+        true
+      ]
+    ]
+  },
+  "old_sha256": "5ba95511417ebecef59e8f548925709e0b099469b0224406290158aad1ffad78",
+  "oracle": "ini_configparser",
+  "reference": "CPython 3.13.18 configparser, profile cfgparser.3",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

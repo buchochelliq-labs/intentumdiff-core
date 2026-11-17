@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-key-no-eol",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "1c5acf265b2527407586224a4e53bef082756c566fe5d8c1a7b45b3f1e47eb1d",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 7)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "1c5acf265b2527407586224a4e53bef082756c566fe5d8c1a7b45b3f1e47eb1d",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

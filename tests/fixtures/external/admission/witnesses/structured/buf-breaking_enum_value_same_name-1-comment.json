@@ -1,0 +1,16 @@
+{
+  "case_id": "buf-breaking_enum_value_same_name-1-comment",
+  "executed_utc": "2026-11-17T20:20:39+00:00",
+  "new_sha256": "6a2405fb4e8b3904b8e844452a440596776a664c41d775aa1e29255a4cf2428b",
+  "observations": {
+    "breaking_exit": 0,
+    "breaking_output": null,
+    "image_equal": true,
+    "reference_equal": true
+  },
+  "old_sha256": "ef506532cca12e7c74da392fd2d63f18e88cad7163785efed2aaa441aa65c62f",
+  "oracle": "proto_equivalent",
+  "reference": "buf 1.75.0 build --exclude-source-info image equality + breaking (FILE, WIRE_JSON)",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-valid-spec-table-5",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "e06b23539fc5feed4dfd582911555b4493701d1054f26cb0810650671b41e032",
+  "observations": {
+    "reference_accepts": true,
+    "typed_json_equal": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "e06b23539fc5feed4dfd582911555b4493701d1054f26cb0810650671b41e032",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

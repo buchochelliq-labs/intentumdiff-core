@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-datetime-no-leads",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "63b7b99d2846f777894887d5ce45bd279f38967197b2fa8fa206a4ade3ab2953",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 2, column 16)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "63b7b99d2846f777894887d5ce45bd279f38967197b2fa8fa206a4ade3ab2953",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

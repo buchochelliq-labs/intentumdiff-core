@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-LHL4",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "a3d264693e3ad0b10bf68c10b3b4c20a4ae8bffbb173b26a2cb262810da9e93e",
+  "observations": {
+    "error": "ScannerError: while scanning a tag\n  in \"<unicode string>\", line 2, column 1:\n    !invalid{}tag scalar\n    ^ (line: 2)\nexpected ' ', but found '{'\n  in \"<unicode string>\", line 2, column 9:\n    !invalid{}tag scalar\n            ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "a3d264693e3ad0b10bf68c10b3b4c20a4ae8bffbb173b26a2cb262810da9e93e",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

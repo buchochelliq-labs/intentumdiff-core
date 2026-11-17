@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-MUS6-00",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "9c1c305500f8e6f1ef3397c52f97af7e736d805894d6ac153f842fd688aaacbf",
+  "observations": {
+    "error": "ScannerError: while scanning a directive\n  in \"<unicode string>\", line 1, column 1:\n    %YAML 1.1#...\n    ^ (line: 1)\nexpected a digit or '.', but found '#'\n  in \"<unicode string>\", line 1, column 10:\n    %YAML 1.1#...\n             ^ (line: 1)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "9c1c305500f8e6f1ef3397c52f97af7e736d805894d6ac153f842fd688aaacbf",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

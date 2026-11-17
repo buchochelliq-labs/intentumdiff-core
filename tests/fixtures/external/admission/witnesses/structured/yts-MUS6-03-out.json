@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-MUS6-03-out",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "f52d711103d50a437830c6fbcd04fb4bab49a0f82f6d26d1c791c6e8488dd090",
+  "observations": {
+    "new": null,
+    "old": "ScannerError: while scanning a directive\n  in \"<unicode string>\", line 1, column 1:\n    %YAML \t 1.1\n    ^ (line: 1)\nexpected a digit, but found '\\t'\n  in \"<unicode string>\", line 1, column 7:\n    %YAML \t 1.1\n          ^ (line: 1)"
+  },
+  "old_sha256": "cd11287583eb617628c6bc2663ce0fc27c2306e55e6ebdad86e32951b3ef192b",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}
