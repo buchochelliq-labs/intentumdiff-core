@@ -47,3 +47,13 @@ These directories hold verbatim upstream files at pinned commits. Each file's SH
 
 `admission/cases/sql/` and `admission/cases/adf/` hold the reviewed derived pairs, written by
 `scripts/external_families/family_262_sql_data.py`.
+
+### #265 structured bytes
+
+`upstream/structured/<suite>/` holds the verbatim upstream files for the #265 family at pinned commits.
+Each suite records its bytes, SHA-256 and acquisition steps in `ACQUISITION.json`, written by
+`scripts/acquire_structured_benchmarks.py`, with the licence evidence named in the suite record. The derived pairs live under
+`admission/families/structured-265/`, the witness records under `admission/witnesses/structured/`, and
+the generated fragment `admission/families/structured-265.json` is merged into `admission/ledger.json`
+by `scripts/build_external_admission.py`. Both generated files are committed and `--check`-ed.
+

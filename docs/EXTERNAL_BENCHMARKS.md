@@ -112,7 +112,7 @@ under a stated `eligibility_rule`, the imported rows and the holdout policy.
 | `class` | `upstream_gold`, `reviewed_external_derived`, `external_seed_only` or `handwritten_regression` |
 | `lane` | `parser_fidelity`, `change_understanding` or `robustness_scaling` |
 | `behavior` | `claim` (`changed` / `preserved` / `unknown`) and its `assumptions` — separate from IntentumDiff classification |
-| `expected` | `classification` (each of `has_semantic_changes`, `is_style_only`, `changes_empty`, `completeness`; `null` = unconstrained), `required`, `alternatives`, `forbidden` |
+| `expected` | `classification` (each of `has_semantic_changes`, `is_style_only`, `changes_empty`, `completeness`; `null` = unconstrained), `required`, `alternatives`, `forbidden`, and on parser-fidelity cases `parse` (see below) |
 | `oracle` | `basis` (`executable_witness`, `curated_annotation`, `specification_review`, `byte_identity`, `source_review`, `candidate_only`), witness record, notes |
 | `admission` | `admitted` / `candidate` / `rejected` with the review reason |
 | `licence`, `attribution`, `known_issue` | per-case provenance and any linked bug |
@@ -148,8 +148,10 @@ lane entries; a lane with no executed admitted external case is `gap` (or `block
 never 100%. No pooled average is computed.
 
 ```sh
+python scripts/import_external_benchmarks.py --validate
 python scripts/external_ledger.py validate
-python scripts/build_external_admission.py --check
+python scripts/structured_family.py build --check      # the #265 fragment is current
+python scripts/build_external_admission.py --check     # the ledger is current
 PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
   --parsers build/benchmark-inputs --native-library <libintentumdiff_rust_core.so> \
   --report build/benchmarks/ledger-results.json \
@@ -173,7 +175,12 @@ ledger:
    The family's own deterministic tool generates each fragment and checks it with `--check`; the builder
    merges it verbatim. #265 uses this mechanism.
 
-A blocked acquisition names the language, suite, lanes and reason. A blocked lane is shown as BLOCKED with
+The ledger and each fragment are deterministic build outputs, and both stay committed. Every consumer
+reads the committed ledger directly: the validator, the runner, the witness tools and the tooling tests.
+The CI baseline and the evidence also pin its SHA-256. The `--check` gates (`structured_family.py build
+--check`, then `build_external_admission.py --check`) prove that the committed files match their inputs.
+
+A blocked acquisition (the ledger's top-level `blocked_acquisitions`) names the language, suite, lanes and reason. A blocked lane is shown as BLOCKED with
 that reason. It is never shown as a gap or a pass.
 
 ## The parser-fidelity lane

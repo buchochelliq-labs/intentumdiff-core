@@ -1,27 +1,88 @@
-# External-benchmark scorecard: first slice, 2026-11-17
+# External-benchmark scorecard: first slice, #262 and #265, 2026-11-17
 
-This is the first scorecard produced under the core #268 contract (schema-2 admission ledger). It covers
-the first #261 slice: HumanEvalPack tasks 0–11 in Python, JavaScript, Java, Go, C++ and Rust, plus
-handwritten C and C++ character-literal regressions. **It does not certify any language.** 68 of the 74
-registered IDs have no executed external case and appear as `GAP` in every lane.
+This is the scorecard produced under the core #268 contract (schema-2 admission ledger). It covers three
+contributions, all in one ledger and one runner report. **It does not certify any language.**
 
-**Update (#262 SQL and data-platform family, same day).** The ledger now also carries the #262 family:
-PostgreSQL regression (`sql`), Microsoft SqlScriptDOM (`tsql`), Microsoft powerquery-parser (`m`) and
-Azure Data Factory samples (`adf`), plus utPLSQL seeds (`plsql`). With it, 64 of the 74 IDs remain gaps.
-`results.json` and the scorecard were regenerated from the combined ledger; see the
-[#262 section](#262-sql-and-data-platform-family) below.
+- **The first #261 slice:** HumanEvalPack tasks 0–11 in Python, JavaScript, Java, Go, C++ and Rust, plus
+  handwritten C and C++ character-literal regressions.
+- **#262, the SQL and data-platform family:** PostgreSQL regression (`sql`), Microsoft SqlScriptDOM
+  (`tsql`), Microsoft powerquery-parser (`m`) and Azure Data Factory samples (`adf`), plus utPLSQL seeds
+  (`plsql`). See the [#262 section](#262-sql-and-data-platform-family).
+- **#265, the structured family:** `yaml`, `json`, `toml`, `ini`, `proto` and `graphql`; `xml` is BLOCKED
+  in both lanes. See the [#265 section](#265-structured-family).
+
+The ledger holds 2,282 cases (171 + 48 + 2,063), of which 2,133 are admitted and executed through the
+C ABI (165 + 42 + 1,926). 58 of the 74 registered IDs have no measured external lane. No language has a
+robustness/scaling result. The two family sections were first published as separate runs; this directory
+now holds the single combined run, and the former `../2026-11-17-external-scorecard-265/` directory was
+folded into it.
 
 Files:
 
 - `scorecard.md` and `scorecard.json`: rows for each language × suite × class × lane, with discovered,
   eligible, admitted, executed, passed, failed, unsupported, skipped and blocked counts. Every one of
   the 74 IDs has an entry.
-- `results.json`: the runner report, with a compact review summary for each case. It is also the
-  reviewed baseline for the CI regression gate.
+- `results.json`: the runner report for all 2,133 admitted cases, with a compact review summary for each
+  case. It is also the reviewed baseline for the CI regression gate.
 - `parser_manifest.json`: the exact staged component identities.
 - `adversarial-old-cpp-component.json`: the guard check described below.
 
-## Identity
+## Combined run
+
+- Core `786698a3` (`claude/magical-mendel-isxeqm`: release/v0.0.3-rc `5ec2105` plus the #262 and #265
+  merges; `crates/` clean and identical to `74618c31`). Ledger SHA-256 `fd249308…`.
+- The C ABI library is the same release build as every earlier run, SHA-256 `ced9e0e1…598b`, built from
+  `74618c31` as described under Identity.
+- Components: the same staged `build/benchmark-inputs` (manifest `23c390a8…`) that the first slice, #262 and
+  #265 used. `parser_manifest.json` here is that manifest.
+- Transport: intentumdiff-python `0dd7e50` on `PYTHONPATH`.
+- **Determinism.** Two full runs gave identical statuses, errors, worker statuses, completeness and review
+  summaries for all 2,133 cases.
+- **Unchanged statuses.** Every case recorded by the three earlier runs (165 first slice, 207 with #262,
+  2,091 with #265) has the same status, errors and review summary in this run. The gate exits 0 against
+  each earlier report and against this one.
+- **Scorecard change.** The parser-fidelity rows of #262 now score its reference-accepted documents as
+  must-accept documents (valid-acceptance rate) instead of as preservation controls, the same as #265. The
+  case statuses are unchanged.
+
+### Results per language × lane (admitted external cases)
+
+Rates are numerator/denominator over executed cases; `unsupported` cases are not executed. The full rows
+per suite and class are in `scorecard.md`.
+
+| Language | Lane | Executed | Passed | Failed | Unsupported | Valid accepted | Invalid rejected | Change recall | Preservation false alarms |
+|---|---|---:|---:|---:|---:|---|---|---|---|
+| adf | parser | 2 | 2 | 0 | 0 | 2/2 | N/A | N/A | N/A |
+| adf | change | 4 | 4 | 0 | 0 | N/A | N/A | 2/2 | 0/2 |
+| cpp | change | 32 | 31 | 1 | 0 | N/A | N/A | 17/17 | 1/15 |
+| go | change | 21 | 21 | 0 | 0 | N/A | N/A | 9/9 | 0/12 |
+| graphql | parser | 46 | 46 | 0 | 0 | 46/46 | N/A | N/A | N/A |
+| graphql | change | 50 | 39 | 11 | 0 | N/A | N/A | 14/25 | 0/25 |
+| ini | parser | 9 | 9 | 0 | 0 | 9/9 | N/A | N/A | N/A |
+| ini | change | 13 | 13 | 0 | 0 | N/A | N/A | 6/6 | 0/7 |
+| java | change | 27 | 27 | 0 | 0 | N/A | N/A | 12/12 | 0/15 |
+| javascript | change | 27 | 26 | 1 | 0 | N/A | N/A | 11/12 | 0/15 |
+| json | parser | 245 | 97 | 148 | 0 | 95/95 | 2/150 | N/A | N/A |
+| json | change | 144 | 128 | 16 | 0 | N/A | N/A | 98/100 | 14/44 |
+| m | parser | 9 | 2 | 7 | 0 | 2/9 | N/A | N/A | N/A |
+| proto | parser | 185 | 173 | 12 | 0 | 173/185 | N/A | N/A | N/A |
+| proto | change | 117 | 117 | 0 | 7 | N/A | N/A | 93/93 | 0/24 |
+| python | change | 27 | 25 | 2 | 0 | N/A | N/A | 11/12 | 1/15 |
+| rust | change | 27 | 27 | 0 | 0 | N/A | N/A | 12/12 | 0/15 |
+| sql | parser | 4 | 3 | 1 | 1 | 3/4 | N/A | N/A | N/A |
+| sql | change | 12 | 9 | 3 | 0 | N/A | N/A | 6/6 | 3/6 |
+| toml | parser | 546 | 270 | 276 | 0 | 185/185 | 85/361 | N/A | N/A |
+| toml | change | 77 | 72 | 5 | 0 | N/A | N/A | 48/48 | 5/29 |
+| tsql | parser | 5 | 0 | 5 | 0 | 0/5 | N/A | N/A | N/A |
+| tsql | change | 5 | 0 | 5 | 0 | N/A | N/A | N/A | 5/5 |
+| yaml | parser | 303 | 270 | 33 | 0 | 229/229 | 41/74 | N/A | N/A |
+| yaml | change | 184 | 52 | 132 | 0 | N/A | N/A | 6/6 | 132/178 |
+
+The C handwritten regressions (4/4 passed) and the C++ ones (5/5) never enter a lane rate. Totals: 1,467
+passed, 658 failed and 8 unsupported (handwritten 9/9; reviewed_external_derived 367 passed, 32 failed;
+upstream_gold 1,091 passed, 626 failed, 8 unsupported).
+
+## Identity (C ABI library and components)
 
 - Core `74618c311836983b4f60ae2d8389edfdd14f7793` (`release/v0.0.3-rc`, crates clean).
 - C ABI library: `cargo build --locked --release --lib` with Rust 1.95.0, `CARGO_PROFILE_RELEASE_DEBUG=0`.
@@ -87,7 +148,7 @@ not admitted:
 - Go task 10: the case bytes, built from declaration + solution, omit the `IsPalindrome` helper.
   That helper exists only in the upstream `prompt`. The case needs a re-import before admission.
 
-## Admitted cases (165 executed through the C ABI)
+## First-slice admitted cases (165 executed through the C ABI)
 
 | Language | upstream_gold | reviewed_external_derived | handwritten_regression | candidates |
 |---|---:|---:|---:|---:|
@@ -107,7 +168,7 @@ not admitted:
 
 Handwritten cases never enter a lane rate.
 
-## Results
+## Results (first slice)
 
 **161 of 165 admitted cases pass. Four real failures were found.** Each one was judged against
 independent source evidence, not against current engine output:
@@ -148,7 +209,8 @@ remains for any consumer still shipping the old component.
 
 - Exact intent, correspondence and span accuracy are not certified.
 - HumanEvalPack rows 12–163 are discovered but not imported.
-- The parser-fidelity and robustness/scaling lanes have no admitted cases in any language.
+- The robustness/scaling lane has no admitted cases in any language. (The first slice has no
+  parser-fidelity cases; #262 and #265 add them.)
 - Translated HumanEvalPack tasks overlap across languages, so a portfolio total must deduplicate by
   task index.
 - Tests are bounded evidence for the inputs they exercise; they are not program equivalence.
@@ -159,8 +221,8 @@ Ledger contribution: `scripts/external_families/family_262_sql_data.py` (merged 
 `scripts/build_external_admission.py`). Witnesses: `scripts/data_family_witness.py`, with the ScriptDom tool in
 `scripts/witness_tools/scriptdom/` and the M tool in `scripts/witness_tools/powerquery/`. The same core, C ABI
 library (`ced9e0e1…`, built from `74618c31`; `crates/` is identical at `bbdec7c9`) and staged components
-(manifest `23c390a8…`) were used as for the HumanEvalPack slice. The 2026-11-17 runner report is now the CI
-baseline, and the gate exits 0 against it. Two full runs gave identical statuses, errors and review summaries.
+(manifest `23c390a8…`) were used as for the HumanEvalPack slice. Its own two runs gave identical statuses,
+errors and review summaries, and the combined run above reproduces them.
 
 ### Admitted suites
 
@@ -218,6 +280,9 @@ against the independent inventory (`external_ledger.judge_parse`):
 - The number of units and each unit's start byte must equal the reference.
 
 Without an inventory, the case only checks acceptance: no parse errors, no fallback and no invented changes.
+#262 cases carry no explicit `accepts` claim, so a fallback on a reference-accepted document is
+`unsupported`, not failed. This is one adapter shared with #265's must-accept/must-reject claims; see
+`docs/EXTERNAL_BENCHMARKS.md`.
 
 ### Cases (admitted / executed / passed) per language × class × lane
 
@@ -295,3 +360,118 @@ Each failure is minimised to its smallest reproducing input.
   vendored. The shared-component alias assertions remain open.
 - **Robustness/scaling lane:** no admitted cases for any of the nine IDs. The fuel finding above was found
   by minimisation; it is not yet a scored robustness case.
+
+## #265 structured family
+
+This family adds the core #265 data/schema IDs to the #268 ledger: `yaml`, `json`, `toml`, `xml`, `ini`,
+`proto` and `graphql`. Its fragment is `tests/fixtures/external/admission/families/structured-265.json`,
+written and `--check`-ed by `scripts/structured_family.py` and merged by
+`scripts/build_external_admission.py`. `xml` is BLOCKED in both lanes. No language has a
+robustness/scaling result.
+
+### Identity
+
+- Core `bbdec7c9` (crates identical to `74618c31`, clean). The C ABI library is the same release build
+  as the first slice, SHA-256 `ced9e0e1…598b`.
+- Components: the same staged `build/benchmark-inputs` as the first slice (manifest `23c390a8…`). The
+  family's components are `yaml_parser.wasm` `2ff91eb6…`, `json_parser.wasm` `ffb886cf…`,
+  `toml_parser.wasm` `af1ec51b…`, `ini_parser.wasm` `dc665e89…`, `proto_parser.wasm` `d692e7aa…`,
+  `graphql_parser.wasm` `b01f0a4b…` and `xml_parser.wasm` `2bd8f26b…` (not exercised).
+- Transport: intentumdiff-python `0dd7e50`.
+- Determinism: its own second run gave identical statuses, errors and review summaries for all 2,091
+  cases, and the combined run above reproduces them.
+
+### Sources (all pinned to a commit; bytes and SHA-256 are in `upstream/structured/<suite>/ACQUISITION.json`)
+
+| Suite | Revision | Licence | Enumeration |
+|---|---|---|---|
+| YAML Test Suite, `data` branch | `6ad3d2c62885d82fc349026c136ef560838fdf3d` | MIT (`License` at main `da267a5c`) | **incomplete**: no in-suite index. 333 candidate IDs were probed and 385 (sub)tests found. |
+| JSONTestSuite `test_parsing` | `1ef36fa01286573e846ac449e8683f8833c5b26a` | MIT | names in `results/parsing.html` (lower bound; the index is hashed, not vendored) |
+| JSON Patch Tests | `2a928f9044aad35c74e2788d498bcf2c6b91adea` | Apache-2.0 (README) | `tests.json`, `spec_tests.json` |
+| toml-test v1.6.0 | `369cc3ae275fd76b6e21780ebf87609e5b2a951a` | MIT (`COPYING`) | `tests/files-toml-1.0.0` (complete) |
+| CPython v3.13.18 configparser | `0d4bd512fc429e3d4eacdd113c975e161f21644d` | PSF-2.0 | `configdata/cfgparser.{1,2,3}` |
+| inih | `2bbdec4a366c8c39746ee0982e7ca0febbb044b6` | BSD-3-Clause | `.ini` names in `tests/unittest.c` |
+| buf v1.75.0 breaking fixtures | `1a3a05a3e0fa350c4b814b7f48aa0e64e9a906bd` | Apache-2.0 | dirs from `breaking_test.go`; file names probed (`1..9.proto`, `a/b.proto`, `buf.yaml`) |
+| graphql-js v16.15.0 | `2b4f68feaed36fd3b221764a467c6fa78a0c9797` | MIT | `findBreakingChanges-test.ts` |
+
+Tags and branches were resolved to commits with the Go module proxy's VCS origin record. Bytes were then
+fetched only from `raw.githubusercontent.com/<repo>/<commit>/<path>`.
+
+**Blocked acquisitions:**
+
+- github.com HTML, the REST API and git clones are unreachable for these repositories, so no tree listing
+  was possible. YAML and buf enumeration is therefore partial. Two buf cases (`breaking_ignore_unstable_*`)
+  need files under subdirectories and stay candidates.
+- **W3C XML Conformance Test Suite:** `www.w3.org` refuses the CONNECT tunnel (403). It is recorded in the
+  ledger's `blocked_acquisitions`, and `xml` is BLOCKED in both lanes. No other source was substituted.
+
+### Oracles (2,063 executions, `scripts/structured_family.py witness`)
+
+| Oracle | Reference | supports / other |
+|---|---|---|
+| JSON parse, typed equality | CPython 3.13.18 `json` (strict; NaN/Infinity rejected) | 316 / 0 |
+| JSON Patch | `jsonpatch` 1.33 must reproduce the upstream `expected`, then typed equality | 73 / 1 inconclusive (library fails on root `add`) |
+| TOML parse, typed equality | `tomllib`; valid files must also equal toml-test's tagged JSON | 623 / 0 |
+| YAML parse, typed equality | ruamel.yaml 0.18.16 safe loader (YAML 1.2), compared with `in.json` | 487 / 134 (68 contradict, 66 inconclusive) |
+| INI | configparser under each upstream test's options and assertions; inih's own `unittest.c` built with gcc 13.3 and compared byte-for-byte with `baseline_multi.txt` | 22 / 0 |
+| proto | buf 1.75.0 `build`; `breaking` must reproduce the exact upstream annotation set; image equality without source info | 309 / 2 inconclusive |
+| graphql | graphql-js 16.15.0 `buildSchema`; `findBreaking/DangerousChanges` must equal the upstream assertions; sorted `printSchema` equality | 96 / 0 |
+
+Only `supports_claim` admits a case. Where the YAML reference disagrees with the suite label, the case
+stays a candidate. That biases the admitted YAML subset toward inputs ruamel handles.
+
+### Results (admitted #265 cases through the C ABI)
+
+| Language | Lane | Class | Passed / executed | Notes |
+|---|---|---|---|---|
+| json | parser | upstream_gold | 97/245 | valid accepted 95/95; **invalid rejected 2/150** |
+| json | change | reviewed_external_derived | 128/144 | change recall 98/100; preservation false alarms 14/44 |
+| toml | parser | upstream_gold | 270/546 | valid 185/185; **invalid rejected 85/361** |
+| toml | change | reviewed_external_derived | 72/77 | recall 48/48; preservation failures 5/29 (all `incomplete`) |
+| yaml | parser | upstream_gold | 270/303 | valid 229/229; invalid rejected 41/74 |
+| yaml | change | upstream_gold (in→out) | 46/172 | preservation false alarms 126/172 |
+| yaml | change | reviewed_external_derived | 6/12 | recall 6/6; comment false alarms 6/6 |
+| ini | parser | upstream_gold | 9/9 | accept-only (no dialect-neutral reject rule) |
+| ini | change | reviewed_external_derived | 13/13 | |
+| proto | parser | upstream_gold | 173/185 | 12 valid files rejected by explicit fallback |
+| proto | change | upstream_gold | 93/93 executed (+7 unsupported) | buf pairs |
+| proto | change | reviewed_external_derived | 24/24 | |
+| graphql | parser | upstream_gold | 46/46 | |
+| graphql | change | upstream_gold | 14/25 | **11 schema changes reported as style-only** |
+| graphql | change | reviewed_external_derived | 25/25 | |
+
+### Real failures, minimised (not filed)
+
+Each reproducer was rechecked directly through `live_diff_contents`/`parse_to_tree`:
+
+1. **GraphQL field types are not represented.** `type Query {\n  foo: Float\n}` → `foo: String` gives
+   `has_semantic_changes=false, is_style_only=true`. The tree has `field 'foo'` with no type, so nullability
+   and type changes are invisible.
+2. **GraphQL single-line type bodies lose their fields.** In `type Query { foo: Float }`, the tree is
+   `type_definition 'Query'` with no children, so even a field rename is style-only.
+3. **JSON numbers with an explicit `+` exponent are truncated.** `[1e+22]` parses as `number '22'` and
+   `[1e+2]` as `number '1'`. Both `[1e+22]`→`[2e+22]` and `[1e+2]`→`[1e+3]` are style-only.
+4. **JSON/TOML/YAML accept invalid input silently.** `[1 true]` is parsed as `array[true]` with no
+   diagnostics: the `1` is dropped, and `[1 true]`→`[2 true]` is style-only. TOML `a = [1,,2]` and YAML
+   2CMS (`this\n is\n  invalid: x`) give no `parse_errors` and no fallback. 148 of 150 JSON, 276 of 361
+   TOML and 33 of 74 YAML must-reject documents are affected.
+5. **YAML double-quoted scalars with an escape lose their text.** `"a\/b"` is labelled `\/`, and
+   `k: "a\nb"` → `k: "c\nd"` is style-only (a value change missed).
+6. **YAML comments become node labels.** `a: 1` → `# c\na: 1` reports `MODIFICATION stream 'stream' → '# c'`,
+   and a trailing comment reports `block_mapping → '# c'`. Quoting style is compared lexically:
+   `k: a` → `k: 'a'` is a MODIFICATION. Together these cause most of the 126 in→out false alarms; 28 more
+   are `incomplete` reviews.
+7. **proto fallback on valid files (buf build succeeds).** Two inputs trigger it:
+   `syntax = "proto2";\nmessage A {\n  optional group Foo = 1 {\n  }\n}` and the edition-2023 option
+   `string s = 1 [features.(pb.cpp).string_type = VIEW];`.
+8. **JSON re-serialisation false alarms.** Number respelling (`1E22`→`1e+22`) and escape
+   normalisation are reported as semantic MODIFICATIONs, even though the typed values are equal.
+9. **TOML `8080` → `8_080`** returns `completeness: incomplete` and is not proven equivalent.
+
+### Not claimed
+
+- XML is not covered: its acquisition is blocked. No lane has robustness/scaling cases.
+- INI must-reject behaviour is not admitted, because the route declares no dialect.
+- YAML enumeration is partial, and the admitted YAML subset is filtered by agreement with ruamel.
+- Compatibility labels (buf, graphql-js) are one semantic dimension, not author intent.
+- Derived edits are bounded at 24 per derivation and suite, and are built deterministically from sorted seeds.
