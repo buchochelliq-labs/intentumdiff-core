@@ -2,9 +2,43 @@
 //! Real staged parser components (INTENTUMDIFF_TEST_WASM_DIR) drive every C-ABI review path.
 use super::*;
 
+/// The Tier-C provisioner stages registry-verified Wasm but not the runtime parser_manifest.json,
+/// and native selection is fail-closed without it. So build one isolated fixture dir holding the
+/// EXACT staged component bytes these tests use plus a minimal test-only manifest.
 fn wasm_dir() -> String {
-    std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
-        .expect("Tier-C tests need INTENTUMDIFF_TEST_WASM_DIR (a staged dir with parser_manifest.json)")
+    static DIR: std::sync::OnceLock<tempfile::TempDir> = std::sync::OnceLock::new();
+    let dir = DIR.get_or_init(|| {
+        let staged = std::env::var("INTENTUMDIFF_TEST_WASM_DIR")
+            .expect("Tier-C tests need INTENTUMDIFF_TEST_WASM_DIR (checksum-verified parser components)");
+        let fixture = tempfile::tempdir().expect("isolated parser fixture");
+        let entries: &[(&str, &str, &[&str])] = &[
+            ("python", "python_parser.wasm", &[".py", ".pyi"]),
+            ("go", "go_parser.wasm", &[".go"]),
+            ("bash", "bash_parser.wasm", &[".sh"]),
+            ("json", "json_parser.wasm", &[".json"]),
+            ("yaml", "yaml_parser.wasm", &[".yaml", ".yml"]),
+            ("toml", "toml_parser.wasm", &[".toml"]),
+            ("javascript", "js_ts_parser.wasm", &[".js"]),
+        ];
+        let mut parsers = serde_json::Map::new();
+        let mut index = serde_json::Map::new();
+        for (language, wasm, extensions) in entries {
+            let source = std::path::Path::new(&staged).join(wasm);
+            assert!(source.is_file(), "verified component missing: {}", source.display());
+            std::fs::copy(&source, fixture.path().join(wasm)).expect("copy verified component");
+            parsers.insert((*language).into(), json!({"plugin_id": language, "wasm": wasm, "extensions": extensions}));
+            for extension in *extensions {
+                index.insert((*extension).into(), json!(language));
+            }
+        }
+        std::fs::write(
+            fixture.path().join("parser_manifest.json"),
+            json!({"schema_version": 1, "parsers": parsers, "extension_index": index}).to_string(),
+        )
+        .expect("write test parser manifest");
+        fixture
+    });
+    dir.path().to_str().expect("UTF-8 fixture path").to_owned()
 }
 
 fn call(name: &str, args: Value) -> Value {
