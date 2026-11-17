@@ -66,6 +66,8 @@ TIER_C_COMPONENTS = [
     "kotlin", "swift",
     # #270 Perl spacing, #272 Astro/Svelte embedded JS quotes, #273 CSS comments.
     "perl", "astro", "svelte",
+    # #252 completeness contract: a suppressed bash assignment swap must stay incomplete.
+    "bash",
 ]
 
 

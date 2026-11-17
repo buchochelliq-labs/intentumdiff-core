@@ -77,8 +77,34 @@ pub struct Review {
     /// `code` | `docs` | `config` | `data` | `text`, from the routed language.
     #[serde(default)]
     pub content_class: Option<String>,
+    /// `complete` | `equivalent` | `incomplete` (core #252): whether `changes` explain the
+    /// source delta. `incomplete` is never a clean review; see [`Review::incomplete`].
+    #[serde(default)]
+    pub completeness: Option<String>,
+    /// Present only for `completeness == "incomplete"`: render `message` verbatim.
+    #[serde(default)]
+    pub incomplete: Option<Incomplete>,
     #[serde(default)]
     pub metadata: Map<String, Value>,
+    #[serde(flatten)]
+    pub attributes: Map<String, Value>,
+}
+/// Report-a-bug evidence for a review that could not explain its source delta. Contains no
+/// source text: only the routed language id, the core version and changed byte/line ranges.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Incomplete {
+    /// Stable reason code, e.g. `unexplained_source_delta`.
+    pub reason: String,
+    /// User-facing text produced by the core; bindings show it unchanged.
+    pub message: String,
+    pub report_url: String,
+    #[serde(default)]
+    pub language: String,
+    #[serde(default)]
+    pub core_version: String,
+    /// Zero-based lines, exclusive end bytes.
+    #[serde(default)]
+    pub source_ranges: Vec<Value>,
     #[serde(flatten)]
     pub attributes: Map<String, Value>,
 }

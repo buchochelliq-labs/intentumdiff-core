@@ -39,7 +39,7 @@ pub fn finalize(mut diff: Value, lifecycle: FileLifecycle) -> Result<Value, Stri
             return Err(format!("diff.{field} must be an array"));
         }
     }
-    crate::apply_file_lifecycle_to_diff(&mut diff, lifecycle.as_str());
+    crate::apply_file_lifecycle_to_diff(&mut diff, lifecycle.as_str(), None);
     Ok(diff)
 }
 

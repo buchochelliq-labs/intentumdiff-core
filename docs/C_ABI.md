@@ -274,6 +274,108 @@ generic text route are `docs`). It describes what was reviewed, never a risk. `C
 carries no `impact`: group `kind` and `refactoring_kind` already state everything the engine
 has decided about a group, and an impact level would be a risk claim the engine cannot derive.
 
+### Review completeness (core #252)
+
+Every served review (`SemanticDiff`) carries `completeness` and `incomplete`. They are set
+at one shared boundary (`completeness::attach`, reached from `routed_review::complete` and
+from the lifecycle stamp every served diff passes), so `live_diff_contents`,
+`live_handle_diff`, `live_handle_review`, `diff_batch`, `diff_batch_commit_json`,
+`complete_routed_review`, `review_text`, `source_fallback_diff` and `finalize_file_lifecycle`
+all report the same state. `finalize_review` also returns `completeness` (and
+`equivalence_proof`) for bindings that complete the review themselves.
+
+| `completeness` | Meaning | `incomplete` |
+|---|---|---|
+| `complete` | `changes` are the review: at least one change, or byte-identical sources | `null` |
+| `equivalent` | Sources differ and equivalence was proved: `is_style_only=true`, or `is_style_only=false` with `metadata.equivalence_proof` naming the rule (e.g. `keyed_data.unordered_mapping_member_order`) | `null` |
+| `incomplete` | Sources differ, no change survived and nothing proved equivalence | object (below) |
+
+Byte-identical input is `complete`, never `equivalent`, so it stays distinguishable from a
+proved style-only edit even on routes that also set `is_style_only` for identical input.
+An `incomplete` review keeps `changes=[]`, `has_semantic_changes=false`,
+`is_style_only=false` and `metadata.no_surviving_changes=true`: the core never fabricates
+semantic changes. It is not a clean review, and bindings must not render it as "no changes".
+
+```json
+"incomplete": {
+  "reason": "unexplained_source_delta",
+  "message": "IntentumDiff could not explain this change. ... Please report a bug at https://github.com/buchochelliq-labs/intentumdiff-core/issues/new (reason: unexplained_source_delta; language: go; core: 0.1.0).",
+  "report_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new",
+  "language": "go",
+  "core_version": "0.1.0",
+  "source_ranges": [{"old_start_byte": 26, "old_end_byte": 36, "new_start_byte": 26,
+    "new_end_byte": 36, "old_start_line": 2, "old_end_line": 4, "new_start_line": 2,
+    "new_end_line": 4}],
+  "source_ranges_truncated": false,
+  "source_ranges_available": true
+}
+```
+
+The `report_url` above is shown without its query for brevity: it is the pre-filled
+`https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…` URL of
+`report.issue_url` (described below).
+
+- `reason` is a stable code; `message` is core-authored text that every binding (Python,
+  VS Code, LSP, live server, CLI) shows verbatim. It names only the routed language id and
+  the core version: no filename, label, identifier or source text.
+- `source_ranges` are the changed line hunks (zero-based lines, exclusive end bytes),
+  capped at 64 with `source_ranges_truncated`. `source_ranges_available=false` only when a
+  source-less stage (`finalize_file_lifecycle` on a DTO without a prior verdict) had to
+  classify from `metadata.no_surviving_changes` alone.
+- `api::Review` exposes `completeness: Option<String>` and `incomplete: Option<Incomplete>`
+  (`Incomplete.attributes` carries `report`).
+
+#### Sanitised repro outline (`incomplete.report`)
+
+Core builds one bug-report outline so every binding scrubs identically:
+
+```json
+"report": {
+  "title": "Incomplete review: unexplained_source_delta (go, core 0.1.0)",
+  "body_markdown": "### IntentumDiff could not explain a change\n…",
+  "truncated": false,
+  "issue_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…",
+  "outline": {
+    "schema_version": 1, "reason": "unexplained_source_delta", "core_version": "0.1.0",
+    "language": "go", "plugin": {"id": "go", "version": "sha256:4b60…"},
+    "regions": [{"index": 1,
+      "old": {"start_line": 4, "start_col": 0, "end_line": 4, "end_col": 0, "bytes": 0},
+      "new": {"start_line": 4, "start_col": 0, "end_line": 5, "end_col": 0, "bytes": 13},
+      "old_skeleton": "source_file > function_declaration > block",
+      "old_shape": "block(statement_list(expression_statement(call_expression[id1](id1, argument_list(string(9), int))), …))",
+      "new_skeleton": "…", "new_shape": "…"}],
+    "regions_truncated": false, "structure_available": true,
+    "suppressions": [{"pass": "refine:suppress_descendant_noise",
+      "removed": [{"change_type": "MOVE", "node_type": "call_expression", "count": 2}], "added": []}],
+    "placeholder_count": 2
+  }
+}
+```
+
+- **Contents.** Core version, routed language id, parser plugin id and version (the
+  component's SHA-256, since the manifest records no version; `builtin` for the native
+  parser compiled into the core; `null` when the route did not resolve a plugin), the
+  node-kind skeleton (ancestors) and shape (nesting, depth ≤ 5, ≤ 8 children per node)
+  around each changed region, the passes that removed or added draft changes (pass names,
+  change types, node kinds; `suppressions: null` when the route records no trace), and
+  zero-based line/byte-column offsets plus byte sizes of each region.
+- **Privacy.** No source text: identifiers become placeholders (`id1`, `id2`, …) that are
+  consistent within one report and never hashed; literals become their type and length
+  (`string(12)`, `int`, `float`, `number`, `bool`, `null`); comments and docstrings are
+  dropped. A node kind that is not lowercase grammar vocabulary, or that equals an
+  identifier's text, is shown as `node`. No filename or path appears.
+- **URL.** `issue_url` (= `incomplete.report_url`) is at most 8000 bytes. When the body does
+  not fit, the URL carries a deterministic prefix of whole body lines plus a truncation note,
+  `truncated` is `true`, and `body_markdown` stays complete so a binding can offer
+  copy-to-clipboard.
+- **Determinism.** The same inputs produce a byte-identical `report`.
+- **Binding obligations.** Core never sends anything. A binding MUST show the user the
+  `title` and `body_markdown` for preview and MUST require explicit user confirmation before
+  opening `issue_url` (or copying the body). Never open the URL automatically, and never
+  add filenames, source text or other local data to it.
+- The CLI presentation (`render_cli_review`) shows an "Incomplete review" panel with
+  `message` instead of "No changes detected".
+
 ### Guardrail check verdict (`guardrail_check_result`)
 
 `api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)

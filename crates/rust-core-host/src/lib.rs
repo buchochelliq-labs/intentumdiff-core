@@ -55,6 +55,8 @@ pub mod guardrail_policy;
 mod declaration_facts;
 mod source_text;
 pub mod content_class;
+pub mod completeness;
+mod repro_outline;
 pub mod routed_review;
 pub mod patch_source;
 /// Shared typed symbol/reference API for native Rust consumers.
@@ -1465,7 +1467,7 @@ fn finalize_review_impl(
         let diff = source_fallback::source_fallback_diff_impl(old_source, new_source, "", "", language, "parse_errors")?;
         return Ok(json!({"used":true,"engine":"rust_source_fallback_v1", "changes":diff["changes"],
             "change_groups":diff["change_groups"],"is_style_only":false,"no_surviving_changes":!diff["has_semantic_changes"].as_bool().unwrap_or(false),
-            "ignored_style_changes":[],"fallback_diff":diff}).to_string());
+            "completeness":diff["completeness"],"ignored_style_changes":[],"fallback_diff":diff}).to_string());
     }
 
     let old_count = 1 + old_tree.descendants().len();
@@ -1528,14 +1530,15 @@ fn finalize_review_impl(
             "change_groups": [],
             "is_style_only": false,
             "no_surviving_changes": false,
+            "completeness": completeness::COMPLETE,
             "ignored_style_changes": [],
         })
         .to_string());
     }
 
-    if config.collect_trace {
-        finalize_trace_start();
-    }
+    // Always traced: the per-pass record feeds both diagnostics (`collect_trace`) and the
+    // suppression outline of an incomplete review (core #252).
+    finalize_trace_start();
     let matching = compute_matching_with_diagnostics_indexed(
         &TreeIndex::new(&old_tree),
         &TreeIndex::new(&new_tree),
@@ -1619,22 +1622,27 @@ fn finalize_review_impl(
             finalization.change_groups.push(group);
         }
     }
+    finalize_debug_probe("review:language_scaffold_churn", &drafts);
 
     // Resource-profile change augmentation (issue #39): promote same-key attribute value
     // changes to attribute-level MODIFICATIONs and surface keyed review-container add/delete.
     // No-op for non-resource languages.
     augment_resource_profile_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_resource_profile_changes", &drafts);
     // Statement-profile change augmentation (issue #57 asm/bash/delphi): demote a same-key
     // MOVE/REORDER (a stable-identity statement merely shifted by an insertion) to a MODIFICATION
     // or drop it. No-op for other languages.
     augment_statement_profile_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_statement_profile_changes", &drafts);
     // Statement-profile scaffold suppression (issue #57 bash/delphi): fold sub-token churn under a
     // MODIFIED review container into the one MODIFICATION (the general descendant-noise pass only
     // roots on ADD/DELETE/MOVE, not a MODIFICATION). No-op for other languages.
     suppress_statement_container_descendant_noise_drafts(&mut drafts, language);
+    finalize_debug_probe("review:suppress_statement_container_descendant_noise", &drafts);
     // Query-profile change augmentation (issue #57 sql): demote same-key clause MOVEs (positional
     // displacement from an inserted JOIN) and recover keyed clause/field add/deletes.
     augment_sql_query_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_sql_query_changes", &drafts);
     // Keyed-data change augmentation (issue #57 json/yaml): recover keyed pair/item ADD/DELETEs
     // hidden by coarse container matches; identical-content positional-label churn suppresses
     // with evidence.
@@ -1643,6 +1651,7 @@ fn finalize_review_impl(
     {
         finalization.change_groups.push(group);
     }
+    finalize_debug_probe("review:augment_keyed_data_changes", &drafts);
     // YAML representation-graph equivalence (issue #57 yaml): block↔flow style churn suppresses
     // with evidence; a diff fully consumed by it is style-only.
     if language == "yaml" {
@@ -1652,6 +1661,7 @@ fn finalize_review_impl(
                 finalization.is_style_only = true;
             }
         }
+        finalize_debug_probe("review:suppress_yaml_representation_equivalent", &drafts);
     }
     // js/ts style rule (issue #57 javascript): relabel suppression residue as IGNORED_STYLE.
     if let Some((group, ignored)) =
@@ -1668,6 +1678,17 @@ fn finalize_review_impl(
             Some((old_source, new_source, language)));
         if style_equivalent {
             finalization.is_style_only = true;
+        } else if unordered_mapping_equivalent(&old_tree, &new_tree, old_source, new_source, language) {
+            // Member order of an unordered mapping is not a change: an explicit proof, so
+            // the review is `equivalent` (core #252), not style-only and not incomplete.
+            finalization.is_style_only = false;
+            finalization.equivalence_proof = Some(UNORDERED_MAPPING_RULE);
+            finalization.change_groups.push(json!({
+                "kind": "NOISE_SUPPRESSED", "raw_change_indices": [], "confidence": 1.0,
+                "rule_id": UNORDERED_MAPPING_RULE,
+                "metadata": {"index_space": "equivalence_proof", "reason":
+                    "Only the order of members of an unordered mapping changed; keys and values are identical."},
+            }));
         } else {
             finalization.is_style_only = false;
             finalization.no_surviving_changes = true;
@@ -1683,13 +1704,20 @@ fn finalize_review_impl(
         change_groups.push(group);
         ignored_style_changes.push(ignored);
     }
+    finalize_debug_probe("review:final", &drafts);
+    let records = finalize_trace_take();
     let trace: Vec<Value> = if config.collect_trace {
-        finalize_trace_take()
-            .into_iter()
-            .map(|(pass, count)| json!({"pass": pass, "changes_after": count}))
+        records.iter()
+            .map(|(pass, kinds)| json!({"pass": pass, "changes_after": kinds.len()}))
             .collect()
     } else {
         Vec::new()
+    };
+    // Which passes removed which drafts, only when nothing survived on differing sources.
+    let suppression_trace = if drafts.is_empty() && old_source != new_source {
+        suppression_trace_value(&records)
+    } else {
+        Value::Null
     };
     Ok(json!({
         "used": true,
@@ -1699,7 +1727,11 @@ fn finalize_review_impl(
         "change_groups": change_groups,
         "is_style_only": finalization.is_style_only,
         "no_surviving_changes": finalization.no_surviving_changes,
+        "equivalence_proof": finalization.equivalence_proof,
+        "completeness": completeness::classify(!serialized.changes.is_empty(), Some(old_source == new_source),
+            finalization.is_style_only, finalization.equivalence_proof.is_some(), finalization.no_surviving_changes),
         "ignored_style_changes": ignored_style_changes,
+        "suppression_trace": suppression_trace,
         "trace": trace,
     })
     .to_string())
@@ -2825,6 +2857,9 @@ struct PythonReviewFinalization {
     ignored_style_changes: Vec<Value>,
     is_style_only: bool,
     no_surviving_changes: bool,
+    /// Rule id of a suppressor that proved the sources equivalent although they are not
+    /// style-only (core #252). Read by the completeness boundary; `None` = no proof.
+    equivalence_proof: Option<&'static str>,
 }
 
 #[derive(Clone, Debug)]
@@ -3282,7 +3317,7 @@ fn diff_python_sources_final_impl(
         && (old_ts_tree.root_node().has_error() || new_ts_tree.root_node().has_error())
     {
         let mut diff = source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors")?;
-        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle);
+        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle, Some((old_source, new_source)));
         return Ok(diff);
     }
     let (
@@ -3358,7 +3393,7 @@ fn diff_python_sources_final_impl(
             diff["metadata"]["rust_core"]["used"] = json!(true);
             diff["metadata"]["rust_phase_timings"] =
                 diff["metadata"]["rust_core"]["details"]["phase_timings"].clone();
-            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
             return Ok(diff);
         }
         let max_cst_nodes = old_cst_nodes.max(new_cst_nodes);
@@ -3448,7 +3483,7 @@ fn diff_python_sources_final_impl(
             diff["metadata"]["rust_core"]["used"] = json!(true);
             diff["metadata"]["rust_phase_timings"] =
                 diff["metadata"]["rust_core"]["details"]["phase_timings"].clone();
-            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
             return Ok(diff);
         }
 
@@ -3583,6 +3618,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
+    finalize_trace_start();
     refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
@@ -3602,6 +3638,13 @@ fn diff_python_sources_final_impl(
         "rust_python_review_finalization",
         review_finalization_started,
     );
+    finalize_debug_probe("review:final", &change_report.drafts);
+    let suppression_trace = if change_report.drafts.is_empty() && old_source != new_source {
+        suppression_trace_value(&finalize_trace_take())
+    } else {
+        finalize_trace_take();
+        Value::Null
+    };
     let serialization_started = probe.enabled().then(Instant::now);
     let serialized_changes = if probe.enabled() {
         serialize_change_drafts_with_size_maps(
@@ -3744,12 +3787,13 @@ fn diff_python_sources_final_impl(
         "finalized":{"changes":diff["changes"], "change_groups":diff["change_groups"],
             "is_style_only":diff["is_style_only"],
             "ignored_style_changes":diff["metadata"]["ignored_style_changes"],
-            "no_surviving_changes":diff["metadata"]["no_surviving_changes"]}
+            "no_surviving_changes":diff["metadata"]["no_surviving_changes"],
+            "suppression_trace":suppression_trace}
     }))?;
-    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only"] {
+    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only", "completeness", "incomplete"] {
         diff[key] = completed[key].clone();
     }
-    for key in ["ignored_style_changes", "no_surviving_changes"] {
+    for key in ["ignored_style_changes", "no_surviving_changes", "equivalence_proof"] {
         if let Some(value) = completed["metadata"].get(key) { diff["metadata"][key] = value.clone(); }
     }
     // Scope indices also refer to the surviving final change list.
@@ -3761,7 +3805,7 @@ fn diff_python_sources_final_impl(
     } else {
         diff["metadata"].as_object_mut().unwrap().remove("scope_trails");
     }
-    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
     Ok(diff)
 }
 
@@ -4366,7 +4410,7 @@ fn diff_batch_file_item(
             match incomplete {
                 Ok(Some(mut diff)) => {
                     attach_content_type_metadata(&mut diff, old_source, new_source);
-                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
                     return BatchItemResult::complete(json!({"index":index,"old_filename":old_filename,
                         "new_filename":new_filename,"language":"python","status":COMPLETE,"diff":diff}), false);
                 }
@@ -4410,7 +4454,7 @@ fn diff_batch_file_item(
         );
         diff["metadata"]["rust_core"]["engine"] = json!(BATCH_ENGINE);
         attach_content_type_metadata(&mut diff, old_source, new_source);
-        apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+        apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
         return BatchItemResult::complete(
             json!({
                 "index": index,
@@ -5310,7 +5354,7 @@ fn native_generic_text_diff(
         "metadata": metadata,
     });
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
     Ok(diff)
 }
 
@@ -5540,7 +5584,7 @@ pub(crate) fn native_wasm_single_diff(
         if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
         diff["metadata"]["schema"] = schema_metadata;
     }
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
         if let Some(rules) = guardrail_rules {
             let violations = evaluate_guardrail_rules_for_diff(
                 &diff, rules, language, old_filename, new_filename, "null", "null")?;
@@ -5562,7 +5606,7 @@ pub(crate) fn native_wasm_single_diff(
     }
     // File lifecycle (add/delete/modify) — mirrors differ's _apply_file_lifecycle_to_diff.
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
     // Protected-path guardrail rules (#100): evaluated AFTER lifecycle like the differ
     // (apply_guardrails_to_diff runs on the routed diff), using the same enriched trees.
     if let Some(rules) = guardrail_rules {
@@ -9569,7 +9613,10 @@ fn refine_candidate_drafts<'a>(
 thread_local! {
     /// Per-pass trace for diagnostics mode (issue #54): None = off; Some = collecting
     /// (pass name, surviving change count) after every probed refine/finalize pass.
-    static FINALIZE_TRACE: std::cell::RefCell<Option<Vec<(String, usize)>>> =
+    /// Each record also keeps the surviving drafts' (change type, node kind) pairs — grammar
+    /// vocabulary only, never labels — so an incomplete review can name which pass removed
+    /// which drafts (core #252 repro outline).
+    static FINALIZE_TRACE: std::cell::RefCell<Option<Vec<(String, Vec<(String, String)>)>>> =
         const { std::cell::RefCell::new(None) };
 }
 
@@ -9577,14 +9624,43 @@ fn finalize_trace_start() {
     FINALIZE_TRACE.with(|trace| *trace.borrow_mut() = Some(Vec::new()));
 }
 
-fn finalize_trace_take() -> Vec<(String, usize)> {
+fn finalize_trace_take() -> Vec<(String, Vec<(String, String)>)> {
     FINALIZE_TRACE.with(|trace| trace.borrow_mut().take().unwrap_or_default())
+}
+
+/// Per-pass removals (and additions) of draft kinds between consecutive trace records.
+/// Deterministic: passes in execution order, kinds sorted.
+fn suppression_trace_value(records: &[(String, Vec<(String, String)>)]) -> Value {
+    use std::collections::BTreeMap;
+    let count = |kinds: &[(String, String)]| {
+        let mut map: BTreeMap<(String, String), i64> = BTreeMap::new();
+        for kind in kinds { *map.entry(kind.clone()).or_default() += 1; }
+        map
+    };
+    let mut passes = Vec::new();
+    for window in records.windows(2) {
+        let (before, after) = (count(&window[0].1), count(&window[1].1));
+        let delta = |from: &BTreeMap<(String, String), i64>, to: &BTreeMap<(String, String), i64>| -> Vec<Value> {
+            from.iter().filter_map(|(kind, n)| {
+                let lost = n - to.get(kind).copied().unwrap_or(0);
+                (lost > 0).then(|| json!({"change_type": kind.0, "node_type": kind.1, "count": lost}))
+            }).collect()
+        };
+        let (removed, added) = (delta(&before, &after), delta(&after, &before));
+        if !removed.is_empty() || !added.is_empty() {
+            passes.push(json!({"pass": window[1].0, "removed": removed, "added": added}));
+        }
+    }
+    json!(passes)
 }
 
 fn finalize_debug_probe(stage: &str, changes: &[ChangeDraft<'_>]) {
     FINALIZE_TRACE.with(|trace| {
         if let Some(records) = trace.borrow_mut().as_mut() {
-            records.push((stage.to_string(), changes.len()));
+            records.push((stage.to_string(), changes.iter().map(|change| {
+                let node = change.new_node.or(change.old_node);
+                (change.change_type.to_string(), node.map(|n| n.node_type.clone()).unwrap_or_default())
+            }).collect()));
         }
     });
     if std::env::var("INTENTUMDIFF_FINALIZE_DEBUG").is_err() {
@@ -10003,7 +10079,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     diff["change_groups"] = Value::Array(change_groups);
     diff["metadata"] = metadata;
     attach_scope_trails_metadata(&mut diff, &changes, &old_index, &new_index);
-    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
 
     Ok(json!({
         "schema_version": 1,
@@ -11013,9 +11089,15 @@ fn infer_file_lifecycle_from_file(file: &Value) -> &'static str {
     infer_file_lifecycle(explicit, old_source, new_source, staging_status)
 }
 
-fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str) {
-    // Every served diff passes through here; stamp the content class alongside the lifecycle.
+fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str, sources: Option<(&str, &str)>) {
+    // Every served diff passes through here; stamp the content class alongside the lifecycle,
+    // and the completeness state (core #252) after the lifecycle adjusts the flags.
     content_class::attach(diff);
+    apply_file_lifecycle_flags(diff, lifecycle);
+    completeness::attach(diff, sources);
+}
+
+fn apply_file_lifecycle_flags(diff: &mut Value, lifecycle: &str) {
     if !diff.get("metadata").is_some_and(Value::is_object) {
         diff["metadata"] = json!({});
     }

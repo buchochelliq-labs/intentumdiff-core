@@ -23,7 +23,7 @@ def case(old='x = 1\n', new='x = 2\n'):
 def review(**kwargs):
     return {'language': 'python', 'has_semantic_changes': True, 'is_style_only': False,
             'is_fallback': False, 'parse_errors': [], 'changes': [{'change_type': 'MODIFICATION'}],
-            **kwargs}
+            'completeness': 'complete', 'incomplete': None, **kwargs}
 
 
 def test_always_style_and_wrong_route_fail_meaningful_oracle():
@@ -38,6 +38,34 @@ def test_exact_identity_rejects_invented_changes_and_semantics():
     c['expected'] = {'has_semantic_changes': False, 'is_style_only': None, 'changes_empty': True}
     assert m.check_classification(c, review(has_semantic_changes=False, changes=[{'change_type': 'MOVE'}]))
     assert not m.check_classification(c, review(has_semantic_changes=False, is_style_only=True, changes=[]))
+
+
+INCOMPLETE = {'reason': 'unexplained_source_delta', 'message': 'could not explain',
+              'report_url': 'https://github.com/buchochelliq-labs/intentumdiff-core/issues/new'}
+
+
+def test_incomplete_review_is_never_a_clean_preservation_pass():
+    m = module(); c = case('x = 1\ny = 2\n', 'y = 2\nx = 1\n')
+    c['expected'] = {'has_semantic_changes': False, 'is_style_only': None, 'changes_empty': None}
+    lost = review(has_semantic_changes=False, changes=[], completeness='incomplete', incomplete=INCOMPLETE)
+    assert any('incomplete' in e for e in m.check_classification(c, lost))
+    assert m.check_classification(c, review(has_semantic_changes=False, changes=[], completeness=None))
+    # A reviewed fixture may pin the honest incomplete verdict.
+    c['expected']['completeness'] = 'incomplete'
+    assert not m.check_classification(c, lost)
+    assert m.check_classification(c, review(has_semantic_changes=False, changes=[], completeness='incomplete'))
+    assert m.check_classification(c, review(has_semantic_changes=False, changes=[]))
+
+
+def test_identity_and_style_states_are_distinct():
+    m = module(); same = case('x = 1\n', 'x = 1\n')
+    same['expected'] = {'has_semantic_changes': False, 'is_style_only': None, 'changes_empty': True}
+    assert m.check_classification(same, review(has_semantic_changes=False, changes=[], completeness='equivalent'))
+    style = case('x = 1\n', 'x  =  1\n')
+    style['expected'] = {'has_semantic_changes': False, 'is_style_only': True, 'changes_empty': None}
+    assert not m.check_classification(style, review(has_semantic_changes=False, is_style_only=True,
+                                                    changes=[], completeness='equivalent'))
+    assert m.check_classification(style, review(has_semantic_changes=False, is_style_only=True, changes=[]))
 
 
 def test_fallback_or_missing_boolean_is_not_a_success():
