@@ -69,6 +69,14 @@ jobs:
       - name: Guard all 760 language probes against reviewed baseline
         run: |
           python scripts/assess_languages.py --fixtures tests/fixtures/language_assessment --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --baseline docs/evidence/2026-11-08-merged-rc-language-baseline.json --report build/language-assessment/results.json
+      - name: Guard admitted schema-2 ledger cases against the reviewed baseline
+        # Fast (about 170 C ABI reviews). Fails on an invalid/stale ledger, any blocked case,
+        # or a regression of a previously passing upstream_gold case; the scorecard is retained.
+        run: |
+          python scripts/external_ledger.py validate
+          python scripts/build_external_admission.py --check
+          python scripts/run_external_ledger.py --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --report build/benchmarks/ledger-results.json --baseline docs/evidence/2026-11-17-external-scorecard/results.json
+          python scripts/external_ledger.py scorecard --results build/benchmarks/ledger-results.json --out-json build/benchmarks/scorecard.json --out-md build/benchmarks/scorecard.md
       - name: Retain exact results and identities
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

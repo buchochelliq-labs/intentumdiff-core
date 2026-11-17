@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-09-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "557cac2c7e6edc4a4e86b63a7011e1a462b87bbf4d31cc456212b34f5098b1c2",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "2b27a01633c4f3ddff2663011079dfc8f45ced9e67e1220f0ca715178a025778",
+  "new_test_sha256": "66dc9b70473c8823a0b33ad5d1f3374d3eb565dc3048028e8d982d031b3538d2",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "0ba11c47c2149b161d5f984e12e5c7837025dc1e1f57deff57b2a4f3ec7f4ae7",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-p3_ld616/prog.py\", line 29, in <module>\n    check(rolling_max)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-p3_ld616/prog.py\", line 25, in check\n    assert rolling_max([1, 2, 3, 4]) == [1, 2, 3, 4]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "a07a05d7566894fa5a1ac90b79bab0a8b9d4974e385645dceb214c23254c3796",
+  "old_test_sha256": "66dc9b70473c8823a0b33ad5d1f3374d3eb565dc3048028e8d982d031b3538d2",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/09.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

@@ -76,6 +76,17 @@ def make_root(tmp_path, verdict='supports_claim'):
     return root, ledger
 
 
+def test_checked_in_ledger_is_valid_and_reproducible():
+    ledger, inventory = L.validate(REAL)
+    assert {c['class'] for c in ledger['cases']} <= set(L.CLASSES)
+    assert set(json.loads((REAL / 'ledger.json').read_bytes())['languages'][0]) >= {'language_id'}
+    assert len(inventory['parsers']) == 74
+    spec = importlib.util.spec_from_file_location('builder', SCRIPTS / 'build_external_admission.py')
+    builder = importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
+    builder.CHECK_ONLY = True  # never rewrite fixtures from a test
+    assert L.encode(builder.build()) == (REAL / 'admission' / 'ledger.json').read_bytes(), 'ledger is stale'
+
+
 def test_synthetic_ledger_validates(tmp_path):
     root, _ = make_root(tmp_path)
     L.validate(root)

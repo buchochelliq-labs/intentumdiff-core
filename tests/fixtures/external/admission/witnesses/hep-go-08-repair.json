@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-08-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "076ae9b86f2766c79f381c71ded01e8abac95c5e70fb7735f9c5eed8b1d42131",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.007s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "e966568bc42bfb5e2d6de4e80caf56b2265f28cf25a441089196c4b7afe35851",
+  "new_test_sha256": "d561531871d53e91ba9749aacd23511069b813d9f8d14de955649b4125af4570",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "076ae9b86f2766c79f381c71ded01e8abac95c5e70fb7735f9c5eed8b1d42131",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "  \t            \texpected: [2]int{3, 1}\n        \t            \tactual  : [2]int{3, 0}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -2,3 +2,3 @@\n        \t            \t  (int) 3,\n        \t            \t- (int) 1\n        \t            \t+ (int) 0\n        \t            \t }\n        \tTest:       \tTestSumProduct\n    main_test.go:13: \n        \tError Trace:\t/tmp/hep-witness-ey5zmg2t/main_test.go:13\n        \tError:      \tNot equal: \n        \t            \texpected: [2]int{15, 105}\n        \t            \tactual  : [2]int{15, 0}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -2,3 +2,3 @@\n        \t            \t  (int) 15,\n        \t            \t- (int) 105\n        \t            \t+ (int) 0\n        \t            \t }\n        \tTest:       \tTestSumProduct\n    main_test.go:14: \n        \tError Trace:\t/tmp/hep-witness-ey5zmg2t/main_test.go:14\n        \tError:      \tNot equal: \n        \t            \texpected: [2]int{10, 10}\n        \t            \tactual  : [2]int{10, 0}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -2,3 +2,3 @@\n        \t            \t  (int) 10,\n        \t            \t- (int) 10\n        \t            \t+ (int) 0\n        \t            \t }\n        \tTest:       \tTestSumProduct\nFAIL\nFAIL\thumanevalpack\t0.011s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "2b26b18f23f58feff629d5fe52eb727b532bba38a0f9d0883f532b25fad22611",
+  "old_test_sha256": "d561531871d53e91ba9749aacd23511069b813d9f8d14de955649b4125af4570",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/08.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

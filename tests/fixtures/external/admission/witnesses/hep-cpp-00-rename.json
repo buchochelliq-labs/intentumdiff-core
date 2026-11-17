@@ -1,0 +1,82 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-cpp-00-rename",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "9fd1e43e17052fcb6c02487b5cbea1daade80c57eab209f8254f0b0c9f827550",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "52d71e3cf92c416e98a6ba04a1bc5f43571b9494d24a9c3d1658e685c1557822",
+  "new_test_sha256": "c1af08c4893fba8e577b83b7ecf74ffc90a5512e5c02608074c038512e8768a3",
+  "new_test_substitutions": [
+    {
+      "pattern": "\\bhas_close_elements\\b",
+      "replacement": "nearby_elements"
+    }
+  ],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "e7084163b418bbeae38d8d6aeebac731712f9b2b481539a8696c8d88007f5a29",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "0a8dda23e5ebfdf49af935f4f1bd5b1f0a77273832608c74bfb133beeab8fd3e",
+  "old_test_sha256": "c9c047895323407b06c9c2f1de5a490e8dd6d7cfc6e31501ca75cbc858a3f24f",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/00.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

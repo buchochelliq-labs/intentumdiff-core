@@ -1,0 +1,191 @@
+{
+  "cases": [
+    {
+      "case_id": "literal-c-minimal-char",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '0' -> '1'"
+      ],
+      "language_id": "c",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-c-ordinary",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '0' -> '1'"
+      ],
+      "language_id": "c",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-c-escape",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '\\n' -> '\\t'"
+      ],
+      "language_id": "c",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-c-position",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal 'a' -> 'b'"
+      ],
+      "language_id": "c",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-cpp-minimal-char",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '0' -> '1'"
+      ],
+      "language_id": "cpp",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-cpp-ordinary",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '0' -> '1'"
+      ],
+      "language_id": "cpp",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-cpp-escape",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal '\\n' -> '\\t'"
+      ],
+      "language_id": "cpp",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-cpp-position",
+      "class": "handwritten_regression",
+      "errors": [
+        "missing required change_fact (MODIFICATION): character literal 'a' -> 'b'"
+      ],
+      "language_id": "cpp",
+      "status": "failed"
+    },
+    {
+      "case_id": "literal-cpp-prefix",
+      "class": "handwritten_regression",
+      "errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True",
+        "missing required change_fact (MODIFICATION): character literal 'x' -> L'x'",
+        "forbidden style-only classification: a literal value change is not style-only",
+        "forbidden empty change list: the literal edit must be reported"
+      ],
+      "language_id": "cpp",
+      "status": "failed"
+    }
+  ],
+  "components": {
+    "abap_parser.wasm": "a00561ca1dd7c774e7a586c9fdb7b56bcaf268c2e56c0d8d3d0eff82e80c0554",
+    "adf_parser.wasm": "d1537ca40be16a9e191290ea0579b32180d360404e305f7265889dd59e00b375",
+    "asciidoc_parser.wasm": "f87cb7a74f3159c23811b16eb531edbb7cfceabaecedcbc1c037d1986162d306",
+    "asm_parser.wasm": "54fcd474826b4b392715027c1732b8c7e95f6b7472ea07930c17002c52853baf",
+    "assemblyscript_parser.wasm": "48ffe441dfa4ede797417428bcb1dc5ad17756b029f5ea9aebf5967970c0314d",
+    "astro_parser.wasm": "87b9522ecb7b59163fe38e128edd5c1250c4a923035ff05928bfb179660fa533",
+    "bash_parser.wasm": "a040ede7a7ab725bc6a8f067f28b615eff9b3ce9218c966246ea755e7bd075c0",
+    "clojure_parser.wasm": "b7b9389e242e0c679a945a80a969991e40350648444bcccb6d58fbcd593ac392",
+    "cmake_parser.wasm": "f3074dd3e4a6b0bb55f7330b156ae7d703bc633e887e27b1a8a492a868b4aa59",
+    "cpp_parser.wasm": "9af46c8b31ba636c00139b8b91bc10e3e118c156edee824aa8a2a60e671db6c2",
+    "csharp_parser.wasm": "1ad282ea4b8f5efe94e546726901bd62d40800bae9d457ee35e79dd6e9776a10",
+    "css_parser.wasm": "014c28541deb9d9285b22dca1510f447ebb299eca2a93ecb25cad9e30785b845",
+    "dart_parser.wasm": "ef6ab5470a9d41ee445c6cebbb012d4106ff5e3cb7100d085ee28c63d8d025ae",
+    "databricks_parser.wasm": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0",
+    "dax_parser.wasm": "2b58916887a2805fc98ab69f60956791cb5eeecd65fe715893f22b424c4343c5",
+    "delphi_parser.wasm": "091734b404007f999b82bbb438477d2c798b5035f8da3e1812f1a66e07a5d424",
+    "dockerfile_parser.wasm": "34a607e721b2f3dd1354f281e5220c14ea1d8cb9dec198f6557558c52f377e11",
+    "elixir_parser.wasm": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf",
+    "generic_parser.wasm": "6c7f7de7c9d88f4f5795bf6f6f99a3cc9d19c169cfb006b77f59e150423f746d",
+    "gitignore_parser.wasm": "a468265461647408a591851dcdd09817b38f1fb266a45e12267ad1286d2fe6b7",
+    "go_parser.wasm": "4b60216e2b6b58c7ca894fda6b724bce57eb6056959510d9996e18541116a285",
+    "gomod_parser.wasm": "f818e01d364f9f247ff9850120c56882b29f954523166b49c14276cc022ce577",
+    "graphql_parser.wasm": "b01f0a4b3f19ace3cd125f1a9e863cf097ee9c35c35b1f5539f2ed129c8fc4e2",
+    "groovy_parser.wasm": "802b390f22e4d4b6e46433ce076bbd690a3cce889ce5898daf2af878060e28f0",
+    "haskell_parser.wasm": "c24869c7d7a1c71f8fd0574107ffe88bcb816f3ba89243cf9ad20756b2c427ca",
+    "html_parser.wasm": "3aad4e0b71c4089902f40c650210925ff696ffebde025f3562a17834191be56c",
+    "ini_parser.wasm": "dc665e8970a8922f70e76ef572297293db36d6802a98d5ac13a74bb519e538d0",
+    "java_parser.wasm": "580021fc83c32f3fc11711eace069aeefa30c5b81ab0440dd93d05ab5eb1fcb6",
+    "js_ts_parser.wasm": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34",
+    "json_parser.wasm": "ffb886cf098373b018ab0d21ecdc04c0928619c20ca1b20961a40d738418d2fd",
+    "kotlin_parser.wasm": "cf1f86d749ba8ee10754709f59c3aa1613b8465c071b97837924ed8d7e2b9025",
+    "latex_parser.wasm": "b9c83976e79d4970e30b293e873713ed4759a9188f49474916fcac53ba2538cf",
+    "lua_parser.wasm": "e9fab17743ef283b49218dab633242aacb1028e04570f323e0a0fbd34ca2adcb",
+    "make_parser.wasm": "0dd92dab1c57d2c4191b9c14d9f0ddd96e39808b41880211862f225796207529",
+    "markdown_parser.wasm": "05415ec27989e8eba2651f7440725a865670bb3248a648c2e456b4f6d7502e9d",
+    "mdx_parser.wasm": "1bb9e1aa2d5b58b973c4ea5f680e08581e6cd362079f17e2928d317bfdd0ec71",
+    "ocaml_parser.wasm": "5c0933950a9250824bf09f5328e8a51da6ab36a6549f8ed2f820fff01f70c82b",
+    "odin_parser.wasm": "f80f5ea40d7c86bf43850de4ed2b4e60caed933c7a2975dd7edcd3f2bcad20ed",
+    "perl_parser.wasm": "0e82e6ca637f892c96c0f347e92d47108b77a7ea41714723d1e1ea3baf0687ed",
+    "php_parser.wasm": "9b7dc0bf853f95fe55850ac8b340b3657d44bca70946c2a2be836cdceac42b37",
+    "plsql_parser.wasm": "26decdd220d4fdd8ac4501a0c8be0306b35a0476a207e691c43ad792816a8ffb",
+    "po_parser.wasm": "092800f8e61e4b6d62ca914be56c850478913c798dece3fea02ee49be9fc970c",
+    "postscript_parser.wasm": "2f9dfc5f869ae4ec8cd03818977b7ae7c4565a901e2943fd096536476d771a1b",
+    "powershell_parser.wasm": "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15",
+    "proto_parser.wasm": "d692e7aad9a759b2d5567d7dc5eeb2c5f6bc2e54d8e61d908dfa576f04df586a",
+    "puppet_parser.wasm": "378e7c4e2abce858bed1bfd4fb08027559d5438d834a478f2d9c2c21c2066945",
+    "python_parser.wasm": "627326a48a950f18fc2355aa00ef392f87a8f4e32f42965a7dd36be0a1f24b24",
+    "qsharp_parser.wasm": "7ee18d2ea51b991a0d6ee866da54b9e514a4952c77b221f9c1aac7261bc4e06c",
+    "r_parser.wasm": "a8e48efe3403a92b1484072e88c33cf633dd0e4e5fd4564c1f6a369afcfe0c87",
+    "reasonml_parser.wasm": "a0b779b30af24eb1147a19adc174891fa47667b41809e6dc82ab432faba5574b",
+    "ruby_parser.wasm": "a1f251608c22e32876e0b06ac0e49d9b3a31f30c9d4ecafd3af986fbed298087",
+    "rust_parser.wasm": "5575a9798c4f28caf80aa2ca2b0572e82c0626bec9bf5c1bdb45b573645872a8",
+    "sas_parser.wasm": "9e97d5e32ab2f98e008b76bd429aca8ff3cce501f18c8b04e7bc65ff0948fbb4",
+    "scala_parser.wasm": "e169a5618a3b6b4d973d57e02819bf8ff04ec7b15cddfbe19ab6293c98ced6de",
+    "scss_parser.wasm": "0bde9a9cacee1526e50b4a618d09c73e37a1d1553c7ab352328877c230fca3bc",
+    "sql_parser.wasm": "10255c582d04c55dac5bf61ab3e661fd0b0ab774002163b378baac2cda1b0a3c",
+    "squirrel_parser.wasm": "17905c03c109d5eebed80a1222fc025086c8cce4b25658b34ab20be4eee9dee2",
+    "svelte_parser.wasm": "4112804bcdc30b3aed3311c16d4bb56caa293ac879228cc1f119d54ccb412ad2",
+    "swift_parser.wasm": "d15cf1448851ffdc7994a24c3458ea369201f74060ff5edac0f92b177fa3ed47",
+    "terraform_parser.wasm": "78b3c62d6bd701c0d67870fd280e93e72e3072ea08d559b6b7a507892858e490",
+    "toml_parser.wasm": "af1ec51b47ebb327400e2c799ff73a991b3e2dedb8bf20a86fdc089d45845876",
+    "tsql_parser.wasm": "704340850e7ece143507f17f92dd32695118a90328e0538a0baece1fcce1a290",
+    "vbnet_parser.wasm": "35de0e7db4775794cce83ff7c79d78720247bf2c9bb769e256ea1b8605a14b8f",
+    "vue_parser.wasm": "16a2dfc6ca30bf8a7741acb804496bf2d9a7b7f4c4918f3776ffe953b24a80dd",
+    "wat_parser.wasm": "11458443ab73ac7079827f9c13f899600057687fe7381df6000b745028eb7254",
+    "xml_parser.wasm": "2bd8f26bae4f9fd0e5a4528efa6d019a128bacd60721401609f63801b10e8a8a",
+    "yaml_parser.wasm": "2ff91eb6d68ae517e2941ed00c863a3ff3f2357ceedebecf9a062f8a216989d1",
+    "zig_parser.wasm": "8520545894161d06c302558f7b0a7e3d7a3127a420c927aca5fc0f508ba125e6"
+  },
+  "core_commit": "74618c311836983b4f60ae2d8389edfdd14f7793",
+  "core_crates_dirty": false,
+  "interface": "production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)",
+  "ledger_sha256": "d788346726c572d22c6a52a2e76ab9b1c5fdf13561321c313c1ca2abb9b3d616",
+  "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+  "parser_manifest_sha256": "b1dbef68e2a1db45bc81f4d62bdbc278d0410d15f8efc2f1fac6a5c07b27c309",
+  "purpose": "ADVERSARIAL guard check: cpp_parser.wasm replaced by the published intentumdiff-python 0.0.2b2 wheel bytes (pre cpp-parser#5 fix); all other inputs identical.",
+  "run_utc": "2026-11-17T19:53:36+00:00",
+  "schema_version": 1,
+  "selection": {
+    "classes": [
+      "handwritten_regression"
+    ],
+    "languages": null
+  },
+  "workers": {
+    "c": {
+      "completed_count": 4,
+      "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+      "peak_rss_kib": 129628,
+      "wall_seconds": 2.263,
+      "worker_error": null
+    },
+    "cpp": {
+      "completed_count": 5,
+      "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+      "peak_rss_kib": 129432,
+      "wall_seconds": 2.411,
+      "worker_error": null
+    }
+  }
+}

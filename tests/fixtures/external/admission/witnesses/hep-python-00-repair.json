@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-00-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "9b13afce8232a0dd7ff4f26514a421be3724dd793120706a9f9d6ecd681a61ae",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "51f9c0aa59abbd719b5d500dc100614f88ef424dcc79f5e2aae4cf11d9cf0a5b",
+  "new_test_sha256": "183070877c99627cf04d1a0c9d21a9110f387add55f9fc81d8aac34855c22bbd",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "2268be5595e26d78ee3d1eb5928122c867bb39394822de3ed4437871b91a2523",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-dfatfjti/prog.py\", line 28, in <module>\n    check(has_close_elements)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-dfatfjti/prog.py\", line 21, in check\n    assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05) == False\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "4d5fe6e1643feeac1c4f98f03a894ca209fc6edb7392ff19befade5ceed75274",
+  "old_test_sha256": "183070877c99627cf04d1a0c9d21a9110f387add55f9fc81d8aac34855c22bbd",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/00.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,54 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-js-00-rename",
+  "config": "js",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "b7c6d3471533ecf01edd211e3a9cd17db85665a31ddb9ed0508fbb1b80350923",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "f3c67dee9112ef5524f8a56f3d3cca5b69293d1fcbc2f9459d2118d5ee14f139",
+  "new_test_sha256": "80af0650b534125e313058350645371c56e335fafb1d20f7db45a2d4a4c08d3f",
+  "new_test_substitutions": [
+    {
+      "pattern": "\\bhasCloseElements\\b",
+      "replacement": "nearbyElements"
+    }
+  ],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "4aa9cf261510bde155b9f371fa55810666defceff214ef6481b16e0623e3e029",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "8b4be9f2165099a299a46e30ff6ba22ccc75cfd80d0c03ee8dbbbb2b95d4dd0a",
+  "old_test_sha256": "4c6f6b20a38726163f5120b3f0073807b0e6f81b8ec2691ce6094477c0e6f65c",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/js/00.json",
+  "toolchain": [
+    "v22.23.4"
+  ],
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,49 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-js-11-repair",
+  "config": "js",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "1edd198de7d65b408b9887d4b6a0555c4919c39c3edba17c75880e059eb5b271",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "c32e3bb4e9c7b08f957c0130dbfc2119ad03b31e8d9adcd83473c0651add6df6",
+  "new_test_sha256": "9454410095b9b43424c87a82caba61c815d228bfe5449f962c661bec5315f16e",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "fa4cf361507218fdd217ea91c60e417b44f1562eab4d3bc8bb7ae37d6ed82293",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "Assertion failed\nAssertion failed\nAssertion failed\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "d0afec9d4fff075e676e188d72b7dd655c082fe10156aacfef90f435f5acc3c6",
+  "old_test_sha256": "9454410095b9b43424c87a82caba61c815d228bfe5449f962c661bec5315f16e",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/js/11.json",
+  "toolchain": [
+    "v22.23.4"
+  ],
+  "verdict": "supports_claim"
+}

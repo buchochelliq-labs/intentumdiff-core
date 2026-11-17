@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-go-06-identity",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "83c67770a53f27b23199e3d1213cf85212be29b13dc1edcf913cc95934956d31",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.004s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "65cf312e262973f0a3af590220914bf2132bd98c609d3b87d3eeccffad346ca7",
+  "new_test_sha256": "0f4f536c04dd8bcd123167d0460d02896bf2936047f9c483fb848261e8437083",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "83c67770a53f27b23199e3d1213cf85212be29b13dc1edcf913cc95934956d31",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.005s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "65cf312e262973f0a3af590220914bf2132bd98c609d3b87d3eeccffad346ca7",
+  "old_test_sha256": "0f4f536c04dd8bcd123167d0460d02896bf2936047f9c483fb848261e8437083",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/06.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

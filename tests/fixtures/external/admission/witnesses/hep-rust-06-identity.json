@@ -1,0 +1,80 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-rust-06-identity",
+  "config": "rust",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "2fcd5f5fc74d3af97a075f52884d6163bb206f579739ba38ea1800c6d484f168",
+    "steps": [
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet",
+          "--no-run"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "\nrunning 1 test\n.\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "21b2fa739b3426fe48ab18b34d93f70e637c886528e4e8893a9b23d27bf27ac9",
+  "new_test_sha256": "77fd569aab828a28a4e070a0a92d141fe4bfdbbd6b269c9f2789c73645580dd2",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "2fcd5f5fc74d3af97a075f52884d6163bb206f579739ba38ea1800c6d484f168",
+    "steps": [
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet",
+          "--no-run"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "\nrunning 1 test\n.\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "21b2fa739b3426fe48ab18b34d93f70e637c886528e4e8893a9b23d27bf27ac9",
+  "old_test_sha256": "77fd569aab828a28a4e070a0a92d141fe4bfdbbd6b269c9f2789c73645580dd2",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/rust/06.json",
+  "toolchain": [
+    "cargo 1.97.0 (c980f4866 2026-06-30)",
+    "rustc 1.97.0 (2d8144b78 2026-07-07)"
+  ],
+  "verdict": "supports_claim"
+}

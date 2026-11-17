@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-cpp-01-repair",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "6c3ef8e7ced59ea98ecfeccd6698b8cb37949f31a86012a3ce9ecd8d30cb7c60",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "c42b5e08f1db84d72ce4d03f778bd90b7391f81a634e77416c74d8c067326bda",
+  "new_test_sha256": "b912f556bc198370183803ba33854a0f406d1803dcd9067471120a59afe068bf",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "69fe83d225178cc76b340600f97cf6339714c4638ec0889a8373ba121702c961",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": -6,
+        "stderr_tail": "prog: prog.cpp:46: int main(): Assertion `issame(separate_paren_groups(\"(()()) ((())) () ((())()())\"),{\"(()())\", \"((()))\", \"()\", \"((())()())\"})' failed.\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "ff753b4f9f8d6f75a716c33580d2f3da29077b363b34ebe9e62a29abf30b4e80",
+  "old_test_sha256": "b912f556bc198370183803ba33854a0f406d1803dcd9067471120a59afe068bf",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/01.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}
