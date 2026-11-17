@@ -1,0 +1,1470 @@
+{
+  "enumeration": {
+    "complete": true,
+    "listed": 114,
+    "method": "run_cmake(<name>) calls in RunCMakeTest.cmake at the pinned commit; per test <name>.cmake plus any of -stderr.txt/-stdout.txt/-result.txt/-check.cmake that exist",
+    "not_imported": "run_cmake_command/run_override and include()d helper tests (not run_cmake)"
+  },
+  "files": {
+    "Copyright.txt": {
+      "bytes": 5477,
+      "sha256": "4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Copyright.txt"
+    },
+    "Tests/RunCMake/RunCMake.cmake": {
+      "bytes": 12268,
+      "sha256": "5bad76787499989bddb71585cbbd1c4bdce698aa93f7dc5581375baeab11d267",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/RunCMake.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariable-stderr.txt": {
+      "bytes": 12,
+      "sha256": "b03b0d70e9d35ed6ccc57f2681cd24e2052fd06b9985efc28980c7231ad50f98",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariable-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariable.cmake": {
+      "bytes": 226,
+      "sha256": "a08589e97614c78656d2162c6323c32becc10cb2c8cd8461954db1ba83a43bd5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariable.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableAtOnly-stderr.txt": {
+      "bytes": 16,
+      "sha256": "b5d4a8807e3987b9d9214fe958a4acf2e8e0e884caeefde5fb2852fe1a5a1792",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableAtOnly-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableAtOnly.cmake": {
+      "bytes": 172,
+      "sha256": "f04b08605eea0d5fcc11203b8abbad54c4f742c9e1e7b365621a73c27a49cf26",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableAtOnly.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableAtOnlyFile-stderr.txt": {
+      "bytes": 60,
+      "sha256": "bcd00a0dd1a7dc55edb11bfd346193fdd4b3419534a4563d0badf121abb9c62b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableAtOnlyFile-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableAtOnlyFile.cmake": {
+      "bytes": 241,
+      "sha256": "73f404cafb661f30a79be1f4fb4c36d90b0c59dd90dec72f53d3c736f879fbd7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableAtOnlyFile.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableEmptyExpansion-stderr.txt": {
+      "bytes": 16,
+      "sha256": "b5d4a8807e3987b9d9214fe958a4acf2e8e0e884caeefde5fb2852fe1a5a1792",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableEmptyExpansion-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableEmptyExpansion.cmake": {
+      "bytes": 187,
+      "sha256": "300b2f8d0f83dba40e9e2b7434d2b06257c2cdc5a3467ef660e66a8c03e07be3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableEmptyExpansion.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableEmptyExpansionAtOnly-stderr.txt": {
+      "bytes": 16,
+      "sha256": "b5d4a8807e3987b9d9214fe958a4acf2e8e0e884caeefde5fb2852fe1a5a1792",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableEmptyExpansionAtOnly-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableEmptyExpansionAtOnly.cmake": {
+      "bytes": 204,
+      "sha256": "a75c2de7449b5a27cc07a183c29f14a911cc19f0a50e8e6e6840dc8e6f1f73f1",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableEmptyExpansionAtOnly.cmake"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableFile-stderr.txt": {
+      "bytes": 53,
+      "sha256": "206a5e5201d601c9ded87c658a1b10f73197f91035ebe36c7f5c577d4eb516dd",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableFile-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/AtWithVariableFile.cmake": {
+      "bytes": 233,
+      "sha256": "4ff80ed70ab3e1cb63b3856add4e71e1ee3b45fd780574567ee583095b4bb3ba",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/AtWithVariableFile.cmake"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-BE-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-BE-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-BE-stderr.txt": {
+      "bytes": 162,
+      "sha256": "4448eb2d053a485173e7d1c952b9b50f970446a2b0de9560ad29411703a261f3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-BE-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-BE.cmake": {
+      "bytes": 54,
+      "sha256": "cb3c4c58878818fe83e887b4b264e3edaafe19d156812f9d8bdd05b9fba64592",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-BE.cmake"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-LE-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-LE-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-LE-stderr.txt": {
+      "bytes": 162,
+      "sha256": "a5ddff1f49f96c92c80dc73acb057bd814eb989e7f01767a23544cda93666a90",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-LE-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-16-LE.cmake": {
+      "bytes": 54,
+      "sha256": "793b31305f2292dfbee86d81719cb8a8dc2e84c5cdb0d4577263142d846e5332",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-16-LE.cmake"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-BE-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-BE-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-BE-stderr.txt": {
+      "bytes": 162,
+      "sha256": "e1455badd642d7e7ef45f0d5321415fd9d60dd6a0b8de46eb1a8093d8b731ea3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-BE-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-BE.cmake": {
+      "bytes": 108,
+      "sha256": "0fb02193c6c5af49019d1ddaf08dfab8a4bc890683edaca6dc5899b5cdfc604d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-BE.cmake"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-LE-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-LE-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-LE-stderr.txt": {
+      "bytes": 162,
+      "sha256": "3d9cf925bed28f47520f5823960540eb8dcdd29ffadc0181710d633347c15c9f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-LE-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-32-LE.cmake": {
+      "bytes": 108,
+      "sha256": "50becaf4ff17090c7bfce77daa9d6ec3d7fcd650dd5722e3dd4b9ea37155ea73",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-32-LE.cmake"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-8-stdout.txt": {
+      "bytes": 11,
+      "sha256": "ba6f764801e06a63574a51209dcb17b2639770a7f7f5f6fc37b0470741123936",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-8-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/BOM-UTF-8.cmake": {
+      "bytes": 29,
+      "sha256": "f684e35482daed9dfb32b5447013f11bb29c6af30e2a900da7c3a37bc05d7b55",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BOM-UTF-8.cmake"
+    },
+    "Tests/RunCMake/Syntax/Bracket0-stderr.txt": {
+      "bytes": 18,
+      "sha256": "3ac8f568de1bb71458b7830e6b1dbb55a57bac55702d4c3e3b16d1e779fa2fb3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Bracket0.cmake": {
+      "bytes": 27,
+      "sha256": "d2a6765b93bf3bc86e303d21165df6d51763be9f83f0a511d555ec555aafee8e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket0.cmake"
+    },
+    "Tests/RunCMake/Syntax/Bracket1-stderr.txt": {
+      "bytes": 22,
+      "sha256": "d280cd6d05724146432c26e62fcc8f8bacd5458d162fd4dcd6c69282a91221b1",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Bracket1.cmake": {
+      "bytes": 42,
+      "sha256": "4610b39dcbdcba3ae8807fe40d11f2cd27a59f6e7a64f985439e9c522feb8cde",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket1.cmake"
+    },
+    "Tests/RunCMake/Syntax/Bracket2-stdout.txt": {
+      "bytes": 44,
+      "sha256": "1d7b724b8d2b5c9b7ed55c67a4bff082caf8a07e99abe8c3b91138000e439c34",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket2-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/Bracket2.cmake": {
+      "bytes": 124,
+      "sha256": "d203b50cf1557fc405a05fde96c0633b76a3d2045a0e1979d4d2847ad302acfc",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Bracket2.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketBackslash-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketBackslash-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketBackslash-stderr.txt": {
+      "bytes": 135,
+      "sha256": "a2f130ac524d55314114634afea5a69ae3ffbca67e854a7b1390fbd7b37f46ee",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketBackslash-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketBackslash.cmake": {
+      "bytes": 34,
+      "sha256": "6a5d5cac52a4f58df82daedfc35406f5e43590348b11bcadb2b8a2bb35e7ad96",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketBackslash.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketCRLF-stderr.txt": {
+      "bytes": 16,
+      "sha256": "a7a6ddeda49c2b74c2d5ebdd4445c99a3319001db6f1619f1ea897e3b2bdcbb5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketCRLF-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketCRLF.cmake": {
+      "bytes": 135,
+      "sha256": "33a6001f15cfc9d38edbf1944fac0de743fc852d81628138deac40d04ed558ab",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketCRLF.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment0-stdout.txt": {
+      "bytes": 40,
+      "sha256": "343f4a607cb2441ce4dda20d8118d8aa56924a045d7b2ecdfb4499920c3d7d9c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment0-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment0.cmake": {
+      "bytes": 118,
+      "sha256": "3f8648df25750e681d87f9f5ef1633c5647dff10a6789f8c22a60d873eb09aee",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment0.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment1-stderr.txt": {
+      "bytes": 151,
+      "sha256": "b678739bcb089c908c472ea5c76e574005bf951c30192f957076e35c977444e3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment1.cmake": {
+      "bytes": 59,
+      "sha256": "0c6736084f1f3d9594e114ce1b2a4c3d409c27ab0582f6ae952774a1f7182e68",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment1.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment2-stderr.txt": {
+      "bytes": 151,
+      "sha256": "cd0b2ccea9737a1e52106b2bd7095f9eed4699826a036d2d1e6249627231f222",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment2.cmake": {
+      "bytes": 59,
+      "sha256": "dc794afafd5b9594d20020fd96585289daa95116285f339047f5871334e877ed",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment2.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment3-stdout.txt": {
+      "bytes": 40,
+      "sha256": "343f4a607cb2441ce4dda20d8118d8aa56924a045d7b2ecdfb4499920c3d7d9c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment3-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment3.cmake": {
+      "bytes": 131,
+      "sha256": "b65d325bb89f15a073b054db0f186ed048f646059e2c6458e2f3f0cb6cc6d242",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment3.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment4-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment4-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment4-stderr.txt": {
+      "bytes": 182,
+      "sha256": "5d16f68c1883d53740812891d600e5cf9fcb5b684604d3adbf8adc077986c9be",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment4-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment4.cmake": {
+      "bytes": 102,
+      "sha256": "56a088570821c610031d37e3ab6a414c755347aa4bf08395a1c5c8d094158726",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment4.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketComment5-stdout.txt": {
+      "bytes": 40,
+      "sha256": "343f4a607cb2441ce4dda20d8118d8aa56924a045d7b2ecdfb4499920c3d7d9c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment5-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketComment5.cmake": {
+      "bytes": 363,
+      "sha256": "b3826215ebb309db5d98cd5632dc71babb2938b919ab79af6a9f8f307e619b43",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketComment5.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace0-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace0-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace0-stderr.txt": {
+      "bytes": 214,
+      "sha256": "590d0b5eda6678887fb26fd1b89caa549d9fb9838e02dd42c18b36ae4e122b90",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace0.cmake": {
+      "bytes": 36,
+      "sha256": "d986987f5eefed7f13277d4c3a642ea6f47d5736226545d50e9c0773bc2dcf1c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace0.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace1-stderr.txt": {
+      "bytes": 214,
+      "sha256": "45f53103b1ce5570dc1b185315e34977766c023f142785a5c07e8fc543998b59",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace1.cmake": {
+      "bytes": 36,
+      "sha256": "3a6a6d9711c9c834b43d9aff4952c91cbdf063cf5c0dfaa27d1db4b47b091baa",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace1.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace2-stderr.txt": {
+      "bytes": 214,
+      "sha256": "e3228a27fd5ef86029faf3be7fd45f358132fdfccf429a9a405d04b42909b721",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace2.cmake": {
+      "bytes": 56,
+      "sha256": "8cfa605fe244b453e1865fa65bc75d1c1c3a9ba36ef3b9c952711edd5580a7fe",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace2.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace3-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace3-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace3-stderr.txt": {
+      "bytes": 214,
+      "sha256": "301102710f3f9ee7d77580a29d269a76ea57f4a9bba7c9aa2606c0253e6a3e3f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace3-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace3.cmake": {
+      "bytes": 57,
+      "sha256": "a200bb449fe2b7b4d6afb4c54cbbf3bd4b9c71bc44f6de2a2ed667bccdac634d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace3.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace4-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace4-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace4-stderr.txt": {
+      "bytes": 214,
+      "sha256": "874cb7ba9c3b124e4d67b935d5c8d1616bd063ae7a6bdcfe56beece45691e00b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace4-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace4.cmake": {
+      "bytes": 53,
+      "sha256": "ef00eb7ba17352a58f74d89f8e3da5776257b7682baf41ebd5521e0592b3feea",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace4.cmake"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace5-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace5-result.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace5-stderr.txt": {
+      "bytes": 214,
+      "sha256": "fea51654bb0a8dc20a535fd2c6bd331782e1383c9200de55a23ce6e96cb3668c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace5-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/BracketNoSpace5.cmake": {
+      "bytes": 54,
+      "sha256": "c93ebfdd0828688fe9187ce95cb506c1cf0fd76a1f452073f6689fc5a861ba16",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/BracketNoSpace5.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-NEW-stderr.txt": {
+      "bytes": 18,
+      "sha256": "93f9c92c00b62ff53470f2b0d09bbf860b72c0ffc80156bb564f4bd5806fb1f1",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-NEW-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-NEW.cmake": {
+      "bytes": 191,
+      "sha256": "89f7afa8b9002a4cbf3643cfad107e3e5df716c41e25c1e27818a1e777e3ebae",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-NEW.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-OLD-stderr.txt": {
+      "bytes": 520,
+      "sha256": "d3d6738f42dee668f207ee444c6c8d8b0980bd9ac13f9cd03cb9e3313f257b16",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-OLD-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-OLD.cmake": {
+      "bytes": 187,
+      "sha256": "bf3d7034d865fd3c53154ac4d7042bf600587efda0b1510f3e2febc5106731e5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-OLD.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-WARN-newlines-stderr.txt": {
+      "bytes": 668,
+      "sha256": "a73f3c0691b92e0db218df841d0407da84b2d307d0c88a77a78588b9a85bc017",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-WARN-newlines-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-WARN-newlines.cmake": {
+      "bytes": 96,
+      "sha256": "a63b25619ac5aadce0389bc628933457820b1f25f69945cf36d3db271b581d00",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-WARN-newlines.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-WARN-stderr.txt": {
+      "bytes": 629,
+      "sha256": "14ccd1bb67c58e878ac8b3d2a72885794ca7def16b08c07e565c792b9141a11e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-WARN-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-At-WARN.cmake": {
+      "bytes": 94,
+      "sha256": "3c6a1ff443f0c98d5d6c7ebc958cb2b77665d43ac7add7fdf11bc9ce6830a18c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-At-WARN.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-Dollar-NEW-stderr.txt": {
+      "bytes": 26,
+      "sha256": "000ad6e3300f05d9a914ed34de263df686659d528f73bf62c5ec1cdcb0ea222c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-Dollar-NEW-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-Dollar-NEW.cmake": {
+      "bytes": 110,
+      "sha256": "eb4cdf7a7c9e2ec183f5ec19800c94a6c53beb73fd3213c3c4e7e67693150d90",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-Dollar-NEW.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-Dollar-OLD-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-Dollar-OLD-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-Dollar-OLD-stderr.txt": {
+      "bytes": 806,
+      "sha256": "653ec90cc0390d6fcce0f8c4baa043b49ed5f0e2fc480f990ea987d924d9020d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-Dollar-OLD-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-Dollar-OLD.cmake": {
+      "bytes": 110,
+      "sha256": "5328f828b9ae35937bd3eee82ba94d4ca8f3952c4642afa3d8a7b48939369101",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-Dollar-OLD.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NUL-stderr.txt": {
+      "bytes": 1560,
+      "sha256": "8544e413df2747ad2b4ca64248b63d8d25c9a06b096c82ad7a4c0f243328b77c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NUL-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NUL.cmake": {
+      "bytes": 121,
+      "sha256": "90569d62656f1d289ab6e29876634e8e71cc7994415f3bf110b27a93148a13eb",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NUL.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn-stderr.txt": {
+      "bytes": 191,
+      "sha256": "b7aeda87f7df899bf5808fa3ee7c57c13ecacfe3b1699b7e08ba04bb6a7c399d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn.cmake": {
+      "bytes": 68,
+      "sha256": "faf8bf7ff6e57101f7f0c2ada84eb68f541e1685a486530ce4045ae191cd7d54",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturn.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturnQuoted.cmake": {
+      "bytes": 70,
+      "sha256": "61ae73ff0c7dca352b6576d1ef6947c29c90165c7390ef9ef2d42b5051a784c9",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithCarriageReturnQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces-stderr.txt": {
+      "bytes": 189,
+      "sha256": "3d632d24c5835756438e6d8478ad160f0d83db46d2ecfb0c1a5ccbaec0a5bbee",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces.cmake": {
+      "bytes": 68,
+      "sha256": "e2a696d8bfd39f8d6ba986c572b777ff61230f7f06eaa1e383ed95b93f0af5e5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpaces.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpacesQuoted.cmake": {
+      "bytes": 70,
+      "sha256": "6714cfb8d1c675a14b15aeef7e72a05ab12b3e84a6678a87292c4c41f7fc4cb3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedSpacesQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs-stderr.txt": {
+      "bytes": 187,
+      "sha256": "ad77b0574e7ff3e37b20507a6fa73ee8bda0ee9edacaee47c1f0bba961d07a84",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs.cmake": {
+      "bytes": 66,
+      "sha256": "60999354b0420d7511765eaf077fedd5200224b64ea9138eeab2aee039ace059",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabs.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabsQuoted.cmake": {
+      "bytes": 68,
+      "sha256": "b01eae5d9e9ca7333d90260b9e2734ea3630e7dd547162bb6d8011edec9cbd7c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithEscapedTabsQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithNewline-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithNewline-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithNewline-stderr.txt": {
+      "bytes": 184,
+      "sha256": "1d4e9c019cafee571d5fc42739930b7b9988b242b27f8b184c7ecc8a606b0b6d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithNewline-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithNewline.cmake": {
+      "bytes": 61,
+      "sha256": "086e872acac3ff03f4da7493a86703cb0cff649c45ffc02b2ebc28572b5de8c6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithNewline.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithNewlineQuoted.cmake": {
+      "bytes": 63,
+      "sha256": "49e0f2215ec7dd1f4d0c846cb7f9a59cbf6ba28eb6fa9eef1861c507d60b9d1d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithNewlineQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpaces-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpaces-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpaces-stderr.txt": {
+      "bytes": 307,
+      "sha256": "307afb117a9dc69d98b7d7a540255e4a2581170fb38467f22cd156857cfdef05",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpaces-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpaces.cmake": {
+      "bytes": 57,
+      "sha256": "897595173e9e7aa0fb372272c61965bfd74dc1f7e6cfdd8123d6e2918f110cad",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpaces.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted-stderr.txt": {
+      "bytes": 338,
+      "sha256": "bcceafd83b36b1ee56bba36fd492f5944b7b30f1978eed91fbc3897c5d62e3a2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted.cmake": {
+      "bytes": 59,
+      "sha256": "0f9f9df74144b4287bf981f6932e2d2a4b38e71f5f79d1dbe9aca0fb0020ac8a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithSpacesQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabs-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabs-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabs-stderr.txt": {
+      "bytes": 303,
+      "sha256": "21a5e3a550f357c22cc66e42e75ecdd7ef09424e72e5d7c351c511e209da91ea",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabs-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabs.cmake": {
+      "bytes": 55,
+      "sha256": "d8e5cb6641a399490c70e4173dc7b5dd64c4ae5a429dfa9bdc4a092a420abb10",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabs.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted-stderr.txt": {
+      "bytes": 332,
+      "sha256": "4524ee60d5325cdb30d35ecc56007402a831e4f27981433533f9f3075e8629f5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted.cmake": {
+      "bytes": 57,
+      "sha256": "1aa7069e677af3fb654c6cf14dcaa2717004f45b3cb8b7a3fb318989ebfef236",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-NameWithTabsQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-ParenInENV-stderr.txt": {
+      "bytes": 12,
+      "sha256": "9fdf9c2495ecaf67f2f749c70153c12046231edd9a8b5730221f8fd9ec79ba52",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-ParenInENV-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-ParenInENV.cmake": {
+      "bytes": 81,
+      "sha256": "a97c70b431656a7d7d9458baac14e480b960ea79084c41eb84bff3ba67fedda9",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-ParenInENV.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-ParenInQuotedENV-stderr.txt": {
+      "bytes": 12,
+      "sha256": "9fdf9c2495ecaf67f2f749c70153c12046231edd9a8b5730221f8fd9ec79ba52",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-ParenInQuotedENV-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-ParenInQuotedENV.cmake": {
+      "bytes": 83,
+      "sha256": "d91a0408c3ef3a71a9932da35963354103494d0676171917346d74303fef469a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-ParenInQuotedENV.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-WARN-stderr.txt": {
+      "bytes": 829,
+      "sha256": "44c76fb8dcadd05d2f213bd88f40c67c7e6834e09fef4e777bc8b7b7987e68e7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-WARN-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CMP0053-WARN.cmake": {
+      "bytes": 65,
+      "sha256": "74e516e12c5955c6f60df80e81a0c48a4f81831ae8ebba3198bbea4ce585831a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMP0053-WARN.cmake"
+    },
+    "Tests/RunCMake/Syntax/CMakeLists.txt": {
+      "bytes": 102,
+      "sha256": "ca53993ec8f019d8cb9c986292a9253ea857e851b321168da14e863a34938610",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CMakeLists.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandComments-stderr.txt": {
+      "bytes": 71,
+      "sha256": "80df5240006a3ca8925e70260853128ab4b7fb23d65d99df00da93af837b129e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandComments-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandComments.cmake": {
+      "bytes": 159,
+      "sha256": "39b2a35659353a6982ac98699bb0d9d7d8891e56584fa7f8e2fbfec8c4c09ee2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandComments.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandEOF-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandEOF-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandEOF-stderr.txt": {
+      "bytes": 181,
+      "sha256": "ef6697bcc4d671f27cc4b67356becf11b1d6fe2724970415699c2b467a70ef68",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandEOF-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandEOF.cmake": {
+      "bytes": 7,
+      "sha256": "ab530a13e45914982b79f9b7e3fba994cfd1f3fb22f71cea1afbf02b460c6d1d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandEOF.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandError0-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError0-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError0-stderr.txt": {
+      "bytes": 169,
+      "sha256": "6e0f8b914c8244cbe11cb2f605b8c225548f1f351eec55aa450a80c7c0464d05",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError0.cmake": {
+      "bytes": 30,
+      "sha256": "8592b94124ccc4e234be7ae12b87a5a2319033b30dc0377ebb562b6c389cd1f3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError0.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandError1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError1-stderr.txt": {
+      "bytes": 180,
+      "sha256": "1d2da7c6711f240b4e83ef7db15414128f03231a4c7a46449b706c8fa07156c1",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError1.cmake": {
+      "bytes": 53,
+      "sha256": "59ab054ff1744ee9ca1624c032301f38e68fbce09a28bd4fb37ead4ad0d9fd2f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError1.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandError2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError2-stderr.txt": {
+      "bytes": 204,
+      "sha256": "8532f3407a69a8520763e5dd7ca803a138b9f860add980827884d32688296f9e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandError2.cmake": {
+      "bytes": 50,
+      "sha256": "d949454349f87b60e44699f4605b36b18373e7e8db22f1ed78c2d938e8883363",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandError2.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandNewlines-stderr.txt": {
+      "bytes": 48,
+      "sha256": "7993c3b88e32360e8da9e06449ce81147dc15aa7d392f905d93a3a58abb01421",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandNewlines-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandNewlines.cmake": {
+      "bytes": 99,
+      "sha256": "3330bdeaf7d9a72d387abfd7c6bc8d611254f2de158af1e13c2dc82eb8e07b9d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandNewlines.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandSpaces-stderr.txt": {
+      "bytes": 96,
+      "sha256": "7c3fa681e3977d351cbacb54aa00e5a529dc0c44dcc3c93556b09092e4c354f2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandSpaces-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandSpaces.cmake": {
+      "bytes": 176,
+      "sha256": "043b21ca9048ad880d8aa0f5f739edb0c66e60aa5d6b98569422dae516e1f7d7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandSpaces.cmake"
+    },
+    "Tests/RunCMake/Syntax/CommandTabs-stderr.txt": {
+      "bytes": 96,
+      "sha256": "7c3fa681e3977d351cbacb54aa00e5a529dc0c44dcc3c93556b09092e4c354f2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandTabs-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/CommandTabs.cmake": {
+      "bytes": 174,
+      "sha256": "f07f73de40fef176e58318bbcf2465fac3d51b389e65d7e373d6dcfb597b4db9",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/CommandTabs.cmake"
+    },
+    "Tests/RunCMake/Syntax/Escape1-stderr.txt": {
+      "bytes": 64,
+      "sha256": "87ab458462b65625af7b8c0d4e0f367d8de9c0fc92cf22a26b2d7cd60ced740f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Escape1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Escape1.cmake": {
+      "bytes": 109,
+      "sha256": "fd95c42f2a1681356af832999a4e3e21c5c12eb4ab041f8be3317e2b13cd9cdb",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Escape1.cmake"
+    },
+    "Tests/RunCMake/Syntax/Escape2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Escape2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/Escape2-stderr.txt": {
+      "bytes": 306,
+      "sha256": "1c8ba3e2f234ed2f81b539f012a16477445b42fa3e6fb11cdd6a27ac17863874",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Escape2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Escape2.cmake": {
+      "bytes": 96,
+      "sha256": "673fed4b8dff9eebc10118b1a5e9d8801a213dd3710f58bdb2e086656ed25800",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Escape2.cmake"
+    },
+    "Tests/RunCMake/Syntax/EscapeCharsAllowed-stderr.txt": {
+      "bytes": 196,
+      "sha256": "4ad666946c513d01c1ac9577c2bdce75b19e933fc05fc01c5b9a6cbda9ecad6a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapeCharsAllowed-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/EscapeCharsAllowed.cmake": {
+      "bytes": 800,
+      "sha256": "f667580b14c1f3a1980338613bfb2a480976b7ac28c7291236a7d701d78ad0c8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapeCharsAllowed.cmake"
+    },
+    "Tests/RunCMake/Syntax/EscapeQuotes-stderr.txt": {
+      "bytes": 8,
+      "sha256": "6d729cf0b4bdeacd2ee88816a2ff8d13985dd668d47ed6f7180844b8a77159a6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapeQuotes-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/EscapeQuotes.cmake": {
+      "bytes": 204,
+      "sha256": "93544bfe663397d12912c3042791b593c8f12cf09a23fd01d6cae611a6515f74",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapeQuotes.cmake"
+    },
+    "Tests/RunCMake/Syntax/EscapedAt-stderr.txt": {
+      "bytes": 10,
+      "sha256": "4393dcad62d813708c84e0a69ce2245f7043a50bdd194295e6bf6177cb6a348d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapedAt-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/EscapedAt.cmake": {
+      "bytes": 94,
+      "sha256": "15972fc3740280f6ccf069979795f6dcaaab6262059cd03af588a7f8bfa097b0",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/EscapedAt.cmake"
+    },
+    "Tests/RunCMake/Syntax/ExpandInAt-stderr.txt": {
+      "bytes": 12,
+      "sha256": "f19c0f9e2239686a0ea102b9c13baf71e25a9e18c714502dea8d1ff3b31d82cd",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ExpandInAt-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ExpandInAt.cmake": {
+      "bytes": 119,
+      "sha256": "e9fb76049fadfa711dc5dbfeeb121813108f89e48924e23810e4890275a9cec7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ExpandInAt.cmake"
+    },
+    "Tests/RunCMake/Syntax/ForEachBracket1-stderr.txt": {
+      "bytes": 18,
+      "sha256": "2b37a9fe9cb1ebf162e8afbee7787d73b5a56dd4c1a4ff412e8e37363062d45e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ForEachBracket1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ForEachBracket1.cmake": {
+      "bytes": 56,
+      "sha256": "3020ed97161cbe9eb73bb6f5d16eb5a8f627699ac859054dc54ae8e00326e528",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ForEachBracket1.cmake"
+    },
+    "Tests/RunCMake/Syntax/FunctionBracket1-stderr.txt": {
+      "bytes": 158,
+      "sha256": "2dab7fc97765923447c8d160abedb6de297f173c755bbd5f60229b2233ed94f9",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionBracket1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/FunctionBracket1.cmake": {
+      "bytes": 192,
+      "sha256": "60c24521fae7daca0bb1c1b22123529695e9a428fd405ca4f29df67520bff92d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionBracket1.cmake"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatched-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatched-result.txt"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatched-stderr.txt": {
+      "bytes": 191,
+      "sha256": "bc5fa0c070c7df29e4365071e1f4441f9985a4b87624a885b11e81ae7750a20f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatched-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatched.cmake": {
+      "bytes": 37,
+      "sha256": "0b00ccdb0ec332a51485b39d61f5a51dbaf31d226b0e33f29ea172fff9e67662",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatched.cmake"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatchedForeach-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatchedForeach-result.txt"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatchedForeach-stderr.txt": {
+      "bytes": 201,
+      "sha256": "d594f7ba3f9aa9dac0b3f8afdaef155fd00c019cdd4a5f92b8f2bfa7d49fdcf8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatchedForeach-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/FunctionUnmatchedForeach.cmake": {
+      "bytes": 71,
+      "sha256": "6bae9f216a293c8625cb3f939845335a5e4b9672f1153c56d56844f91080570b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/FunctionUnmatchedForeach.cmake"
+    },
+    "Tests/RunCMake/Syntax/ImproperNesting-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ImproperNesting-result.txt"
+    },
+    "Tests/RunCMake/Syntax/ImproperNesting-stderr.txt": {
+      "bytes": 191,
+      "sha256": "a8afe74d5b8b2edaedeb20de3fca1edcde69665b989559511487584cf78a27a6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ImproperNesting-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ImproperNesting.cmake": {
+      "bytes": 99,
+      "sha256": "c2322e609bbce546a49d9c59c1246db87f30760280093cdb82237581a9b5f661",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ImproperNesting.cmake"
+    },
+    "Tests/RunCMake/Syntax/MacroBracket1-stderr.txt": {
+      "bytes": 158,
+      "sha256": "2dab7fc97765923447c8d160abedb6de297f173c755bbd5f60229b2233ed94f9",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroBracket1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/MacroBracket1.cmake": {
+      "bytes": 186,
+      "sha256": "cef1d743fb681d88398716658f234663ca4349b329e6a07e50ad2da67ac26dff",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroBracket1.cmake"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatched-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatched-result.txt"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatched-stderr.txt": {
+      "bytes": 185,
+      "sha256": "3bce7e44a7bb5dc602b237f106a7e8a96c5595f0527e8d66f983ad64e06bba88",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatched-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatched.cmake": {
+      "bytes": 31,
+      "sha256": "9279f6377185cfdb198a6d9f154f82a97efcb446c4b1d3cd92a70107a4405f29",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatched.cmake"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatchedForeach-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatchedForeach-result.txt"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatchedForeach-stderr.txt": {
+      "bytes": 195,
+      "sha256": "5793c46d68d90b9f417cc1d519b5266f5ae737ee4bfa54134f25b8062dfb300d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatchedForeach-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/MacroUnmatchedForeach.cmake": {
+      "bytes": 65,
+      "sha256": "389da6d485adbaeed560abd5cdfa63f8aa6640280ae2f828df7b80191c4e7cc7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/MacroUnmatchedForeach.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturn-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturn-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturn-stderr.txt": {
+      "bytes": 342,
+      "sha256": "3047a4e6c5f396e3f0e30b39768c21dee0a381b15b9a0b158a0a53dcc2d1a2f2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturn-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturn.cmake": {
+      "bytes": 38,
+      "sha256": "52088d1970e2c4dcb6ac116aeff3d92441947ac0b1b41b23c38f9775ce32e711",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturn.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted-stderr.txt": {
+      "bytes": 354,
+      "sha256": "fc3350d1683b48d741c73a8c8cb438f9b4451707d25c82646745c9b5525578f0",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted.cmake": {
+      "bytes": 40,
+      "sha256": "97d6c1cb16203f3a19811230520309a3ecc071e84d7f06a97b23e216ecf1d032",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithCarriageReturnQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpaces-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpaces-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpaces-stderr.txt": {
+      "bytes": 341,
+      "sha256": "3d7e65776c71992ce8a32328330d4dd59f0fec30373d69ece80a23b6004a959d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpaces-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpaces.cmake": {
+      "bytes": 38,
+      "sha256": "3c1e105c5e9b9255677c1333ddbb0b707400268e3ac99033d2b8ec5d454a6599",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpaces.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted-stderr.txt": {
+      "bytes": 353,
+      "sha256": "36932a873b866cd3fe0b14e9c3b0e442530682ae7517644243cbf46e425784fa",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted.cmake": {
+      "bytes": 40,
+      "sha256": "d0a2cf1386797ce46242403570e8f30218ef1c2e2af52eda0d762b3e9d86004a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedSpacesQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabs-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabs-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabs-stderr.txt": {
+      "bytes": 309,
+      "sha256": "a5ef48577d143deb8d7a83ca32b905a50d7318f53ffb6b16bf275c2b99e49bd8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabs-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabs.cmake": {
+      "bytes": 36,
+      "sha256": "069a762502c33a33221ff9eaba19ebf44d15640a8c77305a6f39e291723cba5f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabs.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted-stderr.txt": {
+      "bytes": 321,
+      "sha256": "85faeb87923c816ce7d61be759e8f4ee87d188e0b28c3375ab76828993a81113",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted.cmake": {
+      "bytes": 38,
+      "sha256": "306bd92925b96cb981ef2409fdb492f2eefc12728a6dbb6df26e3a363a043bab",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithEscapedTabsQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewline-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewline-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewline-stderr.txt": {
+      "bytes": 321,
+      "sha256": "fc07aecc09eb65fbc60cda1720ab8e2e2a9850bc2ed7afecfa95bf064af6a2a1",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewline-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewline.cmake": {
+      "bytes": 31,
+      "sha256": "ce2582b295c30d1ce0b4093989846c121ff7fc8811ac90ee93732653c8828221",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewline.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewlineQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewlineQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewlineQuoted-stderr.txt": {
+      "bytes": 333,
+      "sha256": "35aa64da3c9709e75ffd7be485676fa5ca3ecbfc66f7c0dc0c8ee4f5003974ea",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewlineQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithNewlineQuoted.cmake": {
+      "bytes": 33,
+      "sha256": "14df9e80eafe89cf017f7d362ed2aa8c4d6c1d93e6e49fffa700d7031fa93a66",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithNewlineQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpaces-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpaces-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpaces-stderr.txt": {
+      "bytes": 302,
+      "sha256": "2599d91a51f70983de8959d14957984f8cf1c61123a5323c9995cc8ff5429133",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpaces-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpaces.cmake": {
+      "bytes": 27,
+      "sha256": "996a2a8e36166fe1cfebae9f8e0ea694881959e9c1c4baad137a0ac51ace8578",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpaces.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpacesQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpacesQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpacesQuoted-stderr.txt": {
+      "bytes": 325,
+      "sha256": "8fbdb0cdada354b1633f6e7be9fea7fba8a61dd255ebba4a5f476eb44df03b52",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpacesQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithSpacesQuoted.cmake": {
+      "bytes": 29,
+      "sha256": "70455a798ac8d0c67e55076fd2913dae1cdc732b763db8028364cbbe83b6fc2e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithSpacesQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabs-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabs-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabs-stderr.txt": {
+      "bytes": 298,
+      "sha256": "03b4e7335edad3056a4c1e7fada4eda15efac31813fa2bdfbf111549ef3ee815",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabs-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabs.cmake": {
+      "bytes": 25,
+      "sha256": "fbe3c1567bcf51b9ba7d3eeedef996f4c74ee7c199d37bfb4792be7029619d84",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabs.cmake"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabsQuoted-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabsQuoted-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabsQuoted-stderr.txt": {
+      "bytes": 319,
+      "sha256": "6b7a22f53a44166c49d5d8329b974f42384568416e2f4f1d9c9e8b019e69f8da",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabsQuoted-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NameWithTabsQuoted.cmake": {
+      "bytes": 27,
+      "sha256": "ce579ee997b9b3017db164d9ca0e64b353f2733285525dbb3aa0f0a0d573abe6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NameWithTabsQuoted.cmake"
+    },
+    "Tests/RunCMake/Syntax/NullAfterBackslash-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullAfterBackslash-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NullAfterBackslash-stderr.txt": {
+      "bytes": 206,
+      "sha256": "785196f9fcc0d4f08bae720e3500f8184da59ab9f4ca2516218f75f248fc6e8b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullAfterBackslash-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NullAfterBackslash.cmake": {
+      "bytes": 113,
+      "sha256": "02f5ed469f69885167a071a94593a0a41247d448b17e35553b37794f526cd3d8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullAfterBackslash.cmake"
+    },
+    "Tests/RunCMake/Syntax/NullTerminatedArgument-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullTerminatedArgument-result.txt"
+    },
+    "Tests/RunCMake/Syntax/NullTerminatedArgument-stderr.txt": {
+      "bytes": 208,
+      "sha256": "b40fde164bb8bc4b2a34f6307cfd2d8bdd2e942f2c2ecb70a83c69da6198be48",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullTerminatedArgument-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/NullTerminatedArgument.cmake": {
+      "bytes": 106,
+      "sha256": "95d45df3fed3f75b284edfc38eef980c725faadd13f4342057eb05e222552e93",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/NullTerminatedArgument.cmake"
+    },
+    "Tests/RunCMake/Syntax/OneLetter-stderr.txt": {
+      "bytes": 8,
+      "sha256": "00cf20e07aa9699f6c4f934230eeff8fc6f6cfdd57c8e5af93496082d75cee42",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/OneLetter-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/OneLetter.cmake": {
+      "bytes": 89,
+      "sha256": "ef338aff7766ddc014e5463d0723e2b99a2e4285d926948d21bd1643ca499785",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/OneLetter.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenInENV-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInENV-result.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInENV-stderr.txt": {
+      "bytes": 589,
+      "sha256": "f68ef1626c47b0ee6b1df40e8b3042e06e0c2be92c1179388d2f79f0c78474e3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInENV-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInENV.cmake": {
+      "bytes": 49,
+      "sha256": "cdb27694a0a19c78035b2ba55dbd39218fcf7690888850654f4941aaa149892b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInENV.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenInQuotedENV-stderr.txt": {
+      "bytes": 12,
+      "sha256": "9fdf9c2495ecaf67f2f749c70153c12046231edd9a8b5730221f8fd9ec79ba52",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInQuotedENV-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInQuotedENV.cmake": {
+      "bytes": 51,
+      "sha256": "42dd7ed268e41dd4533f06211515b9eda83764c8ff3bc6b2766f8a7431bebe45",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInQuotedENV.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName0-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName0-result.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName0-stderr.txt": {
+      "bytes": 307,
+      "sha256": "7b9c1efac7833bf32be4017c88489dfae7d0bc3a4557ffb86863f28d7c19cd6e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName0.cmake": {
+      "bytes": 74,
+      "sha256": "08643936af813667d302fdc6c502fe771c1ceaa9b526171fc0b20379409eb955",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName0.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName1-stderr.txt": {
+      "bytes": 311,
+      "sha256": "a9f41aca3eaa5471e3f6cc4ec83cf838673ae19dfde199e47e966501a80cf882",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenInVarName1.cmake": {
+      "bytes": 76,
+      "sha256": "7c60051986e2398002b9b1bac9e04381f7cac46138bf72f1d106ac8d20c548aa",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenInVarName1.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace0-stdout.txt": {
+      "bytes": 45,
+      "sha256": "ae2b1bf04465306a883cf7469b7ccaf8d43fe0c9b9691128af0309c5f7b511c3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace0-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace0.cmake": {
+      "bytes": 84,
+      "sha256": "ae4fa32559d10c7f28fb9ef98bc6f2355432f989791bf354a19e5572cbd36f7d",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace0.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace1-stderr.txt": {
+      "bytes": 802,
+      "sha256": "3e4385cff44d343ed9defb758534e80e6e96b0c07bfb23c918a07d584e6de4b0",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace1.cmake": {
+      "bytes": 111,
+      "sha256": "e3d24d191d88b57d0241b5422bfa30809f9d24b3d4eb167feb20618195c07b95",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace1.cmake"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace2-stdout.txt": {
+      "bytes": 66,
+      "sha256": "afb9485dc52f9dfa0bdb84823a6cb18ba79b0d95662f974288a5a867ef056414",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace2-stdout.txt"
+    },
+    "Tests/RunCMake/Syntax/ParenNoSpace2.cmake": {
+      "bytes": 111,
+      "sha256": "6197cb499822a399e93e102598a37f970821da365c6351f37e4869aced884c8f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/ParenNoSpace2.cmake"
+    },
+    "Tests/RunCMake/Syntax/QueryCache-stderr.txt": {
+      "bytes": 36,
+      "sha256": "b36e2ce3995fa71b144bc17270f003ee93d8aee72c25745541dbb47ef8f0bfb3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/QueryCache-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/QueryCache.cmake": {
+      "bytes": 141,
+      "sha256": "29514a4a37a8fe3e9bc085848160cf9ef1646035232226b9b28946546807db14",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/QueryCache.cmake"
+    },
+    "Tests/RunCMake/Syntax/RunCMakeTest.cmake": {
+      "bytes": 4371,
+      "sha256": "6522256b83fb3d5fc188bdc90a7f1bc9a29fd16dc3bf63f4ed83048edfeb5de3",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/RunCMakeTest.cmake"
+    },
+    "Tests/RunCMake/Syntax/String0-stderr.txt": {
+      "bytes": 10,
+      "sha256": "1b1aa3af2d84ee399208afa0657962985ee234765ad18773e5568a6f49659c7c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/String0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/String0.cmake": {
+      "bytes": 35,
+      "sha256": "8fa760d4d50d3c91c0634a87d4e1435bda0719b75eb0100f51c78c83023bbca6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/String0.cmake"
+    },
+    "Tests/RunCMake/Syntax/String1-stderr.txt": {
+      "bytes": 21,
+      "sha256": "c8a111e7b7b22c0c9df5baa947fe70875c850d4e004e6913e487f9f5f92ed0af",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/String1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/String1.cmake": {
+      "bytes": 30,
+      "sha256": "63eaa4c07e7487bbcdb789683edea9997a9388f90f268221731e0618d9c28d90",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/String1.cmake"
+    },
+    "Tests/RunCMake/Syntax/StringBackslash-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringBackslash-result.txt"
+    },
+    "Tests/RunCMake/Syntax/StringBackslash-stderr.txt": {
+      "bytes": 133,
+      "sha256": "30824462dfd71a17ccdbcf5898f12b40580a9959bc377d558637e1fffb988b7f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringBackslash-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/StringBackslash.cmake": {
+      "bytes": 29,
+      "sha256": "5f156b1480c74d1532e00cbce554652bad490d8e948833f5d2dd7b59cdaeda2c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringBackslash.cmake"
+    },
+    "Tests/RunCMake/Syntax/StringCRLF-stderr.txt": {
+      "bytes": 16,
+      "sha256": "a7a6ddeda49c2b74c2d5ebdd4445c99a3319001db6f1619f1ea897e3b2bdcbb5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringCRLF-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/StringCRLF.cmake": {
+      "bytes": 111,
+      "sha256": "807ede86f663c0f91ff17aa2b830982f21a3020076eed22ddb8dd7b9d9dbbfb6",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringCRLF.cmake"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation1-stderr.txt": {
+      "bytes": 131,
+      "sha256": "93678da2d712b6c219a7da67994eafa180a97ec93e31a11ebed79fcc748e68db",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation1.cmake": {
+      "bytes": 28,
+      "sha256": "4c1c0c43cf0c7da6a97c8ab6bbe49c9812b271a4e9cdb6b9e98ce7f1f30a2bf4",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation1.cmake"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation2-stderr.txt": {
+      "bytes": 133,
+      "sha256": "b3116dbf3aba48c0ca6322c3c2a25368e1c6f99daa8314e59c180d75ca4f6206",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/StringContinuation2.cmake": {
+      "bytes": 30,
+      "sha256": "cb60e47f1a77ac9e6588c45f37a66814a3d042b625282fdea8f108e46460f7cc",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringContinuation2.cmake"
+    },
+    "Tests/RunCMake/Syntax/StringNoSpace-stderr.txt": {
+      "bytes": 623,
+      "sha256": "aec800f18f68bfdfaab53e2ae3e8d510661c8eb2aa17b42f71af5e68bb2e48a8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringNoSpace-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/StringNoSpace.cmake": {
+      "bytes": 134,
+      "sha256": "00b53a707eb7fd96242fd639b39acdbed9f2334609b9bc78c1c9bd16fc782105",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/StringNoSpace.cmake"
+    },
+    "Tests/RunCMake/Syntax/Unquoted0-stderr.txt": {
+      "bytes": 7,
+      "sha256": "bde5ea8670640e2ba48057e7f5886edd39cc0574063e3ac36b01c2e89ae45f99",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Unquoted0.cmake": {
+      "bytes": 33,
+      "sha256": "92808e29cd737e73c1484c160000c334af61f4adc5b243475529b9744f6bf948",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted0.cmake"
+    },
+    "Tests/RunCMake/Syntax/Unquoted1-stderr.txt": {
+      "bytes": 45,
+      "sha256": "1404fa90d569828bdc78071be37c7cc5293ffad1d968758c3daa96b002143ed5",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Unquoted1.cmake": {
+      "bytes": 45,
+      "sha256": "463d73315b61000d2f8c8de54e394d576638fb146090b5f144865e0eb781c4b2",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted1.cmake"
+    },
+    "Tests/RunCMake/Syntax/Unquoted2-stderr.txt": {
+      "bytes": 35,
+      "sha256": "1b0c3c6a09e9d40ed5d63cfe25108850985be965c49524d43521ce6389ca3e11",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/Unquoted2.cmake": {
+      "bytes": 73,
+      "sha256": "3dde2bff0c37202b9511224e36959b78bca37291e10a1cf46eb6deea913a67f8",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/Unquoted2.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace0-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace0-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace0-stderr.txt": {
+      "bytes": 301,
+      "sha256": "364cb738adab0e836d20715d9f6c0c4fc9e7a18ae1105893ce63a98f829a6cab",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace0.cmake": {
+      "bytes": 14,
+      "sha256": "523322ad1b2d708d4e44037ed9e4ce4d1f9b2442a608d316447adc95a322725e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace0.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace1-stderr.txt": {
+      "bytes": 381,
+      "sha256": "de4b2e3584cfd09f67e6e78b8593466f572bdc8888d345610595f7f446b9f742",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace1.cmake": {
+      "bytes": 44,
+      "sha256": "220396fd9b6d04ad4b9a2950bb8ac0aaf6789b57ec229fb015f6851d8262c57a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace1.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace2-stderr.txt": {
+      "bytes": 290,
+      "sha256": "26c0383ddc429f11d97cd2767b1b2cfa2cb72ed9016c1f52013d25f12adb5bfd",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBrace2.cmake": {
+      "bytes": 74,
+      "sha256": "de56552111ca512e6495088d6dd54a2025f35316717b30ec2f02c87d83d66a01",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBrace2.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket0-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket0-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket0-stderr.txt": {
+      "bytes": 219,
+      "sha256": "58232ab3dbc60bf6766cecd44d8530df6e4761079eed29399deeefc8bb440509",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket0-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket0.cmake": {
+      "bytes": 12,
+      "sha256": "aaea510edfc5e45718861cc0194dd71e20ce3880cd4b13f900086e8d57339878",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket0.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket1-stderr.txt": {
+      "bytes": 221,
+      "sha256": "062315e0cd31dd6206d91b0bc12f28c9f11eea97ff2a7bd5d02ea21e570b1b6f",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracket1.cmake": {
+      "bytes": 15,
+      "sha256": "78b5449357399ac75c6174ef40a5e0928d7ae6d5d475ab4bcec006ff2161d81c",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracket1.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracketComment-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracketComment-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracketComment-stderr.txt": {
+      "bytes": 210,
+      "sha256": "ade8c4914beaf30a60e17175eab177297d8ad7c239cb8cee9a680ab2d8e1b051",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracketComment-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedBracketComment.cmake": {
+      "bytes": 9,
+      "sha256": "aa66660dd229ecbcc62b4b6b77a9907a5db2183ef40aaaaddfd54fee31d1279e",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedBracketComment.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall1-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall1-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall1-stderr.txt": {
+      "bytes": 180,
+      "sha256": "b55423792fe75e52e6486c7b45640f273b10277ae0ce9e1b12fce5a3bc483706",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall1-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall1.cmake": {
+      "bytes": 41,
+      "sha256": "e04b195c6821d6391832e6208c850575b28db00fcd599b66e9754903bcc73728",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall1.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall2-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall2-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall2-stderr.txt": {
+      "bytes": 180,
+      "sha256": "8c3fad219f9b947c71fd835d23ae2c0467bd88eff2f7e7092a927379c901a2b7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall2-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedCall2.cmake": {
+      "bytes": 55,
+      "sha256": "3cee3bcf68d13c4e8ab3405a7b6385854b21326b8c5505f8069fa972b0059c2a",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedCall2.cmake"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedString-result.txt": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedString-result.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedString-stderr.txt": {
+      "bytes": 216,
+      "sha256": "07dc3e5b7435b76ee0c7257f756d6ee2a263c8146f9bb9ac020ce5348cf47c4b",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedString-stderr.txt"
+    },
+    "Tests/RunCMake/Syntax/UnterminatedString.cmake": {
+      "bytes": 11,
+      "sha256": "2a56b37862e4678cd9581b1a7f657d8040010ca0de2a35a6c24bc12b73fd58f7",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/Tests/RunCMake/Syntax/UnterminatedString.cmake"
+    }
+  },
+  "method": "raw",
+  "ref": "v3.28.3",
+  "repo": "Kitware/CMake",
+  "revision": "5e984bb35232116a54de7db39788cb162ca7c263",
+  "suite_id": "cmake-runcmake-syntax",
+  "url_template": "https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/{path}",
+  "verification": [
+    "ref v3.28.3 resolved to 5e984bb35232116a54de7db39788cb162ca7c263 via proxy.golang.org Origin.Hash (2026-11-17)",
+    "every byte fetched from https://raw.githubusercontent.com/Kitware/CMake/5e984bb35232116a54de7db39788cb162ca7c263/<path>; a nonexistent commit or path returns 404"
+  ]
+}
