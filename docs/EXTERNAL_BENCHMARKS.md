@@ -157,3 +157,45 @@ PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
 python scripts/external_ledger.py scorecard --results build/benchmarks/ledger-results.json \
   --out-json build/benchmarks/scorecard.json --out-md build/benchmarks/scorecard.md
 ```
+
+## #265 structured family (yaml, json, toml, xml, ini, proto, graphql)
+
+The family contributes the fragment `tests/fixtures/external/admission/families/structured-265.json`.
+`build_external_admission.py` merges every `admission/families/*.json` fragment in file-name order, so
+each language family can be added and rebuilt on its own. A fragment holds `suites`, `discovery`,
+`cases` and an optional `blocked_acquisitions` list. Each blocked entry names the language, suite, lanes
+and reason. A blocked lane is shown as BLOCKED with that reason. It is never shown as a gap or a pass.
+
+```sh
+python scripts/acquire_structured_benchmarks.py           # network: raw.githubusercontent.com at pinned commits
+STRUCTURED_REF_PYTHON=<python with ruamel.yaml 0.18.16 + jsonpatch 1.33> \
+STRUCTURED_REF_NODE_MODULES=<node_modules with graphql@16.15.0 + @bufbuild/buf@1.75.0> \
+  python scripts/structured_family.py witness             # executes the reference oracles
+python scripts/structured_family.py build [--check]       # offline, deterministic fragment
+python scripts/build_external_admission.py [--check]
+```
+
+**Parser-fidelity lane.** Each case uses the verbatim upstream document on both sides and carries
+`expected.parse.accepts`. The runner's parse adapter applies two rules:
+
+- A must-accept document fails on any explicit fallback, parse diagnostic, tree or determinism error, or
+  invented change.
+- A must-reject document passes only when the C ABI reports the problem, through an explicit
+  fallback/error or `parse_errors`. Silent acceptance fails.
+
+These rows report the valid-acceptance and invalid-rejection rates. Change-fact rates for them are N/A.
+
+**Change-understanding lane.** Upstream pairs are admitted as `upstream_gold`. They come from buf
+`previous/`→`current/`, graphql-js `oldSchema`/`newSchema` template literals (extracted byte-exact) and
+YAML `in.yaml`→`out.yaml`. Every other pair is `reviewed_external_derived`, with its derivation recorded
+on the case. Derived pairs come from JSON Patch `doc`/`expected` serialisations, key reorders,
+re-serialisations, scalar value/type edits, comments, delimiter spacing and literal respelling. Each
+claim is witnessed by a reference implementation run outside IntentumDiff:
+
+- typed value equality: json, tomllib, ruamel.yaml, configparser;
+- buf image equality and `breaking`, reproducing the exact upstream annotation set;
+- graphql-js `findBreakingChanges`/`findDangerousChanges`, matching the upstream assertions, and sorted
+  `printSchema` equality.
+
+Results and minimised failures: `docs/evidence/2026-11-17-external-scorecard-265/`. The W3C XML suite is
+a blocked acquisition (www.w3.org is unreachable), so `xml` is BLOCKED.
