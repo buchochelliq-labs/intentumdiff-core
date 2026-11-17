@@ -33,3 +33,17 @@ pins executed upstream-test witness records under `admission/witnesses/`. It is 
 `scripts/build_external_admission.py` and validated by `scripts/external_ledger.py validate`. Pilot seed
 repairs promoted there are admitted only where the witness actually ran and supported the claim; see
 `docs/EXTERNAL_BENCHMARKS.md` and `docs/evidence/2026-11-17-external-scorecard/README.md`.
+
+### #262 SQL and data-platform bytes
+
+These directories hold verbatim upstream files at pinned commits. Each file's SHA-256 was checked against
+`raw.githubusercontent.com`, and each licence file is retained:
+
+- `upstream/postgresql-regress/` (REL_16_15, PostgreSQL Licence);
+- `upstream/sqlscriptdom/` (MIT);
+- `upstream/powerquery-parser/` (MIT);
+- `upstream/azure-datafactory-samples/` (MIT);
+- `upstream/utplsql/` (Apache-2.0, seed only).
+
+`admission/cases/sql/` and `admission/cases/adf/` hold the reviewed derived pairs, written by
+`scripts/external_families/family_262_sql_data.py`.

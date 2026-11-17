@@ -1,0 +1,44 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "adf-samples-second-parse",
+  "eligibility_differs": false,
+  "eligibility_new": {
+    "CopyDataToStage <- SprocStage=Failed": false,
+    "CopyDataToStage <- SprocStage=Skipped": false,
+    "CopyDataToStage <- SprocStage=Succeeded": true,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Failed": false,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Skipped": false,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Succeeded": true,
+    "Sproc2 <- CopyDataToStage=Failed": false,
+    "Sproc2 <- CopyDataToStage=Skipped": false,
+    "Sproc2 <- CopyDataToStage=Succeeded": true
+  },
+  "eligibility_old": {
+    "CopyDataToStage <- SprocStage=Failed": false,
+    "CopyDataToStage <- SprocStage=Skipped": false,
+    "CopyDataToStage <- SprocStage=Succeeded": true,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Failed": false,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Skipped": false,
+    "CopyDataToStage <- Validate_adf_file_Dataset_activity=Succeeded": true,
+    "Sproc2 <- CopyDataToStage=Failed": false,
+    "Sproc2 <- CopyDataToStage=Skipped": false,
+    "Sproc2 <- CopyDataToStage=Succeeded": true
+  },
+  "engines": [
+    {
+      "name": "python json (strict: duplicate keys and NaN/Infinity rejected)",
+      "version": "Python 3.13.18"
+    },
+    {
+      "name": "ADF dependency-condition model (documented semantics; predecessor outcomes Succeeded/Failed/Skipped injected)",
+      "version": "1"
+    }
+  ],
+  "new_sha256": "ef1d9023f442a729275b1b54d2a2b81f70c7e842029f67e87d3f8dc5a677f909",
+  "old_sha256": "ef1d9023f442a729275b1b54d2a2b81f70c7e842029f67e87d3f8dc5a677f909",
+  "oracle": "strict_json_value_equality_and_adf_dependency_matrix",
+  "schema_version": 1,
+  "status": "executed",
+  "values_equal": true,
+  "verdict": "supports_claim"
+}

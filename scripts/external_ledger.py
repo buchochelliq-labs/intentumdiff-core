@@ -146,6 +146,8 @@ def _validate_expected(expected, where):
         _need(alternative, 'reason', str, f'{where}.alternatives[{index}]')
         requirements(_need(alternative, 'required', list, f'{where}.alternatives[{index}]'),
                      f'alternatives[{index}].required')
+    if 'parse' in expected:
+        _validate_parse(expected['parse'], where + '.parse')
     for index, item in enumerate(_need(expected, 'forbidden', list, where)):
         here = f'{where}.forbidden[{index}]'
         kind = _need(item, 'kind', str, here)
@@ -154,6 +156,20 @@ def _validate_expected(expected, where):
         if kind == 'change_type' and item.get('change_type') not in CHANGE_TYPES:
             raise LedgerError(f'{here}: unknown change_type')
         _need(item, 'reason', str, here)
+
+
+def _validate_parse(parse, where):
+    """Parser-fidelity lane: an independently established statement inventory (#262)."""
+    if not isinstance(parse, dict) or parse.get('side') not in ('old', 'new'):
+        raise LedgerError(f'{where}: side must be old or new')
+    if parse.get('statement_inventory') is None:
+        return  # acceptance only: no parse errors / fallback, judged by the runner's common checks
+    inventory = _need(parse, 'statement_inventory', dict, where)
+    count = _need(inventory, 'count', int, where + '.statement_inventory')
+    starts = _need(inventory, 'starts', list, where + '.statement_inventory')
+    if len(starts) != count or any(type(s) is not int or s < 0 for s in starts) or starts != sorted(set(starts)):
+        raise LedgerError(f'{where}: starts must be {count} increasing byte offsets')
+    _need(inventory, 'evidence', str, where + '.statement_inventory')
 
 
 def validate_case(root, case, suites, inventory, witness_dir_ok=True):
@@ -233,6 +249,11 @@ def validate_case(root, case, suites, inventory, witness_dir_ok=True):
                         raise LedgerError(f'{where}: {side} outside source')
         if claim == 'unknown':
             raise LedgerError(f'{where}: an admitted case needs a changed/preserved behavior claim')
+        if 'parse' in expected:
+            source = old if expected['parse']['side'] == 'old' else new
+            inventory = expected['parse'].get('statement_inventory') or {'starts': []}
+            if any(s >= len(source) for s in inventory['starts']):
+                raise LedgerError(f'{where}: statement start outside source')
     elif case.get('expected') is not None:
         raise LedgerError(f'{where}: unadmitted cases must not carry expectations (expected: null)')
     return case
@@ -382,6 +403,54 @@ def judge(case, review, old: bytes, new: bytes):
             errors.append(f"forbidden empty change list: {item['reason']}")
         elif kind == 'fallback' and review.get('is_fallback') is not False:
             errors.append(f"forbidden fallback: {item['reason']}")
+    return errors
+
+
+def judge_parse(case, trees, source: bytes):
+    """Parser-fidelity judgement against the reference engine's statement inventory.
+
+    Comparison domain: the direct children of the parse-tree root are the top-level
+    units, except that a node spanning more than one reference statement start is a
+    grouping container (a transaction block, batch or section) and is replaced by its own
+    children, recursively. The units' number must equal the reference count and each must
+    start at the reference engine's statement start byte. No node type names are used.
+    Exact end spans are not asserted (terminators are presentation-dependent).
+    """
+    parse = case['expected'].get('parse')
+    if not parse:
+        return []
+    side = parse['side']
+    wanted = parse.get('statement_inventory')
+    if wanted is None:
+        return []
+    parsed = (trees or {}).get(side)
+    tree = parsed.get('tree') if isinstance(parsed, dict) else None
+    if not isinstance(tree, dict):
+        return [f'parse: no {side} tree returned']
+    def units(nodes):
+        out = []
+        for node in nodes:
+            if not isinstance(node, dict):
+                continue
+            rng = node_range(node, source)
+            inside = 0 if rng is None else sum(rng[0] <= s < rng[1] for s in wanted['starts'])
+            kids = [c for c in node.get('children') or [] if isinstance(c, dict)]
+            out.extend(units(kids) if inside > 1 and kids else [node])
+        return out
+
+    children = units(tree.get('children') or [])
+    starts = [(node_range(c, source) or (None,))[0] for c in children]
+    errors = []
+    if len(children) != wanted['count']:
+        errors.append(f"statement inventory: expected {wanted['count']} top-level statements, got {len(children)}")
+    missing = [s for s in wanted['starts'] if s not in starts]
+    extra = [s for s in starts if s not in wanted['starts']]
+    if missing:
+        errors.append(f'statement starts: {len(missing)} reference statement start(s) not matched, first at byte '
+                      f'{missing[0]}')
+    if extra:
+        errors.append(f'statement starts: {len(extra)} reported statement(s) start where the reference has none, '
+                      f'first at byte {extra[0]}')
     return errors
 
 

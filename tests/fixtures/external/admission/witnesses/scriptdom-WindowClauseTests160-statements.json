@@ -1,0 +1,67 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-WindowClauseTests160-statements",
+  "claim_tested": "0 TSql160Parser errors; TSql150Parser error count equals the upstream Only160SyntaxTests expectation; statement inventory from the ScriptDom tree",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "new_sha256": "982dc0994107177ee59996d7790dfe8a14ef6478de5344abf15fc9917a62efc0",
+  "old_sha256": "982dc0994107177ee59996d7790dfe8a14ef6478de5344abf15fc9917a62efc0",
+  "oracle": "scriptdom_parse_acceptance_and_statement_inventory",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 15,
+      "errors160": 0,
+      "generated160_sha256": "26a38cea8429a7b83d15d6e80a94e61b474295804d906ce7aa17948b52f88f50",
+      "statement_count": 16,
+      "statement_starts": [
+        43,
+        113,
+        275,
+        359,
+        479,
+        588,
+        733,
+        842,
+        1023,
+        1109,
+        1273,
+        1349,
+        1525,
+        1641,
+        1833,
+        1993
+      ],
+      "statement_types": [
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "CreateProcedureStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "upstream_expected_errors150": 15,
+  "verdict": "supports_claim"
+}

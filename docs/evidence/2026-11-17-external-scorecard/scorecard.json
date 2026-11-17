@@ -47,23 +47,21 @@
       "lanes": {
         "change_understanding": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
-            "numerator": 0,
-            "value": null
+            "denominator": 4,
+            "numerator": 4,
+            "value": 1.0
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "parser_fidelity": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
-            "numerator": 0,
-            "value": null
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "robustness_scaling": {
           "external_gold_pass_rate": {
@@ -77,7 +75,114 @@
         }
       },
       "language_id": "adf",
-      "rows": [],
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 4,
+            "blocked": 0,
+            "discovered": 4,
+            "eligible": 4,
+            "executed": 4,
+            "failed": 0,
+            "passed": 4,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 4,
+            "numerator": 4,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 2,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "azure-datafactory-samples",
+          "suite_revision": "d470e0613b426db4e886cd57ccd6096e016464da",
+          "suite_version": "main @ d470e0613b42"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 0,
+            "eligible": 0,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "azure-datafactory-samples",
+          "suite_revision": "d470e0613b426db4e886cd57ccd6096e016464da",
+          "suite_version": "main @ d470e0613b42"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 2,
+            "blocked": 0,
+            "discovered": 2,
+            "eligible": 2,
+            "executed": 2,
+            "failed": 0,
+            "passed": 2,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 2,
+            "numerator": 2,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 2,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "azure-datafactory-samples",
+          "suite_revision": "d470e0613b426db4e886cd57ccd6096e016464da",
+          "suite_version": "main @ d470e0613b42"
+        }
+      ],
       "selected_evidence_class": "qualified external candidate; admission gap",
       "selected_primary_source": "https://github.com/Azure/Azure-DataFactory"
     },
@@ -1862,13 +1967,12 @@
         },
         "parser_fidelity": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
-            "numerator": 0,
-            "value": null
+            "denominator": 9,
+            "numerator": 2,
+            "value": 0.2222
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "robustness_scaling": {
           "external_gold_pass_rate": {
@@ -1882,7 +1986,107 @@
         }
       },
       "language_id": "m",
-      "rows": [],
+      "rows": [
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 9,
+            "blocked": 0,
+            "discovered": 78,
+            "eligible": 78,
+            "executed": 9,
+            "failed": 7,
+            "passed": 2,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "pqparser-helloworld-helloworld-parse",
+              "errors": [
+                "statement inventory: expected 4 top-level statements, got 1",
+                "statement starts: 4 reference statement start(s) not matched, first at byte 24",
+                "statement starts: 1 reported statement(s) start where the reference has none, first at byte 144"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-helloworldwithdocs-helloworldwithdocs-parse",
+              "errors": [
+                "statement inventory: expected 5 top-level statements, got 1",
+                "statement starts: 5 reference statement start(s) not matched, first at byte 32",
+                "statement starts: 1 reported statement(s) start where the reference has none, first at byte 1382"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-navigationtable-navigationtable-parse",
+              "errors": [
+                "statement inventory: expected 11 top-level statements, got 5",
+                "statement starts: 11 reference statement start(s) not matched, first at byte 77",
+                "statement starts: 5 reported statement(s) start where the reference has none, first at byte 195"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-oauthpkce-pkcesample-parse",
+              "errors": [
+                "statement inventory: expected 5 top-level statements, got 3",
+                "statement starts: 5 reference statement start(s) not matched, first at byte 230",
+                "statement starts: 3 reported statement(s) start where the reference has none, first at byte 326"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-trippin-1-odata-trippin-parse",
+              "errors": [
+                "statement inventory: expected 4 top-level statements, got 1",
+                "statement starts: 4 reference statement start(s) not matched, first at byte 21",
+                "statement starts: 1 reported statement(s) start where the reference has none, first at byte 202"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-trippin-2-rest-trippin-parse",
+              "errors": [
+                "statement inventory: expected 5 top-level statements, got 1",
+                "statement starts: 5 reference statement start(s) not matched, first at byte 21",
+                "statement starts: 1 reported statement(s) start where the reference has none, first at byte 405"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pqparser-trippin-3-navtables-trippin-parse",
+              "errors": [
+                "statement inventory: expected 10 top-level statements, got 5",
+                "statement starts: 10 reference statement start(s) not matched, first at byte 74",
+                "statement starts: 5 reported statement(s) start where the reference has none, first at byte 894"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 9,
+            "numerator": 2,
+            "value": 0.2222
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 9,
+            "numerator": 7,
+            "value": 0.7778
+          },
+          "suite_id": "powerquery-parser",
+          "suite_revision": "84eb5f6f9f8f656dca69e687f514d7a2f86b5ef5",
+          "suite_version": "4.0.1 (package.json) @ 84eb5f6f9f8f"
+        }
+      ],
       "selected_evidence_class": "official upstream regression suite",
       "selected_primary_source": "https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md"
     },
@@ -2202,7 +2406,82 @@
         }
       },
       "language_id": "plsql",
-      "rows": [],
+      "rows": [
+        {
+          "class": "external_seed_only",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 4,
+            "eligible": 4,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "utplsql",
+          "suite_revision": "77fc2b49bc288f5fd9523aa98ee76328adeb5769",
+          "suite_version": "develop @ 77fc2b49bc28"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 489,
+            "eligible": 0,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "utplsql",
+          "suite_revision": "77fc2b49bc288f5fd9523aa98ee76328adeb5769",
+          "suite_version": "develop @ 77fc2b49bc28"
+        }
+      ],
       "selected_evidence_class": "established community / compatibility suite",
       "selected_primary_source": "https://github.com/utPLSQL/utPLSQL"
     },
@@ -2929,23 +3208,21 @@
       "lanes": {
         "change_understanding": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
-            "numerator": 0,
-            "value": null
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "parser_fidelity": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
-            "numerator": 0,
-            "value": null
+            "denominator": 4,
+            "numerator": 3,
+            "value": 0.75
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "robustness_scaling": {
           "external_gold_pass_rate": {
@@ -2959,7 +3236,222 @@
         }
       },
       "language_id": "sql",
-      "rows": [],
+      "rows": [
+        {
+          "class": "external_seed_only",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 2,
+            "eligible": 2,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "postgresql-regress",
+          "suite_revision": "7d3e000c5961a544302072058a1184e9a588837b",
+          "suite_version": "REL_16_15"
+        },
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 12,
+            "eligible": 12,
+            "executed": 12,
+            "failed": 3,
+            "passed": 9,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "pgreg-select-having-keyword-case",
+              "errors": [
+                "has_semantic_changes: expected False, got True",
+                "is_style_only: expected True, got False",
+                "completeness: style-only review must be equivalent, got complete",
+                "forbidden MODIFICATION reported: presentation-only edit is not a code edit"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pgreg-select-having-comment",
+              "errors": [
+                "has_semantic_changes: expected False, got True",
+                "forbidden MODIFICATION reported: a comment is not a code edit"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "pgreg-select-implicit-alias-rename",
+              "errors": [
+                "forbidden ADDITION reported: an alias rename does not add or delete an entity",
+                "forbidden DELETION reported: an alias rename does not add or delete an entity"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 6,
+            "numerator": 6,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 6,
+            "numerator": 3,
+            "value": 0.5
+          },
+          "suite_id": "postgresql-regress",
+          "suite_revision": "7d3e000c5961a544302072058a1184e9a588837b",
+          "suite_version": "REL_16_15"
+        },
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 1,
+            "blocked": 0,
+            "discovered": 1,
+            "eligible": 1,
+            "executed": 1,
+            "failed": 0,
+            "passed": 1,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 1,
+            "numerator": 1,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 1,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "postgresql-regress",
+          "suite_revision": "7d3e000c5961a544302072058a1184e9a588837b",
+          "suite_version": "REL_16_15"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 0,
+            "eligible": 0,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "postgresql-regress",
+          "suite_revision": "7d3e000c5961a544302072058a1184e9a588837b",
+          "suite_version": "REL_16_15"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 4,
+            "blocked": 0,
+            "discovered": 222,
+            "eligible": 5,
+            "executed": 3,
+            "failed": 1,
+            "passed": 2,
+            "skipped": 0,
+            "unsupported": 1
+          },
+          "failures": [
+            {
+              "case_id": "pgreg-case-statements",
+              "errors": [
+                "statement inventory: expected 64 top-level statements, got 54",
+                "statement starts: 10 reference statement start(s) not matched, first at byte 4160"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 3,
+            "numerator": 2,
+            "value": 0.6667
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 3,
+            "numerator": 1,
+            "value": 0.3333
+          },
+          "suite_id": "postgresql-regress",
+          "suite_revision": "7d3e000c5961a544302072058a1184e9a588837b",
+          "suite_version": "REL_16_15"
+        }
+      ],
       "selected_evidence_class": "official upstream regression suite",
       "selected_primary_source": "https://www.sqlite.org/sqllogictest/dir?name=test"
     },
@@ -3129,23 +3621,21 @@
       "lanes": {
         "change_understanding": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "denominator": 5,
             "numerator": 0,
-            "value": null
+            "value": 0.0
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "parser_fidelity": {
           "external_gold_pass_rate": {
-            "denominator": 0,
-            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "denominator": 5,
             "numerator": 0,
-            "value": null
+            "value": 0.0
           },
-          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
-          "status": "gap"
+          "na_reason": null,
+          "status": "measured"
         },
         "robustness_scaling": {
           "external_gold_pass_rate": {
@@ -3159,7 +3649,168 @@
         }
       },
       "language_id": "tsql",
-      "rows": [],
+      "rows": [
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 5,
+            "blocked": 0,
+            "discovered": 41,
+            "eligible": 41,
+            "executed": 5,
+            "failed": 5,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "scriptdom-MergeStatementTests160-baseline",
+              "errors": [
+                "old: 0: range outside source (30,0)",
+                "new: 0: range outside source (34,0)"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-SelectStatementTests160-baseline",
+              "errors": [
+                "has_semantic_changes: expected False, got True"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-ShiftOperatorTests160-baseline",
+              "errors": [
+                "old: 0: range outside source (14,0)",
+                "new: 0: range outside source (15,0)"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-StringConcatOperatorTests160-baseline",
+              "errors": [
+                "old: 0: range outside source (23,0)",
+                "new: 0: range outside source (51,0)"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-WindowClauseTests160-baseline",
+              "errors": [
+                "has_semantic_changes: expected False, got True",
+                "old: 0: range outside source (90,0)",
+                "new: 0: range outside source (118,0)"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 5,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          },
+          "suite_id": "sqlscriptdom",
+          "suite_revision": "3ea69b6fc1ed76b63eca6df868f3d1347b92e9fb",
+          "suite_version": "main @ 3ea69b6fc1ed"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 5,
+            "blocked": 0,
+            "discovered": 492,
+            "eligible": 41,
+            "executed": 5,
+            "failed": 5,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "scriptdom-MergeStatementTests160-statements",
+              "errors": [
+                "old: 0: range outside source (30,0)",
+                "new: 0: range outside source (30,0)",
+                "statement inventory: expected 5 top-level statements, got 0",
+                "statement starts: 5 reference statement start(s) not matched, first at byte 45"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-SelectStatementTests160-statements",
+              "errors": [
+                "statement inventory: expected 12 top-level statements, got 0",
+                "statement starts: 12 reference statement start(s) not matched, first at byte 43"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-ShiftOperatorTests160-statements",
+              "errors": [
+                "old: 0: range outside source (14,0)",
+                "new: 0: range outside source (14,0)",
+                "statement inventory: expected 3 top-level statements, got 0",
+                "statement starts: 3 reference statement start(s) not matched, first at byte 3"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-StringConcatOperatorTests160-statements",
+              "errors": [
+                "old: 0: range outside source (23,0)",
+                "new: 0: range outside source (23,0)",
+                "statement inventory: expected 12 top-level statements, got 0",
+                "statement starts: 12 reference statement start(s) not matched, first at byte 0"
+              ],
+              "known_issue": null
+            },
+            {
+              "case_id": "scriptdom-WindowClauseTests160-statements",
+              "errors": [
+                "old: 0: range outside source (90,0)",
+                "new: 0: range outside source (90,0)",
+                "statement inventory: expected 16 top-level statements, got 0",
+                "statement starts: 16 reference statement start(s) not matched, first at byte 43"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "parser_fidelity",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 5,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          },
+          "suite_id": "sqlscriptdom",
+          "suite_revision": "3ea69b6fc1ed76b63eca6df868f3d1347b92e9fb",
+          "suite_version": "main @ 3ea69b6fc1ed"
+        }
+      ],
       "selected_evidence_class": "official upstream regression suite",
       "selected_primary_source": "https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md"
     },
@@ -3524,7 +4175,7 @@
       "selected_primary_source": "https://ziglang.org/documentation/0.15.1/"
     }
   ],
-  "ledger_sha256": "33163b7af06e83c6ddbaf6c27f1c4c213aa3a35783eca4adefd3edeba4cd2339",
+  "ledger_sha256": "89a3646a28a23466ef576aa51eb13d060c2ad79b39f5bb3227e88286af694419",
   "run": {
     "components": {
       "abap_parser.wasm": "a00561ca1dd7c774e7a586c9fdb7b56bcaf268c2e56c0d8d3d0eff82e80c0554",
@@ -3596,73 +4247,101 @@
       "yaml_parser.wasm": "2ff91eb6d68ae517e2941ed00c863a3ff3f2357ceedebecf9a062f8a216989d1",
       "zig_parser.wasm": "8520545894161d06c302558f7b0a7e3d7a3127a420c927aca5fc0f508ba125e6"
     },
-    "core_commit": "74618c311836983b4f60ae2d8389edfdd14f7793",
+    "core_commit": "bbdec7c948258be3eaebedbd921163accbfa0dc0",
     "core_crates_dirty": false,
     "interface": "production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)",
-    "ledger_sha256": "33163b7af06e83c6ddbaf6c27f1c4c213aa3a35783eca4adefd3edeba4cd2339",
+    "ledger_sha256": "89a3646a28a23466ef576aa51eb13d060c2ad79b39f5bb3227e88286af694419",
     "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
     "parser_manifest_sha256": "23c390a898f252d919d9a348b13337c98198980cdf693682747faff630d0b69f",
-    "run_utc": "2026-11-17T19:55:17+00:00",
+    "run_utc": "2026-11-17T20:30:39+00:00",
     "schema_version": 1,
     "selection": {
       "classes": null,
       "languages": null
     },
     "workers": {
+      "adf": {
+        "completed_count": 6,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 71900,
+        "wall_seconds": 0.63,
+        "worker_error": null
+      },
       "c": {
         "completed_count": 4,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 129692,
-        "wall_seconds": 1.427,
+        "peak_rss_kib": 127228,
+        "wall_seconds": 1.289,
         "worker_error": null
       },
       "cpp": {
         "completed_count": 32,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 136348,
-        "wall_seconds": 2.927,
+        "peak_rss_kib": 132104,
+        "wall_seconds": 2.003,
         "worker_error": null
       },
       "go": {
         "completed_count": 21,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 89112,
-        "wall_seconds": 1.805,
+        "peak_rss_kib": 86264,
+        "wall_seconds": 1.287,
         "worker_error": null
       },
       "java": {
         "completed_count": 27,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 90652,
-        "wall_seconds": 1.975,
+        "peak_rss_kib": 88988,
+        "wall_seconds": 1.308,
         "worker_error": null
       },
       "javascript": {
         "completed_count": 27,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 105356,
-        "wall_seconds": 1.952,
+        "peak_rss_kib": 103376,
+        "wall_seconds": 1.399,
+        "worker_error": null
+      },
+      "m": {
+        "completed_count": 9,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 69696,
+        "wall_seconds": 0.57,
         "worker_error": null
       },
       "python": {
         "completed_count": 27,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 88648,
-        "wall_seconds": 1.267,
+        "peak_rss_kib": 88192,
+        "wall_seconds": 1.089,
         "worker_error": null
       },
       "rust": {
         "completed_count": 27,
         "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
-        "peak_rss_kib": 96352,
-        "wall_seconds": 1.828,
+        "peak_rss_kib": 93604,
+        "wall_seconds": 1.511,
+        "worker_error": null
+      },
+      "sql": {
+        "completed_count": 17,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 119624,
+        "wall_seconds": 2.326,
+        "worker_error": null
+      },
+      "tsql": {
+        "completed_count": 10,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 78548,
+        "wall_seconds": 0.58,
         "worker_error": null
       }
     }
   },
   "schema_version": 1,
   "summary": {
-    "languages_without_measured_external_lane": 68,
+    "languages_without_measured_external_lane": 64,
     "pooled_summary": "none: per-language rows only; no macro average is claimed",
     "registered_languages": 74
   }

@@ -315,6 +315,27 @@ def literal_cases():
     return out, suite_files
 
 
+FAMILIES = Path(__file__).with_name('external_families')
+
+
+def family_contributions():
+    """Per-family case builders (#262-#267), each in its own module under scripts/external_families/.
+
+    Each module exposes ``contribute(ctx)`` returning ``{'suites': [...], 'discovery': [...],
+    'cases': [...]}``. Modules are merged in sorted file-name order, so independently added
+    families rebuild one deterministic ledger.
+    """
+    from types import SimpleNamespace
+    ctx = SimpleNamespace(ROOT=ROOT, ref=ref, write=write, minimal_region=minimal_region, witness_ref=witness_ref,
+                          classification=classification, forbid=forbid, ledger_lib=ledger_lib, sha=sha)
+    out = []
+    for path in sorted(FAMILIES.glob('*.py')):
+        spec = importlib.util.spec_from_file_location(f'external_family_{path.stem}', path)
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        out.append(module.contribute(ctx))
+    return out
+
+
 def build():
     for config in CONFIGS:
         parquet = ROOT / f'upstream/{config}/test-00000-of-00001.parquet'
@@ -374,6 +395,8 @@ def build():
          'acquisition': {'method': 'authored in repository', 'files': literal_files,
                          'verification': ['bytes pinned per file by SHA-256']}},
     ]
+    for family in family_contributions():
+        suites += family['suites']; discovery += family['discovery']; cases += family['cases']
     ledger = {'schema_version': 2, 'contract': 'core#268 admission ledger; parent core#261',
               'inventory': ref('inventory.json'), 'language_selection': ref('ledger.json'),
               'suites': suites, 'discovery': discovery, 'cases': cases}

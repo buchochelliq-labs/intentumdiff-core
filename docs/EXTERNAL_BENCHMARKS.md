@@ -157,3 +157,36 @@ PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
 python scripts/external_ledger.py scorecard --results build/benchmarks/ledger-results.json \
   --out-json build/benchmarks/scorecard.json --out-md build/benchmarks/scorecard.md
 ```
+
+## Language-family contributions and the parser-fidelity adapter
+
+Each family task (#262–#267) adds a module under `scripts/external_families/`. The module exposes
+`contribute(ctx)` and returns `{'suites', 'discovery', 'cases'}`. `build_external_admission.py` merges the
+modules in sorted file-name order, so independently added families rebuild one deterministic ledger.
+Upstream bytes are vendored under `tests/fixtures/external/upstream/<suite_id>/`, and derived bytes go under
+`admission/cases/<language>/`.
+
+A parser-fidelity case may carry `expected.parse`:
+`{side, statement_inventory: {count, starts, evidence} | null}`. The inventory comes from the reference
+engine or parser, never from IntentumDiff. `external_ledger.judge_parse` then compares it with the parse
+tree:
+
+- The top-level units are the root's children.
+- A node that spans more than one reference start is a container and is replaced by its own children.
+- The unit count and each unit's start byte must match the reference.
+
+A `null` inventory means the case only checks acceptance: no parse errors, no fallback and no invented
+changes.
+
+**#262 (SQL and data-platform).** The family module is `scripts/external_families/family_262_sql_data.py`.
+Its witnesses are written by `scripts/data_family_witness.py ledger`, which reads each case's `witness_plan`.
+It needs:
+
+- a PostgreSQL server with `logging_collector=on`, `log_destination=csvlog`, `log_statement=all` and
+  `log_min_error_statement=error`, reached through `PGHOST`, `PGPORT` and `PGUSER`, with `--csvlog`;
+- `dotnet` and the built `scripts/witness_tools/scriptdom` tool, passed as `--tool`;
+- `node` with `@microsoft/powerquery-parser@4.0.1` in `--node-path`.
+
+CI does not rerun these witnesses. It validates the committed records and rebuilds the ledger with
+`--check`. The results, minimised failures and blocked sources are in
+`docs/evidence/2026-11-17-external-scorecard/README.md`.
