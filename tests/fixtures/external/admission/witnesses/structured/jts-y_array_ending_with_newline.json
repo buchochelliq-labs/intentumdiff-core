@@ -1,0 +1,14 @@
+{
+  "case_id": "jts-y_array_ending_with_newline",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "0eb5b8d6f81bc677da8a08567cc4fa9a06a57e9ec8da85ed73a7f62727996002",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "0eb5b8d6f81bc677da8a08567cc4fa9a06a57e9ec8da85ed73a7f62727996002",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

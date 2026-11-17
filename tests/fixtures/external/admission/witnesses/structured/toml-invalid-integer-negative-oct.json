@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-integer-negative-oct",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "395340f6cf5f472a5e472a256d7278952498f7a1bec33b9c197aa2e7b0d5b858",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 18)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "395340f6cf5f472a5e472a256d7278952498f7a1bec33b9c197aa2e7b0d5b858",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

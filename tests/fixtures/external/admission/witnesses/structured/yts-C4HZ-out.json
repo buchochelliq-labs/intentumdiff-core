@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-C4HZ-out",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "5aa648733d4d4728aa4307f462880f7c8bd9e8584cbb44ae99e74d6ddd022285",
+  "observations": {
+    "new": "ConstructorError: could not determine a constructor for the tag 'tag:clarkevans.com,2002:shape'\n  in \"<unicode string>\", line 1, column 5:\n    --- !<tag:clarkevans.com,2002:shape>\n        ^ (line: 1)",
+    "old": "ConstructorError: could not determine a constructor for the tag 'tag:clarkevans.com,2002:shape'\n  in \"<unicode string>\", line 2, column 5:\n    --- !shape\n        ^ (line: 2)"
+  },
+  "old_sha256": "a26b06a007bba6af4a31fc98fb3bba587265d8c0cae3178d5f083a03cb25ff4d",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

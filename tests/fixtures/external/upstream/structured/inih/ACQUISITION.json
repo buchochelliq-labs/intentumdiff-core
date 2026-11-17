@@ -1,0 +1,143 @@
+{
+  "enumeration": {
+    "complete": true,
+    "listed": [
+      "bad_comment.ini",
+      "bad_multi.ini",
+      "bad_section.ini",
+      "bom.ini",
+      "duplicate_sections.ini",
+      "long_line.ini",
+      "long_section.ini",
+      "multi_line.ini",
+      "name_only_after_error.ini",
+      "no_file.ini",
+      "no_value.ini",
+      "normal.ini",
+      "user_error.ini"
+    ],
+    "method": ".ini files named in tests/unittest.c"
+  },
+  "files": {
+    "LICENSE.txt": {
+      "bytes": 1510,
+      "sha256": "9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/LICENSE.txt"
+    },
+    "ini.c": {
+      "bytes": 9339,
+      "sha256": "ede2df5a39d091dc494c2718d3900a26adcabc74cd63dc5016ef1145ef0a2f0c",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/ini.c"
+    },
+    "ini.h": {
+      "bytes": 6953,
+      "sha256": "2e46eba137b5f9ac816e12786846791296f89fb4bd5d4cba69191b706d64654e",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/ini.h"
+    },
+    "tests/bad_comment.ini": {
+      "bytes": 17,
+      "sha256": "1126ecbebd70c2e8855fc16e47903b57987073b4168ebb9fa1ce598f1547c4e8",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/bad_comment.ini"
+    },
+    "tests/bad_multi.ini": {
+      "bytes": 11,
+      "sha256": "25c32f97996dce00e1b52e726b6b6e77c50d288f5db12a2026cfd9aee8499718",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/bad_multi.ini"
+    },
+    "tests/bad_section.ini": {
+      "bytes": 71,
+      "sha256": "718d3f71e0cff713ca84882cd6bc5ac69633b3755df80bfb8dd43685bd0fbead",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/bad_section.ini"
+    },
+    "tests/baseline_disallow_inline_comments.txt": {
+      "bytes": 1964,
+      "sha256": "cb208b9c7f0f35a5999e5e052b39d6c4cf8901540c7320ab71769ed3a51a62c0",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/baseline_disallow_inline_comments.txt"
+    },
+    "tests/baseline_handler_lineno.txt": {
+      "bytes": 2154,
+      "sha256": "eb55bb64b1d7f2f42f5c259626c9f8c19bb332dccf10d774ca0165d749ef030b",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/baseline_handler_lineno.txt"
+    },
+    "tests/baseline_multi.txt": {
+      "bytes": 1739,
+      "sha256": "b51d778e28c66e922f6aab74bf592e6ad90a556b3f4c560c8c04359adb5a2c53",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/baseline_multi.txt"
+    },
+    "tests/baseline_single.txt": {
+      "bytes": 1646,
+      "sha256": "d548e8dc1bc924a918c18e2610e6a86ace6e20404994cd466320ef0c1ba68395",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/baseline_single.txt"
+    },
+    "tests/baseline_stop_on_first_error.txt": {
+      "bytes": 1652,
+      "sha256": "3834f7beed984d0194bed16ffe18b9bbc85bf4aebd00d4693994498d63c8320a",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/baseline_stop_on_first_error.txt"
+    },
+    "tests/bom.ini": {
+      "bytes": 54,
+      "sha256": "1277480adb4ef1398aedc8a3bccf1abc3ead79c2cbea207628a02a389cafeb6c",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/bom.ini"
+    },
+    "tests/duplicate_sections.ini": {
+      "bytes": 77,
+      "sha256": "e431760754ba1fa6dcc7b4021b6eac55efb3297a327aadfb0a79553fd8e11389",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/duplicate_sections.ini"
+    },
+    "tests/long_line.ini": {
+      "bytes": 310,
+      "sha256": "0982ef47ea2372dbc971f51238bd4c58a69089cd976a4fb92b71e7dff02b4e8a",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/long_line.ini"
+    },
+    "tests/long_section.ini": {
+      "bytes": 110,
+      "sha256": "d30b9e083f71c6bd2782152d1caa3e5bfc301cf531b6a7de53e14563b9f99ce0",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/long_section.ini"
+    },
+    "tests/multi_line.ini": {
+      "bytes": 283,
+      "sha256": "8c7cf26b6d12123e9e8f7035b312575c730ec7b67dca6f2e002651b33e051bf1",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/multi_line.ini"
+    },
+    "tests/name_only_after_error.ini": {
+      "bytes": 255,
+      "sha256": "a61332751cf055e364322e8fa6332a7d0748cc53c932b87dd984a58b872ab5f6",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/name_only_after_error.ini"
+    },
+    "tests/no_value.ini": {
+      "bytes": 86,
+      "sha256": "3ff488d63951f9e6b9f01097745beec8aab4abac8e591d9449a3c2a56665b4ef",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/no_value.ini"
+    },
+    "tests/normal.ini": {
+      "bytes": 749,
+      "sha256": "1698dab99f3d161a6af374bc0073f6c0b7954ff53eec5fcc812aae5a4f210adf",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/normal.ini"
+    },
+    "tests/unittest.c": {
+      "bytes": 2177,
+      "sha256": "761a665d40b845863edcd2d63f03dae3e814dbf98e17637af47d2b6009a1f300",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/unittest.c"
+    },
+    "tests/unittest.sh": {
+      "bytes": 2639,
+      "sha256": "2259f2637f5619a0a4b79f2d2672b14145d467a24997e6dba390db33697e4780",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/unittest.sh"
+    },
+    "tests/user_error.ini": {
+      "bytes": 41,
+      "sha256": "0983ca845483eb5349765aa78bf39a27ca249bc0825383578c8cf9dccf7b044b",
+      "url": "https://raw.githubusercontent.com/benhoyt/inih/2bbdec4a366c8c39746ee0982e7ca0febbb044b6/tests/user_error.ini"
+    }
+  },
+  "notes": [],
+  "probed_absent": [
+    "tests/no_file.ini"
+  ],
+  "ref": "master",
+  "repository": "benhoyt/inih",
+  "revision": "2bbdec4a366c8c39746ee0982e7ca0febbb044b6",
+  "revision_resolution": "Go module proxy VCS origin for benhoyt/inih@master (Origin.Hash); bytes fetched only at that commit",
+  "schema_version": 1,
+  "suite_id": "inih"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_extension_no_delete-previous-1",
+  "executed_utc": "2026-11-17T20:20:33+00:00",
+  "new_sha256": "60fd6585f5a7add8540cc275b68cfc4084378d67a7c55dcb07bd78d0eb4fbb5b",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "60fd6585f5a7add8540cc275b68cfc4084378d67a7c55dcb07bd78d0eb4fbb5b",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

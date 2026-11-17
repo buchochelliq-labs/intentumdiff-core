@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-key-end-in-escape",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "fc41961df90b453d80a28878ea0f6c2a61a492e05cb3761e49ac28404b316021",
+  "observations": {
+    "error": "Unescaped '\\' in a string (at end of document)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "fc41961df90b453d80a28878ea0f6c2a61a492e05cb3761e49ac28404b316021",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

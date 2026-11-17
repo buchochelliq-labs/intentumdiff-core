@@ -1,0 +1,99 @@
+{
+  "case_id": "buf-breaking_enum_same_json_format-1",
+  "executed_utc": "2026-11-17T20:21:18+00:00",
+  "new_sha256": "e998a7a1efef1d25641c1eb9ec659c1a69b1bd8106aa21930902f01de19f9611",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          9,
+          1,
+          11,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          13,
+          1,
+          15,
+          2
+        ]
+      ],
+      [
+        "3.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          26,
+          3,
+          26,
+          52
+        ]
+      ],
+      [
+        "4.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          11,
+          1,
+          13,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          9,
+          1,
+          11,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          13,
+          1,
+          15,
+          2
+        ]
+      ],
+      [
+        "3.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          26,
+          3,
+          26,
+          52
+        ]
+      ],
+      [
+        "4.proto",
+        "ENUM_SAME_JSON_FORMAT",
+        [
+          11,
+          1,
+          13,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "9940840bcbbc480eee71564c0badff19d74d45dea8101458ce4552ac9d6866f0",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

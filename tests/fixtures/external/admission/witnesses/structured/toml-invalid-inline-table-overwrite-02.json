@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-inline-table-overwrite-02",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "372552cd786f6178b0993436684e2de8eac1beb74e5f4fe1c87e1ce58e525970",
+  "observations": {
+    "error": "Cannot declare ('a', 'b') twice (at line 3, column 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "372552cd786f6178b0993436684e2de8eac1beb74e5f4fe1c87e1ce58e525970",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

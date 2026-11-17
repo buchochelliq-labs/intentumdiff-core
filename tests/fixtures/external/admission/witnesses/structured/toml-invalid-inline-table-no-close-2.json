@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-inline-table-no-close-2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "b2d79e1ada6c00a52ab6e6513eeab27b37942e8629b85e87636bbbe29c0b243f",
+  "observations": {
+    "error": "Unclosed inline table (at line 1, column 7)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "b2d79e1ada6c00a52ab6e6513eeab27b37942e8629b85e87636bbbe29c0b243f",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

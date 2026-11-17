@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-K54U-out",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "17c320b09d80c6afd222768b09a2f7ca63880cd2dc583269fb24c38e18494d8b",
+  "observations": {
+    "new": null,
+    "old": "ScannerError: while scanning for the next token\nfound character '\\t' that cannot start any token\n  in \"<unicode string>\", line 1, column 4:\n    ---\tscalar\n       ^ (line: 1)"
+  },
+  "old_sha256": "e0a87fbe3b5dd1e558597a22bf3daa7ea6fd37e2ea4ced9feee85faefb726542",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

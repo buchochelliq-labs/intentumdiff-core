@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-table-array-implicit-and-explicit-after-bump",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "d612bc94351be50ac039a80261f4307e996abf10efdca036b49d91fddc3e0cdf",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "258f20d7986cbe7c63d7578973bb7049f47206a2973366d92b457ad1453cb6e2",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

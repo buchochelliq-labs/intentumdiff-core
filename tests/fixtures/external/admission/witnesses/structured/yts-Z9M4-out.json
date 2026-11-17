@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-Z9M4-out",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "c490571c52525fd6e455b09eec99576e1989c5916e44cf0d29e398bd9f217340",
+  "observations": {
+    "new": "ConstructorError: could not determine a constructor for the tag 'tag:example.com,2000:app/foo'\n  in \"<unicode string>\", line 2, column 3:\n    - !<tag:example.com,2000:app/foo>  ... \n      ^ (line: 2)",
+    "old": "ConstructorError: could not determine a constructor for the tag 'tag:example.com,2000:app/foo'\n  in \"<unicode string>\", line 3, column 3:\n    - !e!foo \"bar\"\n      ^ (line: 3)"
+  },
+  "old_sha256": "23bae94fc4688454728dfd755083d531aa4380bbec6c7203a75fbd1772082fda",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

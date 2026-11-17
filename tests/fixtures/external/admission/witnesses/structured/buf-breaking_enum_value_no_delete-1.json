@@ -1,0 +1,119 @@
+{
+  "case_id": "buf-breaking_enum_value_no_delete-1",
+  "executed_utc": "2026-11-17T20:21:19+00:00",
+  "new_sha256": "530bb1f96d646fc3d6ed4dd5595a0c4c019d0939638aa28c3ad1412a73c4625d",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          5,
+          1,
+          8,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          12,
+          5,
+          15,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          22,
+          3,
+          25,
+          4
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          40,
+          1,
+          42,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          48,
+          1,
+          52,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          5,
+          1,
+          8,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          12,
+          5,
+          15,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          22,
+          3,
+          25,
+          4
+        ]
+      ],
+      [
+        "1.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          40,
+          1,
+          42,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_VALUE_NO_DELETE",
+        [
+          48,
+          1,
+          52,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "f6a692e3cc6be64b44d174ed53a263fa894e090189293dc1c5069838ac0c4ec5",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

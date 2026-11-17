@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-M2N8-01-out",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "d8f69a7ed71b82124dd15c06520cacc5cc660997a181319710b93d4be5d972c2",
+  "observations": {
+    "new": "ConstructorError: while constructing a mapping\n  in \"<unicode string>\", line 1, column 1:\n    ? []: x\n    ^ (line: 1)\nfound unhashable key\n  in \"<unicode string>\", line 1, column 3:\n    ? []: x\n      ^ (line: 1)",
+    "old": "ConstructorError: while constructing a mapping\n  in \"<unicode string>\", line 1, column 1:\n    ? []: x\n    ^ (line: 1)\nfound unhashable key\n  in \"<unicode string>\", line 1, column 3:\n    ? []: x\n      ^ (line: 1)"
+  },
+  "old_sha256": "52d07f495f989baea072c54aef70607c052570e74a50b3dcbaad7c48acb0c864",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

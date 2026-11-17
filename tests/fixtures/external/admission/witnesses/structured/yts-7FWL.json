@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-7FWL",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "39a625f6e3af303e4adc3efc55ca374f47f2d726202678748af957ec3c7fd035",
+  "observations": {
+    "error": "ConstructorError: could not determine a constructor for the tag '!bar'\n  in \"<unicode string>\", line 2, column 3:\n      !<!bar> baz\n      ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "39a625f6e3af303e4adc3efc55ca374f47f2d726202678748af957ec3c7fd035",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

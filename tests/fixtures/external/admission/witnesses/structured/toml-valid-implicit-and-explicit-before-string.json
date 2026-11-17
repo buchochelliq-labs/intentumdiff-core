@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-implicit-and-explicit-before-string",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "4ee9039219590f47e965fc3e6a0990f631ec246658b1133fc2c14ece92c00e05",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "33435dddb68144b652ca5f5e0c4c53e4f7b3ca0166f9b944eda55f8d76ed2871",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

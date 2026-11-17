@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-spec-string-7-0",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "db2c984107f95b5db36a726ce7e77c5ff9bf22d016effa5ab3f4786ea8c84301",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 3, column 48)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "db2c984107f95b5db36a726ce7e77c5ff9bf22d016effa5ab3f4786ea8c84301",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

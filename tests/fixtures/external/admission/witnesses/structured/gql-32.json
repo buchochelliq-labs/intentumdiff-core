@@ -1,0 +1,34 @@
+{
+  "case_id": "gql-32",
+  "executed_utc": "2026-11-17T20:20:42+00:00",
+  "new_sha256": "3000cc65d878f820564586f931aef7027b4d92b5ca5c959d4e28d2391d07f776",
+  "observations": {
+    "reference": {
+      "Breaking": [],
+      "Dangerous": [
+        [
+          "OPTIONAL_ARG_ADDED",
+          "An optional arg arg2 on Type1.field1 was added."
+        ]
+      ]
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Dangerous",
+        [
+          [
+            "Dangerous",
+            "OPTIONAL_ARG_ADDED",
+            "An optional arg arg2 on Type1.field1 was added."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "341bfdf9b31227b1c32a247182f517e8dee1cfdccd9bc92161e4e66e08712d3e",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

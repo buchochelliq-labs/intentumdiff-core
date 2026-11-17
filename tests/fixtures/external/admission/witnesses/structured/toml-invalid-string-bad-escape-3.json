@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-string-bad-escape-3",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "da1bec15d906407f532e7800655f2184d4c68e2e9fe1b0f3d13cd67b7bb8e89e",
+  "observations": {
+    "error": "Illegal character '\\n' (at line 1, column 16)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "da1bec15d906407f532e7800655f2184d4c68e2e9fe1b0f3d13cd67b7bb8e89e",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

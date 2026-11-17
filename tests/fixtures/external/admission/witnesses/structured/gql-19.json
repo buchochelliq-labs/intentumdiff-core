@@ -1,0 +1,34 @@
+{
+  "case_id": "gql-19",
+  "executed_utc": "2026-11-17T20:20:42+00:00",
+  "new_sha256": "8217062d554f090f1fe3e41bd5377d25bef8b219c3350b14053b43557d547fd1",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "DIRECTIVE_ARG_REMOVED",
+          "arg1 was removed from DirectiveWithArg."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "DIRECTIVE_ARG_REMOVED",
+            "arg1 was removed from DirectiveWithArg."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "67bdf31c6041b6db68c6577a3429dc10f60feaf24d8a5bfae04dc0d6c6a6faf6",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,119 @@
+{
+  "case_id": "buf-breaking_message_same_values-2",
+  "executed_utc": "2026-11-17T20:21:24+00:00",
+  "new_sha256": "327233a37c399f2d4bff396b1b9cd84d36ed6387e9666f60150162077f9a0d6b",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          6,
+          3,
+          6,
+          49
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          12,
+          7,
+          12,
+          53
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          23,
+          3,
+          23,
+          49
+        ]
+      ],
+      [
+        "2.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          6,
+          3,
+          6,
+          49
+        ]
+      ],
+      [
+        "2.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          10,
+          3,
+          10,
+          49
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": "\u001b[33mWARN\u001b[0m\tRule MESSAGE_SAME_MESSAGE_SET_WIRE_FORMAT referenced in your buf.yaml is deprecated.\n\tAs with all buf changes, this change is backwards-compatible: MESSAGE_SAME_MESSAGE_SET_WIRE_FORMAT will continue to work.\n\tWe recommend replacing MESSAGE_SAME_MESSAGE_SET_WIRE_FORMAT in your buf.yaml, but no action is immediately necessary.\n",
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          6,
+          3,
+          6,
+          49
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          12,
+          7,
+          12,
+          53
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          23,
+          3,
+          23,
+          49
+        ]
+      ],
+      [
+        "2.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          6,
+          3,
+          6,
+          49
+        ]
+      ],
+      [
+        "2.proto",
+        "MESSAGE_NO_REMOVE_STANDARD_DESCRIPTOR_ACCESSOR",
+        [
+          10,
+          3,
+          10,
+          49
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "2e64644092ec3bb193cade7da82ebadf5b9c49f8e893348bb14ce617f83db30d",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

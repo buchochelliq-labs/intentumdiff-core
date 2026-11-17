@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-inline-table-overwrite-03",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "6c526b9180b9e0a84045650a6f2390588e66127445686cd13742dd87aea0b896",
+  "observations": {
+    "error": "Cannot mutate immutable namespace ('a',) (at line 2, column 8)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "6c526b9180b9e0a84045650a6f2390588e66127445686cd13742dd87aea0b896",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

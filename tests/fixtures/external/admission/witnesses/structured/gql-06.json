@@ -1,0 +1,39 @@
+{
+  "case_id": "gql-06",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "a34a7376ca3bf5a629ef95a52c5801741de0daf0d99607caaf3039f87edde702",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "TYPE_REMOVED_FROM_UNION",
+          "Type2 was removed from union type UnionType1."
+        ]
+      ],
+      "Dangerous": [
+        [
+          "TYPE_ADDED_TO_UNION",
+          "Type3 was added to union type UnionType1."
+        ]
+      ]
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "TYPE_REMOVED_FROM_UNION",
+            "Type2 was removed from union type UnionType1."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "7024bdccd23bd87d35b4216228101fd731c1fed7ca576a7971c0b4e841d0254e",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

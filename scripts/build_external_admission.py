@@ -316,14 +316,23 @@ def literal_cases():
 
 
 FAMILIES = Path(__file__).with_name('external_families')
+FRAGMENTS = ROOT / 'admission' / 'families'
 
 
 def family_contributions():
-    """Per-family case builders (#262-#267), each in its own module under scripts/external_families/.
+    """Language-family contributions (#262-#267), merged after the first slice.
 
-    Each module exposes ``contribute(ctx)`` returning ``{'suites': [...], 'discovery': [...],
-    'cases': [...]}``. Modules are merged in sorted file-name order, so independently added
-    families rebuild one deterministic ledger.
+    Two mechanisms are supported, in this fixed order so independently added families
+    rebuild one deterministic ledger:
+
+    1. code families: ``scripts/external_families/*.py`` modules (sorted by file name), each
+       exposing ``contribute(ctx)`` that builds its cases with this builder's helpers;
+    2. fragment families: ``tests/fixtures/external/admission/families/*.json`` (sorted by file
+       name), generated and ``--check``-ed by the family's own deterministic tool (e.g.
+       ``scripts/structured_family.py``) and merged verbatim.
+
+    Each contribution is ``{'suites': [...], 'discovery': [...], 'cases': [...]}`` plus an
+    optional ``'blocked_acquisitions': [...]``.
     """
     from types import SimpleNamespace
     ctx = SimpleNamespace(ROOT=ROOT, ref=ref, write=write, minimal_region=minimal_region, witness_ref=witness_ref,
@@ -333,6 +342,8 @@ def family_contributions():
         spec = importlib.util.spec_from_file_location(f'external_family_{path.stem}', path)
         module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
         out.append(module.contribute(ctx))
+    for fragment in sorted(FRAGMENTS.glob('*.json')):
+        out.append(json.loads(fragment.read_bytes()))
     return out
 
 
@@ -395,11 +406,15 @@ def build():
          'acquisition': {'method': 'authored in repository', 'files': literal_files,
                          'verification': ['bytes pinned per file by SHA-256']}},
     ]
+    blocked = []
     for family in family_contributions():
         suites += family['suites']; discovery += family['discovery']; cases += family['cases']
+        blocked += family.get('blocked_acquisitions', [])
     ledger = {'schema_version': 2, 'contract': 'core#268 admission ledger; parent core#261',
               'inventory': ref('inventory.json'), 'language_selection': ref('ledger.json'),
               'suites': suites, 'discovery': discovery, 'cases': cases}
+    if blocked:
+        ledger['blocked_acquisitions'] = blocked
     return ledger
 
 

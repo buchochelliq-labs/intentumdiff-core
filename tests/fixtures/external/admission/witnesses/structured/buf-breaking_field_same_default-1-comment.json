@@ -1,0 +1,16 @@
+{
+  "case_id": "buf-breaking_field_same_default-1-comment",
+  "executed_utc": "2026-11-17T20:20:40+00:00",
+  "new_sha256": "ba6cb712ff45447366e8a186e34ab3aae94bd17f4fcc1ee9150e06c5a23a0a90",
+  "observations": {
+    "breaking_exit": 0,
+    "breaking_output": null,
+    "image_equal": true,
+    "reference_equal": true
+  },
+  "old_sha256": "76d35177a1127a61e996ae28e3c936f2940d34cf888566e20b158f576949dc66",
+  "oracle": "proto_equivalent",
+  "reference": "buf 1.75.0 build --exclude-source-info image equality + breaking (FILE, WIRE_JSON)",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

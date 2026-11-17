@@ -1,0 +1,28 @@
+{
+  "case_id": "cpy-cfgparser-2",
+  "executed_utc": "2026-11-17T20:21:18+00:00",
+  "new_sha256": "6fb2881acee2f256c276ad2f6365a269f381adeba08ae4b236525b21789d67e5",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true,
+    "upstream_assertions": [
+      [
+        "global",
+        "workgroup",
+        "MDKGROUP",
+        true
+      ],
+      [
+        "tmp",
+        "echo command",
+        "cat %s; rm %s",
+        true
+      ]
+    ]
+  },
+  "old_sha256": "6fb2881acee2f256c276ad2f6365a269f381adeba08ae4b236525b21789d67e5",
+  "oracle": "ini_configparser",
+  "reference": "CPython 3.13.18 configparser, profile cfgparser.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-B63P",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "21c8b22e7bebda1164c681294b4ca4cfc49ab36b077c3f572aef17c076ecf76e",
+  "observations": {
+    "error": "ParserError: expected '<document start>', but found ('<document end>',)\n  in \"<unicode string>\", line 2, column 1:\n    ...\n    ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "21c8b22e7bebda1164c681294b4ca4cfc49ab36b077c3f572aef17c076ecf76e",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-float-us-after-point",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "f9edae61440e47202a95bd5baaa9cd9c358d6c9fe85c6c9317c15e5439f09e74",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 19)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "f9edae61440e47202a95bd5baaa9cd9c358d6c9fe85c6c9317c15e5439f09e74",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

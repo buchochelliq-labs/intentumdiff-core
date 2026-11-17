@@ -159,17 +159,46 @@ def _validate_expected(expected, where):
 
 
 def _validate_parse(parse, where):
-    """Parser-fidelity lane: an independently established statement inventory (#262)."""
-    if not isinstance(parse, dict) or parse.get('side') not in ('old', 'new'):
+    """Parser-fidelity expectations: one schema for #262 and #265.
+
+    ``expected.parse`` carries up to two independent claims about one document:
+
+    - ``accepts`` (bool, #265): a conformance claim. ``true`` = must accept (a fallback is a
+      failure, not ``unsupported``); ``false`` = must reject (judged on the C ABI's
+      fallback/diagnostics, never on change facts).
+    - ``statement_inventory`` (#262): the reference engine's top-level statement starts in
+      the ``side`` document (``old``/``new``). Without ``accepts`` the reference acceptance is
+      a precondition of the inventory, so a fallback leaves the case ``unsupported``.
+
+    ``side`` is required whenever ``accepts`` is absent; with ``accepts`` it defaults to
+    ``old`` (parser_fidelity cases judge one document, old == new).
+    """
+    if not isinstance(parse, dict):
+        raise LedgerError(f'{where}: must be an object')
+    if 'accepts' in parse and type(parse['accepts']) is not bool:
+        raise LedgerError(f'{where}: parse.accepts must be a bool')
+    if ('side' in parse or 'accepts' not in parse) and parse.get('side') not in ('old', 'new'):
         raise LedgerError(f'{where}: side must be old or new')
     if parse.get('statement_inventory') is None:
         return  # acceptance only: no parse errors / fallback, judged by the runner's common checks
+    if parse.get('accepts') is False:
+        raise LedgerError(f'{where}: a must-reject document cannot carry a statement inventory')
     inventory = _need(parse, 'statement_inventory', dict, where)
     count = _need(inventory, 'count', int, where + '.statement_inventory')
     starts = _need(inventory, 'starts', list, where + '.statement_inventory')
     if len(starts) != count or any(type(s) is not int or s < 0 for s in starts) or starts != sorted(set(starts)):
         raise LedgerError(f'{where}: starts must be {count} increasing byte offsets')
     _need(inventory, 'evidence', str, where + '.statement_inventory')
+
+
+def parse_side(parse) -> str:
+    """The document a parse expectation is about (``old`` unless stated)."""
+    return parse.get('side', 'old')
+
+
+def parse_accepts(parse) -> bool:
+    """Whether the document is expected to be accepted (an inventory implies acceptance)."""
+    return parse.get('accepts', True)
 
 
 def validate_case(root, case, suites, inventory, witness_dir_ok=True):
@@ -249,10 +278,22 @@ def validate_case(root, case, suites, inventory, witness_dir_ok=True):
                         raise LedgerError(f'{where}: {side} outside source')
         if claim == 'unknown':
             raise LedgerError(f'{where}: an admitted case needs a changed/preserved behavior claim')
-        if 'parse' in expected:
-            source = old if expected['parse']['side'] == 'old' else new
-            inventory = expected['parse'].get('statement_inventory') or {'starts': []}
-            if any(s >= len(source) for s in inventory['starts']):
+        parse = expected.get('parse')
+        if case['lane'] == 'parser_fidelity':
+            # Single-source fidelity (#262 inventory, #265 conformance): one upstream document on
+            # both sides, judged on acceptance/rejection and statement structure, never on change facts.
+            if not isinstance(parse, dict) or ('accepts' not in parse and 'side' not in parse):
+                raise LedgerError(f'{where}: parser_fidelity expectations need parse.accepts (bool) '
+                                  'or a parse.side statement-inventory claim')
+            if old != new:
+                raise LedgerError(f'{where}: parser_fidelity cases judge one document (old == new)')
+            if not parse_accepts(parse) and (expected['required'] or any(v is not None for k, v in
+                                                                         expected['classification'].items())):
+                raise LedgerError(f'{where}: a must-reject case cannot constrain a review it is not expected to get')
+        if parse is not None:
+            source = old if parse_side(parse) == 'old' else new
+            starts = (parse.get('statement_inventory') or {'starts': []})['starts']
+            if any(s >= len(source) for s in starts):
                 raise LedgerError(f'{where}: statement start outside source')
     elif case.get('expected') is not None:
         raise LedgerError(f'{where}: unadmitted cases must not carry expectations (expected: null)')
@@ -297,6 +338,13 @@ def validate(root: Path, ledger=None, inventory=None):
         if eligible > discovered:
             raise LedgerError(f'{where}: eligible exceeds discovered')
         _need(row, 'eligibility_rule', str, where)
+    for index, row in enumerate(ledger.get('blocked_acquisitions', [])):
+        where = f'blocked_acquisitions[{index}]'
+        if row.get('language_id') not in inventory['parsers'] or not row.get('lanes') \
+                or any(lane not in LANES for lane in row['lanes']):
+            raise LedgerError(f'{where}: unknown language or lane')
+        for key in ('suite_id', 'name', 'url', 'reason'):
+            _need(row, key, str, where)
     ids = set()
     for case in _need(ledger, 'cases', list, 'ledger'):
         validate_case(root, case, suites, inventory)
@@ -417,12 +465,10 @@ def judge_parse(case, trees, source: bytes):
     Exact end spans are not asserted (terminators are presentation-dependent).
     """
     parse = case['expected'].get('parse')
-    if not parse:
-        return []
-    side = parse['side']
-    wanted = parse.get('statement_inventory')
+    wanted = (parse or {}).get('statement_inventory')
     if wanted is None:
         return []
+    side = parse_side(parse)
     parsed = (trees or {}).get(side)
     tree = parsed.get('tree') if isinstance(parsed, dict) else None
     if not isinstance(tree, dict):
@@ -470,13 +516,15 @@ def build_scorecard(ledger, inventory, selection, results):
     """Combine ledger + run results into per-language rows. Every language gets rows."""
     selection = {row['language_id']: row for row in selection['languages']}
     suites = {s['suite_id']: s for s in ledger['suites']}
+    blocked = ledger.get('blocked_acquisitions', [])
     by_case = {row['case_id']: row for row in (results or {}).get('cases', [])}
     if results is not None:
         unknown = set(by_case) - {c['id'] for c in ledger['cases']}
         if unknown:
             raise LedgerError(f'results contain unknown cases: {sorted(unknown)}')
     rows = defaultdict(_blank)
-    detail = defaultdict(lambda: {'changed': [0, 0], 'preserved': [0, 0], 'failures': []})
+    detail = defaultdict(lambda: {'changed': [0, 0], 'preserved': [0, 0], 'accept': [0, 0], 'reject': [0, 0],
+                                  'failures': []})
     # Discovery counts upstream tasks (the original suite inventory) on the upstream_gold row.
     # Every non-upstream case was created by derivation/authoring, so it counts itself.
     for d in ledger['discovery']:
@@ -498,7 +546,11 @@ def build_scorecard(ledger, inventory, selection, results):
         row[status] += 1
         if status in ('passed', 'failed'):
             row['executed'] += 1
-            bucket = detail[key][case['behavior']['claim']]
+            if case['lane'] == 'parser_fidelity':
+                # Single-source conformance: score acceptance and rejection, not change facts.
+                bucket = detail[key]['accept' if parse_accepts(case['expected']['parse']) else 'reject']
+            else:
+                bucket = detail[key][case['behavior']['claim']]
             bucket[1] += 1
             bucket[0] += status == 'passed'
             if status == 'failed':
@@ -521,10 +573,15 @@ def build_scorecard(ledger, inventory, selection, results):
                 'pass_rate': _rate(counts['passed'], counts['executed'],
                                    'no admitted case was executed' if counts['admitted'] else 'no admitted cases'),
                 'meaningful_change_recall': _rate(d['changed'][0], d['changed'][1],
-                                                  'no executed behavior-changing cases'),
+                                                  'parser_fidelity lane: no change facts are scored'
+                                                  if key[3] == 'parser_fidelity' else 'no executed behavior-changing cases'),
                 'preservation_false_alarm_rate': _rate(d['preserved'][1] - d['preserved'][0], d['preserved'][1],
-                                                       'no executed preservation controls'),
+                                                       'parser_fidelity lane: no change facts are scored'
+                                                       if key[3] == 'parser_fidelity' else 'no executed preservation controls'),
+                'valid_acceptance_rate': _rate(d['accept'][0], d['accept'][1], 'no executed must-accept documents'),
+                'invalid_rejection_rate': _rate(d['reject'][0], d['reject'][1], 'no executed must-reject documents'),
                 'failures': d['failures']})
+        entry['blocked_acquisitions'] = [b for b in blocked if b['language_id'] == language]
         for lane in LANES:
             lane_rows = [r for r in entry['rows'] if r['lane'] == lane and r['class'] in EXTERNAL_GOLD]
             executed = sum(r['counts']['executed'] for r in lane_rows)
@@ -534,6 +591,10 @@ def build_scorecard(ledger, inventory, selection, results):
                 reason = None
             elif any(r['counts']['blocked'] for r in lane_rows):
                 status, reason = 'blocked', 'admitted external cases could not execute (see rows)'
+            elif any(language == b['language_id'] and lane in b['lanes'] for b in blocked):
+                status = 'blocked'
+                reason = '; '.join(f"{b['name']}: {b['reason']}" for b in blocked
+                                   if language == b['language_id'] and lane in b['lanes'])
             else:
                 status = 'gap'
                 reason = ('no admitted external case executed in this lane; selection: '
@@ -584,15 +645,17 @@ def render_markdown(card, header_lines):
         lines.append(f"| `{e['language_id']}` | {' | '.join(cells)} | "
                      f"{('<' + source + '>') if source else '—'} ({e['selected_evidence_class'] or 'none'}) |")
     lines += ['', '## Rows with cases (language × suite × class × lane)', '',
-              '| Language | Suite | Class | Lane | Disc. | Elig. | Adm. | Exec. | Pass | Fail | Unsup. | Skip | Blocked | Pass rate | Change recall | Preservation false alarms |',
-              '|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|']
+              '| Language | Suite | Class | Lane | Disc. | Elig. | Adm. | Exec. | Pass | Fail | Unsup. | Skip | Blocked | Pass rate | Change recall | Preservation false alarms | Valid accepted | Invalid rejected |',
+              '|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---|']
     for e in card['languages']:
         for r in e['rows']:
             c = r['counts']
             lines.append(f"| `{e['language_id']}` | {r['suite_id']} | {r['class']} | {r['lane']} | "
                          + ' | '.join(str(c[k]) for k in COUNT_KEYS)
                          + f" | {_fmt_rate(r['pass_rate'])} | {_fmt_rate(r['meaningful_change_recall'])}"
-                         f" | {_fmt_rate(r['preservation_false_alarm_rate'])} |")
+                         f" | {_fmt_rate(r['preservation_false_alarm_rate'])}"
+                         f" | {_fmt_rate(r['valid_acceptance_rate']) if 'valid_acceptance_rate' in r else 'N/A'}"
+                         f" | {_fmt_rate(r['invalid_rejection_rate']) if 'invalid_rejection_rate' in r else 'N/A'} |")
     failures = [(e['language_id'], f) for e in card['languages'] for r in e['rows'] for f in r['failures']]
     lines += ['', '## Failed admitted cases', '']
     if not failures:

@@ -1,0 +1,114 @@
+{
+  "case_id": "buf-breaking_message_enum-2",
+  "executed_utc": "2026-11-17T20:21:24+00:00",
+  "new_sha256": "8352a8a3628f1557f5a65fdcc5bbda5a8a2d040b327893891cd4e39a63206eb1",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          15
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          6
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          16
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          7
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          15
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          6
+        ]
+      ],
+      [
+        "2.proto",
+        "ENUM_NO_DELETE",
+        null
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_CARDINALITY",
+        [
+          3,
+          3,
+          3,
+          16
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_SAME_TYPE",
+        [
+          3,
+          3,
+          3,
+          7
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "40773defb8daebc21ed845a4f5bb10797adb0cf69fe0912cfa0b20b9f06be20b",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

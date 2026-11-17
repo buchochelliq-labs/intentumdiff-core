@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-SU74",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "de097b3c09b1bde6bd0ab60b8c2bf9f4d72d33d30207221b5c3a518ec6654b0b",
+  "observations": {
+    "error": "ParserError: while parsing a block mapping\n  in \"<unicode string>\", line 1, column 1:\n    key1: &alias value1\n    ^ (line: 1)\nexpected <block end>, but found '<alias>'\n  in \"<unicode string>\", line 2, column 4:\n    &b *alias : value2\n       ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "de097b3c09b1bde6bd0ab60b8c2bf9f4d72d33d30207221b5c3a518ec6654b0b",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

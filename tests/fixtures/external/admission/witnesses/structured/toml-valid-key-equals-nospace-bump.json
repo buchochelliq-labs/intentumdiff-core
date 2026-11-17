@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-key-equals-nospace-bump",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "1a6cd03133b8376482f8285d36daded321f198ad6d6fde4ce24b801837683188",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "24cab0d01b67b184d0a737de3a5b5d47b8b69b36203273296d5ef763f7fdcf68",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

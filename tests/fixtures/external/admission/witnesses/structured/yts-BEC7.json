@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-BEC7",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "74c73931ac99c3695d17adfbe0a4b927b0ab6e88a32ccbe65b0b0b59303388ab",
+  "observations": {
+    "error": "AssertionError: version minor part can only be 2 or 1, got (1, 3)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "74c73931ac99c3695d17adfbe0a4b927b0ab6e88a32ccbe65b0b0b59303388ab",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

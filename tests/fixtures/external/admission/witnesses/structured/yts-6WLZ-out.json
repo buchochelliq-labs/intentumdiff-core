@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-6WLZ-out",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "3acf43f1e020bd39a8f1b521a1a570e70f7b21dff5a822554f05e11d96820297",
+  "observations": {
+    "new": "ConstructorError: could not determine a constructor for the tag '!foo'\n  in \"<unicode string>\", line 2, column 1:\n    !foo \"bar\"\n    ^ (line: 2)",
+    "old": "ConstructorError: could not determine a constructor for the tag '!foo'\n  in \"<unicode string>\", line 3, column 1:\n    !foo \"bar\"\n    ^ (line: 3)"
+  },
+  "old_sha256": "7a4603f8fb560de01716fb155f242e4b34e4adca3f16644d08a14f1a02947675",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

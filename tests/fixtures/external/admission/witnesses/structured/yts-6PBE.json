@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-6PBE",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "0756815d029cb1dcdaa03dfe2147ec3bf86df0292d3d9758ee338bb1e46b71aa",
+  "observations": {
+    "error": "~~~~^^^^^\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 202, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/local/lib/python3.13/json/encoder.py\", line 263, in iterencode\n    return _iterencode(o, 0)\nTypeError: keys must be str, int, float, bool or None, not tuple\n",
+    "ok": null
+  },
+  "old_sha256": "0756815d029cb1dcdaa03dfe2147ec3bf86df0292d3d9758ee338bb1e46b71aa",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference loader crashed",
+  "verdict": "inconclusive"
+}

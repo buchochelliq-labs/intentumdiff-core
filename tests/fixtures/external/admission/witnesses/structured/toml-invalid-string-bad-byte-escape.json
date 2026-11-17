@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-string-bad-byte-escape",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "c665dcec7c02f442c4fdc80423698eed2376ce65779cf855371772293bec2927",
+  "observations": {
+    "error": "Unescaped '\\' in a string (at line 1, column 14)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "c665dcec7c02f442c4fdc80423698eed2376ce65779cf855371772293bec2927",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

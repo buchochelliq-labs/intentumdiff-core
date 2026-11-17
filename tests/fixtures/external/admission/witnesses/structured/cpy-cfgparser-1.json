@@ -1,0 +1,22 @@
+{
+  "case_id": "cpy-cfgparser-1",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "198e4881db3ad935ec51a772196302df943deb3a651833c973996ffb082188b2",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true,
+    "upstream_assertions": [
+      [
+        "Foo Bar",
+        "foo",
+        "newbar",
+        true
+      ]
+    ]
+  },
+  "old_sha256": "198e4881db3ad935ec51a772196302df943deb3a651833c973996ffb082188b2",
+  "oracle": "ini_configparser",
+  "reference": "CPython 3.13.18 configparser, profile cfgparser.1",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

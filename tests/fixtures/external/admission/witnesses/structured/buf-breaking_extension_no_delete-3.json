@@ -1,0 +1,99 @@
+{
+  "case_id": "buf-breaking_extension_no_delete-3",
+  "executed_utc": "2026-11-17T20:21:20+00:00",
+  "new_sha256": "155f5c128f22674afe93fe7182e8b4598c32e6f90fbf63193c5481fac6e1e55b",
+  "observations": {
+    "annotations": [
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "3.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        "3.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          8,
+          3,
+          14,
+          4
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        null
+      ],
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        null
+      ],
+      [
+        "2.proto",
+        "EXTENSION_NO_DELETE",
+        null
+      ],
+      [
+        "3.proto",
+        "EXTENSION_NO_DELETE",
+        null
+      ],
+      [
+        "3.proto",
+        "EXTENSION_NO_DELETE",
+        [
+          8,
+          3,
+          14,
+          4
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "4ed12810beb6731398e7737b29e0df487443c66cd44fe67695896888daa60446",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

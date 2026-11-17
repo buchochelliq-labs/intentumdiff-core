@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-S98Z",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "8f109570c63e7caf93a8dea7b369d54f4499e38f0dd2df7d7145a939f7f4ea22",
+  "observations": {
+    "error": "ScannerError: more indented follow up line than first in a block scalar\n  in \"<unicode string>\", line 5, column 2:\n     # comment\n     ^ (line: 5)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "8f109570c63e7caf93a8dea7b369d54f4499e38f0dd2df7d7145a939f7f4ea22",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

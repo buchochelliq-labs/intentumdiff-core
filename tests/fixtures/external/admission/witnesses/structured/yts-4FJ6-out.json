@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-4FJ6-out",
+  "executed_utc": "2026-11-17T20:20:24+00:00",
+  "new_sha256": "fb56cb9bd4d14d6d694b53d85b114a49e1097d0b51d7683b7e422273642ca10e",
+  "observations": {
+    "new": "TypeError: unhashable type: 'list'",
+    "old": "TypeError: unhashable type: 'list'"
+  },
+  "old_sha256": "96c8e9421fd9f9570137800bbd2f912b6589500d99bf13ff103a2008e974d053",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}
