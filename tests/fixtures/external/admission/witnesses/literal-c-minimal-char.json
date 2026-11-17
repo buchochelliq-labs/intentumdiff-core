@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "literal-c-minimal-char",
+  "config": "c",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "faaebcd02d8379cca5f27cbb3e88391f963eb8fbb9f1ccbdad3b4191240bc107",
+    "steps": [
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-O0",
+          "prog.c",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "5b2a964903c75ca3358effa20b6effa09cb4d175551aafa9a74fb761891930ea",
+  "new_test_sha256": "3fa2f5ecf893459e3486417777e7915e3013c6c0e8127c4ee0f433052a1e6b69",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "46e3d6133df1287b11f107ab6e0caa5f4a16d93ec92235420489922a3ff2eef3",
+    "steps": [
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-O0",
+          "prog.c",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "741247753dbe2ce30b1ec719225e15d3ca91057f35ab5a186afcf8c4406b04df",
+  "old_test_sha256": "3fa2f5ecf893459e3486417777e7915e3013c6c0e8127c4ee0f433052a1e6b69",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "inline witness test recorded in the ledger witness_plan",
+  "toolchain": [
+    "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

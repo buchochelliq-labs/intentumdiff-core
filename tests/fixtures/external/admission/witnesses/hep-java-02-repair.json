@@ -1,0 +1,72 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-java-02-repair",
+  "config": "java",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "9e5002f75be51190c189cfb47fc9d56441685e83aece3c2d2b138f9fe699d03e",
+    "steps": [
+      {
+        "argv": [
+          "javac",
+          "Main.java"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41245 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=\n",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "java",
+          "-ea",
+          "Main"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41245 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "4f4cab296453680bedb56e78ffaa2dc58970bbcf653110810edde9642a545190",
+  "new_test_sha256": "cc8d3d2f27dc2965bebd4e4953321ab8f5c66b02b9993e34ccf7f2509e01740e",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "158c9480c4990567dc9b91becf37adae266017ff41f241048f0549fddd76b401",
+    "steps": [
+      {
+        "argv": [
+          "javac",
+          "Main.java"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41245 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=\n",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "java",
+          "-ea",
+          "Main"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41245 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=\nException in thread \"main\" java.lang.AssertionError\n\tat Main.main(Main.java:18)\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "4195ce4f8ef2dcc7d286320095cc7ce76ba56b2b13143748d56ab617a41e3b34",
+  "old_test_sha256": "cc8d3d2f27dc2965bebd4e4953321ab8f5c66b02b9993e34ccf7f2509e01740e",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/java/02.json",
+  "toolchain": [
+    "javac 21.0.12.1",
+    "openjdk version \"21.0.12.1\" 2026-08-18"
+  ],
+  "verdict": "supports_claim"
+}

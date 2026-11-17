@@ -1,0 +1,3669 @@
+{
+  "contract": "core#268 per-language external-benchmark scorecard",
+  "languages": [
+    {
+      "component": "abap_parser.wasm",
+      "component_sha256": "a00561ca1dd7c774e7a586c9fdb7b56bcaf268c2e56c0d8d3d0eff82e80c0554",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+          "status": "gap"
+        }
+      },
+      "language_id": "abap",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/abaplint/abaplint/blob/main/docs/development.md"
+    },
+    {
+      "component": "adf_parser.wasm",
+      "component_sha256": "d1537ca40be16a9e191290ea0579b32180d360404e305f7265889dd59e00b375",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+          "status": "gap"
+        }
+      },
+      "language_id": "adf",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://github.com/Azure/Azure-DataFactory"
+    },
+    {
+      "component": "asciidoc_parser.wasm",
+      "component_sha256": "f87cb7a74f3159c23811b16eb531edbb7cfceabaecedcbc1c037d1986162d306",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "asciidoc",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/asciidoctor-contrib/asciidoctor-doctest"
+    },
+    {
+      "component": "asm_parser.wasm",
+      "component_sha256": "54fcd474826b4b392715027c1732b8c7e95f6b7472ea07930c17002c52853baf",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "asm",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://llvm.org/docs/TestingGuide.html"
+    },
+    {
+      "component": "assemblyscript_parser.wasm",
+      "component_sha256": "48ffe441dfa4ede797417428bcb1dc5ad17756b029f5ea9aebf5967970c0314d",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "assemblyscript",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/AssemblyScript/assemblyscript/blob/main/package.json"
+    },
+    {
+      "component": "astro_parser.wasm",
+      "component_sha256": "87b9522ecb7b59163fe38e128edd5c1250c4a923035ff05928bfb179660fa533",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "astro",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/withastro/compiler/blob/main/internal/printer/printer_test.go"
+    },
+    {
+      "component": "bash_parser.wasm",
+      "component_sha256": "a040ede7a7ab725bc6a8f067f28b615eff9b3ce9218c966246ea755e7bd075c0",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "bash",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://www.gnu.org/s/bash/manual/html_node/Basic-Installation.html"
+    },
+    {
+      "component": "cpp_parser.wasm",
+      "component_sha256": "447196da1ea6f2ee2f9adb10fe02d14d6da3a85d8eee06059a01aaaeb20eb483",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "c",
+      "rows": [
+        {
+          "class": "handwritten_regression",
+          "counts": {
+            "admitted": 4,
+            "blocked": 0,
+            "discovered": 4,
+            "eligible": 4,
+            "executed": 4,
+            "failed": 0,
+            "passed": 4,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 4,
+            "numerator": 4,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 4,
+            "numerator": 4,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "intentumdiff-literal-regressions",
+          "suite_revision": "in-repository",
+          "suite_version": "v2"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "clojure_parser.wasm",
+      "component_sha256": "b7b9389e242e0c679a945a80a969991e40350648444bcccb6d58fbcd593ac392",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "clojure",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/clojure/clojure"
+    },
+    {
+      "component": "cmake_parser.wasm",
+      "component_sha256": "f3074dd3e4a6b0bb55f7330b156ae7d703bc633e887e27b1a8a492a868b4aa59",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "cmake",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/Kitware/CMake/blob/master/Tests/RunCMake/README.rst"
+    },
+    {
+      "component": "cpp_parser.wasm",
+      "component_sha256": "447196da1ea6f2ee2f9adb10fe02d14d6da3a85d8eee06059a01aaaeb20eb483",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 27,
+            "numerator": 26,
+            "value": 0.963
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "cpp",
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 15,
+            "blocked": 0,
+            "discovered": 15,
+            "eligible": 15,
+            "executed": 15,
+            "failed": 1,
+            "passed": 14,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "hep-cpp-00-local-rename",
+              "errors": [
+                "forbidden ADDITION reported: a local rename does not add or delete an entity",
+                "forbidden DELETION reported: a local rename does not add or delete an entity"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 15,
+            "numerator": 14,
+            "value": 0.9333
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 15,
+            "numerator": 1,
+            "value": 0.0667
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 12,
+            "failed": 0,
+            "passed": 12,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "handwritten_regression",
+          "counts": {
+            "admitted": 5,
+            "blocked": 0,
+            "discovered": 5,
+            "eligible": 5,
+            "executed": 5,
+            "failed": 0,
+            "passed": 5,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 5,
+            "numerator": 5,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "intentumdiff-literal-regressions",
+          "suite_revision": "in-repository",
+          "suite_version": "v2"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "csharp_parser.wasm",
+      "component_sha256": "1ad282ea4b8f5efe94e546726901bd62d40800bae9d457ee35e79dd6e9776a10",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "csharp",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/dotnet/roslyn/blob/main/Compilers.slnf"
+    },
+    {
+      "component": "css_parser.wasm",
+      "component_sha256": "014c28541deb9d9285b22dca1510f447ebb299eca2a93ecb25cad9e30785b845",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "css",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/web-platform-tests/wpt"
+    },
+    {
+      "component": "dart_parser.wasm",
+      "component_sha256": "ef6ab5470a9d41ee445c6cebbb012d4106ff5e3cb7100d085ee28c63d8d025ae",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "dart",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/dart-lang/sdk/blob/main/docs/Building.md"
+    },
+    {
+      "component": "databricks_parser.wasm",
+      "component_sha256": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        }
+      },
+      "language_id": "databricks",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/databricks/cli/blob/main/AGENTS.md"
+    },
+    {
+      "component": "databricks_parser.wasm",
+      "component_sha256": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+          "status": "gap"
+        }
+      },
+      "language_id": "databricks-workflow",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/databricks/cli/blob/main/AGENTS.md"
+    },
+    {
+      "component": "dax_parser.wasm",
+      "component_sha256": "2b58916887a2805fc98ab69f60956791cb5eeecd65fe715893f22b424c4343c5",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+          "status": "gap"
+        }
+      },
+      "language_id": "dax",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://www.daxbench.com/tasks"
+    },
+    {
+      "component": "delphi_parser.wasm",
+      "component_sha256": "091734b404007f999b82bbb438477d2c798b5035f8da3e1812f1a66e07a5d424",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+          "status": "gap"
+        }
+      },
+      "language_id": "delphi",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/fpc/FPCSource"
+    },
+    {
+      "component": "dockerfile_parser.wasm",
+      "component_sha256": "34a607e721b2f3dd1354f281e5220c14ea1d8cb9dec198f6557558c52f377e11",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "dockerfile",
+      "rows": [],
+      "selected_evidence_class": "published specialist research benchmark",
+      "selected_primary_source": "https://github.com/STAR-RG/shipwright"
+    },
+    {
+      "component": "elixir_parser.wasm",
+      "component_sha256": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "elixir",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/elixir-lang/elixir/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "component": "generic_parser.wasm",
+      "component_sha256": "6c7f7de7c9d88f4f5795bf6f6f99a3cc9d19c169cfb006b77f59e150423f746d",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+          "status": "gap"
+        }
+      },
+      "language_id": "generic",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://github.com/google-research-datasets/wiki-atomic-edits"
+    },
+    {
+      "component": "gitignore_parser.wasm",
+      "component_sha256": "a468265461647408a591851dcdd09817b38f1fb266a45e12267ad1286d2fe6b7",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "gitignore",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/git/git/blob/master/t/t0008-ignores.sh"
+    },
+    {
+      "component": "go_parser.wasm",
+      "component_sha256": "4b60216e2b6b58c7ca894fda6b724bce57eb6056959510d9996e18541116a285",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 21,
+            "numerator": 21,
+            "value": 1.0
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "go",
+      "rows": [
+        {
+          "class": "external_seed_only",
+          "counts": {
+            "admitted": 0,
+            "blocked": 0,
+            "discovered": 6,
+            "eligible": 6,
+            "executed": 0,
+            "failed": 0,
+            "passed": 0,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted cases",
+            "numerator": 0,
+            "value": null
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 12,
+            "eligible": 12,
+            "executed": 12,
+            "failed": 0,
+            "passed": 12,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 12,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 9,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 9,
+            "failed": 0,
+            "passed": 9,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 9,
+            "numerator": 9,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 9,
+            "numerator": 9,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "gomod_parser.wasm",
+      "component_sha256": "f818e01d364f9f247ff9850120c56882b29f954523166b49c14276cc022ce577",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "gomod",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://go.dev/src/cmd/go/testdata/script/mod_replace.txt"
+    },
+    {
+      "component": "graphql_parser.wasm",
+      "component_sha256": "b01f0a4b3f19ace3cd125f1a9e863cf097ee9c35c35b1f5539f2ed129c8fc4e2",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "graphql",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/graphql/graphql-js"
+    },
+    {
+      "component": "groovy_parser.wasm",
+      "component_sha256": "802b390f22e4d4b6e46433ce076bbd690a3cce889ce5898daf2af878060e28f0",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "groovy",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/apache/groovy/blob/master/CONTRIBUTING.md"
+    },
+    {
+      "component": "haskell_parser.wasm",
+      "component_sha256": "c24869c7d7a1c71f8fd0574107ffe88bcb816f3ba89243cf9ad20756b2c427ca",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "haskell",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://ghc.gitlab.haskell.org/homepage/blog/20190708-testsuite-work.html"
+    },
+    {
+      "component": "terraform_parser.wasm",
+      "component_sha256": "78b3c62d6bd701c0d67870fd280e93e72e3072ea08d559b6b7a507892858e490",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "hcl",
+      "rows": [],
+      "selected_evidence_class": "published specialist research benchmark",
+      "selected_primary_source": "https://huggingface.co/datasets/autoiac-project/iac-eval"
+    },
+    {
+      "component": "html_parser.wasm",
+      "component_sha256": "3aad4e0b71c4089902f40c650210925ff696ffebde025f3562a17834191be56c",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "html",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/web-platform-tests/wpt"
+    },
+    {
+      "component": "ini_parser.wasm",
+      "component_sha256": "dc665e8970a8922f70e76ef572297293db36d6802a98d5ac13a74bb519e538d0",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "ini",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/python/cpython/blob/main/Lib/test/test_configparser.py"
+    },
+    {
+      "component": "java_parser.wasm",
+      "component_sha256": "580021fc83c32f3fc11711eace069aeefa30c5b81ab0440dd93d05ab5eb1fcb6",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 27,
+            "numerator": 27,
+            "value": 1.0
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "java",
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 15,
+            "blocked": 0,
+            "discovered": 15,
+            "eligible": 15,
+            "executed": 15,
+            "failed": 0,
+            "passed": 15,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 15,
+            "numerator": 15,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 15,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 12,
+            "failed": 0,
+            "passed": 12,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://github.com/pouryafard75/RM-ASTDiff"
+    },
+    {
+      "component": "js_ts_parser.wasm",
+      "component_sha256": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 27,
+            "numerator": 26,
+            "value": 0.963
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "javascript",
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 15,
+            "blocked": 0,
+            "discovered": 15,
+            "eligible": 15,
+            "executed": 15,
+            "failed": 0,
+            "passed": 15,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 15,
+            "numerator": 15,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 15,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 12,
+            "failed": 1,
+            "passed": 11,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "hep-js-06-repair",
+              "errors": [
+                "missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 258..262 (old) / 258..258 (new)"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9167
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9167
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        }
+      ],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/tc39/test262"
+    },
+    {
+      "component": "json_parser.wasm",
+      "component_sha256": "ffb886cf098373b018ab0d21ecdc04c0928619c20ca1b20961a40d738418d2fd",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "json",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/nst/JSONTestSuite"
+    },
+    {
+      "component": "kotlin_parser.wasm",
+      "component_sha256": "cf1f86d749ba8ee10754709f59c3aa1613b8465c071b97837924ed8d7e2b9025",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "kotlin",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/JetBrains/kotlin/blob/master/kotlin-native/HACKING.md"
+    },
+    {
+      "component": "latex_parser.wasm",
+      "component_sha256": "b9c83976e79d4970e30b293e873713ed4759a9188f49474916fcac53ba2538cf",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "latex",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/latex3/latex2e/tree/develop/base/testfiles"
+    },
+    {
+      "component": "lua_parser.wasm",
+      "component_sha256": "e9fab17743ef283b49218dab633242aacb1028e04570f323e0a0fbd34ca2adcb",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "lua",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://www.lua.org/tests/"
+    },
+    {
+      "component": "dax_parser.wasm",
+      "component_sha256": "2b58916887a2805fc98ab69f60956791cb5eeecd65fe715893f22b424c4343c5",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "m",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md"
+    },
+    {
+      "component": "make_parser.wasm",
+      "component_sha256": "0dd92dab1c57d2c4191b9c14d9f0ddd96e39808b41880211862f225796207529",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "make",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/mirror/make/blob/master/tests/scripts/variables/flavors"
+    },
+    {
+      "component": "markdown_parser.wasm",
+      "component_sha256": "05415ec27989e8eba2651f7440725a865670bb3248a648c2e456b4f6d7502e9d",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "markdown",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/commonmark/commonmark-spec"
+    },
+    {
+      "component": "mdx_parser.wasm",
+      "component_sha256": "1bb9e1aa2d5b58b973c4ea5f680e08581e6cd362079f17e2928d317bfdd0ec71",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "mdx",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/mdx-js/mdx/blob/main/packages/mdx/test/compile.js"
+    },
+    {
+      "component": "ocaml_parser.wasm",
+      "component_sha256": "5c0933950a9250824bf09f5328e8a51da6ab36a6549f8ed2f820fff01f70c82b",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "ocaml",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/ocaml/ocaml"
+    },
+    {
+      "component": "odin_parser.wasm",
+      "component_sha256": "f80f5ea40d7c86bf43850de4ed2b4e60caed933c7a2975dd7edcd3f2bcad20ed",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "odin",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/odin-lang/Odin/blob/master/.github/workflows/ci.yml"
+    },
+    {
+      "component": "perl_parser.wasm",
+      "component_sha256": "0e82e6ca637f892c96c0f347e92d47108b77a7ea41714723d1e1ea3baf0687ed",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "perl",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://perldoc.perl.org/perlhack"
+    },
+    {
+      "component": "php_parser.wasm",
+      "component_sha256": "9b7dc0bf853f95fe55850ac8b340b3657d44bca70946c2a2be836cdceac42b37",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "php",
+      "rows": [],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "plsql_parser.wasm",
+      "component_sha256": "26decdd220d4fdd8ac4501a0c8be0306b35a0476a207e691c43ad792816a8ffb",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "plsql",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/utPLSQL/utPLSQL"
+    },
+    {
+      "component": "po_parser.wasm",
+      "component_sha256": "092800f8e61e4b6d62ca914be56c850478913c798dece3fea02ee49be9fc970c",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "po",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/autotools-mirror/gettext/blob/master/gettext-tools/tests/msgfmt-1"
+    },
+    {
+      "component": "postscript_parser.wasm",
+      "component_sha256": "2f9dfc5f869ae4ec8cd03818977b7ae7c4565a901e2943fd096536476d771a1b",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+          "status": "gap"
+        }
+      },
+      "language_id": "postscript",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://github.com/ArtifexSoftware/ghostpdl/tree/master/examples"
+    },
+    {
+      "component": "powershell_parser.wasm",
+      "component_sha256": "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "powershell",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/testing-guidelines.md"
+    },
+    {
+      "component": "proto_parser.wasm",
+      "component_sha256": "d692e7aad9a759b2d5567d7dc5eeb2c5f6bc2e54d8e61d908dfa576f04df586a",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "proto",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/bufbuild/buf/blob/main/private/bufpkg/bufcheck/breaking_test.go"
+    },
+    {
+      "component": "puppet_parser.wasm",
+      "component_sha256": "378e7c4e2abce858bed1bfd4fb08027559d5438d834a478f2d9c2c21c2066945",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "puppet",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/puppetlabs/puppet/blob/main/spec/integration/parser/compiler_spec.rb"
+    },
+    {
+      "component": "python_parser.wasm",
+      "component_sha256": "627326a48a950f18fc2355aa00ef392f87a8f4e32f42965a7dd36be0a1f24b24",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 27,
+            "numerator": 25,
+            "value": 0.9259
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "python",
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 15,
+            "blocked": 0,
+            "discovered": 15,
+            "eligible": 15,
+            "executed": 15,
+            "failed": 1,
+            "passed": 14,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "hep-python-00-local-rename",
+              "errors": [
+                "forbidden ADDITION reported: a local rename does not add or delete an entity",
+                "forbidden DELETION reported: a local rename does not add or delete an entity"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 15,
+            "numerator": 14,
+            "value": 0.9333
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 15,
+            "numerator": 1,
+            "value": 0.0667
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 12,
+            "failed": 1,
+            "passed": 11,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [
+            {
+              "case_id": "hep-python-06-repair",
+              "errors": [
+                "missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 309..313 (old) / 309..309 (new)"
+              ],
+              "known_issue": null
+            }
+          ],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9167
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9167
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified"
+    },
+    {
+      "component": "qsharp_parser.wasm",
+      "component_sha256": "7ee18d2ea51b991a0d6ee866da54b9e514a4952c77b221f9c1aac7261bc4e06c",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "qsharp",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/microsoft/qdk"
+    },
+    {
+      "component": "r_parser.wasm",
+      "component_sha256": "a8e48efe3403a92b1484072e88c33cf633dd0e4e5fd4564c1f6a369afcfe0c87",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "r",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://svn.r-project.org/R/trunk/tests/README"
+    },
+    {
+      "component": "reasonml_parser.wasm",
+      "component_sha256": "a0b779b30af24eb1147a19adc174891fa47667b41809e6dc82ab432faba5574b",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+          "status": "gap"
+        }
+      },
+      "language_id": "reasonml",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://github.com/reasonml/reason"
+    },
+    {
+      "component": "ruby_parser.wasm",
+      "component_sha256": "a1f251608c22e32876e0b06ac0e49d9b3a31f30c9d4ecafd3af986fbed298087",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "ruby",
+      "rows": [],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "rust_parser.wasm",
+      "component_sha256": "5575a9798c4f28caf80aa2ca2b0572e82c0626bec9bf5c1bdb45b573645872a8",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 27,
+            "numerator": 27,
+            "value": 1.0
+          },
+          "na_reason": null,
+          "status": "measured"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+          "status": "gap"
+        }
+      },
+      "language_id": "rust",
+      "rows": [
+        {
+          "class": "reviewed_external_derived",
+          "counts": {
+            "admitted": 15,
+            "blocked": 0,
+            "discovered": 15,
+            "eligible": 15,
+            "executed": 15,
+            "failed": 0,
+            "passed": 15,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 0,
+            "na_reason": "no executed behavior-changing cases",
+            "numerator": 0,
+            "value": null
+          },
+          "pass_rate": {
+            "denominator": 15,
+            "numerator": 15,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 15,
+            "numerator": 0,
+            "value": 0.0
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        },
+        {
+          "class": "upstream_gold",
+          "counts": {
+            "admitted": 12,
+            "blocked": 0,
+            "discovered": 164,
+            "eligible": 164,
+            "executed": 12,
+            "failed": 0,
+            "passed": 12,
+            "skipped": 0,
+            "unsupported": 0
+          },
+          "failures": [],
+          "lane": "change_understanding",
+          "meaningful_change_recall": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "pass_rate": {
+            "denominator": 12,
+            "numerator": 12,
+            "value": 1.0
+          },
+          "preservation_false_alarm_rate": {
+            "denominator": 0,
+            "na_reason": "no executed preservation controls",
+            "numerator": 0,
+            "value": null
+          },
+          "suite_id": "humanevalpack",
+          "suite_revision": "9a41762f73a8cb23bb5811b73d5aab164efcf378",
+          "suite_version": "Hub dataset revision 9a41762f73a8; OctoPack arXiv:2308.07124"
+        }
+      ],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "sas_parser.wasm",
+      "component_sha256": "9e97d5e32ab2f98e008b76bd429aca8ff3cce501f18c8b04e7bc65ff0948fbb4",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+          "status": "gap"
+        }
+      },
+      "language_id": "sas",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/HMS-Analytical-Software/SASUnit"
+    },
+    {
+      "component": "scala_parser.wasm",
+      "component_sha256": "e169a5618a3b6b4d973d57e02819bf8ff04ec7b15cddfbe19ab6293c98ced6de",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "scala",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/scala/scala/blob/2.13.x/CONTRIBUTING.md"
+    },
+    {
+      "component": "scss_parser.wasm",
+      "component_sha256": "0bde9a9cacee1526e50b4a618d09c73e37a1d1553c7ab352328877c230fca3bc",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "scss",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/sass/sass-spec"
+    },
+    {
+      "component": "sql_parser.wasm",
+      "component_sha256": "10255c582d04c55dac5bf61ab3e661fd0b0ab774002163b378baac2cda1b0a3c",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+          "status": "gap"
+        }
+      },
+      "language_id": "sql",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://www.sqlite.org/sqllogictest/dir?name=test"
+    },
+    {
+      "component": "squirrel_parser.wasm",
+      "component_sha256": "17905c03c109d5eebed80a1222fc025086c8cce4b25658b34ab20be4eee9dee2",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Official samples exist; comprehensive conformance/edit oracle not verified.",
+          "status": "gap"
+        }
+      },
+      "language_id": "squirrel",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://github.com/albertodemichelis/squirrel"
+    },
+    {
+      "component": "svelte_parser.wasm",
+      "component_sha256": "4112804bcdc30b3aed3311c16d4bb56caa293ac879228cc1f119d54ccb412ad2",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "svelte",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests"
+    },
+    {
+      "component": "swift_parser.wasm",
+      "component_sha256": "d15cf1448851ffdc7994a24c3458ea369201f74060ff5edac0f92b177fa3ed47",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "swift",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://www.swift.org/contributing/"
+    },
+    {
+      "component": "toml_parser.wasm",
+      "component_sha256": "af1ec51b47ebb327400e2c799ff73a991b3e2dedb8bf20a86fdc089d45845876",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "toml",
+      "rows": [],
+      "selected_evidence_class": "established community / compatibility suite",
+      "selected_primary_source": "https://github.com/toml-lang/toml-test"
+    },
+    {
+      "component": "tsql_parser.wasm",
+      "component_sha256": "704340850e7ece143507f17f92dd32695118a90328e0538a0baece1fcce1a290",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "tsql",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md"
+    },
+    {
+      "component": "js_ts_parser.wasm",
+      "component_sha256": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "tsx",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "component": "js_ts_parser.wasm",
+      "component_sha256": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "typescript",
+      "rows": [],
+      "selected_evidence_class": "recognised software-engineering research benchmark",
+      "selected_primary_source": "https://www.swebench.com/multilingual"
+    },
+    {
+      "component": "vbnet_parser.wasm",
+      "component_sha256": "35de0e7db4775794cce83ff7c79d78720247bf2c9bb769e256ea1b8605a14b8f",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "vbnet",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/dotnet/roslyn/blob/main/Compilers.slnf"
+    },
+    {
+      "component": "vue_parser.wasm",
+      "component_sha256": "16a2dfc6ca30bf8a7741acb804496bf2d9a7b7f4c4918f3776ffe953b24a80dd",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "vue",
+      "rows": [],
+      "selected_evidence_class": "official upstream regression suite",
+      "selected_primary_source": "https://github.com/vuejs/core/blob/main/packages/compiler-sfc/__tests__/compileStyle.spec.ts"
+    },
+    {
+      "component": "wat_parser.wasm",
+      "component_sha256": "11458443ab73ac7079827f9c13f899600057687fe7381df6000b745028eb7254",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+          "status": "gap"
+        }
+      },
+      "language_id": "wast",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/WebAssembly/spec/blob/main/interpreter/README.md"
+    },
+    {
+      "component": "wat_parser.wasm",
+      "component_sha256": "11458443ab73ac7079827f9c13f899600057687fe7381df6000b745028eb7254",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "wat",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/WebAssembly/spec/blob/main/interpreter/README.md"
+    },
+    {
+      "component": "xml_parser.wasm",
+      "component_sha256": "2bd8f26bae4f9fd0e5a4528efa6d019a128bacd60721401609f63801b10e8a8a",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "xml",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://www.w3.org/XML/Test/"
+    },
+    {
+      "component": "yaml_parser.wasm",
+      "component_sha256": "2ff91eb6d68ae517e2941ed00c863a3ff3f2357ceedebecf9a062f8a216989d1",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Selected; import, immutable pin, licence review and independent oracle validation pending.",
+          "status": "gap"
+        }
+      },
+      "language_id": "yaml",
+      "rows": [],
+      "selected_evidence_class": "standards / conformance suite",
+      "selected_primary_source": "https://github.com/yaml/yaml-test-suite"
+    },
+    {
+      "component": "zig_parser.wasm",
+      "component_sha256": "8520545894161d06c302558f7b0a7e3d7a3127a420c927aca5fc0f508ba125e6",
+      "lanes": {
+        "change_understanding": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+          "status": "gap"
+        },
+        "parser_fidelity": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+          "status": "gap"
+        },
+        "robustness_scaling": {
+          "external_gold_pass_rate": {
+            "denominator": 0,
+            "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+            "numerator": 0,
+            "value": null
+          },
+          "na_reason": "no admitted external case executed in this lane; selection: Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+          "status": "gap"
+        }
+      },
+      "language_id": "zig",
+      "rows": [],
+      "selected_evidence_class": "qualified external candidate; admission gap",
+      "selected_primary_source": "https://ziglang.org/documentation/0.15.1/"
+    }
+  ],
+  "ledger_sha256": "33163b7af06e83c6ddbaf6c27f1c4c213aa3a35783eca4adefd3edeba4cd2339",
+  "run": {
+    "components": {
+      "abap_parser.wasm": "a00561ca1dd7c774e7a586c9fdb7b56bcaf268c2e56c0d8d3d0eff82e80c0554",
+      "adf_parser.wasm": "d1537ca40be16a9e191290ea0579b32180d360404e305f7265889dd59e00b375",
+      "asciidoc_parser.wasm": "f87cb7a74f3159c23811b16eb531edbb7cfceabaecedcbc1c037d1986162d306",
+      "asm_parser.wasm": "54fcd474826b4b392715027c1732b8c7e95f6b7472ea07930c17002c52853baf",
+      "assemblyscript_parser.wasm": "48ffe441dfa4ede797417428bcb1dc5ad17756b029f5ea9aebf5967970c0314d",
+      "astro_parser.wasm": "87b9522ecb7b59163fe38e128edd5c1250c4a923035ff05928bfb179660fa533",
+      "bash_parser.wasm": "a040ede7a7ab725bc6a8f067f28b615eff9b3ce9218c966246ea755e7bd075c0",
+      "clojure_parser.wasm": "b7b9389e242e0c679a945a80a969991e40350648444bcccb6d58fbcd593ac392",
+      "cmake_parser.wasm": "f3074dd3e4a6b0bb55f7330b156ae7d703bc633e887e27b1a8a492a868b4aa59",
+      "cpp_parser.wasm": "447196da1ea6f2ee2f9adb10fe02d14d6da3a85d8eee06059a01aaaeb20eb483",
+      "csharp_parser.wasm": "1ad282ea4b8f5efe94e546726901bd62d40800bae9d457ee35e79dd6e9776a10",
+      "css_parser.wasm": "014c28541deb9d9285b22dca1510f447ebb299eca2a93ecb25cad9e30785b845",
+      "dart_parser.wasm": "ef6ab5470a9d41ee445c6cebbb012d4106ff5e3cb7100d085ee28c63d8d025ae",
+      "databricks_parser.wasm": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0",
+      "dax_parser.wasm": "2b58916887a2805fc98ab69f60956791cb5eeecd65fe715893f22b424c4343c5",
+      "delphi_parser.wasm": "091734b404007f999b82bbb438477d2c798b5035f8da3e1812f1a66e07a5d424",
+      "dockerfile_parser.wasm": "34a607e721b2f3dd1354f281e5220c14ea1d8cb9dec198f6557558c52f377e11",
+      "elixir_parser.wasm": "4ea4738efe8d04546325d685e4c91a3abfa5a3d617755fa95f8d444cef2ebccf",
+      "generic_parser.wasm": "6c7f7de7c9d88f4f5795bf6f6f99a3cc9d19c169cfb006b77f59e150423f746d",
+      "gitignore_parser.wasm": "a468265461647408a591851dcdd09817b38f1fb266a45e12267ad1286d2fe6b7",
+      "go_parser.wasm": "4b60216e2b6b58c7ca894fda6b724bce57eb6056959510d9996e18541116a285",
+      "gomod_parser.wasm": "f818e01d364f9f247ff9850120c56882b29f954523166b49c14276cc022ce577",
+      "graphql_parser.wasm": "b01f0a4b3f19ace3cd125f1a9e863cf097ee9c35c35b1f5539f2ed129c8fc4e2",
+      "groovy_parser.wasm": "802b390f22e4d4b6e46433ce076bbd690a3cce889ce5898daf2af878060e28f0",
+      "haskell_parser.wasm": "c24869c7d7a1c71f8fd0574107ffe88bcb816f3ba89243cf9ad20756b2c427ca",
+      "html_parser.wasm": "3aad4e0b71c4089902f40c650210925ff696ffebde025f3562a17834191be56c",
+      "ini_parser.wasm": "dc665e8970a8922f70e76ef572297293db36d6802a98d5ac13a74bb519e538d0",
+      "java_parser.wasm": "580021fc83c32f3fc11711eace069aeefa30c5b81ab0440dd93d05ab5eb1fcb6",
+      "js_ts_parser.wasm": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34",
+      "json_parser.wasm": "ffb886cf098373b018ab0d21ecdc04c0928619c20ca1b20961a40d738418d2fd",
+      "kotlin_parser.wasm": "cf1f86d749ba8ee10754709f59c3aa1613b8465c071b97837924ed8d7e2b9025",
+      "latex_parser.wasm": "b9c83976e79d4970e30b293e873713ed4759a9188f49474916fcac53ba2538cf",
+      "lua_parser.wasm": "e9fab17743ef283b49218dab633242aacb1028e04570f323e0a0fbd34ca2adcb",
+      "make_parser.wasm": "0dd92dab1c57d2c4191b9c14d9f0ddd96e39808b41880211862f225796207529",
+      "markdown_parser.wasm": "05415ec27989e8eba2651f7440725a865670bb3248a648c2e456b4f6d7502e9d",
+      "mdx_parser.wasm": "1bb9e1aa2d5b58b973c4ea5f680e08581e6cd362079f17e2928d317bfdd0ec71",
+      "ocaml_parser.wasm": "5c0933950a9250824bf09f5328e8a51da6ab36a6549f8ed2f820fff01f70c82b",
+      "odin_parser.wasm": "f80f5ea40d7c86bf43850de4ed2b4e60caed933c7a2975dd7edcd3f2bcad20ed",
+      "perl_parser.wasm": "0e82e6ca637f892c96c0f347e92d47108b77a7ea41714723d1e1ea3baf0687ed",
+      "php_parser.wasm": "9b7dc0bf853f95fe55850ac8b340b3657d44bca70946c2a2be836cdceac42b37",
+      "plsql_parser.wasm": "26decdd220d4fdd8ac4501a0c8be0306b35a0476a207e691c43ad792816a8ffb",
+      "po_parser.wasm": "092800f8e61e4b6d62ca914be56c850478913c798dece3fea02ee49be9fc970c",
+      "postscript_parser.wasm": "2f9dfc5f869ae4ec8cd03818977b7ae7c4565a901e2943fd096536476d771a1b",
+      "powershell_parser.wasm": "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15",
+      "proto_parser.wasm": "d692e7aad9a759b2d5567d7dc5eeb2c5f6bc2e54d8e61d908dfa576f04df586a",
+      "puppet_parser.wasm": "378e7c4e2abce858bed1bfd4fb08027559d5438d834a478f2d9c2c21c2066945",
+      "python_parser.wasm": "627326a48a950f18fc2355aa00ef392f87a8f4e32f42965a7dd36be0a1f24b24",
+      "qsharp_parser.wasm": "7ee18d2ea51b991a0d6ee866da54b9e514a4952c77b221f9c1aac7261bc4e06c",
+      "r_parser.wasm": "a8e48efe3403a92b1484072e88c33cf633dd0e4e5fd4564c1f6a369afcfe0c87",
+      "reasonml_parser.wasm": "a0b779b30af24eb1147a19adc174891fa47667b41809e6dc82ab432faba5574b",
+      "ruby_parser.wasm": "a1f251608c22e32876e0b06ac0e49d9b3a31f30c9d4ecafd3af986fbed298087",
+      "rust_parser.wasm": "5575a9798c4f28caf80aa2ca2b0572e82c0626bec9bf5c1bdb45b573645872a8",
+      "sas_parser.wasm": "9e97d5e32ab2f98e008b76bd429aca8ff3cce501f18c8b04e7bc65ff0948fbb4",
+      "scala_parser.wasm": "e169a5618a3b6b4d973d57e02819bf8ff04ec7b15cddfbe19ab6293c98ced6de",
+      "scss_parser.wasm": "0bde9a9cacee1526e50b4a618d09c73e37a1d1553c7ab352328877c230fca3bc",
+      "sql_parser.wasm": "10255c582d04c55dac5bf61ab3e661fd0b0ab774002163b378baac2cda1b0a3c",
+      "squirrel_parser.wasm": "17905c03c109d5eebed80a1222fc025086c8cce4b25658b34ab20be4eee9dee2",
+      "svelte_parser.wasm": "4112804bcdc30b3aed3311c16d4bb56caa293ac879228cc1f119d54ccb412ad2",
+      "swift_parser.wasm": "d15cf1448851ffdc7994a24c3458ea369201f74060ff5edac0f92b177fa3ed47",
+      "terraform_parser.wasm": "78b3c62d6bd701c0d67870fd280e93e72e3072ea08d559b6b7a507892858e490",
+      "toml_parser.wasm": "af1ec51b47ebb327400e2c799ff73a991b3e2dedb8bf20a86fdc089d45845876",
+      "tsql_parser.wasm": "704340850e7ece143507f17f92dd32695118a90328e0538a0baece1fcce1a290",
+      "vbnet_parser.wasm": "35de0e7db4775794cce83ff7c79d78720247bf2c9bb769e256ea1b8605a14b8f",
+      "vue_parser.wasm": "16a2dfc6ca30bf8a7741acb804496bf2d9a7b7f4c4918f3776ffe953b24a80dd",
+      "wat_parser.wasm": "11458443ab73ac7079827f9c13f899600057687fe7381df6000b745028eb7254",
+      "xml_parser.wasm": "2bd8f26bae4f9fd0e5a4528efa6d019a128bacd60721401609f63801b10e8a8a",
+      "yaml_parser.wasm": "2ff91eb6d68ae517e2941ed00c863a3ff3f2357ceedebecf9a062f8a216989d1",
+      "zig_parser.wasm": "8520545894161d06c302558f7b0a7e3d7a3127a420c927aca5fc0f508ba125e6"
+    },
+    "core_commit": "74618c311836983b4f60ae2d8389edfdd14f7793",
+    "core_crates_dirty": false,
+    "interface": "production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)",
+    "ledger_sha256": "33163b7af06e83c6ddbaf6c27f1c4c213aa3a35783eca4adefd3edeba4cd2339",
+    "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+    "parser_manifest_sha256": "23c390a898f252d919d9a348b13337c98198980cdf693682747faff630d0b69f",
+    "run_utc": "2026-11-17T19:55:17+00:00",
+    "schema_version": 1,
+    "selection": {
+      "classes": null,
+      "languages": null
+    },
+    "workers": {
+      "c": {
+        "completed_count": 4,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 129692,
+        "wall_seconds": 1.427,
+        "worker_error": null
+      },
+      "cpp": {
+        "completed_count": 32,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 136348,
+        "wall_seconds": 2.927,
+        "worker_error": null
+      },
+      "go": {
+        "completed_count": 21,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 89112,
+        "wall_seconds": 1.805,
+        "worker_error": null
+      },
+      "java": {
+        "completed_count": 27,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 90652,
+        "wall_seconds": 1.975,
+        "worker_error": null
+      },
+      "javascript": {
+        "completed_count": 27,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 105356,
+        "wall_seconds": 1.952,
+        "worker_error": null
+      },
+      "python": {
+        "completed_count": 27,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 88648,
+        "wall_seconds": 1.267,
+        "worker_error": null
+      },
+      "rust": {
+        "completed_count": 27,
+        "native_library_sha256": "ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b",
+        "peak_rss_kib": 96352,
+        "wall_seconds": 1.828,
+        "worker_error": null
+      }
+    }
+  },
+  "schema_version": 1,
+  "summary": {
+    "languages_without_measured_external_lane": 68,
+    "pooled_summary": "none: per-language rows only; no macro average is claimed",
+    "registered_languages": 74
+  }
+}

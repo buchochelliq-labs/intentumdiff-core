@@ -24,6 +24,12 @@
   all 74 routed IDs, independent control expectations and machine-readable results.
 - Add an offline Rust public-API benchmark gate and exact installed-binding
   acceptance, separating semantic accuracy from parity and infrastructure failures.
+- Add the core #268 schema-2 admission ledger (`tests/fixtures/external/admission/`), its
+  validator and per-language scorecard (`scripts/external_ledger.py`), executed upstream-test
+  witnesses (`scripts/humanevalpack_witness.py`), a deterministic ledger builder and a C ABI
+  runner reusing `assess_languages.py`. First slice: 165 admitted HumanEvalPack and
+  literal cases; scorecard in `docs/evidence/2026-11-17-external-scorecard/` with every
+  registered ID (68 gaps) and four recorded failures. CI guards upstream_gold regressions.
 - Consume the verified C/C++ component preserving character-literal payloads,
   prefixes, escapes and byte spans. Wider 0.0.3 acceptance remains open.
 

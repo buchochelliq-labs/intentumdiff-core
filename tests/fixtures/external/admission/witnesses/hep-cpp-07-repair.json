@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-cpp-07-repair",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "ab8133e0f3f9e6158d4a52bdeb7ee9d6279ff3a4beaba8e5ce32fc2541b17b3f",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "1d90b229b5da215fa2640366e4a4380a8ebdf7101483ae24c7ec076965c89cff",
+  "new_test_sha256": "ee0bd77731ffca9e9348b3bea61205ba6f7071ba2bf4695fe8fdc5cd957a2e34",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "9d79b6c7b41c39aa45e0f37cb8c700939fb19c8937c0dba37e6695122f36edae",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": -6,
+        "stderr_tail": "prog: prog.cpp:30: int main(): Assertion `issame(filter_by_substring({\"xxx\", \"asd\", \"xxy\", \"john doe\", \"xxxAAA\", \"xxx\"}, \"xxx\"), {\"xxx\", \"xxxAAA\", \"xxx\"})' failed.\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "b07ebe7660340f3a70e6da8a39557519944a5bc7a41d6c1eed291dcf945e6643",
+  "old_test_sha256": "ee0bd77731ffca9e9348b3bea61205ba6f7071ba2bf4695fe8fdc5cd957a2e34",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/07.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

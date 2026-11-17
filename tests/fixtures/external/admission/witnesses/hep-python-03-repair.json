@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-03-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "b441b42e61cc58d3efc80a26d530cc3e818bf5364c760ab21541cf86cf872fda",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "2ee8ba44047bfd848fd0a33a000885ab746ac1bdd00ddfd3d50312b8501df795",
+  "new_test_sha256": "ad118ca5682a90082fdea729e9f739478ec57c435f7ea5c174e2350ca23c204e",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "c8d5c0d88c1dc14fb1f9decef5a07fae6b7e656e60ae023a929b87693b461d23",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-70c2lh3s/prog.py\", line 27, in <module>\n    check(below_zero)\n    ~~~~~^^^^^^^^^^^^\n  File \"/tmp/hep-witness-70c2lh3s/prog.py\", line 21, in check\n    assert below_zero([1, 2, -3, 1, 2, -3]) == False\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "9064855e96ee937cf70f6e67e7146add96a5812b6ebde7e04982e789b1523c4c",
+  "old_test_sha256": "ad118ca5682a90082fdea729e9f739478ec57c435f7ea5c174e2350ca23c204e",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/03.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

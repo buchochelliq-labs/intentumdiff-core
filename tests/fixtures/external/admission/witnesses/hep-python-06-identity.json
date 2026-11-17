@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-python-06-identity",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "f359fa8da9eb698829d0ac5e1a5d63165722b35bbf76364e58d24adfc69e00c8",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "757e4408c1797a3f5400b58d059519f2ce46066636407c8810a907ffe95a75e6",
+  "new_test_sha256": "79258966387201d24b7e3ae66bf04df6f93eb961c10f0391e5cca19fef876b38",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "f359fa8da9eb698829d0ac5e1a5d63165722b35bbf76364e58d24adfc69e00c8",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "757e4408c1797a3f5400b58d059519f2ce46066636407c8810a907ffe95a75e6",
+  "old_test_sha256": "79258966387201d24b7e3ae66bf04df6f93eb961c10f0391e5cca19fef876b38",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/06.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

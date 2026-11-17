@@ -1,0 +1,80 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-rust-05-repair",
+  "config": "rust",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "b15549617e01b8bd29cc94ea77086d14dc31c2773385908861b3e8dcec205c79",
+    "steps": [
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet",
+          "--no-run"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "\nrunning 1 test\n.\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "199b9af631d7e083e7fe8bb90a56938f5dbefc418ef2371a6c8513c7e7e71d7b",
+  "new_test_sha256": "131ec275a95463b238a2f0db64ade894650a902691f68b3556936bd8e08302fd",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "ac10b3e6a317a1914696fe19716f1244e6a3772a2189100dd760e61224b73f84",
+    "steps": [
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet",
+          "--no-run"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "--quiet"
+        ],
+        "exit_code": 101,
+        "stderr_tail": "error: test failed, to rerun pass `--bin humanevalpack_witness`\n",
+        "stdout_tail": "\ntests::test_intersperse --- FAILED\n\nfailures:\n\n---- tests::test_intersperse stdout ----\n\nthread 'tests::test_intersperse' (32319) panicked at src/main.rs:24:9:\nassertion failed: intersperse(vec![5, 6, 3, 2], 8) == vec![5, 8, 6, 8, 3, 8, 2]\nstack backtrace:\n   0: __rustc::rust_begin_unwind\n             at /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/std/src/panicking.rs:689:5\n   1: core::panicking::panic_fmt\n             at /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/panicking.rs:80:14\n   2: core::panicking::panic\n             at /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/panicking.rs:150:5\n   3: humanevalpack_witness::tests::test_intersperse\n             at ./src/main.rs:24:9\n   4: humanevalpack_witness::tests::test_intersperse::{closure#0}\n             at ./src/main.rs:22:26\n   5: <humanevalpack_witness::tests::test_intersperse::{closure#0} as core::ops::function::FnOnce<()>>::call_once\n             at /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/ops/function.rs:250:5\n   6: <fn() -> core::result::Result<(), alloc::string::String> as core::ops::function::FnOnce<()>>::call_once\n             at /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/ops/function.rs:250:5\nnote: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.\n\n\nfailures:\n    tests::test_intersperse\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s\n\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "4df8bc8edada117eb75a6ecddc05cbb16f33b88bd24c0cd6a68a68decc01d453",
+  "old_test_sha256": "131ec275a95463b238a2f0db64ade894650a902691f68b3556936bd8e08302fd",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/rust/05.json",
+  "toolchain": [
+    "cargo 1.97.0 (c980f4866 2026-06-30)",
+    "rustc 1.97.0 (2d8144b78 2026-07-07)"
+  ],
+  "verdict": "supports_claim"
+}

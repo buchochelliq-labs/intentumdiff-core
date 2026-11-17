@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-01-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "a33f1f84d249aa0d73b01a8ccc5a749bf375acc7d2ab04330565cc33fa69f3e7",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "844134725858369c932c84996aa403e61852a3f57c12cbc5bcf47a094b1bda68",
+  "new_test_sha256": "f87be7663faf43d242ea547f98f79ccde9e16a0ad147d2766c9fb68f6ce4bd9c",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "5f75fd6daa8f190b049eb58f2f1e610ead785adaff17bfb9a2adda3dda03d5fa",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-3_78t06r/prog.py\", line 40, in <module>\n    check(separate_paren_groups)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-3_78t06r/prog.py\", line 29, in check\n    assert separate_paren_groups('(()()) ((())) () ((())()())') == [\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        '(()())', '((()))', '()', '((())()())'\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ]\n    ^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "5b660c8bb778cb668926593caf0e108c6e3c7696af49eef0723fc01211c1a71a",
+  "old_test_sha256": "f87be7663faf43d242ea547f98f79ccde9e16a0ad147d2766c9fb68f6ce4bd9c",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/01.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

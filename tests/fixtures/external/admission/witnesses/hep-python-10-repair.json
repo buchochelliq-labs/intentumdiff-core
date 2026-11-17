@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-10-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "2f91258b20269b47eba4f68d1641142f2dd759c6eaab7174d49cdc09177e2ea2",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "a0cdb3a154e30e2d765d362b932d49bc16864260d0c2ef847287096a5a5c95f1",
+  "new_test_sha256": "335d3a3c9289666e8a08179bfde6d8994d333b549c6f445289573668d653d22d",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "timeout",
+    "program_sha256": "792f854edbe4fb6aa7a57f0118a168016911924ead5d13835aa65ad337c387de",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": null,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": true
+      }
+    ]
+  },
+  "old_sha256": "40bc76c570b3d6b309c37c39e62390317d293c61d163044c30ab8a64fe27e544",
+  "old_test_sha256": "335d3a3c9289666e8a08179bfde6d8994d333b549c6f445289573668d653d22d",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/10.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

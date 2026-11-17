@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-cpp-06-repair",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "fb271081256e1a5a56c592ec8fb9baade3f7ad77f6af4505229170f6361601c4",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "dd93ed036ff116e9c0ea1138b00c03ecc1a227e23fd0a693a2eb17eb2b9c7f4b",
+  "new_test_sha256": "71f29a986775ff80d74e83a6f517086d2369bcbedb72994881effcca6ff014f0",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "82112995661df4dfcc7bc6d5e9017f267ba41f97bdfcade8baecaf928b74b9e7",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": -6,
+        "stderr_tail": "prog: prog.cpp:48: int main(): Assertion `issame(parse_nested_parens(\"(()()) ((())) () ((())()())\"),{2, 3, 1, 3})' failed.\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "a9db63e60fe4277017b0a8d80457f2e7f17d029e9bff4db517ffffd68170e774",
+  "old_test_sha256": "71f29a986775ff80d74e83a6f517086d2369bcbedb72994881effcca6ff014f0",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/06.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

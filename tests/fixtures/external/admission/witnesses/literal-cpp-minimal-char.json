@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "literal-cpp-minimal-char",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "d5a1fdf1c15d2802c3b443e73f9f80bb0f7a0c30238cfee0169142a067428265",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "5b2a964903c75ca3358effa20b6effa09cb4d175551aafa9a74fb761891930ea",
+  "new_test_sha256": "49b041178230f9a037a9f9aa6c6d39c24b2d31707dc702975212f5b067f10fee",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "5a257730a03f3e542aa8426e83bdd6c49adb8f0b9e49a7edb1633e9c2c510f84",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "741247753dbe2ce30b1ec719225e15d3ca91057f35ab5a186afcf8c4406b04df",
+  "old_test_sha256": "49b041178230f9a037a9f9aa6c6d39c24b2d31707dc702975212f5b067f10fee",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "inline witness test recorded in the ledger witness_plan",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-05-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "6f3b551a949c8f1b51ff35645e7bab3ab43d50de26b973d4fc90dbd3996f5e73",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.008s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "4353c67d5a815db61a4e4bf3ac428061ded09ea35f14a6926c68b49b7da0f0c3",
+  "new_test_sha256": "8d9ab76baf541c02098db4f481cc98b6765e07cf43f971bad843a4d50eab88b2",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "6f3b551a949c8f1b51ff35645e7bab3ab43d50de26b973d4fc90dbd3996f5e73",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "--- FAIL: TestIntersperse (0.00s)\n    main_test.go:11: \n        \tError Trace:\t/tmp/hep-witness-cmw_k25a/main_test.go:11\n        \tError:      \tNot equal: \n        \t            \texpected: []int{5, 8, 6, 8, 3, 8, 2}\n        \t            \tactual  : []int{5, 8, 6, 8, 3, 8}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,2 +1,2 @@\n        \t            \t-([]int) (len=7) {\n        \t            \t+([]int) (len=6) {\n        \t            \t  (int) 5,\n        \t            \t@@ -6,4 +6,3 @@\n        \t            \t  (int) 3,\n        \t            \t- (int) 8,\n        \t            \t- (int) 2\n        \t            \t+ (int) 8\n        \t            \t }\n        \tTest:       \tTestIntersperse\n    main_test.go:12: \n        \tError Trace:\t/tmp/hep-witness-cmw_k25a/main_test.go:12\n        \tError:      \tNot equal: \n        \t            \texpected: []int{2, 2, 2, 2, 2}\n        \t            \tactual  : []int{2, 2, 2, 2}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,3 +1,2 @@\n        \t            \t-([]int) (len=5) {\n        \t            \t- (int) 2,\n        \t            \t+([]int) (len=4) {\n        \t            \t  (int) 2,\n        \tTest:       \tTestIntersperse\nFAIL\nFAIL\thumanevalpack\t0.008s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "0ac26717bad0d6222416461c24c0bf26b3b98997771aa9a5324fd7bdcd12ac15",
+  "old_test_sha256": "8d9ab76baf541c02098db4f481cc98b6765e07cf43f971bad843a4d50eab88b2",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/05.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

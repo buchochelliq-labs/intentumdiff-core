@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-cpp-03-repair",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "6a6982a871abc0d2ea7a576d18d75e3b88b586f270f038a1919eca1407c85eca",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "c078f9cf78bb2e5681b2c6fe6eb8136e7b53d8859c033a0b7b5090aceed066a6",
+  "new_test_sha256": "f9b7b4318e5be42c4d64b5b3357bb9969c26cf3cc5b157f01f0492d6e3923f3b",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "16c79064d42d89eb2649b89ef0dec9dd8018c6974e64ae7a963647727c4307d8",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": -6,
+        "stderr_tail": "prog: prog.cpp:21: int main(): Assertion `below_zero({1, 2, -3, 1, 2, -3}) == false' failed.\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "17f329d17d542046ff64d851bd53fe188c8e28407d48559b7d5c38996fccccba",
+  "old_test_sha256": "f9b7b4318e5be42c4d64b5b3357bb9969c26cf3cc5b157f01f0492d6e3923f3b",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/03.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

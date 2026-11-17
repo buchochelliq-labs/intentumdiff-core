@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-06-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "f359fa8da9eb698829d0ac5e1a5d63165722b35bbf76364e58d24adfc69e00c8",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "757e4408c1797a3f5400b58d059519f2ce46066636407c8810a907ffe95a75e6",
+  "new_test_sha256": "79258966387201d24b7e3ae66bf04df6f93eb961c10f0391e5cca19fef876b38",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "83269c38bafb9fd13723f0560ccc2e9ffee8cd8d1aef546e8ed36c8d2e952d9d",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-lkpj5cla/prog.py\", line 29, in <module>\n    check(parse_nested_parens)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-lkpj5cla/prog.py\", line 25, in check\n    assert parse_nested_parens('(()()) ((())) () ((())()())') == [2, 3, 1, 3]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "48c12bba11c8249bc7459279a04a632469b967b160da34d8875673c28ac337c9",
+  "old_test_sha256": "79258966387201d24b7e3ae66bf04df6f93eb961c10f0391e5cca19fef876b38",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/06.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

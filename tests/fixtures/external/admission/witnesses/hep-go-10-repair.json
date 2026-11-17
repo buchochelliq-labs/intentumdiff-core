@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-10-repair",
+  "config": "go",
+  "new": {
+    "outcome": "build_failed",
+    "program_sha256": "16aa58cd4ca0d9cc9d00e213abc143065708496ded5f9b2ef0cd163e5470231c",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "# humanevalpack [humanevalpack.test]\n./main.go:13:10: undefined: IsPalindrome\n",
+        "stdout_tail": "FAIL\thumanevalpack [build failed]\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "0ba4b13932c874565e0719b46c23d1419510e3792acde128e17ce9f804594260",
+  "new_test_sha256": "676b791d0ade0b45bb2f91c82e2a742b4a05eb527baa05f91c67b6088334d5df",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "build_failed",
+    "program_sha256": "16aa58cd4ca0d9cc9d00e213abc143065708496ded5f9b2ef0cd163e5470231c",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "# humanevalpack [humanevalpack.test]\n./main.go:13:10: undefined: IsPalindrome\n./main.go:13:23: use of package strings not in selector\n",
+        "stdout_tail": "FAIL\thumanevalpack [build failed]\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "771c6600cb0953d5ea63504995e192801a870c35cb0e18006430bc642214132d",
+  "old_test_sha256": "676b791d0ade0b45bb2f91c82e2a742b4a05eb527baa05f91c67b6088334d5df",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/10.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "inconclusive"
+}

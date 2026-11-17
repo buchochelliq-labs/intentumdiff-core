@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-cpp-09-identity",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "64a3844c3690f0f61a73e63e0a650295576c08545e89200753119fc7d34ec8e9",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "632edf0887c0d737790670b17a95bb58d161491183c7312f5e4d1779742d45f3",
+  "new_test_sha256": "58cded3d8362779dc5293f3a2aa9e02172957fd64746e78847569c604cd5cbee",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "64a3844c3690f0f61a73e63e0a650295576c08545e89200753119fc7d34ec8e9",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "632edf0887c0d737790670b17a95bb58d161491183c7312f5e4d1779742d45f3",
+  "old_test_sha256": "58cded3d8362779dc5293f3a2aa9e02172957fd64746e78847569c604cd5cbee",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/09.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

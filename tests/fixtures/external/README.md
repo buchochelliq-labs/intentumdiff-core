@@ -24,3 +24,12 @@ python scripts/import_external_benchmarks.py --data-dir tests/fixtures/external/
 ```
 
 The importer refuses changed Parquet SHA-256 before extracting rows. It does not download data, run IntentumDiff, or synthesize expectations from engine output. No product semantics live in this Python test tooling.
+
+## Schema-2 admission ledger (core #268)
+
+`admission/ledger.json` is the #268 contract used by #262–#267. It references the bytes above by path
+and SHA-256 rather than copying them, adds new derived/handwritten bytes under `admission/cases/`, and
+pins executed upstream-test witness records under `admission/witnesses/`. It is rebuilt only by
+`scripts/build_external_admission.py` and validated by `scripts/external_ledger.py validate`. Pilot seed
+repairs promoted there are admitted only where the witness actually ran and supported the claim; see
+`docs/EXTERNAL_BENCHMARKS.md` and `docs/evidence/2026-11-17-external-scorecard/README.md`.
