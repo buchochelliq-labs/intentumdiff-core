@@ -1,4 +1,4 @@
-# External-benchmark scorecard: first slice, #262 and #265, 2026-11-17
+# External-benchmark scorecard: first slice, #262, #265 and #263, 2026-11-17
 
 This is the scorecard produced under the core #268 contract (schema-2 admission ledger). It covers three
 contributions, all in one ledger and one runner report. **It does not certify any language.**
@@ -10,9 +10,12 @@ contributions, all in one ledger and one runner report. **It does not certify an
   (`plsql`). See the [#262 section](#262-sql-and-data-platform-family).
 - **#265, the structured family:** `yaml`, `json`, `toml`, `ini`, `proto` and `graphql`; `xml` is BLOCKED
   in both lanes. See the [#265 section](#265-structured-family).
+- **#263, the web, markup and embedded family:** `markdown`, `mdx`, `html`, `css`, `scss`, `vue`,
+  `svelte`, `astro`, `latex`, `asciidoc` and `po`; `postscript` and `generic` are BLOCKED. See the
+  [#263 section](#263-web-markup-and-embedded-family).
 
-The ledger holds 2,282 cases (171 + 48 + 2,063), of which 2,133 are admitted and executed through the
-C ABI (165 + 42 + 1,926). 58 of the 74 registered IDs have no measured external lane. No language has a
+The ledger holds 4,779 cases (171 + 48 + 2,063 + 2,497), of which 4,293 are admitted and executed through
+the C ABI (165 + 42 + 1,926 + 2,160). 47 of the 74 registered IDs have no measured external lane. No language has a
 robustness/scaling result. The two family sections were first published as separate runs; this directory
 now holds the single combined run, and the former `../2026-11-17-external-scorecard-265/` directory was
 folded into it.
@@ -475,3 +478,101 @@ Each reproducer was rechecked directly through `live_diff_contents`/`parse_to_tr
 - YAML enumeration is partial, and the admitted YAML subset is filtered by agreement with ruamel.
 - Compatibility labels (buf, graphql-js) are one semantic dimension, not author intent.
 - Derived edits are bounded at 24 per derivation and suite, and are built deterministically from sorted seeds.
+
+## #263 web, markup and embedded family
+
+Fragment: `tests/fixtures/external/admission/families/markup-263.json`, written and `--check`-ed by
+`scripts/markup_family.py` and merged by `scripts/build_external_admission.py`. Bytes:
+`scripts/acquire_markup_benchmarks.py`. Run on core `1d835646` with the same C ABI library (`ced9e0e1…598b`)
+and staged components (manifest `23c390a8…`) as every earlier run; intentumdiff-python `0dd7e50`.
+Two full runs gave identical statuses, errors and review summaries for all 4,293 cases, every one of the
+2,133 earlier cases kept its status, errors and review summary, and the gate exits 0 against the earlier
+and the new `results.json`. `tsx` (also in #263's scope) was not part of this task and stays a GAP.
+
+### Sources
+
+Revisions were resolved with `git ls-remote`; bytes come from `raw.githubusercontent.com` at the commit, or
+from the npm tarball whose `gitHead` is the commit. Tree listings are unreachable, so most enumerations are
+probes of recalled names (recorded as incomplete).
+
+| Suite (language) | Revision | Licence | Reference executed |
+|---|---|---|---|
+| CommonMark spec 0.31.2 (`markdown`), npm `commonmark-spec` (tarball `588280df…`, byte-equal to raw) | `9103e341a973013013bb1a80e13567007c5cef6f` | CC-BY-SA-4.0 | commonmark.js 0.31.2 |
+| GFM spec, cmark-gfm 0.29.0.gfm.13 (`markdown`, extension examples only) | `587a12bb54d95ac37241377e6ddc93ea0e45439b` | CC-BY-SA-4.0 | cmark-gfm via cmarkgfm 2025.10.22 |
+| WPT `html/syntax/parsing/resources/*.dat` (`html`; html5lib-tests says the tree tests now live here) | `edd042b63671f8ba064d86560836171e0cdb3956` | BSD-3-Clause (tests from html5lib, MIT) | html5lib 1.1 |
+| css-parsing-tests (`css`) | `203ce36bffd617db7f118c551e32794561fb273d` | CC0-1.0 | tinycss2 1.5.1 |
+| sass-spec, npm `sass-spec` 3.5.4-1 (tarball `890c0af3…`; basic, scss, css, errors dirs) | `8be4e1b7555e5560ed1767605ebefc0429756ece` | MIT | Dart Sass 1.108.2 |
+| Svelte parser-modern, parser-legacy and migrate samples (`svelte`) | `23bb146306ff02cc5041bca0c5de9f8bd086e4a3` (svelte@5.57.3) | MIT | svelte 5.57.3 compiler + `svelte/server` |
+| Vue compiler-sfc `parse.spec.ts`, `compileScript.spec.ts` (`vue`) | `8b479a89445868d474f17e2d837765e7c9ece5e4` (v3.5.45) | MIT | @vue/compiler-sfc + vue/server-renderer 3.5.45 |
+| Astro `internal/printer/printer_test.go` (`astro`) | `271eee2e499432015ab4c6dc510c5331e1961b84` (@astrojs/compiler@4.0.0) | MIT | @astrojs/compiler 4.0.0 |
+| MDX `docs/**/*.mdx` (`mdx`; project sample corpus, not a test suite) | `50aa8df0b027c893dec9f97a2b7c51539e9f1a4b` (3.1.1) | MIT | @mdx-js/mdx 3.1.1 |
+| Asciidoctor DocTest `data/examples/asciidoc` (`asciidoc`; only the inline_*, document, embedded files exist) | `1f48884cb953e0315490837fbc30c1558c5752a0` | MIT | Asciidoctor 2.0.26 |
+| polib test fixtures (`po`) | `bcb2bbab34448ca2e703a364ee523a6241eeff72` | MIT | GNU msgfmt 0.21 `--check` |
+| LaTeX2e `base/manifest.txt` documents (`latex`) | `bd4c0b10fb93bd0dfdf2ed1b4660b05ff74fd2ca` | LPPL-1.3c | pdfTeX 1.40.25 (TeX Live 2023, texlive-latex-base) |
+
+Blocked acquisitions: **postscript**, Ghostscript examples are AGPL-3.0 and no permissive suite with an
+oracle was found; **generic**, WikiAtomicEdits data is only on storage.googleapis.com, which answers 403.
+
+### Admitted cases and results (C ABI)
+
+Parser-fidelity cases are must-accept unless a must-reject count is shown. Change pairs are
+`reviewed_external_derived` except the 17 Svelte migrate pairs (`upstream_gold`).
+
+| Language | Parser passed / executed | Valid accepted | Invalid rejected | Change passed / executed | Change recall | Preservation false alarms |
+|---|---|---|---|---|---|---|
+| markdown | 662/674 | 662/674 | N/A | 86/106 | 50/58 | 12/48 |
+| mdx | 30/30 | 30/30 | N/A | 42/48 | 42/42 | 6/6 |
+| html | 164/164 | 164/164 | N/A | 75/125 | 21/47 | 24/78 |
+| css | 24/24 | 24/24 | N/A | 6/6 | N/A | 0/6 |
+| scss | 170/186 | 170/173 | 0/13 | 58/84 | 34/37 | 23/47 |
+| svelte | 86/90 | 86/86 | 0/4 | 33/44 | 0/9 | 2/35 |
+| vue | 88/88 | 88/88 | N/A | 2/11 | 0/2 | 7/9 |
+| astro | 238/238 | 238/238 | N/A | 41/60 | 27/46 | 0/14 |
+| latex | 9/9 | 9/9 | N/A | 6/12 | 3/6 | 3/6 |
+| asciidoc | 67/68 | 67/68 | N/A | 39/41 | 17/19 | 0/22 |
+| po | 18/19 | 18/18 | 0/1 | 20/33 | 9/9 | 13/24 |
+
+486 cases stay candidates: the reference disagreed with the claim (e.g. `*x*`→`_x_` in delimiter-rule
+examples renders differently; Astro keeps frontmatter verbatim), or could not run (51 LaTeX documents need
+packages outside texlive-latex-base, Svelte migrate samples that import sibling components, sass-spec
+expectations from 2018 that Dart Sass 1.108 no longer reproduces).
+
+### Real failures, minimised (not filed)
+
+1. **Markdown block loss.** `---\n---\n` gives a tree with no nodes, and `---\nFoo\n---\nBar\n` loses the
+   thematic break and the `Foo` setext heading. Six more CommonMark examples split or merge container blocks
+   differently from the reference (lazy continuation `>     foo\n    bar`, list continuation `- one\n\n two`,
+   `10) foo\n   - bar`); three report a section wrapper that starts on a leading blank line.
+2. **Markdown presentation reported as semantic.** `*foo*`→`_foo_` is a paragraph MODIFICATION; an
+   appended blank line after a list item is an ADDITION of `block_continuation`; editing the text of a
+   setext heading is reported only as a REFACTORING of the section, not as a text edit.
+3. **HTML text in implied-end elements is invisible.** `<p>foo<p>bar` → `<p>foox<p>bar` is style-only;
+   `<p>foo</p>`→`<p>foox</p>` is correct. Upper-casing a tag name (`<div>`→`<DIV>`) is semantic, and
+   swapping two attributes returns `completeness: incomplete`.
+4. **Astro and Svelte element text is invisible.** `<button>Click</button>` → `Clickx` is style-only in both;
+   the Svelte tree has `element` nodes that cover only the start tag and no text child.
+5. **Quote respelling in script imports is semantic.** `import { onMount } from 'svelte'` → `"svelte"` (and the
+   same in Vue `<script setup>`) is a MODIFICATION of the import statement.
+6. **SCSS.** A leading `// note` line relabels the root (`stylesheet` → `// derived note`), so every
+   silent-comment control is a false alarm; a number inside `@include` arguments is missed; three valid
+   files (`$a: null`, IE `filter: alpha(opacity=…)`, hyphen/underscore names) fall back with "Empty semantic
+   tree"; 13 syntax errors (e.g. `--prop: );`, `@supports {}`) are accepted without diagnostics.
+7. **Svelte loose-mode inputs** (`{#if }`, `<div foo={a.}>`, unclosed tags) are accepted without diagnostics.
+8. **PO.** A translator comment is an ADDITION reported as semantic; `test_syntax_error1.po` (a second
+   `msgstr` without `msgid`) is accepted without diagnostics.
+9. **LaTeX.** `Hello world` → `Hello  world` is a text MODIFICATION; `\section{A}` → `\subsection{A}` is
+   reported only as a DELETION of the section.
+10. **AsciiDoc.** The callout example `"Hello world!" // <1>` in a listing yields a node range outside the
+    source; a link target inside an `image::` macro is missed.
+
+The one failing Svelte migrate pair, `self-closing-elements` (`<div />` → `<div></div>`), is reported with no
+changes. The expectation treats every non-whitespace migration as a rewrite that must be shown; for this pair
+a style-only answer is also defensible, so it is a contract question rather than a confirmed defect.
+
+### Not claimed
+
+- No robustness/scaling cases. `tsx` is not covered. CSS has only 6 derived pairs (css-parsing-tests inputs
+  are tiny); WPT CSS tests were not imported.
+- Equivalence oracles are bounded observations (one render, compile or DVI), not semantic equivalence.
+- The CommonMark block inventory treats a link reference definition as part of the following block, as
+  commonmark.js does; where IntentumDiff reports it as its own node (one case), the domains differ.

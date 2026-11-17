@@ -6,17 +6,17 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 
 ## Identity
 
-- Ledger SHA-256: `fd249308790b1024313fd17e5b7996c870976e1aa0fd664b57b836a7aa28ae61`
-- Core commit: `786698a39e2f59aaf0741a877f357a792e596d31` (crates dirty: False)
+- Ledger SHA-256: `69bfc45dbc8cc49743840913988ffbde76b96e2d74866827787be7e1143342aa`
+- Core commit: `1d8356463754945afe4bf0d122a52492afcfa00f` (crates dirty: False)
 - C ABI library SHA-256: `ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b`
 - Staged parser manifest SHA-256: `23c390a898f252d919d9a348b13337c98198980cdf693682747faff630d0b69f`
 - Interface: production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)
-- Run (UTC): 2026-11-17T20:41:43+00:00
+- Run (UTC): 2026-11-17T23:44:43+00:00
 
 ## Summary
 
 - Registered language IDs: 74.
-- With at least one measured external lane: 16; gaps: 58.
+- With at least one measured external lane: 27; gaps: 47.
 - Handwritten regressions are shown in their own rows and never count toward a lane.
 
 ## Per-language lane status (all registered IDs)
@@ -25,17 +25,17 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 |---|---|---|---|---|
 | `abap` | GAP | GAP | GAP | <https://github.com/abaplint/abaplint/blob/main/docs/development.md> (established community / compatibility suite) |
 | `adf` | 4/4 (100%) | 2/2 (100%) | GAP | <https://github.com/Azure/Azure-DataFactory> (qualified external candidate; admission gap) |
-| `asciidoc` | GAP | GAP | GAP | <https://github.com/asciidoctor-contrib/asciidoctor-doctest> (established community / compatibility suite) |
+| `asciidoc` | 39/41 (95%) | 67/68 (99%) | GAP | <https://github.com/asciidoctor-contrib/asciidoctor-doctest> (established community / compatibility suite) |
 | `asm` | GAP | GAP | GAP | <https://llvm.org/docs/TestingGuide.html> (official upstream regression suite) |
 | `assemblyscript` | GAP | GAP | GAP | <https://github.com/AssemblyScript/assemblyscript/blob/main/package.json> (official upstream regression suite) |
-| `astro` | GAP | GAP | GAP | <https://github.com/withastro/compiler/blob/main/internal/printer/printer_test.go> (official upstream regression suite) |
+| `astro` | 41/60 (68%) | 238/238 (100%) | GAP | <https://github.com/withastro/compiler/blob/main/internal/printer/printer_test.go> (official upstream regression suite) |
 | `bash` | GAP | GAP | GAP | <https://www.gnu.org/s/bash/manual/html_node/Basic-Installation.html> (official upstream regression suite) |
 | `c` | GAP | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `clojure` | GAP | GAP | GAP | <https://github.com/clojure/clojure> (official upstream regression suite) |
 | `cmake` | GAP | GAP | GAP | <https://github.com/Kitware/CMake/blob/master/Tests/RunCMake/README.rst> (official upstream regression suite) |
 | `cpp` | 26/27 (96%) | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `csharp` | GAP | GAP | GAP | <https://github.com/dotnet/roslyn/blob/main/Compilers.slnf> (official upstream regression suite) |
-| `css` | GAP | GAP | GAP | <https://github.com/web-platform-tests/wpt> (standards / conformance suite) |
+| `css` | 6/6 (100%) | 24/24 (100%) | GAP | <https://github.com/web-platform-tests/wpt> (standards / conformance suite) |
 | `dart` | GAP | GAP | GAP | <https://github.com/dart-lang/sdk/blob/main/docs/Building.md> (official upstream regression suite) |
 | `databricks` | GAP | GAP | GAP | <https://github.com/databricks/cli/blob/main/AGENTS.md> (official upstream regression suite) |
 | `databricks-workflow` | GAP | GAP | GAP | <https://github.com/databricks/cli/blob/main/AGENTS.md> (official upstream regression suite) |
@@ -43,7 +43,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `delphi` | GAP | GAP | GAP | <https://github.com/fpc/FPCSource> (established community / compatibility suite) |
 | `dockerfile` | GAP | GAP | GAP | <https://github.com/STAR-RG/shipwright> (published specialist research benchmark) |
 | `elixir` | GAP | GAP | GAP | <https://github.com/elixir-lang/elixir/blob/main/CONTRIBUTING.md> (official upstream regression suite) |
-| `generic` | GAP | GAP | GAP | <https://github.com/google-research-datasets/wiki-atomic-edits> (qualified external candidate; admission gap) |
+| `generic` | BLOCKED | BLOCKED | GAP | <https://github.com/google-research-datasets/wiki-atomic-edits> (qualified external candidate; admission gap) |
 | `gitignore` | GAP | GAP | GAP | <https://github.com/git/git/blob/master/t/t0008-ignores.sh> (official upstream regression suite) |
 | `go` | 21/21 (100%) | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `gomod` | GAP | GAP | GAP | <https://go.dev/src/cmd/go/testdata/script/mod_replace.txt> (official upstream regression suite) |
@@ -51,25 +51,25 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `groovy` | GAP | GAP | GAP | <https://github.com/apache/groovy/blob/master/CONTRIBUTING.md> (official upstream regression suite) |
 | `haskell` | GAP | GAP | GAP | <https://ghc.gitlab.haskell.org/homepage/blog/20190708-testsuite-work.html> (official upstream regression suite) |
 | `hcl` | GAP | GAP | GAP | <https://huggingface.co/datasets/autoiac-project/iac-eval> (published specialist research benchmark) |
-| `html` | GAP | GAP | GAP | <https://github.com/web-platform-tests/wpt> (standards / conformance suite) |
+| `html` | 75/125 (60%) | 164/164 (100%) | GAP | <https://github.com/web-platform-tests/wpt> (standards / conformance suite) |
 | `ini` | 13/13 (100%) | 9/9 (100%) | GAP | <https://github.com/python/cpython/blob/main/Lib/test/test_configparser.py> (official upstream regression suite) |
 | `java` | 27/27 (100%) | GAP | GAP | <https://github.com/pouryafard75/RM-ASTDiff> (recognised software-engineering research benchmark) |
 | `javascript` | 26/27 (96%) | GAP | GAP | <https://github.com/tc39/test262> (standards / conformance suite) |
 | `json` | 128/144 (89%) | 97/245 (40%) | GAP | <https://github.com/nst/JSONTestSuite> (established community / compatibility suite) |
 | `kotlin` | GAP | GAP | GAP | <https://github.com/JetBrains/kotlin/blob/master/kotlin-native/HACKING.md> (official upstream regression suite) |
-| `latex` | GAP | GAP | GAP | <https://github.com/latex3/latex2e/tree/develop/base/testfiles> (official upstream regression suite) |
+| `latex` | 6/12 (50%) | 9/9 (100%) | GAP | <https://github.com/latex3/latex2e/tree/develop/base/testfiles> (official upstream regression suite) |
 | `lua` | GAP | GAP | GAP | <https://www.lua.org/tests/> (official upstream regression suite) |
 | `m` | GAP | 2/9 (22%) | GAP | <https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md> (official upstream regression suite) |
 | `make` | GAP | GAP | GAP | <https://github.com/mirror/make/blob/master/tests/scripts/variables/flavors> (official upstream regression suite) |
-| `markdown` | GAP | GAP | GAP | <https://github.com/commonmark/commonmark-spec> (standards / conformance suite) |
-| `mdx` | GAP | GAP | GAP | <https://github.com/mdx-js/mdx/blob/main/packages/mdx/test/compile.js> (official upstream regression suite) |
+| `markdown` | 86/106 (81%) | 662/674 (98%) | GAP | <https://github.com/commonmark/commonmark-spec> (standards / conformance suite) |
+| `mdx` | 42/48 (88%) | 30/30 (100%) | GAP | <https://github.com/mdx-js/mdx/blob/main/packages/mdx/test/compile.js> (official upstream regression suite) |
 | `ocaml` | GAP | GAP | GAP | <https://github.com/ocaml/ocaml> (official upstream regression suite) |
 | `odin` | GAP | GAP | GAP | <https://github.com/odin-lang/Odin/blob/master/.github/workflows/ci.yml> (official upstream regression suite) |
 | `perl` | GAP | GAP | GAP | <https://perldoc.perl.org/perlhack> (official upstream regression suite) |
 | `php` | GAP | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `plsql` | GAP | GAP | GAP | <https://github.com/utPLSQL/utPLSQL> (established community / compatibility suite) |
-| `po` | GAP | GAP | GAP | <https://github.com/autotools-mirror/gettext/blob/master/gettext-tools/tests/msgfmt-1> (official upstream regression suite) |
-| `postscript` | GAP | GAP | GAP | <https://github.com/ArtifexSoftware/ghostpdl/tree/master/examples> (qualified external candidate; admission gap) |
+| `po` | 20/33 (61%) | 18/19 (95%) | GAP | <https://github.com/autotools-mirror/gettext/blob/master/gettext-tools/tests/msgfmt-1> (official upstream regression suite) |
+| `postscript` | BLOCKED | BLOCKED | GAP | <https://github.com/ArtifexSoftware/ghostpdl/tree/master/examples> (qualified external candidate; admission gap) |
 | `powershell` | GAP | GAP | GAP | <https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/testing-guidelines.md> (official upstream regression suite) |
 | `proto` | 117/117 (100%) | 173/185 (94%) | GAP | <https://github.com/bufbuild/buf/blob/main/private/bufpkg/bufcheck/breaking_test.go> (official upstream regression suite) |
 | `puppet` | GAP | GAP | GAP | <https://github.com/puppetlabs/puppet/blob/main/spec/integration/parser/compiler_spec.rb> (official upstream regression suite) |
@@ -81,17 +81,17 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `rust` | 27/27 (100%) | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `sas` | GAP | GAP | GAP | <https://github.com/HMS-Analytical-Software/SASUnit> (established community / compatibility suite) |
 | `scala` | GAP | GAP | GAP | <https://github.com/scala/scala/blob/2.13.x/CONTRIBUTING.md> (official upstream regression suite) |
-| `scss` | GAP | GAP | GAP | <https://github.com/sass/sass-spec> (official upstream regression suite) |
+| `scss` | 58/84 (69%) | 170/186 (91%) | GAP | <https://github.com/sass/sass-spec> (official upstream regression suite) |
 | `sql` | 9/12 (75%) | 3/4 (75%) | GAP | <https://www.sqlite.org/sqllogictest/dir?name=test> (official upstream regression suite) |
 | `squirrel` | GAP | GAP | GAP | <https://github.com/albertodemichelis/squirrel> (qualified external candidate; admission gap) |
-| `svelte` | GAP | GAP | GAP | <https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests> (official upstream regression suite) |
+| `svelte` | 33/44 (75%) | 86/90 (96%) | GAP | <https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests> (official upstream regression suite) |
 | `swift` | GAP | GAP | GAP | <https://www.swift.org/contributing/> (official upstream regression suite) |
 | `toml` | 72/77 (94%) | 270/546 (49%) | GAP | <https://github.com/toml-lang/toml-test> (established community / compatibility suite) |
 | `tsql` | 0/5 (0%) | 0/5 (0%) | GAP | <https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md> (official upstream regression suite) |
 | `tsx` | GAP | GAP | GAP | <https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md> (official upstream regression suite) |
 | `typescript` | GAP | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `vbnet` | GAP | GAP | GAP | <https://github.com/dotnet/roslyn/blob/main/Compilers.slnf> (official upstream regression suite) |
-| `vue` | GAP | GAP | GAP | <https://github.com/vuejs/core/blob/main/packages/compiler-sfc/__tests__/compileStyle.spec.ts> (official upstream regression suite) |
+| `vue` | 2/11 (18%) | 88/88 (100%) | GAP | <https://github.com/vuejs/core/blob/main/packages/compiler-sfc/__tests__/compileStyle.spec.ts> (official upstream regression suite) |
 | `wast` | GAP | GAP | GAP | <https://github.com/WebAssembly/spec/blob/main/interpreter/README.md> (standards / conformance suite) |
 | `wat` | GAP | GAP | GAP | <https://github.com/WebAssembly/spec/blob/main/interpreter/README.md> (standards / conformance suite) |
 | `xml` | BLOCKED | BLOCKED | GAP | <https://www.w3.org/XML/Test/> (standards / conformance suite) |
@@ -105,16 +105,34 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `adf` | azure-datafactory-samples | reviewed_external_derived | change_understanding | 4 | 4 | 4 | 4 | 4 | 0 | 0 | 0 | 0 | 4/4 (100%) | 2/2 (100%) | 0/2 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `adf` | azure-datafactory-samples | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `adf` | azure-datafactory-samples | upstream_gold | parser_fidelity | 2 | 2 | 2 | 2 | 2 | 0 | 0 | 0 | 0 | 2/2 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 2/2 (100%) | N/A (0 of 0: no executed must-reject documents) |
+| `asciidoc` | asciidoctor-doctest | external_seed_only | change_understanding | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `asciidoc` | asciidoctor-doctest | external_seed_only | parser_fidelity | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `asciidoc` | asciidoctor-doctest | reviewed_external_derived | change_understanding | 41 | 41 | 41 | 41 | 39 | 2 | 0 | 0 | 0 | 39/41 (95%) | 17/19 (89%) | 0/22 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `asciidoc` | asciidoctor-doctest | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `asciidoc` | asciidoctor-doctest | upstream_gold | parser_fidelity | 72 | 72 | 68 | 68 | 67 | 1 | 0 | 0 | 0 | 67/68 (99%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 67/68 (99%) | N/A (0 of 0: no executed must-reject documents) |
+| `astro` | astro-compiler-tests | external_seed_only | change_understanding | 12 | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `astro` | astro-compiler-tests | external_seed_only | parser_fidelity | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `astro` | astro-compiler-tests | reviewed_external_derived | change_understanding | 60 | 60 | 60 | 60 | 41 | 19 | 0 | 0 | 0 | 41/60 (68%) | 27/46 (59%) | 0/14 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `astro` | astro-compiler-tests | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `astro` | astro-compiler-tests | upstream_gold | parser_fidelity | 339 | 240 | 238 | 238 | 238 | 0 | 0 | 0 | 0 | 238/238 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 238/238 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `c` | intentumdiff-literal-regressions | handwritten_regression | change_understanding | 4 | 4 | 4 | 4 | 4 | 0 | 0 | 0 | 0 | 4/4 (100%) | 4/4 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `cpp` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 14 | 1 | 0 | 0 | 0 | 14/15 (93%) | N/A (0 of 0: no executed behavior-changing cases) | 1/15 (7%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `cpp` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 12/12 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `cpp` | intentumdiff-literal-regressions | handwritten_regression | change_understanding | 5 | 5 | 5 | 5 | 5 | 0 | 0 | 0 | 0 | 5/5 (100%) | 5/5 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `css` | css-parsing-tests | reviewed_external_derived | change_understanding | 6 | 6 | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 6/6 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/6 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `css` | css-parsing-tests | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `css` | css-parsing-tests | upstream_gold | parser_fidelity | 31 | 24 | 24 | 24 | 24 | 0 | 0 | 0 | 0 | 24/24 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 24/24 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `go` | humanevalpack | external_seed_only | change_understanding | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `go` | humanevalpack | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/12 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `go` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 9 | 9 | 9 | 0 | 0 | 0 | 0 | 9/9 (100%) | 9/9 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `graphql` | graphql-js-breaking | reviewed_external_derived | change_understanding | 25 | 25 | 25 | 25 | 25 | 0 | 0 | 0 | 0 | 25/25 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/25 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `graphql` | graphql-js-breaking | upstream_gold | change_understanding | 33 | 25 | 25 | 25 | 14 | 11 | 0 | 0 | 0 | 14/25 (56%) | 14/25 (56%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `graphql` | graphql-js-breaking | upstream_gold | parser_fidelity | 46 | 46 | 46 | 46 | 46 | 0 | 0 | 0 | 0 | 46/46 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 46/46 (100%) | N/A (0 of 0: no executed must-reject documents) |
+| `html` | wpt-html-tree-construction | external_seed_only | change_understanding | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `html` | wpt-html-tree-construction | external_seed_only | parser_fidelity | 16 | 16 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `html` | wpt-html-tree-construction | reviewed_external_derived | change_understanding | 125 | 125 | 125 | 125 | 75 | 50 | 0 | 0 | 0 | 75/125 (60%) | 21/47 (45%) | 24/78 (31%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `html` | wpt-html-tree-construction | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `html` | wpt-html-tree-construction | upstream_gold | parser_fidelity | 1830 | 180 | 164 | 164 | 164 | 0 | 0 | 0 | 0 | 164/164 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 164/164 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `ini` | cpython-configparser | reviewed_external_derived | change_understanding | 13 | 13 | 13 | 13 | 13 | 0 | 0 | 0 | 0 | 13/13 (100%) | 6/6 (100%) | 0/7 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `ini` | cpython-configparser | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `ini` | cpython-configparser | upstream_gold | parser_fidelity | 3 | 3 | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 3/3 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 3/3 (100%) | N/A (0 of 0: no executed must-reject documents) |
@@ -129,9 +147,29 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `json` | jsontestsuite | reviewed_external_derived | change_understanding | 71 | 71 | 71 | 71 | 58 | 13 | 0 | 0 | 0 | 58/71 (82%) | 43/44 (98%) | 12/27 (44%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | jsontestsuite | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | jsontestsuite | upstream_gold | parser_fidelity | 291 | 245 | 245 | 245 | 97 | 148 | 0 | 0 | 0 | 97/245 (40%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 95/95 (100%) | 2/150 (1%) |
+| `latex` | latex2e-base | external_seed_only | change_understanding | 84 | 84 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `latex` | latex2e-base | external_seed_only | parser_fidelity | 51 | 51 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `latex` | latex2e-base | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 6 | 6 | 0 | 0 | 0 | 6/12 (50%) | 3/6 (50%) | 3/6 (50%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `latex` | latex2e-base | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `latex` | latex2e-base | upstream_gold | parser_fidelity | 61 | 60 | 9 | 9 | 9 | 0 | 0 | 0 | 0 | 9/9 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 9/9 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `m` | powerquery-parser | upstream_gold | parser_fidelity | 78 | 78 | 9 | 9 | 2 | 7 | 0 | 0 | 0 | 2/9 (22%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 2/9 (22%) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | commonmark-spec | external_seed_only | change_understanding | 24 | 24 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | commonmark-spec | reviewed_external_derived | change_understanding | 106 | 106 | 106 | 106 | 86 | 20 | 0 | 0 | 0 | 86/106 (81%) | 50/58 (86%) | 12/48 (25%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | commonmark-spec | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | commonmark-spec | upstream_gold | parser_fidelity | 652 | 652 | 652 | 652 | 640 | 12 | 0 | 0 | 0 | 640/652 (98%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 640/652 (98%) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | gfm-spec | external_seed_only | parser_fidelity | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `markdown` | gfm-spec | upstream_gold | parser_fidelity | 672 | 24 | 22 | 22 | 22 | 0 | 0 | 0 | 0 | 22/22 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 22/22 (100%) | N/A (0 of 0: no executed must-reject documents) |
+| `mdx` | mdx-docs | external_seed_only | change_understanding | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `mdx` | mdx-docs | reviewed_external_derived | change_understanding | 48 | 48 | 48 | 48 | 42 | 6 | 0 | 0 | 0 | 42/48 (88%) | 42/42 (100%) | 6/6 (100%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `mdx` | mdx-docs | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `mdx` | mdx-docs | upstream_gold | parser_fidelity | 30 | 30 | 30 | 30 | 30 | 0 | 0 | 0 | 0 | 30/30 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 30/30 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `plsql` | utplsql | external_seed_only | parser_fidelity | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `plsql` | utplsql | upstream_gold | parser_fidelity | 489 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `po` | polib-tests | external_seed_only | change_understanding | 9 | 9 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `po` | polib-tests | external_seed_only | parser_fidelity | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `po` | polib-tests | reviewed_external_derived | change_understanding | 33 | 33 | 33 | 33 | 20 | 13 | 0 | 0 | 0 | 20/33 (61%) | 9/9 (100%) | 13/24 (54%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `po` | polib-tests | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `po` | polib-tests | upstream_gold | parser_fidelity | 24 | 23 | 19 | 19 | 18 | 1 | 0 | 0 | 0 | 18/19 (95%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 18/18 (100%) | 0/1 (0%) |
 | `proto` | buf-breaking | external_seed_only | change_understanding | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `proto` | buf-breaking | reviewed_external_derived | change_understanding | 24 | 24 | 24 | 24 | 24 | 0 | 0 | 0 | 0 | 24/24 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/24 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `proto` | buf-breaking | upstream_gold | change_understanding | 116 | 102 | 100 | 93 | 93 | 0 | 7 | 0 | 0 | 93/93 (100%) | 93/93 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
@@ -140,16 +178,31 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `python` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 11 | 1 | 0 | 0 | 0 | 11/12 (92%) | 11/12 (92%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `rust` | humanevalpack | reviewed_external_derived | change_understanding | 15 | 15 | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 15/15 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/15 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `rust` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 12/12 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `scss` | sass-spec | external_seed_only | change_understanding | 12 | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `scss` | sass-spec | external_seed_only | parser_fidelity | 46 | 46 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `scss` | sass-spec | reviewed_external_derived | change_understanding | 84 | 84 | 84 | 84 | 58 | 26 | 0 | 0 | 0 | 58/84 (69%) | 34/37 (92%) | 23/47 (49%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `scss` | sass-spec | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `scss` | sass-spec | upstream_gold | parser_fidelity | 6317 | 232 | 186 | 186 | 170 | 16 | 0 | 0 | 0 | 170/186 (91%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 170/173 (98%) | 0/13 (0%) |
 | `sql` | postgresql-regress | external_seed_only | parser_fidelity | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `sql` | postgresql-regress | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 9 | 3 | 0 | 0 | 0 | 9/12 (75%) | 6/6 (100%) | 3/6 (50%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `sql` | postgresql-regress | reviewed_external_derived | parser_fidelity | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1/1 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 1/1 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `sql` | postgresql-regress | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `sql` | postgresql-regress | upstream_gold | parser_fidelity | 222 | 5 | 4 | 3 | 2 | 1 | 1 | 0 | 0 | 2/3 (67%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 2/3 (67%) | N/A (0 of 0: no executed must-reject documents) |
+| `svelte` | svelte-tests | external_seed_only | change_understanding | 32 | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `svelte` | svelte-tests | external_seed_only | parser_fidelity | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `svelte` | svelte-tests | reviewed_external_derived | change_understanding | 27 | 27 | 27 | 27 | 17 | 10 | 0 | 0 | 0 | 17/27 (63%) | 0/9 (0%) | 1/18 (6%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `svelte` | svelte-tests | upstream_gold | change_understanding | 37 | 34 | 17 | 17 | 16 | 1 | 0 | 0 | 0 | 16/17 (94%) | N/A (0 of 0: no executed behavior-changing cases) | 1/17 (6%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `svelte` | svelte-tests | upstream_gold | parser_fidelity | 92 | 92 | 90 | 90 | 86 | 4 | 0 | 0 | 0 | 86/90 (96%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 86/86 (100%) | 0/4 (0%) |
 | `toml` | toml-test | reviewed_external_derived | change_understanding | 77 | 77 | 77 | 77 | 72 | 5 | 0 | 0 | 0 | 72/77 (94%) | 48/48 (100%) | 5/29 (17%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `toml` | toml-test | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `toml` | toml-test | upstream_gold | parser_fidelity | 556 | 546 | 546 | 546 | 270 | 276 | 0 | 0 | 0 | 270/546 (49%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 185/185 (100%) | 85/361 (24%) |
 | `tsql` | sqlscriptdom | upstream_gold | change_understanding | 41 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: no executed behavior-changing cases) | 5/5 (100%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `tsql` | sqlscriptdom | upstream_gold | parser_fidelity | 492 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 0/5 (0%) | N/A (0 of 0: no executed must-reject documents) |
+| `vue` | vue-compiler-sfc-tests | external_seed_only | change_understanding | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `vue` | vue-compiler-sfc-tests | external_seed_only | parser_fidelity | 19 | 19 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `vue` | vue-compiler-sfc-tests | reviewed_external_derived | change_understanding | 11 | 11 | 11 | 11 | 2 | 9 | 0 | 0 | 0 | 2/11 (18%) | 0/2 (0%) | 7/9 (78%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `vue` | vue-compiler-sfc-tests | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `vue` | vue-compiler-sfc-tests | upstream_gold | parser_fidelity | 110 | 107 | 88 | 88 | 88 | 0 | 0 | 0 | 0 | 88/88 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 88/88 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | external_seed_only | change_understanding | 52 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | external_seed_only | parser_fidelity | 82 | 82 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 6 | 6 | 0 | 0 | 0 | 6/12 (50%) | 6/6 (100%) | 6/6 (100%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
@@ -158,6 +211,28 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 
 ## Failed admitted cases
 
+- `asciidoc` `adoc-inline-callout-basic-word_edit`: old: 0.1: range outside source (1,7); new: 0.1: range outside source (1,7)
+- `asciidoc` `adoc-inline-image-image-with-link-link_target`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `asciidoc` `adoc-inline-callout-basic`: old: 0.1: range outside source (1,7); new: 0.1: range outside source (1,7)
+- `astro` `astro-printer-003-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-004-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-014-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-018-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-019-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-020-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-021-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-022-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-030-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-035-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-037-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-038-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-044-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-045-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-046-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-047-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-048-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-049-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `astro` `astro-printer-050-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
 - `cpp` `hep-cpp-00-local-rename`: forbidden ADDITION reported: a local rename does not add or delete an entity; forbidden DELETION reported: a local rename does not add or delete an entity
 - `graphql` `gql-01`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
 - `graphql` `gql-02`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
@@ -170,6 +245,56 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `graphql` `gql-27`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
 - `graphql` `gql-28`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
 - `graphql` `gql-29`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-adoption01-000-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-001-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-002-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-003-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-004-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-005-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-007-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-008-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-009-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-010-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-011-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-012-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-013-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-014-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption01-015-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-adoption02-000-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-blocks-000-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-000-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-blocks-001-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-001-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-blocks-002-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-002-tag_case`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: tag names are ASCII case-insensitive
+- `html` `wpt-blocks-003-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-004-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-005-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-006-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-007-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-008-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-009-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-010-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-011-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-013-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-014-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-015-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-016-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-017-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-018-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-019-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-020-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-021-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-022-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-blocks-023-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-domjs-unsafe-008-attribute_value`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-domjs-unsafe-009-attribute_value`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-domjs-unsafe-010-attribute_value`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `html` `wpt-tests11-000-attribute_order`: completeness: review could not explain the source delta (incomplete)
+- `html` `wpt-tests11-003-attribute_order`: completeness: review could not explain the source delta (incomplete)
+- `html` `wpt-tests11-007-attribute_order`: completeness: review could not explain the source delta (incomplete)
+- `html` `wpt-tests19-089-attribute_order`: completeness: review could not explain the source delta (incomplete)
+- `html` `wpt-webkit01-016-attribute_order`: completeness: review could not explain the source delta (incomplete)
 - `javascript` `hep-js-06-repair`: missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 258..262 (old) / 258..258 (new)
 - `json` `jpt-tests-003`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the patch leaves the document value unchanged; forbidden ADDITION reported: the patch leaves the document value unchanged
 - `json` `jpt-tests-058`: completeness: review could not explain the source delta (incomplete)
@@ -335,6 +460,12 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `json` `jts-n_structure_unicode-identifier`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `json` `jts-n_structure_whitespace_U+2060_word_joiner`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `json` `jts-n_structure_whitespace_formfeed`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `latex` `latex-cfgguide-section_level`: missing required edit_region (MODIFICATION/ADDITION/DELETION): the sectioning level changes; a reported change must touch the independently computed delta 1706..1706 (old) / 1706..1709 (new)
+- `latex` `latex-cfgguide-interword_space`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: TeX collapses spaces
+- `latex` `latex-clsguide-historic-section_level`: missing required edit_region (MODIFICATION/ADDITION/DELETION): the sectioning level changes; a reported change must touch the independently computed delta 1614..1614 (old) / 1614..1617 (new)
+- `latex` `latex-clsguide-historic-interword_space`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: TeX collapses spaces
+- `latex` `latex-cyrguide-section_level`: missing required edit_region (MODIFICATION/ADDITION/DELETION): the sectioning level changes; a reported change must touch the independently computed delta 2005..2005 (old) / 2005..2008 (new)
+- `latex` `latex-cyrguide-interword_space`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: TeX collapses spaces
 - `m` `pqparser-helloworld-helloworld-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 24; statement starts: 1 reported statement(s) start where the reference has none, first at byte 144
 - `m` `pqparser-helloworldwithdocs-helloworldwithdocs-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 32; statement starts: 1 reported statement(s) start where the reference has none, first at byte 1382
 - `m` `pqparser-navigationtable-navigationtable-parse`: statement inventory: expected 11 top-level statements, got 5; statement starts: 11 reference statement start(s) not matched, first at byte 77; statement starts: 5 reported statement(s) start where the reference has none, first at byte 195
@@ -342,6 +473,58 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `m` `pqparser-trippin-1-odata-trippin-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 202
 - `m` `pqparser-trippin-2-rest-trippin-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 405
 - `m` `pqparser-trippin-3-navtables-trippin-parse`: statement inventory: expected 10 top-level statements, got 5; statement starts: 10 reference statement start(s) not matched, first at byte 74; statement starts: 5 reported statement(s) start where the reference has none, first at byte 894
+- `markdown` `cm-0004-trailing_blank_line`: has_semantic_changes: expected False, got True; forbidden ADDITION reported: a trailing blank line renders nothing
+- `markdown` `cm-0007-trailing_blank_line`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: a trailing blank line renders nothing
+- `markdown` `cm-0009-trailing_blank_line`: has_semantic_changes: expected False, got True; forbidden ADDITION reported: a trailing blank line renders nothing
+- `markdown` `cm-0021-trailing_blank_line`: has_semantic_changes: expected False, got True; forbidden ADDITION reported: a trailing blank line renders nothing; forbidden MODIFICATION reported: a trailing blank line renders nothing
+- `markdown` `cm-0037-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0059-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0066-emphasis_delimiter`: has_semantic_changes: expected False, got True
+- `markdown` `cm-0080-emphasis_delimiter`: has_semantic_changes: expected False, got True
+- `markdown` `cm-0080-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0081-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0083-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0086-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0089-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0095-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0141-word_edit`: missing required edit_region (MODIFICATION/ADDITION/DELETION): rendered text changes; a reported change must touch the independently computed delta 3..3 (old) / 3..4 (new)
+- `markdown` `cm-0152-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0167-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0168-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0176-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0188-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element renders
+- `markdown` `cm-0096`: statement inventory: expected 4 top-level statements, got 2; statement starts: 2 reference statement start(s) not matched, first at byte 0
+- `markdown` `cm-0097`: statement starts: 1 reference statement start(s) not matched, first at byte 1; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `markdown` `cm-0098`: statement inventory: expected 2 top-level statements, got 0; statement starts: 2 reference statement start(s) not matched, first at byte 0
+- `markdown` `cm-0117`: statement starts: 1 reference statement start(s) not matched, first at byte 6; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `markdown` `cm-0215`: statement inventory: expected 2 top-level statements, got 3; statement starts: 1 reported statement(s) start where the reference has none, first at byte 12
+- `markdown` `cm-0227`: statement starts: 1 reference statement start(s) not matched, first at byte 4; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `markdown` `cm-0236`: statement starts: 2 reference statement start(s) not matched, first at byte 0; statement starts: 2 reported statement(s) start where the reference has none, first at byte 2
+- `markdown` `cm-0255`: statement starts: 2 reference statement start(s) not matched, first at byte 0; statement starts: 2 reported statement(s) start where the reference has none, first at byte 2
+- `markdown` `cm-0257`: statement starts: 2 reference statement start(s) not matched, first at byte 0; statement starts: 2 reported statement(s) start where the reference has none, first at byte 6
+- `markdown` `cm-0276`: statement starts: 2 reference statement start(s) not matched, first at byte 0; statement starts: 2 reported statement(s) start where the reference has none, first at byte 5
+- `markdown` `cm-0297`: statement starts: 2 reference statement start(s) not matched, first at byte 0; statement starts: 2 reported statement(s) start where the reference has none, first at byte 4
+- `markdown` `cm-0313`: statement inventory: expected 2 top-level statements, got 3; statement starts: 1 reference statement start(s) not matched, first at byte 14; statement starts: 2 reported statement(s) start where the reference has none, first at byte 8
+- `mdx` `mdx-docs-extending-mdx-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `mdx` `mdx-docs-using-mdx-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `mdx` `mdx-docs-what-is-mdx-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `mdx` `mdx-guides-frontmatter-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `mdx` `mdx-guides-syntax-highlighting-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `mdx` `mdx-migrating-v2-emphasis_delimiter`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the same emphasis element is compiled
+- `po` `po-comment-ordering-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-merge-after-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-merge-before-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-noencoding-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-obsolete-is-not-fuzzy-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-obsolete-previousmsgid-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-pofile-helpers-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-save-as-mofile-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-save-as-pofile-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-set-fuzzy-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-trailing-comment-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-unusual-metadata-location-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-weird-occurrences-translator_comment`: has_semantic_changes: expected False, got True
+- `po` `po-syntax-error1`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `proto` `buf-breaking_field_same_cpp_string_type-current-1`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
 - `proto` `buf-breaking_field_same_cpp_string_type-previous-2`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
 - `proto` `buf-breaking_field_same_cpp_string_type-current-2`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
@@ -356,10 +539,67 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `proto` `buf-breaking_field_same_type-previous-2`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
 - `python` `hep-python-00-local-rename`: forbidden ADDITION reported: a local rename does not add or delete an entity; forbidden DELETION reported: a local rename does not add or delete an entity
 - `python` `hep-python-06-repair`: missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 309..313 (old) / 309..309 (new)
+- `scss` `sass-basic-00_empty-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-01_simple_css-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-02_simple_nesting-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-03_simple_variable-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-04_basic_variables-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-05_empty_levels-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-06_nesting_and_comments-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-07_nested_simple_selector_groups-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-08_selector_combinators-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-09_selector_groups_and_combinators-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-10_classes_and_ids-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-11_attribute_selectors-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-12_pseudo_classes_and_elements-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-13_back_references-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-15_arithmetic_and_lists-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-17_basic_mixins-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-18_mixin_scope-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-19_full_mixin_craziness-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-20_scoped_variables-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-21_one_builtin_function-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-22_colors_with_alpha-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-23_basic_value_interpolation-4.0-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-basic-24_namespace_properties-silent_comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: silent comments are not emitted
+- `scss` `sass-scss-composed-args-number_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `scss` `sass-scss-media-interpolated-number_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `scss` `sass-scss-media-nesting-number_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `scss` `sass-basic-52_interchangeable_hyphens_underscores`: valid document rejected: explicit fallback {"fallback": "plugin returned error (old): Empty semantic tree"}
+- `scss` `sass-css-custom_properties-error-unmatched_brackets-curly_in_square`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-custom_properties-error-unmatched_brackets-paren`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-custom_properties-error-unmatched_brackets-paren_in_curly`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-custom_properties-error-unmatched_brackets-square`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-custom_properties-error-unmatched_brackets-square_in_paren`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-selector-reference_combinator`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-css-unicode_range-error-question_mark_after_minus`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-errors-fn-varargs-at-start`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-errors-fn-varargs-multiple`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-errors-fn-varargs-with-default`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-errors-unicode-report-after`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-errors-unicode-report-before`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-scss-feature-queries-without-query`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `scss` `sass-scss-ie-functions`: valid document rejected: explicit fallback {"fallback": "plugin returned error (old): Empty semantic tree"}
+- `scss` `sass-scss-null`: valid document rejected: explicit fallback {"fallback": "plugin returned error (old): Empty semantic tree"}
 - `sql` `pgreg-select-having-keyword-case`: has_semantic_changes: expected False, got True; is_style_only: expected True, got False; completeness: style-only review must be equivalent, got complete
 - `sql` `pgreg-select-having-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: a comment is not a code edit
 - `sql` `pgreg-select-implicit-alias-rename`: forbidden ADDITION reported: an alias rename does not add or delete an entity; forbidden DELETION reported: an alias rename does not add or delete an entity
 - `sql` `pgreg-case-statements`: statement inventory: expected 64 top-level statements, got 54; statement starts: 10 reference statement start(s) not matched, first at byte 4160
+- `svelte` `svelte-legacy-attribute-containing-solidus-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-attribute-with-whitespace-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-convert-entities-in-element-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-css-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-dynamic-import-script_quote`: has_semantic_changes: expected False, got True
+- `svelte` `svelte-legacy-element-with-text-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-transition-intro-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-transition-intro-no-params-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-whitespace-after-style-tag-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-legacy-whitespace-leading-trailing-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `svelte` `svelte-migrate-self-closing-elements`: is_style_only: expected False, got True; changes_empty: expected False, got True; missing required edit_region (ADDITION/DELETION/MODIFICATION/REFACTORING/MOVE/REORDER): the migration rewrites the component source; a reported change must touch the independently computed delta 4..74 (old) / 4..89 (new)
+- `svelte` `svelte-modern-loose-invalid-block`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `svelte` `svelte-modern-loose-invalid-expression`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `svelte` `svelte-modern-loose-unclosed-open-tag`: invalid document accepted without diagnostics (no parse_errors, no fallback)
+- `svelte` `svelte-modern-loose-unclosed-tag`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `toml` `toml-valid-integer-long-underscore`: completeness: review could not explain the source delta (incomplete)
 - `toml` `toml-valid-key-special-word-underscore`: completeness: review could not explain the source delta (incomplete)
 - `toml` `toml-valid-spec-example-1-compact-underscore`: completeness: review could not explain the source delta (incomplete)
@@ -651,6 +891,15 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `tsql` `scriptdom-ShiftOperatorTests160-statements`: old: 0: range outside source (14,0); new: 0: range outside source (14,0); statement inventory: expected 3 top-level statements, got 0
 - `tsql` `scriptdom-StringConcatOperatorTests160-statements`: old: 0: range outside source (23,0); new: 0: range outside source (23,0); statement inventory: expected 12 top-level statements, got 0
 - `tsql` `scriptdom-WindowClauseTests160-statements`: old: 0: range outside source (90,0); new: 0: range outside source (90,0); statement inventory: expected 16 top-level statements, got 0
+- `vue` `vue-script-003-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-004-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-024-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `vue` `vue-script-024-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-030-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-034-text_edit`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
+- `vue` `vue-script-034-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-071-script_quote`: has_semantic_changes: expected False, got True
+- `vue` `vue-script-072-script_quote`: has_semantic_changes: expected False, got True
 - `yaml` `yts-9KAX-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
 - `yaml` `yts-AZ63-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
 - `yaml` `yts-H2RW-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
