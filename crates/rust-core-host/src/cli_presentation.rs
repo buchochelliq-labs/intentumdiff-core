@@ -24,6 +24,12 @@ struct Diff {
     #[serde(default)] staging_status: Option<String>,
     #[serde(default)] parse_errors: Vec<Value>,
     #[serde(default)] guardrail_violations: Vec<Violation>,
+    #[serde(default)] completeness: Option<String>,
+    #[serde(default)] incomplete: Option<Incomplete>,
+}
+#[derive(Deserialize)]
+struct Incomplete {
+    message: String,
 }
 #[derive(Deserialize)]
 struct Change {
@@ -85,7 +91,12 @@ pub fn render_cli_review_impl(request_json: &str) -> Result<String, String> {
         }
         if request.width >= 60 { append(&mut output, &console, &table); }
     }
-    let (title, state, style) = if diff.is_fallback {
+    let incomplete_message = diff.incomplete.as_ref().map(|item| item.message.clone())
+        .filter(|_| diff.completeness.as_deref() == Some("incomplete"));
+    let (title, state, style) = if let Some(message) = incomplete_message.as_deref() {
+        // Core-authored report-a-bug text (#252); never a clean "no changes" panel.
+        ("Incomplete review", message, "yellow")
+    } else if diff.is_fallback {
         ("Source fallback", "Semantic equivalence unknown; source changes require review.", "yellow")
     } else if diff.is_style_only && (!diff.changes.is_empty()
         || diff.change_groups.iter().any(|group| group["kind"] == "IGNORED_STYLE")) {
@@ -160,6 +171,24 @@ mod tests {
         input["color"] = json!(true);
         assert!(render_cli_review_impl(&input.to_string()).unwrap().contains('\x1b'));
     }
+    #[test]
+    fn incomplete_review_shows_core_message_not_no_changes() {
+        let mut input = request();
+        input["diff"]["changes"] = json!([]);
+        input["diff"]["has_semantic_changes"] = json!(false);
+        input["diff"]["completeness"] = json!("incomplete");
+        input["diff"]["incomplete"] = json!({"reason":"unexplained_source_delta",
+            "message":crate::completeness::incomplete_message("python"),
+            "report_url":crate::completeness::REPORT_URL});
+        let output = render_cli_review_impl(&input.to_string()).unwrap();
+        assert!(output.contains("Incomplete review"), "{output}");
+        assert!(output.contains("could not explain"), "{output}");
+        assert!(!output.contains("No changes detected"), "{output}");
+        // The state, not a stray payload, selects the panel.
+        input["diff"]["completeness"] = json!("complete");
+        assert!(render_cli_review_impl(&input.to_string()).unwrap().contains("No changes detected"));
+    }
+
     #[test]
     fn fallback_never_claims_semantic_equivalence() {
         let mut input = request(); input["diff"]["is_fallback"] = json!(true);

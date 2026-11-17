@@ -527,6 +527,7 @@ pub(crate) fn commit_json_from_items(
                 apply_file_lifecycle_to_diff(
                     &mut diff,
                     infer_file_lifecycle_from_file(file),
+                    item_sources(Some(file)),
                 );
             }
             file_diffs.push(diff);
@@ -624,6 +625,7 @@ pub(crate) fn commit_json_from_owned_items(
                 apply_file_lifecycle_to_diff(
                     &mut diff,
                     infer_file_lifecycle_from_file(file),
+                    item_sources(Some(file)),
                 );
             }
             file_diffs.push(diff);

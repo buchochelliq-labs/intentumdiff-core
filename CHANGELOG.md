@@ -2,6 +2,17 @@
 
 ## Unreleased — v0.0.3 correctness foundation
 
+- Every served review now carries `completeness` (`complete` | `equivalent` | `incomplete`)
+  and `incomplete` (core #252). Differing sources whose drafts were all suppressed without an
+  equivalence proof are `incomplete`, never a clean review: the DTO keeps `changes=[]`, adds
+  changed byte/line ranges and a core-authored report-a-bug `message` with a stable `reason`
+  and `report_url`. Identical input is `complete`; proved style-only input is `equivalent`.
+  Binding authors: render `incomplete.message` verbatim (see `docs/C_ABI.md`).
+- Member reorders inside JSON objects, YAML mappings and TOML tables are proved equivalent
+  (`metadata.equivalence_proof = keyed_data.unordered_mapping_member_order`); duplicate or
+  escaped keys, YAML anchors/aliases/tags and TOML arrays of tables decline the proof.
+- The language assessment checks the completeness state; cases may pin
+  `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for
   all 74 routed IDs, independent control expectations and machine-readable results.
 - Add an offline Rust public-API benchmark gate and exact installed-binding

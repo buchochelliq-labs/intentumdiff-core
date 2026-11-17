@@ -61,6 +61,7 @@ pub(crate) fn source_fallback_diff_impl(old: &str, new: &str, old_filename: &str
     diff["metadata"]["preview_limit_chars"] = json!(160);
     if reason == "parse_errors" { diff["parse_errors"] = json!(["Incomplete or invalid syntax; source changes preserved without a semantic interpretation"]); }
     if changed { diff["change_groups"] = json!([{"kind":"MEANINGFUL_CHANGE","raw_change_indices":[0],"confidence":0.5,"rule_id":"source.incomplete_review","metadata":{"semantic_equivalence":"unknown"}}]); }
+    crate::completeness::attach(&mut diff, Some((old, new)));
     Ok(diff)
 }
 

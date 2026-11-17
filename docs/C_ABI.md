@@ -274,6 +274,54 @@ generic text route are `docs`). It describes what was reviewed, never a risk. `C
 carries no `impact`: group `kind` and `refactoring_kind` already state everything the engine
 has decided about a group, and an impact level would be a risk claim the engine cannot derive.
 
+### Review completeness (core #252)
+
+Every served review (`SemanticDiff`) carries `completeness` and `incomplete`. They are set
+at one shared boundary (`completeness::attach`, reached from `routed_review::complete` and
+from the lifecycle stamp every served diff passes), so `live_diff_contents`,
+`live_handle_diff`, `live_handle_review`, `diff_batch`, `diff_batch_commit_json`,
+`complete_routed_review`, `review_text`, `source_fallback_diff` and `finalize_file_lifecycle`
+all report the same state. `finalize_review` also returns `completeness` (and
+`equivalence_proof`) for bindings that complete the review themselves.
+
+| `completeness` | Meaning | `incomplete` |
+|---|---|---|
+| `complete` | `changes` are the review: at least one change, or byte-identical sources | `null` |
+| `equivalent` | Sources differ and equivalence was proved: `is_style_only=true`, or `is_style_only=false` with `metadata.equivalence_proof` naming the rule (e.g. `keyed_data.unordered_mapping_member_order`) | `null` |
+| `incomplete` | Sources differ, no change survived and nothing proved equivalence | object (below) |
+
+Byte-identical input is `complete`, never `equivalent`, so it stays distinguishable from a
+proved style-only edit even on routes that also set `is_style_only` for identical input.
+An `incomplete` review keeps `changes=[]`, `has_semantic_changes=false`,
+`is_style_only=false` and `metadata.no_surviving_changes=true`: the core never fabricates
+semantic changes. It is not a clean review, and bindings must not render it as "no changes".
+
+```json
+"incomplete": {
+  "reason": "unexplained_source_delta",
+  "message": "IntentumDiff could not explain this change. ... Please report a bug at https://github.com/buchochelliq-labs/intentumdiff-core/issues/new (reason: unexplained_source_delta; language: go; core: 0.1.0).",
+  "report_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new",
+  "language": "go",
+  "core_version": "0.1.0",
+  "source_ranges": [{"old_start_byte": 26, "old_end_byte": 36, "new_start_byte": 26,
+    "new_end_byte": 36, "old_start_line": 2, "old_end_line": 4, "new_start_line": 2,
+    "new_end_line": 4}],
+  "source_ranges_truncated": false,
+  "source_ranges_available": true
+}
+```
+
+- `reason` is a stable code; `message` is core-authored text that every binding (Python,
+  VS Code, LSP, live server, CLI) shows verbatim. It names only the routed language id and
+  the core version: no filename, label, identifier or source text.
+- `source_ranges` are the changed line hunks (zero-based lines, exclusive end bytes),
+  capped at 64 with `source_ranges_truncated`. `source_ranges_available=false` only when a
+  source-less stage (`finalize_file_lifecycle` on a DTO without a prior verdict) had to
+  classify from `metadata.no_surviving_changes` alone.
+- `api::Review` exposes `completeness: Option<String>` and `incomplete: Option<Incomplete>`.
+- The CLI presentation (`render_cli_review`) shows an "Incomplete review" panel with
+  `message` instead of "No changes detected".
+
 ### Guardrail check verdict (`guardrail_check_result`)
 
 `api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)

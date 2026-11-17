@@ -973,3 +973,85 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
 #[cfg(test)]
 #[path = "keyed_data_tests.rs"]
 mod tests;
+
+/// Rule id recorded as `equivalence_proof` when a review's only delta is member order inside
+/// specification-unordered mappings (core #252).
+pub(crate) const UNORDERED_MAPPING_RULE: &str = "keyed_data.unordered_mapping_member_order";
+
+fn line_starts(source: &str) -> Vec<usize> {
+    std::iter::once(0).chain(source.match_indices('\n').map(|(i, _)| i + 1)).collect()
+}
+
+fn node_bytes<'s>(node: &SemanticNode, source: &'s str, starts: &[usize]) -> Option<&'s str> {
+    let p = &node.position;
+    let start = starts.get(p.start_line as usize)? + p.start_col as usize;
+    let end = starts.get(p.end_line as usize)? + p.end_col as usize;
+    source.get(start..end)
+}
+
+/// Canonical form where only the members of unordered containers are sorted. Leaves compare
+/// by their exact source bytes, so no value or spelling equivalence is assumed. `None`
+/// declines the proof (duplicate keys, unknown spans).
+fn unordered_canonical(node: &SemanticNode, source: &str, starts: &[usize], language: &str) -> Option<String> {
+    if node.children.is_empty() {
+        return Some(format!("{}:{:?}", node.node_type, node_bytes(node, source, starts)?));
+    }
+    let mut children = node.children.iter()
+        .map(|child| unordered_canonical(child, source, starts, language))
+        .collect::<Option<Vec<_>>>()?;
+    let unordered = match language {
+        "json" => node.node_type == "object",
+        "yaml" => matches!(node.node_type.as_str(), "block_mapping" | "flow_mapping"),
+        "toml" => matches!(node.node_type.as_str(), "document" | "table" | "inline_table"),
+        _ => false,
+    };
+    if unordered {
+        // Keys are the first child (json/yaml pairs) or the node label (toml pair/table).
+        let keys: Vec<String> = node.children.iter().zip(&children).map(|(child, canonical)| match language {
+            "toml" => format!("{}:{}", child.node_type, child.label),
+            _ => child.children.first()
+                .and_then(|key| unordered_canonical(key, source, starts, language))
+                .unwrap_or_else(|| canonical.clone()),
+        }).collect();
+        let unique: std::collections::BTreeSet<&String> = keys.iter().collect();
+        if unique.len() != keys.len() {
+            return None;
+        }
+        children.sort();
+    }
+    Some(format!("{}:{}({})", node.node_type, node.label, children.join(",")))
+}
+
+/// Whether two keyed-data sources differ only by the order of members of JSON objects
+/// (RFC 8259 §4), YAML mappings (YAML 1.2 §3.2.1.1) or TOML tables. Conservative: anchors,
+/// aliases, merge keys, tags and arrays of tables decline; so does any dropped token
+/// (the non-whitespace, non-separator character multisets must agree).
+pub(crate) fn unordered_mapping_equivalent(old_tree: &SemanticNode, new_tree: &SemanticNode,
+    old_source: &str, new_source: &str, language: &str) -> bool {
+    if !matches!(language, "json" | "yaml" | "toml") || old_source == new_source {
+        return false;
+    }
+    let risky = |source: &str| match language {
+        "yaml" => source.contains(['&', '*', '!']) || source.contains("<<"),
+        "toml" => source.contains("[["),
+        // Escaped keys could spell one key twice; reordering duplicates is not equivalent.
+        _ => source.contains('\\'),
+    };
+    if risky(old_source) || risky(new_source) {
+        return false;
+    }
+    let bag = |source: &str| {
+        let mut chars: Vec<char> = source.chars().filter(|c| !c.is_whitespace() && *c != ',').collect();
+        chars.sort_unstable();
+        chars
+    };
+    if bag(old_source) != bag(new_source) {
+        return false;
+    }
+    let (old_starts, new_starts) = (line_starts(old_source), line_starts(new_source));
+    match (unordered_canonical(old_tree, old_source, &old_starts, language),
+        unordered_canonical(new_tree, new_source, &new_starts, language)) {
+        (Some(old), Some(new)) => old == new,
+        _ => false,
+    }
+}

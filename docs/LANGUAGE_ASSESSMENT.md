@@ -104,6 +104,11 @@ accuracy and explanation/correspondence precision or recall are not automated
 by these checks. The independent review adds three concrete explanation or
 evidence defects that passed headline verdict checks.
 
+Every executed review must also report a `completeness` state (core #252). Byte-identical
+cases must be `complete`, expected style-only cases `equivalent`, and an `incomplete` review
+fails its case unless the fixture pins `expected.completeness: "incomplete"` (an honestly
+unexplained delta). An `incomplete` review must carry `reason`, `message` and `report_url`.
+
 An incomplete-input observation means the engine returned within the bounded
 run, either with a result or an explicit fallback. It is not a correctness pass.
 Parent-child span containment is retained as an observation: a node's name span

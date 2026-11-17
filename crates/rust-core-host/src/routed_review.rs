@@ -91,6 +91,13 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         if fin["no_surviving_changes"] == true || (changes.is_empty() && !style && old_source != new_source) {
             metadata["no_surviving_changes"] = json!(true);
         }
+        // A suppressor that proved equivalence names its rule; completeness reads it (#252).
+        if changes.is_empty() && !style {
+            if let Some(proof) = fin.get("equivalence_proof").filter(|p| p.is_string()) {
+                metadata["equivalence_proof"] = proof.clone();
+                metadata.as_object_mut().unwrap().remove("no_surviving_changes");
+            }
+        }
         reconcile_groups_to_final_changes(&changes, &mut groups);
         json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
             "has_semantic_changes":!changes.is_empty() && !style,"is_style_only":style,
@@ -98,6 +105,9 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]})
     };
     crate::content_class::attach(&mut diff);
+    // The shared completeness boundary (#252): every routed review states whether its
+    // changes explain the source delta, with report-a-bug evidence when they do not.
+    crate::completeness::attach(&mut diff, Some((old_source, new_source)));
     diff["metadata"]["engine_owner"] = json!("rust");
     diff["metadata"]["semantic_contract"] = json!("rust_finalize_review_v1");
     diff["metadata"]["rust_core"] = json!({"engine":"rust_finalize_review_v1", "stage":"per_stage_finalize_routing", "used":true});

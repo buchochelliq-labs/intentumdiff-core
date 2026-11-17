@@ -58,6 +58,31 @@ def check_classification(case, review):
             errors.append('exact identity produced invented changes')
         if empty is not None and bool(not changes) != empty:
             errors.append(f'changes_empty: expected {empty}, got {not changes}')
+    errors.extend(check_completeness(case, review))
+    return errors
+
+
+def check_completeness(case, review):
+    """Core #252: an unexplained empty review is `incomplete`, never a clean result."""
+    state = review.get('completeness'); errors = []
+    if state not in ('complete', 'equivalent', 'incomplete'):
+        return [f'completeness: missing or unknown state {state!r}']
+    incomplete = review.get('incomplete')
+    if (state == 'incomplete') != isinstance(incomplete, dict):
+        errors.append('completeness: incomplete payload does not match state')
+    elif state == 'incomplete' and not all(isinstance(incomplete.get(k), str) and incomplete[k]
+                                           for k in ('reason', 'message', 'report_url')):
+        errors.append('completeness: incomplete payload lacks reason/message/report_url')
+    wanted = case['expected'].get('completeness')
+    if wanted is not None:
+        if state != wanted:
+            errors.append(f'completeness: expected {wanted}, got {state}')
+    elif case['old'] == case['new'] and state != 'complete':
+        errors.append(f'completeness: identical input must be complete, got {state}')
+    elif state == 'incomplete':
+        errors.append('completeness: review could not explain the source delta (incomplete)')
+    elif case['expected'].get('is_style_only') is True and state != 'equivalent':
+        errors.append(f'completeness: style-only review must be equivalent, got {state}')
     return errors
 
 
@@ -177,6 +202,8 @@ def load_cases(root, inventory, selected=None):
             for key in ('has_semantic_changes', 'is_style_only', 'changes_empty'):
                 if case['expected'].get(key) is not None and type(case['expected'][key]) is not bool:
                     raise ValueError(f"{case['id']}: invalid oracle {key}")
+            if case['expected'].get('completeness') not in (None, 'complete', 'equivalent', 'incomplete'):
+                raise ValueError(f"{case['id']}: invalid oracle completeness")
             if not case.get('oracle', {}).get('basis'):
                 raise ValueError(f"{case['id']}: missing independent oracle rationale")
             check_provenance(case, root)
