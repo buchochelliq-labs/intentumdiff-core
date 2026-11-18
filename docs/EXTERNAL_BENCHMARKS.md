@@ -152,6 +152,7 @@ never 100%. No pooled average is computed.
 python scripts/import_external_benchmarks.py --validate
 python scripts/external_ledger.py validate
 python scripts/structured_family.py build --check      # the #265 fragment is current
+python scripts/markup_family.py build --check          # the #263 fragment is current
 python scripts/build_external_admission.py --check     # the ledger is current
 PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
   --parsers build/benchmark-inputs --native-library <libintentumdiff_rust_core.so> \
@@ -256,6 +257,34 @@ outside IntentumDiff:
   `printSchema` equality.
 
 The W3C XML suite is a blocked acquisition (www.w3.org is unreachable), so `xml` is BLOCKED.
+
+### #263 (web, markup and embedded: markdown, mdx, html, css, scss, vue, svelte, astro, latex, asciidoc, po, postscript, generic)
+
+The family contributes the fragment `tests/fixtures/external/admission/families/markup-263.json`, the second
+fragment family; it reuses the #265 expectation helpers and the shared parser-fidelity adapter.
+
+```sh
+python scripts/acquire_markup_benchmarks.py               # network: raw.githubusercontent.com at pinned commits, npm tarballs
+MARKUP_REF_NODE_MODULES=<node_modules with commonmark@0.31.2 sass@1.108.2 svelte@5.57.3 @vue/compiler-sfc@3.5.45
+  vue@3.5.45 @astrojs/compiler@4.0.0 @mdx-js/mdx@3.1.1> \
+MARKUP_REF_PYTHON=<python with html5lib 1.1, tinycss2 1.5.1, cmarkgfm 2025.10.22> \
+MARKUP_REF_ASCIIDOCTOR=<asciidoctor 2.0.26> \
+  python scripts/markup_family.py witness                 # also needs GNU msgfmt and TeX Live latex on PATH
+python scripts/markup_family.py build [--check]           # offline, deterministic fragment
+python scripts/build_external_admission.py [--check]
+```
+
+Parser-fidelity cases are verbatim upstream documents (CommonMark/GFM examples, WPT html5lib `#data`,
+css-parsing-tests inputs and Vue/Astro test sources are extracted byte-exact by each suite's own rule).
+Each claim is confirmed by a reference: the upstream expected HTML/tree/AST/CSS must be reproduced
+(commonmark.js, cmark-gfm, html5lib, tinycss2, Dart Sass), or the compiler/converter must accept it
+(Svelte, Vue, Astro, MDX, Asciidoctor without warnings, `msgfmt --check`, pdfTeX). CommonMark cases also
+carry the commonmark.js top-level block inventory (start byte of each block's first line). Change pairs
+are Svelte's own migrate input/output (`upstream_gold`, witnessed by equal server-rendered HTML) and
+bounded `reviewed_external_derived` edits (24 per derivation and suite) witnessed by rendered HTML,
+html5lib trees, tinycss2 ASTs, compiled CSS, SSR HTML, compiled modules, `.mo` bytes or DVI bytes.
+`postscript` (Ghostscript samples are AGPL-3.0) and `generic` (WikiAtomicEdits data answers 403) are
+blocked acquisitions.
 
 The combined results for the first slice, #262 and #265, with minimised failures and blocked sources,
 are in `docs/evidence/2026-11-17-external-scorecard/README.md`.

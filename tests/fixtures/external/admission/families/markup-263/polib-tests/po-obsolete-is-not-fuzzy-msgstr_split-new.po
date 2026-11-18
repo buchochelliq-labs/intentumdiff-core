@@ -1,0 +1,18 @@
+# test file for not counting obsolete fuzzy messages as fuzzy messages
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "a"
+msgstr "a"
+
+#, fuzzy
+msgid "Line"
+msgstr ""
+"Li"
+"gne"
+
+#, fuzzy
+#~| msgid "c"
+#~ msgid "c"
+#~ msgstr "c"

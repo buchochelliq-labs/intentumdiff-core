@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-errors-interpolation-error-1",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "7d5977152d18ade42f297bc85c0bbbebe9e2ebbe90df7967f3db08a757d90340",
+  "observations": {
+    "error": "Expected expression."
+  },
+  "old_sha256": "7d5977152d18ade42f297bc85c0bbbebe9e2ebbe90df7967f3db08a757d90340",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass rejects, but not with a syntax error",
+  "verdict": "inconclusive"
+}

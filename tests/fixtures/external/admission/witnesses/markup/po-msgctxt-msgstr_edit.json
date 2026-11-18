@@ -1,0 +1,18 @@
+{
+  "case_id": "po-msgctxt-msgstr_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2a246d1b8025ba243a7f9c358007635634ac6b6a275245ee297d684c718a480f",
+  "observations": {
+    "new": {
+      "stderr": "n header\nf.po:3: warning: header field 'Language-Team' missing in header\nf.po:3: warning: header field 'MIME-Version' missing in header\nf.po:3: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:3: warning: header field 'Language' missing in header\nmsgfmt: found 2 fatal errors\n"
+    },
+    "old": {
+      "stderr": "n header\nf.po:3: warning: header field 'Language-Team' missing in header\nf.po:3: warning: header field 'MIME-Version' missing in header\nf.po:3: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:3: warning: header field 'Language' missing in header\nmsgfmt: found 2 fatal errors\n"
+    }
+  },
+  "old_sha256": "9b299de3122c5d80e0baf7a67b1cc78c93c294ee24bca5a1e00bb5e9112aa197",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

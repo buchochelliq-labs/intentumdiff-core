@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-css-directive_with_lots_of_whitespace",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "255c116e493070cc24a8b83fdfc2a034917e77b05704b9aa89c4b199b44a82fb",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "255c116e493070cc24a8b83fdfc2a034917e77b05704b9aa89c4b199b44a82fb",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

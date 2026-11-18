@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-scss-simple-inheritance",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "78c2895f961095e627955efa9c0f6860d76b58da47825299bd047d06a6bd5f27",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "78c2895f961095e627955efa9c0f6860d76b58da47825299bd047d06a6bd5f27",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

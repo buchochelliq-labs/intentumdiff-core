@@ -1,0 +1,163 @@
+import {Note} from '../_component/note.jsx'
+
+export const info = {
+  author: [
+    {github: 'wooorm', name: 'Titus Wormer'}
+  ],
+  modified: new Date('2025-01-27'),
+  published: new Date('2021-10-06')
+}
+export const navSortSelf = 4
+
+# Syntax highlighting
+
+This guide explores how to apply syntax highlighting to code
+blocks. {/* more */}
+MDX supports standard markdown syntax ([CommonMark][]).
+It does not apply syntax highlighting to code blocks by default.
+
+There are two ways to accomplish syntax highlighting: at compile time or at
+runtime.
+Doing it at compile time means the effort is spent upfront so that readers will
+have a fast experience as no extra code is sent to them (syntax highlighting
+needs a *lot* of code to work).
+Doing it at runtime gives more flexibility by moving the work to the client.
+This can result in a slow experience for readers though.
+It also depends on what framework you use (as in it’s specific to React, Preact,
+Vue, etc.)
+
+## Syntax highlighting at compile time
+
+Use for example [`rehype-starry-night`][rehype-starry-night] (`starry-night`),
+[`rehype-highlight`][rehype-highlight] (`lowlight`, `highlight.js`),
+or [`@mapbox/rehype-prism`][rehype-prism] (`refractor`, `prism`)
+by doing something like this:
+
+```js twoslash path="example.js"
+/// <reference types="node" />
+// ---cut---
+import {compile} from '@mdx-js/mdx'
+import rehypeStarryNight from 'rehype-starry-night'
+
+const code = `~~~js
+console.log(1)
+~~~`
+
+console.log(
+  String(await compile(code, {rehypePlugins: [rehypeStarryNight]}))
+)
+```
+
+<details>
+  <summary>Expand equivalent JSX</summary>
+
+  ```jsx path="output.jsx"
+  <>
+    <pre>
+      <code className="language-js">
+        <span className="pl-en">console</span>.<span className="pl-c1">log</span>(<span className="pl-c1">1</span>)
+      </code>
+    </pre>
+  </>
+  ```
+</details>
+
+<Note type="important">
+  **Important**: you must likely also include CSS somewhere on the page.
+  See the documentation of the plugin you’re using for more information.
+</Note>
+
+## Syntax highlighting at run time
+
+Use for example
+[`react-syntax-highlighter`][react-syntax-highlighter],
+by doing something like this:
+
+{/* Note: `react-syntax-highlighter` doesn’t seem actively maintained so no twoslash to check this example. */}
+
+```jsx path="example.jsx"
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import Post from './example.mdx' // Assumes an integration is used to compile MDX -> JS.
+
+console.log(<Post components={{code}} />)
+
+function code({className, ...properties}) {
+  const match = /language-(\w+)/.exec(className || '')
+  return match
+    ? <SyntaxHighlighter language={match[1]} PreTag="div" {...properties} />
+    : <code className={className} {...properties} />
+}
+```
+
+<details>
+  <summary>Expand equivalent JSX</summary>
+
+  ```jsx path="output.jsx"
+  <>
+    <pre>
+      <div
+        className="language-js"
+        style={{
+          background: '#F0F0F0',
+          color: '#444',
+          display: 'block',
+          overflowX: 'auto',
+          padding: '0.5em'
+        }}
+      >
+        <code style={{whiteSpace: 'pre'}}>
+          <span>console.</span>
+          <span style={{color: '#397300'}}>log</span>
+          <span>(</span>
+          <span style={{color: '#880000'}}>1</span>
+          <span>)</span>
+        </code>
+      </div>
+    </pre>
+  </>
+  ```
+</details>
+
+## Syntax highlighting with the `meta` field
+
+Markdown supports a meta string for code:
+
+````mdx path="example.mdx"
+```js filename="index.js"
+console.log(1)
+```
+````
+
+The `meta` part is everything after the language (in this case, `js`).
+This is a *hidden* part of markdown: it’s normally ignored.
+But as the above example shows, it’s a useful place to put some extra fields.
+
+`@mdx-js/mdx` doesn’t know whether you’re handling code as a component or what
+the format of that meta string is, so it defaults to how markdown handles it:
+`meta` is ignored.
+
+But what if you want to access `meta` at runtime?
+That’s exactly what the rehype plugin
+[`rehype-mdx-code-props`][rehype-mdx-code-props] does.
+It lets you type JSX attributes in the `meta` part which you can access by
+with a component for `pre`.
+
+That plugin, like all rehype plugins, can be passed as
+[`rehypePlugins` in `ProcessorOptions`][processor-options].
+More info on plugins is available in [§ Extending MDX][extend]
+
+[commonmark]: https://spec.commonmark.org/current/
+
+[extend]: /docs/extending-mdx/
+
+[processor-options]: /packages/mdx/#processoroptions
+
+[react-syntax-highlighter]: https://github.com/react-syntax-highlighter/react-syntax-highlighter
+
+[rehype-highlight]: https://github.com/rehypejs/rehype-highlight
+
+[rehype-mdx-code-props]: https://github.com/remcohaszing/rehype-mdx-code-props
+
+[rehype-prism]: https://github.com/mapbox/rehype-prism
+
+[rehype-starry-night]: https://github.com/rehypejs/rehype-starry-night

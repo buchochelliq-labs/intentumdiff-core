@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-031-script_quote",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "21882f2ab16a5d8895a8ffe6839f7945cafce8d5a1423e6b1c7c363a87e567de",
+  "observations": {
+    "crash": "ReferenceError: foo is not defined\n    at setup (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/v17.mjs:10:23)\n    at callWithErrorHandling (/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19)\n    at setupStatefulComponent (/tmp/claude-0/-hom"
+  },
+  "old_sha256": "52cd4c14be97c59e407642208ca08a8aab5e621c8be3f1f504514adf0bbd3814",
+  "oracle": "vue_ssr_equal",
+  "reference": "vue_ssr_equal: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

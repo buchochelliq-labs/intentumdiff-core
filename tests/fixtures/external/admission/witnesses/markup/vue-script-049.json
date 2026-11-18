@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-049",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "45ad648d8b14cb389a1ad3b550f50fb1fed30315a75efc7deafd4f93f26d8537",
+  "observations": {
+    "crash": "Error: [@vue/compiler-sfc] `defineProps()` in <script setup> cannot reference locally declared variables because it will be hoisted outside of the setup() function. If your component options require initialization in the module scope, use a separate normal <script> to export the options instead.\n\nFixture.vue\n3  |          defineProps({\n4  |            foo: {\n5  |              default: () => bar\n  "
+  },
+  "old_sha256": "45ad648d8b14cb389a1ad3b550f50fb1fed30315a75efc7deafd4f93f26d8537",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

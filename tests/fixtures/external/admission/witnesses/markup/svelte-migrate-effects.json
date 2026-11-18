@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-effects",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2106c67c158f4a03f7b128ff44b902005969072178a9a12a557b784591117d07",
+  "observations": {
+    "crash": "ReferenceError: x is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c4.mjs:16:3)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/10746643-8"
+  },
+  "old_sha256": "d5ee26b02c40c7a61a503523dd318978e71524e1dda8278a7ed8e5c271f27d2e",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

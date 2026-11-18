@@ -1,0 +1,1 @@
+<script>foo()</script><script setup lang="ts">bar()</script>

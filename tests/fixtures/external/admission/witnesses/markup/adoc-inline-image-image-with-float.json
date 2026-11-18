@@ -1,0 +1,15 @@
+{
+  "case_id": "adoc-inline-image-image-with-float",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "88078b03eb27349a72e08d52387958bed0ce32e23dcf580ec3692b7d213a77ce",
+  "observations": {
+    "html_sha256": "8ca896bfe80f3db6be19479166d0ec35dce58a914dc916f95bcb5423fe356794",
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "88078b03eb27349a72e08d52387958bed0ce32e23dcf580ec3692b7d213a77ce",
+  "oracle": "asciidoctor_convert",
+  "reference": "asciidoctor_convert: Asciidoctor 2.0.26 [https://asciidoctor.org]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

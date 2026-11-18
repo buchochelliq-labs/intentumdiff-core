@@ -1,0 +1,1 @@
+<script setup>console.log(1)</script><script setup>console.log(1)</script>

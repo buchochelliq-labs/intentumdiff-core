@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-weird_added_space",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "307ca9c26271e34ceefcf68f32743228eded0b92a6614165e5aa2dd044f0c525",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "307ca9c26271e34ceefcf68f32743228eded0b92a6614165e5aa2dd044f0c525",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

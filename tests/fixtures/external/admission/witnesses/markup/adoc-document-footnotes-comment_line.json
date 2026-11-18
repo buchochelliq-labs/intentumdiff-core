@@ -1,0 +1,18 @@
+{
+  "case_id": "adoc-document-footnotes-comment_line",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "bb315f3a77ed76bb71d9560532057c3abe4feac42af42831f9b35f9c71cd554d",
+  "observations": {
+    "new": {
+      "stderr": "asciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer,Opinions are my own.]; use footnote macro with target instead\nasciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer]; use footnote macro with target instead\n"
+    },
+    "old": {
+      "stderr": "asciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer,Opinions are my own.]; use footnote macro with target instead\nasciidoctor: WARNING: found deprecated footnoteref macro: footnoteref:[disclaimer]; use footnote macro with target instead\n"
+    }
+  },
+  "old_sha256": "519190021e6d32afe8eb12fa3f936f1a048a31502adf606b698bceeacc0e4fa9",
+  "oracle": "asciidoctor_equal",
+  "reference": "asciidoctor_equal: Asciidoctor 2.0.26 [https://asciidoctor.org]",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

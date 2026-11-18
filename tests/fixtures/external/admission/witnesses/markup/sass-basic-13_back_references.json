@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-basic-13_back_references",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "3543ebc60ddefd7e655f3af5a72a1339a3c2c11403795491ec18d69a77f1c594",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "3543ebc60ddefd7e655f3af5a72a1339a3c2c11403795491ec18d69a77f1c594",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-reactive-statements-reorder-not-deleting-additions",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c9fe95e954ee2c0acd0d65172225c053018d884e78fcf2e855c95845d5dcff65",
+  "observations": {
+    "crash": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/blah.js' imported from /tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c34.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:275:11)\n    at moduleResolve (node:internal/modules/"
+  },
+  "old_sha256": "07f075a3d3c4e7848a330fe89aedfb567f94b44e06dea59680499178e7cf0a73",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

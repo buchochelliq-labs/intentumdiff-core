@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-css-custom_properties-script",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "f75abe19a066efd08ac264355092ed17c99fa980c263e9774fe69f39322a8c37",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "f75abe19a066efd08ac264355092ed17c99fa980c263e9774fe69f39322a8c37",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-slots-with-$$props",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "5fbf2ef84b32ad8d797ef9defc94fbfd6263314132b7a5905d8d1cca6e38a2f4",
+  "observations": {
+    "crash": "ReferenceError: foos is not defined\n    at file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c5.mjs:12:3\n    at file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:413:11\n    at Renderer.child (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-"
+  },
+  "old_sha256": "289d4ab12a692afabde149b540c0bfccf78dbf70eb95301a06f409652e0aeccf",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

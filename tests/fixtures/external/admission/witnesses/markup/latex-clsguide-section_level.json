@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-clsguide-section_level",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "33f4b8fec480594c299bbca467910ebeb7c39ab20550029e17cbe66c47c8b36d",
+  "observations": {
+    "new": {
+      "error": "! LaTeX Error: File `csquotes.sty' not found.",
+      "missing": [
+        "csquotes.sty"
+      ]
+    },
+    "old": {
+      "error": "! LaTeX Error: File `csquotes.sty' not found.",
+      "missing": [
+        "csquotes.sty"
+      ]
+    }
+  },
+  "old_sha256": "a24d5d030f59222f20968a12605a3cd86a6e9ce2d28a5461e7e7d8e9f47b54be",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

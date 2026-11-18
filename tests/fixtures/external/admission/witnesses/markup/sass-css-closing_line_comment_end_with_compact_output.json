@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-css-closing_line_comment_end_with_compact_output",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "3d1f7add134ff628659b9998a15726a1073be6c348553c60354392f994b2a695",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "3d1f7add134ff628659b9998a15726a1073be6c348553c60354392f994b2a695",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

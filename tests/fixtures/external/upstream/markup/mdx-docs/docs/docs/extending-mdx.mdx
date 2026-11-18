@@ -1,0 +1,200 @@
+import {Note} from '../_component/note.jsx'
+
+export const info = {
+  author: [
+    {github: 'wooorm', name: 'Titus Wormer'}
+  ],
+  modified: new Date('2025-01-27'),
+  published: new Date('2021-10-06')
+}
+export const navSortSelf = 4
+
+# Extending MDX
+
+This article explains how to extend MDX content—specifically, how to *transform*
+content with plugins. {/* more */}
+See [§ Using MDX][use] for how to pass components, props, and the layout.
+See [§ Getting started][start] for how to integrate MDX into your project.
+
+## Contents
+
+* [Components & plugins](#components--plugins)
+  * [List of components](#list-of-components)
+  * [List of plugins](#list-of-plugins)
+* [Using plugins](#using-plugins)
+* [Creating plugins](#creating-plugins)
+
+## Components & plugins
+
+There are three extension points when using `@mdx-js/mdx` or one of its
+integrations:
+
+* Options passed to the compiler (see [¶ API in `@mdx-js/mdx`][api])
+* Plugins that hook into several stages of compilation (see [remark
+  plugins][remark-plugins], [rehype plugins][rehype-plugins], and
+  [recma plugins][recma-plugins])
+* Components passed, defined, or imported at runtime (see [§ Using MDX][use])
+
+Most of the time, these components and plugins are not coupled to MDX.
+For example, if you’re using React, then you can use
+[`<ReactConfetti />`][react-confetti] with MDX.
+Or, you can use the plugin [`remark-gfm`][remark-gfm] to turn on GFM features in
+MDX.
+Sometimes, we need specific components or specific plugins to work with MDX.
+We’re compiling those here on this page.
+
+### List of components
+
+* [`PaulieScanlon/mdx-embed`](https://github.com/PaulieScanlon/mdx-embed)
+  — React components for embedding 3rd party content, integrates w/
+  MDX provider
+* [`system-ui/theme-ui`](https://github.com/system-ui/theme-ui)
+  — React components for building consistent apps, integrates w/ MDX provider
+
+{/*
+  * Please use alpha sorting on **project** name!
+  * You can use this template:
+  *
+  * ```markdown
+  * * [`user/project`](https://github.com/user/project)
+  *   — somewhat short description of the project
+  * ```
+  */}
+
+<Note type="info">
+  **Note**: have another component that *specifically* works with MDX?
+  Please send a PR to add it here!
+</Note>
+
+### List of plugins
+
+See also the [list of remark plugins][remark-plugins],
+[list of rehype plugins][rehype-plugins], and
+[list of recma plugins][recma-plugins].
+
+* [`remcohaszing/recma-export-filepath`](https://github.com/remcohaszing/recma-export-filepath)
+  — export the filepath
+* [`ipikuka/recma-mdx-change-props`](https://github.com/ipikuka/recma-mdx-change-props)
+  — changes the param as `_props` in the `_createMdxContent` function
+* [`domdomegg/recma-mdx-displayname`](https://github.com/domdomegg/recma-mdx-displayname)
+  — add a `displayName` to `MDXContent` components, to enable switching
+  on them in production
+* [`ipikuka/recma-mdx-escape-missing-components`](https://github.com/ipikuka/recma-mdx-escape-missing-components)
+  — set a default value of `() => null` for missing components instead of
+  throwing an error
+* [`remcohaszing/recma-mdx-is-mdx-component`](https://github.com/remcohaszing/recma-mdx-is-mdx-component)
+  — add an `isMdxComponent` field on MDX components
+* [`remcohaszing/recma-nextjs-static-props`](https://github.com/remcohaszing/recma-nextjs-static-props)
+  — generate [`getStaticProps`](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
+  exposing top level identifiers in Next.js
+* [`remcohaszing/recma-module-to-function`](https://github.com/remcohaszing/recma-module-to-function)
+  — convert a module into a function body
+* [`remcohaszing/rehype-mdx-code-props`](https://github.com/remcohaszing/rehype-mdx-code-props)
+  — interpret the code `meta` field as JSX props
+* [`remcohaszing/rehype-mdx-import-media`](https://github.com/remcohaszing/rehype-mdx-import-media)
+  — change media sources to JavaScript imports
+* [`remcohaszing/rehype-mdx-title`](https://github.com/remcohaszing/rehype-mdx-title)
+  — expose the page title as a string
+* [`boning-w/rehype-mdx-toc`](https://github.com/boning-w/rehype-mdx-toc)
+  — export the table of contents data into MDX module
+* [`pangelani/remark-mdx-chartjs`](https://github.com/pangelani/remark-mdx-chartjs)
+  — replace fenced code blocks with charts using [`react-chartjs-2`](https://react-chartjs-2.js.org/).
+* [`remcohaszing/remark-mdx-frontmatter`](https://github.com/remcohaszing/remark-mdx-frontmatter)
+  — change frontmatter (YAML) metadata to exports
+* [`goodproblems/remark-mdx-math-enhanced`](https://github.com/goodproblems/remark-mdx-math-enhanced)
+  — enhance math with JavaScript inside it
+
+{/*
+  * Please use alpha sorting on **project** name!
+  * You can use this template:
+  *
+  * ```markdown
+  * * [`user/project`](https://github.com/user/project)
+  *   — somewhat short description of the project
+  * ```
+  */}
+
+<Note type="info">
+  **Note**: have another unified plugin that *specifically* works with MDX?
+  Please send a PR to add it here!
+</Note>
+
+## Using plugins
+
+Where to pass plugins is encoded in their name:
+remark plugins go in `remarkPlugins`,
+rehype plugins go in `rehypePlugins`,
+and recma plugins go in `recmaPlugins` of
+[`ProcessorOptions`][processor-options].
+Those fields expect lists of plugins and/or of `[plugin, options]`:
+
+```tsx twoslash
+import {compile} from '@mdx-js/mdx'
+import rehypeKatex from 'rehype-katex' // Render math with KaTeX.
+import remarkFrontmatter from 'remark-frontmatter' // YAML and such.
+import remarkGfm from 'remark-gfm' // Tables, footnotes, strikethrough, task lists, literal URLs.
+import remarkMath from 'remark-math' // Support math like `$so$`.
+
+const file = '# hi'
+
+// One plugin:
+await compile(file, {remarkPlugins: [remarkGfm]})
+
+// A plugin with options:
+await compile(file, {remarkPlugins: [[remarkFrontmatter, 'toml']]})
+
+// Two plugins:
+await compile(file, {remarkPlugins: [remarkGfm, remarkFrontmatter]})
+
+// Two plugins, first w/ options:
+await compile(file, {remarkPlugins: [[remarkGfm, {singleTilde: false}], remarkFrontmatter]})
+
+// remark and rehype plugins:
+await compile(file, {rehypePlugins: [rehypeKatex], remarkPlugins: [remarkMath]})
+
+// remark and rehype plugins, last w/ options:
+await compile(file, {
+  // A plugin with options:
+  rehypePlugins: [[rehypeKatex, {strict: true, throwOnError: true}]],
+  remarkPlugins: [remarkMath]
+})
+```
+
+## Creating plugins
+
+Creating a plugin for MDX is mostly the same as creating a plugin for remark,
+rehype, or recma.
+There are several guides and recipes on that in [§ Learn on
+`unifiedjs.com`][learn].
+
+For the MDX specific parts of plugins, it’s recommended to read
+[¶ Architecture][architecture] to learn how `@mdx-js/mdx` works.
+For info on the node types that represent MDX specific features, see
+[¶ Syntax tree in `remark-mdx`][syntax-tree] and use our interactive
+[§ Playground][playground].
+
+[api]: /packages/mdx/#api
+
+[architecture]: /packages/mdx/#architecture
+
+[learn]: https://unifiedjs.com/learn/
+
+[playground]: /playground/
+
+[processor-options]: /packages/mdx/#processoroptions
+
+[react-confetti]: https://github.com/alampros/react-confetti
+
+[recma-plugins]: https://github.com/mdx-js/recma/blob/main/doc/plugins.md#list-of-plugins
+
+[rehype-plugins]: https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins
+
+[remark-gfm]: https://github.com/remarkjs/remark-gfm
+
+[remark-plugins]: https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins
+
+[start]: /docs/getting-started/
+
+[syntax-tree]: /packages/remark-mdx/#syntax-tree
+
+[use]: /docs/using-mdx/

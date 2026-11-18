@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-slotted-element-tag_whitespace",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "d6134cfb4eed2a94ae2b8654c95e23e2608cedd30a0d3d1172d241aa4f937abf",
+  "observations": {
+    "crash": "ReferenceError: Component is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c29.mjs:4:2)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/10"
+  },
+  "old_sha256": "29bad284e9ef0d3bad5a349507d9cfd34bf225ab1c95d68d44e1d2d1301e7706",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

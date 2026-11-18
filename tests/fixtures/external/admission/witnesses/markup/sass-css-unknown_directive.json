@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-css-unknown_directive",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "88e2a24a2dde3b7242268774bf90423c30dfef60c08aaa59f97b232825e1aea2",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "88e2a24a2dde3b7242268774bf90423c30dfef60c08aaa59f97b232825e1aea2",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

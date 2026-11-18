@@ -59,6 +59,13 @@
   witnessed by reference implementations (`scripts/acquire_structured_benchmarks.py`,
   `scripts/structured_family.py`). The W3C XML suite is a recorded blocked acquisition, so
   `xml` is BLOCKED in both lanes, never a gap or a pass.
+- Admit the #263 web, markup and embedded family: `markdown`, `mdx`, `html`, `css`, `scss`,
+  `vue`, `svelte`, `astro`, `latex`, `asciidoc` and `po`; 2,160 admitted cases from pinned
+  upstream suites (CommonMark and GFM specs, WPT html5lib tree construction, css-parsing-tests,
+  sass-spec, Svelte, Vue compiler-sfc and Astro compiler tests, MDX docs, Asciidoctor DocTest,
+  polib fixtures, LaTeX2e documents), witnessed by reference renderers and compilers
+  (`scripts/acquire_markup_benchmarks.py`, `scripts/markup_family.py`). `postscript` (licence)
+  and `generic` (WikiAtomicEdits unreachable) are recorded blocked acquisitions.
 - The ledger builder merges family contributions in a fixed order: code modules under
   `scripts/external_families/`, then generated fragments under `admission/families/`. One
   parser-fidelity adapter judges `expected.parse` must-accept / must-reject claims and

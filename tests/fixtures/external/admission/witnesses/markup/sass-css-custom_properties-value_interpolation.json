@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-css-custom_properties-value_interpolation",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "41d70cfa7386bfe9a76404d3456350dd3f4ae5dbad6e21d8e29fb4a4df7ff57a",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "41d70cfa7386bfe9a76404d3456350dd3f4ae5dbad6e21d8e29fb4a4df7ff57a",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-044",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "5d9cbc635bae3b98edc009b61d85556cb1d3b94bfa2672231958ae4b1c86dad2",
+  "observations": {
+    "crash": "Error: [@vue/compiler-sfc] <script> and <script setup> must have the same language type.\n    at Module.compileScript (/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js:26010:11)\n    at file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness.mjs:45:64"
+  },
+  "old_sha256": "5d9cbc635bae3b98edc009b61d85556cb1d3b94bfa2672231958ae4b1c86dad2",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

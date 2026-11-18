@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-mixin-content-selectors",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "d2e3ea51f37e3b8d69ba3a0f7c3d82386e59d639861028539d2171b7b0b32a08",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "d2e3ea51f37e3b8d69ba3a0f7c3d82386e59d639861028539d2171b7b0b32a08",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -57,3 +57,12 @@ Each suite records its bytes, SHA-256 and acquisition steps in `ACQUISITION.json
 the generated fragment `admission/families/structured-265.json` is merged into `admission/ledger.json`
 by `scripts/build_external_admission.py`. Both generated files are committed and `--check`-ed.
 
+### #263 markup bytes
+
+`upstream/markup/<suite>/` holds the verbatim upstream files for the #263 family, fetched at pinned commits from
+raw.githubusercontent.com or taken from npm tarballs whose `gitHead` is the pinned commit (`commonmark-spec`,
+`sass-spec`); each `ACQUISITION.json`, written by `scripts/acquire_markup_benchmarks.py`, records URLs, sizes,
+SHA-256 and the tarball identity. Examples extracted byte-exact from a spec or test module, and the derived edits,
+live under `admission/families/markup-263/`; witness records under `admission/witnesses/markup/`; the generated
+fragment `admission/families/markup-263.json` is `--check`-ed by `scripts/markup_family.py build --check`.
+

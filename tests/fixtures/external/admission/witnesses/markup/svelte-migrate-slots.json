@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-slots",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "6ba73056be6f04c30a9685e8bd323a5dc5516464ecae28f8bfe2154fecd1ef8e",
+  "observations": {
+    "crash": "ReferenceError: foos is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c0.mjs:10:2)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/1074664"
+  },
+  "old_sha256": "3ca7e2b456896b7baf3cc697ba29bf74a578b223583e27c41ecd75f4996968a5",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

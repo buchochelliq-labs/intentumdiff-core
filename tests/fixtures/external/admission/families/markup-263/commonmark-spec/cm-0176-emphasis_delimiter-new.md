@@ -1,0 +1,2 @@
+<style>p{color:red;}</style>
+_foo_

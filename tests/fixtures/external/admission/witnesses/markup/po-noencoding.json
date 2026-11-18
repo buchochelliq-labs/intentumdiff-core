@@ -1,0 +1,16 @@
+{
+  "case_id": "po-noencoding",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "8c7d0630d31a680139bdbc8dee45af8483687a7753e02abec0df14f606803b23",
+  "observations": {
+    "mo_sha256": "fb3069b0e77617f0cea87e75f38d2ad2b02a7f583c5d46856ff2e7fcd9612fac",
+    "reference_accepts": true,
+    "stderr": "ield 'Language-Team' missing in header\nf.po:6: warning: header field 'MIME-Version' missing in header\nf.po:6: warning: header field 'Content-Type' missing in header\nf.po:6: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:6: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "8c7d0630d31a680139bdbc8dee45af8483687a7753e02abec0df14f606803b23",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

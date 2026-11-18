@@ -1,0 +1,16 @@
+{
+  "case_id": "latex-clsguide",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "a24d5d030f59222f20968a12605a3cd86a6e9ce2d28a5461e7e7d8e9f47b54be",
+  "observations": {
+    "error": "! LaTeX Error: File `csquotes.sty' not found.",
+    "missing": [
+      "csquotes.sty"
+    ]
+  },
+  "old_sha256": "a24d5d030f59222f20968a12605a3cd86a6e9ce2d28a5461e7e7d8e9f47b54be",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "document needs files absent from the reference TeX installation",
+  "verdict": "inconclusive"
+}
