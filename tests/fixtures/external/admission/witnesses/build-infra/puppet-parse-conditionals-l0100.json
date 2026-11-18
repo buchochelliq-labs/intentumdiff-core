@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-conditionals-l0100",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "04fcf796bb01988bbefbd74d6b6c9e57947e8d8ad61eb4302821a75019297d25",
+  "old_sha256": "04fcf796bb01988bbefbd74d6b6c9e57947e8d8ad61eb4302821a75019297d25",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

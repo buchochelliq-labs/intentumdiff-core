@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-resource-l0169",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "eeb114b308b2959828c1ead4e69e3dc02ac7056cf23266fd2610ce7a6de6430a",
+  "old_sha256": "eeb114b308b2959828c1ead4e69e3dc02ac7056cf23266fd2610ce7a6de6430a",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseError: Virtual (@) can only be applied to a Resource Expression (line: 1, column: 1)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseError: Virtual (@) can only be applied to a Resource Expression (line: 1, column: 1), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

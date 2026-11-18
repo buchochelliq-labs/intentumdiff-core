@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-cmp0053-namewithcarriagereturn",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "faf8bf7ff6e57101f7f0c2ada84eb68f541e1685a486530ce4045ae191cd7d54",
+  "old_sha256": "faf8bf7ff6e57101f7f0c2ada84eb68f541e1685a486530ce4045ae191cd7d54",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(CMP0053-NameWithCarriageReturn) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

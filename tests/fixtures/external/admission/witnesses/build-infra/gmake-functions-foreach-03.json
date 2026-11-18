@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-functions-foreach-03",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "a a a\n",
+    "line": 68,
+    "options": "",
+    "script": "functions/foreach"
+  },
+  "new_sha256": "fa30fabf8ac54af5f16f2b1c388df86000a97c31db56c46ab32e9c0d714ac9a0",
+  "old_sha256": "fa30fabf8ac54af5f16f2b1c388df86000a97c31db56c46ab32e9c0d714ac9a0",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

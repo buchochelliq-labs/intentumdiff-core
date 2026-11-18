@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-invalid-provider-localname-normalization-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "019a152a4e029830cf2126ed32ede917a20d1083f9b207292f03d2154e389365",
+  "old_sha256": "019a152a4e029830cf2126ed32ede917a20d1083f9b207292f03d2154e389365",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax). Upstream directory label: invalid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    0,
+    90,
+    112,
+    208
+  ],
+  "verdict": "supports_claim"
+}

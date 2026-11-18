@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-flavors-06",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "Goodbye\n",
+    "line": 77,
+    "options": "",
+    "script": "variables/flavors"
+  },
+  "new_sha256": "868ea82af029b5e5af5d2f23caeea543079f74282e85d41805b80d3887af12d8",
+  "old_sha256": "868ea82af029b5e5af5d2f23caeea543079f74282e85d41805b80d3887af12d8",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

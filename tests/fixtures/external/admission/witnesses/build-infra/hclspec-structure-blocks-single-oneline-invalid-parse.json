@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hclspec-structure-blocks-single-oneline-invalid-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "3623a897f24bf06702f9ce4b765c40c6b9ec36b9bec09c6c2cb5cc4c3fbd867f",
+  "old_sha256": "3623a897f24bf06702f9ce4b765c40c6b9ec36b9bec09c6c2cb5cc4c3fbd867f",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": false,
+  "reference_error": "fixture.hcl:1,14-15: Invalid single-argument block definition; Single-line block syntax can include only one argument definition. To define multiple arguments, use the multi-line block syntax with one argument definition per line., and 4 other diagnostic(s)",
+  "review": "hclsyntax.ParseConfig reports syntax errors: fixture.hcl:1,14-15: Invalid single-argument block definition; Single-line block syntax can include only one argument definition. To define multiple arguments, use the multi-line block syntax with one argument definition per line., and 4 other diagnostic(s) The upstream .t expects error diagnostics.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [],
+  "verdict": "supports_claim"
+}

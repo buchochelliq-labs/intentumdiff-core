@@ -1,0 +1,29 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-valid-required-version-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "8d6a48e40dd536a38fbd05bc363d2b34debb48d69e4d2a120ecbe82d1ce67bce",
+  "old_sha256": "8d6a48e40dd536a38fbd05bc363d2b34debb48d69e4d2a120ecbe82d1ce67bce",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax). Upstream directory label: valid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    1
+  ],
+  "verdict": "supports_claim"
+}

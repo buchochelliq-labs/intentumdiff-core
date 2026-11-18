@@ -1,0 +1,404 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-mail-comment",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update -qy && apt-get install mutt offlineimap vim-nox abook elinks curl tmux cron zsh -y"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".muttrc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".offlineimaprc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".tmux.conf"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.mutt",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "mutt"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.vim",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "vim"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.vimrc",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "vimrc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/etc/crontab",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "crontab"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "chmod 644 /etc/crontab"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /Mail"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /.offlineimap"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "echo \"export TERM=screen-256color\" >/.zshenv"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "setsid cron; tmux -2"
+              ],
+              "Files": null,
+              "PrependShell": true
+            },
+            "type": "*instructions.CmdCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "new_sha256": "2bdfc1c86f21815fc9a5587e646382c19ed123ccfb864999156a91d6dd141c04",
+  "old_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update -qy && apt-get install mutt offlineimap vim-nox abook elinks curl tmux cron zsh -y"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".muttrc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".offlineimaprc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                ".tmux.conf"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.mutt",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "mutt"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.vim",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "vim"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/.vimrc",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "vimrc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/etc/crontab",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "crontab"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "chmod 644 /etc/crontab"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /Mail"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /.offlineimap"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "echo \"export TERM=screen-256color\" >/.zshenv"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "setsid cron; tmux -2"
+              ],
+              "Files": null,
+              "PrependShell": true
+            },
+            "type": "*instructions.CmdCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "old_sha256": "55e76739f752ca851bd6433d1558b9aa21a8992471853d31561d980352d4983b",
+  "oracle": "buildkit_instructions_equality",
+  "projection_equal": true,
+  "review": "BuildKit instructions.Parse: the typed instruction lists equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

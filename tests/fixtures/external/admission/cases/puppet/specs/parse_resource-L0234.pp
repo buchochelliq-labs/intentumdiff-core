@@ -1,0 +1,1 @@
+class { 'cname1': x => 1; 'cname2': y => 2}

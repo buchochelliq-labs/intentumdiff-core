@@ -1,0 +1,1 @@
+node kermit.example.com {}

@@ -1,0 +1,35 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-replace2-golden-parse",
+  "cmd_go_error": null,
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "6f451f1b9ffc13b826b3cb0446ac27b2e09e9f4de8f7c9b322447a6d31836fb9",
+  "old_sha256": "6f451f1b9ffc13b826b3cb0446ac27b2e09e9f4de8f7c9b322447a6d31836fb9",
+  "oracle": "gomod_parse",
+  "reference_accepts": true,
+  "review": "modfile.Parse and `go mod edit -json` both accept the file.",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [
+    0,
+    12
+  ],
+  "verdict": "supports_claim",
+  "xmod_error": null
+}

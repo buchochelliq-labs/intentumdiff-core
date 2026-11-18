@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "t0008-setup-gitignore-disjoint-reorder",
+  "engines": [
+    {
+      "name": "git",
+      "version": "git version 2.43.0"
+    }
+  ],
+  "new_observation": [
+    "a/b/five",
+    "a/b/four",
+    "a/b/ignored-dir/x",
+    "a/b/six",
+    "a/b/twooo",
+    "a/b/xthree",
+    "a/ignored-and-untracked",
+    "a/one",
+    "a/per-repo",
+    "a/three",
+    "globalone",
+    "globalthree",
+    "ignored-and-untracked",
+    "ignored-x",
+    "one",
+    "per-repo",
+    "top-level-dir/x"
+  ],
+  "new_sha256": "fb7438ce6f69b667134b4502ecf3772297842fa3b88f0933eb588811db29ecdc",
+  "old_observation": [
+    "a/b/five",
+    "a/b/four",
+    "a/b/ignored-dir/x",
+    "a/b/six",
+    "a/b/twooo",
+    "a/b/xthree",
+    "a/ignored-and-untracked",
+    "a/one",
+    "a/per-repo",
+    "a/three",
+    "globalone",
+    "globalthree",
+    "ignored-and-untracked",
+    "ignored-x",
+    "one",
+    "per-repo",
+    "top-level-dir/x"
+  ],
+  "old_sha256": "e16d13493c3522792c3b2f994929356952cd04624169dfdb6ac05d50f366654d",
+  "oracle": "git_check_ignore_membership",
+  "projection_equal": true,
+  "review": "git check-ignore --no-index: the ignored path sets equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

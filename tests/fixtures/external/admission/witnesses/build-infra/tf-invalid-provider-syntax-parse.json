@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-invalid-provider-syntax-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "79e9f16c6ba673df8ae00ca8b0adb9310aba4669c7fcc98b2fe56a36f58c0b2f",
+  "old_sha256": "79e9f16c6ba673df8ae00ca8b0adb9310aba4669c7fcc98b2fe56a36f58c0b2f",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": false,
+  "reference_error": "fixture.hcl:2,13-3,1: Invalid expression; Expected the start of an expression, but found an invalid expression token.",
+  "review": "hclsyntax.ParseConfig reports syntax errors: fixture.hcl:2,13-3,1: Invalid expression; Expected the start of an expression, but found an invalid expression token. Upstream directory label: invalid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [],
+  "verdict": "supports_claim"
+}

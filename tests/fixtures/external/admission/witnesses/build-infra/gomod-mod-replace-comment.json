@@ -1,0 +1,47 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gomod-mod-replace-comment",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "quoter"
+    },
+    "Replace": null,
+    "Require": [
+      {
+        "Path": "rsc.io/quote/v3",
+        "Version": "v3.0.0"
+      }
+    ],
+    "Retract": null,
+    "Tool": null
+  },
+  "new_sha256": "64f1ca99873888cb9e1b3a21cd8e0b710581a98fb353055fe48549ef6c8382b0",
+  "old_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "quoter"
+    },
+    "Replace": null,
+    "Require": [
+      {
+        "Path": "rsc.io/quote/v3",
+        "Version": "v3.0.0"
+      }
+    ],
+    "Retract": null,
+    "Tool": null
+  },
+  "old_sha256": "6c65c306d62b5f69517da69692e0f01b466993a3447d48e3d8d3887183187dc5",
+  "oracle": "go_mod_edit_json_equality",
+  "projection_equal": true,
+  "review": "cmd/go `go mod edit -json`: the module JSON documents equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

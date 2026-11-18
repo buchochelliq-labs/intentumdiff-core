@@ -1,0 +1,255 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "bk-nginx-remove-instruction",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "Labels": [
+                {
+                  "Key": "maintainer",
+                  "Value": "Erik Hollensbe <erik@hollensbe.org>"
+                }
+              ]
+            },
+            "type": "*instructions.LabelCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update && apt-get install nginx-full -y"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "rm -rf /etc/nginx"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/etc/nginx",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "etc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "chown -R root:root /etc/nginx"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /www"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "/usr/sbin/nginx"
+              ],
+              "Files": null,
+              "PrependShell": false
+            },
+            "type": "*instructions.CmdCommand"
+          },
+          {
+            "fields": {
+              "Volumes": [
+                "/www"
+              ]
+            },
+            "type": "*instructions.VolumeCommand"
+          },
+          {
+            "fields": {
+              "Ports": [
+                "80"
+              ]
+            },
+            "type": "*instructions.ExposeCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "new_sha256": "7c762ea1a61e2c0bc98f77b69ce84217c46c47e7dbdad09d90e437cc6098d0bb",
+  "old_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "Labels": [
+                {
+                  "Key": "maintainer",
+                  "Value": "Erik Hollensbe <erik@hollensbe.org>"
+                }
+              ]
+            },
+            "type": "*instructions.LabelCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update && apt-get install nginx-full -y"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "rm -rf /etc/nginx"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Checksum": "",
+              "Chmod": "",
+              "Chown": "",
+              "DestPath": "/etc/nginx",
+              "ExcludePatterns": null,
+              "KeepGitDir": false,
+              "Link": false,
+              "SourceContents": null,
+              "SourcePaths": [
+                "etc"
+              ]
+            },
+            "type": "*instructions.AddCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "chown -R root:root /etc/nginx"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "/usr/sbin/nginx -qt"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "mkdir /www"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "/usr/sbin/nginx"
+              ],
+              "Files": null,
+              "PrependShell": false
+            },
+            "type": "*instructions.CmdCommand"
+          },
+          {
+            "fields": {
+              "Volumes": [
+                "/www"
+              ]
+            },
+            "type": "*instructions.VolumeCommand"
+          },
+          {
+            "fields": {
+              "Ports": [
+                "80"
+              ]
+            },
+            "type": "*instructions.ExposeCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "old_sha256": "07bddf49e5ef4058d858892040cf79d4fa3a97b3a096d94c451fc775aea1ff01",
+  "oracle": "buildkit_instructions_equality",
+  "projection_equal": false,
+  "review": "BuildKit instructions.Parse: the typed instruction lists differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

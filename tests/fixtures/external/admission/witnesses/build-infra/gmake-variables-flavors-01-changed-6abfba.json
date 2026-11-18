@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "gmake-variables-flavors-01-changed-6abfba",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "Hello\n"
+  },
+  "new_sha256": "d60c5ca53da340b34fe6e318797aa1f19458396f81731708dca0015f603936d5",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "Goodbye\n"
+  },
+  "old_sha256": "8ca5c055bcce2a78ccfea5646cc78da80db9d48f6d4fbd31cb950ab0cb3494a7",
+  "oracle": "gnu_make_output_equality",
+  "projection_equal": false,
+  "review": "GNU Make 4.3: exit status, stdout and stderr differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,1 @@
+define foo($a, $b=10) {}

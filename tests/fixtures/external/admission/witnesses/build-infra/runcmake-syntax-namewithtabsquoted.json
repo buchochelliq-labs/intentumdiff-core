@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-namewithtabsquoted",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "ce579ee997b9b3017db164d9ca0e64b353f2733285525dbb3aa0f0a0d573abe6",
+  "old_sha256": "ce579ee997b9b3017db164d9ca0e64b353f2733285525dbb3aa0f0a0d573abe6",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(NameWithTabsQuoted) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,37 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-empty-golden",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": ""
+    },
+    "Replace": null,
+    "Require": null,
+    "Retract": null,
+    "Tool": null
+  },
+  "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "old_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": ""
+    },
+    "Replace": null,
+    "Require": null,
+    "Retract": null,
+    "Tool": null
+  },
+  "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "oracle": "go_mod_edit_json_equality",
+  "projection_equal": true,
+  "review": "cmd/go `go mod edit -json`: the module JSON documents equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

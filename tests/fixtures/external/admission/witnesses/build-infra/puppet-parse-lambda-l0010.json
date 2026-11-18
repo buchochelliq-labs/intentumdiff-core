@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-lambda-l0010",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "cc85d3a5ffee134914812ea1c4f000ee61b0e281d6e9196c4b5d7c56afee0d9f",
+  "old_sha256": "cc85d3a5ffee134914812ea1c4f000ee61b0e281d6e9196c4b5d7c56afee0d9f",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

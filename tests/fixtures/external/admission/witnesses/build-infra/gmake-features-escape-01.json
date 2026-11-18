@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-escape-01",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": ": 'foo:bar'\n: 'foo\\:bar'\n: 'foo\\\\:bar'\n: 'foo'\n",
+    "line": 70,
+    "options": "",
+    "script": "features/escape"
+  },
+  "new_sha256": "c813984861920bd5e855e92d4d75559b4e24eeff977e5001e93738d19a740648",
+  "old_sha256": "c813984861920bd5e855e92d4d75559b4e24eeff977e5001e93738d19a740648",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

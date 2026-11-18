@@ -1,0 +1,1 @@
+if true { $a = 10 $b = 20} else {$a = 20}

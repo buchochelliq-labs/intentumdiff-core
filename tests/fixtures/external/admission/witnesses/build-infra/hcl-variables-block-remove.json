@@ -1,0 +1,343 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hcl-variables-block-remove",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {},
+          "blocks": null
+        },
+        "labels": [
+          "foo"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "string",
+              "value": "hello"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "type": {
+              "expr_tokens": "list"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "baz"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": [
+                "tuple",
+                []
+              ],
+              "value": []
+            },
+            "type": {
+              "expr_tokens": "list ( string )"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar-baz"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "number",
+              "value": 3.14159265359
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "π"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": [
+                "object",
+                {
+                  "a": "number",
+                  "b": "number"
+                }
+              ],
+              "value": {
+                "a": 1,
+                "b": 2
+              }
+            },
+            "sensitive": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "sensitive_value"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "string",
+              "value": "ok"
+            },
+            "nullable": {
+              "type": "bool",
+              "value": true
+            },
+            "type": {
+              "expr_tokens": "string"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "nullable"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "dynamic",
+              "value": null
+            },
+            "nullable": {
+              "type": "bool",
+              "value": true
+            },
+            "type": {
+              "expr_tokens": "map ( string )"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "nullable_default_null"
+        ],
+        "type": "variable"
+      }
+    ]
+  },
+  "new_sha256": "528175ec8d5fa3cbe6d7162a3b448c49d75a6bc77739c425ce56013bbcf652ac",
+  "old_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {},
+          "blocks": null
+        },
+        "labels": [
+          "foo"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "string",
+              "value": "hello"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "type": {
+              "expr_tokens": "list"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "baz"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": [
+                "tuple",
+                []
+              ],
+              "value": []
+            },
+            "type": {
+              "expr_tokens": "list ( string )"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar-baz"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "description": {
+              "type": "string",
+              "value": "Nothing special"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "cheeze_pizza"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "number",
+              "value": 3.14159265359
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "π"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": [
+                "object",
+                {
+                  "a": "number",
+                  "b": "number"
+                }
+              ],
+              "value": {
+                "a": 1,
+                "b": 2
+              }
+            },
+            "sensitive": {
+              "type": "bool",
+              "value": true
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "sensitive_value"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "string",
+              "value": "ok"
+            },
+            "nullable": {
+              "type": "bool",
+              "value": true
+            },
+            "type": {
+              "expr_tokens": "string"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "nullable"
+        ],
+        "type": "variable"
+      },
+      {
+        "body": {
+          "attributes": {
+            "default": {
+              "type": "dynamic",
+              "value": null
+            },
+            "nullable": {
+              "type": "bool",
+              "value": true
+            },
+            "type": {
+              "expr_tokens": "map ( string )"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "nullable_default_null"
+        ],
+        "type": "variable"
+      }
+    ]
+  },
+  "old_sha256": "6cb353a1e26d9fd5807ce0d08fd1f8d76f4d5a425b7996ea42164e9f15a48eee",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": false,
+  "review": "hclsyntax v2.23.0: the information-model projections differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

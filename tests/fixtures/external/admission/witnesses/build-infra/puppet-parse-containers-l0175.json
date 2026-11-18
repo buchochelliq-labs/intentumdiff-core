@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-containers-l0175",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "a3580f61a1eb5b48858ceefd1bb96e9540e908877318e13f62ce362e8686850b",
+  "old_sha256": "a3580f61a1eb5b48858ceefd1bb96e9540e908877318e13f62ce362e8686850b",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseErrorWithIssue: Syntax error at 'default' (line: 1, column: 8)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseErrorWithIssue: Syntax error at 'default' (line: 1, column: 8), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

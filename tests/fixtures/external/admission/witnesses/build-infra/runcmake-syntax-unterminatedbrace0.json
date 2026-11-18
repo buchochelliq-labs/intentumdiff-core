@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-unterminatedbrace0",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "523322ad1b2d708d4e44037ed9e4ce4d1f9b2442a608d316447adc95a322725e",
+  "old_sha256": "523322ad1b2d708d4e44037ed9e4ce4d1f9b2442a608d316447adc95a322725e",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(UnterminatedBrace0) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

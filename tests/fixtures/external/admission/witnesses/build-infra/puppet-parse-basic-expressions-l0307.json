@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-basic-expressions-l0307",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "6e6fd009626cf4f86d1c850779cc43eca8b17b951ed00ea1905c44d7a13442a3",
+  "old_sha256": "6e6fd009626cf4f86d1c850779cc43eca8b17b951ed00ea1905c44d7a13442a3",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseErrorWithIssue: Syntax error at '=>' (line: 1, column: 10)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseErrorWithIssue: Syntax error at '=>' (line: 1, column: 10), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

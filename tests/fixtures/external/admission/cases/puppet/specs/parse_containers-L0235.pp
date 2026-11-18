@@ -1,0 +1,1 @@
+node wat inherits /apache.*/ {}

@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hclspec-structure-attributes-unexpected-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "65a7214de1764059604f12269c2871bddc357e3b46e3fd378c84bc865a9b079d",
+  "old_sha256": "65a7214de1764059604f12269c2871bddc357e3b46e3fd378c84bc865a9b079d",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax). The upstream .t expects error diagnostics.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    0,
+    14,
+    28,
+    42
+  ],
+  "verdict": "supports_claim"
+}

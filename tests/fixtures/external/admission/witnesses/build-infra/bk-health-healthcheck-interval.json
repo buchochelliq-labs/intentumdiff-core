@@ -1,0 +1,25 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "bk-health-healthcheck-interval",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": null,
+  "new_sha256": "1c0c10c68820288dd926c5ec4962e30cb0223367d8a4a80dee2d3c0a9dddcd86",
+  "old_observation": null,
+  "old_sha256": "a5eac0c1a34c029d7d6b1e21da632a7c367ecfba37e38d937b6fe09d94b6ccbb",
+  "oracle": "buildkit_instructions_equality",
+  "review": "the reference did not accept both sides",
+  "schema_version": 1,
+  "verdict": "inconclusive"
+}

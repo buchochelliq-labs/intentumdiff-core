@@ -1,0 +1,114 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hcl-primitive-literals-comment",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {
+      "false": {
+        "type": "bool",
+        "value": false
+      },
+      "fractional_number": {
+        "type": "number",
+        "value": 3.2
+      },
+      "fractional_number_precision": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "null": {
+        "type": "dynamic",
+        "value": null
+      },
+      "string_ascii": {
+        "type": "string",
+        "value": "hello"
+      },
+      "string_unicode_astral": {
+        "type": "string",
+        "value": "👩‍👩‍👧‍👦"
+      },
+      "string_unicode_bmp": {
+        "type": "string",
+        "value": "ЖЖ"
+      },
+      "string_unicode_nonnorm": {
+        "type": "string",
+        "value": "años"
+      },
+      "true": {
+        "type": "bool",
+        "value": true
+      },
+      "whole_number": {
+        "type": "number",
+        "value": 5
+      }
+    },
+    "blocks": null
+  },
+  "new_sha256": "0ba5c67521b9828a844ab6e337ed5ae8072109505342b3d43debfb82aa3ccb15",
+  "old_observation": {
+    "attributes": {
+      "false": {
+        "type": "bool",
+        "value": false
+      },
+      "fractional_number": {
+        "type": "number",
+        "value": 3.2
+      },
+      "fractional_number_precision": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "null": {
+        "type": "dynamic",
+        "value": null
+      },
+      "string_ascii": {
+        "type": "string",
+        "value": "hello"
+      },
+      "string_unicode_astral": {
+        "type": "string",
+        "value": "👩‍👩‍👧‍👦"
+      },
+      "string_unicode_bmp": {
+        "type": "string",
+        "value": "ЖЖ"
+      },
+      "string_unicode_nonnorm": {
+        "type": "string",
+        "value": "años"
+      },
+      "true": {
+        "type": "bool",
+        "value": true
+      },
+      "whole_number": {
+        "type": "number",
+        "value": 5
+      }
+    },
+    "blocks": null
+  },
+  "old_sha256": "3b1927d355a09ec4f2ae7f8bc25e3c16987e903a4140a686a1193dc0c3b41adb",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": true,
+  "review": "hclsyntax v2.23.0: the information-model projections equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

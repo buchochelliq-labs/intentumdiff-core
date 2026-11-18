@@ -1,0 +1,1290 @@
+{
+  "enumeration": {
+    "complete": true,
+    "listed": 251,
+    "method": "file names of /usr/local/go/src/cmd/go/testdata/mod (local go1.24.7 installation); every file re-fetched at the pinned commit and compared byte-for-byte with the local copy"
+  },
+  "files": {
+    "LICENSE": {
+      "bytes": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/LICENSE"
+    },
+    "VERSION": {
+      "bytes": 35,
+      "sha256": "a8287c711d0d4a72184b2a44500f77e9e3b60c31519514a57abf810b2e342724",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/VERSION"
+    },
+    "src/cmd/go/testdata/mod/README": {
+      "bytes": 1483,
+      "sha256": "2f5a8c28155d2e4aa6084cc5868eec66c94ff727132819a1f54745ea582efe17",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/README"
+    },
+    "src/cmd/go/testdata/mod/example.com_ambiguous_a_b_v0.0.0-empty.txt": {
+      "bytes": 244,
+      "sha256": "9f45528fbd0ddcaf1cc345e99eaf6b4a30c96871dad06fbbc413a096a1dea18d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_ambiguous_a_b_v0.0.0-empty.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_ambiguous_a_v1.0.0.txt": {
+      "bytes": 356,
+      "sha256": "7505067234f40e0972339ff7260cda9199cc60bfe8e790c976d4eae9578d9a5a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_ambiguous_a_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_a_v1.0.0.txt": {
+      "bytes": 200,
+      "sha256": "b9ea7748ab6306013fe1ab4404509d453cd7c8eece27f8786875279a4c837f6c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_a_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_a_v1.1.0.txt": {
+      "bytes": 200,
+      "sha256": "39338ed76dcd055654f5fe17020a122dd3b1baa295c0aed20553cd6ddbe44767",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_a_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_b_v1.0.0.txt": {
+      "bytes": 200,
+      "sha256": "249c44f7511a25d509705fc8b2006d0a55050e754d3984224405eed871dcde53",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_b_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_b_v1.1.0.txt": {
+      "bytes": 200,
+      "sha256": "924540a2a1ac7cf749b7664785aca2b07ed8cf1585d6b14bcaa5f3d35e1ce10a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_b_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_c_v1.0.0.txt": {
+      "bytes": 126,
+      "sha256": "d0a7017356df048a13dee9c455af6cc9742af4da7f82c6cf012179ae7ff4a2c4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_c_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_badchain_c_v1.1.0.txt": {
+      "bytes": 126,
+      "sha256": "b41739ca4f8b6cf34c7baba7be7d56855d15287c4b2e8f60351793d3c8bfc124",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_badchain_c_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-exclude.txt": {
+      "bytes": 365,
+      "sha256": "b27dc24b557b156d03d72f1543283099287bee817f41cf7ca501f56dbe64fa29",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-exclude.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-newerself.txt": {
+      "bytes": 373,
+      "sha256": "d975eb9d6e7695783e14f63ba7c71948aac83b477e873f2743079c7306a48680",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-newerself.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-replace.txt": {
+      "bytes": 397,
+      "sha256": "d7ea210b4a41b2cc31f51af016b10ee2dddbd7ac37665c48c5d365f02281fea4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_cmd_v1.0.0-replace.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_cmd_v1.0.0.txt": {
+      "bytes": 476,
+      "sha256": "a443b4b447a3ee26bc0ad79ef06d7b557746261e708b2be5b58c265458db7acd",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_cmd_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_cmd_v1.9.0.txt": {
+      "bytes": 381,
+      "sha256": "11ad4212d270c1abc9fa9bc2064b2e95a701ed0ee6383b570565ccf911355ebc",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_cmd_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_depends_on_generics_v1.0.0.txt": {
+      "bytes": 370,
+      "sha256": "f2b9c119b00f71596921b6b815e1fc15b46891cf1c094c7d48f5ca1b8b52f486",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_depends_on_generics_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_deprecated_a_v1.0.0.txt": {
+      "bytes": 246,
+      "sha256": "6bf3eebb4427f5a22f9e00cd6bec9cd7b1ba087e6893009fde1f38d1547264ae",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_deprecated_a_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_deprecated_a_v1.9.0.txt": {
+      "bytes": 346,
+      "sha256": "5e70b34b3f5f365e013b49b8531d47902132541bd26cfcfcab9a2df78022e0bf",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_deprecated_a_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_deprecated_b_v1.0.0.txt": {
+      "bytes": 160,
+      "sha256": "e22960627e8a2b8a05d4feef46fe4072abd0ed0ed054df8f7b81ce96cd4d3a40",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_deprecated_b_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_deprecated_b_v1.9.0.txt": {
+      "bytes": 260,
+      "sha256": "3815939a28435eff11d17d63c4966849a1bbeb74990de97a030d98d9da872546",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_deprecated_b_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_dotgo.go_v1.0.0.txt": {
+      "bytes": 287,
+      "sha256": "b549f6f2db89946dff4af34230ae24f65e999402a634f0ed4efb473d660ff2c7",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_dotgo.go_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_dotname_v1.0.0.txt": {
+      "bytes": 159,
+      "sha256": "a128d0f98f5463ed21c1473e2abb1300371e4a1088d99930be6264abbd94d05e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_dotname_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_downgrade_v2.0.0.txt": {
+      "bytes": 148,
+      "sha256": "dfdd47626306d18941406e45aae7f0e19385e2c2384b6449cb3b9127ff41cd64",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_downgrade_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_downgrade_v2_v2.0.1.txt": {
+      "bytes": 228,
+      "sha256": "1ce17766bdaf7dbe2ca36d8a86ae8158f7e81516cc93ba6a2afe332fe6497479",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_downgrade_v2_v2.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_fuzzfail_v0.1.0.txt": {
+      "bytes": 291,
+      "sha256": "ceb3fc490ce2ea8c3333bf641c7d397e96299b76f98eb1bb430d554e002a38f2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_fuzzfail_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_fuzzfail_v0.2.0.txt": {
+      "bytes": 416,
+      "sha256": "1bb803c5cb33d044c618266389afaeb19972b29a26147ef2cddd19255509670b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_fuzzfail_v0.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_generics_v1.0.0.txt": {
+      "bytes": 255,
+      "sha256": "040cd50876afa005c1a5d5fcad3d1b67ce45cc98ca0e0ef189460d010e276320",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_generics_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_incompatiblewithsub_v1.0.0.txt": {
+      "bytes": 212,
+      "sha256": "3616c141888cc9bf790a59286feff2610d7a57b065902b3ced474c73727c495f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_incompatiblewithsub_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_incompatiblewithsub_v2.0.0+incompatible.txt": {
+      "bytes": 225,
+      "sha256": "230da783953d85c7a7eedd112d8a9bfed837568d729052362099244231391b8b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_incompatiblewithsub_v2.0.0+incompatible.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_invalidpath_v1_v1.0.0.txt": {
+      "bytes": 229,
+      "sha256": "3abca7e1a22a560f9ee488eb6b01e4242d7dad452aba9a40689eb83930e2d258",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_invalidpath_v1_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_join_subpkg_v1.0.0.txt": {
+      "bytes": 170,
+      "sha256": "b4662ce3235d8327dbb68c3175b3cfa85017a3d16c8abeccdfc159d85e3d789b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_join_subpkg_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_join_subpkg_v1.1.0.txt": {
+      "bytes": 177,
+      "sha256": "84b21f6cbebc3b6dc902cfe9323518fe830378ac209076c802ca112251469ab8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_join_subpkg_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_join_v1.0.0.txt": {
+      "bytes": 137,
+      "sha256": "df885a7b234f2fb61e0deab3d3220ee4dc397f21cd029042fa6f3d9eff07e166",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_join_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_join_v1.1.0.txt": {
+      "bytes": 170,
+      "sha256": "46650d4cbee48f25ba5c8026b5b3bbfd39e3230604ab55c0402b940db54f09cd",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_join_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_latemigrate_v2_v2.0.0.txt": {
+      "bytes": 475,
+      "sha256": "c3e3b30db21f913640f84e1000b491d0d8f7b3c0e01e2e1f51f629f0ea786114",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_latemigrate_v2_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_latemigrate_v2_v2.0.1.txt": {
+      "bytes": 449,
+      "sha256": "8b53c9844dee6966f056308db51b01ec66de57e8febe6f951ffa5dbbc3af7b0b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_latemigrate_v2_v2.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_missingpkg_v1.0.0.txt": {
+      "bytes": 265,
+      "sha256": "be63e6e1bb6967a4dace6dccccaccce32b59b74ad0216a15bb1b096d2d2980f9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_missingpkg_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_missingpkg_v1.0.1-beta.txt": {
+      "bytes": 156,
+      "sha256": "d6684f4feccba90938ed74a47cb2476cfa22fa9a130f41d7ec0f7e23e9dcd089",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_missingpkg_v1.0.1-beta.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_nest_sub_v1.0.0.txt": {
+      "bytes": 261,
+      "sha256": "8aa85b45950f6b5949dfbcccedb588dc8c8e172dc0f258686c47b830292e9630",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_nest_sub_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_nest_v1.0.0.txt": {
+      "bytes": 244,
+      "sha256": "1bdc4ccdb61c3ba384d8618eabc492ade2e23ca7166600236785a4c787d90345",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_nest_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_nest_v1.1.0.txt": {
+      "bytes": 244,
+      "sha256": "3124a55b791e63f29cc01d0c801b1bfe050057f68852f6045da00940607dd41e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_nest_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_newcycle_a_v1.0.0.txt": {
+      "bytes": 211,
+      "sha256": "5fd841174573a559d2917e126a94106988356195919a48c29a18858e2f348a76",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_newcycle_a_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_newcycle_a_v1.0.1.txt": {
+      "bytes": 201,
+      "sha256": "dbe89493cd8b2e3dd39008e4dc124ee76a583f780b85915e8a07f6cd506e9705",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_newcycle_a_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_newcycle_b_v1.0.0.txt": {
+      "bytes": 144,
+      "sha256": "0edf93e080993ae4d9faa9aa5ee528af91112ca9cb4f70e55bb5ad90bd2eb092",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_newcycle_b_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_noroot_v1.0.0.txt": {
+      "bytes": 136,
+      "sha256": "54c90e800d22ce968bd006d2ded1d8f14d8f066128cbb35641e8bbb8b14e864f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_noroot_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_noroot_v1.0.1.txt": {
+      "bytes": 136,
+      "sha256": "595975bc53a4f9094bb2793dd82bf51e80ebaf2d6b4c31d56fe77c0d9db7533c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_noroot_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_notags_v0.0.0-20190507143103-cc8cbe209b64.txt": {
+      "bytes": 233,
+      "sha256": "0fb67597f9bc2097aeb28b647d25b872e5fc0ba294c41f2a1af6a1f646fe6842",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_notags_v0.0.0-20190507143103-cc8cbe209b64.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_printversion_v0.1.0.txt": {
+      "bytes": 781,
+      "sha256": "b7b1ecdd1a2f080233a01bb8b414914d0fbaeeb190f607257acabddea837db59",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_printversion_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_printversion_v1.0.0.txt": {
+      "bytes": 1001,
+      "sha256": "fa7d37da959ce426844b53223c297c9513c643946f117fbc035ea9264a143dad",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_printversion_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.0.0-20190430073000-30950c05d534.txt": {
+      "bytes": 340,
+      "sha256": "15a4c9e00b5775af6ea90508e3e8bc7dd22db156c11ad3682b0c9d747e6f4d16",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.0.0-20190430073000-30950c05d534.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.1.0.txt": {
+      "bytes": 238,
+      "sha256": "06a9200636e33cda9dd3bab85eea027dec9272ec8733e2c2c60bd5a3388b5fc7",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.1.1-0.20190429073117-b5426c86b553.txt": {
+      "bytes": 346,
+      "sha256": "8532f360ca9f61db4cd34cc91a95d38e7773c68063aca58badd7e436394a9033",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_pseudoupgrade_v0.1.1-0.20190429073117-b5426c86b553.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_quote_v1.5.2.txt": {
+      "bytes": 217,
+      "sha256": "1f1a1d0051b9e92bbd5934f295a7e1b7f7dc51c3ba7c6685bb4eb8664e9bc8ae",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_quote_v1.5.2.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_ambiguous_nested_v1.9.0-bad.txt": {
+      "bytes": 178,
+      "sha256": "2753abce1429b374351636fb13a8448256db3c2386030edcc3aa4ed0e262e708",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_ambiguous_nested_v1.9.0-bad.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_ambiguous_other_v1.0.0.txt": {
+      "bytes": 220,
+      "sha256": "aba2c6b89d2e7bc2ee312df50b3e3ece3b41337c3e0bced7772facd18b510bbf",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_ambiguous_other_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_ambiguous_v1.0.0.txt": {
+      "bytes": 129,
+      "sha256": "fa5ac3350d0770de55ddb2e11d7465de66597c3f4f8d0ac64502994632234f01",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_ambiguous_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_incompatible_v1.0.0.txt": {
+      "bytes": 342,
+      "sha256": "d105612b628cc58bd6f7c97a0a2fd486a2ef9f88f22192922038bfc60b4a2373",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_incompatible_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_incompatible_v2.0.0+incompatible.txt": {
+      "bytes": 226,
+      "sha256": "de5b0b1133db5849e1de08a9abeaf34ef7192ac4adf57a971e2d6f663dcef0b3",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_incompatible_v2.0.0+incompatible.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_missingmod_v1.0.0.txt": {
+      "bytes": 252,
+      "sha256": "00035c2e3224d4d5a9c5a8aac1230ae5462b9f55b3002c6607dfae7190fa281d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_missingmod_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_missingmod_v1.9.0.txt": {
+      "bytes": 167,
+      "sha256": "e2b1cf2bbf5e20a9734b926ac0f0c01de12eae6ee10e43497a4db0ed9d90f2fe",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_missingmod_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_newergoversion_v1.0.0.txt": {
+      "bytes": 136,
+      "sha256": "5833247503c4df0710537299f8babfe9d19d84c7c8861f54f51935b67a92ae64",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_newergoversion_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_newergoversion_v1.2.0.txt": {
+      "bytes": 153,
+      "sha256": "50547e8ec14fd00c15df86b5fd3907341c7357e5a99685ae812173d4d3985f67",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_newergoversion_v1.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_noupgrade_v1.0.0.txt": {
+      "bytes": 114,
+      "sha256": "d3c09fbd44095f78e47691d07c500ac570fda5a6375ddf282ad66fb429ec3f5f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_noupgrade_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-block.txt": {
+      "bytes": 96,
+      "sha256": "431fb8e322fb71ba193dbd14afaccba8ee0a5cd2ab79e104ffba677f6faaaf19",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-block.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-blockwithcomment.txt": {
+      "bytes": 107,
+      "sha256": "0c4a475dea7f66e5bf044f7185bda67a3ea009327e857f06cc058c9446af5be2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-blockwithcomment.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-empty.txt": {
+      "bytes": 125,
+      "sha256": "e95e8c5f1fcfc32d03185cd0fac4ea1405afe8f15544bd3ba5135a0e77a116eb",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-empty.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-long.txt": {
+      "bytes": 124,
+      "sha256": "a7cef442564c8c2ad6e31c598d4503374685a83d1822faeac579b14695bb2492",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-long.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-multiline1.txt": {
+      "bytes": 130,
+      "sha256": "1e98ccfba2e1e93bb94dca31ed1608279a85fd4e6143019356786cb9c1c3e394",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-multiline1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-multiline2.txt": {
+      "bytes": 130,
+      "sha256": "535c2d62f58cb764ac02b9a5b83b2692ee1c643324f6c596925b61ed290c6e17",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-multiline2.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-order.txt": {
+      "bytes": 96,
+      "sha256": "aaacbe4e838f74b89114cca6e92e65dc79ba434987b581d092674e136fdd6c45",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-order.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-unprintable.txt": {
+      "bytes": 131,
+      "sha256": "ab3108274ee6c7ddb418afce05d13fc2f2698b7d4283c7d8c06026df95a61c87",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.0-unprintable.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.1-order.txt": {
+      "bytes": 96,
+      "sha256": "33f25934ebe9aecb868ae29d55f49527bde7a068b928315a1bc4fbfd7d74e88b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.0.1-order.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rationale_v1.9.0.txt": {
+      "bytes": 1273,
+      "sha256": "76691585972ba848157ebdda44d37c1fae1033a5027afe87670c2a6cdd3182ed",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rationale_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rename_v1.0.0-bad.txt": {
+      "bytes": 374,
+      "sha256": "6127d26b0a14fea26d4245453a08dfae2cd7efa16b8da059bdad90785716e93f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rename_v1.0.0-bad.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_rename_v1.9.0-new.txt": {
+      "bytes": 429,
+      "sha256": "06ef612676eb5765b7c2887b3c57a2505a9dac2b4a10e65c5202bd371cb8361a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_rename_v1.9.0-new.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_all_v1.9.0.txt": {
+      "bytes": 241,
+      "sha256": "2d5946ba86d3c54b4c0cc4a643c16d694033e0548510b6515e17adea6f34162e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_all_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.0.0.txt": {
+      "bytes": 365,
+      "sha256": "16719e440759ae114000e54d9e2b349aeb8b894cd8a83e08939e60c9abf5f143",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.9.0.txt": {
+      "bytes": 411,
+      "sha256": "4989b5e5ec82138fd8c18bc97cc2f822e23a83fe4c5a75dd1cd66f866ce0055c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.9.1-pre.txt": {
+      "bytes": 369,
+      "sha256": "48f7aede48856e710a8d869fcab70944265da0b4ac8b9290bd9ab049ca0f4d8c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prerelease_v1.9.1-pre.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.0.0-bad.txt": {
+      "bytes": 192,
+      "sha256": "09858e2a8529fabb1a73da4cb8d769a204e530e5a589077c2864a1d6609cdc10",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.0.0-bad.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.1.0.txt": {
+      "bytes": 218,
+      "sha256": "18649366f0164588583ecf2a3dfc87aec6e601079fe69605e56712c2076c261a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.9.0.txt": {
+      "bytes": 351,
+      "sha256": "de613c41ca14d33e14a8acf75f898de841d45365eccf3c8ff438a930323aa714",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_prev_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v0.0.0-20200325131415-0123456789ab": {
+      "bytes": 568,
+      "sha256": "1e0d2ed1ac5eb79765b78df7409a92dd13b1f465fb0e3bb20355e75be06e3d92",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v0.0.0-20200325131415-0123456789ab"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v1.0.0-bad.txt": {
+      "bytes": 196,
+      "sha256": "46758c24a510c524f1bbac5b51225c93cb8f721e284aa636fd00d259d9ccdf22",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v1.0.0-bad.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v1.9.0.txt": {
+      "bytes": 310,
+      "sha256": "9edb7994a2f11ab727cb24c499af6e4a22a93f7f78e42c38f5591e03b178de9d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_self_pseudo_v1.9.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_v1.0.0-bad.txt": {
+      "bytes": 119,
+      "sha256": "41ad86f7008cfae82504816e18e0850f1f5e4e59f24489026a973a3c8b39c179",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_v1.0.0-bad.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_v1.0.0-good.txt": {
+      "bytes": 120,
+      "sha256": "6438b904f73796ec40b5a92a9f32c6e2303fb55f412a8123ef449a943082eea9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_v1.0.0-good.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_v1.0.0-unused.txt": {
+      "bytes": 122,
+      "sha256": "4b746231a1550671729623a64ece775206a7b05403d341f11cfdd0578585d021",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_v1.0.0-unused.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_retract_v1.1.0.txt": {
+      "bytes": 171,
+      "sha256": "1a09c435715c744fcc3dbe8dc50468860a4e00bf342ffa259421ece6ec31779d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_retract_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split-incompatible_subpkg_v0.1.0.txt": {
+      "bytes": 353,
+      "sha256": "b94fdf4f086e1cade4ea38e70061c32b652a66131a56d22539c3c0f9f14d7b3a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split-incompatible_subpkg_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split-incompatible_v2.0.0+incompatible.txt": {
+      "bytes": 299,
+      "sha256": "6150a138be1d63476161353a01d5365d223a1609aff7464bf052afd415694ecb",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split-incompatible_v2.0.0+incompatible.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split-incompatible_v2.1.0-pre+incompatible.txt": {
+      "bytes": 347,
+      "sha256": "033e8c3c50603cc06251b7a2934cec7d13b10e9e6ea03a8de7c180acdce3a501",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split-incompatible_v2.1.0-pre+incompatible.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split_subpkg_v1.1.0.txt": {
+      "bytes": 230,
+      "sha256": "43f807ec6d821122763df6b65857e1366abff80682b70483da19b9c3a9eea0a9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split_subpkg_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split_v1.0.0.txt": {
+      "bytes": 196,
+      "sha256": "f4574f2a37d6fb0feeeccdd2d4577899c7091e39db8338d6dde97f10b77ad08a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_split_v1.1.0.txt": {
+      "bytes": 204,
+      "sha256": "2a19a2f30aa96030926732b42158049afa20b866f5f1409811fe7f0d75163d5b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_split_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_stack_v1.0.0.txt": {
+      "bytes": 380,
+      "sha256": "f40f350b6467c37e1a37b0a355f27071b0827aabea1f4cafd1f752c3cc6025fc",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_stack_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_stack_v1.0.1.txt": {
+      "bytes": 380,
+      "sha256": "d657823efcb534bccaa20e88b8f0da7c4028eb4b714f785624e090d6b4310ed6",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_stack_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_tools_v1.0.0.txt": {
+      "bytes": 161,
+      "sha256": "ddc64e007e4435357442a39d002ffbf96e41e63878269c5c5335c37d64680bb2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_tools_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_tools_v1.1.0.txt": {
+      "bytes": 166,
+      "sha256": "8bf34576c1e99c8584d1db5db957eab0c05a043f9185f35397130bc84dda0c75",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_tools_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_undeprecated_v1.0.0.txt": {
+      "bytes": 318,
+      "sha256": "a91e9ce8e46a27f4dc187c6704a9ac12f604039cf38c2f5599cef47fa6e0fa5e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_undeprecated_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_undeprecated_v1.0.1.txt": {
+      "bytes": 316,
+      "sha256": "d8eecba9aca8e75c7ce63a09ba0e1ed3aa664ac09421f52a01a4c12ff34fcb86",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_undeprecated_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_usemissingpre_v1.0.0.txt": {
+      "bytes": 280,
+      "sha256": "546bbfd7c5d2f8181931b3d62620a6cf70969fa9180aa1f99f35d92602fb4270",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_usemissingpre_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_v1.0.0.txt": {
+      "bytes": 143,
+      "sha256": "6805ade8e5e4fafdeb0a299123aa40a0c50ef6b4c9b28b2467bd5ff35ef8387b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_version_v1.0.0.txt": {
+      "bytes": 168,
+      "sha256": "b411f002fbe520dcec3bc97ffde58f8b97317e7861d528f4a49696a3efac2baa",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_version_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_version_v1.0.1.txt": {
+      "bytes": 168,
+      "sha256": "7f0e69b2d7bc2109869055afb218c1788a7d84582a1c76d8f42a600693d09375",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_version_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/example.com_version_v1.1.0.txt": {
+      "bytes": 168,
+      "sha256": "aeb1f50d7c034d27b2f0a89fac08fa534d5d8b237f63dc7ef582be592ca761b5",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.com_version_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_ambiguous_nested_v0.1.0.txt": {
+      "bytes": 402,
+      "sha256": "58d1083a6faaf05255ea84f71f8189e88d62a67ec8e718a53802153c12a2785e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_ambiguous_nested_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_ambiguous_v0.1.0.txt": {
+      "bytes": 395,
+      "sha256": "f263605405b8736808250fa1ae6ba295f39f3efe5478b6d9219348946f63c7b2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_ambiguous_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_ambiguous_v0.2.0.txt": {
+      "bytes": 402,
+      "sha256": "46e5c7ad5d73a8d73e86193958eda40d38cd8c4efc1ae8afe0ad4312617d3f2b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_ambiguous_v0.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_pkgadded_v1.0.0.txt": {
+      "bytes": 347,
+      "sha256": "3e8b8e3b3bf7b746490cbf904acdbaeb8a58c3537cd1687b29c010020cbc38ef",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_pkgadded_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_pkgadded_v1.1.0.txt": {
+      "bytes": 387,
+      "sha256": "9c45d6bfbbbc643b57e3b9a0d0916b6bcb9a9c385a732cda958969b2249cc015",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_pkgadded_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/example.net_pkgadded_v1.2.0.txt": {
+      "bytes": 384,
+      "sha256": "a6ef5e068d03def9bf91d792b1806d7e23e05a422435b35a26dfa0c6a192028d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/example.net_pkgadded_v1.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.0.0-20190619020302-197a620e0c9a.txt": {
+      "bytes": 259,
+      "sha256": "d8a7d81f16248718624074675eb494f381dec8770d560982ff9f1b395227c7ed",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.0.0-20190619020302-197a620e0c9a.txt"
+    },
+    "src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.5.0-alpha.0.20190619023908-3da23a9deb9e.txt": {
+      "bytes": 275,
+      "sha256": "2fedf5a248f6d0376c51db865d9a98af72c38355cf0f2ea95028e994c8e03a28",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.5.0-alpha.0.20190619023908-3da23a9deb9e.txt"
+    },
+    "src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.5.0-alpha.txt": {
+      "bytes": 215,
+      "sha256": "82ae4cc41728d0b2eb84fe415153a3bd3b17d084827dce2f57f29707745e29ab",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/github.com_dmitshur-test_modtest5_v0.5.0-alpha.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_notx_useinternal_v0.1.0.txt": {
+      "bytes": 363,
+      "sha256": "c053b2f1583d4b3df21bbd81bd14d619f8b3a6773e3a781764398dbc4dd47f1f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_notx_useinternal_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.1.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "bbc060ef9b8e7d7a2ec5acf85c0dbb5075ecfe248ada153c7f822ccc56a8eee3",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.1.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.3.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "2be29e1485b9ee9514e25b565f35c1e175841501f385b62ede1d64bc5951580a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.3.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.5.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "8cabea0694165d9406527111f13f3ce6b73b10d765cae0ce0d1ceb1f7d8ec2f7",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.5.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.7.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "95f1e40d68992ff2783796435c7a1e0fe45c9e6a36fb379dc2bd989e9cbf15ad",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.7.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.9.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "203094fa68c2cd7de4ac1e7011f1a7fcd1803d91b5c0365cd2f224f836924ec9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.9.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.linux-amd64.txt": {
+      "bytes": 181,
+      "sha256": "7dda147940aee8e6f80182e727ebc8bbc0aa7e44de2ead7efa21724a93ca010b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.18.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.0.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "2d780a40f14ed07676e177ac77cceac75defd17344b261da3096fe31d09ccec7",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.0.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.1.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "2d044724d49779f42a307a83870f128beffdf4825d9f2bc955cf09ad0bafa01c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.1.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.3.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "c61c3fc32ec7b0e6c1431f189d364d3b5c93843f6816837c3501cbccd24183d4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.3.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.5.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "259219c6868850275fed62abfea1114ff6a4a16f748372764d13318558b01ca0",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.5.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.7.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "9e6fd7e689f48b46751601f7f3544e1dd99e02f842923de7fcc6483644312f92",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.7.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.9.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "63a42cdb554591ff239937ea0740ec626f849c630e4b902defe4808b2b7de234",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22.9.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22rc1.linux-amd64.txt": {
+      "bytes": 187,
+      "sha256": "bcad53526791695a5d2989af0870c0c027c526b97630a58212b2db3da1762e7a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.22rc1.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.0.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "e215ff2d1da1a191564354523ee42f34696ec02051689e795dac644e1129dcde",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.0.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.5.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "7af33955a4d08bb2c1a3b6b700aa89e6ce84631e2d74267ae521fde08d9fbd83",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.5.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.9.linux-amd64.txt": {
+      "bytes": 185,
+      "sha256": "70194ff7b382fd7451bb134067bdd2f65fa2f27cbebcd2d7e15ba6ddb8a1983a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.23.9.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.24rc1.linux-amd64.txt": {
+      "bytes": 187,
+      "sha256": "aa0e542d6f42d418dfcd4320f0226a0f3599aec919ef58a27fbfa9f5b081933b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.24rc1.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.aix-ppc64.txt": {
+      "bytes": 325,
+      "sha256": "ab9cf7957ca5eb6416801230dcf78b6628e00c34a9e9b0b85af0cc8738f6ae63",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.aix-ppc64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-386.txt": {
+      "bytes": 329,
+      "sha256": "b82b49a08bad72a6f2da6449b74a3e8051d7df75eab0edc9b646ff426ae6b595",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-amd64.txt": {
+      "bytes": 333,
+      "sha256": "583c86483bb676b2fab9a61381482ac995cf086a960609f4fb2a360205b31b13",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-arm.txt": {
+      "bytes": 329,
+      "sha256": "2de08bad10ef380f0b2d2beefde0628b15b7d3a4afb3af918a200f3e3d9e9620",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-arm64.txt": {
+      "bytes": 333,
+      "sha256": "0ce95ce8a3ebe7bacc27d4479b3811f925cdbc49684a06acb9a6e69f09ccf72c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.android-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.darwin-amd64.txt": {
+      "bytes": 331,
+      "sha256": "a8e973b991f0a878890df0e96f6a453b476e6256fb0b340be8954615e9c9311e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.darwin-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.darwin-arm64.txt": {
+      "bytes": 331,
+      "sha256": "af62448e96f9c983462c515d0a352b101b3852bf33ac41ca35aed92303de114d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.darwin-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.dragonfly-amd64.txt": {
+      "bytes": 337,
+      "sha256": "08e84606c895ec92da6ce7a360ca26d722edcad9cf3654f2c2c7789dfb28c2e4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.dragonfly-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-386.txt": {
+      "bytes": 329,
+      "sha256": "207ec62004ffe320ce2f713ed48d5561471d4bcef8ea6357cd3076b85f87090a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-amd64.txt": {
+      "bytes": 333,
+      "sha256": "a0919cbfa71fefb5a0137f2576edaeeadc888d621ec3286f3c1d250f547f2961",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-arm.txt": {
+      "bytes": 329,
+      "sha256": "a48f72074049b5b955df6381f15e545dcae94f03b410a624253bd769337830ff",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-arm64.txt": {
+      "bytes": 333,
+      "sha256": "e17536987aaeaf50ea33d88f0102e2974cb47b64722137c8ee21699e02bd83b8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-riscv64.txt": {
+      "bytes": 337,
+      "sha256": "09bc20177e7f2a400937eb3c3732417ce72ff324eb115288f5cbda3747f0248b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.freebsd-riscv64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.illumos-amd64.txt": {
+      "bytes": 333,
+      "sha256": "805af27f59d78dd4607ec484db3411edc08a29b44fe5918580c82c5badf75e13",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.illumos-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.ios-amd64.txt": {
+      "bytes": 325,
+      "sha256": "2ed14af91a5d5538ae9d3c1b74ced051022e46ed9b55a14f172f6f9466b75416",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.ios-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.ios-arm64.txt": {
+      "bytes": 325,
+      "sha256": "97edd3fae4b2453814587582a03723d7f77e484b1b775449100f3c8f1aa55fe8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.ios-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.js-wasm.txt": {
+      "bytes": 321,
+      "sha256": "00ff6f2dfe4f973fe8074dbb747bfb7b674a7af310c20ccd62c00a233475bb5d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.js-wasm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-386.txt": {
+      "bytes": 325,
+      "sha256": "1116034220d71ac067c2f37aa4c5187dab7ef402b4cca3e7687237e22b2a842d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-amd64.txt": {
+      "bytes": 329,
+      "sha256": "b8696368a1f96b85ae7b03bb7d3d645c4ba5bd7729aef78166c6336482d0fead",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-arm.txt": {
+      "bytes": 325,
+      "sha256": "185469151a336f5c1165d875416c98f9eaf0d5215df88fec8f00edc33ae3c3a0",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-arm64.txt": {
+      "bytes": 329,
+      "sha256": "e1758872e8d263661cad25f95965b2fa6ff1ae1b07b34f4c9d06109d2ab7ae90",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-loong64.txt": {
+      "bytes": 333,
+      "sha256": "3b2e306dd1dee149615405f2410a68bff56ec967d6f51db46234f2f7a25f2e03",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-loong64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-mips64x.txt": {
+      "bytes": 333,
+      "sha256": "79615b81d14b464e477a3b730e58fa41b67a43afcf53d4f5c1849d8b6377524a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-mips64x.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-mipsx.txt": {
+      "bytes": 329,
+      "sha256": "5fdcbaab9cb60e6410ba2cc16e7b0d8c9c98b8c4dd1b7eee8b7fa071ea4c5602",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-mipsx.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-ppc64.txt": {
+      "bytes": 329,
+      "sha256": "e2bfa582539f3a0a78e7166a58723a88f4e11683a40ed7aed57f664e7759fa8e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-ppc64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-ppc64le.txt": {
+      "bytes": 333,
+      "sha256": "ee4e459441a40f9279d2145fe571cf64722cf2de193ef0798abae03b0abb249c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-ppc64le.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-riscv64.txt": {
+      "bytes": 333,
+      "sha256": "1f8c1cff049c0010c822bdfe5e8238251bb5fc39dbb3aa439a6815c542b54283",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-riscv64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-s390x.txt": {
+      "bytes": 329,
+      "sha256": "9a60465636d3de6ab9af412061a3dd34ff7114a3380763c0fabd53b747ed440a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.linux-s390x.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-386.txt": {
+      "bytes": 327,
+      "sha256": "3d6ee16103519cd80d63aabb80678d380cb126ddb5af4f5eaa09c7b6b37f0ae9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-amd64.txt": {
+      "bytes": 331,
+      "sha256": "77c2286c000391d32eebc96cfeb10119c0aae5b0e5921a007cd425244e11a68c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-arm.txt": {
+      "bytes": 327,
+      "sha256": "ae93648c36967e1fb3f37836d126ea92c995991a10852a397c311cab08deb116",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-arm64.txt": {
+      "bytes": 331,
+      "sha256": "9dc9a97857554cc8f444764b44de52812f9cd2b9b41340ff64a26cd839d20a24",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.netbsd-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-386.txt": {
+      "bytes": 329,
+      "sha256": "fff975edca9f6c3b4a775e7aecc407e6eaaddf4a59ce9d9fc6f8ffe98ab19db0",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-amd64.txt": {
+      "bytes": 333,
+      "sha256": "364d67712e3c96c866f59b285b0241d6bb8e78456b04970ed38beba08d1baea5",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-arm.txt": {
+      "bytes": 329,
+      "sha256": "ef19cd87dc57363351e97537c76fad6cf44bf21bb7cc5443c429c85a15517081",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-arm64.txt": {
+      "bytes": 333,
+      "sha256": "95ca75dec560615fef93ed518781d450331595a7df5f941fa178f80b74f651e8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-mips64.txt": {
+      "bytes": 335,
+      "sha256": "2dd889968c26a148309ff97a99d436ece4e16618283d939b823f16c111ea5226",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-mips64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-ppc64.txt": {
+      "bytes": 333,
+      "sha256": "04e2454e237115fe7a33d7af623c5867fcec024dc7cc3092f6d203850d9776e9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-ppc64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-riscv64.txt": {
+      "bytes": 337,
+      "sha256": "03faf1277e2725628230bbb66ad39868e52b08e514e95a1b70dd65bb43b76119",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.openbsd-riscv64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-386.txt": {
+      "bytes": 325,
+      "sha256": "723eb52e721d92310f6fef5a016951ffe7d56d422ca4ad5ed0ea5d938e04ce09",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-amd64.txt": {
+      "bytes": 329,
+      "sha256": "05b2038948e67395c8ea381c9a6022880ef897fbaf3e1984288a05c36931ecba",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-arm.txt": {
+      "bytes": 325,
+      "sha256": "73e92d2644c8f3be1f8d9a7da0870e0e0fa222b565f91b66c22df760b847f1ff",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.plan9-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.solaris-amd64.txt": {
+      "bytes": 333,
+      "sha256": "23946257503f772408515a945d74242a420d628af1faabda0862b35890cfea76",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.solaris-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-386.txt": {
+      "bytes": 291,
+      "sha256": "54e856428e49b7a5fef90e3a44525c50f1af6936547d2e1f9f541805d3598583",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-386.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-amd64.txt": {
+      "bytes": 295,
+      "sha256": "95287dcebf3b7f74313ff97e1f75586c31a4ee9a6660ffc6f5b29f1c8269f64e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-amd64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-arm.txt": {
+      "bytes": 291,
+      "sha256": "cb3d8f6f0d5ced46465cfa2de298d536834a79f205da34c9fb38286a14c73eae",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-arm.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-arm64.txt": {
+      "bytes": 275,
+      "sha256": "85f2fb79b61ef92836786869b0ae65c5399cb2f24fcf5b2691e43d5fee096129",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_toolchain_v0.0.1-go1.999testmod.windows-arm64.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_x_internal_v0.1.0.txt": {
+      "bytes": 1320,
+      "sha256": "9afffb6cf4fd121b05cda06545e45ae627582cdbb51a920c1ce7cabaadb5e5bb",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_x_internal_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_x_text_v0.0.0-20170915032832-14c0d48ead0c.txt": {
+      "bytes": 1179,
+      "sha256": "e06149a05e1bbedbddfb8e3c78826c1d31fe88bce3f57e6d635e86afcf3a6469",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_x_text_v0.0.0-20170915032832-14c0d48ead0c.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_x_text_v0.3.0.txt": {
+      "bytes": 1105,
+      "sha256": "2d8ce6af6d6c10153f0cc9b1935729ff60886adee44d3c97bf63b60198bfa187",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_x_text_v0.3.0.txt"
+    },
+    "src/cmd/go/testdata/mod/golang.org_x_useinternal_v0.1.0.txt": {
+      "bytes": 356,
+      "sha256": "03db25834b7f6345120e5e59ba007316283fe9e7fe3aff2adcf49fc379d95389",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/golang.org_x_useinternal_v0.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/gopkg.in_dummy.v2-unstable_v2.0.0.txt": {
+      "bytes": 158,
+      "sha256": "cbd4a0c9946894a4af11c368d6e726de15bf67b5ee809096b859d0c33a03d319",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/gopkg.in_dummy.v2-unstable_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/not-rsc.io_quote_v0.1.0-nomod.txt": {
+      "bytes": 1564,
+      "sha256": "8c43855cf811b27a1b50e70a877eea421c3755561c6dc5315f72a2ada53f3c7a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/not-rsc.io_quote_v0.1.0-nomod.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_depofdirectpatch_v1.0.0.txt": {
+      "bytes": 251,
+      "sha256": "d8a00a7b503801489b4d480dba42f9766158452e68c50abb863909e3857194c9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_depofdirectpatch_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_depofdirectpatch_v1.0.1.txt": {
+      "bytes": 251,
+      "sha256": "367800688929a667367187da8d8e691e675c04877c96fc9c4de5748024135741",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_depofdirectpatch_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_direct_v1.0.0.txt": {
+      "bytes": 336,
+      "sha256": "32cf8134b836db9b46e1b0a2cedb8067b2c96b3e56ded38b5f3df12c86ec8159",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_direct_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_direct_v1.0.1.txt": {
+      "bytes": 533,
+      "sha256": "192e2ad75bc2ec02662fb01d805c99b6e00bc89aa0c9102422d4a21fc268f309",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_direct_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_direct_v1.1.0.txt": {
+      "bytes": 336,
+      "sha256": "c5b7229afc6c19134b6d5d29e7b61e005e02e9d1068008c0faf0c8a0ba54b51f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_direct_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_indirect_v1.0.0.txt": {
+      "bytes": 209,
+      "sha256": "7c7f4986bec68169c38dc77d74bb0ab0bdfe48b1530b7a259672ae89c72f0c50",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_indirect_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_indirect_v1.0.1.txt": {
+      "bytes": 209,
+      "sha256": "a2084d056791516b24627528dacb5573f7f1c6596ee8e1a861fc7db05bbf66f8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_indirect_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/patch.example.com_indirect_v1.1.0.txt": {
+      "bytes": 209,
+      "sha256": "eac918e67250c43053d26da88fc700acf729a74d2624659ec75450fb9fcc9d2c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/patch.example.com_indirect_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_!c!g!o_v1.0.0.txt": {
+      "bytes": 399,
+      "sha256": "739ab8bc475979451024a09e41ff68763d8f1fde33465bb2d8f01598488b6006",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_!c!g!o_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_!q!u!o!t!e_v1.5.2.txt": {
+      "bytes": 1839,
+      "sha256": "ab19619b5d462310aeb39f2a7bce4638658ebf21e52dee2bce600902c3d95591",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_!q!u!o!t!e_v1.5.2.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_!q!u!o!t!e_v1.5.3-!p!r!e.txt": {
+      "bytes": 1854,
+      "sha256": "516d3cde6b7de9a916c3c9923f126455ef6b11aeb18bdb562ce464af4085684c",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_!q!u!o!t!e_v1.5.3-!p!r!e.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badfile1_v1.0.0.txt": {
+      "bytes": 264,
+      "sha256": "e3857c4981222932558fd3f68d99cb26b4419d6aa9e3f36c5ef1d4f2f7764ff2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badfile1_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badfile2_v1.0.0.txt": {
+      "bytes": 172,
+      "sha256": "b149b995dd5b432f73a4fffb3030cdca1e26e1cdad87687850d57bab0d92867f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badfile2_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badfile3_v1.0.0.txt": {
+      "bytes": 167,
+      "sha256": "2bc33dbf13084c0b0bed5fcf515959a8cc353014777641fd4c39b1cccd3854c0",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badfile3_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badfile4_v1.0.0.txt": {
+      "bytes": 191,
+      "sha256": "cff02da6b54d3aa92fb740938ea46e92e7c1b8ad2fa36a7feb27288bac1ed599",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badfile4_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badfile5_v1.0.0.txt": {
+      "bytes": 200,
+      "sha256": "d00b6d5ee30f57aaa2322e8067e77761752101925b1b2df1aaa4fb64e0066642",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badfile5_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badmod_v1.0.0.txt": {
+      "bytes": 137,
+      "sha256": "569a667b4ef953854a7dab0fc9d42152a0c2767c65e581b4dc49046bc24f6ffc",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badmod_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badsum_v1.0.0.txt": {
+      "bytes": 326,
+      "sha256": "9724d718cd2034308f131f64b7ed97c8c097e8a860d29fc98eccce2e7044a2eb",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badsum_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badsum_v1.0.1.txt": {
+      "bytes": 332,
+      "sha256": "86b060479528d68df5923eb48403ec17f967386f90bf40e79a4f09b0dd31db2b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badsum_v1.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_badzip_v1.0.0.txt": {
+      "bytes": 186,
+      "sha256": "017424d839b739a3493f6a3fd9874b0efaffc750bf5c5340b6031d3cc349420b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_badzip_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_breaker_v1.0.0.txt": {
+      "bytes": 151,
+      "sha256": "5f0be4f5432d7b5a09c7787a570940d3dfbcd3959d1f5fe668ca25bc13f0f9b4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_breaker_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_breaker_v2.0.0+incompatible.txt": {
+      "bytes": 255,
+      "sha256": "7122159ee5d426bea5d2e24bb7d36d130ad031964d9851219dc887b202a3d9c2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_breaker_v2.0.0+incompatible.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_breaker_v2.0.0.txt": {
+      "bytes": 255,
+      "sha256": "7122159ee5d426bea5d2e24bb7d36d130ad031964d9851219dc887b202a3d9c2",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_breaker_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_fortune_v0.0.1.txt": {
+      "bytes": 261,
+      "sha256": "06da748cb8c206c0f8143397d0529843d6c3e7e92b25bc61b9e364019af38d60",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_fortune_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_fortune_v1.0.0.txt": {
+      "bytes": 199,
+      "sha256": "0f3c53f2761fc2b7eb9d075a8af5c4d25c9bfce14335370186be1462abeee9e4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_fortune_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_fortune_v2_v2.0.0.txt": {
+      "bytes": 292,
+      "sha256": "448cd7af33b66feba9c755f4e148d9801093cf3d0ed1fc0b5fd04310f843b5d8",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_fortune_v2_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_future_v1.0.0.txt": {
+      "bytes": 199,
+      "sha256": "3eeba88636bedcc7eb3227ef74d49822e052504e0b9c648dc99c40953eb682dd",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_future_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needall_v0.0.1.txt": {
+      "bytes": 385,
+      "sha256": "450547412d93898ca898d3f1207213d0c39fe8c23ccef3fdfaf712c3f9b0f07e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needall_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo1183_v0.0.1.txt": {
+      "bytes": 205,
+      "sha256": "c99d2159aa0ae38b43624e178d496d39fc3f144d699cf61c6c2f6ef5f442ecb3",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo1183_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo118_v0.0.1.txt": {
+      "bytes": 197,
+      "sha256": "835ab58d10b3e7e2aef3334e97c5c6d419ef4494bd4b8aeecff3632685f74443",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo118_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo121_v0.0.1.txt": {
+      "bytes": 197,
+      "sha256": "9a7cdbfdd203e5fd6b006e0f4d05903cd80340320785862cee6f2bfa0ab9c51e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo121_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo1223_v0.0.1.txt": {
+      "bytes": 204,
+      "sha256": "d1188586d692c6525336b1c4d5f20a356ddfa927f8e36c628a9495a0f36c6e89",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo1223_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo122_v0.0.1.txt": {
+      "bytes": 197,
+      "sha256": "42f86ccf6c783d493900b4c40245c97b11c56043e9e4fbf66914589522d9b56a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo122_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo123_v0.0.1.txt": {
+      "bytes": 197,
+      "sha256": "f3b7573209d1138bc80429be2a50298b48a763d374c857708fb8b4ae4ece4301",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo123_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_needgo124_v0.0.1.txt": {
+      "bytes": 197,
+      "sha256": "61587765a9908d03c4290ab48154ac7c72249469ea604edc5b61c6fae0470cde",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_needgo124_v0.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_panicnil_v1.0.0.txt": {
+      "bytes": 166,
+      "sha256": "d3322f7b452b2e69ee852d5ac2a34e7cd78a20510d43444a5ecfa941d09a2404",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_panicnil_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_panicnil_v1.1.0.txt": {
+      "bytes": 174,
+      "sha256": "522dacd05d4cbc273f3ee2946e98bb90cd18930b5ef85708fa12b90249fd479f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_panicnil_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180214005133-e7a685a342c0.txt": {
+      "bytes": 1616,
+      "sha256": "fc152f5ef8b684acc51f3ba2492f66e05a8a451dd417025adda131fd8cc88bdd",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180214005133-e7a685a342c0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180214005840-23179ee8a569.txt": {
+      "bytes": 2092,
+      "sha256": "e87b33a0b0c5feb1bc4e042da5dcff23d5402b848b8bd503e31ce4656268accb",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180214005840-23179ee8a569.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180628003336-dd9747d19b04.txt": {
+      "bytes": 2354,
+      "sha256": "08547b43157804bcd48f015d236264c88b737ef471cbac5093f5e349f3062c9e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180628003336-dd9747d19b04.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709153244-fd906ed3b100.txt": {
+      "bytes": 2072,
+      "sha256": "f9953309dd768a98e4d19374aeb217e4aec132f578f6ec40e6485c5fb0cfdbd3",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709153244-fd906ed3b100.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709160352-0d003b9c4bfa.txt": {
+      "bytes": 2233,
+      "sha256": "e3cf95455ae090a9f982b4a4aa0e48d7f5abe8069b64e03380db1c3520c660dc",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709160352-0d003b9c4bfa.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162749-b44a0b17b2d1.txt": {
+      "bytes": 2291,
+      "sha256": "5ae529a63c5b2e7a456a6b2b86fcc0b3cdcc03710fae3dfa1fe555e9e88fdeac",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162749-b44a0b17b2d1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162816-fe488b867524.txt": {
+      "bytes": 2291,
+      "sha256": "40bbacb916c507fad9540755e441a2912d0efc8780ea4fa9155d212e20addfce",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162816-fe488b867524.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162918-a91498bed0a7.txt": {
+      "bytes": 2233,
+      "sha256": "eebcb86c56167c35f47682e3228f413558d6a19ec5af7c64c5bb2267e8911215",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180709162918-a91498bed0a7.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180710144737-5d9f230bcfba.txt": {
+      "bytes": 2291,
+      "sha256": "ccde51eed97309d19fe273be0b4128b0b454d51a61aaf800378d211cd6d709a7",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v0.0.0-20180710144737-5d9f230bcfba.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.0.0.txt": {
+      "bytes": 916,
+      "sha256": "2fde7529137e74518f7f547fbd972b2ee0058c4ad5c46a94f48f723069d932a4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.1.0.txt": {
+      "bytes": 1271,
+      "sha256": "836ce7e865a0f586cca477918d3af7d52b1360cee6a752a19189ae0d6053541b",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.1.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.2.0.txt": {
+      "bytes": 1612,
+      "sha256": "ab2ea89667510c69172edbc6da218947c43b9cb271fec8f7224453d5d579a71d",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.2.1.txt": {
+      "bytes": 1584,
+      "sha256": "f770cba0f1d0f4f266eb67133501557ffa958dfe4c1e8dff2d440f9483a9dded",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.2.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.3.0.txt": {
+      "bytes": 1890,
+      "sha256": "00cd1647c0088a1a55730553e2dd29bb43064f00efc734926582cbb23d772716",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.3.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.4.0.txt": {
+      "bytes": 1981,
+      "sha256": "6e0fa9bd7e422f9d41f44a1aa3f38a0fa338285c74338397be40f4304feb4902",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.4.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.5.0.txt": {
+      "bytes": 1981,
+      "sha256": "0b68f5216e111c725cd7160758d7a9443965d32e56ef1beb070cd8c90c60cd30",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.5.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.5.1.txt": {
+      "bytes": 2042,
+      "sha256": "b4aaa84665c12e2fd25ef2ff43374baa3f721b1e36d2bde4d5b5f6e5dea0dc96",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.5.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.5.2.txt": {
+      "bytes": 2302,
+      "sha256": "ed930dce218227dad5c6804c39b27ed3f33c8da770bfe8098e65b4d625dba3d4",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.5.2.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v1.5.3-pre1.txt": {
+      "bytes": 2326,
+      "sha256": "187646843ca4ac5ea1f17bb9f6488ea07cd3fbd1da52fbad0ba5b7648076978e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v1.5.3-pre1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v2.0.0.txt": {
+      "bytes": 2072,
+      "sha256": "f9953309dd768a98e4d19374aeb217e4aec132f578f6ec40e6485c5fb0cfdbd3",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v2.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v2_v2.0.1.txt": {
+      "bytes": 2045,
+      "sha256": "067e2685af7437f0d98816d72f0c5d7d6baba499c1d30ad09a0a7537b417d87e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v2_v2.0.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_quote_v3_v3.0.0.txt": {
+      "bytes": 1110,
+      "sha256": "c872ff70076add67e6a882b727f541cbab6ec8efd4e6e3f4736ef7ac09826b7f",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_quote_v3_v3.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.0.0.txt": {
+      "bytes": 568,
+      "sha256": "53f46bd05e9fd0a2485c4433848ca71c75a6614ca2296b1b4cc08864e6396c0e",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.2.0.txt": {
+      "bytes": 3231,
+      "sha256": "04b1dd2039e8a1b24ede166865abb8f6b9772a3358af505340b3ed990162b929",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.2.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.2.1.txt": {
+      "bytes": 3157,
+      "sha256": "d0f0c32678a37ec12891e810a56df9cd7d22270cc6514ef06841a2ac127fdf88",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.2.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.3.0.txt": {
+      "bytes": 4818,
+      "sha256": "bd1903820820de72238b83366a02588c4c40576ca37308dd509026799ac5e359",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.3.0.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.3.1.txt": {
+      "bytes": 4823,
+      "sha256": "a9fb3506e075d2ccadc2272efb2ff4d6092b5ff408e2837f90d18a17f36429c1",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.3.1.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_sampler_v1.99.99.txt": {
+      "bytes": 3297,
+      "sha256": "efb95b89e22f963b954122ec206bfc0109b4bd87481fc81402554e5c2498660a",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_sampler_v1.99.99.txt"
+    },
+    "src/cmd/go/testdata/mod/rsc.io_testonly_v1.0.0.txt": {
+      "bytes": 142,
+      "sha256": "c8580c5e05a5b50a3e73e644963d1f343accd66c69655868525b0b4e8cbea067",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/mod/rsc.io_testonly_v1.0.0.txt"
+    },
+    "src/cmd/go/testdata/script/mod_replace.txt": {
+      "bytes": 3805,
+      "sha256": "08839ea7f01e8b735f17268e18ccf0af1ae88ea379ee04bf28370f51176461b9",
+      "url": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/src/cmd/go/testdata/script/mod_replace.txt"
+    }
+  },
+  "method": "raw",
+  "ref": "go1.24.7",
+  "repo": "golang/go",
+  "revision": "d41a8222133aabaf5527eab64586050a0fbb773b",
+  "suite_id": "go-cmd-mod-testdata",
+  "url_template": "https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/{path}",
+  "verification": [
+    "ref go1.24.7 resolved to d41a8222133aabaf5527eab64586050a0fbb773b via proxy.golang.org Origin.Hash (2026-11-17)",
+    "every byte fetched from https://raw.githubusercontent.com/golang/go/d41a8222133aabaf5527eab64586050a0fbb773b/<path>; a nonexistent commit or path returns 404",
+    "all 251 testdata/mod files equal the local /usr/local/go copy byte-for-byte"
+  ]
+}

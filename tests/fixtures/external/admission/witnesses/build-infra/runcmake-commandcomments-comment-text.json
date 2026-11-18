@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-commandcomments-comment-text",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nSecond Line of Example\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "new_sha256": "568ba78528a5b984c7867189fc98b06d1e691569530f6c2c847dc706c2aa0011",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nSecond Line of Example\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "old_sha256": "39b2a35659353a6982ac98699bb0d9d7d8891e56584fa7f8e2fbfec8c4c09ee2",
+  "oracle": "cmake_configure_output_equality",
+  "projection_equal": true,
+  "review": "cmake 3.28.3 configure: exit status, stdout and stderr equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

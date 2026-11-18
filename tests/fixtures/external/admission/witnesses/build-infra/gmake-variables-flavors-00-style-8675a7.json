@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-flavors-00-style-8675a7",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "Hello\n"
+  },
+  "new_sha256": "31e9d25f393702ac1158b1bb2c5e114ff535324168b9778c85587403120c544d",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "",
+    "stdout": "Hello\n"
+  },
+  "old_sha256": "cde1abf37c8f2a9a867343f570aa91d2628336bac8e7e18e216c13c5a58aa176",
+  "oracle": "gnu_make_output_equality",
+  "projection_equal": true,
+  "review": "GNU Make 4.3: exit status, stdout and stderr equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

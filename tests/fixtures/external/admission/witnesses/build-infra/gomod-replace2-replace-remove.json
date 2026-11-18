@@ -1,0 +1,124 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "gomod-replace2-replace-remove",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "abc"
+    },
+    "Replace": [
+      {
+        "New": {
+          "Path": "/tmp/z"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.2.3"
+        }
+      },
+      {
+        "New": {
+          "Path": "my/xyz",
+          "Version": "v1.3.4-me"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.3.4"
+        }
+      },
+      {
+        "New": {
+          "Path": "/tmp/my dir"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.4.5"
+        }
+      },
+      {
+        "New": {
+          "Path": "my/xyz",
+          "Version": "v1.5.6"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.5.6"
+        }
+      }
+    ],
+    "Require": null,
+    "Retract": null,
+    "Tool": null
+  },
+  "new_sha256": "de6ad7c05dbfafa6d4f7cb6038202003e609c54804a283c17c08f54a9c4d5542",
+  "old_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "abc"
+    },
+    "Replace": [
+      {
+        "New": {
+          "Path": "/tmp/z"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.2.3"
+        }
+      },
+      {
+        "New": {
+          "Path": "my/xyz",
+          "Version": "v1.3.4-me"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.3.4"
+        }
+      },
+      {
+        "New": {
+          "Path": "/tmp/my dir"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.4.5"
+        }
+      },
+      {
+        "New": {
+          "Path": "my/xyz",
+          "Version": "v1.5.6"
+        },
+        "Old": {
+          "Path": "xyz",
+          "Version": "v1.5.6"
+        }
+      },
+      {
+        "New": {
+          "Path": "my/other/xyz",
+          "Version": "v1.5.4"
+        },
+        "Old": {
+          "Path": "xyz"
+        }
+      }
+    ],
+    "Require": null,
+    "Retract": null,
+    "Tool": null
+  },
+  "old_sha256": "caee26cdd7e17db14e4cd310fe66c86e0aa39abbe71a0011b843950ca5f734e5",
+  "oracle": "go_mod_edit_json_equality",
+  "projection_equal": false,
+  "review": "cmd/go `go mod edit -json`: the module JSON documents differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

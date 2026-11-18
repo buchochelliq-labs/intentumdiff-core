@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-commandspaces-bracket-comment",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nExample Message\nExample Message\nExample Message\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "new_sha256": "9da15304f6c34f5967126fe4388104c8e071094e7d0e12413d1d39e974f80b11",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nExample Message\nExample Message\nExample Message\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "old_sha256": "043b21ca9048ad880d8aa0f5f739edb0c66e60aa5d6b98569422dae516e1f7d7",
+  "oracle": "cmake_configure_output_equality",
+  "projection_equal": true,
+  "review": "cmake 3.28.3 configure: exit status, stdout and stderr equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}
