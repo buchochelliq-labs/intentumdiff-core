@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-whitespace-normal-text_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c39c9390d5e7015835fe20c9cdabbc733e4bf2096ac9319d98ec3350f1986f83",
+  "observations": {
+    "crash": "ReferenceError: name is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c46.mjs:4:48)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/107466"
+  },
+  "old_sha256": "aaaee8b7dbf523d40ae8323e62f3b611fb140dda0c8c145512cb793beb068d7c",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "astro-printer-118",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "551bb1bb11746e364014076099335a118cb3c62194bfafeea624bfcd72c05823",
+  "observations": {
+    "diagnostics": [
+      {
+        "severity": 2,
+        "text": "<script hoist> is no longer needed. You may remove the `hoist` attribute."
+      },
+      {
+        "severity": 4,
+        "text": "This script will be treated as if it has the `is:inline` directive because it contains an attribute. Therefore, features that require processing (e.g. using TypeScript or npm packages in the script) a"
+      }
+    ],
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "551bb1bb11746e364014076099335a118cb3c62194bfafeea624bfcd72c05823",
+  "oracle": "astro_transform",
+  "reference": "astro_transform: 4.0.0",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

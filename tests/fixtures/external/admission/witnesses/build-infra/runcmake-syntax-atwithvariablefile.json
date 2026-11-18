@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-atwithvariablefile",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": "d> \"/usr/bin/cmake\" \"<REPO>/tests/fixtures/external/upstream/build-infra/cmake-runcmake-syntax/Tests/RunCMake/Syntax\" \"-G\" \"Unix Makefiles\" \"-DRunCMake_TEST=AtWithVariableFile\" \"--no-warn-unused-cli\" \"-DCMAKE_MAKE_PROGRAM=/usr/bin/make\"\n\n  Actual stdout:\n\n   actual-stdout> Not searching for unused variables given on the command line.\n   actual-stdout> -- Configuring incomplete, errors occurred!\n\n  Expected stderr to match:\n\n   expect-stderr> -->==>\\${right}<==\n   expect-stderr> ==><==\n   expect-stderr> ==>\\${right}<==\n   expect-stderr> ==><==\n   expect-stderr> <--\n\n  Actual stderr:\n\n   actual-stderr> CMake Error: File <REPO>/tests/fixtures/external/upstream/build-infra/cmake-runcmake-syntax/Tests/RunCMake/Syntax/atfile.txt.in does not exist.\n   actual-stderr> CMake Error at AtWithVariableFile.cmake:4 (configure_file):\n   actual-stderr>   configure_file Problem configuring file\n   actual-stderr> Call Stack (most recent call first):\n   actual-stderr>   CMakeLists.txt:3 (include)\n   actual-stderr> \n   actual-stderr> \n   actual-stderr> CMake Error at AtWithVariableFile.cmake:7 (file):\n   actual-stderr>   file failed to open for reading (No such file or directory):\n   actual-stderr> \n   actual-stderr>     <TMP>/out/AtWithVariableFile-build/atfile.txt\n   actual-stderr> Call Stack (most recent call first):\n   actual-stderr>   CMakeLists.txt:3 (include)\n   actual-stderr> \n   actual-stderr> \n   actual-stderr> --><--\n\nCall Stack (most recent call first):\n  driver.cmake:3 (run_cmake)\n\n\n",
+  "harness_passed": false,
+  "new_sha256": "4ff80ed70ab3e1cb63b3856add4e71e1ee3b45fd780574567ee583095b4bb3ba",
+  "old_sha256": "4ff80ed70ab3e1cb63b3856add4e71e1ee3b45fd780574567ee583095b4bb3ba",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "run_cmake(AtWithVariableFile) did not pass the harness (missing helper inputs or a version difference).",
+  "schema_version": 1,
+  "verdict": "inconclusive"
+}

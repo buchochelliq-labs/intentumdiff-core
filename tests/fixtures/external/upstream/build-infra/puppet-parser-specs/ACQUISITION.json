@@ -1,0 +1,74 @@
+{
+  "enumeration": {
+    "complete": null,
+    "method": "fixed file list"
+  },
+  "files": {
+    "LICENSE": {
+      "bytes": 11358,
+      "sha256": "094bedda295c0702807d1027a00e1134f4cb71d523dc49f6d4b3caf589053068",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/LICENSE"
+    },
+    "spec/unit/pops/parser/parse_basic_expressions_spec.rb": {
+      "bytes": 16436,
+      "sha256": "c3df99a27f624747e2bfcde051f48b70c962a404f71a00102c732568e2b5a0d3",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_basic_expressions_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_calls_spec.rb": {
+      "bytes": 5532,
+      "sha256": "69009f1082437cf0675083e2200c93e25c98ff478b7644538abe1af2436706e7",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_calls_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_conditionals_spec.rb": {
+      "bytes": 5408,
+      "sha256": "9f4784b61eddb365d48eb845f1b9f5bd64c43b0bb954913fbea8040a367bdbca",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_conditionals_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_containers_spec.rb": {
+      "bytes": 8785,
+      "sha256": "0752bfa5963bbfedd49cb62d206266eba079fb78d410c422aad93546c111afa4",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_containers_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_functions_spec.rb": {
+      "bytes": 553,
+      "sha256": "32ee15b3aa263ab00983eb282870b5c69f3c8122c351597fdfa2de4c3f0f02bd",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_functions_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_heredoc_spec.rb": {
+      "bytes": 6194,
+      "sha256": "47838127a46f449e52b50623f9a990193bd40d02b30a90c2f5520a9af586b30a",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_heredoc_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_lambda_spec.rb": {
+      "bytes": 567,
+      "sha256": "82beaf61d71f970ea48ff2d8f2237748da1542b0f20bb36aea9e173f67c8420b",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_lambda_spec.rb"
+    },
+    "spec/unit/pops/parser/parse_resource_spec.rb": {
+      "bytes": 10498,
+      "sha256": "908c4c64778f5e38b17038b32e2ea2722e0502be57032202510f4495f2805c76",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parse_resource_spec.rb"
+    },
+    "spec/unit/pops/parser/parser_rspec_helper.rb": {
+      "bytes": 365,
+      "sha256": "0fb5ec859b72ee5ae68cfe7003da6c5386afd6ac98fb1bd7e456832eaf3a1366",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parser_rspec_helper.rb"
+    },
+    "spec/unit/pops/parser/parser_spec.rb": {
+      "bytes": 7296,
+      "sha256": "78e4718656d977cca3a0a73d75fb51a14c89e675dbd4d981285acb60e08411a2",
+      "url": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/spec/unit/pops/parser/parser_spec.rb"
+    }
+  },
+  "method": "raw",
+  "ref": "main",
+  "repo": "puppetlabs/puppet",
+  "revision": "e227c27540975c25aa22d533a52424a9d2fc886a",
+  "suite_id": "puppet-parser-specs",
+  "url_template": "https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/{path}",
+  "verification": [
+    "ref main resolved to e227c27540975c25aa22d533a52424a9d2fc886a via proxy.golang.org Origin.Hash (2026-11-17)",
+    "every byte fetched from https://raw.githubusercontent.com/puppetlabs/puppet/e227c27540975c25aa22d533a52424a9d2fc886a/<path>; a nonexistent commit or path returns 404",
+    "compared with tag 8.10.0 (the released gem used as oracle): 11 files identical, differing: none; the tag itself could not be resolved to a commit (proxy.golang.org returned not found), so the pin is the main commit above"
+  ]
+}

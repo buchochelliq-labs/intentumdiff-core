@@ -1,0 +1,18 @@
+{
+  "case_id": "po-utf8-translator_comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "1f2ee9edc74bb1b795777222599403f95e2a8e0cf13aaf8d11ecb28aa3e3b7c2",
+  "observations": {
+    "new": {
+      "stderr": "f.po:23:1: syntax error\nmsgfmt: found 1 fatal error\n"
+    },
+    "old": {
+      "stderr": "f.po:6: warning: header field 'Language' missing in header\n"
+    }
+  },
+  "old_sha256": "5e11bc4f8079024e9dd319718d2839ff115e844719af98f23d4e14dce5235790",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,20 @@
+{
+  "case_id": "astro-printer-086",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "8f1f18fee5a8b4f9ad3fa2f3af71015ff278ceb89cb720dab0510124267cdb9b",
+  "observations": {
+    "diagnostics": [
+      {
+        "severity": 4,
+        "text": "This script will be treated as if it has the `is:inline` directive because it contains an attribute. Therefore, features that require processing (e.g. using TypeScript or npm packages in the script) a"
+      }
+    ],
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "8f1f18fee5a8b4f9ad3fa2f3af71015ff278ceb89cb720dab0510124267cdb9b",
+  "oracle": "astro_transform",
+  "reference": "astro_transform: 4.0.0",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

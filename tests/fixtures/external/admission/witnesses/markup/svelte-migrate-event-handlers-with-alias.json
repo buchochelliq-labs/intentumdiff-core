@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-event-handlers-with-alias",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "91b4d4708385c4ed7ea078edad8cac1f6155947301802e40e2bcac7e813271d4",
+  "observations": {
+    "crash": "ReferenceError: Button is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c8.mjs:18:2)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/10746"
+  },
+  "old_sha256": "33ac989ead386b9b25b10e0e055f38e3af39980d0c1d7770d344168c8ecd93de",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

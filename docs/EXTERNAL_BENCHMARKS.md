@@ -152,6 +152,7 @@ never 100%. No pooled average is computed.
 python scripts/import_external_benchmarks.py --validate
 python scripts/external_ledger.py validate
 python scripts/structured_family.py build --check      # the #265 fragment is current
+python scripts/markup_family.py build --check          # the #263 fragment is current
 python scripts/build_external_admission.py --check     # the ledger is current
 PYTHONPATH=<intentumdiff-python>/src python scripts/run_external_ledger.py \
   --parsers build/benchmark-inputs --native-library <libintentumdiff_rust_core.so> \
@@ -171,15 +172,17 @@ ledger:
 1. **Code families**: `scripts/external_families/*.py`, in sorted file-name order. Each module exposes
    `contribute(ctx)` and returns `{'suites', 'discovery', 'cases'}`, built with the builder's own helpers.
    Upstream bytes are vendored under `tests/fixtures/external/upstream/<suite_id>/`, and derived bytes go
-   under `admission/cases/<language>/`. #262 uses this mechanism.
+   under `admission/cases/<language>/`. #262 and #267 use this mechanism.
 2. **Fragment families**: `tests/fixtures/external/admission/families/*.json`, in sorted file-name order.
    The family's own deterministic tool generates each fragment and checks it with `--check`; the builder
-   merges it verbatim. #265 uses this mechanism.
+   merges it verbatim. #265 and #263 use this mechanism.
 
 The ledger and each fragment are deterministic build outputs, and both stay committed. Every consumer
 reads the committed ledger directly: the validator, the runner, the witness tools and the tooling tests.
 The CI baseline and the evidence also pin its SHA-256. The `--check` gates (`structured_family.py build
---check`, then `build_external_admission.py --check`) prove that the committed files match their inputs.
+--check` and `markup_family.py build --check` for the fragments, then `build_external_admission.py --check`,
+which also re-runs every code module and refuses to rewrite its derived case bytes) prove that the committed
+files match their inputs.
 
 A blocked acquisition (the ledger's top-level `blocked_acquisitions`) names the language, suite, lanes and reason. A blocked lane is shown as BLOCKED with
 that reason. It is never shown as a gap or a pass.
@@ -257,5 +260,68 @@ outside IntentumDiff:
 
 The W3C XML suite is a blocked acquisition (www.w3.org is unreachable), so `xml` is BLOCKED.
 
-The combined results for the first slice, #262 and #265, with minimised failures and blocked sources,
-are in `docs/evidence/2026-11-17-external-scorecard/README.md`.
+### #263 (web, markup and embedded: markdown, mdx, html, css, scss, vue, svelte, astro, latex, asciidoc, po, postscript, generic)
+
+The family contributes the fragment `tests/fixtures/external/admission/families/markup-263.json`, the second
+fragment family; it reuses the #265 expectation helpers and the shared parser-fidelity adapter.
+
+```sh
+python scripts/acquire_markup_benchmarks.py               # network: raw.githubusercontent.com at pinned commits, npm tarballs
+MARKUP_REF_NODE_MODULES=<node_modules with commonmark@0.31.2 sass@1.108.2 svelte@5.57.3 @vue/compiler-sfc@3.5.45
+  vue@3.5.45 @astrojs/compiler@4.0.0 @mdx-js/mdx@3.1.1> \
+MARKUP_REF_PYTHON=<python with html5lib 1.1, tinycss2 1.5.1, cmarkgfm 2025.10.22> \
+MARKUP_REF_ASCIIDOCTOR=<asciidoctor 2.0.26> \
+  python scripts/markup_family.py witness                 # also needs GNU msgfmt and TeX Live latex on PATH
+python scripts/markup_family.py build [--check]           # offline, deterministic fragment
+python scripts/build_external_admission.py [--check]
+```
+
+Parser-fidelity cases are verbatim upstream documents (CommonMark/GFM examples, WPT html5lib `#data`,
+css-parsing-tests inputs and Vue/Astro test sources are extracted byte-exact by each suite's own rule).
+Each claim is confirmed by a reference: the upstream expected HTML/tree/AST/CSS must be reproduced
+(commonmark.js, cmark-gfm, html5lib, tinycss2, Dart Sass), or the compiler/converter must accept it
+(Svelte, Vue, Astro, MDX, Asciidoctor without warnings, `msgfmt --check`, pdfTeX). CommonMark cases also
+carry the commonmark.js top-level block inventory (start byte of each block's first line). Change pairs
+are Svelte's own migrate input/output (`upstream_gold`, witnessed by equal server-rendered HTML) and
+bounded `reviewed_external_derived` edits (24 per derivation and suite) witnessed by rendered HTML,
+html5lib trees, tinycss2 ASTs, compiled CSS, SSR HTML, compiled modules, `.mo` bytes or DVI bytes.
+`postscript` (Ghostscript samples are AGPL-3.0) and `generic` (WikiAtomicEdits data answers 403) are
+blocked acquisitions.
+
+### #267 (build, configuration and infrastructure: dockerfile, hcl, gomod, gitignore, cmake, make, puppet)
+
+The family module is `scripts/external_families/family_267_build_infra.py`. Its `plan()` lists every case and is
+shared with the witness tool. `bash` and `powershell` are left to #266.
+
+```sh
+python scripts/acquire_build_infra_benchmarks.py          # network: Go module zips (sum.golang.org) and raw files
+(cd scripts/witness_tools/buildinfra && go build -o "$BUILDINFRA_TOOL" .)   # BuildKit v0.17.3, hcl v2.23.0, x/mod v0.22.0
+GEM_HOME=<gems with puppet 8.10.0> BUILDINFRA_TOOL=... \
+  python scripts/build_infra_witness.py extract           # GNU Make harness makefiles + puppet spec manifests
+GEM_HOME=... BUILDINFRA_TOOL=... python scripts/build_infra_witness.py witness
+python scripts/build_external_admission.py [--check]
+```
+
+The witness tool also needs go1.24.7, git 2.43.0, cmake 3.28.3, GNU Make 4.3 and Perl. A missing tool
+produces a `blocked` record, and a blocked record never admits a case.
+
+The oracles run outside IntentumDiff:
+
+- **dockerfile:** BuildKit `parser.Parse`, which must reproduce each upstream `result` dump, and
+  `instructions.Parse` typed instruction lists for pairs.
+- **hcl:** `hclsyntax.ParseConfig` acceptance, and an information-model projection for pairs (`hclwrite.Format`
+  makes the canonical-format pairs).
+- **gomod:** `modfile.Parse` and `go mod edit -json`.
+- **gitignore:** git reproducing the t0008 expectations, and `check-ignore` sets over a fixed universe for pairs.
+- **cmake:** the upstream RunCMake harness, and configure-output equality for pairs.
+- **make:** the upstream `run_make_tests.pl` harness, and make-output equality for pairs.
+- **puppet:** `Parser#parse_string` as the specs call it, and normalised catalog equality for pairs.
+
+IaC-Eval and Shipwright are blocked acquisitions.
+
+### Combined results
+
+The first slice, #262, #265, #263 and #267 share one ledger and one runner report. The combined results,
+measured on the components locked to registry `eb02686` (#21), with minimised failures and blocked sources
+for every family, are in `docs/evidence/2026-11-17-external-scorecard/README.md`. Its `results.json` is the
+CI regression baseline.

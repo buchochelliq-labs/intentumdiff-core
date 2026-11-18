@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "t0008-setup-a-gitignore-parse",
+  "engines": [
+    {
+      "name": "git",
+      "version": "git version 2.43.0"
+    }
+  ],
+  "new_sha256": "d3d9d4711be7e11c8ec4a9fe64988fca15ef503b8ac6c49f883d03199412ff92",
+  "old_sha256": "d3d9d4711be7e11c8ec4a9fe64988fca15ef503b8ac6c49f883d03199412ff92",
+  "oracle": "git_t0008_reproduction",
+  "reference_accepts": true,
+  "review": "git reproduces the t0008 `setup` expectation with this file in place.",
+  "schema_version": 1,
+  "t0008": {
+    "actual": ".gitignore:1:one\tone\n.gitignore:1:one\ta/one\na/b/.gitignore:8:!on*\ta/b/on\na/b/.gitignore:8:!on*\ta/b/one\na/b/.gitignore:8:!on*\ta/b/one one\na/b/.gitignore:8:!on*\ta/b/one two\na/b/.gitignore:8:!on*\t\"a/b/one\\\"three\"\na/b/.gitignore:9:!two\ta/b/two\na/.gitignore:1:two*\ta/b/twooo\nglobal-excludes:2:!globaltwo\tglobaltwo\nglobal-excludes:2:!globaltwo\ta/globaltwo\nglobal-excludes:2:!globaltwo\ta/b/globaltwo\nglobal-excludes:2:!globaltwo\tb/globaltwo\n",
+    "command": "git -c core.excludesfile=global-excludes check-ignore --stdin -v",
+    "exit_status": 0,
+    "expected": ".gitignore:1:one\tone\n.gitignore:1:one\ta/one\na/b/.gitignore:8:!on*\ta/b/on\na/b/.gitignore:8:!on*\ta/b/one\na/b/.gitignore:8:!on*\ta/b/one one\na/b/.gitignore:8:!on*\ta/b/one two\na/b/.gitignore:8:!on*\t\"a/b/one\\\"three\"\na/b/.gitignore:9:!two\ta/b/two\na/.gitignore:1:two*\ta/b/twooo\nglobal-excludes:2:!globaltwo\tglobaltwo\nglobal-excludes:2:!globaltwo\ta/globaltwo\nglobal-excludes:2:!globaltwo\ta/b/globaltwo\nglobal-excludes:2:!globaltwo\tb/globaltwo\n",
+    "stdin": "one\nnot-ignored\na/one\na/not-ignored\na/b/on\na/b/one\na/b/one one\n\"a/b/one two\"\n\"a/b/one\\\"three\"\na/b/not-ignored\na/b/two\na/b/twooo\nglobaltwo\na/globaltwo\na/b/globaltwo\nb/globaltwo\n"
+  },
+  "verdict": "supports_claim"
+}

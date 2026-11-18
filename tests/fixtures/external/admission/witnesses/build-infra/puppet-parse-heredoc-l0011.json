@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-heredoc-l0011",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "2748d67d5f80d75766a2cb6f5505a82c45201f734a312c0444186cd01ed3cd03",
+  "old_sha256": "2748d67d5f80d75766a2cb6f5505a82c45201f734a312c0444186cd01ed3cd03",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

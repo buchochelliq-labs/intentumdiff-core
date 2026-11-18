@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-automatic-01",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "$? = bar\n",
+    "line": 102,
+    "options": "",
+    "script": "variables/automatic"
+  },
+  "new_sha256": "6655af46587a55cdc850b3294b8b8a4a9ee1361dec0558a9693020480140424f",
+  "old_sha256": "6655af46587a55cdc850b3294b8b8a4a9ee1361dec0558a9693020480140424f",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

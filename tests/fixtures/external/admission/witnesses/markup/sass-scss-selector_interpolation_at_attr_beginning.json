@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-selector_interpolation_at_attr_beginning",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "b4e4ad116ff2a77808493c4e3d6f954c5376d05a1ecc66be870cdd4d4b62bab5",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "b4e4ad116ff2a77808493c4e3d6f954c5376d05a1ecc66be870cdd4d4b62bab5",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

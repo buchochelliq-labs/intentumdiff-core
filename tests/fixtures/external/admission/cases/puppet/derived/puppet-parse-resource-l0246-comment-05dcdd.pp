@@ -1,0 +1,2 @@
+# probe
+notify { "thisisa[bug]": }

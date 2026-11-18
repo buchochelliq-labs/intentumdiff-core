@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-bracketcomment5",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "b3826215ebb309db5d98cd5632dc71babb2938b919ab79af6a9f8f307e619b43",
+  "old_sha256": "b3826215ebb309db5d98cd5632dc71babb2938b919ab79af6a9f8f307e619b43",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(BracketComment5) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

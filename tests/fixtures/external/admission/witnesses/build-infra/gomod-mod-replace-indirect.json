@@ -1,0 +1,48 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "gomod-mod-replace-indirect",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "quoter"
+    },
+    "Replace": null,
+    "Require": [
+      {
+        "Indirect": true,
+        "Path": "rsc.io/quote/v3",
+        "Version": "v3.0.0"
+      }
+    ],
+    "Retract": null,
+    "Tool": null
+  },
+  "new_sha256": "9d773f8c5fd9ea93002a033580f434c3c70abfb4cba630d8d5fa71450bd6dceb",
+  "old_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "quoter"
+    },
+    "Replace": null,
+    "Require": [
+      {
+        "Path": "rsc.io/quote/v3",
+        "Version": "v3.0.0"
+      }
+    ],
+    "Retract": null,
+    "Tool": null
+  },
+  "old_sha256": "6c65c306d62b5f69517da69692e0f01b466993a3447d48e3d8d3887183187dc5",
+  "oracle": "go_mod_edit_json_equality",
+  "projection_equal": false,
+  "review": "cmd/go `go mod edit -json`: the module JSON documents differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

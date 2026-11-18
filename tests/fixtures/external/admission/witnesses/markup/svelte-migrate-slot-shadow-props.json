@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-slot-shadow-props",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c573b1e7716b0e865aa7e6576430d6639334b5f5ccdc9b0a48d8eef29d180c01",
+  "observations": {
+    "crash": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/Component.svelte' imported from /tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c46.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:275:11)\n    at moduleResolve (node:internal"
+  },
+  "old_sha256": "6abbf816d1465ae1d7b1504ab7c5e8de0d7aa39809bbe2fa84a4b1c5efb28c1e",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

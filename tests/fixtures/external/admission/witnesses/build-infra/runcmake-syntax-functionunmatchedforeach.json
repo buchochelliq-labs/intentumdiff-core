@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-functionunmatchedforeach",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "6bae9f216a293c8625cb3f939845335a5e4b9672f1153c56d56844f91080570b",
+  "old_sha256": "6bae9f216a293c8625cb3f939845335a5e4b9672f1153c56d56844f91080570b",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(FunctionUnmatchedForeach) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

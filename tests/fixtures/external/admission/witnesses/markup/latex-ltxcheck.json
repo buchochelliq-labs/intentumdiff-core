@@ -1,0 +1,15 @@
+{
+  "case_id": "latex-ltxcheck",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "0f4a3943b52216e07db302ce5479e3f08e76569a58bb1f0f13fce0d04c0e6290",
+  "observations": {
+    "error": "! Emergency stop.",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "0f4a3943b52216e07db302ce5479e3f08e76569a58bb1f0f13fce0d04c0e6290",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

@@ -1,0 +1,16 @@
+{
+  "case_id": "po-merge-before",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "efa4eec050453f8cafb5bc3a1591d06057544695ba2ce53e0db3cc4c5b9d8aec",
+  "observations": {
+    "mo_sha256": "318d8af88c70d85f17124c19dc5e217bd2224fd66bc6c37819d65bd375b46d2c",
+    "reference_accepts": true,
+    "stderr": "f.po:6: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "efa4eec050453f8cafb5bc3a1591d06057544695ba2ce53e0db3cc4c5b9d8aec",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

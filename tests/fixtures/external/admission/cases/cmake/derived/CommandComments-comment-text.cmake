@@ -1,0 +1,6 @@
+message("Example Message"#)
+        )
+message ("Example Message" # )
+        )
+message( "Example Message\n" # "Commented out" )
+         "Second Line of Example")

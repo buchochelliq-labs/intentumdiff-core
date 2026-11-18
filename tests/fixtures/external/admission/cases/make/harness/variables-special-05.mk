@@ -1,0 +1,4 @@
+
+.RECIPEPREFIX = :
+foo:
+        bar

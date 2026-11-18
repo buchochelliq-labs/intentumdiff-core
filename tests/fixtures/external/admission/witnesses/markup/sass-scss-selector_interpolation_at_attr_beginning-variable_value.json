@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-scss-selector_interpolation_at_attr_beginning-variable_value",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "16125571c436f6fdeddb2afba85dc79e089f63725111ac4ad25543e7ce448e6a",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "b4e4ad116ff2a77808493c4e3d6f954c5376d05a1ecc66be870cdd4d4b62bab5",
+  "oracle": "sass_equal",
+  "reference": "sass_equal: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

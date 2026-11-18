@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-namewithescapedspacesquoted",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "d0a2cf1386797ce46242403570e8f30218ef1c2e2af52eda0d762b3e9d86004a",
+  "old_sha256": "d0a2cf1386797ce46242403570e8f30218ef1c2e2af52eda0d762b3e9d86004a",
+  "oracle": "runcmake_harness",
+  "reference_accepts": true,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(NameWithEscapedSpacesQuoted) on cmake 3.28.3.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

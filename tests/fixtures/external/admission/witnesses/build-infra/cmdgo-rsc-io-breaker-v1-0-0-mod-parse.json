@@ -1,0 +1,34 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "cmdgo-rsc-io-breaker-v1-0-0-mod-parse",
+  "cmd_go_error": null,
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "7d20df90fdfee116a4593bd790de38e15ee0c2629d651c2e235b2b7838e6e325",
+  "old_sha256": "7d20df90fdfee116a4593bd790de38e15ee0c2629d651c2e235b2b7838e6e325",
+  "oracle": "gomod_parse",
+  "reference_accepts": true,
+  "review": "modfile.Parse and `go mod edit -json` both accept the file.",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [
+    0
+  ],
+  "verdict": "supports_claim",
+  "xmod_error": null
+}

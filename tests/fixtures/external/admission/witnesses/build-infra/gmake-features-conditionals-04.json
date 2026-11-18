@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-conditionals-04",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "one\n",
+    "line": 145,
+    "options": "",
+    "script": "features/conditionals"
+  },
+  "new_sha256": "521e92d4a9bc1c25acc48a6b978fea43f25470fb09ec8dbe01c9f9b2b122bcbf",
+  "old_sha256": "521e92d4a9bc1c25acc48a6b978fea43f25470fb09ec8dbe01c9f9b2b122bcbf",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,18 @@
+{
+  "case_id": "po-previous-msgid-translator_comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "effc7bc855da36de80d1201058687a753c3e4bce135007e33ea6a527bcf41216",
+  "observations": {
+    "new": {
+      "stderr": "f.po:14:1: syntax error\nmsgfmt: found 1 fatal error\n"
+    },
+    "old": {
+      "stderr": "d 'Last-Translator' missing in header\nf.po:3: warning: header field 'Language-Team' missing in header\nf.po:3: warning: header field 'MIME-Version' missing in header\nf.po:3: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:3: warning: header field 'Language' missing in header\n"
+    }
+  },
+  "old_sha256": "5fb62138104584c4fcbed1421af3efc4d27dfd146c56553b01aba624ad2a0cba",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-animation-text_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "f81d41b787bc6be1dbabb6dddeaa52a999bb831c7c4332db129f8a952b4f6fb1",
+  "observations": {
+    "crash": "ReferenceError: things is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c30.mjs:6:41)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/1074"
+  },
+  "old_sha256": "9bbba5cfe744114413972d221b762ab3d45c1e1d8d111d77b235707c44000f15",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

@@ -59,14 +59,32 @@
   witnessed by reference implementations (`scripts/acquire_structured_benchmarks.py`,
   `scripts/structured_family.py`). The W3C XML suite is a recorded blocked acquisition, so
   `xml` is BLOCKED in both lanes, never a gap or a pass.
+- Admit the #263 web, markup and embedded family: `markdown`, `mdx`, `html`, `css`, `scss`,
+  `vue`, `svelte`, `astro`, `latex`, `asciidoc` and `po`; 2,160 admitted cases from pinned
+  upstream suites (CommonMark and GFM specs, WPT html5lib tree construction, css-parsing-tests,
+  sass-spec, Svelte, Vue compiler-sfc and Astro compiler tests, MDX docs, Asciidoctor DocTest,
+  polib fixtures, LaTeX2e documents), witnessed by reference renderers and compilers
+  (`scripts/acquire_markup_benchmarks.py`, `scripts/markup_family.py`). `postscript` (licence)
+  and `generic` (WikiAtomicEdits unreachable) are recorded blocked acquisitions.
+- Admit the #267 build, configuration and infrastructure family: `dockerfile`, `hcl`,
+  `gomod`, `gitignore`, `cmake`, `make` and `puppet`; 761 admitted cases from pinned
+  upstream suites (BuildKit parser testfiles, HCL specsuite and Terraform testdata, x/mod
+  and cmd/go testdata, git t0008, CMake RunCMake Syntax, GNU Make tests, puppet parser
+  specs), witnessed by BuildKit, hclsyntax, `modfile.Parse`/`go mod edit -json`, git,
+  CMake, GNU Make and puppet (`scripts/acquire_build_infra_benchmarks.py`,
+  `scripts/build_infra_witness.py`, code module `family_267_build_infra.py`). IaC-Eval and
+  Shipwright are recorded blocked acquisitions; `bash` and `powershell` are left to #266.
 - The ledger builder merges family contributions in a fixed order: code modules under
   `scripts/external_families/`, then generated fragments under `admission/families/`. One
   parser-fidelity adapter judges `expected.parse` must-accept / must-reject claims and
   reference statement inventories; parser-fidelity rows score valid-acceptance and
   invalid-rejection rates, not change facts.
-- One combined scorecard for the first slice, #262 and #265 (2,133 admitted cases, 58 IDs
-  without a measured lane) in `docs/evidence/2026-11-17-external-scorecard/`; it is the CI
-  regression baseline, and CI also runs `structured_family.py build --check`.
+- One combined scorecard for the first slice, #262, #265, #263 and #267 (5,054 admitted
+  cases: 4,129 passed, 906 failed, 19 unsupported; 40 IDs without a measured lane) in
+  `docs/evidence/2026-11-17-external-scorecard/`, measured on the registry #21 components;
+  the separate -265 and -267 runs are folded into it. It is the CI regression baseline, and
+  CI also runs `structured_family.py build --check` and `markup_family.py build --check`
+  before `build_external_admission.py --check`, which re-runs the #262 and #267 code modules.
 - Consume the verified C/C++ component preserving character-literal payloads,
   prefixes, escapes and byte spans. Wider 0.0.3 acceptance remains open.
 

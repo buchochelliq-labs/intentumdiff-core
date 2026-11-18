@@ -1,0 +1,6 @@
+message("Example Message")
+message ("Example Message")
+message( "Example Message" )
+message( "Example message")
+  message  ( "Example Message")
+message ( Example " " Message )

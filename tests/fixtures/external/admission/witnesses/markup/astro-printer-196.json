@@ -1,0 +1,20 @@
+{
+  "case_id": "astro-printer-196",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "29f4e5ee1072c1f78f7945d127c194e7efffd76c33f1a59ea63ab95d1f79b709",
+  "observations": {
+    "diagnostics": [
+      {
+        "severity": 2,
+        "text": "set:html directive will overwrite child nodes."
+      }
+    ],
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "29f4e5ee1072c1f78f7945d127c194e7efffd76c33f1a59ea63ab95d1f79b709",
+  "oracle": "astro_transform",
+  "reference": "astro_transform: 4.0.0",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

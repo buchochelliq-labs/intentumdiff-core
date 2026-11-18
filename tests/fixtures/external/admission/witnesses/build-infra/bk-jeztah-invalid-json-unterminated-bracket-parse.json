@@ -1,0 +1,30 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-jeztah-invalid-json-unterminated-bracket-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "7d5ab8e482aa425c7ff1eef1d924adf4c210d1453dbed6c4a1ff0f80fbc40258",
+  "old_sha256": "7d5ab8e482aa425c7ff1eef1d924adf4c210d1453dbed6c4a1ff0f80fbc40258",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

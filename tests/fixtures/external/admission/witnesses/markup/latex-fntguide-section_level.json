@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-fntguide-section_level",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "0f61d19913a3d9b8a37e06d2adba3b83c0da8eed49f53e734133d20d9d662064",
+  "observations": {
+    "new": {
+      "error": "! LaTeX Error: File `fewerfloatpages.sty' not found.",
+      "missing": [
+        "fewerfloatpages.sty"
+      ]
+    },
+    "old": {
+      "error": "! LaTeX Error: File `fewerfloatpages.sty' not found.",
+      "missing": [
+        "fewerfloatpages.sty"
+      ]
+    }
+  },
+  "old_sha256": "9c21a7f2416e238f745216a1454f5245d004453c45c0bbdf8b2b2e5d3e121740",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

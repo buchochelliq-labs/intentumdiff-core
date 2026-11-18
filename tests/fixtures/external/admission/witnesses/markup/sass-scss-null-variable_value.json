@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-scss-null-variable_value",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "582f4f0999720a2e4eb69c6c0c54af0ad48a7db07ad27dbf4658bcf3e2d1bfa4",
+  "observations": {
+    "reference_equal": true
+  },
+  "old_sha256": "f772d1ab9b83787f91d8bfd5ec081920c094af1fc4cd4998af0c859b8d4fc52e",
+  "oracle": "sass_equal",
+  "reference": "sass_equal: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference says equal; claim changed",
+  "verdict": "contradicts_claim"
+}

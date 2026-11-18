@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-resource-l0161",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "66c64de8633d3437fc61a8ba63612c94ed001967d2219caa1b101f7161a9e9c8",
+  "old_sha256": "66c64de8633d3437fc61a8ba63612c94ed001967d2219caa1b101f7161a9e9c8",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseErrorWithIssue: Syntax error at ':' (line: 1, column: 8)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseErrorWithIssue: Syntax error at ':' (line: 1, column: 8), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "sass-scss-while_without_condition",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2b1f3f30c55cd954cd7065e862211dda05c9e369bfaefe0bf81ebd2ddba87708",
+  "observations": {
+    "error": "Expected expression."
+  },
+  "old_sha256": "2b1f3f30c55cd954cd7065e862211dda05c9e369bfaefe0bf81ebd2ddba87708",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass rejects, but not with a syntax error",
+  "verdict": "inconclusive"
+}

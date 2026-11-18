@@ -1,0 +1,24 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-syntax-bracketnospace2",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    },
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    }
+  ],
+  "harness": "Tests/RunCMake/RunCMake.cmake run_cmake() with RunCMakeTest.cmake preamble (RunCMake_IGNORE_POLICY_VERSION_DEPRECATION ON)",
+  "harness_log_tail": null,
+  "harness_passed": true,
+  "new_sha256": "8cfa605fe244b453e1865fa65bc75d1c1c3a9ba36ef3b9c952711edd5580a7fe",
+  "old_sha256": "8cfa605fe244b453e1865fa65bc75d1c1c3a9ba36ef3b9c952711edd5580a7fe",
+  "oracle": "runcmake_harness",
+  "reference_accepts": false,
+  "review": "The RunCMake harness reproduces the upstream result/stdout/stderr expectation for run_cmake(BracketNoSpace2) on cmake 3.28.3; that expectation is a parse error in this file.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

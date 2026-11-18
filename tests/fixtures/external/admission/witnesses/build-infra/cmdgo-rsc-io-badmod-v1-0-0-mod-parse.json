@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "cmdgo-rsc-io-badmod-v1-0-0-mod-parse",
+  "cmd_go_error": "go: errors parsing go.mod:\n<TMP>/go.mod:2: unknown directive: hello",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "3bcd8d14d93e30b1a422cf39d7ab33a38788a8751009128b0b543f2a4393b320",
+  "old_sha256": "3bcd8d14d93e30b1a422cf39d7ab33a38788a8751009128b0b543f2a4393b320",
+  "oracle": "gomod_parse",
+  "reference_accepts": false,
+  "review": "the reference rejects the file: go.mod:2: unknown directive: hello",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [],
+  "verdict": "contradicts_claim",
+  "xmod_error": "go.mod:2: unknown directive: hello"
+}

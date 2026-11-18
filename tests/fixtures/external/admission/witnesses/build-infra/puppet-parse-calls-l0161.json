@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-calls-l0161",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "d5399a2dafdf4ad91f2b1d053c5c795620ff0b29d07287ef417f6bd0fa8ade3b",
+  "old_sha256": "d5399a2dafdf4ad91f2b1d053c5c795620ff0b29d07287ef417f6bd0fa8ade3b",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseError: attempt to pass argument list to the function 'foo' which cannot be called without parentheses (line: 1, column: 7)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseError: attempt to pass argument list to the function 'foo' which cannot be called without parentheses (line: 1, column: 7), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

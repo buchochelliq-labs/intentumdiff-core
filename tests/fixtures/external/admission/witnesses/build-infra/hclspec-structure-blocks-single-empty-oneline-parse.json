@@ -1,0 +1,29 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hclspec-structure-blocks-single-empty-oneline-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "7df2d3ac857ea507c490dff0dd16dff64a2af0cd694613bc30a1800c12e1b118",
+  "old_sha256": "7df2d3ac857ea507c490dff0dd16dff64a2af0cd694613bc30a1800c12e1b118",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax).",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    0
+  ],
+  "verdict": "supports_claim"
+}

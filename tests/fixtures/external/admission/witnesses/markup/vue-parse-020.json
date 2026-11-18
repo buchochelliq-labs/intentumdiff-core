@@ -1,0 +1,17 @@
+{
+  "case_id": "vue-parse-020",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "39772365cbf6cc6189f4a3a319189c45a5167568d8c69efcee83222fec816476",
+  "observations": {
+    "errors": [
+      "Single file component can contain only one <script> element"
+    ],
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "39772365cbf6cc6189f4a3a319189c45a5167568d8c69efcee83222fec816476",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

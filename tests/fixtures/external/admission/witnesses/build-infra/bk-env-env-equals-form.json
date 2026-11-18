@@ -1,0 +1,428 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-env-env-equals-form",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu",
+        "commands": [
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "value2"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"value value1\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value\\ value2"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"value'quote space'value2\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'value\"double quote\"value2'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value\\ value2"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "value2\\ value3"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"a\\\"b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"a\\'b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\'b'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\'b''"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\\"b'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"''\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                },
+                {
+                  "Key": "name1",
+                  "Value": "value1"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "\"value2a            value2b\""
+                },
+                {
+                  "Key": "name3",
+                  "Value": "\"value3a\\n\\\"value3b\\\"\""
+                },
+                {
+                  "Key": "name4",
+                  "Value": "\"value4a\\\\nvalue4b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "new_sha256": "926c89f002333790cca4cf1ce5e95e0d56f5c684676f1ad51b7b3dd5dba188cb",
+  "old_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu",
+        "commands": [
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "value2"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"value value1\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value\\ value2"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"value'quote space'value2\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'value\"double quote\"value2'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value\\ value2"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "value2\\ value3"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"a\\\"b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"a\\'b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\'b'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\'b''"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "'a\\\"b'"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "\"''\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "name",
+                  "Value": "value"
+                },
+                {
+                  "Key": "name1",
+                  "Value": "value1"
+                },
+                {
+                  "Key": "name2",
+                  "Value": "\"value2a            value2b\""
+                },
+                {
+                  "Key": "name3",
+                  "Value": "\"value3a\\n\\\"value3b\\\"\""
+                },
+                {
+                  "Key": "name4",
+                  "Value": "\"value4a\\\\nvalue4b\""
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "old_sha256": "b77a85e129749b995a6b0b7132d248be64df7ce841efc5e58cc29f9bf33e6fd3",
+  "oracle": "buildkit_instructions_equality",
+  "projection_equal": true,
+  "review": "BuildKit instructions.Parse: the typed instruction lists equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

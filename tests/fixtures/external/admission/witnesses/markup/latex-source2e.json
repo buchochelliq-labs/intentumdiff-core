@@ -1,0 +1,16 @@
+{
+  "case_id": "latex-source2e",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "5af54fbcf3bb2a092b0adbc0d77a0f028fce0407d33669fd5d27dbc9ca682fd1",
+  "observations": {
+    "error": "! LaTeX Error: File `alphalph.sty' not found.",
+    "missing": [
+      "alphalph.sty"
+    ]
+  },
+  "old_sha256": "5af54fbcf3bb2a092b0adbc0d77a0f028fce0407d33669fd5d27dbc9ca682fd1",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "document needs files absent from the reference TeX installation",
+  "verdict": "inconclusive"
+}

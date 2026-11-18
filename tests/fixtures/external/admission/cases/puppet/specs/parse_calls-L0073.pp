@@ -1,0 +1,2 @@
+notice foo
+(42)

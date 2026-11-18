@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-svelte-self-name-conflict",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "7b3a92956bc2479f6c77aab3a8ecdd0d2ff6b3b1843f5e42e794d507f18606e4",
+  "observations": {
+    "crash": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/output.svelte' imported from /tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c17.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:275:11)\n    at moduleResolve (node:internal/mo"
+  },
+  "old_sha256": "bd5e89c9c1a8925b7c4d62f56c9f82f4c5af1ce2b63dc180671212ada27f2533",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed on the new side",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,17 @@
+{
+  "case_id": "vue-parse-013",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2aad4470d4ec9123cbb0cf882e2e5ed466d8987d631a2aac645e83b0e71d8287",
+  "observations": {
+    "errors": [
+      "Element is missing end tag."
+    ],
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "2aad4470d4ec9123cbb0cf882e2e5ed466d8987d631a2aac645e83b0e71d8287",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

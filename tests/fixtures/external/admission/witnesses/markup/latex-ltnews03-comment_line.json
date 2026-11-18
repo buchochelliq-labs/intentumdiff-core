@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-ltnews03-comment_line",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "78b5425c8ccf13765821074dfa8d9fdb0bbd7aea21ad318e4e7b4d72f2697820",
+  "observations": {
+    "new": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    },
+    "old": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    }
+  },
+  "old_sha256": "4bc43a81a26870030f16f36e11026afbf8b0cc8f66a0d55847815d1cf1ba921e",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

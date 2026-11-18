@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "runcmake-bracket1-bracket-to-quoted",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "1 ${var} \\n 4]==\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "new_sha256": "2d2122b35c35dde2a79dbe208d3c060d1849aa44c1d762d3b7b3f4c858363c7d",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "1 ${var} \\n 4]==\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "old_sha256": "4610b39dcbdcba3ae8807fe40d11f2cd27a59f6e7a64f985439e9c522feb8cde",
+  "oracle": "cmake_configure_output_equality",
+  "projection_equal": true,
+  "review": "cmake 3.28.3 configure: exit status, stdout and stderr equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

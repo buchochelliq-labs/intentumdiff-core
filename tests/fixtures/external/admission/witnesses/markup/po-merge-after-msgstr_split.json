@@ -1,0 +1,15 @@
+{
+  "case_id": "po-merge-after-msgstr_split",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "846551f2cd50124b5f38139032e2b2cc8f4171a966e5db80945dbc3b5d4e31bc",
+  "observations": {
+    "new_mo_sha256": "b4075b8211835233602f2c0f3bc449806c8d20f8ed3d146b60c4672fb551f5a3",
+    "old_mo_sha256": "b4075b8211835233602f2c0f3bc449806c8d20f8ed3d146b60c4672fb551f5a3",
+    "reference_equal": true
+  },
+  "old_sha256": "4513a136dcfadcc2b55ad50453703e57ba6ee56c804a9370d3c1e847c3ce6ed5",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

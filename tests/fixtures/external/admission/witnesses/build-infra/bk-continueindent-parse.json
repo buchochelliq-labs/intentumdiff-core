@@ -1,0 +1,39 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-continueindent-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "2e457d2e38548c9a9c34a2d91ea28fb6886570e339511d815a11356a8af792e8",
+  "old_sha256": "2e457d2e38548c9a9c34a2d91ea28fb6886570e339511d815a11356a8af792e8",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0,
+    19,
+    81,
+    107,
+    131,
+    162,
+    188,
+    231,
+    254,
+    280
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

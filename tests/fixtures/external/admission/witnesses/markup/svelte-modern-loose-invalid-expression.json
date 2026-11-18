@@ -1,0 +1,15 @@
+{
+  "case_id": "svelte-modern-loose-invalid-expression",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "4bac535a27cc0b76bac7def31035d4cd66abd5785fe4668a3ec381ae97aa59eb",
+  "observations": {
+    "error": "Attribute shorthand cannot be empty\nhttps://svelte.dev/e/attribute_empty_shorthand",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "4bac535a27cc0b76bac7def31035d4cd66abd5785fe4668a3ec381ae97aa59eb",
+  "oracle": "svelte_parse",
+  "reference": "svelte_parse: 5.57.3",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

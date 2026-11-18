@@ -1,0 +1,16 @@
+{
+  "case_id": "po-merge",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "d12ef545c40980ad6c4f996c7ceba6679036339d0f04b6ea418d914b6833715b",
+  "observations": {
+    "mo_sha256": "eebd86cf34142264d1d97458b2c1e0ee947b227e3ba5fe4d91f51579c11d6f3d",
+    "reference_accepts": true,
+    "stderr": "ot work.\nf.po:3: warning: header field 'PO-Revision-Date' still has the initial default value\nf.po:3: warning: header field 'Last-Translator' missing in header\nf.po:3: warning: header field 'Content-Type' still has the initial default value\nf.po:3: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "d12ef545c40980ad6c4f996c7ceba6679036339d0f04b6ea418d914b6833715b",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

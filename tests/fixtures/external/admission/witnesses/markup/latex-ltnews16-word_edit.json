@@ -1,0 +1,24 @@
+{
+  "case_id": "latex-ltnews16-word_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "328173795946e85dafff2df40cf424807f335f28ddc2b921556dc107add58656",
+  "observations": {
+    "new": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    },
+    "old": {
+      "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+      "missing": [
+        "pdfmanagement-testphase.sty"
+      ]
+    }
+  },
+  "old_sha256": "7dfcfc149a8f0c7a8606b6f530c0e03fef3f75719a5f1bc46bcd01abc95a7d5e",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

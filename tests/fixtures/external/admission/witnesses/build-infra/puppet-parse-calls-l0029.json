@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-calls-l0029",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "1f6c2fca65dd13d8a3d943abab72d2d9faa3194b3814bb615b873910a25448a7",
+  "old_sha256": "1f6c2fca65dd13d8a3d943abab72d2d9faa3194b3814bb615b873910a25448a7",
+  "oracle": "puppet_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "Puppet 8.10.0 Parser#parse_string accepts, as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

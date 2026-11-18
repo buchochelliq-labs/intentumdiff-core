@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-multiple-operators",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "d6b5e5fb6b389372e5d881be6b2052edc847a68db4ccd9a89b2af28399bb0181",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "d6b5e5fb6b389372e5d881be6b2052edc847a68db4ccd9a89b2af28399bb0181",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

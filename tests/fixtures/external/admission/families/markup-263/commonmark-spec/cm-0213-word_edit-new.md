@@ -1,0 +1,4 @@
+Foox
+[bar]: /baz
+
+[bar]

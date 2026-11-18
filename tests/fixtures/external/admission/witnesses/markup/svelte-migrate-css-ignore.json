@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-css-ignore",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "f664f1dc80824cc8e2c83054512d3f407bafaa9a7c631bff1fd397caea577490",
+  "observations": {
+    "crash": "css_expected_identifier: Expected a valid CSS identifier\nhttps://svelte.dev/e/css_expected_identifier\nFixture.svelte:8:1\n 6: \n 7: <style lang=\"scss\">\n 8:   $font-stack: Helvetica, sans-serif;\n      ^\n 9:   $primary-color: #333;\n10: "
+  },
+  "old_sha256": "c35f0414918554d03d6e73deecc0ff77edc0541d847e1f6972c93c396ae958a1",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

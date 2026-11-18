@@ -1,0 +1,8 @@
+$x: 1x;
+$y: 2;
+
+@foo $x $y, hux {
+  bar {
+    whatever: whatever;
+  }
+}

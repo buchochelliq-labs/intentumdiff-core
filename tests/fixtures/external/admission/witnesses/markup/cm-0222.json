@@ -1,0 +1,22 @@
+{
+  "case_id": "cm-0222",
+  "executed_utc": "2026-11-17T23:30:27+00:00",
+  "new_sha256": "801b140ed5a3cab2199f34921a3ea9a38801ea8fea03942d547150fe248bb4f9",
+  "observations": {
+    "html_equal": true,
+    "inventory": {
+      "count": 1,
+      "evidence": "commonmark.js 0.31.2 top-level block sourcepos (first line start byte); every non-blank line belongs to a top-level block",
+      "starts": [
+        0
+      ]
+    },
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "801b140ed5a3cab2199f34921a3ea9a38801ea8fea03942d547150fe248bb4f9",
+  "oracle": "commonmark_example",
+  "reference": "commonmark_example: 0.31.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

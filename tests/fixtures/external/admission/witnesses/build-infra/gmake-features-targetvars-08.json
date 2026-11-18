@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-targetvars-08",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "$FOO BAR\n",
+    "line": 221,
+    "options": "",
+    "script": "features/targetvars"
+  },
+  "new_sha256": "260df13ab08f3e0a40953dca471209eeedd409a1224bd80d03fb139e133acc0a",
+  "old_sha256": "260df13ab08f3e0a40953dca471209eeedd409a1224bd80d03fb139e133acc0a",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

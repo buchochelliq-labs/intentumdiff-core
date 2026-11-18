@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-block-golden",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": null,
+  "new_sha256": "83fc7586efc53825bea17b058fa5affd03724060af3e3be4d8ef00a85c62bb3a",
+  "old_observation": null,
+  "old_sha256": "59a8111665c432d4bff4c51cf90af759a3f9c1695614fa59d919cfc7f09e33aa",
+  "oracle": "go_mod_edit_json_equality",
+  "review": "the reference did not accept both sides",
+  "schema_version": 1,
+  "verdict": "inconclusive"
+}

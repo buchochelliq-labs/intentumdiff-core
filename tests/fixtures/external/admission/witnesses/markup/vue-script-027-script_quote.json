@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-027-script_quote",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "6bc2522e4a8733b557dca45f424a7a7207443a5b956ab3b12df7f652148d5faa",
+  "observations": {
+    "crash": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/Foo.vue' imported from /tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/v7.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:275:11)\n    at moduleResolve (node:internal/modules/e"
+  },
+  "old_sha256": "bcdf6725eeeedbeb252d5e1f93e0da3b410edf872a16a2fb86db286c9c723277",
+  "oracle": "vue_ssr_equal",
+  "reference": "vue_ssr_equal: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

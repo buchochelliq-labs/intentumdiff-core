@@ -1,0 +1,1 @@
+define foo {$a = 10 $b = 20}

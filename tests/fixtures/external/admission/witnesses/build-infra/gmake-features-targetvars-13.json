@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-targetvars-13",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 512,
+    "expected_output": "foobar.sh\nmake: foobar.sh: No such file or directory\nmake: *** [work/features/targetvars.mk.13:3: all] Error 127\n",
+    "line": 275,
+    "options": "",
+    "script": "features/targetvars"
+  },
+  "new_sha256": "f6f0b0bf6ce9cea4c9f185fe076f940c974d054acb8bda58b3ea1a939d0c72cd",
+  "old_sha256": "f6f0b0bf6ce9cea4c9f185fe076f940c974d054acb8bda58b3ea1a939d0c72cd",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}
