@@ -7,11 +7,11 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 ## Identity
 
 - Ledger SHA-256: `fd249308790b1024313fd17e5b7996c870976e1aa0fd664b57b836a7aa28ae61`
-- Core commit: `786698a39e2f59aaf0741a877f357a792e596d31` (crates dirty: False)
-- C ABI library SHA-256: `ced9e0e18e617b23c243b60cbe75ae6060af6b91d288ef964ab0276511a0598b`
-- Staged parser manifest SHA-256: `23c390a898f252d919d9a348b13337c98198980cdf693682747faff630d0b69f`
+- Core commit: `58b462e586fe1e4166a2872d965fc49a056fec6c` (crates dirty: False)
+- C ABI library SHA-256: `5f664627ffa329669178cf132374590f5b0de6aa0907b5c55bca5216c4c7fd40`
+- Staged parser manifest SHA-256: `70944de9825ef2244bb12566eb1fd5ac6525e04de3a275fd5d414d2994b64d4f`
 - Interface: production Rust C ABI: live_diff_contents + parse_to_tree (via scripts/assess_languages.py workers)
-- Run (UTC): 2026-11-17T20:41:43+00:00
+- Run (UTC): 2026-11-18T02:31:55+00:00
 
 ## Summary
 
@@ -47,7 +47,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `gitignore` | GAP | GAP | GAP | <https://github.com/git/git/blob/master/t/t0008-ignores.sh> (official upstream regression suite) |
 | `go` | 21/21 (100%) | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `gomod` | GAP | GAP | GAP | <https://go.dev/src/cmd/go/testdata/script/mod_replace.txt> (official upstream regression suite) |
-| `graphql` | 39/50 (78%) | 46/46 (100%) | GAP | <https://github.com/graphql/graphql-js> (official upstream regression suite) |
+| `graphql` | 50/50 (100%) | 46/46 (100%) | GAP | <https://github.com/graphql/graphql-js> (official upstream regression suite) |
 | `groovy` | GAP | GAP | GAP | <https://github.com/apache/groovy/blob/master/CONTRIBUTING.md> (official upstream regression suite) |
 | `haskell` | GAP | GAP | GAP | <https://ghc.gitlab.haskell.org/homepage/blog/20190708-testsuite-work.html> (official upstream regression suite) |
 | `hcl` | GAP | GAP | GAP | <https://huggingface.co/datasets/autoiac-project/iac-eval> (published specialist research benchmark) |
@@ -87,7 +87,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `svelte` | GAP | GAP | GAP | <https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests> (official upstream regression suite) |
 | `swift` | GAP | GAP | GAP | <https://www.swift.org/contributing/> (official upstream regression suite) |
 | `toml` | 72/77 (94%) | 270/546 (49%) | GAP | <https://github.com/toml-lang/toml-test> (established community / compatibility suite) |
-| `tsql` | 0/5 (0%) | 0/5 (0%) | GAP | <https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md> (official upstream regression suite) |
+| `tsql` | 0/5 (0%) | 1/5 (20%) | GAP | <https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md> (official upstream regression suite) |
 | `tsx` | GAP | GAP | GAP | <https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md> (official upstream regression suite) |
 | `typescript` | GAP | GAP | GAP | <https://www.swebench.com/multilingual> (recognised software-engineering research benchmark) |
 | `vbnet` | GAP | GAP | GAP | <https://github.com/dotnet/roslyn/blob/main/Compilers.slnf> (official upstream regression suite) |
@@ -95,7 +95,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `wast` | GAP | GAP | GAP | <https://github.com/WebAssembly/spec/blob/main/interpreter/README.md> (standards / conformance suite) |
 | `wat` | GAP | GAP | GAP | <https://github.com/WebAssembly/spec/blob/main/interpreter/README.md> (standards / conformance suite) |
 | `xml` | BLOCKED | BLOCKED | GAP | <https://www.w3.org/XML/Test/> (standards / conformance suite) |
-| `yaml` | 52/184 (28%) | 270/303 (89%) | GAP | <https://github.com/yaml/yaml-test-suite> (standards / conformance suite) |
+| `yaml` | 71/184 (39%) | 270/303 (89%) | GAP | <https://github.com/yaml/yaml-test-suite> (standards / conformance suite) |
 | `zig` | GAP | GAP | GAP | <https://ziglang.org/documentation/0.15.1/> (qualified external candidate; admission gap) |
 
 ## Rows with cases (language × suite × class × lane)
@@ -113,7 +113,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `go` | humanevalpack | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/12 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `go` | humanevalpack | upstream_gold | change_understanding | 164 | 164 | 9 | 9 | 9 | 0 | 0 | 0 | 0 | 9/9 (100%) | 9/9 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `graphql` | graphql-js-breaking | reviewed_external_derived | change_understanding | 25 | 25 | 25 | 25 | 25 | 0 | 0 | 0 | 0 | 25/25 (100%) | N/A (0 of 0: no executed behavior-changing cases) | 0/25 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
-| `graphql` | graphql-js-breaking | upstream_gold | change_understanding | 33 | 25 | 25 | 25 | 14 | 11 | 0 | 0 | 0 | 14/25 (56%) | 14/25 (56%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `graphql` | graphql-js-breaking | upstream_gold | change_understanding | 33 | 25 | 25 | 25 | 25 | 0 | 0 | 0 | 0 | 25/25 (100%) | 25/25 (100%) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `graphql` | graphql-js-breaking | upstream_gold | parser_fidelity | 46 | 46 | 46 | 46 | 46 | 0 | 0 | 0 | 0 | 46/46 (100%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 46/46 (100%) | N/A (0 of 0: no executed must-reject documents) |
 | `ini` | cpython-configparser | reviewed_external_derived | change_understanding | 13 | 13 | 13 | 13 | 13 | 0 | 0 | 0 | 0 | 13/13 (100%) | 6/6 (100%) | 0/7 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `ini` | cpython-configparser | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
@@ -149,27 +149,16 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `toml` | toml-test | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `toml` | toml-test | upstream_gold | parser_fidelity | 556 | 546 | 546 | 546 | 270 | 276 | 0 | 0 | 0 | 270/546 (49%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 185/185 (100%) | 85/361 (24%) |
 | `tsql` | sqlscriptdom | upstream_gold | change_understanding | 41 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: no executed behavior-changing cases) | 5/5 (100%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
-| `tsql` | sqlscriptdom | upstream_gold | parser_fidelity | 492 | 41 | 5 | 5 | 0 | 5 | 0 | 0 | 0 | 0/5 (0%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 0/5 (0%) | N/A (0 of 0: no executed must-reject documents) |
+| `tsql` | sqlscriptdom | upstream_gold | parser_fidelity | 492 | 41 | 5 | 5 | 1 | 4 | 0 | 0 | 0 | 1/5 (20%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 1/5 (20%) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | external_seed_only | change_understanding | 52 | 52 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | external_seed_only | parser_fidelity | 82 | 82 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
-| `yaml` | yaml-test-suite | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 6 | 6 | 0 | 0 | 0 | 6/12 (50%) | 6/6 (100%) | 6/6 (100%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
-| `yaml` | yaml-test-suite | upstream_gold | change_understanding | 236 | 222 | 172 | 172 | 46 | 126 | 0 | 0 | 0 | 46/172 (27%) | N/A (0 of 0: no executed behavior-changing cases) | 126/172 (73%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `yaml` | yaml-test-suite | reviewed_external_derived | change_understanding | 12 | 12 | 12 | 12 | 12 | 0 | 0 | 0 | 0 | 12/12 (100%) | 6/6 (100%) | 0/6 (0%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `yaml` | yaml-test-suite | upstream_gold | change_understanding | 236 | 222 | 172 | 172 | 59 | 113 | 0 | 0 | 0 | 59/172 (34%) | N/A (0 of 0: no executed behavior-changing cases) | 113/172 (66%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `yaml` | yaml-test-suite | upstream_gold | parser_fidelity | 385 | 385 | 303 | 303 | 270 | 33 | 0 | 0 | 0 | 270/303 (89%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 229/229 (100%) | 41/74 (55%) |
 
 ## Failed admitted cases
 
 - `cpp` `hep-cpp-00-local-rename`: forbidden ADDITION reported: a local rename does not add or delete an entity; forbidden DELETION reported: a local rename does not add or delete an entity
-- `graphql` `gql-01`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-02`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-06`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-09`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-13`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-14`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-21`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-22`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-27`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-28`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
-- `graphql` `gql-29`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True
 - `javascript` `hep-js-06-repair`: missing required edit_region (MODIFICATION/ADDITION/DELETION): a reported edit must touch the independently computed delta bytes 258..262 (old) / 258..258 (new)
 - `json` `jpt-tests-003`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: the patch leaves the document value unchanged; forbidden ADDITION reported: the patch leaves the document value unchanged
 - `json` `jpt-tests-058`: completeness: review could not explain the source delta (incomplete)
@@ -331,13 +320,13 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `json` `jts-n_structure_unicode-identifier`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `json` `jts-n_structure_whitespace_U+2060_word_joiner`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `json` `jts-n_structure_whitespace_formfeed`: invalid document accepted without diagnostics (no parse_errors, no fallback)
-- `m` `pqparser-helloworld-helloworld-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 24; statement starts: 1 reported statement(s) start where the reference has none, first at byte 144
-- `m` `pqparser-helloworldwithdocs-helloworldwithdocs-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 32; statement starts: 1 reported statement(s) start where the reference has none, first at byte 1382
-- `m` `pqparser-navigationtable-navigationtable-parse`: statement inventory: expected 11 top-level statements, got 5; statement starts: 11 reference statement start(s) not matched, first at byte 77; statement starts: 5 reported statement(s) start where the reference has none, first at byte 195
-- `m` `pqparser-oauthpkce-pkcesample-parse`: statement inventory: expected 5 top-level statements, got 3; statement starts: 5 reference statement start(s) not matched, first at byte 230; statement starts: 3 reported statement(s) start where the reference has none, first at byte 326
-- `m` `pqparser-trippin-1-odata-trippin-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 202
-- `m` `pqparser-trippin-2-rest-trippin-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 405
-- `m` `pqparser-trippin-3-navtables-trippin-parse`: statement inventory: expected 10 top-level statements, got 5; statement starts: 10 reference statement start(s) not matched, first at byte 74; statement starts: 5 reported statement(s) start where the reference has none, first at byte 894
+- `m` `pqparser-helloworld-helloworld-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 24; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `m` `pqparser-helloworldwithdocs-helloworldwithdocs-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 32; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `m` `pqparser-navigationtable-navigationtable-parse`: statement inventory: expected 11 top-level statements, got 1; statement starts: 11 reference statement start(s) not matched, first at byte 77; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `m` `pqparser-oauthpkce-pkcesample-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 230; statement starts: 1 reported statement(s) start where the reference has none, first at byte 85
+- `m` `pqparser-trippin-1-odata-trippin-parse`: statement inventory: expected 4 top-level statements, got 1; statement starts: 4 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `m` `pqparser-trippin-2-rest-trippin-parse`: statement inventory: expected 5 top-level statements, got 1; statement starts: 5 reference statement start(s) not matched, first at byte 21; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
+- `m` `pqparser-trippin-3-navtables-trippin-parse`: statement inventory: expected 10 top-level statements, got 1; statement starts: 10 reference statement start(s) not matched, first at byte 74; statement starts: 1 reported statement(s) start where the reference has none, first at byte 0
 - `proto` `buf-breaking_field_same_cpp_string_type-current-1`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
 - `proto` `buf-breaking_field_same_cpp_string_type-previous-2`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
 - `proto` `buf-breaking_field_same_cpp_string_type-current-2`: valid document rejected: explicit fallback {"fallback": "fixture.proto: Incomplete or invalid syntax; source changes preserved without a semantic interpretation", "fallback_code": "native_parse_incomplete"}
@@ -637,23 +626,15 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `toml` `toml-invalid-table-text-after-table`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `toml` `toml-invalid-table-whitespace`: invalid document accepted without diagnostics (no parse_errors, no fallback)
 - `toml` `toml-invalid-table-with-pound`: invalid document accepted without diagnostics (no parse_errors, no fallback)
-- `tsql` `scriptdom-MergeStatementTests160-baseline`: old: 0: range outside source (30,0); new: 0: range outside source (34,0)
+- `tsql` `scriptdom-MergeStatementTests160-baseline`: has_semantic_changes: expected False, got True
 - `tsql` `scriptdom-SelectStatementTests160-baseline`: has_semantic_changes: expected False, got True
-- `tsql` `scriptdom-ShiftOperatorTests160-baseline`: old: 0: range outside source (14,0); new: 0: range outside source (15,0)
-- `tsql` `scriptdom-StringConcatOperatorTests160-baseline`: old: 0: range outside source (23,0); new: 0: range outside source (51,0)
-- `tsql` `scriptdom-WindowClauseTests160-baseline`: has_semantic_changes: expected False, got True; old: 0: range outside source (90,0); new: 0: range outside source (118,0)
-- `tsql` `scriptdom-MergeStatementTests160-statements`: old: 0: range outside source (30,0); new: 0: range outside source (30,0); statement inventory: expected 5 top-level statements, got 0
-- `tsql` `scriptdom-SelectStatementTests160-statements`: statement inventory: expected 12 top-level statements, got 0; statement starts: 12 reference statement start(s) not matched, first at byte 43
-- `tsql` `scriptdom-ShiftOperatorTests160-statements`: old: 0: range outside source (14,0); new: 0: range outside source (14,0); statement inventory: expected 3 top-level statements, got 0
-- `tsql` `scriptdom-StringConcatOperatorTests160-statements`: old: 0: range outside source (23,0); new: 0: range outside source (23,0); statement inventory: expected 12 top-level statements, got 0
-- `tsql` `scriptdom-WindowClauseTests160-statements`: old: 0: range outside source (90,0); new: 0: range outside source (90,0); statement inventory: expected 16 top-level statements, got 0
-- `yaml` `yts-9KAX-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-AZ63-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-H2RW-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-J7VC-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-KMK3-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-ZWK4-comment`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: adding a comment does not change content
-- `yaml` `yts-2XXW-out`: has_semantic_changes: expected False, got True
+- `tsql` `scriptdom-ShiftOperatorTests160-baseline`: has_semantic_changes: expected False, got True
+- `tsql` `scriptdom-StringConcatOperatorTests160-baseline`: has_semantic_changes: expected False, got True
+- `tsql` `scriptdom-WindowClauseTests160-baseline`: has_semantic_changes: expected False, got True
+- `tsql` `scriptdom-MergeStatementTests160-statements`: statement inventory: expected 5 top-level statements, got 25; statement starts: 20 reported statement(s) start where the reference has none, first at byte 61
+- `tsql` `scriptdom-ShiftOperatorTests160-statements`: statement inventory: expected 3 top-level statements, got 12; statement starts: 1 reference statement start(s) not matched, first at byte 3; statement starts: 10 reported statement(s) start where the reference has none, first at byte 0
+- `tsql` `scriptdom-StringConcatOperatorTests160-statements`: statement inventory: expected 12 top-level statements, got 23; statement starts: 11 reported statement(s) start where the reference has none, first at byte 23
+- `tsql` `scriptdom-WindowClauseTests160-statements`: statement inventory: expected 16 top-level statements, got 19; statement starts: 6 reference statement start(s) not matched, first at byte 113; statement starts: 8 reported statement(s) start where the reference has none, first at byte 143
 - `yaml` `yts-35KP-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-36F6-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-3MYT-out`: has_semantic_changes: expected False, got True
@@ -670,17 +651,13 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `yaml` `yts-5GBF-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-5KJE-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-5T43-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-5WE3-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-6FWR-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-6HB6-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-6JQW-out`: has_semantic_changes: expected False, got True
+- `yaml` `yts-6HB6-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-6VJK-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-6WPF-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-735Y-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-753E-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-7A4E-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-7BMT-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-7BUB-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-7T8X-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-7TMG-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-82AN-out`: has_semantic_changes: expected False, got True
@@ -719,7 +696,6 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `yaml` `yts-EX5H-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-EXG3-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-F3CP-out`: completeness: review could not explain the source delta (incomplete)
-- `yaml` `yts-F8F9-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-FBC9-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-FP8R-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-FUP4-out`: completeness: review could not explain the source delta (incomplete)
@@ -729,15 +705,12 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `yaml` `yts-H3Z8-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-HM87-00-out`: has_semantic_changes: expected False, got True; forbidden ADDITION reported: a re-emission of the same representation does not add or delete content
 - `yaml` `yts-HMK4-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-J7PZ-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-JHB9-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-JR7V-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-K527-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-K858-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-KH5V-01-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-KH5V-02-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-KSS4-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-L383-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-L9U5-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-LP6E-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-LQZ7-out`: completeness: review could not explain the source delta (incomplete)
@@ -760,19 +733,15 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `yaml` `yts-Q8AD-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-QF4Y-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-R52L-out`: completeness: review could not explain the source delta (incomplete)
-- `yaml` `yts-RTP8-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-RZT7-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-S4JQ-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-SYW4-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-T4YY-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-T5N4-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-TL85-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-TS54-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-U3C3-out`: has_semantic_changes: expected False, got True
-- `yaml` `yts-U3XV-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-UDM2-out`: completeness: review could not explain the source delta (incomplete)
 - `yaml` `yts-UDR7-out`: completeness: review could not explain the source delta (incomplete)
-- `yaml` `yts-W42U-out`: has_semantic_changes: expected False, got True; forbidden ADDITION reported: a re-emission of the same representation does not add or delete content; forbidden DELETION reported: a re-emission of the same representation does not add or delete content
+- `yaml` `yts-W42U-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-W4TN-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-XLQ9-out`: has_semantic_changes: expected False, got True
 - `yaml` `yts-XV9V-out`: has_semantic_changes: expected False, got True

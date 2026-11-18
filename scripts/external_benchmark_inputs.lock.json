@@ -1,23 +1,23 @@
 {
   "schema_version": 2,
-  "registry_commit": "28f5fce55a80933ec80e18f0b1fe389ad1d2a0ab",
+  "registry_commit": "eb02686ba69eb8d03e751977ee3a4c9a84fae8a0",
   "published_distribution": "intentumdiff-python==0.0.2b2",
   "components": {
     "cpp_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-cpp-parser",
-      "commit": "d29063acd1516658fcbe3f3bab7fdd77ec515db2",
-      "artifact_id": 13600073866,
+      "commit": "e0dcb684aa74f8faba2adf7419af7d181597037d",
+      "artifact_id": 13813998684,
       "archive_member": "intentumdiff_cpp_parser.wasm",
-      "archive_sha256": "7df83322e09324b1909fe19c165bd02150112f8e10a16300e89e9cc593697aef",
-      "component_sha256": "447196da1ea6f2ee2f9adb10fe02d14d6da3a85d8eee06059a01aaaeb20eb483"
+      "archive_sha256": "5632bd85faad02ba090f65d98534f29c564764e05a220f30a040f73e14bd4904",
+      "component_sha256": "a7e956d8c56212ebc6980d3ad6668a10f37ee9b6a0d332589d155330dcc8ab68"
     },
     "js_ts_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-js-ts-parser",
-      "commit": "56799e9cffc66816d7e323d5dfb80a3e356a3531",
-      "artifact_id": 13631908959,
+      "commit": "c3994ce01eb62bdbc7eb7cf99fdafe8ae2126559",
+      "artifact_id": 13814378033,
       "archive_member": "intentumdiff_js_ts_parser.wasm",
-      "archive_sha256": "f1547e1d75971a714cfd5cb47c01621f6285d154cbdf6213349944d549fe857b",
-      "component_sha256": "55b6c5d089b438c895306d23d62ee469b08cbb84b74576586cd482555bcd6c34"
+      "archive_sha256": "71ff0f38693bd882a4567e40d4b4e55558c66318079167e28ccfb27922f17d9a",
+      "component_sha256": "9a60003b5ac5fdef7170648ccc97edc94ed7d6fb8473c3f76e4e74769958aa1e"
     },
     "json_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-json-parser",
@@ -29,11 +29,11 @@
     },
     "yaml_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-yaml-parser",
-      "commit": "bc4aaa3c17625a47f4a7d171098975a8a6664727",
-      "artifact_id": 13632153088,
+      "commit": "2d28fb7223a3de466624052c7488bc60a8de6513",
+      "artifact_id": 13814454002,
       "archive_member": "intentumdiff_yaml_parser.wasm",
-      "archive_sha256": "234c28c787133f335e49e4ce7fdd1af25a1d405d0d9bb97462d7dfaa53df0b8f",
-      "component_sha256": "2ff91eb6d68ae517e2941ed00c863a3ff3f2357ceedebecf9a062f8a216989d1"
+      "archive_sha256": "067b43ca4bc7259d89554e1b0c1b4531d47e2675247e7056de137d6468771a64",
+      "component_sha256": "f97b09304c87e73a11355eefebfba98e736aa5bb7c959f2769f883fc44601fb4"
     },
     "sql_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-sql-parser",
@@ -53,11 +53,299 @@
     },
     "databricks_parser.wasm": {
       "repository": "buchochelliq-labs/intentumdiff-databricks-parser",
-      "commit": "24f0c6d95e03e34f703700fe6d07f4024ff6d7b9",
-      "artifact_id": 13649537073,
+      "commit": "86ed0e555410a3b385f51ac7bfa874bb89400292",
+      "artifact_id": 13813851578,
       "archive_member": "intentumdiff_databricks_parser.wasm",
-      "archive_sha256": "d62509f223006e9b3f78d005f9046feba9d25e32a6dee4d2fa563cdea3308a9a",
+      "archive_sha256": "6415c1d3a31f845fbdb1080e86e1a0d48f0bef965fd6b1ba5c5ac7ef97ff7487",
       "component_sha256": "b1ba6fb8495682eea337944ffeb11cacc48523453332118685e9ec69637f8ee0"
+    },
+    "abap_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-abap-parser",
+      "commit": "c4c080882a82c8f9a63016a04ad1b88b625adca5",
+      "artifact_id": 13883630751,
+      "archive_member": "intentumdiff_abap_parser.wasm",
+      "archive_sha256": "6f9f83e697615a7ac712ae8a20a080a8c4a9796bcc7ca092fa782aa78d15bf39",
+      "component_sha256": "77e6126967a6ef56efce6e0a0263a2b83ccb2949ba2b9c3efd45b1a054d37058"
+    },
+    "asciidoc_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-asciidoc-parser",
+      "commit": "1a25770ad9176fa446631ce68dc3c4a4dbae2763",
+      "artifact_id": 13811971923,
+      "archive_member": "intentumdiff_asciidoc_parser.wasm",
+      "archive_sha256": "13580382af49de24c1f17fbcea3d00b738495d27884b26820a35cb288e595c75",
+      "component_sha256": "9783beee87b16ced6c9a4afe058bc26213f1ca5d7b349cdbed1f1f941bcd991c"
+    },
+    "asm_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-asm-parser",
+      "commit": "435ef64ddca545403dde31bde23b6c670ed6e950",
+      "artifact_id": 13815160199,
+      "archive_member": "intentumdiff_asm_parser.wasm",
+      "archive_sha256": "bd30cab1335240e88f8c630af09b3bee6782e2be3514199b2d20a07f26bcaefd",
+      "component_sha256": "f9e8a59c642feb49dbdb20f4c3a26783e7ecc8d21b785061dc4f34742110ea8b"
+    },
+    "assemblyscript_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-assemblyscript-parser",
+      "commit": "1f3e4437361c4c382c2c8953cd1419e4c90e32e6",
+      "artifact_id": 13882993990,
+      "archive_member": "intentumdiff_assemblyscript_parser.wasm",
+      "archive_sha256": "fb384d93e7114286842b80e1f6c231b70f857c6479cd374fa296d032b1674840",
+      "component_sha256": "f64dc8e2cdb85464a0ce65e8567cb3b45d8e39f5f88d1094ad44ec4202ddbfd6"
+    },
+    "astro_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-astro-parser",
+      "commit": "7b8ce271bd303720a98db88d4a488a8d91754284",
+      "artifact_id": 13882819035,
+      "archive_member": "intentumdiff_astro_parser.wasm",
+      "archive_sha256": "1010f3902b68a7de31668a4e60517a6b48d1ed0e11177aafdcc4effc47097396",
+      "component_sha256": "7772a613263ad4188898ea06ecbbd7eeecaef6cf7261202be0f46aa69d95f3bb"
+    },
+    "bash_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-bash-parser",
+      "commit": "0e18bf3ab4c8d4695902caaa4bfc1e37d9d0d999",
+      "artifact_id": 13811004888,
+      "archive_member": "intentumdiff_bash_parser.wasm",
+      "archive_sha256": "65ea2b56740249db3184b116be0c0f0a3d1b47f56281927d77ebe35f7a422938",
+      "component_sha256": "44cd7c2a3afb26e02428b47de4bfec4f2a3ad704014edde02bfc53f8c8d97b54"
+    },
+    "csharp_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-csharp-parser",
+      "commit": "89cbfa9cb213b671b11eb2496493cbd740634fec",
+      "artifact_id": 13815160894,
+      "archive_member": "intentumdiff_csharp_parser.wasm",
+      "archive_sha256": "fe4b472e592bdfa0c6d526659a286d1497f61f527de40759f2445c82575370d8",
+      "component_sha256": "e4edcbae1aae67a594ea598b455fd142d32f597ff35447bcecabcfaacbbd5db1"
+    },
+    "dax_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-dax-parser",
+      "commit": "94b75fcba63146a0d0875613ced82809a9abe58e",
+      "artifact_id": 13883111495,
+      "archive_member": "intentumdiff_dax_parser.wasm",
+      "archive_sha256": "ee7f99f157d7708ea1f81b099b54bb78fde44cdd0ab6379a702db614723d9bd7",
+      "component_sha256": "e37b975504a6ca1223057af8f26c9e05ef97514e6be7d2b343ce5847ea37806d"
+    },
+    "dockerfile_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-dockerfile-parser",
+      "commit": "aedc3d1ad0cd97b1fd0cdb20391b78dd8d7f5b54",
+      "artifact_id": 13811979986,
+      "archive_member": "intentumdiff_dockerfile_parser.wasm",
+      "archive_sha256": "aa6cdf4593fc0a6376c5e8c9b08d8280f9acd3b5c8c8944e748cb3e277e0fcd3",
+      "component_sha256": "5fedc61b81c63f1953615f9501d2aa3e10dc0c3459ddfc4392ec77af01302cee"
+    },
+    "generic_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-generic-parser",
+      "commit": "bd6163be4fc6f99d8bef0367bf55be161838bf95",
+      "artifact_id": 13839307064,
+      "archive_member": "intentumdiff_generic_parser.wasm",
+      "archive_sha256": "53232b593a4a38c1bb093b8f00845a56e5d6e81a100a0ee9ab2219b4f76d696d",
+      "component_sha256": "c6f3c95dd28c45d73c109b38fc57b7265352d8241dec56b8002912e757ab212e"
+    },
+    "gitignore_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-gitignore-parser",
+      "commit": "0e5ee499b977948c3b6a0064d16fd1ad686e206a",
+      "artifact_id": 13812546142,
+      "archive_member": "intentumdiff_gitignore_parser.wasm",
+      "archive_sha256": "15c88de95682596e879b838d97baec8efc3ca92ee8a0fc12e73e31176ef52ef6",
+      "component_sha256": "84eb61b957f15078c2605a3a562e48245e3afe395920fc5a65887c3a670cf4e1"
+    },
+    "graphql_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-graphql-parser",
+      "commit": "e55fbeceb6f7c36b6b3f665b0bc7eb3e10ebb351",
+      "artifact_id": 13843401950,
+      "archive_member": "intentumdiff_graphql_parser.wasm",
+      "archive_sha256": "9bfa8c361843ea90acc23eb25ff0b074620b8729a3f6d8595bff01a1906aaa9b",
+      "component_sha256": "97402e30df197d6c7db07f13ddb5a281b652a5addb913f064930734863ca5eff"
+    },
+    "groovy_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-groovy-parser",
+      "commit": "12756c11bfb6b8dc93ef338438a7ea6eccf37598",
+      "artifact_id": 13812531704,
+      "archive_member": "intentumdiff_groovy_parser.wasm",
+      "archive_sha256": "2680d78e3bcb64f6352e2eeae7ac81e789de63dc09ba91214f5620fb021594fd",
+      "component_sha256": "952fb82f10a59d9caa598eee5043679355a9ffb83a541a91bc0a723417bc8977"
+    },
+    "kotlin_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-kotlin-parser",
+      "commit": "a5f940a611500cc73c0c4fab0e244fb10111be98",
+      "artifact_id": 13842209576,
+      "archive_member": "intentumdiff_kotlin_parser.wasm",
+      "archive_sha256": "06c0143cbc31b70d9de42e1d0637e2180c2b35f9d69fb650136ff6eb58798c2b",
+      "component_sha256": "b51551d09ca6766700b7b655cb33f16dc96f83d3b3fe05ebcbf95b1e093d9d78"
+    },
+    "latex_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-latex-parser",
+      "commit": "8f6e5cc106e2b4ac49be36b4f55b97c1b28d537c",
+      "artifact_id": 13882589094,
+      "archive_member": "intentumdiff_latex_parser.wasm",
+      "archive_sha256": "34da81affeafd83e9f0e9c61a2e44546a023432a814a9568bffad7a25c0a55fe",
+      "component_sha256": "ebacd743c1bf29f3693d7fe8b3056d7510aae8c9de5e17e224aa08336195f1ac"
+    },
+    "make_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-make-parser",
+      "commit": "d0ecf643ac9d6ccb395ee8949a5f72e57e08c46c",
+      "artifact_id": 14392574832,
+      "archive_member": "intentumdiff_make_parser.wasm",
+      "archive_sha256": "0d1f77136979f486b01f332fdacc007d1db414dcd7183ae47d2bc29555c110e2",
+      "component_sha256": "32c73eeaa501538bfb9e4e408079c7952a3d065d60a56a3e45e871114b045bc0"
+    },
+    "mdx_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-mdx-parser",
+      "commit": "7c060e6b0be27decbf1d399287061dcc3d8c585c",
+      "artifact_id": 13882843042,
+      "archive_member": "intentumdiff_mdx_parser.wasm",
+      "archive_sha256": "841ddd6639673b659c600d3f6854b925d44a31db32a755170d1f4e77d70f9dc0",
+      "component_sha256": "4292d879bacf19c355e101677bb9840417378a7e38846ea8f956452726c26933"
+    },
+    "ocaml_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-ocaml-parser",
+      "commit": "eb5ed3b309af12ed1f0481898a0194b77a6c3880",
+      "artifact_id": 13882678012,
+      "archive_member": "intentumdiff_ocaml_parser.wasm",
+      "archive_sha256": "79f9c101ce909a6dd672476b058b369f9ce0b8d9d6448e7606b742465ee9aa12",
+      "component_sha256": "8758918b170bc289de2ee94585103eed3039c069ee36818ec7e90569e719eb6e"
+    },
+    "odin_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-odin-parser",
+      "commit": "35aa10e1288da64f27baa0b29b6e130e727c777a",
+      "artifact_id": 13882688120,
+      "archive_member": "intentumdiff_odin_parser.wasm",
+      "archive_sha256": "d23a6ec3ad8cd7f6707f1bbb92c29aa16a28ec989595d5f5610b1344e13cad98",
+      "component_sha256": "848e071669f9d7914789729bb34bd23be2f335968ab3c1f8d96fda973496da2d"
+    },
+    "perl_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-perl-parser",
+      "commit": "add4bd4d632b5b9ed09b9f3c29c42dfed4bdf5a6",
+      "artifact_id": 13813458775,
+      "archive_member": "intentumdiff_perl_parser.wasm",
+      "archive_sha256": "ae722c15ec5fca4b278b494740ce9ab116d03a0dfecb889453ced660166b33dd",
+      "component_sha256": "43761c84a6d4d11efb7e17e67f6ae6b6abb0ef13acfd825037aa757bb9315987"
+    },
+    "php_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-php-parser",
+      "commit": "85d81e0ba14a2c8e70738f5ea4443e56256d240f",
+      "artifact_id": 13882348667,
+      "archive_member": "intentumdiff_php_parser.wasm",
+      "archive_sha256": "ac2b816a75e06acc245f6e50e10ee14aeeebedbf0f46fabb1c17ac1e2f9f0821",
+      "component_sha256": "e92c29a65d515a00eb82180100376a2e40a7f44e6e3ce0b9818f239145d36139"
+    },
+    "plsql_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-plsql-parser",
+      "commit": "5895fe82e59b94494c4cf5c0a12aa8b8aa56dd80",
+      "artifact_id": 13882069312,
+      "archive_member": "intentumdiff_plsql_parser.wasm",
+      "archive_sha256": "c2115d7719b12d77acd48280ece193d7c16274e55099e42c4a0379b4e74eccb4",
+      "component_sha256": "10dc73ba6e7289342b9c6cf57ff62bebbed1d979f81c7e6d60c5299168fc61f1"
+    },
+    "postscript_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-postscript-parser",
+      "commit": "c4318554d0450a19b97a6ddae6a0596ed965df0c",
+      "artifact_id": 13882358718,
+      "archive_member": "intentumdiff_postscript_parser.wasm",
+      "archive_sha256": "996a9caf2e44d648de031b4fa6a170d550dd7a26a6364943207cfc12051afbac",
+      "component_sha256": "cb28dfd5b3d076d50a88f150262531b0f7693ea3ed64b977813f8d8bc07aaab9"
+    },
+    "powershell_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-powershell-parser",
+      "commit": "471e723524cebd247afad9d2d309a928ba34e98e",
+      "artifact_id": 13842214958,
+      "archive_member": "intentumdiff_powershell_parser.wasm",
+      "archive_sha256": "e42f59a976abacb2356de583e9af8cb02746b75f601e90c10d38c849af4c2599",
+      "component_sha256": "b47cff15ae39f73f753c26babb7fabb393089c3dac1dc1d1ef43d1aba49e3ff0"
+    },
+    "proto_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-proto-parser",
+      "commit": "95485ecfd75476276f1b01ce084e775d16669e1f",
+      "artifact_id": 13876821426,
+      "archive_member": "intentumdiff_proto_parser.wasm",
+      "archive_sha256": "3f2ab207750c43b3a8eb480ec32b9509f5b9aad3926af5d35ea9ff24d8b5aa4a",
+      "component_sha256": "d692e7aad9a759b2d5567d7dc5eeb2c5f6bc2e54d8e61d908dfa576f04df586a"
+    },
+    "python_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-python-parser",
+      "commit": "baba9a61b6918303954d9b305187e5249e7c4271",
+      "artifact_id": 13877075411,
+      "archive_member": "intentumdiff_python_parser.wasm",
+      "archive_sha256": "32df173b31e75d6b7bcd1dc2ccdcc929cb15c6df5d66fdf00e558f3e14e9e4c7",
+      "component_sha256": "c968d83e7638b026e4d0d0867131fff143abe3520eb34bfc8453aee458a67e08"
+    },
+    "qsharp_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-qsharp-parser",
+      "commit": "3002f4cdfa811c80e2db02c5756c61639e6b22dc",
+      "artifact_id": 13882673649,
+      "archive_member": "intentumdiff_qsharp_parser.wasm",
+      "archive_sha256": "5f4c572a42cd8a00c1caf25d2cbd7245cfbaccc07e117cbc0775a291e2922be6",
+      "component_sha256": "992b230b1517c3112d01dc6e3cc9175e969f7566d3d70cdb74df83966358e6f0"
+    },
+    "reasonml_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-reasonml-parser",
+      "commit": "0c7a98b4e0fc78fbf0c42d6eed4f4f6a4d63d7ad",
+      "artifact_id": 13876700931,
+      "archive_member": "intentumdiff_reasonml_parser.wasm",
+      "archive_sha256": "4fb86b4410c6a0da90b8e84de0f02a2892b3dbe6e038f34b0cbd652adbed4c8b",
+      "component_sha256": "ce435ffac08c7dfb8d0f966c07909ec36ebe9a0baef8bc37b24bebd4c8668f99"
+    },
+    "rust_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-rust-parser",
+      "commit": "973ce6ecf0ceed75f083825e69672a3d2a5ede6a",
+      "artifact_id": 13880079884,
+      "archive_member": "intentumdiff_rust_parser.wasm",
+      "archive_sha256": "f17cf13997ebbd9191a1d08ab7792ac036512603c37bcbc946ea805cd41d22a2",
+      "component_sha256": "c1595c174ebb33d9186826c1763386772f992051a034bd6eb1daea7c7f331346"
+    },
+    "sas_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-sas-parser",
+      "commit": "4221c0a3361b6fba6d4baf40b998b30f479ae10e",
+      "artifact_id": 13842804778,
+      "archive_member": "intentumdiff_sas_parser.wasm",
+      "archive_sha256": "ed79c5f0142c2dd6e24b59801a56c0fd086d3b58edde02b89320f01223ce58e3",
+      "component_sha256": "c7966bd49524ce91c5e4564db72d4fd8b9d107118a452355049551a9f24cc160"
+    },
+    "svelte_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-svelte-parser",
+      "commit": "15be2374809a13396d2e90e7b03a4c3e73faf3d2",
+      "artifact_id": 13881543066,
+      "archive_member": "intentumdiff_svelte_parser.wasm",
+      "archive_sha256": "e12a49ab52fdaa3eafab8dc18522d374d3010de27a55202fed4b027701889271",
+      "component_sha256": "b57c868589fdac8e85dfa6570c2e036a93f7bd9abd39bab8e69f56d0ffbc1716"
+    },
+    "swift_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-swift-parser",
+      "commit": "d5a3fadeb5fae7db1d9dc748f3391616824c66c9",
+      "artifact_id": 13842788215,
+      "archive_member": "intentumdiff_swift_parser.wasm",
+      "archive_sha256": "64c45cdcf37e3394f7e38181e7305dbb8d6cf89fb308c3204959132e45c51750",
+      "component_sha256": "19e4df40ba0f78e74cc8c70f2a94f19068c2656a576da3468a47789c977577ac"
+    },
+    "tsql_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-tsql-parser",
+      "commit": "d8c1f041167ce46c76700c3dca0e5109cfd40219",
+      "artifact_id": 13844035384,
+      "archive_member": "intentumdiff_tsql_parser.wasm",
+      "archive_sha256": "6b4580fbc5d647e2dfce9edde9fc627de8a4c746238b9b138d80ba1c043a8592",
+      "component_sha256": "2904e246ddd4758cc8e3d66d6809620f26ecd27016bca2cd859e8d1e730f73eb"
+    },
+    "vbnet_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-vbnet-parser",
+      "commit": "c096b6185d586939b4e2da8c3ab0a60f0a6bb734",
+      "artifact_id": 13882427819,
+      "archive_member": "intentumdiff_vbnet_parser.wasm",
+      "archive_sha256": "a2a57c67395d3674a6fa4eafbb60971307b7ccd40af1a695ec5a09d869200eb6",
+      "component_sha256": "cfef5c8fb40fd1fb7babce951f780fd26df413719458b00c3631910558134979"
+    },
+    "vue_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-vue-parser",
+      "commit": "ffa21628457ae21d38b0d4c81e5512a7a31559c0",
+      "artifact_id": 13881213364,
+      "archive_member": "intentumdiff_vue_parser.wasm",
+      "archive_sha256": "3d922faf52229512d00cfb3889e91618b8516b2bb7dad4416c9c2dadb327372a",
+      "component_sha256": "9a39640832d10c178af880d747e335e0d8098b76c3c2a340895d56710b894097"
+    },
+    "wat_parser.wasm": {
+      "repository": "buchochelliq-labs/intentumdiff-wat-parser",
+      "commit": "44e87dd5ee1eaf7ff2ece77609fbea00496ac9fa",
+      "artifact_id": 13813029063,
+      "archive_member": "intentumdiff_wat_parser.wasm",
+      "archive_sha256": "e7b8f8376ac112f4ea8a45365b173fb143d3d671e2c327f3ddcf95bf7a8a5d8f",
+      "component_sha256": "14410450f276a73f5ad3df983933e27cc862a5ddde82669b0cc54e8a48414d70"
     }
   }
 }

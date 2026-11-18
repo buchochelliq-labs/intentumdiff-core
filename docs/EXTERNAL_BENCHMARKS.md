@@ -24,9 +24,10 @@ only local fixtures and components. The workflow
 Its immutable inputs are in `scripts/external_benchmark_inputs.lock.json`.
 
 The published wheel supplies existing component bytes. Each is independently
-checked against the committed registry. C/C++, JavaScript/TypeScript, JSON, SQL,
-YAML, ADF and Databricks come from the exact successful CI artifacts recorded in
-the schema-2 lock. Both source commits and component hashes must agree with that registry.
+checked against the committed registry. Every component whose registry pin the
+wheel does not mirror (C/C++, JavaScript/TypeScript, JSON, SQL, YAML, ADF,
+Databricks, and the 36 others re-pinned by registry #20) comes from the exact
+successful CI artifacts recorded in the schema-2 lock. Both source commits and component hashes must agree with that registry.
 Acquisition verifies the artifact ID, successful source run, archive digest,
 single flat archive member and component digest. The same acquisition helper
 serves Tier-C provisioning; locked components never fall back to wheel or latest

@@ -57,7 +57,7 @@ per suite and class are in `scorecard.md`.
 | cpp | change | 32 | 31 | 1 | 0 | N/A | N/A | 17/17 | 1/15 |
 | go | change | 21 | 21 | 0 | 0 | N/A | N/A | 9/9 | 0/12 |
 | graphql | parser | 46 | 46 | 0 | 0 | 46/46 | N/A | N/A | N/A |
-| graphql | change | 50 | 39 | 11 | 0 | N/A | N/A | 14/25 | 0/25 |
+| graphql | change | 50 | 50 | 0 | 0 | N/A | N/A | 25/25 | 0/25 |
 | ini | parser | 9 | 9 | 0 | 0 | 9/9 | N/A | N/A | N/A |
 | ini | change | 13 | 13 | 0 | 0 | N/A | N/A | 6/6 | 0/7 |
 | java | change | 27 | 27 | 0 | 0 | N/A | N/A | 12/12 | 0/15 |
@@ -73,14 +73,15 @@ per suite and class are in `scorecard.md`.
 | sql | change | 12 | 9 | 3 | 0 | N/A | N/A | 6/6 | 3/6 |
 | toml | parser | 546 | 270 | 276 | 0 | 185/185 | 85/361 | N/A | N/A |
 | toml | change | 77 | 72 | 5 | 0 | N/A | N/A | 48/48 | 5/29 |
-| tsql | parser | 5 | 0 | 5 | 0 | 0/5 | N/A | N/A | N/A |
+| tsql | parser | 5 | 1 | 4 | 0 | 1/5 | N/A | N/A | N/A |
 | tsql | change | 5 | 0 | 5 | 0 | N/A | N/A | N/A | 5/5 |
 | yaml | parser | 303 | 270 | 33 | 0 | 229/229 | 41/74 | N/A | N/A |
-| yaml | change | 184 | 52 | 132 | 0 | N/A | N/A | 6/6 | 132/178 |
+| yaml | change | 184 | 71 | 113 | 0 | N/A | N/A | 6/6 | 113/178 |
 
-The C handwritten regressions (4/4 passed) and the C++ ones (5/5) never enter a lane rate. Totals: 1,471
-passed, 654 failed and 8 unsupported (handwritten 9/9; reviewed_external_derived 371 passed, 28 failed;
-upstream_gold 1,091 passed, 626 failed, 8 unsupported).
+The C handwritten regressions (4/4 passed) and the C++ ones (5/5) never enter a lane rate. Totals: 1,502
+passed, 623 failed and 8 unsupported (handwritten 9/9; reviewed_external_derived 377 passed, 22 failed;
+upstream_gold 1,116 passed, 601 failed, 8 unsupported). These counts include the registry #20 component
+update described below.
 
 ### Baseline update: number respelling equivalence
 
@@ -94,6 +95,36 @@ below still describe the original run. A full rerun with the new library changed
 error, completeness or review summary, and no `upstream_gold` case. Still failing, and correct to
 decline: `-0` → `0` (signed zero is not equated), and the spellings with `e+` that the pinned JSON
 component splits (`1E22` → `1e+22` keeps only `22`, so the token cannot be proved).
+
+### Baseline update (registry #20 components)
+
+`scripts/external_benchmark_inputs.lock.json` now follows registry `9889613d` (the #20 merge) instead of
+`28f5fce5`. Registry #20 re-pinned 41 parser components to their CI-built 0.0.3 RC heads. The
+`intentumdiff-python==0.0.2b2` wheel mirrors none of the new pins, so the lock now holds the exact CI
+artifact for each of the 40 re-pinned components in the inventory (43 entries with the unchanged JSON, SQL
+and ADF pins); the other 25 components still come from the wheel. 38 staged component hashes changed
+(Databricks was re-pinned to a new commit with identical bytes). `results.json`, `parser_manifest.json` and
+the scorecard are now one full rerun on these components:
+
+- Core `58b462e5` (crates clean), C ABI library `cargo +1.95.0 build --locked --release --lib` with
+  `CARGO_PROFILE_RELEASE_DEBUG=0`, SHA-256 `5f664627…fd40`; manifest `70944de9…4d4f`; transport from the
+  published `intentumdiff-python==0.0.2b2` wheel, as in CI.
+- **31 cases flip from failed to passed, and none regresses.** No `upstream_gold` case that passed before
+  fails now; the gate exits 0 against the previous `results.json`.
+  - `graphql` `upstream_gold` change, 11: `gql-01`, `-02`, `-06`, `-09`, `-13`, `-14`, `-21`, `-22`,
+    `-27`, `-28`, `-29` (graphql `b01f0a4b…` → `97402e30…`).
+  - `tsql` `upstream_gold` parser, 1: `scriptdom-SelectStatementTests160-statements` (tsql `70434085…` →
+    `2904e246…`).
+  - `yaml`, 19 (yaml `2ff91eb6…` → `f97b0930…`): `upstream_gold` change 13 (`yts-2XXW-out`, `-5WE3-out`,
+    `-6JQW-out`, `-7BMT-out`, `-7BUB-out`, `-F8F9-out`, `-J7PZ-out`, `-JHB9-out`, `-L383-out`, `-RTP8-out`,
+    `-S4JQ-out`, `-SYW4-out`, `-U3XV-out`) and `reviewed_external_derived` comment pairs 6
+    (`yts-9KAX-comment`, `-AZ63-comment`, `-H2RW-comment`, `-J7VC-comment`, `-KMK3-comment`,
+    `-ZWK4-comment`).
+- The four JSON number-respelling passes recorded in the previous update are still passes.
+- Without changing status, 23 still-failing cases changed their errors, completeness or review summary
+  (`tsql` 9, `m` 7, `yaml` 7), and 9 passing cases changed their review summary (`graphql` 8, `rust` 1).
+- The family sections below (#262, #265, the minimised failures and the original Identity) describe the
+  earlier component set, except for the rows marked "see Baseline update (registry #20 components)".
 
 ## Identity (C ABI library and components)
 
@@ -304,7 +335,7 @@ Without an inventory, the case only checks acceptance: no parse errors, no fallb
 | sql | upstream_gold | parser_fidelity | 4 | 3 | 2 | plus 1 `unsupported` (explicit fallback); 2 candidates |
 | sql | reviewed_external_derived | parser_fidelity | 1 | 1 | 1 | boolean SQL payload |
 | sql | reviewed_external_derived | change_understanding | 12 | 12 | 9 | changed 6/6, preservation false alarms 3/6 |
-| tsql | upstream_gold | parser_fidelity | 5 | 5 | 0 | |
+| tsql | upstream_gold | parser_fidelity | 5 | 5 | 1 | was 0; see "Baseline update (registry #20 components)" |
 | tsql | upstream_gold | change_understanding | 5 | 5 | 0 | all preservation pairs; no behaviour-change oracle |
 | m | upstream_gold | parser_fidelity | 9 | 9 | 2 | |
 | adf | upstream_gold | parser_fidelity | 2 | 2 | 2 | |
@@ -442,15 +473,15 @@ stays a candidate. That biases the admitted YAML subset toward inputs ruamel han
 | toml | parser | upstream_gold | 270/546 | valid 185/185; **invalid rejected 85/361** |
 | toml | change | reviewed_external_derived | 72/77 | recall 48/48; preservation failures 5/29 (all `incomplete`) |
 | yaml | parser | upstream_gold | 270/303 | valid 229/229; invalid rejected 41/74 |
-| yaml | change | upstream_gold (in→out) | 46/172 | preservation false alarms 126/172 |
-| yaml | change | reviewed_external_derived | 6/12 | recall 6/6; comment false alarms 6/6 |
+| yaml | change | upstream_gold (in→out) | 59/172 | preservation false alarms 113/172 (was 46/172 and 126/172; see "Baseline update (registry #20 components)") |
+| yaml | change | reviewed_external_derived | 12/12 | recall 6/6; comment false alarms 0/6 (was 6/12 and 6/6; see "Baseline update (registry #20 components)") |
 | ini | parser | upstream_gold | 9/9 | accept-only (no dialect-neutral reject rule) |
 | ini | change | reviewed_external_derived | 13/13 | |
 | proto | parser | upstream_gold | 173/185 | 12 valid files rejected by explicit fallback |
 | proto | change | upstream_gold | 93/93 executed (+7 unsupported) | buf pairs |
 | proto | change | reviewed_external_derived | 24/24 | |
 | graphql | parser | upstream_gold | 46/46 | |
-| graphql | change | upstream_gold | 14/25 | **11 schema changes reported as style-only** |
+| graphql | change | upstream_gold | 25/25 | was 14/25 with **11 schema changes reported as style-only**; see "Baseline update (registry #20 components)" |
 | graphql | change | reviewed_external_derived | 25/25 | |
 
 ### Real failures, minimised (not filed)
