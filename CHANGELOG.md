@@ -2,6 +2,10 @@
 
 ## Unreleased — v0.0.3 correctness foundation
 
+- Windows ARM64 admits the registry #20 PowerShell component (`b47cff15…`, PowerShell
+  parser PR #9), which that parser's CI compiled on real Windows ARM64 with fuel-metered
+  Wasmtime 48.0.7 (run #42994016353). The earlier PR #5 component stays admitted; every
+  other PowerShell payload is still refused on that platform.
 - Every served review now carries `completeness` (`complete` | `equivalent` | `incomplete`)
   and `incomplete` (core #252). Differing sources whose drafts were all suppressed without an
   equivalence proof are `incomplete`, never a clean review: the DTO keeps `changes=[]`, adds
