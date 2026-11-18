@@ -4,7 +4,8 @@ on:
   pull_request:
   push:
     branches: [main, release/v0.0.3-rc]
-  workflow_dispatch:
+  # No workflow_dispatch: a manual run on an arbitrary ref is a privileged default-branch
+  # context, and this job checks out and runs the registry commit the lock file names.
 
 permissions:
   contents: read
