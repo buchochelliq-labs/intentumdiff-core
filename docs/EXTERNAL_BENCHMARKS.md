@@ -175,12 +175,14 @@ ledger:
    under `admission/cases/<language>/`. #262 and #267 use this mechanism.
 2. **Fragment families**: `tests/fixtures/external/admission/families/*.json`, in sorted file-name order.
    The family's own deterministic tool generates each fragment and checks it with `--check`; the builder
-   merges it verbatim. #265 uses this mechanism.
+   merges it verbatim. #265 and #263 use this mechanism.
 
 The ledger and each fragment are deterministic build outputs, and both stay committed. Every consumer
 reads the committed ledger directly: the validator, the runner, the witness tools and the tooling tests.
 The CI baseline and the evidence also pin its SHA-256. The `--check` gates (`structured_family.py build
---check`, then `build_external_admission.py --check`) prove that the committed files match their inputs.
+--check` and `markup_family.py build --check` for the fragments, then `build_external_admission.py --check`,
+which also re-runs every code module and refuses to rewrite its derived case bytes) prove that the committed
+files match their inputs.
 
 A blocked acquisition (the ledger's top-level `blocked_acquisitions`) names the language, suite, lanes and reason. A blocked lane is shown as BLOCKED with
 that reason. It is never shown as a gap or a pass.
@@ -286,9 +288,6 @@ html5lib trees, tinycss2 ASTs, compiled CSS, SSR HTML, compiled modules, `.mo` b
 `postscript` (Ghostscript samples are AGPL-3.0) and `generic` (WikiAtomicEdits data answers 403) are
 blocked acquisitions.
 
-The combined results for the first slice, #262 and #265, with minimised failures and blocked sources,
-are in `docs/evidence/2026-11-17-external-scorecard/README.md`.
-
 ### #267 (build, configuration and infrastructure: dockerfile, hcl, gomod, gitignore, cmake, make, puppet)
 
 The family module is `scripts/external_families/family_267_build_infra.py`. Its `plan()` lists every case and is
@@ -318,5 +317,11 @@ The oracles run outside IntentumDiff:
 - **make:** the upstream `run_make_tests.pl` harness, and make-output equality for pairs.
 - **puppet:** `Parser#parse_string` as the specs call it, and normalised catalog equality for pairs.
 
-IaC-Eval and Shipwright are blocked acquisitions. Results, minimised failures and gaps are in
-`docs/evidence/2026-11-17-external-scorecard-267/README.md`.
+IaC-Eval and Shipwright are blocked acquisitions.
+
+### Combined results
+
+The first slice, #262, #265, #263 and #267 share one ledger and one runner report. The combined results,
+measured on the components locked to registry `eb02686` (#21), with minimised failures and blocked sources
+for every family, are in `docs/evidence/2026-11-17-external-scorecard/README.md`. Its `results.json` is the
+CI regression baseline.
