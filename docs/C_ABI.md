@@ -558,10 +558,12 @@ is the compatible **new** operation for a host that has staged a component.
 The host performs permitted I/O to compute the lowercase or uppercase SHA-256
 of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
 policy and returns the same `reason`/`unavailable` shape. Only the component
-built and tested with fuel-enabled Wasmtime 48.0.7 on Windows ARM64 in
-PowerShell parser PR #5 (CI #40707156445; Core Rust API CI #40709266345)
-(SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
-may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
+built and tested with fuel-enabled Wasmtime 48.0.7 on real Windows ARM64 may
+bypass the PowerShell exclusion: the registry #20 component from PowerShell parser
+PR #9 (SHA-256 `b47cff15ae39f73f753c26babb7fabb393089c3dac1dc1d1ef43d1aba49e3ff0`,
+parser CI #42994016353) and the earlier PR #5 component (SHA-256
+`29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`, CI #40707156445;
+Core Rust API CI #40709266345). Missing, partial, unexpected and legacy
 digests **fail closed**, and earlier four-argument clients remain excluded.
 The digest is not a substitute for registry trust verification: hosts must
 check the signed/pinned source and checksum and must not rely on untrusted
