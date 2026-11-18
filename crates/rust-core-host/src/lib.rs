@@ -7265,19 +7265,16 @@ fn convert_cst_with_hash_memo(
         None
     };
     let child_parent_class = own_class.as_deref().or(parent_class);
-    // Operator leaves (#229) are named `<parent>.op<k>` and do not take a sibling slot, so every
-    // other child keeps the id it had before operators were carried - and the same id the
-    // Wasm route's source recovery produces (native/Wasm candidate parity).
+    // Ids are dotted child-index paths over every kept CST child, operator leaves (#229)
+    // included: the plugin SDK's semantic-token contract (PLUGIN_GUIDE "IDs", core#230), which
+    // the shipped python_parser.wasm now emits itself. A native-only `<parent>.op<k>` scheme
+    // shifted every following sibling's id against that component, so the certified and a
+    // custom Python route disagreed on node ids (intentumdiff-python#346). Host recovery for
+    // components that still drop operators keeps its own `.op<k>` names (operator_tokens.rs):
+    // it inserts into a guest tree whose ids are already fixed.
     let mut children: Vec<SemanticNode> = Vec::with_capacity(node.children.len());
-    let (mut idx, mut op_idx) = (0usize, 0usize);
-    for child in &node.children {
-        let child_id = if child.node_type == operator_tokens::OPERATOR_NODE_TYPE {
-            op_idx += 1;
-            format!("{id_prefix}.op{}", op_idx - 1)
-        } else {
-            idx += 1;
-            format!("{id_prefix}.{}", idx - 1)
-        };
+    for (idx, child) in node.children.iter().enumerate() {
+        let child_id = format!("{id_prefix}.{idx}");
         if let Some(converted) =
             convert_cst_with_hash_memo(child, &child_id, child_parent_class, hash_memo)
         {

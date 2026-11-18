@@ -290,7 +290,7 @@ use crate::*;
                 "new_filename": "billing.py",
                 "change_type": "MODIFICATION",
                 "old": {
-                    "id": "0.0.2.0.2.0.0.1",
+                    "id": "0.0.2.0.2.0.0.2",
                     "node_type": "integer",
                     "label": "100",
                     "position": {
@@ -301,7 +301,7 @@ use crate::*;
                     }
                 },
                 "new": {
-                    "id": "0.0.2.1.0.1",
+                    "id": "0.0.2.1.0.2",
                     "node_type": "integer",
                     "label": "150",
                     "position": {
@@ -356,7 +356,7 @@ use crate::*;
                 "change_type": "ADDITION",
                 "old": null,
                 "new": {
-                    "id": "0.1.2.1.0.1.1.1",
+                    "id": "0.1.2.1.0.2.1.1",
                     "node_type": "call",
                     "label": "call",
                     "position": {
@@ -510,7 +510,7 @@ use crate::*;
                 "new_filename": "src/billing.py",
                 "change_type": "REFACTORING",
                 "old": {
-                    "id": "0.1.2.0.0.1.0",
+                    "id": "0.1.2.0.0.2.0",
                     "node_type": "identifier",
                     "label": "calculate_discount",
                     "position": {
@@ -521,7 +521,7 @@ use crate::*;
                     }
                 },
                 "new": {
-                    "id": "0.1.2.0.0.1.0",
+                    "id": "0.1.2.0.0.2.0",
                     "node_type": "identifier",
                     "label": "calculate_discount_for_customer",
                     "position": {

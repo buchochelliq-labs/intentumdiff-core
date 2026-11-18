@@ -821,6 +821,60 @@ use crate::*;
         assert_eq!(payload["diffs"][0]["diff"]["is_fallback"], true);
         assert_eq!(payload["diffs"][0]["diff"]["metadata"]["engine_owner"], "rust");
     }
+    /// (id, node_type, label) of every node of a tree, pre-order.
+    fn tree_shape(node: &SemanticNode, out: &mut Vec<(String, String, String)>) {
+        out.push((node.id.clone(), node.node_type.clone(), node.label.clone()));
+        node.children.iter().for_each(|child| tree_shape(child, out));
+    }
+
+    fn native_python_shape(source: &str) -> Vec<(String, String, String)> {
+        let ts_tree = parse_python_tree(source).unwrap();
+        let cst_json = serialize_tree_json(&ts_tree, source).unwrap();
+        let trivia: Vec<String> = PYTHON_TRIVIA.iter().map(|item| (*item).to_owned()).collect();
+        let cst: CstNode = serde_json::from_str(&strip_trivia_json(&cst_json, &trivia).unwrap()).unwrap();
+        let mut out = Vec::new();
+        tree_shape(&convert_cst(&cst, "0", None).unwrap(), &mut out);
+        out
+    }
+
+    // Operator sources whose operator leaves and following operands must carry the same
+    // dotted child-index ids on the native and the Wasm Python route (intentumdiff-python#346).
+    const OPERATOR_ID_SOURCES: &[&str] = &[
+        "def answer():\n    x = 1\n    return 2\n",
+        "def f(a, b):\n    y = a + b\n    y -= 1\n    return not a and b is not y\n",
+        "x = a if a < b <= c else -b ** 2\n",
+    ];
+
+    #[test]
+    fn native_python_operator_leaves_take_their_child_index_slot() {
+        // The SDK semantic-token contract: ids are dotted child-index paths over every kept
+        // child, so the `=` leaf is `.1` and the operand after it `.2` (not `.op0` / `.1`).
+        let shape = native_python_shape(OPERATOR_ID_SOURCES[0]);
+        let ids = |kind: &str| -> Vec<String> {
+            shape.iter().filter(|(_, t, _)| t == kind).map(|(id, _, _)| id.clone()).collect()
+        };
+        assert_eq!(ids("operator"), vec!["0.0.2.0.0.1"]);
+        assert_eq!(ids("integer"), vec!["0.0.2.0.0.2", "0.0.2.1.0"]);
+        assert!(shape.iter().all(|(id, _, _)| !id.contains(".op")), "{shape:?}");
+    }
+
+    #[test]
+    #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+    fn native_python_tree_ids_match_the_python_component_for_operators() {
+        for source in OPERATOR_ID_SOURCES {
+            let (tree_json, _) = run_python_wasm_process_pair(
+                &python_wasm_path(), source, "", "example.py", source, "", "example.py",
+                40_000_000, 64 * 1024 * 1024, "python",
+            )
+            .unwrap();
+            let mut wasm_tree: SemanticNode = serde_json::from_str(&tree_json).unwrap();
+            // The finalize path runs host recovery on guest trees; it must find nothing to add.
+            operator_tokens::recover_operator_tokens(&mut wasm_tree, source, "python");
+            let mut wasm = Vec::new();
+            tree_shape(&wasm_tree, &mut wasm);
+            assert_eq!(native_python_shape(source), wasm, "{source:?}");
+        }
+    }
     #[test]
     #[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
     fn native_candidate_matches_wasm_candidate_for_working_tree_small() {

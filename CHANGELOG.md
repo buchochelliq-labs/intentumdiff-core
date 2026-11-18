@@ -26,6 +26,12 @@
   RFC 8259 tokens within the plugin-sdk #36 exponent domain are proved; `1_000`, `0x10`,
   `+1`, `.5`, `01`, `-0` vs `0`, out-of-range exponents and number↔string edits stay
   meaningful. `apply_invariances` results now carry `equivalence_proof`.
+- The certified native Python route ids operator leaves as dotted child-index paths
+  (`x = 1`: `=` is `.1`, `1` is `.2`), the plugin SDK semantic-token contract the Python
+  component now emits, instead of a native-only `<parent>.op<k>` that shifted every later
+  sibling. The certified and a custom Python component route agree on node ids again
+  (intentumdiff-python#346). Host recovery for components that still drop operators keeps
+  its `.op<k>` names.
 - The language assessment checks the completeness state; cases may pin
   `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for
