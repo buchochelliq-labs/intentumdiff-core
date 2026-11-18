@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-08-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "7f25a508146a6473f7fb3a17601c07657f5b06c54e6a147979cd229fded9d7dd",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "827d32a523bac7194a9faacd6b251df255461b42395b94d4d752c35d1b760060",
+  "new_test_sha256": "aa7aaf6bddbe8feb114b3d154931c6d724760ccee60baa740274edad8d22d649",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "ff4e966e2dcc0f86d33f11a9d7b2e70bdfd82199373aa1ae7d67173f37103185",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-ogwv_sq5/prog.py\", line 25, in <module>\n    check(sum_product)\n    ~~~~~^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-ogwv_sq5/prog.py\", line 19, in check\n    assert sum_product([]) == (0, 1)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "6f85722d98623ababc6be8d2cd9ab655c573affb750bb3300d39bc271f4a73fe",
+  "old_test_sha256": "aa7aaf6bddbe8feb114b3d154931c6d724760ccee60baa740274edad8d22d649",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/08.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

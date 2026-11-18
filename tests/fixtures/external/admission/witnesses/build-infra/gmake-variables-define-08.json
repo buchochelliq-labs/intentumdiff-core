@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-define-08",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 512,
+    "expected_output": "work/variables/define.mk.8:4: *** missing 'endef', unterminated 'define'.  Stop.\n",
+    "line": 178,
+    "options": "",
+    "script": "variables/define"
+  },
+  "new_sha256": "d45b8da3b36be577adc4c008ed5c561c5688b1b9ec7e8735b6922a19c1d5bd4b",
+  "old_sha256": "d45b8da3b36be577adc4c008ed5c561c5688b1b9ec7e8735b6922a19c1d5bd4b",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": false,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call, which is a makefile read error.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "    sum_value := 0\n    prod_value := 0\n\n    for _, n := range numbers {\n        sum_value += n\n        prod_value *= n\n    }\n    return [2]int{sum_value, prod_value}\n}\n\n",
+  "canonical_solution": "    sum_value := 0\n    prod_value := 1\n\n    for _, n := range numbers {\n        sum_value += n\n        prod_value *= n\n    }\n    return [2]int{sum_value, prod_value}\n}\n\n",
+  "declaration": "\nfunc SumProduct(numbers []int) [2]int {\n",
+  "docstring": "For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\nEmpty sum should be equal to 0 and empty product should be equal to 1.\n>>> SumProduct([])\n(0, 1)\n>>> SumProduct([1, 2, 3, 4])\n(10, 24)",
+  "entry_point": "SumProduct",
+  "example_test": "func TestSumProduct(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([2]int{0, 1}, SumProduct([]int{}))\n    assert.Equal([2]int{10,24}, SumProduct([]int{1, 2,3,4}))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Go function `func SumProduct(numbers []int) [2]int` to solve the following problem:\nFor a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\nEmpty sum should be equal to 0 and empty product should be equal to 1.\n>>> SumProduct([])\n(0, 1)\n>>> SumProduct([1, 2, 3, 4])\n(10, 24)",
+  "prompt": "\n// For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n// Empty sum should be equal to 0 and empty product should be equal to 1.\n// >>> SumProduct([])\n// (0, 1)\n// >>> SumProduct([1, 2, 3, 4])\n// (10, 24)\nfunc SumProduct(numbers []int) [2]int {\n",
+  "signature": "func SumProduct(numbers []int) [2]int",
+  "task_id": "Go/8",
+  "test": "func TestSumProduct(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([2]int{0, 1}, SumProduct([]int{}))\n    assert.Equal([2]int{3, 1}, SumProduct([]int{1, 1, 1}))\n    assert.Equal([2]int{100, 0}, SumProduct([]int{100, 0}))\n    assert.Equal([2]int{3 + 5 + 7, 3 * 5 * 7}, SumProduct([]int{3, 5, 7}))\n    assert.Equal([2]int{10, 10}, SumProduct([]int{10}))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

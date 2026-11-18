@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-04-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "b27ae5b67124b0999cd885733e6d9ce1988678afeed845714c0afb67e9295cf6",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "5eb106edfbe1a90ed9b59aa25fbd840645bb6ccb118c41744f0c8ee4b6840e1a",
+  "new_test_sha256": "9b23602ddf258cb7acb2badc67dee3dcd0136ba1d7834c3532f37c996f649538",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "93515e4e0359e9a6c77a9a77474dd68c50215abb8b17c4fa58b373f3c921f7ad",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-opd0_j8d/prog.py\", line 18, in <module>\n    check(mean_absolute_deviation)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-opd0_j8d/prog.py\", line 14, in check\n    assert abs(mean_absolute_deviation([1.0, 2.0, 3.0]) - 2.0/3.0) < 1e-6\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "d321da0c8d9b21760ae8f5e80e9abba828ec0953e2e764ba55fa553e4128426e",
+  "old_test_sha256": "9b23602ddf258cb7acb2badc67dee3dcd0136ba1d7834c3532f37c996f649538",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/04.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

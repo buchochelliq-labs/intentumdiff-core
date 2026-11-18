@@ -1,0 +1,77 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-cpp-10-repair",
+  "config": "cpp",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "880ca8976ed0e84863c9bd044a8f8801dd509458c1dc957c28bab79eb8de7439",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "a3a8a7dfb7c8f7a2eebab2b4f513e1e61c8a2d5c8868bc101cc8af5a88bfe367",
+  "new_test_sha256": "b93cb7423d672575b99ee7c3f2d1a03ae1ec9c518813faa16f7dc79ca0394996",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "1872c6ba351cecdb32b4d66225a5f725459b6af4576dd9bcc8a9a36d288a691a",
+    "steps": [
+      {
+        "argv": [
+          "g++",
+          "-std=c++17",
+          "-O0",
+          "prog.cpp",
+          "-o",
+          "prog",
+          "-lm"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      },
+      {
+        "argv": [
+          "./prog"
+        ],
+        "exit_code": -6,
+        "stderr_tail": "prog: prog.cpp:32: int main(): Assertion `make_palindrome(\"xyz\") == \"xyzyx\"' failed.\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "f472b1dd76713a1911b7e8601baa2c33fefca0f2ebdc4b087277e69afad4f3d1",
+  "old_test_sha256": "b93cb7423d672575b99ee7c3f2d1a03ae1ec9c518813faa16f7dc79ca0394996",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/cpp/10.json",
+  "toolchain": [
+    "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  ],
+  "verdict": "supports_claim"
+}

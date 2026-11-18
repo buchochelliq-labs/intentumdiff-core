@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "classification": "reviewed_external_derived",
+  "original_edit_gold": false,
+  "reference_tools_executed": false,
+  "cases": [
+    {
+      "case_id": "web-asciidoc-external-paragraph-bound",
+      "upstream_case": "paragraph/basic",
+      "source_path": "asciidoctor-doctest/paragraph.adoc",
+      "source_sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20",
+      "original_expected": null,
+      "derivation": "Retain full acquired AsciiDoc source and replace first one-or-more lower bound only."
+    },
+    {
+      "case_id": "web-asciidoc-external-comment-marker",
+      "upstream_case": "paragraph/basic",
+      "source_path": "asciidoctor-doctest/paragraph.adoc",
+      "source_sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20",
+      "original_expected": null,
+      "derivation": "Change only a standalone comment body; no backend rendering claimed."
+    },
+    {
+      "case_id": "web-astro-external-button-text",
+      "upstream_case": "TestPrintToJS/basic (no frontmatter)",
+      "source_path": "astro/printer_test.go",
+      "source_sha256": "dad01dd730425e6bb404bc56268e79d96c3876dccb68f30311c7e33faeb24f58",
+      "original_expected": null,
+      "derivation": "Extract verbatim Go raw source literal, then replace only its static child text."
+    },
+    {
+      "case_id": "web-astro-external-start-tag-space",
+      "upstream_case": "TestPrintToJS/basic (no frontmatter)",
+      "source_path": "astro/printer_test.go",
+      "source_sha256": "dad01dd730425e6bb404bc56268e79d96c3876dccb68f30311c7e33faeb24f58",
+      "original_expected": null,
+      "derivation": "Extract verbatim Astro payload; insert one start-tag whitespace character."
+    },
+    {
+      "case_id": "web-css-external-computed-color",
+      "upstream_case": "named color rows black/white",
+      "source_path": "wpt/color-computed-named-color.html",
+      "source_sha256": "ffbb15d445a6d1f3ec7b065aeea23b8cf6d5f0ecca62bc9c836bfd7365de87d5",
+      "original_expected": {
+        "black": "rgb(0, 0, 0)",
+        "white": "rgb(255, 255, 255)"
+      },
+      "derivation": "Extract CSS table values and place each in the same authored #target rule; wrapper is derived."
+    },
+    {
+      "case_id": "web-css-external-keyword-case",
+      "upstream_case": "named color rows black/BLACK",
+      "source_path": "wpt/color-computed-named-color.html",
+      "source_sha256": "ffbb15d445a6d1f3ec7b065aeea23b8cf6d5f0ecca62bc9c836bfd7365de87d5",
+      "original_expected": {
+        "black": "rgb(0, 0, 0)",
+        "BLACK": "rgb(0, 0, 0)"
+      },
+      "derivation": "Extract independently asserted value strings and wrap them in the same #target rule."
+    },
+    {
+      "case_id": "web-html-external-button-type",
+      "upstream_case": "a button's type should stay within the range of valid values",
+      "source_path": "wpt/button-type.html",
+      "source_sha256": "620d896d1041ce554543828affda3843112488d4791ed10e20ce0a5ba33fbd9f",
+      "original_expected": {
+        "type=button": "button",
+        "type=submit": "submit"
+      },
+      "derivation": "Extract valid type values from original JS loop and build minimal equivalent HTML; browser wrapper itself is not assessed as CSS or TSX."
+    },
+    {
+      "case_id": "web-html-external-attribute-quotes",
+      "upstream_case": "button type reflected attribute",
+      "source_path": "wpt/button-type.html",
+      "source_sha256": "620d896d1041ce554543828affda3843112488d4791ed10e20ce0a5ba33fbd9f",
+      "original_expected": null,
+      "derivation": "Retain the same derived button markup and change only attribute delimiters; quote equivalence is specification-reviewed."
+    },
+    {
+      "case_id": "web-latex-external-article-option",
+      "upstream_case": "github-0043",
+      "source_path": "latex2e/github-0043.lvt",
+      "source_sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e",
+      "original_expected": {
+        "original_log": "github-0043.tlg retained; not a font-size oracle"
+      },
+      "derivation": "Retain exact original LVT test source and insert an article class option. No l3build environment or generated package execution claimed."
+    },
+    {
+      "case_id": "web-latex-external-comment-insertion",
+      "upstream_case": "github-0043",
+      "source_path": "latex2e/github-0043.lvt",
+      "source_sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e",
+      "original_expected": null,
+      "derivation": "Insert only a standalone TeX comment after the documentclass line; preserve original file contents in separate acquisition."
+    },
+    {
+      "case_id": "web-markdown-external-heading-tab",
+      "upstream_case": "CommonMark 0.31.2 example 10",
+      "source_path": "commonmark-spec/spec-lines-1-800.txt",
+      "source_sha256": "188924cfaa26764d54bb05c93166b7e2e96b7b02b201d0cb712a4afb31aea194",
+      "original_expected": {
+        "original_html": "<h1>Foo</h1>\n",
+        "derived_expected_html": "<h2>Foo</h2>\n"
+      },
+      "derivation": "Extract example 10 Markdown, decode the normative → tab notation, append its example-final newline; add one opening heading marker."
+    },
+    {
+      "case_id": "web-markdown-external-code-block-form",
+      "upstream_case": "CommonMark 0.31.2 examples 18 and 19",
+      "source_path": "commonmark-spec/spec-lines-1-800.txt",
+      "source_sha256": "188924cfaa26764d54bb05c93166b7e2e96b7b02b201d0cb712a4afb31aea194",
+      "original_expected": {
+        "old_html": "<pre><code>\\[\\]\n</code></pre>\n",
+        "new_html": "<pre><code>\\[\\]\n</code></pre>\n"
+      },
+      "derivation": "Pair two original conformance examples with identical supplied HTML; this comparison pair is assembled here, not an upstream edit task."
+    },
+    {
+      "case_id": "web-mdx-external-rendered-heading",
+      "upstream_case": "should compile / should compile a vfile",
+      "source_path": "mdx/compile.js",
+      "source_sha256": "b661a518fafb311021d310fb7a01b7d02bb33a393871410f78b0a33b3e4a980d",
+      "original_expected": {
+        "old_html": "<h1>hi!</h1>",
+        "new_html": "<h1>hi?</h1>"
+      },
+      "derivation": "Extract two original MDX string arguments from separate original runtime render assertions and pair them; no JS wrapper is benchmarked as MDX."
+    },
+    {
+      "case_id": "web-mdx-external-closing-heading-marker",
+      "upstream_case": "should compile",
+      "source_path": "mdx/compile.js",
+      "source_sha256": "b661a518fafb311021d310fb7a01b7d02bb33a393871410f78b0a33b3e4a980d",
+      "original_expected": {
+        "original_html": "<h1>hi!</h1>"
+      },
+      "derivation": "Extract original MDX source and add the optional CommonMark closing hash delimiter; the preservation label is specification-reviewed."
+    },
+    {
+      "case_id": "web-po-external-message-translation",
+      "upstream_case": "mf-1-module1.po/msg 1",
+      "source_path": "gettext/msgfmt-1",
+      "source_sha256": "34c39389900ab78e9b823a959e89da0a8694c900d9f974ca52141b9d012cdd28",
+      "original_expected": null,
+      "derivation": "Extract exactly one complete msgid/msgstr record from the original shell heredoc, excluding domain extension entries; change translation only."
+    },
+    {
+      "case_id": "web-po-external-translation-concatenation",
+      "upstream_case": "mf-1-module1.po/msg 1",
+      "source_path": "gettext/msgfmt-1",
+      "source_sha256": "34c39389900ab78e9b823a959e89da0a8694c900d9f974ca52141b9d012cdd28",
+      "original_expected": null,
+      "derivation": "Extract exact record; split msgstr into adjacent quoted fragments without inserted decoded characters. ASCII record needs no UTF-8 declaration."
+    },
+    {
+      "case_id": "web-scss-external-escaped-string-value",
+      "upstream_case": "new-line/scss/escaped",
+      "source_path": "sass-spec/strings.hrx",
+      "source_sha256": "c720a6a5b877ac0e69791897fe49bf01290378e3f2844b2e597112b6e6da54b9",
+      "original_expected": {
+        "original_css": "a {\n  b: \"line1       line2\";\n}\n\n"
+      },
+      "derivation": "Extract exact input.scss HRX payload, excluding HRX delimiters; replace literal text only."
+    },
+    {
+      "case_id": "web-scss-external-escaped-string-spelling",
+      "upstream_case": "new-line/scss/escaped/input.scss and output.css",
+      "source_path": "sass-spec/strings.hrx",
+      "source_sha256": "c720a6a5b877ac0e69791897fe49bf01290378e3f2844b2e597112b6e6da54b9",
+      "original_expected": {
+        "original_css": "a {\n  b: \"line1       line2\";\n}\n\n"
+      },
+      "derivation": "Use original input.scss as old and its original expected output.css bytes as equivalent SCSS new; this cross-source comparison is derived."
+    },
+    {
+      "case_id": "web-svelte-external-static-class",
+      "upstream_case": "runtime-legacy/attribute-static",
+      "source_path": "svelte/attribute-static/main.svelte",
+      "source_sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724",
+      "original_expected": {
+        "original_html": "<div class=\"foo\"></div>"
+      },
+      "derivation": "Retain exact original Svelte source and replace the single class token."
+    },
+    {
+      "case_id": "web-svelte-external-static-quote-spelling",
+      "upstream_case": "runtime-legacy/attribute-static",
+      "source_path": "svelte/attribute-static/main.svelte",
+      "source_sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724",
+      "original_expected": {
+        "original_html": "<div class=\"foo\"></div>"
+      },
+      "derivation": "Change only source attribute quote delimiters; original expected HTML is in the retained _config.js."
+    },
+    {
+      "case_id": "web-tsx-external-component-prop",
+      "upstream_case": "TypeScript 5.9.3 checkJsxChildrenProperty1",
+      "source_path": "typescript/checkJsxChildrenProperty1.tsx",
+      "source_sha256": "4856d9de34cf1861c362ea5acd68b5413c193a859fcc2ba9d72af5b27989058f",
+      "original_expected": null,
+      "derivation": "Retain entire CRLF source; change first JSX b string only. Original noLib/react declaration environment is recorded but not imported/executed."
+    },
+    {
+      "case_id": "web-tsx-external-module-quote-spelling",
+      "upstream_case": "TypeScript 5.9.3 checkJsxChildrenProperty1",
+      "source_path": "typescript/checkJsxChildrenProperty1.tsx",
+      "source_sha256": "4856d9de34cf1861c362ea5acd68b5413c193a859fcc2ba9d72af5b27989058f",
+      "original_expected": null,
+      "derivation": "Retain full source and change only require module literal quote delimiters; no TypeScript conformance completion claim."
+    },
+    {
+      "case_id": "web-vue-external-scoped-color",
+      "upstream_case": "SFC scoped CSS/simple selectors",
+      "source_path": "vue/compileStyle.spec.ts",
+      "source_sha256": "fcd6ddb4100383f2b06d73747cfe59b696a385842a0b2881f28a0225e029a0c0",
+      "original_expected": {
+        "original_compiled_fragment": "h1[data-v-test] { color: red;"
+      },
+      "derivation": "Extract exact CSS payload from original TypeScript test; add a minimal scoped style SFC wrapper and change color only."
+    },
+    {
+      "case_id": "web-vue-external-scoped-css-formatting",
+      "upstream_case": "SFC scoped CSS/simple selectors",
+      "source_path": "vue/compileStyle.spec.ts",
+      "source_sha256": "fcd6ddb4100383f2b06d73747cfe59b696a385842a0b2881f28a0225e029a0c0",
+      "original_expected": {
+        "original_compiled_fragment": "h1[data-v-test] { color: red;"
+      },
+      "derivation": "Extract original CSS payload and wrap as Vue style SFC; reformat only ordinary CSS declaration whitespace."
+    }
+  ]
+}

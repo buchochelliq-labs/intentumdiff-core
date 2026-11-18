@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-6JTT",
+  "executed_utc": "2026-11-17T20:20:25+00:00",
+  "new_sha256": "4c9dca197aa53235537073d581b14861b605bfe6bec208bc199b6ffbaa4dfae7",
+  "observations": {
+    "error": "ParserError: while parsing a flow sequence\n  in \"<unicode string>\", line 2, column 1:\n    [ [ a, b, c ]\n    ^ (line: 2)\nexpected ',' or ']', but got '<stream end>'\n  in \"<unicode string>\", line 3, column 1:\n    \n    ^ (line: 3)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "4c9dca197aa53235537073d581b14861b605bfe6bec208bc199b6ffbaa4dfae7",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

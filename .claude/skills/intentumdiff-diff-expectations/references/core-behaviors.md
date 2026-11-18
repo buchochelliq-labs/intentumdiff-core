@@ -16,6 +16,25 @@ specifics are in [failing-scenarios.md](failing-scenarios.md).
 | CSS color re-expressed: `#00f` / `rgb(0,0,255)` / `blue` | ignored (equal color); stays individually inspectable | css color equivalence | `test_invariances.py` |
 | CSS color changed: `blue` → `red` | a **MEANINGFUL** change (different color) | — | `test_invariances.py` |
 
+## Completeness — an empty review is not an equivalence proof (core #252)
+
+| If you see (X) | Expect (Y) | rule_id / group | enforced by |
+|---|---|---|---|
+| Byte-identical sources | `completeness="complete"`, `changes=[]`, `incomplete=null` | — | `tests_completeness.rs` |
+| Proved style-only edit (`x = 1` → `x  =  1`) | `is_style_only=true`, `completeness="equivalent"`, `incomplete=null` | style-only evidence | `tests_completeness.rs` |
+| JSON object / YAML mapping / TOML table members reordered, same keys and values | `changes=[]`, `is_style_only=false`, `completeness="equivalent"`, `metadata.equivalence_proof` set, one `NOISE_SUPPRESSED` group with `index_space="equivalence_proof"` | `keyed_data.unordered_mapping_member_order` | `tests_completeness.rs` |
+| JSON / ADF / Databricks `number` respelled to the same exact decimal only (`9`→`9.0`, `1000`→`1e3`, `1E-2`→`0.01`, layout may change in JSON-lexable sources) | `changes=[]`, `is_style_only=false`, `completeness="equivalent"`, `metadata.equivalence_proof` set; one `IGNORED_STYLE` group per pair with both spellings as written in `old_labels`/`new_labels` and `raw_change_indices=[]` | `keyed_data.number_exact_decimal_respelling` | `number_respelling_tests.rs`, `number_respelling_source_tests.rs` (ADF PR #11 component, pinned ADF/JSON) |
+| Same number rule, mixed edit (`retry 9`→`9.0` and `ratio 1`→`2`) | only the real change (`1`→`2`) in `changes`, `completeness="complete"`, no proof; the respelling stays as `IGNORED_STYLE` evidence | `keyed_data.number_exact_decimal_respelling` | same |
+| Real value edits: `9`→`10`, `9`→`-9`, `1.0`→`1.01`, `-0`→`0`, number→string; unprovable spellings `1_000`, `0x10`, `+1`, `.5`, `01`, `1e1000001`; YAML/TOML scalars; a split token (`22` of `1e+22`); an equal-hash label-only edit of any non-`number` node | meaningful, labelled with the source text, never this proof | — | same |
+| Same reorder with values swapped between keys, duplicate/escaped keys, YAML anchors/aliases/tags, TOML `[[arrays]]` | never `equivalent` via the proof | — | `tests_completeness.rs` |
+| Sources differ, every draft suppressed, no proof (today: Go call reorder in a body, bash `x=1`/`x=2` swap, JSON array element swap, Lua/PowerShell/make/Dockerfile command reorders, INI key reorder, bash function-definition reorder) | `completeness="incomplete"`, `changes=[]`, `has_semantic_changes=false`, `is_style_only=false`, `metadata.no_surviving_changes=true`, `incomplete.{reason="unexplained_source_delta", message, report_url, source_ranges}`; the message contains no source text | — | `tests_completeness.rs`, `completeness.rs` |
+| Any `incomplete` review | `incomplete.report` carries a sanitised outline: identifiers `id1…` (consistent per report), literals `string(N)`/`int`/…, comments and docstrings dropped, no source text in `title`, `body_markdown`, `issue_url` or `outline`; `issue_url` ≤ 8000 bytes (`truncated` when cut); byte-identical on repeat | — | `repro_outline.rs`, `tests_completeness.rs` |
+| CS-01 executable reorder / CS-02 raw/bytes prefix edit | today `complete` with surviving changes; if a suppressor regresses to `changes=[]`, the boundary still returns `incomplete` | — | `tests_completeness.rs` |
+
+The incomplete rows are honest gaps, not targets to suppress: fixing one means the engine
+surfaces the reorder (making the review `complete`) or proves equivalence, never that the
+`incomplete` marker is removed.
+
 ## Reorder / move
 
 | If you see (X) | Expect (Y) | rule_id / group | enforced by |

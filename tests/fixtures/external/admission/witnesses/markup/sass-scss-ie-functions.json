@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-ie-functions",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "568a10676625524312a9eb235c1eed4966e59910c1d66267bfb377a3db023c9b",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "568a10676625524312a9eb235c1eed4966e59910c1d66267bfb377a3db023c9b",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

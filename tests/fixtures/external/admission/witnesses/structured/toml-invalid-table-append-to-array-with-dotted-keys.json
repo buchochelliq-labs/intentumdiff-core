@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-table-append-to-array-with-dotted-keys",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "f761264265675377ac486030ad7ddf52da634f289080c05657cc7f37f5146f68",
+  "observations": {
+    "error": "Cannot redefine namespace ('a', 'b') (at line 4, column 8)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "f761264265675377ac486030ad7ddf52da634f289080c05657cc7f37f5146f68",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

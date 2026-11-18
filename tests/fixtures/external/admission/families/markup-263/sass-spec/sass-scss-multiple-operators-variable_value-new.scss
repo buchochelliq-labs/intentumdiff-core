@@ -1,0 +1,8 @@
+$x: 2x;
+$y: 1;
+
+@function getResult() { @return true; }
+
+.test {
+    a: $x > $y == getResult();
+}

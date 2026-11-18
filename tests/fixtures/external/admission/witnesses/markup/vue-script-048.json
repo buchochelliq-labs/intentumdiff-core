@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-048",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "78cd4289c33a0f48481b40e382fb8a3a31b4a36b902e62a00dc4232b46b9625b",
+  "observations": {
+    "crash": "Error: [@vue/compiler-sfc] <script setup> cannot contain ES module exports. If you are using a previous version of <script setup>, please consult the updated RFC at https://github.com/vuejs/rfcs/pull/227.\n\nFixture.vue\n1  |  <script setup>\n2  |            const bar = 1\n3  |            export { bar as default }\n   |            ^^^^^^^^^^^^^^^^^^^^^^^^^\n4  |          </script>\n    at ScriptCompileCon"
+  },
+  "old_sha256": "78cd4289c33a0f48481b40e382fb8a3a31b4a36b902e62a00dc4232b46b9625b",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

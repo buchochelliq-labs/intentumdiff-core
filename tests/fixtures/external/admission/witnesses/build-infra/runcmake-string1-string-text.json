@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "runcmake-string1-string-text",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "'\n  1 ${var} 5\n '\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "new_sha256": "43d950227a671274875a301b6e7dc3bc6c0534382cbd24ce84b7871e991e00a6",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "'\n  1 ${var} 4\n '\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "old_sha256": "63eaa4c07e7487bbcdb789683edea9997a9388f90f268221731e0618d9c28d90",
+  "oracle": "cmake_configure_output_equality",
+  "projection_equal": false,
+  "review": "cmake 3.28.3 configure: exit status, stdout and stderr differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-S4GJ",
+  "executed_utc": "2026-11-17T20:20:29+00:00",
+  "new_sha256": "db0aa9af46d93e5f02d68fb5347b8a56c9a95d05ea3960c819191921231c1d26",
+  "observations": {
+    "error": "ScannerError: while scanning a block scalar\n  in \"<unicode string>\", line 2, column 9:\n    folded: > first line\n            ^ (line: 2)\nexpected a comment or a line break, but found 'f'\n  in \"<unicode string>\", line 2, column 11:\n    folded: > first line\n              ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "db0aa9af46d93e5f02d68fb5347b8a56c9a95d05ea3960c819191921231c1d26",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

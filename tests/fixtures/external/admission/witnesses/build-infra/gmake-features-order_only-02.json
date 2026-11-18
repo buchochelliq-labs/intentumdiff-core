@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-features-order_only-02",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 0,
+    "expected_output": "touch bar\ntouch baz\n$^ = bar baz\n$| = \ntouch foo\n",
+    "line": 40,
+    "options": "",
+    "script": "features/order_only"
+  },
+  "new_sha256": "c9cf13275677f6a855cc76ab83b72975b71c8cb16b9f812cdb6b8b93aaac6c9a",
+  "old_sha256": "c9cf13275677f6a855cc76ab83b72975b71c8cb16b9f812cdb6b8b93aaac6c9a",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

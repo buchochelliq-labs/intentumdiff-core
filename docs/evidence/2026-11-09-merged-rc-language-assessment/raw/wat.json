@@ -1,0 +1,5104 @@
+{
+  "language_id": "wat",
+  "options": {
+    "language_hint": "wat",
+    "strict_plugins": true
+  },
+  "completed_count": 13,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "wat-literal-value",
+      "language_id": "wat",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "4520cf69eb3a332d8d996d3df190854cc4e7e0c099a2d4deea4927741b1ecfea",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update instruction('1') -> instruction('2')",
+            "old_node": {
+              "id": "0.0.3",
+              "node_type": "instruction",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 55,
+                "end_line": 0,
+                "end_col": 56
+              },
+              "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.3",
+              "node_type": "instruction",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 55,
+                "end_line": 0,
+                "end_col": 56
+              },
+              "structural_hash": "84ce0a482d8598dca7e1a42358b202ab36f9f7f23bf7fbff8bb2fea1ccc36f50",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [
+              "2"
+            ],
+            "old_node_ids": [
+              "0.0.3"
+            ],
+            "new_node_ids": [
+              "0.0.3"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.458702,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.213850626118068,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.129781,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 270827,
+                "total_fuel_consumed": 270827,
+                "max_fuel_used_percent": 1.2112119856887298,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "ffffc1c9036472e4f70ef6480760a1cd0e0792fb5303a23b87cd3ab549aa36e4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "4a84ca3d4cdb751ccd7e1b004e62aabd048157fce85fd5b98a495310df7c2c9d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "84ce0a482d8598dca7e1a42358b202ab36f9f7f23bf7fbff8bb2fea1ccc36f50",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4953.758
+    },
+    {
+      "id": "wat-declaration-api",
+      "language_id": "wat",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "63397e7981e90002db5782e271675fe6a888417e328a5c560132fd7736b059f5",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update export('\"answer\"') -> export('\"result\"')",
+            "old_node": {
+              "id": "0.0.0",
+              "node_type": "export",
+              "label": "\"answer\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 14,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+              "children": [],
+              "parent_type": "module"
+            },
+            "new_node": {
+              "id": "0.0.0",
+              "node_type": "export",
+              "label": "\"result\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 14,
+                "end_line": 0,
+                "end_col": 31
+              },
+              "structural_hash": "ada72d028ec662ee0338b2395fa0bd9b7d53d5ccf21d3b30a8dda73f8144d77a",
+              "children": [],
+              "parent_type": "module"
+            },
+            "text_diff": "\"answer\" -> \"result\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"answer\""
+            ],
+            "new_labels": [
+              "\"result\""
+            ],
+            "old_node_ids": [
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.320085,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.213850626118068,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.25276,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 270827,
+                "total_fuel_consumed": 270827,
+                "max_fuel_used_percent": 1.2112119856887298,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "2edeff3d6652ce988157def343e7552d1f8e205acbac488682e23a5c85918a6c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "7d39fd6112c26d05eebbd96b8c1cc1da870a763ff2b3bf310558be7958e91af7",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"result\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "ada72d028ec662ee0338b2395fa0bd9b7d53d5ccf21d3b30a8dda73f8144d77a",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 56.827
+    },
+    {
+      "id": "wat-body-operator",
+      "language_id": "wat",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0ac4390e48479a625102401d855053133073167bdea641a957a190ae575b6756",
+      "new_sha256": "fa21765a964ff43d3b55900fdc23f7454cb94b89d3aae831e4ed8f5656c6f070",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update instruction('i32.add') -> instruction('i32.sub')",
+            "old_node": {
+              "id": "0.0.7",
+              "node_type": "instruction",
+              "label": "i32.add",
+              "position": {
+                "start_line": 0,
+                "start_col": 86,
+                "end_line": 0,
+                "end_col": 93
+              },
+              "structural_hash": "8735e20aee1c2e8c04ef96648f4e580b7439076ebf14293cdaf3957caf485bc0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.7",
+              "node_type": "instruction",
+              "label": "i32.sub",
+              "position": {
+                "start_line": 0,
+                "start_col": 86,
+                "end_line": 0,
+                "end_col": 93
+              },
+              "structural_hash": "be69e40961a7f25aa5e0699fb6e3678cfe2b07352b1a02144c79ab79c226fadc",
+              "children": []
+            },
+            "text_diff": "i32.add -> i32.sub"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "i32.add"
+            ],
+            "new_labels": [
+              "i32.sub"
+            ],
+            "old_node_ids": [
+              "0.0.7"
+            ],
+            "new_node_ids": [
+              "0.0.7"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.384815,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23840000,
+                "fuel_consumed": 452321,
+                "total_fuel_consumed": 452321,
+                "max_fuel_used_percent": 1.8973196308724831,
+                "input_bytes": 96,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.266967,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23840000,
+                "fuel_consumed": 451731,
+                "total_fuel_consumed": 451731,
+                "max_fuel_used_percent": 1.8948447986577182,
+                "input_bytes": 96,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 95
+            },
+            "structural_hash": "1fe2159cf9660cbe038013751e16cc14cd4df875d81914bed8ebcdb83f85b4f7",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 94
+                },
+                "structural_hash": "4215c80a3a0f408f01ae7b061445c6b05a89fe3bb875ef264c517ba2464f7785",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"combine\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 32
+                    },
+                    "structural_hash": "3427b02cb58d30cab287cb46dc47bf07ad864813205f5c08b9d3603934d17408",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32 i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 33,
+                      "end_line": 0,
+                      "end_col": 48
+                    },
+                    "structural_hash": "5f0a51c90ef67ae6486521775530956df8be479e19870d649d87acd8614041f6",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 49,
+                      "end_line": 0,
+                      "end_col": 61
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 62,
+                      "end_line": 0,
+                      "end_col": 71
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "instruction",
+                    "label": "0",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 72,
+                      "end_line": 0,
+                      "end_col": 73
+                    },
+                    "structural_hash": "92cb3888d0b42cab7cc38993b405993a7126233f59d403c88f2deda8622e7ead",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 74,
+                      "end_line": 0,
+                      "end_col": 83
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 84,
+                      "end_line": 0,
+                      "end_col": 85
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "instruction",
+                    "label": "i32.add",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 86,
+                      "end_line": 0,
+                      "end_col": 93
+                    },
+                    "structural_hash": "8735e20aee1c2e8c04ef96648f4e580b7439076ebf14293cdaf3957caf485bc0",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 95
+            },
+            "structural_hash": "c415653f67bd392d6e8dc1b26ed0d2d7fd7c5b7b8cd15d0daab5d5f4a9b6f7ee",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 94
+                },
+                "structural_hash": "0194696407af021e47827ebaa2d4b9c1c12a616db531dd47bbad4d45f94aa4b2",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"combine\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 32
+                    },
+                    "structural_hash": "3427b02cb58d30cab287cb46dc47bf07ad864813205f5c08b9d3603934d17408",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32 i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 33,
+                      "end_line": 0,
+                      "end_col": 48
+                    },
+                    "structural_hash": "5f0a51c90ef67ae6486521775530956df8be479e19870d649d87acd8614041f6",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 49,
+                      "end_line": 0,
+                      "end_col": 61
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 62,
+                      "end_line": 0,
+                      "end_col": 71
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "instruction",
+                    "label": "0",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 72,
+                      "end_line": 0,
+                      "end_col": 73
+                    },
+                    "structural_hash": "92cb3888d0b42cab7cc38993b405993a7126233f59d403c88f2deda8622e7ead",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 74,
+                      "end_line": 0,
+                      "end_col": 83
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 84,
+                      "end_line": 0,
+                      "end_col": 85
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "instruction",
+                    "label": "i32.sub",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 86,
+                      "end_line": 0,
+                      "end_col": 93
+                    },
+                    "structural_hash": "be69e40961a7f25aa5e0699fb6e3678cfe2b07352b1a02144c79ab79c226fadc",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 80.04
+    },
+    {
+      "id": "wat-identity",
+      "language_id": "wat",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.41441999999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.213850626118068,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.23414400000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 270827,
+                "total_fuel_consumed": 270827,
+                "max_fuel_used_percent": 1.2112119856887298,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 115.743
+    },
+    {
+      "id": "wat-ordinary-comment",
+      "language_id": "wat",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "e901b651a22c0b5ee76fad80bc4add8345f4d3a875ad729ef23db14dd693acf5",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              ";; Ordinary comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": ";; Ordinary comment\\n",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": ";; Ordinary comment\\n",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.25842,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22760000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.1925175746924428,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.562485,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22760000,
+                "fuel_consumed": 273265,
+                "total_fuel_consumed": 273265,
+                "max_fuel_used_percent": 1.2006370826010546,
+                "input_bytes": 79,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 8,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 14,
+                      "end_line": 1,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 32,
+                      "end_line": 1,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 45,
+                      "end_line": 1,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 55,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 56.05
+    },
+    {
+      "id": "wat-layout",
+      "language_id": "wat",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "5011ede7cb7a5835303171dc8f0f42a8335fd968561de67d883abb945f7bd231",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                59,
+                59
+              ],
+              "new_span": [
+                60,
+                61
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                59,
+                59
+              ],
+              "new_span": [
+                60,
+                61
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.309054,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22400000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.2116830357142858,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.358987,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22400000,
+                "fuel_consumed": 271101,
+                "total_fuel_consumed": 271101,
+                "max_fuel_used_percent": 1.2102723214285713,
+                "input_bytes": 61,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 8,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 14,
+                      "end_line": 1,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 32,
+                      "end_line": 1,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 45,
+                      "end_line": 1,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 55,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.478
+    },
+    {
+      "id": "wat-incomplete",
+      "language_id": "wat",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "eb50407ca00c99068deed943007be579af33c605ba2d17f766c5aba592598b6c",
+      "new_sha256": "c1c793b9c5604c766cb46b509b060b695c1357265450de33765ac393c686f44c",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete instruction('1')",
+            "old_node": {
+              "id": "0.0.3",
+              "node_type": "instruction",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 55,
+                "end_line": 0,
+                "end_col": 56
+              },
+              "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.0.3"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.311318,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 271417,
+                "total_fuel_consumed": 271417,
+                "max_fuel_used_percent": 1.2182091561938957,
+                "input_bytes": 59,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.155089,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22280000,
+                "fuel_consumed": 228710,
+                "total_fuel_consumed": 228710,
+                "max_fuel_used_percent": 1.0265260323159786,
+                "input_bytes": 55,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 58
+            },
+            "structural_hash": "fc5f8bf0ad002d21b36b786147610db2d1e0454bd3adaca58e1af8204e731c6e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 57
+                },
+                "structural_hash": "395fa49faefcfba89dae4f70e3743dd7abe7678629ba13a0386bccdc4f9d4a3d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "instruction",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 55,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "4a683646f5770b097101665ab6a6dc6fdb270901cb580857a870a696acea4675",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 54
+            },
+            "structural_hash": "b874cd241b27d4e8cf2dbdb18dd81ff039d7ccd812ad3443019e9de56a25179b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 54
+                },
+                "structural_hash": "92b2553ca9d20d7a2cd1f7d28b3b551f294bc904800cb3950f321471472a5973",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"answer\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 14,
+                      "end_line": 0,
+                      "end_col": 31
+                    },
+                    "structural_hash": "6688a4fcd1323daf7ce293db0426017976aed10f22a395b1ab7acb815d7d99b2",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 32,
+                      "end_line": 0,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "b4dcd159504f2e22b4d1d242a48f47471e4afea80562e5a27e0c34099a8f1adb",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 62.212
+    },
+    {
+      "id": "wat-unicode-payload",
+      "language_id": "wat",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d706db37f1aa4ae100e33876d6d3d648d895522ff0e40448cd7202f949a58a55",
+      "new_sha256": "b3b57f0bef14a691a46f294eeef59ed6773f22d4e25d564f245a6301aa661e52",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update data('\"café\"') -> data('\"cafe雪\"')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "data",
+              "label": "\"café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 37,
+                "end_line": 0,
+                "end_col": 64
+              },
+              "structural_hash": "f6e4b006b1de1e692c2ef9e8a6b0f245643ff82cd19f2aa8bad9f59dbefe38e1",
+              "children": [
+                {
+                  "id": "0.1.0",
+                  "node_type": "instruction",
+                  "label": "i32.const 0",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 43,
+                    "end_line": 0,
+                    "end_col": 56
+                  },
+                  "structural_hash": "c2c9e17656f0bc032f1bafc10c88a52c1da516c3e9aab00451e991f551889163",
+                  "children": [],
+                  "parent_type": "module"
+                }
+              ],
+              "parent_type": "module"
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "data",
+              "label": "\"cafe雪\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 37,
+                "end_line": 0,
+                "end_col": 65
+              },
+              "structural_hash": "f2495ac7d44d10b76aca94235a1294f6b3890a0262f4e2803dbb8fd4fbefa8c3",
+              "children": [
+                {
+                  "id": "0.1.0",
+                  "node_type": "instruction",
+                  "label": "i32.const 0",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 43,
+                    "end_line": 0,
+                    "end_col": 56
+                  },
+                  "structural_hash": "c2c9e17656f0bc032f1bafc10c88a52c1da516c3e9aab00451e991f551889163",
+                  "children": [],
+                  "parent_type": "module"
+                }
+              ],
+              "parent_type": "module"
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"café\"",
+              "i32.const 0"
+            ],
+            "new_labels": [
+              "\"cafe雪\"",
+              "i32.const 0"
+            ],
+            "old_node_ids": [
+              "0.1",
+              "0.1.0"
+            ],
+            "new_node_ids": [
+              "0.1",
+              "0.1.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.28914799999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 243283,
+                "total_fuel_consumed": 243283,
+                "max_fuel_used_percent": 1.0707878521126761,
+                "input_bytes": 67,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.17753,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 243109,
+                "total_fuel_consumed": 243109,
+                "max_fuel_used_percent": 1.0700220070422535,
+                "input_bytes": 69,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 65
+            },
+            "structural_hash": "218cff7d8f318406059fdcbc034362201902ac687bbe997ae11bb900f77ca4d8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "memory",
+                "label": "1",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 36
+                },
+                "structural_hash": "d1db3d68ed7a6e234b4f837d127be1b3a1e00a878230a50aad26104b839ef91d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"memory\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.1",
+                "node_type": "data",
+                "label": "\"café\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 37,
+                  "end_line": 0,
+                  "end_col": 64
+                },
+                "structural_hash": "f6e4b006b1de1e692c2ef9e8a6b0f245643ff82cd19f2aa8bad9f59dbefe38e1",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "instruction",
+                    "label": "i32.const 0",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 43,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "c2c9e17656f0bc032f1bafc10c88a52c1da516c3e9aab00451e991f551889163",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 66
+            },
+            "structural_hash": "58cb61a5a89ef8b7b4f0392c7dc041b7adf29954f301aa36d2087e23c51b2d5e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "memory",
+                "label": "1",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 36
+                },
+                "structural_hash": "d1db3d68ed7a6e234b4f837d127be1b3a1e00a878230a50aad26104b839ef91d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"memory\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.1",
+                "node_type": "data",
+                "label": "\"cafe雪\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 37,
+                  "end_line": 0,
+                  "end_col": 65
+                },
+                "structural_hash": "f2495ac7d44d10b76aca94235a1294f6b3890a0262f4e2803dbb8fd4fbefa8c3",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "instruction",
+                    "label": "i32.const 0",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 43,
+                      "end_line": 0,
+                      "end_col": 56
+                    },
+                    "structural_hash": "c2c9e17656f0bc032f1bafc10c88a52c1da516c3e9aab00451e991f551889163",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 61.117
+    },
+    {
+      "id": "wat-repo-fixture-identity",
+      "language_id": "wat",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "100310e3a4ad1529ea898794a970307b57b6c053878d0d6df82e4990a15ad9f0",
+      "new_sha256": "100310e3a4ad1529ea898794a970307b57b6c053878d0d6df82e4990a15ad9f0",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.wat",
+        "new_filename": "playground.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "playground.wat",
+                "call_count": 1,
+                "elapsed_ms": 1.610822,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 37640000,
+                "fuel_consumed": 1915837,
+                "total_fuel_consumed": 1915837,
+                "max_fuel_used_percent": 5.08989638682253,
+                "input_bytes": 441,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "playground.wat",
+                "call_count": 1,
+                "elapsed_ms": 1.113869,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 37640000,
+                "fuel_consumed": 1915023,
+                "total_fuel_consumed": 1915023,
+                "max_fuel_used_percent": 5.087733793836344,
+                "input_bytes": 441,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 39
+            },
+            "structural_hash": "4c5ba9e63d1939921188f31aa9973d26ef71230277dd6e39f2b3cb3807c83f5b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "$add",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 4,
+                  "end_col": 12
+                },
+                "structural_hash": "5d0aecfb650b65dc71b686b5960274604986505749f38fd6f95c4d9beb357dd4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "$add",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "01e477cc4d7b179566a3a76624b7325a287de2e529a1e6a649ea56d82f1502c4",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "$a i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 27
+                    },
+                    "structural_hash": "82edcc9a0f75c0663e1732062ca626e622eea690f7242fb5b55938896e0ecc22",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "signature",
+                    "label": "$b i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 28,
+                      "end_line": 1,
+                      "end_col": 42
+                    },
+                    "structural_hash": "5a4656509d5e178554c4efec464d9490f42e0382560efbbc36153feb27b4e3b3",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 43,
+                      "end_line": 1,
+                      "end_col": 55
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "identifier",
+                    "label": "$a",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 14,
+                      "end_line": 2,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6a44c32e25071ae7e3826e463e64006044543611a451036d899cd46e5656d815",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "identifier",
+                    "label": "$b",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 14,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c4bcedb772cd2b05b27f699c07de3e593d4687f12b90acc99309a1874fe567ac",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.8",
+                    "node_type": "instruction",
+                    "label": "i32.add",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8735e20aee1c2e8c04ef96648f4e580b7439076ebf14293cdaf3957caf485bc0",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.1",
+                "node_type": "func",
+                "label": "$multiply",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 2,
+                  "end_line": 8,
+                  "end_col": 12
+                },
+                "structural_hash": "4651865ae80ccefe6135ebb8c44b5f8da27be9acf5eb22c876b60aac0b69b666",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "$multiply",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 8,
+                      "end_line": 5,
+                      "end_col": 17
+                    },
+                    "structural_hash": "46100b6db2571cbd24954cd7f353211fc305e9a5d7c6cece7a8aee7e8cbe3dfd",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "signature",
+                    "label": "$a i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 18,
+                      "end_line": 5,
+                      "end_col": 32
+                    },
+                    "structural_hash": "82edcc9a0f75c0663e1732062ca626e622eea690f7242fb5b55938896e0ecc22",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "signature",
+                    "label": "$b i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 33,
+                      "end_line": 5,
+                      "end_col": 47
+                    },
+                    "structural_hash": "5a4656509d5e178554c4efec464d9490f42e0382560efbbc36153feb27b4e3b3",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 48,
+                      "end_line": 5,
+                      "end_col": 60
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 4,
+                      "end_line": 6,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.5",
+                    "node_type": "identifier",
+                    "label": "$a",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 14,
+                      "end_line": 6,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6a44c32e25071ae7e3826e463e64006044543611a451036d899cd46e5656d815",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.6",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 7,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.7",
+                    "node_type": "identifier",
+                    "label": "$b",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 14,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c4bcedb772cd2b05b27f699c07de3e593d4687f12b90acc99309a1874fe567ac",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.8",
+                    "node_type": "instruction",
+                    "label": "i32.mul",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "aad63c9aaefe0b39567c9a54bb7c22d0ba6081bef909eac9fca9e837b4e7a704",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.2",
+                "node_type": "func",
+                "label": "$scratch",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 2,
+                  "end_line": 10,
+                  "end_col": 17
+                },
+                "structural_hash": "f99a9719cf496543b6323ce94c035b6f9609d35e1fd448f754420e37ea086c48",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "$scratch",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 8,
+                      "end_line": 9,
+                      "end_col": 16
+                    },
+                    "structural_hash": "4798e3e328dcd7116507918458ed33f03986f15316b55147619b784e613f7711",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "signature",
+                    "label": "$n i32",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 17,
+                      "end_line": 9,
+                      "end_col": 31
+                    },
+                    "structural_hash": "88adcd5aee2533183f1799d76d1fa9960ed3d59af47df49ef054e6d90d8a6303",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 32,
+                      "end_line": 9,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 4,
+                      "end_line": 10,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.4",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 14,
+                      "end_line": 10,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.3",
+                "node_type": "func",
+                "label": "$twice",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 2,
+                  "end_line": 14,
+                  "end_col": 12
+                },
+                "structural_hash": "6acba5f9ecfdd0db7cda654e10c35b295d2c1f8a27dd8d6652d6693e898fdf04",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "$twice",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 11,
+                      "end_col": 14
+                    },
+                    "structural_hash": "0072239c28d2153c08fcd1660847db9bb229ab6ef493c7c82362673fcd3d3a8d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "signature",
+                    "label": "$n i32",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 15,
+                      "end_line": 11,
+                      "end_col": 29
+                    },
+                    "structural_hash": "88adcd5aee2533183f1799d76d1fa9960ed3d59af47df49ef054e6d90d8a6303",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 30,
+                      "end_line": 11,
+                      "end_col": 42
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.3.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 4,
+                      "end_line": 12,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.4",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 14,
+                      "end_line": 12,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.5",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 4,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.6",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 14,
+                      "end_line": 13,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.7",
+                    "node_type": "instruction",
+                    "label": "i32.mul",
+                    "position": {
+                      "start_line": 14,
+                      "start_col": 4,
+                      "end_line": 14,
+                      "end_col": 11
+                    },
+                    "structural_hash": "aad63c9aaefe0b39567c9a54bb7c22d0ba6081bef909eac9fca9e837b4e7a704",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.4",
+                "node_type": "export",
+                "label": "\"add\"",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 2,
+                  "end_line": 15,
+                  "end_col": 28
+                },
+                "structural_hash": "ef91d2379a6e826e7bdd6d55c66660c52b1858b9d6d8ed53ba7244ab3c1cb688",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "func",
+                    "label": "$add",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 16,
+                      "end_line": 15,
+                      "end_col": 27
+                    },
+                    "structural_hash": "82387656d534a4e40277934c656e9e47daf248136ac2590da5796f016245a377",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "identifier",
+                        "label": "$add",
+                        "position": {
+                          "start_line": 15,
+                          "start_col": 22,
+                          "end_line": 15,
+                          "end_col": 26
+                        },
+                        "structural_hash": "01e477cc4d7b179566a3a76624b7325a287de2e529a1e6a649ea56d82f1502c4",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.5",
+                "node_type": "export",
+                "label": "\"multiply\"",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 2,
+                  "end_line": 16,
+                  "end_col": 38
+                },
+                "structural_hash": "1cdfe85680ca5af503c134192cc1b23b9a2a5b96e57875916f1e0ab0f5513b3e",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "func",
+                    "label": "$multiply",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 21,
+                      "end_line": 16,
+                      "end_col": 37
+                    },
+                    "structural_hash": "e60eff300ccccc76456c1f6f42044fa90fbacca3e4588b32d186c9ff11cda69a",
+                    "children": [
+                      {
+                        "id": "0.5.0.0",
+                        "node_type": "identifier",
+                        "label": "$multiply",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 27,
+                          "end_line": 16,
+                          "end_col": 36
+                        },
+                        "structural_hash": "46100b6db2571cbd24954cd7f353211fc305e9a5d7c6cece7a8aee7e8cbe3dfd",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 39
+            },
+            "structural_hash": "4c5ba9e63d1939921188f31aa9973d26ef71230277dd6e39f2b3cb3807c83f5b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "$add",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 4,
+                  "end_col": 12
+                },
+                "structural_hash": "5d0aecfb650b65dc71b686b5960274604986505749f38fd6f95c4d9beb357dd4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "identifier",
+                    "label": "$add",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 12
+                    },
+                    "structural_hash": "01e477cc4d7b179566a3a76624b7325a287de2e529a1e6a649ea56d82f1502c4",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "$a i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 27
+                    },
+                    "structural_hash": "82edcc9a0f75c0663e1732062ca626e622eea690f7242fb5b55938896e0ecc22",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "signature",
+                    "label": "$b i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 28,
+                      "end_line": 1,
+                      "end_col": 42
+                    },
+                    "structural_hash": "5a4656509d5e178554c4efec464d9490f42e0382560efbbc36153feb27b4e3b3",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 43,
+                      "end_line": 1,
+                      "end_col": 55
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.4",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "identifier",
+                    "label": "$a",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 14,
+                      "end_line": 2,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6a44c32e25071ae7e3826e463e64006044543611a451036d899cd46e5656d815",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.6",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.7",
+                    "node_type": "identifier",
+                    "label": "$b",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 14,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c4bcedb772cd2b05b27f699c07de3e593d4687f12b90acc99309a1874fe567ac",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.8",
+                    "node_type": "instruction",
+                    "label": "i32.add",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 11
+                    },
+                    "structural_hash": "8735e20aee1c2e8c04ef96648f4e580b7439076ebf14293cdaf3957caf485bc0",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.1",
+                "node_type": "func",
+                "label": "$multiply",
+                "position": {
+                  "start_line": 5,
+                  "start_col": 2,
+                  "end_line": 8,
+                  "end_col": 12
+                },
+                "structural_hash": "4651865ae80ccefe6135ebb8c44b5f8da27be9acf5eb22c876b60aac0b69b666",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "identifier",
+                    "label": "$multiply",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 8,
+                      "end_line": 5,
+                      "end_col": 17
+                    },
+                    "structural_hash": "46100b6db2571cbd24954cd7f353211fc305e9a5d7c6cece7a8aee7e8cbe3dfd",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "signature",
+                    "label": "$a i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 18,
+                      "end_line": 5,
+                      "end_col": 32
+                    },
+                    "structural_hash": "82edcc9a0f75c0663e1732062ca626e622eea690f7242fb5b55938896e0ecc22",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "signature",
+                    "label": "$b i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 33,
+                      "end_line": 5,
+                      "end_col": 47
+                    },
+                    "structural_hash": "5a4656509d5e178554c4efec464d9490f42e0382560efbbc36153feb27b4e3b3",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 48,
+                      "end_line": 5,
+                      "end_col": 60
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 4,
+                      "end_line": 6,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.5",
+                    "node_type": "identifier",
+                    "label": "$a",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 14,
+                      "end_line": 6,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6a44c32e25071ae7e3826e463e64006044543611a451036d899cd46e5656d815",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.6",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 4,
+                      "end_line": 7,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.7",
+                    "node_type": "identifier",
+                    "label": "$b",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 14,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c4bcedb772cd2b05b27f699c07de3e593d4687f12b90acc99309a1874fe567ac",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.8",
+                    "node_type": "instruction",
+                    "label": "i32.mul",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 4,
+                      "end_line": 8,
+                      "end_col": 11
+                    },
+                    "structural_hash": "aad63c9aaefe0b39567c9a54bb7c22d0ba6081bef909eac9fca9e837b4e7a704",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.2",
+                "node_type": "func",
+                "label": "$scratch",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 2,
+                  "end_line": 10,
+                  "end_col": 17
+                },
+                "structural_hash": "f99a9719cf496543b6323ce94c035b6f9609d35e1fd448f754420e37ea086c48",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "identifier",
+                    "label": "$scratch",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 8,
+                      "end_line": 9,
+                      "end_col": 16
+                    },
+                    "structural_hash": "4798e3e328dcd7116507918458ed33f03986f15316b55147619b784e613f7711",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "signature",
+                    "label": "$n i32",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 17,
+                      "end_line": 9,
+                      "end_col": 31
+                    },
+                    "structural_hash": "88adcd5aee2533183f1799d76d1fa9960ed3d59af47df49ef054e6d90d8a6303",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 32,
+                      "end_line": 9,
+                      "end_col": 44
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.2.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 4,
+                      "end_line": 10,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.4",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 14,
+                      "end_line": 10,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.3",
+                "node_type": "func",
+                "label": "$twice",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 2,
+                  "end_line": 14,
+                  "end_col": 12
+                },
+                "structural_hash": "6acba5f9ecfdd0db7cda654e10c35b295d2c1f8a27dd8d6652d6693e898fdf04",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "identifier",
+                    "label": "$twice",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 8,
+                      "end_line": 11,
+                      "end_col": 14
+                    },
+                    "structural_hash": "0072239c28d2153c08fcd1660847db9bb229ab6ef493c7c82362673fcd3d3a8d",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "signature",
+                    "label": "$n i32",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 15,
+                      "end_line": 11,
+                      "end_col": 29
+                    },
+                    "structural_hash": "88adcd5aee2533183f1799d76d1fa9960ed3d59af47df49ef054e6d90d8a6303",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 30,
+                      "end_line": 11,
+                      "end_col": 42
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.3.3",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 4,
+                      "end_line": 12,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.4",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 14,
+                      "end_line": 12,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.5",
+                    "node_type": "instruction",
+                    "label": "local.get",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 4,
+                      "end_line": 13,
+                      "end_col": 13
+                    },
+                    "structural_hash": "917a297e1c9c7877cf4ef698f578159cbb8f5563449c0d4fb34372cfa8ad9a16",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.6",
+                    "node_type": "identifier",
+                    "label": "$n",
+                    "position": {
+                      "start_line": 13,
+                      "start_col": 14,
+                      "end_line": 13,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6270086124bafb196a90162a1f5ae7d58f87860a9172d368ab3600ead623d299",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.7",
+                    "node_type": "instruction",
+                    "label": "i32.mul",
+                    "position": {
+                      "start_line": 14,
+                      "start_col": 4,
+                      "end_line": 14,
+                      "end_col": 11
+                    },
+                    "structural_hash": "aad63c9aaefe0b39567c9a54bb7c22d0ba6081bef909eac9fca9e837b4e7a704",
+                    "children": []
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.4",
+                "node_type": "export",
+                "label": "\"add\"",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 2,
+                  "end_line": 15,
+                  "end_col": 28
+                },
+                "structural_hash": "ef91d2379a6e826e7bdd6d55c66660c52b1858b9d6d8ed53ba7244ab3c1cb688",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "func",
+                    "label": "$add",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 16,
+                      "end_line": 15,
+                      "end_col": 27
+                    },
+                    "structural_hash": "82387656d534a4e40277934c656e9e47daf248136ac2590da5796f016245a377",
+                    "children": [
+                      {
+                        "id": "0.4.0.0",
+                        "node_type": "identifier",
+                        "label": "$add",
+                        "position": {
+                          "start_line": 15,
+                          "start_col": 22,
+                          "end_line": 15,
+                          "end_col": 26
+                        },
+                        "structural_hash": "01e477cc4d7b179566a3a76624b7325a287de2e529a1e6a649ea56d82f1502c4",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              },
+              {
+                "id": "0.5",
+                "node_type": "export",
+                "label": "\"multiply\"",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 2,
+                  "end_line": 16,
+                  "end_col": 38
+                },
+                "structural_hash": "1cdfe85680ca5af503c134192cc1b23b9a2a5b96e57875916f1e0ab0f5513b3e",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "func",
+                    "label": "$multiply",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 21,
+                      "end_line": 16,
+                      "end_col": 37
+                    },
+                    "structural_hash": "e60eff300ccccc76456c1f6f42044fa90fbacca3e4588b32d186c9ff11cda69a",
+                    "children": [
+                      {
+                        "id": "0.5.0.0",
+                        "node_type": "identifier",
+                        "label": "$multiply",
+                        "position": {
+                          "start_line": 16,
+                          "start_col": 27,
+                          "end_line": 16,
+                          "end_col": 36
+                        },
+                        "structural_hash": "46100b6db2571cbd24954cd7f353211fc305e9a5d7c6cece7a8aee7e8cbe3dfd",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 110.129
+    },
+    {
+      "id": "wat-memory-initial-limit",
+      "language_id": "wat",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "20088c5a018c8ca1aaf43c4be35f7445938540f35969da3d830be81fa1e6c986",
+      "new_sha256": "68adb3bfde59c363a9e9c11d21a1eda06648c90f1211bed2690963abf9fb107c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-wat-parser#4",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update memory('1') -> memory('2')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "memory",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 38
+              },
+              "structural_hash": "d1db3d68ed7a6e234b4f837d127be1b3a1e00a878230a50aad26104b839ef91d",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "export",
+                  "label": "\"memory\"",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 16,
+                    "end_line": 0,
+                    "end_col": 33
+                  },
+                  "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                  "children": [],
+                  "parent_type": "module"
+                }
+              ],
+              "parent_type": "module"
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "memory",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 38
+              },
+              "structural_hash": "77fc08fa68ba68e8ec77c8349a6a90fdba66a0f90cf6b6e6250085006dcd7850",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "export",
+                  "label": "\"memory\"",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 16,
+                    "end_line": 0,
+                    "end_col": 33
+                  },
+                  "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                  "children": [],
+                  "parent_type": "module"
+                }
+              ],
+              "parent_type": "module"
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1",
+              "\"memory\""
+            ],
+            "new_labels": [
+              "2",
+              "\"memory\""
+            ],
+            "old_node_ids": [
+              "0.0",
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0",
+              "0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.51711,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21600000,
+                "fuel_consumed": 142901,
+                "total_fuel_consumed": 142901,
+                "max_fuel_used_percent": 0.6615787037037038,
+                "input_bytes": 40,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.16517600000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21600000,
+                "fuel_consumed": 142311,
+                "total_fuel_consumed": 142311,
+                "max_fuel_used_percent": 0.6588472222222223,
+                "input_bytes": 40,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 39
+            },
+            "structural_hash": "6fbd62c889a060c309464a61eb749afa40ba9d897ffc15088441e487edeeb1e5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "memory",
+                "label": "1",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "d1db3d68ed7a6e234b4f837d127be1b3a1e00a878230a50aad26104b839ef91d",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"memory\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 39
+            },
+            "structural_hash": "4f95295440a288793946e6a276a448ce6f1f478e41f188d0b12f6a2eb7d8f6d3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "memory",
+                "label": "2",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "77fc08fa68ba68e8ec77c8349a6a90fdba66a0f90cf6b6e6250085006dcd7850",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"memory\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "63aaf2c4371298084b158578ac768a74e53ba82e75b72542223c9b0ba436b1ba",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 79.189
+    },
+    {
+      "id": "wat-import-field",
+      "language_id": "wat",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "731b7c6c3dba27a65513aa01424d531bcd393bfa326631fdcd3440b9874d7ff6",
+      "new_sha256": "674056a7b2f17c8f9a6807aa3bba637a026aca27a321ab9b51755471d3d78203",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-wat-parser#4",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "(module (import \"env\" \"first\" (func $f)))\\n"
+            ],
+            "new_labels": [
+              "(module (import \"env\" \"second\" (func $f)))\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "(module (import \"env\" \"first\" (func $f)))\\n",
+              "new_label": "(module (import \"env\" \"second\" (func $f)))\\n",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                42
+              ],
+              "new_span": [
+                0,
+                43
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "(module (import \"env\" \"first\" (func $f)))\\n",
+              "new_label": "(module (import \"env\" \"second\" (func $f)))\\n",
+              "risk": "amber",
+              "language": "wat",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                42
+              ],
+              "new_span": [
+                0,
+                43
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.290168,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21700000,
+                "fuel_consumed": 182338,
+                "total_fuel_consumed": 182338,
+                "max_fuel_used_percent": 0.8402672811059908,
+                "input_bytes": 42,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.33670500000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21700000,
+                "fuel_consumed": 181915,
+                "total_fuel_consumed": 181915,
+                "max_fuel_used_percent": 0.8383179723502304,
+                "input_bytes": 43,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 41
+            },
+            "structural_hash": "9613963e806f68a3ef51c9aa187323b21256459103a2fe3d89ba7e4c7eb35b29",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "import",
+                "label": "\"env\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 40
+                },
+                "structural_hash": "a895f867cd2d68325aea9f1c7b87e65f9c3594cccc40d96f566fe44a1aea58d5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "func",
+                    "label": "$f",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 39
+                    },
+                    "structural_hash": "ec70c3528a13118e90c301ea4d54b3cecc8b91eeb620a50243e4b97877a468c3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "$f",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 36,
+                          "end_line": 0,
+                          "end_col": 38
+                        },
+                        "structural_hash": "3ba5a954cb122f09c2e2bb808a8db4f661ab18672977de7777eda1433921e9c6",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 42
+            },
+            "structural_hash": "9613963e806f68a3ef51c9aa187323b21256459103a2fe3d89ba7e4c7eb35b29",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "import",
+                "label": "\"env\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 8,
+                  "end_line": 0,
+                  "end_col": 41
+                },
+                "structural_hash": "a895f867cd2d68325aea9f1c7b87e65f9c3594cccc40d96f566fe44a1aea58d5",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "func",
+                    "label": "$f",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 31,
+                      "end_line": 0,
+                      "end_col": 40
+                    },
+                    "structural_hash": "ec70c3528a13118e90c301ea4d54b3cecc8b91eeb620a50243e4b97877a468c3",
+                    "children": [
+                      {
+                        "id": "0.0.0.0",
+                        "node_type": "identifier",
+                        "label": "$f",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 37,
+                          "end_line": 0,
+                          "end_col": 39
+                        },
+                        "structural_hash": "3ba5a954cb122f09c2e2bb808a8db4f661ab18672977de7777eda1433921e9c6",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 65.089
+    },
+    {
+      "id": "wat-spec-value-i32-identity",
+      "language_id": "wat",
+      "category": "external_derived_identity",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ded00032efeab86676d901433b0fabd4dd802a1b748bbae3b335e4db437bd4db",
+      "new_sha256": "ded00032efeab86676d901433b0fabd4dd802a1b748bbae3b335e4db437bd4db",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.350661,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 241179,
+                "total_fuel_consumed": 241179,
+                "max_fuel_used_percent": 1.0615272887323943,
+                "input_bytes": 68,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.207004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 240589,
+                "total_fuel_consumed": 240589,
+                "max_fuel_used_percent": 1.0589304577464789,
+                "input_bytes": 68,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 1
+            },
+            "structural_hash": "734c2d193e3cd87af3de84dee647ea4d637ec3acc41ad43035a2246c2df2af2c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "a3427af42af236debf0bdc8424a85523da9f9773cb1b112c0751923b531e7f3f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"value-i32\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 28
+                    },
+                    "structural_hash": "0bc927c88eef49822ce435c5437e9ee42fdb71b41a08998f17aa9df92e15fcac",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 41
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const 77",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 42,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "77293034f63bc3c5f0a080692b4e01e589d6f8b07657285822894313b40898ed",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 1
+            },
+            "structural_hash": "734c2d193e3cd87af3de84dee647ea4d637ec3acc41ad43035a2246c2df2af2c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "a3427af42af236debf0bdc8424a85523da9f9773cb1b112c0751923b531e7f3f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"value-i32\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 28
+                    },
+                    "structural_hash": "0bc927c88eef49822ce435c5437e9ee42fdb71b41a08998f17aa9df92e15fcac",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 41
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const 77",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 42,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "77293034f63bc3c5f0a080692b4e01e589d6f8b07657285822894313b40898ed",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 58.089
+    },
+    {
+      "id": "wat-spec-value-i32-constant",
+      "language_id": "wat",
+      "category": "external_derived_constant",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ded00032efeab86676d901433b0fabd4dd802a1b748bbae3b335e4db437bd4db",
+      "new_sha256": "681523f76e30a9e43e9ccb856bdcb413333a50f521bb108687cbea191c1d878c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.wat",
+        "new_filename": "probe.wat",
+        "language": "wat",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update instruction('i32.const 77') -> instruction('i32.const 78')",
+            "old_node": {
+              "id": "0.0.2",
+              "node_type": "instruction",
+              "label": "i32.const 77",
+              "position": {
+                "start_line": 1,
+                "start_col": 42,
+                "end_line": 1,
+                "end_col": 56
+              },
+              "structural_hash": "77293034f63bc3c5f0a080692b4e01e589d6f8b07657285822894313b40898ed",
+              "children": [],
+              "parent_type": "module"
+            },
+            "new_node": {
+              "id": "0.0.2",
+              "node_type": "instruction",
+              "label": "i32.const 78",
+              "position": {
+                "start_line": 1,
+                "start_col": 42,
+                "end_line": 1,
+                "end_col": 56
+              },
+              "structural_hash": "57ef31afce4b25056c93511806c3006eb70a2f5c7cdb5895c38da88193fe1c00",
+              "children": [],
+              "parent_type": "module"
+            },
+            "text_diff": "i32.const 77 -> i32.const 78"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "i32.const 77"
+            ],
+            "new_labels": [
+              "i32.const 78"
+            ],
+            "old_node_ids": [
+              "0.0.2"
+            ],
+            "new_node_ids": [
+              "0.0.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.273498,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 241179,
+                "total_fuel_consumed": 241179,
+                "max_fuel_used_percent": 1.0615272887323943,
+                "input_bytes": 68,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "wat",
+                "filename": "probe.wat",
+                "call_count": 1,
+                "elapsed_ms": 0.190624,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 240589,
+                "total_fuel_consumed": 240589,
+                "max_fuel_used_percent": 1.0589304577464789,
+                "input_bytes": 68,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/wat_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 1
+            },
+            "structural_hash": "734c2d193e3cd87af3de84dee647ea4d637ec3acc41ad43035a2246c2df2af2c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "a3427af42af236debf0bdc8424a85523da9f9773cb1b112c0751923b531e7f3f",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"value-i32\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 28
+                    },
+                    "structural_hash": "0bc927c88eef49822ce435c5437e9ee42fdb71b41a08998f17aa9df92e15fcac",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 41
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const 77",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 42,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "77293034f63bc3c5f0a080692b4e01e589d6f8b07657285822894313b40898ed",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "wat",
+          "tree": {
+            "id": "0",
+            "node_type": "module",
+            "label": "module",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 1
+            },
+            "structural_hash": "074f92b6c57330bf8c5e89f6c86453228b126484d21eb6c21f0c27037f9f31f1",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "func",
+                "label": "(func)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 2,
+                  "end_line": 1,
+                  "end_col": 57
+                },
+                "structural_hash": "646126a1d9e28d3bdabebc1bc34842955933bc8bbdb74cf503fae1cd791495c4",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "export",
+                    "label": "\"value-i32\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 8,
+                      "end_line": 1,
+                      "end_col": 28
+                    },
+                    "structural_hash": "0bc927c88eef49822ce435c5437e9ee42fdb71b41a08998f17aa9df92e15fcac",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "signature",
+                    "label": "i32",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 29,
+                      "end_line": 1,
+                      "end_col": 41
+                    },
+                    "structural_hash": "517ec1e812d2b4b451acccb76100bdbc64c9ebeba381420525f9d1c0925504d4",
+                    "children": [],
+                    "parent_type": "module"
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "instruction",
+                    "label": "i32.const 78",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 42,
+                      "end_line": 1,
+                      "end_col": 56
+                    },
+                    "structural_hash": "57ef31afce4b25056c93511806c3006eb70a2f5c7cdb5895c38da88193fe1c00",
+                    "children": [],
+                    "parent_type": "module"
+                  }
+                ],
+                "parent_type": "module"
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.252
+    }
+  ],
+  "attempted_count": 13,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.517
+}

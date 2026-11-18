@@ -1,0 +1,99 @@
+{
+  "case_id": "buf-breaking_message_same_json_format-4",
+  "executed_utc": "2026-11-17T20:21:24+00:00",
+  "new_sha256": "142c68d9639645983a9ae95dc70784a9088bff9be0191ae3b616d874653e5d45",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          9,
+          1,
+          11,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          13,
+          1,
+          15,
+          2
+        ]
+      ],
+      [
+        "3.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          26,
+          3,
+          26,
+          52
+        ]
+      ],
+      [
+        "4.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          11,
+          1,
+          13,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          9,
+          1,
+          11,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          13,
+          1,
+          15,
+          2
+        ]
+      ],
+      [
+        "3.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          26,
+          3,
+          26,
+          52
+        ]
+      ],
+      [
+        "4.proto",
+        "MESSAGE_SAME_JSON_FORMAT",
+        [
+          11,
+          1,
+          13,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "c1be5798f7f5fa4c96698939f63bc23080ee89a5d743e3409f8591b2355583bd",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

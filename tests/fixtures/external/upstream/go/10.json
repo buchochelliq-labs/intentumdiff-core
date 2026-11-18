@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "    if strings.TrimSpace(str) == \"\" {\n        return \"\"\n    }\n    beginning_of_suffix := 0\n    runes := []rune(str)\n    for !IsPalindrome(strings) {\n        beginning_of_suffix += 1\n    }\n    result := make([]rune, 0)\n    for i := len(str[:beginning_of_suffix]) - 1; i >= 0; i-- {\n        result = append(result, runes[i])\n    }\n    return str + string(result)\n}\n\n",
+  "canonical_solution": "    if strings.TrimSpace(str) == \"\" {\n        return \"\"\n    }\n    beginning_of_suffix := 0\n    runes := []rune(str)\n    for !IsPalindrome(string(runes[beginning_of_suffix:])) {\n        beginning_of_suffix += 1\n    }\n    result := make([]rune, 0)\n    for i := len(str[:beginning_of_suffix]) - 1; i >= 0; i-- {\n        result = append(result, runes[i])\n    }\n    return str + string(result)\n}\n\n",
+  "declaration": "\nfunc MakePalindrome(str string) string {\n",
+  "docstring": "Find the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> MakePalindrome('')\n''\n>>> MakePalindrome('cat')\n'catac'\n>>> MakePalindrome('cata')\n'catac'",
+  "entry_point": "MakePalindrome",
+  "example_test": "func TestMakePalindrome(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(\"\", MakePalindrome(\"\"))\n    assert.Equal(\"catac\", MakePalindrome(\"cat\"))\n    assert.Equal(\"catac\", MakePalindrome(\"cata\"))\n}\n",
+  "failure_symptoms": "stackoverflow",
+  "import": "import (\n    \"strings\"\n)\n",
+  "instruction": "Write a Go function `func MakePalindrome(str string) string` to solve the following problem:\nFind the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> MakePalindrome('')\n''\n>>> MakePalindrome('cat')\n'catac'\n>>> MakePalindrome('cata')\n'catac'",
+  "prompt": "import (\n    \"strings\"\n)\n\n// Test if given string is a palindrome.\nfunc IsPalindrome(str string) bool {\n    runes := []rune(str)\n    result := make([]rune, 0)\n    for i := len(runes) - 1; i >= 0; i-- {\n        result = append(result, runes[i])\n    }\n    return str == string(result)\n}\n// Find the shortest palindrome that begins with a supplied string.\n// Algorithm idea is simple:\n// - Find the longest postfix of supplied string that is a palindrome.\n// - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n// >>> MakePalindrome('')\n// ''\n// >>> MakePalindrome('cat')\n// 'catac'\n// >>> MakePalindrome('cata')\n// 'catac'\nfunc MakePalindrome(str string) string {\n",
+  "signature": "func MakePalindrome(str string) string",
+  "task_id": "Go/10",
+  "test": "func TestMakePalindrome(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(\"\", MakePalindrome(\"\"))\n    assert.Equal(\"x\", MakePalindrome(\"x\"))\n    assert.Equal(\"xyzyx\", MakePalindrome(\"xyz\"))\n    assert.Equal(\"xyx\", MakePalindrome(\"xyx\"))\n    assert.Equal(\"jerryrrej\", MakePalindrome(\"jerry\"))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

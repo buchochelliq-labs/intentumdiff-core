@@ -1,0 +1,14 @@
+{
+  "case_id": "jts-y_object_escaped_null_in_key",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "1c3c00c78ceca5a6cce2f0aefe316b5352117011f6f9a471a18eb4f3c1930739",
+  "observations": {
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "1c3c00c78ceca5a6cce2f0aefe316b5352117011f6f9a471a18eb4f3c1930739",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

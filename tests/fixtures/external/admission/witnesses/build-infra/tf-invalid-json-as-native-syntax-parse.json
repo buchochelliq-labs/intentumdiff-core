@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-invalid-json-as-native-syntax-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "0ab5df76f4c02b48c1c81f06228682fddbed794db7861b01737ac451c55a9512",
+  "old_sha256": "0ab5df76f4c02b48c1c81f06228682fddbed794db7861b01737ac451c55a9512",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": false,
+  "reference_error": "fixture.hcl:1,1-2: Argument or block definition required; An argument or block definition is required here.",
+  "review": "hclsyntax.ParseConfig reports syntax errors: fixture.hcl:1,1-2: Argument or block definition required; An argument or block definition is required here. Upstream directory label: invalid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [],
+  "verdict": "supports_claim"
+}

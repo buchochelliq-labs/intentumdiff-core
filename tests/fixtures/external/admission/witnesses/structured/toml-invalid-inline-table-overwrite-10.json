@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-inline-table-overwrite-10",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "5fed71273a25d754ba8ad661d7acf978bc4fb4e8dc1541aed3a42dd1b7255dae",
+  "observations": {
+    "error": "Duplicate inline table key 'b' (at line 4, column 20)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "5fed71273a25d754ba8ad661d7acf978bc4fb4e8dc1541aed3a42dd1b7255dae",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

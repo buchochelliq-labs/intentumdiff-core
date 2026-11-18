@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-integer-long-bump",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "99e323c57bb4ed76f742a5b3b0288fad277072468bed5a3bf1f4703ea07c8618",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "4ee4536d9b35bc3fd55b05e1dc0a4a4565c359a26ddbabf135140587f40cced6",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

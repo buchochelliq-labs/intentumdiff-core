@@ -1,0 +1,20 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "pqparser-trippin-1-odata-trippin-query-parse",
+  "claim_tested": "TaskUtils.tryLexParse(DefaultSettings) reaches an OK parse stage, as the upstream lexParseResource test asserts; section members inventoried from the upstream AST",
+  "engines": [
+    {
+      "name": "@microsoft/powerquery-parser",
+      "runtime": "Node.js v22.23.4",
+      "version": "4.0.1"
+    }
+  ],
+  "new_sha256": "d1796fd532a49e25bc1203af9f8b69bc8457e4ba278b60914584e2d22a22ba73",
+  "old_sha256": "d1796fd532a49e25bc1203af9f8b69bc8457e4ba278b60914584e2d22a22ba73",
+  "oracle": "powerquery_parser_lex_parse_and_member_inventory",
+  "parse_ok": true,
+  "root_kind": "LetExpression",
+  "schema_version": 1,
+  "status": "executed",
+  "verdict": "supports_claim"
+}

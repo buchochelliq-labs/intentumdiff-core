@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "    running_max := math.MinInt32\n    result := make([]int, 0)\n\n    for _, n := range numbers {\n        if running_max == math.MinInt32 {\n            running_max = n\n        } else {\n            running_max = int(math.Max(numbers))\n        }\n        result = append(result, running_max)\n    }\n\n    return result\n}\n\n",
+  "canonical_solution": "    running_max := math.MinInt32\n    result := make([]int, 0)\n\n    for _, n := range numbers {\n        if running_max == math.MinInt32 {\n            running_max = n\n        } else {\n            running_max = int(math.Max(float64(running_max), float64(n)))\n        }\n        result = append(result, running_max)\n    }\n\n    return result\n}\n\n",
+  "declaration": "\nfunc RollingMax(numbers []int) []int {\n",
+  "docstring": "From a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> RollingMax([1, 2, 3, 2, 3, 4, 2])\n[1, 2, 3, 3, 3, 4, 4]",
+  "entry_point": "RollingMax",
+  "example_test": "func TestRollingMax(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{1, 2, 3,3, 3, 4, 4}, RollingMax([]int{1, 2, 3, 2, 3, 4, 2}))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "import (\n    \"math\"\n)\n",
+  "instruction": "Write a Go function `func RollingMax(numbers []int) []int` to solve the following problem:\nFrom a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> RollingMax([1, 2, 3, 2, 3, 4, 2])\n[1, 2, 3, 3, 3, 4, 4]",
+  "prompt": "import (\n    \"math\"\n)\n\n// From a given list of integers, generate a list of rolling maximum element found until given moment\n// in the sequence.\n// >>> RollingMax([1, 2, 3, 2, 3, 4, 2])\n// [1, 2, 3, 3, 3, 4, 4]\nfunc RollingMax(numbers []int) []int {\n",
+  "signature": "func RollingMax(numbers []int) []int",
+  "task_id": "Go/9",
+  "test": "func TestRollingMax(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal([]int{}, RollingMax([]int{}))\n    assert.Equal([]int{1, 2, 3, 4}, RollingMax([]int{1, 2, 3, 4}))\n    assert.Equal([]int{4, 4, 4, 4}, RollingMax([]int{4, 3, 2, 1}))\n    assert.Equal([]int{3, 3, 3, 100, 100}, RollingMax([]int{3, 2, 3, 100, 3}))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "latex-cfgguide-word_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "640c697b2bce79250bf4d2930d209d4371ce9e85d10ebb738818fa0c21ee45ca",
+  "observations": {
+    "new_dvi_sha256": "6e14ee4766d5291409eace96cd6ba2d80e1cad1138ad4121da6725878fb35a5a",
+    "old_dvi_sha256": "ee9b77ad9c0436c38ce0b6cf7a70725f77ba105ecf9af6bd7b1ccdf7bac1166c",
+    "reference_equal": false
+  },
+  "old_sha256": "ca5d6146078530f4551e70a95508294c9888828f2714f9b8f630a1e247cfa8cc",
+  "oracle": "latex_dvi_equal",
+  "reference": "latex_dvi_equal: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-containers-l0090",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "75ede170e0a555c1200e0e83c9e091d436ea385ec4da643eb020ad10d957802a",
+  "old_sha256": "75ede170e0a555c1200e0e83c9e091d436ea385ec4da643eb020ad10d957802a",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseError: A quoted string is not valid as a name here (line: 1, column: 7)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseError: A quoted string is not valid as a name here (line: 1, column: 7), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

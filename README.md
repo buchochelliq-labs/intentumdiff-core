@@ -44,6 +44,9 @@ language) dependency.
 
 ## Build
 
+The 0.0.3 [external correctness benchmark guide](docs/EXTERNAL_BENCHMARKS.md)
+documents the shared corpus, per-language admission ledger and required Linux gate.
+
 ```bash
 # the engine (native)
 cd crates/rust-core-host && cargo test          # engine pins

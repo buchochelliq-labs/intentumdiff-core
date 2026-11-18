@@ -1,0 +1,133 @@
+{
+  "case_id": "gql-09",
+  "executed_utc": "2026-11-17T20:20:41+00:00",
+  "new_sha256": "d1d209533d894caa31945155b109ab681b212c321dfdb95dccd5e5ed3593970c",
+  "observations": {
+    "reference": {
+      "Breaking": [
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg1 has changed type from String to Int."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg11 has changed type from [Int] to [[Int]]."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg12 has changed type from [[Int]] to [Int]."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg13 has changed type from Int! to [Int]!."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg15 has changed type from [[Int]!] to [[Int!]!]."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg2 has changed type from String to [String]."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg3 has changed type from [String] to String."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg4 has changed type from String to String!."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg5 has changed type from String! to Int."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg6 has changed type from String! to Int!."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg8 has changed type from Int to [Int]!."
+        ],
+        [
+          "ARG_CHANGED_KIND",
+          "Type1.field1 arg arg9 has changed type from [Int] to [Int!]."
+        ]
+      ],
+      "Dangerous": []
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Breaking",
+        [
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg1 has changed type from String to Int."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg2 has changed type from String to [String]."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg3 has changed type from [String] to String."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg4 has changed type from String to String!."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg5 has changed type from String! to Int."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg6 has changed type from String! to Int!."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg8 has changed type from Int to [Int]!."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg9 has changed type from [Int] to [Int!]."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg11 has changed type from [Int] to [[Int]]."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg12 has changed type from [[Int]] to [Int]."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg13 has changed type from Int! to [Int]!."
+          ],
+          [
+            "Breaking",
+            "ARG_CHANGED_KIND",
+            "Type1.field1 arg arg15 has changed type from [[Int]!] to [[Int!]!]."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "16b1dfa1b2b1389fa61a8ad8a82c7fad0f994b6d23f1e8bf4a0257c06c11dd5f",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

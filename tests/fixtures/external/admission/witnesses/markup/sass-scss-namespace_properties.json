@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-namespace_properties",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c4b04c730db194ccbdf37eb27f1cb943ebc772e56107cf044b1c7b4129d5d9a5",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "c4b04c730db194ccbdf37eb27f1cb943ebc772e56107cf044b1c7b4129d5d9a5",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

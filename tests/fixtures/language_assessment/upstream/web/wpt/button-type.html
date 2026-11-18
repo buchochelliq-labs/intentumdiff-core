@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>HTMLButtonElement.prototype.type</title>
+<link rel="author" title="Domenic Denicola" href="mailto:d@domenic.me">
+<link rel="help" href="https://html.spec.whatwg.org/multipage/#dom-button-type">
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+
+<script>
+"use strict";
+
+test(() => {
+
+  const button = document.createElement("button");
+  assert_equals(button.type, "submit");
+
+}, "a button's type should be submit by default");
+
+test(() => {
+
+  const button = document.createElement("button");
+
+  for (const type of ["reset", "button", "submit"]) {
+    button.type = type;
+    assert_equals(button.type, type);
+
+    button.type = type.toUpperCase();
+    assert_equals(button.type, type);
+  }
+
+  button.type = "reset";
+  button.type = "asdfgdsafd";
+  assert_equals(button.type, "submit");
+
+  button.type = "reset";
+  button.type = "";
+  assert_equals(button.type, "submit");
+
+}, "a button's type should stay within the range of valid values");
+
+test(() => {
+
+  const button = document.createElement("button");
+  button.type = "reset";
+  button.removeAttribute("type");
+  assert_equals(button.type, "submit");
+
+}, "removing a button's type should make it return to auto state");
+
+test(() => {
+  const div = document.createElement("div");
+  div.id = "test"
+
+  const button1 = document.createElement("button");
+  button1.command = "--test";
+  assert_equals(button1.type, "button");
+
+  const button2 = document.createElement("button");
+  button2.commandfor = "test";
+  assert_equals(button2.type, "button");
+
+  const button3 = document.createElement("button");
+  button3.command = "--test";
+  button3.commandfor = "test";
+  assert_equals(button3.type, "button");
+
+}, "a button in auto state with a command or commandfor attribute should return button type");
+
+test(() => {
+
+  const select = document.createElement("select");
+  const button = document.createElement("button");
+  select.appendChild(button);
+  assert_equals(button.type, "button");
+
+}, "a button in auto state with a select element parent should return button type");
+
+</script>

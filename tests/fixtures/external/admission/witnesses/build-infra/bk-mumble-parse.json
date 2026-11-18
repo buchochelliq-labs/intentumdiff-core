@@ -1,0 +1,33 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-mumble-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "c1aefbdc3d4cba57db182674249a629f5e214df1ea49f3d523976975e6fc20f7",
+  "old_sha256": "c1aefbdc3d4cba57db182674249a629f5e214df1ea49f3d523976975e6fc20f7",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0,
+    19,
+    87,
+    135
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

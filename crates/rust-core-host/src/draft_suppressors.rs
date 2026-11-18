@@ -4,6 +4,155 @@
 
 use crate::*;
 
+// ── #253: complete paired-side delta coverage ─────────────────────────────────────────────
+//
+// A suppressor may only discard a draft when everything that draft reports is ALSO reported by
+// surviving evidence. `DeltaCoverage` is that proof: two subtrees are covered when, after
+// removing every node that is itself an endpoint of surviving evidence (old endpoints from the
+// old side, new endpoints from the new side), what remains is position-for-position identical —
+// same type, same label (or a label exactly derived by substituting reported descendant edits,
+// or a reported rename), same remaining children. Set membership, label sets, substring
+// containment or one-sided ancestry are NOT proofs: duplicated, moved or unpaired descendants
+// cannot satisfy coverage by coincidence.
+pub(crate) struct DeltaCoverage<'a> {
+    old_ids: HashSet<&'a str>,
+    new_ids: HashSet<&'a str>,
+    pairs: Vec<(&'a SemanticNode, &'a SemanticNode)>,
+    renames: HashSet<(&'a str, &'a str)>,
+}
+
+impl<'a> DeltaCoverage<'a> {
+    /// Evidence = every draft in `changes` except the indices in `skip` (the drafts whose
+    /// suppression is being proven).
+    pub(crate) fn of(changes: &[ChangeDraft<'a>], skip: &HashSet<usize>) -> Self {
+        let mut coverage = Self { old_ids: HashSet::new(), new_ids: HashSet::new(), pairs: Vec::new(), renames: HashSet::new() };
+        for (index, change) in changes.iter().enumerate() {
+            if skip.contains(&index) {
+                continue;
+            }
+            if let Some(old) = change.old_node {
+                coverage.old_ids.insert(old.id.as_str());
+            }
+            if let Some(new) = change.new_node {
+                coverage.new_ids.insert(new.id.as_str());
+            }
+            if let (Some(old), Some(new)) = (change.old_node, change.new_node) {
+                coverage.pairs.push((old, new));
+                if change.change_type == "REFACTORING" && old.label != new.label {
+                    coverage.renames.insert((old.label.as_str(), new.label.as_str()));
+                }
+            }
+        }
+        coverage
+    }
+
+    /// Whether every difference between `old` and `new` is reported by the evidence.
+    pub(crate) fn covers(&self, old: &SemanticNode, new: &SemanticNode) -> bool {
+        self.covers_at(old, new, 0)
+    }
+
+    fn covers_at(&self, old: &SemanticNode, new: &SemanticNode, depth: usize) -> bool {
+        // Structure, not hashes: a structural_hash is only as complete as its producer (some
+        // parsers hash text, some hash a qualified path), so it is never taken as proof here.
+        if depth > 256 || old.node_type != new.node_type {
+            return false;
+        }
+        if old.label != new.label && !self.label_explained(old, new) {
+            return false;
+        }
+        let (old_kids, old_reported): (Vec<&SemanticNode>, Vec<&SemanticNode>) =
+            old.children.iter().partition(|c| !self.old_ids.contains(c.id.as_str()));
+        let (new_kids, new_reported): (Vec<&SemanticNode>, Vec<&SemanticNode>) =
+            new.children.iter().partition(|c| !self.new_ids.contains(c.id.as_str()));
+        // Align the unreported children in order. A child may also be absorbed by a REPORTED
+        // sibling on the other side that contains an exact copy of it — wrapping
+        // (`x` -> reported `abs(x)`) or unwrapping (reported `f(x)` -> `x`). Anything else
+        // left over is an unreported delta.
+        let absorbed = |node: &SemanticNode, wrappers: &[&SemanticNode], old_side: bool| {
+            wrappers.iter().any(|wrapper| wrapper.descendants().into_iter().any(|inner| {
+                if old_side { self.covers_at(node, inner, depth + 1) } else { self.covers_at(inner, node, depth + 1) }
+            }))
+        };
+        let (mut i, mut j) = (0, 0);
+        while i < old_kids.len() || j < new_kids.len() {
+            if i < old_kids.len() && j < new_kids.len() && self.covers_at(old_kids[i], new_kids[j], depth + 1) {
+                i += 1;
+                j += 1;
+            } else if i < old_kids.len() && absorbed(old_kids[i], &new_reported, true) {
+                i += 1;
+            } else if j < new_kids.len() && absorbed(new_kids[j], &old_reported, false) {
+                j += 1;
+            } else {
+                return false;
+            }
+        }
+        true
+    }
+
+    /// A label change is explained by a reported rename of that exact label, or when applying
+    /// the reported edits strictly inside this node (each once, longest first) to the old
+    /// label yields exactly the new label.
+    fn label_explained(&self, old: &SemanticNode, new: &SemanticNode) -> bool {
+        if self.renames.contains(&(old.label.as_str(), new.label.as_str())) {
+            return true;
+        }
+        // A label that is only the grammar placeholder or a copy of one of its own children's
+        // labels carries nothing the (recursively compared) children do not.
+        let derived = |node: &SemanticNode| node.label == node.node_type
+            || node.children.iter().any(|child| child.label == node.label);
+        if derived(old) && derived(new) {
+            return true;
+        }
+        let (old_prefix, new_prefix) = (format!("{}.", old.id), format!("{}.", new.id));
+        let mut edits: Vec<(&str, &str)> = self
+            .pairs
+            .iter()
+            .filter(|(o, n)| o.id.starts_with(&old_prefix) && n.id.starts_with(&new_prefix))
+            .filter(|(o, n)| !o.label.is_empty() && o.label != n.label)
+            .map(|(o, n)| (o.label.as_str(), n.label.as_str()))
+            .collect();
+        if edits.is_empty() {
+            return false;
+        }
+        // A name extracted from an edited descendant (`function 'Answer'` from its signature
+        // `function Answer() : Int`): the descendant edit is exactly this name change.
+        let (old_name, new_name) = (old.label.to_lowercase(), new.label.to_lowercase());
+        if !old_name.is_empty() && edits.iter().any(|(from, to)| {
+            let from = from.to_lowercase();
+            from.contains(&old_name) && from.replacen(&old_name, &new_name, 1) == to.to_lowercase()
+        }) {
+            return true;
+        }
+        edits.sort_by_key(|(o, _)| std::cmp::Reverse(o.len()));
+        let mut text = old.label.clone();
+        for (from, to) in edits {
+            // Edits whose text is not part of this label (a summary label such as a callee
+            // name) leave it untouched; the substituted result must still equal the new label.
+            text = text.replacen(from, to, 1);
+        }
+        text == new.label
+    }
+}
+
+/// #253: a descendant draft is covered by a surviving container only when EVERY side it has
+/// lies inside the container's corresponding side (old in old, new in new). One-sided ancestry
+/// — a node moved out of the container on one side — is not coverage.
+pub(crate) fn draft_inside_container(
+    child: &ChangeDraft<'_>,
+    container_old: Option<&SemanticNode>,
+    container_new: Option<&SemanticNode>,
+) -> bool {
+    let inside = |node: Option<&SemanticNode>, container: Option<&SemanticNode>| match (node, container) {
+        (None, _) => true,
+        (Some(node), Some(container)) => node.id.starts_with(&format!("{}.", container.id))
+            && has_descendant_id_node(container, &std::iter::once(node.id.as_str()).collect()),
+        (Some(_), None) => false,
+    };
+    (child.old_node.is_some() || child.new_node.is_some())
+        && inside(child.old_node, container_old)
+        && inside(child.new_node, container_new)
+}
+
 pub(crate) fn promote_same_id_named_line_moves_drafts<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
     matching: &[MatchPair<'a>],
@@ -197,6 +346,16 @@ pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &Seman
     // asymmetric: an ini value `host=server.example.com` contains `server` but not
     // `serverRenamed`, so it was dropped from one shape and kept in the other, and a pure
     // rename looked like a body change.
+    // #253: a child that merely MENTIONS the name is not the name. Dropping it hid every edit
+    // to it (`return total(x) + 1` -> `return calculate_total(x) + 2`); it is compared below
+    // with the names normalised instead. Only a name-carrying child whose label is the name
+    // itself (or the grammar's placeholder label, the INI `section_name`) is the identity.
+    fn is_identity_child(child: &SemanticNode, old_name: &str, new_name: &str) -> bool {
+        carries_entity_name(&child.node_type)
+            && (child.label.is_empty()
+                || child.label == child.node_type
+                || normalise(&child.label, old_name, new_name).chars().all(|c| c == '\u{1}' || c.is_whitespace()))
+    }
     fn body_shape<'a>(
         node: &'a SemanticNode,
         old_name: &str,
@@ -204,15 +363,7 @@ pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &Seman
     ) -> Vec<(&'a str, &'a str)> {
         node.children
             .iter()
-            .filter(|child| {
-                if carries_entity_name(&child.node_type) {
-                    return false;
-                }
-                let mentions = |name: &str| {
-                    !name.is_empty() && (child.label == name || child.label.contains(name))
-                };
-                !mentions(old_name) && !mentions(new_name)
-            })
+            .filter(|child| !is_identity_child(child, old_name, new_name))
             .map(|child| (child.node_type.as_str(), child.structural_hash.as_str()))
             .collect()
     }
@@ -251,7 +402,7 @@ pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &Seman
             let hit = |name: &str| !name.is_empty() && text.contains(name);
             hit(old_name) || hit(new_name)
         };
-        if !mentions(&child.structural_hash) {
+        if !mentions(&child.structural_hash) && !mentions(&child.label) {
             return format!("h\u{2}{}\u{2}{}", child.node_type, child.structural_hash);
         }
         let mut key = format!(
@@ -269,15 +420,7 @@ pub(crate) fn rename_body_is_unchanged(old_node: &SemanticNode, new_node: &Seman
     fn keyed_shape(node: &SemanticNode, old_name: &str, new_name: &str) -> Vec<String> {
         node.children
             .iter()
-            .filter(|child| {
-                if carries_entity_name(&child.node_type) {
-                    return false;
-                }
-                let mentions = |name: &str| {
-                    !name.is_empty() && (child.label == name || child.label.contains(name))
-                };
-                !mentions(old_name) && !mentions(new_name)
-            })
+            .filter(|child| !is_identity_child(child, old_name, new_name))
             .map(|child| child_key(child, old_name, new_name))
             .collect()
     }
@@ -537,26 +680,61 @@ pub(crate) fn promote_label_updates_inside_moved_entities_drafts<'a>(changes: &m
     changes.extend(additions);
 }
 
-pub(crate) fn suppress_same_label_function_delete_for_addition_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
-    let added_labels: HashSet<(&str, &str)> = changes
+pub(crate) fn suppress_same_label_function_delete_for_addition_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    matching: &[MatchPair<'_>],
+) {
+    // #253: a same-label ADDITION only accounts for a DELETION of the same entity in the SAME
+    // scope — the parents must be matched to each other — and each addition accounts for at
+    // most one deletion. `f` deleted from class A is not explained by `f` added to class B.
+    let parent_of = |id: &str| id.rsplit_once('.').map(|(parent, _)| parent.to_owned());
+    let matched_parents: HashSet<(String, String)> = matching
+        .iter()
+        .map(|pair| (pair.old_node.id.clone(), pair.new_node.id.clone()))
+        .collect();
+    let mut additions: HashMap<(&str, &str), Vec<Option<String>>> = HashMap::new();
+    for node in changes
         .iter()
         .filter(|change| change.change_type == "ADDITION")
         .filter_map(|change| change.new_node)
         .filter(|node| is_named_entity_type(node.node_type.as_str()))
-        .map(|node| (node.node_type.as_str(), node.label.as_str()))
-        .collect();
-    if added_labels.is_empty() {
+    {
+        additions
+            .entry((node.node_type.as_str(), node.label.as_str()))
+            .or_default()
+            .push(parent_of(&node.id));
+    }
+    if additions.is_empty() {
         return;
     }
-    changes.retain(|change| {
+    let mut drop = HashSet::new();
+    for (index, change) in changes.iter().enumerate() {
         if change.change_type != "DELETION" {
-            return true;
+            continue;
         }
-        let Some(node) = change.old_node else {
-            return true;
+        let Some(node) = change.old_node else { continue };
+        if !is_named_entity_type(node.node_type.as_str()) {
+            continue;
+        }
+        let Some(candidates) = additions.get_mut(&(node.node_type.as_str(), node.label.as_str())) else {
+            continue;
         };
-        !is_named_entity_type(node.node_type.as_str())
-            || !added_labels.contains(&(node.node_type.as_str(), node.label.as_str()))
+        let old_parent = parent_of(&node.id);
+        let same_scope = |new_parent: &Option<String>| match (&old_parent, new_parent) {
+            (None, None) => true,
+            (Some(o), Some(n)) => matched_parents.contains(&(o.clone(), n.clone())),
+            _ => false,
+        };
+        if let Some(position) = candidates.iter().position(same_scope) {
+            candidates.remove(position);
+            drop.insert(index);
+        }
+    }
+    let mut index = 0;
+    changes.retain(|_| {
+        let keep = !drop.contains(&index);
+        index += 1;
+        keep
     });
 }
 
@@ -851,7 +1029,9 @@ pub(crate) fn collect_suppression_root_id_node(node: &SemanticNode, result: &mut
     result.insert(node.id.clone());
 }
 
-pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft<'_>>, language: &str) {
+pub(crate) fn suppress_parent_modifications_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>, language: &str, sources: Option<(&str, &str)>,
+) {
     // Member-level anchoring first: when an entity-container MODIFICATION (e.g.
     // method_declaration 'Bar') covers a bare LEAF modification, the member keeps the
     // review anchor and the leaf drops — MODIFICATION integer_literal('2') alone loses
@@ -894,14 +1074,8 @@ pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft
             if !child_is_leaf && !statement_anchor {
                 continue;
             }
-            let covered = child.old_node.is_some_and(|node| {
-                let ids: HashSet<&str> = std::iter::once(node.id.as_str()).collect();
-                has_descendant_id_node(parent_old, &ids)
-            }) || child.new_node.is_some_and(|node| {
-                let ids: HashSet<&str> = std::iter::once(node.id.as_str()).collect();
-                has_descendant_id_node(parent_new, &ids)
-            });
-            if covered {
+            // #253: folded only when every side of the child lies inside the anchor.
+            if draft_inside_container(child, Some(parent_old), Some(parent_new)) {
                 drop_leaf[child_index] = true;
             }
         }
@@ -926,6 +1100,9 @@ pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft
             modified_new_ids.insert(node.id.as_str());
         }
     }
+    // #253: a descendant modification only replaces its parent when the parent's WHOLE delta
+    // is reported by surviving evidence; a parent with an unrelated extra edit stays.
+    let coverage = DeltaCoverage::of(changes, &HashSet::new());
     changes.retain(|change| {
         if change.change_type != "MODIFICATION" {
             return true;
@@ -939,13 +1116,25 @@ pub(crate) fn suppress_parent_modifications_drafts(changes: &mut Vec<ChangeDraft
         {
             return true;
         }
+        if let (Some((old_source,new_source)),Some(old),Some(new)) =
+            (sources,change.old_node,change.new_node) {
+            if opaque_payload::changed(old,new,old_source,new_source,language) {
+                return true; // A descendant edit cannot account for this node's own payload.
+            }
+        }
         let has_modified_old_descendant = change
             .old_node
             .is_some_and(|node| has_descendant_id_node(node, &modified_old_ids));
         let has_modified_new_descendant = change
             .new_node
             .is_some_and(|node| has_descendant_id_node(node, &modified_new_ids));
-        !(has_modified_old_descendant || has_modified_new_descendant)
+        if !(has_modified_old_descendant || has_modified_new_descendant) {
+            return true;
+        }
+        match (change.old_node, change.new_node) {
+            (Some(old), Some(new)) => !coverage.covers(old, new),
+            _ => false,
+        }
     });
 }
 
@@ -1042,26 +1231,118 @@ pub(crate) fn suppress_child_moves_under_refactoring_pair_drafts(changes: &mut V
     });
 }
 
-pub(crate) fn suppress_child_modifications_under_preferred_parent_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
-    let mut preferred_old_ids: HashSet<String> = HashSet::new();
-    let mut preferred_new_ids: HashSet<String> = HashSet::new();
-    for change in changes.iter() {
-        if change.change_type != "MODIFICATION" {
-            continue;
-        }
-        let node = change.old_node.or(change.new_node);
-        if !node.is_some_and(|node| is_preferred_modification_parent_type(node.node_type.as_str()))
-        {
-            continue;
-        }
-        if let Some(old_node) = change.old_node {
-            collect_descendant_ids_node(old_node, &mut preferred_old_ids);
-        }
-        if let Some(new_node) = change.new_node {
-            collect_descendant_ids_node(new_node, &mut preferred_new_ids);
-        }
+/// #299: a MOVE whose old and new nodes both sit inside the matched old/new pair of one
+/// MODIFICATION of a statement/expression is the surviving sub-expression of that edit (an
+/// operand removed around it), not moved code. Fold it into the modification by dropping the
+/// MOVE. Moves that cross a block/body boundary (statement reorders inside a modified
+/// function, branch-to-branch moves) and modifications of entities/containers are left alone.
+///
+/// An identity-keyed node (an element with its own XML schema coordinate key: bundled POM /
+/// MSBuild, or a user-registered dialect) is an entity boundary too: the profile forbids
+/// pairing across identities, so a MOVE through one (`<price>` leaving `book[isbn=978-0]` for
+/// `book[isbn=978-9]`) is the identity change the profile exists to surface, never a
+/// sub-expression of the enclosing modification.
+pub(crate) fn suppress_subexpression_moves_inside_modified_statement_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    language: &str,
+) {
+    if !changes.iter().any(|change| change.change_type == "MOVE") {
+        return;
     }
-    if preferred_old_ids.is_empty() && preferred_new_ids.is_empty() {
+    let coordinate_fn = if language == "xml" { xml_schema_coordinate_fn(old_tree, new_tree) } else { None };
+    let old_keyed = identity_keyed_node_ids(old_tree, coordinate_fn.as_ref());
+    let new_keyed = identity_keyed_node_ids(new_tree, coordinate_fn.as_ref());
+    // A keyed modification root is an entity (refinement may pair book[978-0] with
+    // book[978-9] after the matcher refused to): never a statement to fold moves into.
+    let modified: Vec<(&SemanticNode, &SemanticNode)> = changes
+        .iter()
+        .filter(|change| change.change_type == "MODIFICATION")
+        .filter_map(|change| Some((change.old_node?, change.new_node?)))
+        .filter(|(old, new)| !is_move_container_type(&old.node_type) && !is_move_container_type(&new.node_type))
+        .filter(|(old, new)| !old_keyed.contains(&old.id) && !new_keyed.contains(&new.id))
+        .collect();
+    if modified.is_empty() {
+        return;
+    }
+    changes.retain(|change| {
+        if change.change_type != "MOVE" {
+            return true;
+        }
+        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+            return true;
+        };
+        !modified.iter().any(|(old_parent, new_parent)| {
+            expression_path_within(old_parent, &old_node.id, &old_keyed)
+                && expression_path_within(new_parent, &new_node.id, &new_keyed)
+        })
+    });
+}
+
+/// Ids of the nodes in `tree` that carry their own schema identity key under the profile
+/// claiming the diffed pair (empty when no identity profile applies).
+fn identity_keyed_node_ids(tree: &SemanticNode, coordinate_fn: Option<&XmlCoordinateFn>) -> HashSet<String> {
+    let mut ids = HashSet::new();
+    let Some(coordinate_fn) = coordinate_fn else {
+        return ids;
+    };
+    let mut stack = vec![tree];
+    while let Some(node) = stack.pop() {
+        if coordinate_fn(node).is_some() {
+            ids.insert(node.id.clone());
+        }
+        stack.extend(node.children.iter());
+    }
+    ids
+}
+
+/// Entities, bodies and other statement containers: a move inside one is a real move.
+fn is_move_container_type(node_type: &str) -> bool {
+    is_entity_container_type(node_type)
+        || is_function_entity_type(node_type)
+        || is_class_entity_type(node_type)
+        || node_type.ends_with("block")
+        || node_type.ends_with("body")
+        || node_type.ends_with("_list") && node_type.starts_with("statement")
+        || matches!(node_type, "module" | "program" | "source_file" | "compilation_unit" | "suite"
+            | "compound_statement" | "if_statement" | "else_clause" | "elif_clause" | "for_statement"
+            | "while_statement" | "try_statement" | "with_statement" | "match_statement" | "switch_statement"
+            | "case_clause" | "except_clause" | "finally_clause")
+}
+
+/// `target_id` is a strict descendant of `root` reached without passing a container or an
+/// identity-keyed node (`keyed`); a keyed target is itself an entity, so it never qualifies.
+fn expression_path_within(root: &SemanticNode, target_id: &str, keyed: &HashSet<String>) -> bool {
+    fn walk(node: &SemanticNode, target_id: &str, keyed: &HashSet<String>) -> Option<bool> {
+        for child in &node.children {
+            if child.id == target_id {
+                return Some(!keyed.contains(&child.id));
+            }
+            if target_id.starts_with(&format!("{}.", child.id)) {
+                if is_move_container_type(&child.node_type) || keyed.contains(&child.id) {
+                    return Some(false);
+                }
+                return walk(child, target_id, keyed);
+            }
+        }
+        None
+    }
+    target_id.starts_with(&format!("{}.", root.id)) && walk(root, target_id, keyed) == Some(true)
+}
+
+pub(crate) fn suppress_child_modifications_under_preferred_parent_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
+    // #253: the child is folded into a preferred parent only when every side it has lies inside
+    // THAT parent's corresponding side (not old under one parent and new elsewhere).
+    let parents: Vec<(Option<&SemanticNode>, Option<&SemanticNode>)> = changes
+        .iter()
+        .filter(|change| change.change_type == "MODIFICATION")
+        .filter(|change| change.old_node.or(change.new_node)
+            .is_some_and(|node| is_preferred_modification_parent_type(node.node_type.as_str())))
+        .map(|change| (change.old_node, change.new_node))
+        .filter(|(old, new)| !old.is_some_and(|n| n.node_type == "module") && !new.is_some_and(|n| n.node_type == "module"))
+        .collect();
+    if parents.is_empty() {
         return;
     }
     changes.retain(|change| {
@@ -1075,12 +1356,7 @@ pub(crate) fn suppress_child_modifications_under_preferred_parent_drafts(changes
         if node.is_some_and(|node| is_preferred_modification_parent_type(node.node_type.as_str())) {
             return true;
         }
-        !(change
-            .old_node
-            .is_some_and(|node| preferred_old_ids.contains(node.id.as_str()))
-            || change
-                .new_node
-                .is_some_and(|node| preferred_new_ids.contains(node.id.as_str())))
+        !parents.iter().any(|(old, new)| draft_inside_container(change, *old, *new))
     });
 }
 
@@ -1328,3 +1604,15 @@ mod rename_body_tests {
         assert!(!rename_body_is_unchanged(&a, &b));
     }
 }
+
+#[cfg(test)]
+#[path = "moved_subexpression_tests.rs"]
+mod moved_subexpression_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "identity_key_move_source_tests.rs"]
+mod identity_key_move_source_tests;
+
+#[cfg(test)]
+#[path = "delta_coverage_tests.rs"]
+mod delta_coverage_tests;

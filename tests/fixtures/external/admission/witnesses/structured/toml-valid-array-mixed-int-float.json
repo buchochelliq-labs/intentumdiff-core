@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-valid-array-mixed-int-float",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "baa235fc168869716680955fd5bdafab30b6fa9b3d09185086261a56ef12960e",
+  "observations": {
+    "reference_accepts": true,
+    "typed_json_equal": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "baa235fc168869716680955fd5bdafab30b6fa9b3d09185086261a56ef12960e",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-migrate-slots-below-imports",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "4be836c0e4b56a148bff33dfbd8ff3ca8221b3ae46b01c9cb2173f508fee8e2e",
+  "observations": {
+    "crash": "Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/Foo.svelte' imported from /tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c1.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:275:11)\n    at moduleResolve (node:internal/module"
+  },
+  "old_sha256": "eb551498260ea5249e6f0be931bccecfc9c588c960da732734d708365b9c35b9",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

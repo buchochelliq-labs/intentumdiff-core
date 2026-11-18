@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-negative-00",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 512,
+    "expected_output": "work/variables/negative.mk:3: *** unterminated variable reference.  Stop.\n",
+    "line": 8,
+    "options": "",
+    "script": "variables/negative"
+  },
+  "new_sha256": "f72f372f107773a441a0dc8917e3f15293af7d15a211d5238f7e66c78c62f0c7",
+  "old_sha256": "f72f372f107773a441a0dc8917e3f15293af7d15a211d5238f7e66c78c62f0c7",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

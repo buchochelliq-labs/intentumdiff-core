@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-CQ3W",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "417ce8fad00c6d2bc7a31f49d4f6e6e0fcca737c210b9ff9f3f682088be9e425",
+  "observations": {
+    "error": "ScannerError: while scanning a quoted scalar\n  in \"<unicode string>\", line 2, column 6:\n    key: \"missing closing quote\n         ^ (line: 2)\nfound unexpected end of stream\n  in \"<unicode string>\", line 3, column 1:\n    \n    ^ (line: 3)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "417ce8fad00c6d2bc7a31f49d4f6e6e0fcca737c210b9ff9f3f682088be9e425",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

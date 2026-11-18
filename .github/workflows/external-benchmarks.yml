@@ -1,0 +1,94 @@
+name: External source correctness
+
+on:
+  pull_request:
+  push:
+    branches: [main, release/v0.0.3-rc]
+  # No workflow_dispatch: a manual run on an arbitrary ref is a privileged default-branch
+  # context, and this job checks out and runs the registry commit the lock file names.
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  external-correctness:
+    name: External source correctness (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CARGO_PROFILE_DEV_DEBUG: 0
+      CARGO_PROFILE_TEST_DEBUG: 0
+      CARGO_BUILD_JOBS: 2
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+        with:
+          python-version: '3.12'
+      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
+        with:
+          toolchain: 1.95.0
+      - name: Read immutable artifact identities
+        id: inputs
+        run: |
+          python - <<'PY'
+          import json, os
+          values = json.load(open('scripts/external_benchmark_inputs.lock.json'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              for key in ('registry_commit', 'published_distribution'):
+                  print(f'{key}={values[key]}', file=out)
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: buchochelliq-labs/intentumdiff-registry
+          ref: ${{ steps.inputs.outputs.registry_commit }}
+          path: build/registry
+          persist-credentials: false
+      - name: Install pinned published byte mirror and tooling
+        env:
+          PUBLISHED_DISTRIBUTION: ${{ steps.inputs.outputs.published_distribution }}
+        run: |
+          python -m pip install pytest pyyaml pyarrow==26.0.1 "$PUBLISHED_DISTRIBUTION"
+      - name: Stage independently verified parser inputs
+        env:
+          REGISTRY_COMMIT: ${{ steps.inputs.outputs.registry_commit }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PUBLISHED_WASM=$(python -c 'import intentumdiff, pathlib; print(pathlib.Path(intentumdiff.__file__).parent / "wasm")')
+          python scripts/stage_external_benchmark_inputs.py --registry build/registry/registry.yaml --registry-commit "$REGISTRY_COMMIT" --inventory tests/fixtures/external/inventory.json --published-dir "$PUBLISHED_WASM" --lock scripts/external_benchmark_inputs.lock.json --artifacts-dir build/parser-artifacts --download-artifacts --out build/benchmark-inputs
+      - name: Offline corpus and gate checks
+        run: |
+          python scripts/import_external_benchmarks.py --validate
+          python -m pytest tests/tooling -q
+          cargo test --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --example external_benchmarks
+          cargo build --locked --manifest-path crates/rust-core-host/Cargo.toml --no-default-features --lib --example external_benchmarks
+      - name: Execute source-judged pilot without network
+        run: |
+          crates/rust-core-host/target/debug/examples/external_benchmarks --fixtures tests/fixtures/external --parsers build/benchmark-inputs --report build/benchmarks/results.json
+      - name: Guard all 760 language probes against reviewed baseline
+        run: |
+          python scripts/assess_languages.py --fixtures tests/fixtures/language_assessment --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --baseline docs/evidence/2026-11-08-merged-rc-language-baseline.json --report build/language-assessment/results.json
+      - name: Guard admitted schema-2 ledger cases against the reviewed baseline
+        # About 5,050 C ABI reviews (first slice, #262, #265, #263 and #267). Fails on an invalid or
+        # stale ledger, a stale #265/#263 fragment, stale #262/#267 code-module case bytes (the
+        # builder's --check re-runs each scripts/external_families module and refuses to rewrite),
+        # any blocked case, or a regression of a previously passing upstream_gold case against the
+        # combined baseline; the scorecard is retained.
+        run: |
+          python scripts/external_ledger.py validate
+          python scripts/structured_family.py build --check
+          python scripts/markup_family.py build --check
+          python scripts/build_external_admission.py --check
+          python scripts/run_external_ledger.py --parsers build/benchmark-inputs --native-library crates/rust-core-host/target/debug/libintentumdiff_rust_core.so --report build/benchmarks/ledger-results.json --baseline docs/evidence/2026-11-17-external-scorecard/results.json
+          python scripts/external_ledger.py scorecard --results build/benchmarks/ledger-results.json --out-json build/benchmarks/scorecard.json --out-md build/benchmarks/scorecard.md
+      - name: Retain exact results and identities
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: external-source-correctness-linux
+          path: |
+            build/benchmarks/
+            build/language-assessment/
+          if-no-files-found: error

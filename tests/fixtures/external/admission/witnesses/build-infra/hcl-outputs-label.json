@@ -1,0 +1,204 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hcl-outputs-label",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {
+            "value": {
+              "type": "string",
+              "value": "hello"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "foo2"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "value": {
+              "expr_tokens": "local . bar"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "sensitive": {
+              "type": "bool",
+              "value": true
+            },
+            "value": {
+              "type": "string",
+              "value": "ssshhhhhhh"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "baz"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "description": {
+              "type": "string",
+              "value": "Nothing special"
+            },
+            "value": {
+              "type": "string",
+              "value": "🍕"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "cheeze_pizza"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "depends_on": {
+              "expr_tokens": "[ pizza . cheese , ]"
+            },
+            "value": {
+              "type": "number",
+              "value": 3.14159265359
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "π"
+        ],
+        "type": "output"
+      }
+    ]
+  },
+  "new_sha256": "bf822d292b48daaab5ac40a6f28bea4ee77dee603c48f5930c7843ebcd3f9362",
+  "old_observation": {
+    "attributes": {},
+    "blocks": [
+      {
+        "body": {
+          "attributes": {
+            "value": {
+              "type": "string",
+              "value": "hello"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "foo"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "value": {
+              "expr_tokens": "local . bar"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "bar"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "sensitive": {
+              "type": "bool",
+              "value": true
+            },
+            "value": {
+              "type": "string",
+              "value": "ssshhhhhhh"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "baz"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "description": {
+              "type": "string",
+              "value": "Nothing special"
+            },
+            "value": {
+              "type": "string",
+              "value": "🍕"
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "cheeze_pizza"
+        ],
+        "type": "output"
+      },
+      {
+        "body": {
+          "attributes": {
+            "depends_on": {
+              "expr_tokens": "[ pizza . cheese , ]"
+            },
+            "value": {
+              "type": "number",
+              "value": 3.14159265359
+            }
+          },
+          "blocks": null
+        },
+        "labels": [
+          "π"
+        ],
+        "type": "output"
+      }
+    ]
+  },
+  "old_sha256": "d4199927763bb4df940c282957d8a5781f78e3a0747031480fc6713eb131ea9a",
+  "oracle": "hcl_information_model_equality",
+  "projection_equal": false,
+  "review": "hclsyntax v2.23.0: the information-model projections differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

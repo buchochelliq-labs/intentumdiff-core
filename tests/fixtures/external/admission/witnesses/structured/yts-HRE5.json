@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-HRE5",
+  "executed_utc": "2026-11-17T20:20:27+00:00",
+  "new_sha256": "53b439d97e469a6bd82a6411bcf0ce32590fc26092ed82791d068bd2d1155452",
+  "observations": {
+    "error": "ScannerError: while scanning a double-quoted scalar\n  in \"<unicode string>\", line 2, column 9:\n    double: \"quoted \\' scalar\"\n            ^ (line: 2)\nfound unknown escape character \"'\"\n  in \"<unicode string>\", line 2, column 18:\n    double: \"quoted \\' scalar\"\n                     ^ (line: 2)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "53b439d97e469a6bd82a6411bcf0ce32590fc26092ed82791d068bd2d1155452",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

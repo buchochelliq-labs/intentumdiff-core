@@ -1,0 +1,3656 @@
+{
+  "language_id": "assemblyscript",
+  "options": {
+    "language_hint": "assemblyscript",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "assemblyscript-literal-value",
+      "language_id": "assemblyscript",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "0a61b8a8df0115d160bcb6b3be0fc12eebc199cc699794ff94d408217fc6ffaa",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update number('1') -> number('2')",
+            "old_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "number",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 39,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "number",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 39,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer",
+              "1"
+            ],
+            "new_labels": [
+              "answer",
+              "2"
+            ],
+            "old_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "new_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "answer",
+              "new_entity_label": "answer",
+              "entity_type": "function_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.77471,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.345059742647059,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.362644,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510061,
+                "total_fuel_consumed": 510061,
+                "max_fuel_used_percent": 2.3440303308823527,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "930ea274ee3b5e97db6ffa645164849b4af939fbb0a0b5c19897127e2147afbb",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "407f5a0119a7633740450231267318c960f2f47b20a945505c68a9acbf6d220d",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "9f89fb5b5fe93081e2eaeb232c4bc644fe05638ba7f80d3ffdaffcdae55bda23",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "bc391f4310185cffe0005da0c1e3f692163c7e458a56e6f68e823d67a8aee4bf",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "2",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 15312.081
+    },
+    {
+      "id": "assemblyscript-declaration-api",
+      "language_id": "assemblyscript",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "9886f75445d5716b362abfe62cf5e1e720b3e1b27881088f4af4a31782121e54",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "REFACTORING",
+            "confidence": 1.0,
+            "description": "Rename function_declaration('answer') -> ('result')",
+            "old_node": {
+              "id": "0.0.1",
+              "node_type": "function_declaration",
+              "label": "answer",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 43
+              },
+              "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+              "children": [
+                {
+                  "id": "0.0.1.4",
+                  "node_type": "statement_block",
+                  "label": "(anonymous)",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 30,
+                    "end_line": 0,
+                    "end_col": 43
+                  },
+                  "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                  "children": [
+                    {
+                      "id": "0.0.1.4.1",
+                      "node_type": "return_statement",
+                      "label": "(anonymous)",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 32,
+                        "end_line": 0,
+                        "end_col": 41
+                      },
+                      "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                      "children": [
+                        {
+                          "id": "0.0.1.4.1.1",
+                          "node_type": "number",
+                          "label": "1",
+                          "position": {
+                            "start_line": 0,
+                            "start_col": 39,
+                            "end_line": 0,
+                            "end_col": 40
+                          },
+                          "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "facts": {
+                "returns": "literal",
+                "return_kind": "number",
+                "control_shape": "linear",
+                "has_computation": false,
+                "behavior_category": "accessor"
+              }
+            },
+            "new_node": {
+              "id": "0.0.1",
+              "node_type": "function_declaration",
+              "label": "result",
+              "position": {
+                "start_line": 0,
+                "start_col": 7,
+                "end_line": 0,
+                "end_col": 43
+              },
+              "structural_hash": "94859b1484d39b8c1170f36cca9c4d0b30becdd0988c68e94e0ca2dd4e123b8d",
+              "children": [
+                {
+                  "id": "0.0.1.4",
+                  "node_type": "statement_block",
+                  "label": "(anonymous)",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 30,
+                    "end_line": 0,
+                    "end_col": 43
+                  },
+                  "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                  "children": [
+                    {
+                      "id": "0.0.1.4.1",
+                      "node_type": "return_statement",
+                      "label": "(anonymous)",
+                      "position": {
+                        "start_line": 0,
+                        "start_col": 32,
+                        "end_line": 0,
+                        "end_col": 41
+                      },
+                      "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                      "children": [
+                        {
+                          "id": "0.0.1.4.1.1",
+                          "node_type": "number",
+                          "label": "1",
+                          "position": {
+                            "start_line": 0,
+                            "start_col": 39,
+                            "end_line": 0,
+                            "end_col": 40
+                          },
+                          "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "facts": {
+                "returns": "literal",
+                "return_kind": "number",
+                "control_shape": "linear",
+                "has_computation": false,
+                "behavior_category": "accessor"
+              }
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [
+              "answer",
+              "(anonymous)",
+              "(anonymous)",
+              "1"
+            ],
+            "new_labels": [
+              "result",
+              "(anonymous)",
+              "(anonymous)",
+              "1"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.82,
+            "rule_id": "presentation.compact_superseded_meaningful_group",
+            "metadata": {
+              "reason": "refactoring_groups_replace_lower_level_meaningful_changes",
+              "suppressed_count": 1
+            }
+          },
+          {
+            "kind": "REFACTORING",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer"
+            ],
+            "new_labels": [
+              "result"
+            ],
+            "old_node_ids": [
+              "0.0.1"
+            ],
+            "new_node_ids": [
+              "0.0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_refactoring_group",
+            "metadata": {
+              "index_space": "final_changes"
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.810505,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.345059742647059,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.391908,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510066,
+                "total_fuel_consumed": 510066,
+                "max_fuel_used_percent": 2.344053308823529,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "cf3bf9aa2fbd2bbcd8a988ec41bba1dc50f1acbe59a47a1f1ee77ee49e523083",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "result",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "94859b1484d39b8c1170f36cca9c4d0b30becdd0988c68e94e0ca2dd4e123b8d",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 186.799
+    },
+    {
+      "id": "assemblyscript-body-operator",
+      "language_id": "assemblyscript",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "95f1c9c1fd72cc6cedae500e8c6dee5c6498cb068a31cf749c2fe6d71a97edfb",
+      "new_sha256": "fc70a1517e5b5a5cca185c1f27a2578b8dc3e0afb048a838915f7a8b79aae5d7",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Change AssemblyScript binary expression in combine: + -> -",
+            "old_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "binary_expression",
+              "label": "a",
+              "position": {
+                "start_line": 0,
+                "start_col": 54,
+                "end_line": 0,
+                "end_col": 59
+              },
+              "structural_hash": "9dcf440272b51afeaff4838bde4ae47688fa86ab28d6f3e2509b2894581052bf",
+              "children": [
+                {
+                  "id": "0.0.1.4.1.1.1",
+                  "node_type": "+",
+                  "label": "+",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 56,
+                    "end_line": 0,
+                    "end_col": 57
+                  },
+                  "structural_hash": "f21363d78a5d75600ec1681ec61bc060e16ac3a891a2eadf98b633ba00ff6d27",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "binary_expression",
+              "label": "a",
+              "position": {
+                "start_line": 0,
+                "start_col": 54,
+                "end_line": 0,
+                "end_col": 59
+              },
+              "structural_hash": "c1857c6943ffea4e0ca0ae4ece07478b60cea0056619f26093a7241608958c42",
+              "children": [
+                {
+                  "id": "0.0.1.4.1.1.1",
+                  "node_type": "-",
+                  "label": "-",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 56,
+                    "end_line": 0,
+                    "end_col": 57
+                  },
+                  "structural_hash": "23ab1c35152ed93fb0d7794d5c84a982b639cf99d2cf438f72146f29b2640b79",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "combine",
+              "a"
+            ],
+            "new_labels": [
+              "combine",
+              "a"
+            ],
+            "old_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "new_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "combine",
+              "new_entity_label": "combine",
+              "entity_type": "function_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 4.159127000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22520000,
+                "fuel_consumed": 788257,
+                "total_fuel_consumed": 788257,
+                "max_fuel_used_percent": 3.500253108348135,
+                "input_bytes": 63,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.450807,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22520000,
+                "fuel_consumed": 788570,
+                "total_fuel_consumed": 788570,
+                "max_fuel_used_percent": 3.5016429840142096,
+                "input_bytes": 63,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "bcb95b7b8a60a00a1c648ca7a60a5d93e88fd104f56883ee16c7dace22b35157",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "combine",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 62
+                },
+                "structural_hash": "99609236e113ce749f47607864ce7c0aadc79e2a7d33ea987a91853f7d678b43",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 62
+                    },
+                    "structural_hash": "0bc840b15e28ef7759df6bd9f1ae73e6d581d8a86e3ee16ad24f9fc0787605ac",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 47,
+                          "end_line": 0,
+                          "end_col": 60
+                        },
+                        "structural_hash": "c997a72d089dd118aea94bbdc83300899d04571e59b05b1af405d0ab99a38b82",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "a",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 54,
+                              "end_line": 0,
+                              "end_col": 59
+                            },
+                            "structural_hash": "9dcf440272b51afeaff4838bde4ae47688fa86ab28d6f3e2509b2894581052bf",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "+",
+                                "label": "+",
+                                "position": {
+                                  "start_line": 0,
+                                  "start_col": 56,
+                                  "end_line": 0,
+                                  "end_col": 57
+                                },
+                                "structural_hash": "f21363d78a5d75600ec1681ec61bc060e16ac3a891a2eadf98b633ba00ff6d27",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "4bb1d5740999c9138942173d1e17960aaf974a3153763bc30881a0ee0e92a40d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "combine",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 62
+                },
+                "structural_hash": "136ce93e67b3762b512cc31d4a5c7175e3e2f31d62a86841a4c881ceea74b623",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 45,
+                      "end_line": 0,
+                      "end_col": 62
+                    },
+                    "structural_hash": "67559fb5040ef43fee5bb8bdc495792cfe93a63dcf965516f5642cbe076341f1",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 47,
+                          "end_line": 0,
+                          "end_col": 60
+                        },
+                        "structural_hash": "0ebb8049e886e95bb12798b3c5f59a4b7cd8308c286c69c435721c66b40e3887",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "a",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 54,
+                              "end_line": 0,
+                              "end_col": 59
+                            },
+                            "structural_hash": "c1857c6943ffea4e0ca0ae4ece07478b60cea0056619f26093a7241608958c42",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "-",
+                                "label": "-",
+                                "position": {
+                                  "start_line": 0,
+                                  "start_col": 56,
+                                  "end_line": 0,
+                                  "end_col": 57
+                                },
+                                "structural_hash": "23ab1c35152ed93fb0d7794d5c84a982b639cf99d2cf438f72146f29b2640b79",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 85.58
+    },
+    {
+      "id": "assemblyscript-identity",
+      "language_id": "assemblyscript",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.960755,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.345059742647059,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.363716,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21760000,
+                "fuel_consumed": 510061,
+                "total_fuel_consumed": 510061,
+                "max_fuel_used_percent": 2.3440303308823527,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.972
+    },
+    {
+      "id": "assemblyscript-ordinary-comment",
+      "language_id": "assemblyscript",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "eec8c25c57b35166d1ed2011d9892f2b9f7a7d37226e64f3198ebd298c33eee8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// Ordinary comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.827137,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.3027301444043324,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.338679,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 526568,
+                "total_fuel_consumed": 526568,
+                "max_fuel_used_percent": 2.3762093862815887,
+                "input_bytes": 64,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.1.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 7,
+                  "end_line": 1,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.1.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 30,
+                      "end_line": 1,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.1.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 32,
+                          "end_line": 1,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.1.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 39,
+                              "end_line": 1,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.805
+    },
+    {
+      "id": "assemblyscript-layout",
+      "language_id": "assemblyscript",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "4baee0f0e117480cbefccf3a5600b01191b303187e339cf8bba36150c9e8e8f2",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                44,
+                44
+              ],
+              "new_span": [
+                45,
+                46
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                44,
+                44
+              ],
+              "new_span": [
+                45,
+                46
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.751807,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21800000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.3407568807339447,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.340923,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21800000,
+                "fuel_consumed": 512280,
+                "total_fuel_consumed": 512280,
+                "max_fuel_used_percent": 2.3499082568807337,
+                "input_bytes": 46,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 7,
+                  "end_line": 1,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 30,
+                      "end_line": 1,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 32,
+                          "end_line": 1,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 39,
+                              "end_line": 1,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 74.921
+    },
+    {
+      "id": "assemblyscript-incomplete",
+      "language_id": "assemblyscript",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "54e6e38a816761631e24cdbcf3fdf84a23ba42127f39b7981648a69884ee9674",
+      "new_sha256": "8159d7075b2144214116df470bdf2c7e6daabd52782693ed5beec9bc974f2235",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete number('1')",
+            "old_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "number",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 39,
+                "end_line": 0,
+                "end_col": 40
+              },
+              "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer",
+              "1"
+            ],
+            "new_labels": [
+              "answer"
+            ],
+            "old_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "answer",
+              "new_entity_label": "answer",
+              "entity_type": "function_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.824973,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 510285,
+                "total_fuel_consumed": 510285,
+                "max_fuel_used_percent": 2.3580637707948244,
+                "input_bytes": 44,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 1.32383,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21640000,
+                "fuel_consumed": 3379018,
+                "total_fuel_consumed": 3379018,
+                "max_fuel_used_percent": 15.614685767097965,
+                "input_bytes": 38,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": [
+              {
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm",
+                "function": "process",
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "fuel_consumed": 3379018,
+                "fuel_budget": 21640000,
+                "fuel_used_percent": 15.614685767097965,
+                "input_bytes": 82,
+                "input_lines": 2,
+                "fuel_per_kb": 3379018.0,
+                "fuel_per_line": 1689509.0,
+                "thresholds_exceeded": [
+                  "per_line"
+                ]
+              }
+            ]
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ad25bf59596b8103cb4555cdcdd52da979e21f9679d13afa702fcb75b5d2376d",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 43
+                },
+                "structural_hash": "82eed8f0381a30d489680ac86fb74d9395adbfb311abac2d98d3696c982ace35",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 30,
+                      "end_line": 0,
+                      "end_col": 43
+                    },
+                    "structural_hash": "8a0eba2fbfc17dea02801ee7bf980086a5773864f7eba07c38cf06b025c50503",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 32,
+                          "end_line": 0,
+                          "end_col": 41
+                        },
+                        "structural_hash": "48c933f4cfcb50b66b7aab3ff970eaa424f838275cf9439dc1eadf4ca6832c37",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "number",
+                            "label": "1",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 39,
+                              "end_line": 0,
+                              "end_col": 40
+                            },
+                            "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "a3b1f4565efdf902961e16f979856f543c6057e25e748f426fa938c411cd3c57",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 37
+                },
+                "structural_hash": "20e646fba64ca436531f47d5ec948b8fc00e86df954d76c6a90b6ae662c003ca",
+                "children": [
+                  {
+                    "id": "0.0.1.3",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 29,
+                      "end_line": 0,
+                      "end_col": 37
+                    },
+                    "structural_hash": "fbb7d40483ea3db1006e52391de78d7bb71999469e3d3b4a791acf5c5e295492",
+                    "children": [
+                      {
+                        "id": "0.0.1.3.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 31,
+                          "end_line": 0,
+                          "end_col": 37
+                        },
+                        "structural_hash": "1b626415e712da7e6a71e4a4279f25b891484aff824e8ee59a2a874756e89838",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 75.441
+    },
+    {
+      "id": "assemblyscript-unicode-payload",
+      "language_id": "assemblyscript",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6b9c3dcc2c54767274c8e023be0e9b494312404d6ceabd6317670090333bec74",
+      "new_sha256": "875874ebd95a790900e56b80d07ba5dad7797aef027a76be29a5009d82525312",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "export function message(): string { return \"café\"; }\\n"
+            ],
+            "new_labels": [
+              "export function message(): string { return \"cafe雪\"; }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "export function message(): string { return \"café\"; }\\n",
+              "new_label": "export function message(): string { return \"cafe雪\"; }\\n",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                54
+              ],
+              "new_span": [
+                0,
+                56
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "export function message(): string { return \"café\"; }\\n",
+              "new_label": "export function message(): string { return \"cafe雪\"; }\\n",
+              "risk": "amber",
+              "language": "assemblyscript",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                54
+              ],
+              "new_span": [
+                0,
+                56
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.913477,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22200000,
+                "fuel_consumed": 681300,
+                "total_fuel_consumed": 681300,
+                "max_fuel_used_percent": 3.068918918918919,
+                "input_bytes": 54,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.44531699999999996,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22200000,
+                "fuel_consumed": 681522,
+                "total_fuel_consumed": 681522,
+                "max_fuel_used_percent": 3.069918918918919,
+                "input_bytes": 56,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e7cbbc389497ab6969bdffd293d9bfd578b354eea2d33b4d32fc4442550e909a",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "message",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 53
+                },
+                "structural_hash": "44f65b40288dc44a64b91156321bedd7090a3448f67904cc4f93b83868a2fa0c",
+                "children": [
+                  {
+                    "id": "0.0.1.3",
+                    "node_type": "type_annotation",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 25,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "d562ef6a5d67ac627d7b2e5eff343dd18ea52809c2af8485fd22b235faefabbb",
+                    "children": [
+                      {
+                        "id": "0.0.1.3.1",
+                        "node_type": "predefined_type",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 27,
+                          "end_line": 0,
+                          "end_col": 33
+                        },
+                        "structural_hash": "f79ff87237f201814e013f56a88b82050362e73412f33fe1a4ba8a4b28a42f1c",
+                        "children": [
+                          {
+                            "id": "0.0.1.3.1.0",
+                            "node_type": "string",
+                            "label": "string",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 27,
+                              "end_line": 0,
+                              "end_col": 33
+                            },
+                            "structural_hash": "5e2b66ce4f42f50784824384c3bfe6872c21c08a9cbfb1397e6e34d7fac53997",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 34,
+                      "end_line": 0,
+                      "end_col": 53
+                    },
+                    "structural_hash": "c856e32511174fca4bec31451adaab66e23fdedbfddedeabb6261d33fe69ca2c",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 36,
+                          "end_line": 0,
+                          "end_col": 51
+                        },
+                        "structural_hash": "7726d44dd07177be9d1d7a768cb66c7203f6fce03a347571fbd93f5ef3bdf4ba",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "string",
+                            "label": "(anonymous)",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 43,
+                              "end_line": 0,
+                              "end_col": 50
+                            },
+                            "structural_hash": "cffb9ab3991f5b5e6c223d069bc7eb485706d7303acd148d1638d661f0267375",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "e7cbbc389497ab6969bdffd293d9bfd578b354eea2d33b4d32fc4442550e909a",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "message",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 55
+                },
+                "structural_hash": "44f65b40288dc44a64b91156321bedd7090a3448f67904cc4f93b83868a2fa0c",
+                "children": [
+                  {
+                    "id": "0.0.1.3",
+                    "node_type": "type_annotation",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 25,
+                      "end_line": 0,
+                      "end_col": 33
+                    },
+                    "structural_hash": "d562ef6a5d67ac627d7b2e5eff343dd18ea52809c2af8485fd22b235faefabbb",
+                    "children": [
+                      {
+                        "id": "0.0.1.3.1",
+                        "node_type": "predefined_type",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 27,
+                          "end_line": 0,
+                          "end_col": 33
+                        },
+                        "structural_hash": "f79ff87237f201814e013f56a88b82050362e73412f33fe1a4ba8a4b28a42f1c",
+                        "children": [
+                          {
+                            "id": "0.0.1.3.1.0",
+                            "node_type": "string",
+                            "label": "string",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 27,
+                              "end_line": 0,
+                              "end_col": 33
+                            },
+                            "structural_hash": "5e2b66ce4f42f50784824384c3bfe6872c21c08a9cbfb1397e6e34d7fac53997",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 34,
+                      "end_line": 0,
+                      "end_col": 55
+                    },
+                    "structural_hash": "c856e32511174fca4bec31451adaab66e23fdedbfddedeabb6261d33fe69ca2c",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 36,
+                          "end_line": 0,
+                          "end_col": 53
+                        },
+                        "structural_hash": "7726d44dd07177be9d1d7a768cb66c7203f6fce03a347571fbd93f5ef3bdf4ba",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "string",
+                            "label": "(anonymous)",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 43,
+                              "end_line": 0,
+                              "end_col": 52
+                            },
+                            "structural_hash": "cffb9ab3991f5b5e6c223d069bc7eb485706d7303acd148d1638d661f0267375",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 74.577
+    },
+    {
+      "id": "assemblyscript-exponent-operator",
+      "language_id": "assemblyscript",
+      "category": "qualifier_or_character_literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "298f960702154d80d8742c3b2423dc9e34931f661d85997883ce7eb363d75be5",
+      "new_sha256": "f53c0320c15594735d40ef5ac852601dace706dfaadad3628f9e25eb1e579f9f",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#191"
+      ],
+      "review": {
+        "old_filename": "probe.as",
+        "new_filename": "probe.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Change AssemblyScript binary expression in square: * -> **",
+            "old_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "binary_expression",
+              "label": "n",
+              "position": {
+                "start_line": 0,
+                "start_col": 45,
+                "end_line": 0,
+                "end_col": 50
+              },
+              "structural_hash": "356fada4475050010e78e9099dc34563068e9ad9b6696a1666305f45985d316f",
+              "children": [
+                {
+                  "id": "0.0.1.4.1.1.1",
+                  "node_type": "*",
+                  "label": "*",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 47,
+                    "end_line": 0,
+                    "end_col": 48
+                  },
+                  "structural_hash": "da90b6c96da7c109ff6972987b763d9fd1975086343a34eae6d5854364b78dda",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.0.1.4.1.1",
+              "node_type": "binary_expression",
+              "label": "n",
+              "position": {
+                "start_line": 0,
+                "start_col": 45,
+                "end_line": 0,
+                "end_col": 51
+              },
+              "structural_hash": "8bded0bb44d72a93626b8ee27ac2d41da7ea78d3fe819d707f3c2b370bb81754",
+              "children": [
+                {
+                  "id": "0.0.1.4.1.1.1",
+                  "node_type": "**",
+                  "label": "**",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 47,
+                    "end_line": 0,
+                    "end_col": 49
+                  },
+                  "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "square",
+              "n"
+            ],
+            "new_labels": [
+              "square",
+              "n"
+            ],
+            "old_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "new_node_ids": [
+              "0.0.1.4.1.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "square",
+              "new_entity_label": "square",
+              "entity_type": "function_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.93085,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22180000,
+                "fuel_consumed": 687408,
+                "total_fuel_consumed": 687408,
+                "max_fuel_used_percent": 3.099224526600541,
+                "input_bytes": 54,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "probe.as",
+                "call_count": 1,
+                "elapsed_ms": 0.470364,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22180000,
+                "fuel_consumed": 688394,
+                "total_fuel_consumed": 688394,
+                "max_fuel_used_percent": 3.1036699729486026,
+                "input_bytes": 55,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0ac0c728e110dc0659e348fcd8a1d14d13161b58d32d612529ad80ced984c740",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "square",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 53
+                },
+                "structural_hash": "66e7abca4fe23dda0d2718cb061b8b2e0dd8159d7b17e3c878a72c45aa269b73",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 36,
+                      "end_line": 0,
+                      "end_col": 53
+                    },
+                    "structural_hash": "3287a01c26ade4840b5a2856cec949e2fbe97f44203384cdf8bfd33cf2341386",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 38,
+                          "end_line": 0,
+                          "end_col": 51
+                        },
+                        "structural_hash": "6e88d9dedcc21d65c658b7b57200b5cfa1faa1f61121c681a5afb7f8e2a45e9e",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 45,
+                              "end_line": 0,
+                              "end_col": 50
+                            },
+                            "structural_hash": "356fada4475050010e78e9099dc34563068e9ad9b6696a1666305f45985d316f",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "*",
+                                "label": "*",
+                                "position": {
+                                  "start_line": 0,
+                                  "start_col": 47,
+                                  "end_line": 0,
+                                  "end_col": 48
+                                },
+                                "structural_hash": "da90b6c96da7c109ff6972987b763d9fd1975086343a34eae6d5854364b78dda",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5d2462c8ee295c548b943b40024d5f6cd653a28de218f10c176466a5cc87b840",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "square",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 0,
+                  "end_col": 54
+                },
+                "structural_hash": "2ae81e5841ec451aa36f3cfd1e795584f33dd9829cc87b2420625985e8379e89",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 36,
+                      "end_line": 0,
+                      "end_col": 54
+                    },
+                    "structural_hash": "2607c300477248c7663225ceb8e6c43c9b78f5b807aca90def7dc3d140b9cc5a",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 0,
+                          "start_col": 38,
+                          "end_line": 0,
+                          "end_col": 52
+                        },
+                        "structural_hash": "384e3736dc8d33aedd1780812a548c9271c55cc9b2555f927ba88ebe87ebe6a3",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 0,
+                              "start_col": 45,
+                              "end_line": 0,
+                              "end_col": 51
+                            },
+                            "structural_hash": "8bded0bb44d72a93626b8ee27ac2d41da7ea78d3fe819d707f3c2b370bb81754",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "**",
+                                "label": "**",
+                                "position": {
+                                  "start_line": 0,
+                                  "start_col": 47,
+                                  "end_line": 0,
+                                  "end_col": 49
+                                },
+                                "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 76.201
+    },
+    {
+      "id": "assemblyscript-repo-fixture-identity",
+      "language_id": "assemblyscript",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "eb141dbc3ff2b1c67fe44c79ecbb38f9742a0b01d1f6197e892f51e89cd8eba4",
+      "new_sha256": "eb141dbc3ff2b1c67fe44c79ecbb38f9742a0b01d1f6197e892f51e89cd8eba4",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.as",
+        "new_filename": "playground.as",
+        "language": "assemblyscript",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "playground.as",
+                "call_count": 1,
+                "elapsed_ms": 1.5910360000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27000000,
+                "fuel_consumed": 2145237,
+                "total_fuel_consumed": 2145237,
+                "max_fuel_used_percent": 7.945322222222222,
+                "input_bytes": 175,
+                "input_lines": 11,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "assemblyscript",
+                "filename": "playground.as",
+                "call_count": 1,
+                "elapsed_ms": 0.962318,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27000000,
+                "fuel_consumed": 2145013,
+                "total_fuel_consumed": 2145013,
+                "max_fuel_used_percent": 7.944492592592593,
+                "input_bytes": 175,
+                "input_lines": 11,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/assemblyscript_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "9ad18a1d670a486d8a4649ef6ac47fa67aa7984a0831d62ac18e2af87f594dda",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "bb6b4a5102a2dfd510659b4cd47b102bdc01f78d4c346df3a534de5f63e143d8",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 41,
+                      "end_line": 2,
+                      "end_col": 1
+                    },
+                    "structural_hash": "0bc840b15e28ef7759df6bd9f1ae73e6d581d8a86e3ee16ad24f9fc0787605ac",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 15
+                        },
+                        "structural_hash": "c997a72d089dd118aea94bbdc83300899d04571e59b05b1af405d0ab99a38b82",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "a",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 14
+                            },
+                            "structural_hash": "9dcf440272b51afeaff4838bde4ae47688fa86ab28d6f3e2509b2894581052bf",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "+",
+                                "label": "+",
+                                "position": {
+                                  "start_line": 1,
+                                  "start_col": 11,
+                                  "end_line": 1,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "f21363d78a5d75600ec1681ec61bc060e16ac3a891a2eadf98b633ba00ff6d27",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1.1",
+                "node_type": "function_declaration",
+                "label": "square",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 7,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "e057b8b2374781bb6a466933ecf1065d6e06eb29e347856ff36b5b75dbe52299",
+                "children": [
+                  {
+                    "id": "0.1.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 36,
+                      "end_line": 6,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ab18c3faf4a0aedeaa6b60ba533ae8b1957e5958ff67081ff0f5775ebcb699bf",
+                    "children": [
+                      {
+                        "id": "0.1.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 16
+                        },
+                        "structural_hash": "ed567c5e7888390122d1a0f059036608e3609dbb96545bdc3500bd6915b3417c",
+                        "children": [
+                          {
+                            "id": "0.1.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 9,
+                              "end_line": 5,
+                              "end_col": 15
+                            },
+                            "structural_hash": "09252b6f75610cdaac1b2f8b16902f40440ab100c5473c933495d7bd90ab5c33",
+                            "children": [
+                              {
+                                "id": "0.1.1.4.1.1.1",
+                                "node_type": "**",
+                                "label": "**",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 11,
+                                  "end_line": 5,
+                                  "end_col": 13
+                                },
+                                "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.1.1.4.1.1.2",
+                                "node_type": "number",
+                                "label": "2",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 14,
+                                  "end_line": 5,
+                                  "end_col": 15
+                                },
+                                "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2.1",
+                "node_type": "function_declaration",
+                "label": "cube",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 7,
+                  "end_line": 10,
+                  "end_col": 1
+                },
+                "structural_hash": "bf9e2c1de938c7a308a562aa77b03ffb3ea6c4517f8aca11165c11aac215062b",
+                "children": [
+                  {
+                    "id": "0.2.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 34,
+                      "end_line": 10,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ca725749d17a874eaa4f4f3c77078cac455fa80574162e9407a67c0609ead7d4",
+                    "children": [
+                      {
+                        "id": "0.2.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 2,
+                          "end_line": 9,
+                          "end_col": 16
+                        },
+                        "structural_hash": "0f832c70911d2e7cb62f380cb870fa08f1f535114ecf17598ffd34a2b791db20",
+                        "children": [
+                          {
+                            "id": "0.2.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 9,
+                              "end_line": 9,
+                              "end_col": 15
+                            },
+                            "structural_hash": "9c25f709f21bc9b5e9ae57ad1e71bb167ecdf83d355300d986c20ee0dd98554b",
+                            "children": [
+                              {
+                                "id": "0.2.1.4.1.1.1",
+                                "node_type": "**",
+                                "label": "**",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 11,
+                                  "end_line": 9,
+                                  "end_col": 13
+                                },
+                                "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.2.1.4.1.1.2",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 14,
+                                  "end_line": 9,
+                                  "end_col": 15
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "assemblyscript",
+          "tree": {
+            "id": "0",
+            "node_type": "program",
+            "label": "(anonymous)",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 11,
+              "end_col": 0
+            },
+            "structural_hash": "9ad18a1d670a486d8a4649ef6ac47fa67aa7984a0831d62ac18e2af87f594dda",
+            "children": [
+              {
+                "id": "0.0.1",
+                "node_type": "function_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 7,
+                  "end_line": 2,
+                  "end_col": 1
+                },
+                "structural_hash": "bb6b4a5102a2dfd510659b4cd47b102bdc01f78d4c346df3a534de5f63e143d8",
+                "children": [
+                  {
+                    "id": "0.0.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 41,
+                      "end_line": 2,
+                      "end_col": 1
+                    },
+                    "structural_hash": "0bc840b15e28ef7759df6bd9f1ae73e6d581d8a86e3ee16ad24f9fc0787605ac",
+                    "children": [
+                      {
+                        "id": "0.0.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 1,
+                          "start_col": 2,
+                          "end_line": 1,
+                          "end_col": 15
+                        },
+                        "structural_hash": "c997a72d089dd118aea94bbdc83300899d04571e59b05b1af405d0ab99a38b82",
+                        "children": [
+                          {
+                            "id": "0.0.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "a",
+                            "position": {
+                              "start_line": 1,
+                              "start_col": 9,
+                              "end_line": 1,
+                              "end_col": 14
+                            },
+                            "structural_hash": "9dcf440272b51afeaff4838bde4ae47688fa86ab28d6f3e2509b2894581052bf",
+                            "children": [
+                              {
+                                "id": "0.0.1.4.1.1.1",
+                                "node_type": "+",
+                                "label": "+",
+                                "position": {
+                                  "start_line": 1,
+                                  "start_col": 11,
+                                  "end_line": 1,
+                                  "end_col": 12
+                                },
+                                "structural_hash": "f21363d78a5d75600ec1681ec61bc060e16ac3a891a2eadf98b633ba00ff6d27",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.1.1",
+                "node_type": "function_declaration",
+                "label": "square",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 7,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "e057b8b2374781bb6a466933ecf1065d6e06eb29e347856ff36b5b75dbe52299",
+                "children": [
+                  {
+                    "id": "0.1.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 36,
+                      "end_line": 6,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ab18c3faf4a0aedeaa6b60ba533ae8b1957e5958ff67081ff0f5775ebcb699bf",
+                    "children": [
+                      {
+                        "id": "0.1.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 2,
+                          "end_line": 5,
+                          "end_col": 16
+                        },
+                        "structural_hash": "ed567c5e7888390122d1a0f059036608e3609dbb96545bdc3500bd6915b3417c",
+                        "children": [
+                          {
+                            "id": "0.1.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 5,
+                              "start_col": 9,
+                              "end_line": 5,
+                              "end_col": 15
+                            },
+                            "structural_hash": "09252b6f75610cdaac1b2f8b16902f40440ab100c5473c933495d7bd90ab5c33",
+                            "children": [
+                              {
+                                "id": "0.1.1.4.1.1.1",
+                                "node_type": "**",
+                                "label": "**",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 11,
+                                  "end_line": 5,
+                                  "end_col": 13
+                                },
+                                "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.1.1.4.1.1.2",
+                                "node_type": "number",
+                                "label": "2",
+                                "position": {
+                                  "start_line": 5,
+                                  "start_col": 14,
+                                  "end_line": 5,
+                                  "end_col": 15
+                                },
+                                "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.2.1",
+                "node_type": "function_declaration",
+                "label": "cube",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 7,
+                  "end_line": 10,
+                  "end_col": 1
+                },
+                "structural_hash": "bf9e2c1de938c7a308a562aa77b03ffb3ea6c4517f8aca11165c11aac215062b",
+                "children": [
+                  {
+                    "id": "0.2.1.4",
+                    "node_type": "statement_block",
+                    "label": "(anonymous)",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 34,
+                      "end_line": 10,
+                      "end_col": 1
+                    },
+                    "structural_hash": "ca725749d17a874eaa4f4f3c77078cac455fa80574162e9407a67c0609ead7d4",
+                    "children": [
+                      {
+                        "id": "0.2.1.4.1",
+                        "node_type": "return_statement",
+                        "label": "(anonymous)",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 2,
+                          "end_line": 9,
+                          "end_col": 16
+                        },
+                        "structural_hash": "0f832c70911d2e7cb62f380cb870fa08f1f535114ecf17598ffd34a2b791db20",
+                        "children": [
+                          {
+                            "id": "0.2.1.4.1.1",
+                            "node_type": "binary_expression",
+                            "label": "n",
+                            "position": {
+                              "start_line": 9,
+                              "start_col": 9,
+                              "end_line": 9,
+                              "end_col": 15
+                            },
+                            "structural_hash": "9c25f709f21bc9b5e9ae57ad1e71bb167ecdf83d355300d986c20ee0dd98554b",
+                            "children": [
+                              {
+                                "id": "0.2.1.4.1.1.1",
+                                "node_type": "**",
+                                "label": "**",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 11,
+                                  "end_line": 9,
+                                  "end_col": 13
+                                },
+                                "structural_hash": "9bf24b92a7a2296b7e8674bcc5ca1ae619f84c6554284203a612401e6863380c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.2.1.4.1.1.2",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 9,
+                                  "start_col": 14,
+                                  "end_line": 9,
+                                  "end_col": 15
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 92.897
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 16.799
+}

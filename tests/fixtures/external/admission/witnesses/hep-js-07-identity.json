@@ -1,0 +1,49 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-js-07-identity",
+  "config": "js",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "d225d5e124c0f38f0bd7a523c3ce00bb4441c3785790b5eaec89be2909749201",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "95f736e334ac2b1df6574b9d460868e64806930ce1972d307e89ad4b8d14dd3f",
+  "new_test_sha256": "6d9717bedad27de024822b637e18c791cbe2594eb46f6e1d527f55fc75b70e70",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "passed",
+    "program_sha256": "d225d5e124c0f38f0bd7a523c3ce00bb4441c3785790b5eaec89be2909749201",
+    "steps": [
+      {
+        "argv": [
+          "node",
+          "prog.js"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "95f736e334ac2b1df6574b9d460868e64806930ce1972d307e89ad4b8d14dd3f",
+  "old_test_sha256": "6d9717bedad27de024822b637e18c791cbe2594eb46f6e1d527f55fc75b70e70",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/js/07.json",
+  "toolchain": [
+    "v22.23.4"
+  ],
+  "verdict": "supports_claim"
+}

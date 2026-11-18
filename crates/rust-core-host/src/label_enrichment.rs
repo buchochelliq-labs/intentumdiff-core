@@ -73,41 +73,56 @@ pub(crate) fn enrich_statement_profile_labels_node(
 // python analysis/path_profiles.py enrich_path_profile_labels + helpers. Hand-rolled
 // scanners replace the python regexes (repo norm: no regex crate in 22k lines).
 
-/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
-pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
-    let pos = &node.position;
-    let start_line = pos.start_line as usize;
-    if start_line >= source_lines.len() {
-        return String::new();
-    }
-    // Tree-sitter columns are UTF-8 BYTE offsets, not Unicode scalar indexes.
-    // Slicing by chars shifted every nested markup node after a non-ASCII
-    // character and silently lost meaningful XML text modifications.
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let from = from.unwrap_or(0).min(line.len());
+/// Exact source text for a parser span. Tree-sitter columns are UTF-8 BYTE offsets, not
+/// Unicode scalar indexes: slicing by chars shifted every node after a non-ASCII character
+/// (#249: `printf '😀'; echo safe` labelled the second command `o safe`). A column past the
+/// end of its line is clamped to the line end, as before: that loses no text. A column that
+/// falls inside a code point is not recoverable by guessing, so the whole span is rejected
+/// (`None`) rather than shifted onto a neighbouring character.
+pub(crate) fn utf8_source_span(
+    source_lines: &[&str],
+    start_line: usize,
+    start_col: usize,
+    end_line: usize,
+    end_col: usize,
+) -> Option<String> {
+    let clip = |line: &str, from: usize, to: Option<usize>| -> Option<String> {
+        let from = from.min(line.len());
         let to = to.unwrap_or(line.len()).min(line.len());
         if from >= to {
-            return String::new();
+            // Empty (or inverted) after clamping; still reject a split code point.
+            return (line.is_char_boundary(from) && line.is_char_boundary(to)).then(String::new);
         }
-        // Invalid byte boundaries are not recoverable by char-index guessing.
-        line.get(from..to).unwrap_or("").to_string()
+        line.get(from..to).map(str::to_string)
     };
-    let end_line = pos.end_line as usize;
+    let first = *source_lines.get(start_line)?;
     if start_line == end_line {
-        return clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        );
+        return clip(first, start_col, Some(end_col));
     }
-    let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
+    if end_line < start_line {
+        return None;
+    }
+    let mut parts = vec![clip(first, start_col, None)?];
     for line in &source_lines[start_line + 1..end_line.min(source_lines.len())] {
         parts.push((*line).to_string());
     }
-    if end_line < source_lines.len() {
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
+    if let Some(last) = source_lines.get(end_line) {
+        parts.push(clip(last, 0, Some(end_col))?);
     }
-    parts.join("\n")
+    Some(parts.join("\n"))
+}
+
+/// python path_profiles._source_slice (0-based lines, unlike statement's asm/delphi).
+pub(crate) fn path_source_slice(source_lines: &[&str], node: &SemanticNode) -> String {
+    let pos = &node.position;
+    utf8_source_span(
+        source_lines,
+        pos.start_line as usize,
+        pos.start_col as usize,
+        pos.end_line as usize,
+        pos.end_col as usize,
+    )
+    .unwrap_or_default()
 }
 
 pub(crate) fn compact_ws(text: &str) -> String {
@@ -193,7 +208,7 @@ pub(crate) fn attribute_label_from_source(snippet: &str) -> String {
 
 /// python path_profiles._attributes_from_opening_tag: attrs between the tag name and
 /// the first `>` (no angle brackets inside), tokens `name(="v"|'v'|bare)?`.
-pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)> {
+pub(crate) fn attributes_from_opening_tag(snippet: &str, language: &str) -> Vec<(String, String)> {
     let chars: Vec<char> = snippet.chars().collect();
     let mut i = 0;
     let mut attr_region: Option<String> = None;
@@ -251,7 +266,12 @@ pub(crate) fn attributes_from_opening_tag(snippet: &str) -> Vec<(String, String)
         while i < chars.len() && is_ident_char(chars[i]) {
             i += 1;
         }
-        let name = path_normalize_text(&chars[start..i].iter().collect::<String>());
+        let raw_name = chars[start..i].iter().collect::<String>();
+        let name = if language == "xml" {
+            raw_name
+        } else {
+            path_normalize_text(&raw_name)
+        };
         let mut j = i;
         while j < chars.len() && chars[j].is_whitespace() {
             j += 1;
@@ -403,6 +423,46 @@ pub(crate) fn decode_xml_entities(text: &str) -> String {
     out
 }
 
+/// Byte ranges (in `snippet`) of the element's opening tag and of each attribute in it, in
+/// source order (#256). Mirrors `attributes_from_opening_tag`'s scan: quotes are honoured,
+/// a value may be quoted or bare, `/` before `>` closes a self-closing tag.
+fn opening_tag_spans(snippet: &str) -> Option<(std::ops::Range<usize>, Vec<(String, std::ops::Range<usize>)>)> {
+    let bytes = snippet.as_bytes();
+    let open = snippet.find('<')?;
+    let mut i = open + 1;
+    while i < bytes.len() && bytes[i].is_ascii_whitespace() { i += 1; }
+    while i < bytes.len() && !bytes[i].is_ascii_whitespace() && !matches!(bytes[i], b'>' | b'/') { i += 1; }
+    let mut attrs = Vec::new();
+    loop {
+        while i < bytes.len() && (bytes[i].is_ascii_whitespace() || bytes[i] == b'/') { i += 1; }
+        if i >= bytes.len() { return None; }
+        if bytes[i] == b'>' { return Some((open..i + 1, attrs)); }
+        if bytes[i] == b'<' { return None; }
+        let start = i;
+        while i < bytes.len() && !bytes[i].is_ascii_whitespace() && !matches!(bytes[i], b'=' | b'>' | b'/') { i += 1; }
+        let name = snippet[start..i].to_owned();
+        let mut end = i;
+        let mut j = i;
+        while j < bytes.len() && bytes[j].is_ascii_whitespace() { j += 1; }
+        if j < bytes.len() && bytes[j] == b'=' {
+            j += 1;
+            while j < bytes.len() && bytes[j].is_ascii_whitespace() { j += 1; }
+            if j < bytes.len() && matches!(bytes[j], b'"' | b'\'') {
+                let quote = bytes[j];
+                j += 1;
+                while j < bytes.len() && bytes[j] != quote { j += 1; }
+                j = (j + 1).min(bytes.len());
+            } else {
+                while j < bytes.len() && !bytes[j].is_ascii_whitespace() && bytes[j] != b'>' { j += 1; }
+            }
+            end = j;
+            i = j;
+        }
+        if name.is_empty() { i += 1; continue; }
+        attrs.push((name, start..end));
+    }
+}
+
 pub(crate) fn path_synthetic_position(node: &SemanticNode) -> NodePosition {
     NodePosition {
         start_line: node.position.start_line,
@@ -487,53 +547,139 @@ struct StyleItem {
     value_span: std::ops::Range<usize>,
 }
 
-fn style_items_from_source(snippet: &str, parent_selector: &str) -> Vec<StyleItem> {
-    let body = match (snippet.find('{'), snippet.rfind('}')) {
-        (Some(open), Some(close)) if close > open => &snippet[open + 1..close],
-        _ => return Vec::new(),
-    };
-    let range = |text: &str| {
-        let start = text.as_ptr() as usize - snippet.as_ptr() as usize;
-        start..start + text.len()
-    };
-    let mut result = Vec::new();
-    let mut push = |kind: &str, label: String, value: &str, span: &str| {
-        result.push(StyleItem {
-            kind: kind.to_string(), label, value: value.to_string(), span: range(span),
-            value_span: if value.is_empty() { 0..0 } else { range(value) },
-        });
-    };
-    for raw_line in body.lines() {
-        let line = raw_line.trim();
-        if line.is_empty() || line == "}" { continue; }
-        if let Some(rest) = line.strip_prefix("@include") {
-            let name = rest.trim().split('(').next().unwrap_or("").trim_end_matches(';').trim();
-            if !name.is_empty() { push("include_statement", name.into(), "", line); }
-            continue;
-        }
-        if let Some(rest) = line.strip_prefix("@extend") {
-            let name = rest.trim().trim_end_matches(';').trim();
-            if !name.is_empty() { push("extend_statement", name.into(), "", line); }
-            continue;
-        }
-        if let Some(brace) = line.find('{') {
-            let selector = line[..brace].trim().replace('&', parent_selector);
-            if !selector.is_empty() { push("rule_set", compact_ws(&selector), "", line); }
-            let nested = line[brace + 1..].split('}').next().unwrap_or("").trim();
-            if let Some(colon) = nested.find(':') {
-                let name = nested[..colon].trim();
-                let value = nested[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() { push("declaration", name.into(), value, nested); }
+// Replace lexical comments with spaces without moving source byte offsets. Only
+// delimiters outside strings and balanced function/attribute arguments split items.
+fn style_lexical_source(snippet: &str, language: &str) -> (String, Vec<(usize, u8)>) {
+    let bytes = snippet.as_bytes();
+    let mut cleaned = bytes.to_vec();
+    let mut delimiters = Vec::new();
+    let mut quote = None;
+    let mut interpolation = 0usize;
+    let mut arguments = Vec::new();
+    let mut url_depth = None;
+    let mut i = 0;
+    while i < bytes.len() {
+        let byte = bytes[i];
+        if let Some(q) = quote {
+            if byte == b'\\' { i += 2; continue; }
+            if byte == q { quote = None; }
+        } else if url_depth.is_none() && byte == b'/' && bytes.get(i + 1) == Some(&b'*') {
+            let start = i;
+            i += 2;
+            while i < bytes.len() && !(bytes[i] == b'*' && bytes.get(i + 1) == Some(&b'/')) {
+                i += 1;
+            }
+            i = (i + 2).min(bytes.len());
+            for b in &mut cleaned[start..i] {
+                if !matches!(*b, b'\r' | b'\n') { *b = b' '; }
             }
             continue;
-        }
-        if !line.starts_with('@') {
-            if let Some(colon) = line.find(':') {
-                let name = line[..colon].trim();
-                let value = line[colon + 1..].trim_end_matches(';').trim();
-                if !name.is_empty() { push("declaration", name.into(), value, line); }
+        } else if language == "scss" && url_depth.is_none()
+            && byte == b'/' && bytes.get(i + 1) == Some(&b'/') {
+            while i < bytes.len() && !matches!(bytes[i], b'\r' | b'\n') {
+                cleaned[i] = b' ';
+                i += 1;
+            }
+            continue;
+        } else {
+            if language == "scss" && byte == b'#' && bytes.get(i + 1) == Some(&b'{') {
+                interpolation += 1;
+                i += 2;
+                continue;
+            }
+            if interpolation > 0 && matches!(byte, b'{' | b'}') {
+                if byte == b'{' { interpolation += 1; } else { interpolation -= 1; }
+                i += 1;
+                continue;
+            }
+            match byte {
+                b'\\' => { i += 2; continue; }
+                b'\'' | b'"' => quote = Some(byte),
+                b'[' | b']' if url_depth.is_some() => {},
+                b'(' | b'[' => {
+                    if byte == b'(' && url_depth.is_none() && i >= 3
+                        && bytes[i - 3..i].eq_ignore_ascii_case(b"url")
+                        && (i == 3 || !matches!(bytes[i - 4], b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'_' | b'-' | 0x80..=0xff)) {
+                        // Sass permits // inside the CSS url() token.
+                        url_depth = Some(arguments.len() + 1);
+                    }
+                    arguments.push(byte);
+                }
+                b')' if arguments.last() == Some(&b'(') => {
+                    if url_depth == Some(arguments.len()) { url_depth = None; }
+                    arguments.pop();
+                }
+                b']' if arguments.last() == Some(&b'[') => { arguments.pop(); }
+                b':' | b';' | b'{' | b'}' if arguments.is_empty() && interpolation == 0 => delimiters.push((i, byte)),
+                _ => {}
             }
         }
+        i += 1;
+    }
+    // Comment bytes alone were replaced by ASCII spaces, preserving UTF-8.
+    (String::from_utf8(cleaned).expect("comment masking preserves UTF-8"), delimiters)
+}
+
+fn style_items_from_source(snippet: &str, parent_selector: &str, language: &str) -> Vec<StyleItem> {
+    let (cleaned, delimiters) = style_lexical_source(snippet, language);
+    let Some(open) = delimiters.iter().position(|(_, byte)| *byte == b'{') else { return vec![] };
+    let mut result: Vec<StyleItem> = Vec::new();
+    let mut blocks: Vec<Option<usize>> = vec![None];
+    let mut start = delimiters[open].0 + 1;
+    let mut colon = None;
+    let mut value_blocks = 0usize;
+    for &(offset, byte) in &delimiters[open + 1..] {
+        if value_blocks > 0 {
+            if byte == b'{' { value_blocks += 1; }
+            if byte == b'}' { value_blocks -= 1; }
+            continue;
+        }
+        if byte == b'{' && colon.is_some_and(|colon| cleaned[start..colon].trim().starts_with("--")) {
+            value_blocks = 1;
+            continue;
+        }
+        if byte == b':' { colon.get_or_insert(offset); continue; }
+        let text = cleaned[start..offset].trim();
+        let text_start = start + cleaned[start..offset].len() - cleaned[start..offset].trim_start().len();
+        if byte == b'{' {
+            let index = if text.is_empty() { None } else {
+                result.push(StyleItem {
+                    kind: "rule_set".into(), label: compact_ws(&text.replace('&', parent_selector)),
+                    value: String::new(), span: text_start..offset + 1, value_span: 0..0,
+                });
+                Some(result.len() - 1)
+            };
+            blocks.push(index);
+        } else {
+            if let Some(rest) = text.strip_prefix("@include").filter(|rest| rest.starts_with(char::is_whitespace)) {
+                let name = rest.trim().split('(').next().unwrap_or("").trim();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "include_statement".into(), label: name.into(), value: String::new(),
+                        span: text_start..offset + usize::from(byte == b';'), value_span: 0..0 });
+                }
+            } else if let Some(rest) = text.strip_prefix("@extend").filter(|rest| rest.starts_with(char::is_whitespace)) {
+                let name = rest.trim();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "extend_statement".into(), label: name.into(), value: String::new(),
+                        span: text_start..offset + usize::from(byte == b';'), value_span: 0..0 });
+                }
+            } else if let Some(colon) = colon.filter(|_| !text.starts_with('@')) {
+                let name = cleaned[start..colon].trim();
+                let value_text = cleaned[colon + 1..offset].trim();
+                let value_start = colon + 1 + cleaned[colon + 1..offset].len() - cleaned[colon + 1..offset].trim_start().len();
+                let value_span = value_start..value_start + value_text.len();
+                if !name.is_empty() {
+                    result.push(StyleItem { kind: "declaration".into(), label: name.into(),
+                        value: snippet[value_span.clone()].into(), span: text_start..offset + usize::from(byte == b';'), value_span });
+                }
+            }
+            if byte == b'}' {
+                if let Some(Some(index)) = blocks.pop() { result[index].span.end = offset + 1; }
+                if blocks.is_empty() { break; }
+            }
+        }
+        start = offset + 1;
+        colon = None;
     }
     result
 }
@@ -544,6 +690,7 @@ pub(crate) fn enrich_style_children(
     source_lines: &[&str],
     mut children: Vec<SemanticNode>,
     label: &str,
+    language: &str,
 ) -> Vec<SemanticNode> {
     let node_type = node.node_type.to_lowercase();
     if matches!(node_type.as_str(), "declaration" | "variable_declaration") {
@@ -578,7 +725,7 @@ pub(crate) fn enrich_style_children(
         .collect();
     let snippet = style_source_slice(source_lines, node);
     for (index, item) in
-        style_items_from_source(&snippet, label).into_iter().enumerate()
+        style_items_from_source(&snippet, label, language).into_iter().enumerate()
     {
         if existing.contains(&(item.kind.clone(), item.label.clone())) {
             continue;
@@ -606,11 +753,16 @@ pub(crate) fn enrich_style_children(
 }
 
 /// python path_profiles._attribute_parts / _attribute_name.
-pub(crate) fn attribute_name_of(label: &str) -> String {
+fn attribute_name_for_language(label: &str, language: &str) -> String {
     let text = label.trim();
-    match text.find('=') {
-        Some(eq) => path_normalize_text(&text[..eq]),
-        None => path_normalize_text(text),
+    let name = match text.find('=') {
+        Some(eq) => text[..eq].trim(),
+        None => text,
+    };
+    if language == "xml" {
+        name.to_string()
+    } else {
+        path_normalize_text(name)
     }
 }
 
@@ -619,21 +771,37 @@ pub(crate) fn attribute_name_of(label: &str) -> String {
 pub(crate) fn enrich_existing_markup_attributes(
     nodes: Vec<SemanticNode>,
     attr_values: &HashMap<String, String>,
+    language: &str,
 ) -> Vec<SemanticNode> {
     nodes
         .into_iter()
         .map(|node| {
-            let children = enrich_existing_markup_attributes(node.children.clone(), attr_values);
-            let mut label = node.label.clone();
-            if node.node_type.eq_ignore_ascii_case("attribute") {
-                let name = attribute_name_of(&node.label);
-                if let Some(value) = attr_values.get(&name) {
-                    if !value.is_empty() && *value != name {
-                        label = format!("{name}={value}");
-                    } else {
-                        label = name;
-                    }
-                }
+            // Only attributes owned by this opening tag may consume its values.
+            // Recursing through element descendants lets an ancestor's `id`,
+            // `class`, etc. overwrite the nested element's own source value.
+            let label = enriched_markup_attribute_label(&node, attr_values, language);
+            let mut children = node.children.clone();
+            if matches!(node.node_type.to_lowercase().as_str(), "start_tag" | "self_closing_tag") {
+                children = children
+                    .into_iter()
+                    .map(|child| {
+                        if child.node_type.eq_ignore_ascii_case("attribute") {
+                            let child_label = enriched_markup_attribute_label(&child, attr_values, language);
+                            if child_label != child.label {
+                                let structural_hash = synthetic_structural_hash(
+                                    &child.node_type,
+                                    &child_label,
+                                    &child.children,
+                                );
+                                let mut updated = child;
+                                updated.label = child_label;
+                                updated.structural_hash = structural_hash;
+                                return updated;
+                            }
+                        }
+                        child
+                    })
+                    .collect();
             }
             let children_changed = children.len() != node.children.len()
                 || children
@@ -654,6 +822,22 @@ pub(crate) fn enrich_existing_markup_attributes(
         .collect()
 }
 
+fn enriched_markup_attribute_label(
+    node: &SemanticNode,
+    attr_values: &HashMap<String, String>,
+    language: &str,
+) -> String {
+    if !node.node_type.eq_ignore_ascii_case("attribute") {
+        return node.label.clone();
+    }
+    let name = attribute_name_for_language(&node.label, language);
+    match attr_values.get(&name) {
+        Some(value) if !value.is_empty() && *value != name => format!("{name}={value}"),
+        Some(_) => name,
+        None => node.label.clone(),
+    }
+}
+
 /// python path_profiles._enrich_markup_attributes: re-inject attributes parsed from the
 /// opening tag as synthetic `attribute` children (skipping xmlns/xmlns:*), preferring an
 /// existing start/self-closing tag child; otherwise a synthetic start_tag is prepended.
@@ -662,9 +846,10 @@ pub(crate) fn enrich_markup_attributes(
     source_lines: &[&str],
     children: Vec<SemanticNode>,
     label: &str,
+    language: &str,
 ) -> Vec<SemanticNode> {
     let snippet = path_source_slice(source_lines, node);
-    let attrs: Vec<(String, String)> = attributes_from_opening_tag(&snippet)
+    let attrs: Vec<(String, String)> = attributes_from_opening_tag(&snippet, language)
         .into_iter()
         .filter(|(name, _)| name != "xmlns" && !name.starts_with("xmlns:"))
         .collect();
@@ -672,17 +857,33 @@ pub(crate) fn enrich_markup_attributes(
         return children;
     }
     let attr_values: HashMap<String, String> = attrs.iter().cloned().collect();
-    let children = enrich_existing_markup_attributes(children, &attr_values);
+    let children = enrich_existing_markup_attributes(children, &attr_values, language);
     let existing_names: HashSet<String> = children
         .iter()
         .flat_map(|child| {
             std::iter::once(child)
-                .chain(child.descendants())
-                .filter(|d| d.node_type.eq_ignore_ascii_case("attribute"))
-                .map(|d| attribute_name_of(&d.label))
+                .chain(
+                    matches!(child.node_type.to_lowercase().as_str(), "start_tag" | "self_closing_tag")
+                        .then_some(child.children.iter())
+                        .into_iter()
+                        .flatten(),
+                )
+                .filter(|candidate| candidate.node_type.eq_ignore_ascii_case("attribute"))
+                .map(|candidate| attribute_name_for_language(&candidate.label, language))
                 .collect::<Vec<_>>()
         })
         .collect();
+    // Real source ranges for the synthetic nodes (#256): the opening tag and each attribute's
+    // own bytes, matched to the parsed attributes in order by name.
+    let spans = opening_tag_spans(&snippet);
+    let mut attr_spans = spans.as_ref().map(|(_, a)| a.iter()).into_iter().flatten();
+    let mut positions: Vec<NodePosition> = Vec::with_capacity(attrs.len());
+    for (name, _) in &attrs {
+        let found = attr_spans.by_ref().find(|(span_name, _)| {
+            attribute_name_for_language(span_name, language) == attribute_name_for_language(name, language)
+        });
+        positions.push(found.map_or_else(|| path_synthetic_position(node), |(_, range)| style_position(node, &snippet, range.clone())));
+    }
     let synthetic_attrs: Vec<SemanticNode> = attrs
         .iter()
         .enumerate()
@@ -697,7 +898,7 @@ pub(crate) fn enrich_markup_attributes(
                 format!("{}.path_attr_{}", node.id, index),
                 "attribute",
                 attr_label,
-                path_synthetic_position(node),
+                positions[index].clone(),
                 Vec::new(),
             )
         })
@@ -722,11 +923,14 @@ pub(crate) fn enrich_markup_attributes(
             return result;
         }
     }
+    let start_position = spans
+        .as_ref()
+        .map_or_else(|| path_synthetic_position(node), |(open, _)| style_position(node, &snippet, open.clone()));
     let start_tag = path_synthetic_node(
         format!("{}.path_start", node.id),
         "start_tag",
         label.to_string(),
-        path_synthetic_position(node),
+        start_position,
         synthetic_attrs,
     );
     let mut result = vec![start_tag];
@@ -767,8 +971,311 @@ fn markup_text_position(node: &SemanticNode, snippet: &str) -> Option<NodePositi
     Some(style_position(node, snippet, start..end))
 }
 
+/// XML whitespace (production `S`): space, tab, CR, LF. Deliberately not Unicode
+/// whitespace: a no-break space is character data and never collapses.
+fn is_xml_space(c: char) -> bool {
+    matches!(c, ' ' | '\t' | '\r' | '\n')
+}
+
+/// An element's own `xml:space` declaration (issue #247): `Some(true)` = preserve,
+/// `Some(false)` = default, `None` = undeclared/invalid, so the inherited scope applies.
+fn xml_space_override(snippet: &str) -> Option<bool> {
+    attributes_from_opening_tag(snippet, "xml")
+        .into_iter()
+        .find(|(name, _)| name == "xml:space")
+        .and_then(|(_, value)| match value.trim_matches(is_xml_space) {
+            "preserve" => Some(true),
+            "default" => Some(false),
+            _ => None,
+        })
+}
+
+/// One run of an XML element's *direct* character data: the text between its own
+/// tags and child elements (comments and processing instructions are transparent,
+/// CDATA contributes its content verbatim, entities are decoded).
+struct XmlTextRun {
+    /// Byte range in the element snippet, from the run's first to its last data byte.
+    span: std::ops::Range<usize>,
+    text: String,
+    /// Whether child elements sit on both sides of the run (sibling separator).
+    between_children: bool,
+}
+
+/// Lexically split an element's content into direct character-data runs. Runs are
+/// separated by child elements; text nested in children belongs to those children.
+/// Returns `None` when the snippet is not a well-formed `<tag ...>...</tag>` element.
+fn xml_direct_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    markup_direct_text_runs(snippet, false)
+}
+
+/// HTML void elements (no end tag, no content).
+fn is_html_void_element(name: &str) -> bool {
+    matches!(
+        name.to_ascii_lowercase().as_str(),
+        "area" | "base" | "br" | "col" | "embed" | "hr" | "img" | "input" | "keygen" | "link"
+            | "meta" | "param" | "source" | "track" | "wbr"
+    )
+}
+
+/// Shared lexical scan behind [`xml_direct_text_runs`]. With `html`, void elements
+/// (`<br>`) open no nesting level and character references stay as written (HTML text
+/// labels are not entity-decoded elsewhere either).
+fn markup_direct_text_runs(snippet: &str, html: bool) -> Option<(Vec<XmlTextRun>, bool)> {
+    let decode = |text: &str| if html { text.to_string() } else { decode_xml_entities(text) };
+    let open_end = markup_opening_tag_end(snippet)?;
+    if snippet[..open_end].ends_with("/>") {
+        return Some((Vec::new(), false));
+    }
+    let close_start = snippet.rfind("</")?;
+    if close_start < open_end {
+        return None;
+    }
+    let content = &snippet[open_end..close_start];
+    let mut runs = Vec::new();
+    let mut has_child_element = false;
+    let mut depth = 0usize;
+    let mut text = String::new();
+    let mut pending_entities = String::new();
+    let mut span: Option<std::ops::Range<usize>> = None;
+    let flush = |text: &mut String,
+                 pending: &mut String,
+                 span: &mut Option<std::ops::Range<usize>>,
+                 runs: &mut Vec<XmlTextRun>,
+                 between_children: bool| {
+        text.push_str(&decode(pending));
+        pending.clear();
+        if let Some(range) = span.take() {
+            runs.push(XmlTextRun { span: range, text: std::mem::take(text), between_children });
+        }
+        text.clear();
+    };
+    let extend = |span: &mut Option<std::ops::Range<usize>>, range: std::ops::Range<usize>| {
+        let start = span.as_ref().map_or(range.start, |s| s.start);
+        *span = Some(start..range.end);
+    };
+    let mut i = 0;
+    while i < content.len() {
+        let rest = &content[i..];
+        if rest.starts_with("<!--") {
+            i += rest.find("-->").map_or(rest.len(), |end| end + 3);
+        } else if rest.starts_with("<![CDATA[") {
+            // An unterminated CDATA section is malformed: decline rather than guess.
+            let end = rest.find("]]>")? + 3;
+            if depth == 0 {
+                text.push_str(&decode(&pending_entities));
+                pending_entities.clear();
+                text.push_str(&rest["<![CDATA[".len()..end - 3]);
+                extend(&mut span, open_end + i..open_end + i + end);
+            }
+            i += end;
+        } else if rest.starts_with("<?") {
+            i += rest.find("?>").map_or(rest.len(), |end| end + 2);
+        } else if rest.starts_with("</") {
+            depth = depth.checked_sub(1)?;
+            i += rest.find('>').map_or(rest.len(), |end| end + 1);
+        } else if rest.starts_with('<') {
+            let tag_len = markup_opening_tag_end(rest)?;
+            if depth == 0 {
+                flush(&mut text, &mut pending_entities, &mut span, &mut runs, has_child_element);
+                has_child_element = true;
+            }
+            if !rest[..tag_len].ends_with("/>")
+                && !(html && is_html_void_element(&tag_name_from_source(&rest[..tag_len])))
+            {
+                depth += 1;
+            }
+            i += tag_len;
+        } else {
+            let ch = rest.chars().next()?;
+            if depth == 0 {
+                pending_entities.push(ch);
+                extend(&mut span, open_end + i..open_end + i + ch.len_utf8());
+            }
+            i += ch.len_utf8();
+        }
+    }
+    if depth != 0 {
+        return None;
+    }
+    flush(&mut text, &mut pending_entities, &mut span, &mut runs, false);
+    Some((runs, has_child_element))
+}
+
+/// Collapse each run of XML whitespace to one space, keeping it at the boundaries:
+/// under default space handling the *amount* of whitespace is layout, but its
+/// presence vs absence (`<v> x</v>` vs `<v>x</v>`, `a <b/>` vs `a<b/>`) is data.
+fn collapse_xml_space(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut in_space = false;
+    for ch in text.chars() {
+        if is_xml_space(ch) {
+            if !in_space {
+                out.push(' ');
+            }
+            in_space = true;
+        } else {
+            out.push(ch);
+            in_space = false;
+        }
+    }
+    out
+}
+
+/// Synthetic `text` children for an XML element's direct character data (issue #247).
+/// Significance follows XML 1.0 §2.10:
+/// - inside an `xml:space="preserve"` scope every run is kept verbatim, whitespace-only
+///   runs included;
+/// - otherwise, in content with no non-whitespace direct text, line-broken whitespace
+///   (indentation, blank lines) and whitespace at the element's own boundaries is layout;
+///   only an inline (single-line) whitespace run separating two sibling elements is kept,
+///   as inter-word space (`<b>a</b> <i>b</i>` vs `<b>a</b><i>b</i>`);
+/// - otherwise a run containing any non-whitespace character data is kept exactly
+///   (XML does not collapse text; `<p>a b</p>` vs `<p>a  b</p>` differ), and in mixed
+///   content a whitespace-only run is kept collapsed to one space (presence vs absence
+///   separates words). Indentation in element-only content stays layout.
+fn enrich_xml_text_children(
+    node: &SemanticNode,
+    snippet: &str,
+    children: Vec<SemanticNode>,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
+    let Some((runs, has_child_element)) = xml_direct_text_runs(snippet) else {
+        return children;
+    };
+    emit_markup_text_runs(node, snippet, children, runs, has_child_element, xml_preserve)
+}
+
+/// Insert synthetic `text` children for direct character-data runs (shared by XML and
+/// HTML preformatted content). `preserve` keeps every run verbatim.
+fn emit_markup_text_runs(
+    node: &SemanticNode,
+    snippet: &str,
+    mut children: Vec<SemanticNode>,
+    runs: Vec<XmlTextRun>,
+    has_child_element: bool,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
+    let has_data = runs.iter().any(|run| run.text.chars().any(|c| !is_xml_space(c)));
+    let runs: Vec<(XmlTextRun, String)> = runs
+        .into_iter()
+        .filter(|run| !run.text.is_empty())
+        .filter_map(|run| {
+            if xml_preserve {
+                let label = run.text.clone();
+                Some((run, label))
+            } else if run.text.chars().any(|c| !is_xml_space(c)) {
+                // XML never collapses character data: xml:space="default" leaves whitespace
+                // to the application, it does not make its amount layout. A run holding
+                // data keeps every whitespace character exactly.
+                let label = run.text.clone();
+                Some((run, label))
+            } else if has_data
+                || (run.between_children && !run.text.contains(['\n', '\r']))
+            {
+                // Whitespace-only run between children: its presence separates words.
+                let label = collapse_xml_space(&run.text);
+                Some((run, label))
+            } else {
+                None
+            }
+        })
+        .collect();
+    let single = runs.len() == 1 && !has_child_element;
+    for (index, (run, label)) in runs.into_iter().enumerate() {
+        let position = if single {
+            markup_text_position(node, snippet)
+        } else {
+            None
+        }
+        .unwrap_or_else(|| {
+            // Point at the run's data, not its surrounding layout, when it has any.
+            let raw = &snippet[run.span.clone()];
+            let lead = raw.len() - raw.trim_start_matches(is_xml_space).len();
+            let trail = raw.len() - raw.trim_end_matches(is_xml_space).len();
+            let range = if lead + trail < raw.len() {
+                run.span.start + lead..run.span.end - trail
+            } else {
+                run.span.clone()
+            };
+            style_position(node, snippet, range)
+        });
+        let id = if index == 0 {
+            format!("{}.path_text", node.id)
+        } else {
+            format!("{}.path_text_{index}", node.id)
+        };
+        let text = path_synthetic_node(id, "text", label, position, Vec::new());
+        // Keep document order among the element's children so mixed-content runs
+        // align with their neighbouring child elements.
+        let at = if single {
+            children.len()
+        } else {
+            children
+                .iter()
+                .position(|child| {
+                    !matches!(
+                        child.node_type.to_lowercase().as_str(),
+                        "attribute" | "start_tag" | "self_closing_tag"
+                    ) && (child.position.start_line, child.position.start_col)
+                        > (text.position.start_line, text.position.start_col)
+                })
+                .unwrap_or(children.len())
+        };
+        children.insert(at, text);
+    }
+    children
+}
+
+/// HTML elements whose content whitespace is rendered verbatim: `pre`/`listing` (UA style
+/// `white-space: pre`, inherited by descendants) and the raw-text `textarea`/`plaintext`.
+fn is_html_preformatted_element(tag: &str) -> bool {
+    matches!(tag.to_ascii_lowercase().as_str(), "pre" | "listing" | "textarea" | "plaintext")
+}
+
+/// Direct text runs of an HTML element inside a preformatted scope, kept verbatim. Outside
+/// such scopes HTML whitespace collapses and the compacted `direct_markup_text` label stands.
+fn html_preformatted_text_runs(snippet: &str) -> Option<(Vec<XmlTextRun>, bool)> {
+    let tag = tag_name_from_source(snippet).to_ascii_lowercase();
+    let open_end = markup_opening_tag_end(snippet)?;
+    let (mut runs, has_child_element) = if matches!(tag.as_str(), "textarea" | "plaintext") {
+        // Raw text: no child elements, the content runs to the end tag.
+        let close_start = snippet.rfind("</")?;
+        if close_start < open_end {
+            return None;
+        }
+        let text = &snippet[open_end..close_start];
+        let runs = if text.is_empty() {
+            Vec::new()
+        } else {
+            vec![XmlTextRun {
+                span: open_end..close_start,
+                text: text.to_string(),
+                between_children: false,
+            }]
+        };
+        (runs, false)
+    } else {
+        markup_direct_text_runs(snippet, true)?
+    };
+    // HTML parsing drops a single newline immediately after a pre/listing/textarea start tag.
+    if matches!(tag.as_str(), "pre" | "listing" | "textarea") {
+        if let Some(first) = runs.first_mut().filter(|run| run.span.start == open_end) {
+            let skip = if first.text.starts_with("\r\n") {
+                2
+            } else {
+                usize::from(first.text.starts_with('\n'))
+            };
+            first.text.drain(..skip);
+            first.span.start += skip;
+        }
+        runs.retain(|run| !run.text.is_empty());
+    }
+    Some((runs, has_child_element))
+}
+
 /// python path_profiles._enrich_markup_children: attributes + a synthetic `text` child
 /// so text-value changes surface as element-level MODIFICATIONs (xml decodes entities).
+#[cfg(test)]
 pub(crate) fn enrich_markup_children(
     node: &SemanticNode,
     source_lines: &[&str],
@@ -776,19 +1283,40 @@ pub(crate) fn enrich_markup_children(
     label: &str,
     language: &str,
 ) -> Vec<SemanticNode> {
+    enrich_markup_children_scoped(node, source_lines, children, label, language, false)
+}
+
+fn enrich_markup_children_scoped(
+    node: &SemanticNode,
+    source_lines: &[&str],
+    children: Vec<SemanticNode>,
+    label: &str,
+    language: &str,
+    xml_preserve: bool,
+) -> Vec<SemanticNode> {
     if !matches!(
         node.node_type.to_lowercase().as_str(),
         "element" | "script_element" | "style_element"
     ) {
         return children;
     }
-    let mut children = enrich_markup_attributes(node, source_lines, children, label);
+    let mut children = enrich_markup_attributes(node, source_lines, children, label, language);
     if children.iter().any(|c| {
         matches!(c.node_type.to_lowercase().as_str(), "text" | "chardata" | "content")
     }) {
         return children;
     }
     let snippet = path_source_slice(source_lines, node);
+    if language == "xml" {
+        return enrich_xml_text_children(node, &snippet, children, xml_preserve);
+    }
+    // For HTML, `xml_preserve` is the inherited preformatted scope (`<pre>` and friends):
+    // there every whitespace run is data, mixed content included.
+    if language == "html" && xml_preserve {
+        if let Some((runs, has_child_element)) = html_preformatted_text_runs(&snippet) {
+            return emit_markup_text_runs(node, &snippet, children, runs, has_child_element, true);
+        }
+    }
     let mut text = direct_markup_text(&snippet, label);
     if language == "xml" && !text.is_empty() {
         text = decode_xml_entities(&text);
@@ -886,12 +1414,35 @@ pub(crate) fn enrich_path_profile_labels_node(
     source_lines: &[&str],
     language: &str,
 ) -> SemanticNode {
+    enrich_path_profile_labels_scoped(node, source_lines, language, false)
+}
+
+/// `xml_preserve` is the inherited `xml:space` scope (XML 1.0 §2.10): an element's own
+/// `xml:space="preserve"|"default"` overrides it for itself and its descendants. For HTML
+/// the same flag is the preformatted scope opened by `<pre>`, `<listing>`, `<textarea>` and
+/// `<plaintext>` (HTML whitespace is otherwise collapsible).
+fn enrich_path_profile_labels_scoped(
+    node: &SemanticNode,
+    source_lines: &[&str],
+    language: &str,
+    inherited_xml_preserve: bool,
+) -> SemanticNode {
+    let xml_preserve = if language == "xml" && node.node_type.eq_ignore_ascii_case("element") {
+        xml_space_override(&path_source_slice(source_lines, node)).unwrap_or(inherited_xml_preserve)
+    } else if language == "html" && node.node_type.eq_ignore_ascii_case("element") {
+        // HTML has no xml:space; whitespace significance comes from preformatted elements.
+        inherited_xml_preserve
+            || is_html_preformatted_element(&tag_name_from_source(&path_source_slice(source_lines, node)))
+    } else {
+        inherited_xml_preserve
+    };
     let mut children_changed = false;
     let children: Vec<SemanticNode> = node
         .children
         .iter()
         .map(|child| {
-            let enriched = enrich_path_profile_labels_node(child, source_lines, language);
+            let enriched =
+                enrich_path_profile_labels_scoped(child, source_lines, language, xml_preserve);
             if enriched.structural_hash != child.structural_hash
                 || enriched.label != child.label
             {
@@ -931,7 +1482,7 @@ pub(crate) fn enrich_path_profile_labels_node(
             }
         }
         let before = children.len();
-        children = enrich_style_children(node, source_lines, children, &label);
+        children = enrich_style_children(node, source_lines, children, &label, language);
         if children.len() != before {
             children_changed = true;
         }
@@ -957,7 +1508,9 @@ pub(crate) fn enrich_path_profile_labels_node(
         }
         let before_hashes: Vec<String> =
             children.iter().map(|c| c.structural_hash.clone()).collect();
-        children = enrich_markup_children(node, source_lines, children, &label, language);
+        children = enrich_markup_children_scoped(
+            node, source_lines, children, &label, language, xml_preserve,
+        );
         if children.len() != before_hashes.len()
             || children
                 .iter()
@@ -1112,7 +1665,7 @@ pub(crate) fn enrich_resource_profile_labels_node(node: &SemanticNode, language:
     if label == node.label && !children_changed {
         return node.clone();
     }
-    let structural_hash = synthetic_structural_hash(&node.node_type, &label, &children);
+    let structural_hash = enriched_structural_hash(node, &label, &children);
     let mut updated = node.clone();
     updated.label = label;
     updated.children = children;
@@ -1329,6 +1882,123 @@ pub(crate) fn enrich_query_profile_labels_node(
 mod markup_text_span_tests {
     use super::*;
 
+    /// #256: synthetic start tags and attributes point at their own source bytes (multiline
+    /// opening tags and multi-byte values included), never a zero-width span at the element.
+    #[test]
+    fn synthetic_start_tags_and_attributes_have_real_source_ranges() {
+        let source = "<div>\n  <p class=\"café\"\n     data-x='1 2' hidden>hi</p>\n</div>";
+        let lines: Vec<&str> = source.split('\n').collect();
+        // The <p> element: line 1 col 2 .. line 2 end.
+        let p = path_synthetic_node("0.0".into(), "element", "p".into(),
+            NodePosition { start_line: 1, start_col: 2, end_line: 2, end_col: 31 }, vec![]);
+        let children = enrich_markup_attributes(&p, &lines, vec![], "p", "html");
+        let start = &children[0];
+        assert_eq!(start.node_type, "start_tag");
+        let slice = |pos: &NodePosition| {
+            let snippet = path_source_slice(&lines, &path_synthetic_node("x".into(), "x", String::new(), pos.clone(), vec![]));
+            snippet
+        };
+        assert_eq!(slice(&start.position), "<p class=\"café\"\n     data-x='1 2' hidden>");
+        let attrs: Vec<(String, String)> = start.children.iter()
+            .map(|a| (a.label.clone(), slice(&a.position))).collect();
+        assert_eq!(attrs, vec![
+            ("class=café".to_string(), "class=\"café\"".to_string()),
+            ("data-x=1 2".to_string(), "data-x='1 2'".to_string()),
+            ("hidden".to_string(), "hidden".to_string()),
+        ]);
+    }
+
+    #[test]
+    fn nested_and_sibling_attributes_keep_their_own_values() {
+        fn attr(id: &str, value: &str) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "attribute",
+                format!("id={value}"),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![],
+            )
+        }
+        fn start(id: &str, name: &str, value: &str) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "start_tag",
+                name.into(),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![attr(&format!("{id}.0"), value)],
+            )
+        }
+        fn element(id: &str, name: &str, value: &str, children: Vec<SemanticNode>) -> SemanticNode {
+            path_synthetic_node(
+                id.into(),
+                "element",
+                name.into(),
+                NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+                vec![start(&format!("{id}.0"), name, value), children.into_iter().next().unwrap_or_else(|| path_synthetic_node(
+                    format!("{id}.1"), "text", "text".into(),
+                    NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![],
+                ))],
+            )
+        }
+        let source = "<root id=\"outer-é\"><child id=\"before\"><leaf id=\"deep\"/></child><child id=\"sibling\"/></root>";
+        let leaf = element("0.0.0.0", "leaf", "deep", vec![]);
+        let nested = element("0.0.0", "child", "before", vec![leaf]);
+        let sibling = element("0.0.1", "child", "sibling", vec![]);
+        let root = path_synthetic_node(
+            "0".into(),
+            "element",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![],
+        );
+        let children = enrich_markup_attributes(
+            &root,
+            &[source],
+            vec![start("0.0", "root", "stale"), nested, sibling],
+            "root",
+            "html",
+        );
+        let root_start = &children[0];
+        assert_eq!(root_start.children.iter().find(|n| n.node_type == "attribute").unwrap().label, "id=outer-é");
+        let nested_id = &children[1].children[0].children[0];
+        assert_eq!(nested_id.label, "id=before");
+        let leaf_id = &children[1].children[1].children[0].children[0];
+        assert_eq!(leaf_id.label, "id=deep");
+        let sibling_id = &children[2].children[0].children[0];
+        assert_eq!(sibling_id.label, "id=sibling");
+    }
+
+    #[test]
+    fn xml_attribute_names_remain_case_sensitive() {
+        let source = "<root Foo=\"outer\" foo=\"lower\"><child Foo=\"inner\"/></root>";
+        assert_eq!(
+            attributes_from_opening_tag(source, "xml"),
+            vec![("Foo".to_string(), "outer".to_string()), ("foo".to_string(), "lower".to_string())],
+        );
+        assert_eq!(attribute_name_for_language("Foo=outer", "xml"), "Foo");
+        assert_eq!(attribute_name_for_language("Foo=outer", "html"), "foo");
+        let root = path_synthetic_node(
+            "0".into(),
+            "element",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![],
+        );
+        let tag = path_synthetic_node(
+            "0.0".into(),
+            "start_tag",
+            "root".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            vec![
+                path_synthetic_node("0.0.0".into(), "attribute", "Foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+                path_synthetic_node("0.0.1".into(), "attribute", "foo=stale".into(), NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 }, vec![]),
+            ],
+        );
+        let children = enrich_markup_attributes(&root, &[source], vec![tag], "root", "xml");
+        assert_eq!(children[0].children[0].label, "Foo=outer");
+        assert_eq!(children[0].children[1].label, "foo=lower");
+    }
+
     #[test]
     fn nested_xml_text_points_to_the_value_not_the_opening_tag() {
         let source = "<root><value>1</value></root>";
@@ -1358,7 +2028,9 @@ mod markup_text_span_tests {
         let lines: Vec<&str> = source.lines().collect();
         let children = enrich_markup_children(&node, &lines, vec![], "value", "xml");
         let text = children.iter().find(|c| c.node_type == "text").expect("text child");
-        assert_eq!(text.label, "alpha");
+        // Issue #247: the boundary line breaks and indentation are character data and
+        // XML keeps them exactly. The evidence span still points at the value itself.
+        assert_eq!(text.label, "\n    alpha\n");
         assert_eq!(
             (text.position.start_line, text.position.start_col,
              text.position.end_line, text.position.end_col),
@@ -1401,7 +2073,7 @@ mod markup_text_span_tests {
         ] {
             assert_eq!(direct_markup_text(source, "value"), value);
             assert_eq!(
-                attributes_from_opening_tag(source),
+                attributes_from_opening_tag(source, "xml"),
                 vec![("note".to_string(), attribute.to_string())]
             );
             let node = path_synthetic_node(
@@ -1425,10 +2097,47 @@ mod markup_text_span_tests {
     }
 
     #[test]
+    fn xml_mixed_content_text_runs_keep_document_order_and_spans() {
+        // Issue #247: direct text around child elements is data, in document order;
+        // text nested inside a child belongs to that child.
+        let source = "<p>a <b>b</b> c</p>";
+        let b = path_synthetic_node("0.0".into(), "element", "b".into(),
+            NodePosition { start_line: 0, start_col: 5, end_line: 0, end_col: 13 }, vec![]);
+        let node = path_synthetic_node("0".into(), "element", "p".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: source.len() as u32 },
+            vec![b]);
+        let children = enrich_markup_children_scoped(
+            &node, &[source], node.children.clone(), "p", "xml", false);
+        let shape: Vec<(&str, &str, u32, u32)> = children.iter()
+            .map(|c| (c.node_type.as_str(), c.label.as_str(), c.position.start_col, c.position.end_col))
+            .collect();
+        assert_eq!(shape, vec![("text", "a ", 3, 4), ("element", "b", 5, 13), ("text", " c", 14, 15)]);
+    }
+
+    #[test]
+    fn xml_text_with_data_is_verbatim_in_both_space_scopes() {
+        let source = "<v>\ta  b\n</v>";
+        let node = path_synthetic_node("0".into(), "element", "v".into(),
+            NodePosition { start_line: 0, start_col: 0, end_line: 1, end_col: 4 }, vec![]);
+        let lines: Vec<&str> = source.lines().collect();
+        let text_of = |preserve| {
+            enrich_markup_children_scoped(&node, &lines, vec![], "v", "xml", preserve)
+                .into_iter().find(|c| c.node_type == "text").expect("text child").label
+        };
+        assert_eq!(text_of(true), "\ta  b\n");
+        // Character data is never collapsed, whatever the xml:space scope.
+        assert_eq!(text_of(false), "\ta  b\n");
+        assert_eq!(xml_space_override("<v xml:space='preserve'>x</v>"), Some(true));
+        assert_eq!(xml_space_override("<v xml:space=\"default\">x</v>"), Some(false));
+        assert_eq!(xml_space_override("<v space=\"preserve\"><w xml:space=\"preserve\"/></v>"), None);
+    }
+
+    #[test]
     fn xml_entities_and_cdata_preserve_original_byte_ranges() {
         for (source, label, start, end) in [
             ("<value>A&amp;B</value>", "A&B", 7, 14),
-            ("<value><![CDATA[  one  ]]></value>", "one", 18, 21),
+            // Issue #247: CDATA whitespace is data, kept exactly.
+            ("<value><![CDATA[  one  ]]></value>", "  one  ", 18, 21),
             ("<value>café</value>", "café", 7, 12),
         ] {
             let node = path_synthetic_node(
@@ -1456,11 +2165,105 @@ mod style_span_tests {
     use super::*;
 
     #[test]
+    fn style_source_keeps_complete_escaped_multiline_values() {
+        let source = "a {\n  b: 'line1 \\\n      line2';\n}\n\n";
+        let items = style_items_from_source(source, "a", "scss");
+        assert_eq!(items.len(), 1);
+        assert_eq!(items[0].label, "b");
+        assert_eq!(items[0].value, "'line1 \\\n      line2'");
+        assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+    }
+
+    #[test]
+    fn style_source_skips_comments_and_tracks_lexical_delimiters() {
+        let source = ".é { /* : ; { ignored } */ color /* name */: red; content: 'é;}:/*text*/'; transform: fn(1; 2); &:hover { b: blue; c: green; } }";
+        let items = style_items_from_source(source, ".é", "css");
+        let actual: Vec<_> = items.iter().map(|i| (i.kind.as_str(), i.label.as_str(), i.value.as_str())).collect();
+        assert_eq!(actual, vec![
+            ("declaration", "color", "red"),
+            ("declaration", "content", "'é;}:/*text*/'"),
+            ("declaration", "transform", "fn(1; 2)"),
+            ("rule_set", ".é:hover", ""),
+            ("declaration", "b", "blue"),
+            ("declaration", "c", "green"),
+        ]);
+        for item in items.iter().filter(|i| !i.value.is_empty()) {
+            assert_eq!(&source[item.value_span.clone()], item.value);
+        }
+        assert!(source[items[0].span.clone()].starts_with("color"));
+    }
+
+    #[test]
+    fn style_source_multiline_value_positions_preserve_crlf_and_utf8() {
+        let source = "é a {\r\n  b: 'café \\\r\n    fin'; c: \"x\";\r\n}";
+        let node = path_synthetic_node("0.0".into(), "rule_set", "a".into(),
+            NodePosition { start_line: 0, start_col: 3, end_line: 3, end_col: 1 }, vec![]);
+        let children = enrich_style_children(&node, &source.split('\n').collect::<Vec<_>>(), vec![], "a", "scss");
+        let value = &children[0].children[0];
+        assert_eq!(value.label, "'café \\\r\n    fin'");
+        assert_eq!((value.position.start_line, value.position.start_col, value.position.end_line, value.position.end_col), (1, 5, 2, 8));
+        assert_eq!(children[1].label, "c");
+    }
+
+    #[test]
+    fn style_source_preserves_interpolation_and_custom_property_blocks() {
+        for (source, expected) in [
+            ("a { color: #{$tone}; margin: 1px; }", vec![("color", "#{$tone}"), ("margin", "1px")]),
+            ("a { --theme: { color: red; }; margin: 1px; }", vec![("--theme", "{ color: red; }"), ("margin", "1px")]),
+        ] {
+            let items = style_items_from_source(source, "a", "scss");
+            assert!(items.iter().all(|i| i.kind == "declaration"));
+            assert_eq!(items.iter().map(|i| (i.label.as_str(), i.value.as_str())).collect::<Vec<_>>(), expected);
+        }
+    }
+
+    #[test]
+    fn style_source_skips_scss_line_comment_delimiters() {
+        let items = style_items_from_source("a { // } ; :\n color: red;\n}", "a", "scss");
+        assert_eq!(items.len(), 1);
+        assert_eq!((items[0].label.as_str(), items[0].value.as_str()), ("color", "red"));
+    }
+
+    #[test]
+    fn style_source_keeps_unquoted_scss_url_comment_markers() {
+        let source = "a { background: url(http://example/a); color: red; }";
+        let items = style_items_from_source(source, "a", "scss");
+        assert_eq!(items.len(), 2);
+        assert_eq!((items[0].label.as_str(), items[0].value.as_str()), ("background", "url(http://example/a)"));
+        assert_eq!(&source[items[0].span.clone()], "background: url(http://example/a);");
+        assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+    }
+
+    #[test]
+    fn style_source_keeps_block_comment_markers_in_unquoted_urls() {
+        let source = "a { background: url(https://example/a/*/b); color: red; }";
+        for language in ["css", "scss"] {
+            let items = style_items_from_source(source, "a", language);
+            assert_eq!(items.len(), 2);
+            assert_eq!(items[0].value, "url(https://example/a/*/b)");
+            assert_eq!(&source[items[0].span.clone()], "background: url(https://example/a/*/b);");
+            assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+        }
+    }
+
+    #[test]
+    fn style_source_keeps_unmatched_brackets_in_url_payloads() {
+        let source = "a { background: url(https://example/a[b); color: red; }";
+        for language in ["css", "scss"] {
+            let items = style_items_from_source(source, "a", language);
+            assert_eq!(items.len(), 2);
+            assert_eq!(items[0].value, "url(https://example/a[b)");
+            assert_eq!(&source[items[0].value_span.clone()], items[0].value);
+            assert_eq!((items[1].label.as_str(), items[1].value.as_str()), ("color", "red"));
+        }
+    }
+
+    #[test]
     fn style_children_point_to_declarations_values_and_nested_selectors() {
         let source = ".button {\n  color: white;\n  padding: 8px 16px;\n  @include base;\n  &:hover { color: blue; }\n}";
         let node = path_synthetic_node("0.0".into(), "rule_set", ".button".into(),
             NodePosition { start_line: 0, start_col: 0, end_line: 5, end_col: 1 }, vec![]);
-        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button");
+        let children = enrich_style_children(&node, &source.lines().collect::<Vec<_>>(), vec![], ".button", "scss");
         let color = &children[0];
         assert_eq!((color.position.start_line, color.position.start_col), (1, 2));
         assert_eq!((color.position.end_line, color.position.end_col), (1, 15));
@@ -1476,7 +2279,7 @@ mod style_span_tests {
         let source = "é $name: café;";
         let node = path_synthetic_node("0.0".into(), "declaration", "$name".into(),
             NodePosition { start_line: 0, start_col: 3, end_line: 0, end_col: source.len() as u32 }, vec![]);
-        let children = enrich_style_children(&node, &[source], vec![], "$name");
+        let children = enrich_style_children(&node, &[source], vec![], "$name", "scss");
         assert_eq!(children[0].label, "café");
         assert_eq!((children[0].position.start_col, children[0].position.end_col), (10, 15));
     }
@@ -1618,3 +2421,74 @@ mod mdx_unclosed_fence_regression_tests {
         );
     }
 }
+
+#[cfg(test)]
+mod utf8_span_tests {
+    use super::*;
+    use serde_json::{json, Value};
+
+    fn enrich(source: &str, language: &str, node_type: &str, span: (u32, u32, u32, u32)) -> Value {
+        let (start_line, start_col, end_line, end_col) = span;
+        let tree = json!({
+            "id": "0.1", "node_type": node_type, "label": node_type, "structural_hash": "h",
+            "position": {"start_line": start_line, "start_col": start_col,
+                         "end_line": end_line, "end_col": end_col},
+            "children": [],
+        });
+        let out = crate::enrich_profile_labels_impl(&tree.to_string(), source, language, None)
+            .expect("enrichment succeeds");
+        serde_json::from_str(&out).unwrap()
+    }
+
+    // #249: the audit reproduction. Bytes 15..24 of the line are exactly `echo safe`.
+    #[test]
+    fn bash_label_uses_byte_columns_after_emoji() {
+        let source = "printf '😀'; echo safe";
+        assert_eq!(&source[15..24], "echo safe");
+        let node = enrich(source, "bash", "command", (0, 15, 0, 24));
+        assert_eq!(node["label"], "echo safe");
+        let same_label_elsewhere = enrich("echo safe", "bash", "command", (0, 0, 0, 9));
+        assert_eq!(node["structural_hash"], same_label_elsewhere["structural_hash"]);
+    }
+
+    #[test]
+    fn exact_spans_after_combining_marks_and_multibyte_identifiers() {
+        // "é" as e + U+0301 (3 bytes total) and a 2-byte identifier character.
+        let source = "x=\"e\u{301}\"; ñame=1";
+        let start = source.find("ñame").unwrap() as u32;
+        let node = enrich(source, "bash", "variable_assignment", (0, start, 0, source.len() as u32));
+        assert_eq!(node["label"], "ñame=1");
+        let asm = "mov eax, 1 ; 😀\nadd eax, 2";
+        let node = enrich(asm, "asm", "instruction", (1, 0, 1, 10));
+        assert_eq!(node["label"], "add eax, 2");
+    }
+
+    #[test]
+    fn mid_codepoint_and_missing_line_spans_keep_the_parser_label() {
+        let source = "printf '😀'; echo safe";
+        // Byte 9 is inside the 4-byte emoji that starts at byte 8.
+        assert_eq!(enrich(source, "bash", "command", (0, 9, 0, 24))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (0, 8, 0, 10))["label"], "command");
+        assert_eq!(enrich(source, "bash", "command", (5, 0, 5, 3))["label"], "command");
+        // A column past the line end is clamped: no text is lost or invented.
+        assert_eq!(enrich(source, "bash", "command", (0, 15, 0, 99))["label"], "echo safe");
+        assert_eq!(
+            utf8_source_span(&["a😀b"], 0, 0, 0, 2),
+            None,
+            "end inside a code point"
+        );
+        assert_eq!(utf8_source_span(&["a😀b"], 0, 1, 0, 5).as_deref(), Some("😀"));
+    }
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "xml_whitespace_source_tests.rs"]
+mod xml_whitespace_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "html_whitespace_source_tests.rs"]
+mod html_whitespace_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "web_dynamic_equivalence_source_tests.rs"]
+mod web_dynamic_equivalence_source_tests;

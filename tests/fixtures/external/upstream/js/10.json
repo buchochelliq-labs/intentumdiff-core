@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "  if (string == '')\n    return '';\n  var beginning_of_suffix = 0;\n  while (!isPalindrome(string))\n    beginning_of_suffix += 1;\n  return string + string.slice(0, beginning_of_suffix).split('').reverse().join('');\n}\n\n",
+  "canonical_solution": "  if (string == '')\n    return '';\n  var beginning_of_suffix = 0;\n  while (!isPalindrome(string.slice(beginning_of_suffix)))\n    beginning_of_suffix += 1;\n  return string + string.slice(0, beginning_of_suffix).split('').reverse().join('');\n}\n\n",
+  "declaration": "const isPalindrome = (string) => {\n  return string == string.split('').reverse().join('');\n}\n\nconst makePalindrome = (string) => {\n",
+  "docstring": "Find the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> makePalindrome('')\n''\n>>> makePalindrome('cat')\n'catac'\n>>> makePalindrome('cata')\n'catac'",
+  "entry_point": "makePalindrome",
+  "example_test": "const testmakePalindrome = () => {\n  console.assert(makePalindrome('') === '')\n  console.assert(makePalindrome('cat') === 'catac')\n  console.assert(makePalindrome('cata') === 'catac')\n}\ntestmakePalindrome()\n",
+  "failure_symptoms": "stackoverflow",
+  "import": "",
+  "instruction": "Write a JavaScript function `const makePalindrome = (string)` to solve the following problem:\nFind the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n>>> makePalindrome('')\n''\n>>> makePalindrome('cat')\n'catac'\n>>> makePalindrome('cata')\n'catac'",
+  "prompt": "/* Test if gniven strig is a palindrome */\nconst isPalindrome = (string) => {\n  return string == string.split('').reverse().join('');\n}\n\n/* Find the shortest palindrome that begins with a supplied string.\n  Algorithm idea is simple:\n  - Find the longest postfix of supplied string that is a palindrome.\n  - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n  >>> makePalindrome('')\n  ''\n  >>> makePalindrome('cat')\n  'catac'\n  >>> makePalindrome('cata')\n  'catac'\n  */\nconst makePalindrome = (string) => {\n",
+  "signature": "const makePalindrome = (string)",
+  "task_id": "JavaScript/10",
+  "test": "const testmakePalindrome = () => {\n  console.assert(makePalindrome('') === '')\n  console.assert(makePalindrome('x') === 'x')\n  console.assert(makePalindrome('xyz') === 'xyzyx')\n  console.assert(makePalindrome('xyx') === 'xyx')\n  console.assert(makePalindrome('jerry') === 'jerryrrej')\n}\n\ntestmakePalindrome()\n",
+  "test_setup": ""
+}

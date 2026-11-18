@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "    vector<int> out={};\n    for (int i=1;i<numbers.size();i++)\n    {\n        out.push_back(delimeter);\n        out.push_back(numbers[i]);\n\n    }\n    return out;\n}\n",
+  "canonical_solution": "    vector<int> out={};\n    if (numbers.size()>0) out.push_back(numbers[0]);\n    for (int i=1;i<numbers.size();i++)\n    {\n        out.push_back(delimeter);\n        out.push_back(numbers[i]);\n\n    }\n    return out;\n}\n",
+  "declaration": "#include<stdio.h>\n#include<vector>\nusing namespace std;\n#include<algorithm>\n#include<math.h>\n#include<stdlib.h>\nvector<int> intersperse(vector<int> numbers, int delimeter){ \n",
+  "docstring": "Insert a number \"delimeter\" between every two consecutive elements of input vector `numbers\"\n>>> intersperse({}, 4)\n{}\n>>> intersperse({1, 2, 3}, 4)\n{1, 4, 2, 4, 3}",
+  "entry_point": "intersperse",
+  "example_test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<int> a,vector<int>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n        if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n    assert (issame(intersperse({}, 4), {}));\n    assert (issame(intersperse({1, 2, 3}, 4),{1, 4, 2, 4, 3}));\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a C++ function `vector<int> intersperse(vector<int> numbers, int delimeter)` to solve the following problem:\nInsert a number \"delimeter\" between every two consecutive elements of input vector `numbers\"\n>>> intersperse({}, 4)\n{}\n>>> intersperse({1, 2, 3}, 4)\n{1, 4, 2, 4, 3}",
+  "prompt": "/*\nInsert a number \"delimeter\" between every two consecutive elements of input vector `numbers\"\n>>> intersperse({}, 4)\n{}\n>>> intersperse({1, 2, 3}, 4)\n{1, 4, 2, 4, 3}\n*/\n#include<stdio.h>\n#include<vector>\nusing namespace std;\nvector<int> intersperse(vector<int> numbers, int delimeter){ \n",
+  "signature": "vector<int> intersperse(vector<int> numbers, int delimeter)",
+  "task_id": "CPP/5",
+  "test": "#undef NDEBUG\n#include<assert.h>\nbool issame(vector<int> a,vector<int>b){\n    if (a.size()!=b.size()) return false;\n    for (int i=0;i<a.size();i++)\n    {\n        if (a[i]!=b[i]) return false;\n    }\n    return true;\n}\nint main(){\n    assert (issame(intersperse({}, 7), {}));\n    \n    assert (issame(intersperse({5, 6, 3, 2}, 8),{5, 8, 6, 8, 3, 8, 2}));\n    assert (issame(intersperse({2, 2, 2}, 2),{2, 2, 2, 2, 2}));\n}",
+  "test_setup": ""
+}

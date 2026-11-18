@@ -1,0 +1,16 @@
+{
+  "case_id": "latex-fntguide",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "9c21a7f2416e238f745216a1454f5245d004453c45c0bbdf8b2b2e5d3e121740",
+  "observations": {
+    "error": "! LaTeX Error: File `fewerfloatpages.sty' not found.",
+    "missing": [
+      "fewerfloatpages.sty"
+    ]
+  },
+  "old_sha256": "9c21a7f2416e238f745216a1454f5245d004453c45c0bbdf8b2b2e5d3e121740",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "document needs files absent from the reference TeX installation",
+  "verdict": "inconclusive"
+}

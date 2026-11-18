@@ -1,0 +1,3161 @@
+{
+  "language_id": "vbnet",
+  "options": {
+    "language_hint": "vbnet",
+    "strict_plugins": true
+  },
+  "completed_count": 11,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "vbnet-literal-value",
+      "language_id": "vbnet",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "2c148c36f9a83743a9ec03e7082b9a3e877c6216629647e84c4ecf2a77a7860b",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update return_statement('Return 1') -> return_statement('Return 2')",
+            "old_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return 1",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 16
+              },
+              "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return 2",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 16
+              },
+              "structural_hash": "85f5b8c48ae83904ae2ea655124f9980463891ed56ea8ae741a36645df9f1091",
+              "children": []
+            },
+            "text_diff": "Return 1 -> Return 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Answer",
+              "Return 1"
+            ],
+            "new_labels": [
+              "Answer",
+              "Return 2"
+            ],
+            "old_node_ids": [
+              "0.0.1.2"
+            ],
+            "new_node_ids": [
+              "0.0.1.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "Answer",
+              "new_entity_label": "Answer",
+              "entity_type": "function_statement"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.44655,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24200000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8652768595041321,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.175095,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24200000,
+                "fuel_consumed": 208807,
+                "total_fuel_consumed": 208807,
+                "max_fuel_used_percent": 0.8628388429752066,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "93428ac6fd383982dc7b1f246af37e1ab78640ca07a064ede663d1c4a2e22ed0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "8307be9ad288e50a9d2e6576619fc8f8075af18af11a37388069f1a6d09ae9f3",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "ff5d0f4ae12d4ac0ce43a5fd813d07b0402692e75e61816d23f029aeb04d66a8",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 2",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "85f5b8c48ae83904ae2ea655124f9980463891ed56ea8ae741a36645df9f1091",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4669.292
+    },
+    {
+      "id": "vbnet-declaration-api",
+      "language_id": "vbnet",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "9abe5d338fa098186828b7307a5bdf774d67cebb5eac741bb1502b057ec8e054",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "REFACTORING",
+            "confidence": 1.0,
+            "description": "Rename function_statement('Answer') -> ('ResultValue')",
+            "old_node": {
+              "id": "0.0.1",
+              "node_type": "function_statement",
+              "label": "Answer",
+              "position": {
+                "start_line": 1,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 16
+              },
+              "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+              "children": [
+                {
+                  "id": "0.0.1.2",
+                  "node_type": "return_statement",
+                  "label": "Return 1",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 8,
+                    "end_line": 2,
+                    "end_col": 16
+                  },
+                  "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                  "children": []
+                }
+              ],
+              "parent_type": "Probe",
+              "facts": {
+                "returns": "value",
+                "control_shape": "linear",
+                "has_computation": false,
+                "behavior_category": "accessor"
+              }
+            },
+            "new_node": {
+              "id": "0.0.1",
+              "node_type": "function_statement",
+              "label": "ResultValue",
+              "position": {
+                "start_line": 1,
+                "start_col": 4,
+                "end_line": 3,
+                "end_col": 16
+              },
+              "structural_hash": "f5365138ca9a8ca3edaded8d0a86ac6c298aa7612c98ae9e1401fec8fe4a32e6",
+              "children": [
+                {
+                  "id": "0.0.1.2",
+                  "node_type": "return_statement",
+                  "label": "Return 1",
+                  "position": {
+                    "start_line": 2,
+                    "start_col": 8,
+                    "end_line": 2,
+                    "end_col": 16
+                  },
+                  "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                  "children": []
+                }
+              ],
+              "parent_type": "Probe",
+              "facts": {
+                "returns": "value",
+                "control_shape": "linear",
+                "has_computation": false,
+                "behavior_category": "accessor"
+              }
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [
+              "Answer",
+              "Return 1"
+            ],
+            "new_labels": [
+              "ResultValue",
+              "Return 1"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.82,
+            "rule_id": "presentation.compact_superseded_meaningful_group",
+            "metadata": {
+              "reason": "refactoring_groups_replace_lower_level_meaningful_changes",
+              "suppressed_count": 1
+            }
+          },
+          {
+            "kind": "REFACTORING",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Answer"
+            ],
+            "new_labels": [
+              "ResultValue"
+            ],
+            "old_node_ids": [
+              "0.0.1"
+            ],
+            "new_node_ids": [
+              "0.0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_refactoring_group",
+            "metadata": {
+              "index_space": "final_changes"
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.341594,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24300000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8617160493827161,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.198669,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24300000,
+                "fuel_consumed": 211285,
+                "total_fuel_consumed": 211285,
+                "max_fuel_used_percent": 0.869485596707819,
+                "input_bytes": 110,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "08a1a18cf91763ed358f0c78d78fd482cbc2b58acfc8ac2176a5eda59c25e3b8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "bbcc0f51d9a278df934a63098e554cc1061ba9fd9f583adea8a93cc644e076b9",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "ResultValue",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "f5365138ca9a8ca3edaded8d0a86ac6c298aa7612c98ae9e1401fec8fe4a32e6",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 74.302
+    },
+    {
+      "id": "vbnet-body-operator",
+      "language_id": "vbnet",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c2c3249fa8f7390a8907a3fe7ebec8d48b0ba6b73fbb8c094514ae40e8d729fe",
+      "new_sha256": "edacaaa3b5987ef53b2d4ee75f1473b0220a0976335c15c9968cc08e78aeacb0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update return_statement('Return a + b') -> return_statement('Return a - b')",
+            "old_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return a + b",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 20
+              },
+              "structural_hash": "b599029372559277d680a540ecbf8a137aef8d0523116113febaf8cd545bb3d6",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return a - b",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 20
+              },
+              "structural_hash": "1e366e1a09a9f29faa361dc940a7a177ff42b35072c8e4af1411ab87973139d4",
+              "children": []
+            },
+            "text_diff": "Return a + b -> Return a - b"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Combine",
+              "Return a + b"
+            ],
+            "new_labels": [
+              "Combine",
+              "Return a - b"
+            ],
+            "old_node_ids": [
+              "0.0.1.2"
+            ],
+            "new_node_ids": [
+              "0.0.1.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "Combine",
+              "new_entity_label": "Combine",
+              "entity_type": "function_statement"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.297523,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 25440000,
+                "fuel_consumed": 216872,
+                "total_fuel_consumed": 216872,
+                "max_fuel_used_percent": 0.8524842767295598,
+                "input_bytes": 136,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.12529300000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 25440000,
+                "fuel_consumed": 216282,
+                "total_fuel_consumed": 216282,
+                "max_fuel_used_percent": 0.8501650943396227,
+                "input_bytes": 136,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "1c7170cdc93e1153d8b1bb1c2f1a64b6a6eaefb4cb375b80a57696c02fdaa0f8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "3401ae4526196910a1a1ac41d16a45925ac19a9785268258d6300890d4734575",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Combine",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "e1e1af5ab40c98922853aaa9c016ba313f30d0fde8ae850352d0860b7e786b7a",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return a + b",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 20
+                        },
+                        "structural_hash": "b599029372559277d680a540ecbf8a137aef8d0523116113febaf8cd545bb3d6",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "728fcccf287de8aee11034e688b78aae86f92d85e09100c4e6b4f78ed12cbe5f",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "986bffe7402ecf7a0cd6d0052520bb070c20febed869d4897bb450ef73eac4f0",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Combine",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "49fe4e4a1b78a2b6e8ce3d9b87807d58a59cb330cb0a91f10677a0a5bacc1c55",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return a - b",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 20
+                        },
+                        "structural_hash": "1e366e1a09a9f29faa361dc940a7a177ff42b35072c8e4af1411ab87973139d4",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.181
+    },
+    {
+      "id": "vbnet-identity",
+      "language_id": "vbnet",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.303904,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24200000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8652768595041321,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.169765,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24200000,
+                "fuel_consumed": 208807,
+                "total_fuel_consumed": 208807,
+                "max_fuel_used_percent": 0.8628388429752066,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 154.985
+    },
+    {
+      "id": "vbnet-ordinary-comment",
+      "language_id": "vbnet",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "74f5b10498edd0d1dc0c9c4e205871bf22ba1a466d9c33a37222f812dfb18eed",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "' Ordinary comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "' Ordinary comment\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                19
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "' Ordinary comment\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                19
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.7888850000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24580000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8518999186330349,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.221923,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24580000,
+                "fuel_consumed": 210768,
+                "total_fuel_consumed": 210768,
+                "max_fuel_used_percent": 0.8574776240846217,
+                "input_bytes": 124,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.1.2",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.1.2.3",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 8,
+                          "end_line": 3,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 218.348
+    },
+    {
+      "id": "vbnet-layout",
+      "language_id": "vbnet",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "7a8a3123d5437fd0ed6466791d4dde7ef9c93d73b27243bbdcf541151b7a3c1f",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                105,
+                105
+              ],
+              "new_span": [
+                106,
+                107
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                105,
+                105
+              ],
+              "new_span": [
+                106,
+                107
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.238032,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24240000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8638490099009901,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.155539,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24240000,
+                "fuel_consumed": 211436,
+                "total_fuel_consumed": 211436,
+                "max_fuel_used_percent": 0.8722607260726073,
+                "input_bytes": 107,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.1.2",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.1.2.3",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 3,
+                          "start_col": 8,
+                          "end_line": 3,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.554
+    },
+    {
+      "id": "vbnet-incomplete",
+      "language_id": "vbnet",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "4bbc83121d44e3deae04f6336f8d85bd4238119288a91deb0e9b727a09645542",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete return_statement('Return 1')",
+            "old_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return 1",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 16
+              },
+              "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Answer",
+              "Return 1"
+            ],
+            "new_labels": [
+              "Answer"
+            ],
+            "old_node_ids": [
+              "0.0.1.2"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "Answer",
+              "new_entity_label": "Answer",
+              "entity_type": "function_statement"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.23760099999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23060000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.9080529054640069,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.18881099999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23060000,
+                "fuel_consumed": 148114,
+                "total_fuel_consumed": 148114,
+                "max_fuel_used_percent": 0.6422983521248916,
+                "input_bytes": 48,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 27
+            },
+            "structural_hash": "c6bf36f15f6b47a29da0f02f5c94a757eacc4a546955b21f4329e86d9fe12d46",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 27
+                },
+                "structural_hash": "b872d4409a63499ea6c9e6e8cd9becad4935880c5cb7a672b02c19396d40ce6a",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 27
+                    },
+                    "structural_hash": "b5de505deeeb7365c2e4d4de267d9e3f5082a2a3f19e43754a8b74fcbb1ef113",
+                    "children": [],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 58.048
+    },
+    {
+      "id": "vbnet-unicode-payload",
+      "language_id": "vbnet",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "973fd32b4eb9860488b6c0994dd0e8129c7b6305f496de3cb463ede391b48dc6",
+      "new_sha256": "98876007f0603a580e559448f5dda0bde0824d8099d1131422c472a624f5b1d0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update return_statement('Return \"café\"') -> return_statement('Return \"cafe雪\"')",
+            "old_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return \"café\"",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 22
+              },
+              "structural_hash": "c9b077b77e3de7e6e4bff42f5335b02bb2e45013cb4b32a71c9f8e23bf5f99a1",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.1.2",
+              "node_type": "return_statement",
+              "label": "Return \"cafe雪\"",
+              "position": {
+                "start_line": 2,
+                "start_col": 8,
+                "end_line": 2,
+                "end_col": 24
+              },
+              "structural_hash": "ae0fb9dfa1b6afa093bf44ebad407da9aed07f7b4af7b42664d71ae2033fe78a",
+              "children": []
+            },
+            "text_diff": "Return \"café\" -> Return \"cafe雪\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Message",
+              "Return \"café\""
+            ],
+            "new_labels": [
+              "Message",
+              "Return \"cafe雪\""
+            ],
+            "old_node_ids": [
+              "0.0.1.2"
+            ],
+            "new_node_ids": [
+              "0.0.1.2"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.0.1",
+              "old_entity_node_id": "0.0.1",
+              "new_entity_node_id": "0.0.1",
+              "old_entity_label": "Message",
+              "new_entity_label": "Message",
+              "entity_type": "function_statement"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.29568,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24480000,
+                "fuel_consumed": 211806,
+                "total_fuel_consumed": 211806,
+                "max_fuel_used_percent": 0.865220588235294,
+                "input_bytes": 111,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.19608399999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24480000,
+                "fuel_consumed": 211196,
+                "total_fuel_consumed": 211196,
+                "max_fuel_used_percent": 0.8627287581699346,
+                "input_bytes": 113,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "3a199f4ec0609c1a054a6dad0ea1007db44f79257e7a1bb9272173ac66d92459",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "a225865e145a8317383f774adfff6409dee9a76e2335a189bf9397b16b8e060a",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "c919f2453f73bd54e3b68279897f3ac2799788da330fc68ba557757348cdbde3",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return \"café\"",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 22
+                        },
+                        "structural_hash": "c9b077b77e3de7e6e4bff42f5335b02bb2e45013cb4b32a71c9f8e23bf5f99a1",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "eedf4667035a95e3b54accbb65d61c62e655bf45670736772a062876d4327968",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "f5429754b8ceb1b6b44e243a1635a2d967957efa356a9bab6b18a50d5f6f0245",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "e6a59f8f5e4b63160a26bb356d06a813d21f07a4de8cbfc77ca561b3c9ca0806",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return \"cafe雪\"",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 24
+                        },
+                        "structural_hash": "ae0fb9dfa1b6afa093bf44ebad407da9aed07f7b4af7b42664d71ae2033fe78a",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 64.658
+    },
+    {
+      "id": "vbnet-repo-fixture-identity",
+      "language_id": "vbnet",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "0b17ddeb4748c18ac5b9252027d1d741f9e384ca7a66ebb2917e2a30b917269c",
+      "new_sha256": "0b17ddeb4748c18ac5b9252027d1d741f9e384ca7a66ebb2917e2a30b917269c",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.vb",
+        "new_filename": "playground.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "playground.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.364507,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32440000,
+                "fuel_consumed": 452270,
+                "total_fuel_consumed": 452270,
+                "max_fuel_used_percent": 1.394173859432799,
+                "input_bytes": 311,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "playground.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.273268,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32440000,
+                "fuel_consumed": 451680,
+                "total_fuel_consumed": 451680,
+                "max_fuel_used_percent": 1.3923551171393342,
+                "input_bytes": 311,
+                "input_lines": 13,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 12,
+              "end_col": 10
+            },
+            "structural_hash": "03ea8cb097708ea70bf1d806420663060329174fb5aac9626b058a8d128c9c31",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "HelloWorld",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 10
+                },
+                "structural_hash": "694d43f8de76caabd8c78313992f32966c379d9cd0e6c55cace6ccb4d14c8b76",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sub_statement",
+                    "label": "Greet",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 11
+                    },
+                    "structural_hash": "72784080309dcd52ae94150cd947b4a65cc5fd04d38abb4ef2a14dc55fa46fa8",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "invocation_expression",
+                        "label": "Console.WriteLine($\"Hello, {name}!\")",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 44
+                        },
+                        "structural_hash": "29daa362f8a2a2eb4d1e7076bdf1392d3e557280aa90b6c8d8b52583a7e9ea78",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "function_statement",
+                    "label": "Add",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "acef69013075a207be85d3d5276d2672be41d12a8d2e7c92de4d91b731142421",
+                    "children": [
+                      {
+                        "id": "0.0.5.6",
+                        "node_type": "return_statement",
+                        "label": "Return a + b",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 8,
+                          "end_line": 6,
+                          "end_col": 20
+                        },
+                        "structural_hash": "b599029372559277d680a540ecbf8a137aef8d0523116113febaf8cd545bb3d6",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  },
+                  {
+                    "id": "0.0.9",
+                    "node_type": "function_statement",
+                    "label": "Multiply",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 4,
+                      "end_line": 11,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6d2f1a3a2f099c0391dbfc8f77cc54620a99e5f4ce29af984ef17aa7a479762f",
+                    "children": [
+                      {
+                        "id": "0.0.9.10",
+                        "node_type": "return_statement",
+                        "label": "Return a * b",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 8,
+                          "end_line": 10,
+                          "end_col": 20
+                        },
+                        "structural_hash": "f00bb9503aba0091066ac90b37d974f7b7c5e3c9d80f11f290c0d993b7ca576b",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 12,
+              "end_col": 10
+            },
+            "structural_hash": "03ea8cb097708ea70bf1d806420663060329174fb5aac9626b058a8d128c9c31",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "HelloWorld",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 10
+                },
+                "structural_hash": "694d43f8de76caabd8c78313992f32966c379d9cd0e6c55cace6ccb4d14c8b76",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sub_statement",
+                    "label": "Greet",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 11
+                    },
+                    "structural_hash": "72784080309dcd52ae94150cd947b4a65cc5fd04d38abb4ef2a14dc55fa46fa8",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "invocation_expression",
+                        "label": "Console.WriteLine($\"Hello, {name}!\")",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 44
+                        },
+                        "structural_hash": "29daa362f8a2a2eb4d1e7076bdf1392d3e557280aa90b6c8d8b52583a7e9ea78",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  },
+                  {
+                    "id": "0.0.5",
+                    "node_type": "function_statement",
+                    "label": "Add",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 4,
+                      "end_line": 7,
+                      "end_col": 16
+                    },
+                    "structural_hash": "acef69013075a207be85d3d5276d2672be41d12a8d2e7c92de4d91b731142421",
+                    "children": [
+                      {
+                        "id": "0.0.5.6",
+                        "node_type": "return_statement",
+                        "label": "Return a + b",
+                        "position": {
+                          "start_line": 6,
+                          "start_col": 8,
+                          "end_line": 6,
+                          "end_col": 20
+                        },
+                        "structural_hash": "b599029372559277d680a540ecbf8a137aef8d0523116113febaf8cd545bb3d6",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  },
+                  {
+                    "id": "0.0.9",
+                    "node_type": "function_statement",
+                    "label": "Multiply",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 4,
+                      "end_line": 11,
+                      "end_col": 16
+                    },
+                    "structural_hash": "6d2f1a3a2f099c0391dbfc8f77cc54620a99e5f4ce29af984ef17aa7a479762f",
+                    "children": [
+                      {
+                        "id": "0.0.9.10",
+                        "node_type": "return_statement",
+                        "label": "Return a * b",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 8,
+                          "end_line": 10,
+                          "end_col": 20
+                        },
+                        "structural_hash": "f00bb9503aba0091066ac90b37d974f7b7c5e3c9d80f11f290c0d993b7ca576b",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "HelloWorld"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 65.178
+    },
+    {
+      "id": "vbnet-quoted-apostrophe",
+      "language_id": "vbnet",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "8ed52138d79795efa413dc4ff27f9f09cd252b4df6a1c554b6abbc5dfd443701",
+      "new_sha256": "0a3a269afc379031b894e95e3a877be77ff05db48854910c8ebc5149af055b14",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vbnet-parser#6",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "Return \"can't\"\\n"
+            ],
+            "new_labels": [
+              "Return \"can't ever\"\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Return \"can't\"\\n",
+              "new_label": "Return \"can't ever\"\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                60,
+                83
+              ],
+              "new_span": [
+                60,
+                88
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Return \"can't\"\\n",
+              "new_label": "Return \"can't ever\"\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                60,
+                83
+              ],
+              "new_span": [
+                60,
+                88
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.329733,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24540000,
+                "fuel_consumed": 210724,
+                "total_fuel_consumed": 210724,
+                "max_fuel_used_percent": 0.8586960065199674,
+                "input_bytes": 111,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.19437100000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24540000,
+                "fuel_consumed": 210246,
+                "total_fuel_consumed": 210246,
+                "max_fuel_used_percent": 0.8567481662591686,
+                "input_bytes": 116,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "e9961dc68686cde67fe382fe694ff73fbedeeaf703eafb21035c00420b02b2e2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "15b0378ce1bee693524cc0ba27006173faf79de8fc31f4ea03372dd85e76058a",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "69190389d418a2e383c4c51174be6f124bc170643d94d693cb1aec035c1b4da8",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return \"can",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 22
+                        },
+                        "structural_hash": "f42ec3ce7f899e4d14a658877b6a5afbe6326a35a911ddceffcf54c77c5c15d4",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "e9961dc68686cde67fe382fe694ff73fbedeeaf703eafb21035c00420b02b2e2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "15b0378ce1bee693524cc0ba27006173faf79de8fc31f4ea03372dd85e76058a",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Message",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "69190389d418a2e383c4c51174be6f124bc170643d94d693cb1aec035c1b4da8",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return \"can",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 27
+                        },
+                        "structural_hash": "f42ec3ce7f899e4d14a658877b6a5afbe6326a35a911ddceffcf54c77c5c15d4",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 59.525
+    },
+    {
+      "id": "vbnet-access-modifier",
+      "language_id": "vbnet",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c7c778ecf5da455e5bca252bba7535075d735d47dee93c395a0094b827f7a110",
+      "new_sha256": "b59df68c8a615df90e3d7c3d436a3fdfa091983378b0e5265f08baceb7e9b35b",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vbnet-parser#6",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.vb",
+        "new_filename": "probe.vb",
+        "language": "vbnet",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "Public Function Answer() As Integer\\n"
+            ],
+            "new_labels": [
+              "Private Function Answer() As Integer\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Public Function Answer() As Integer\\n",
+              "new_label": "Private Function Answer() As Integer\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                20,
+                60
+              ],
+              "new_span": [
+                20,
+                61
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "Public Function Answer() As Integer\\n",
+              "new_label": "Private Function Answer() As Integer\\n",
+              "risk": "amber",
+              "language": "vbnet",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                20,
+                60
+              ],
+              "new_span": [
+                20,
+                61
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.271775,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24220000,
+                "fuel_consumed": 209397,
+                "total_fuel_consumed": 209397,
+                "max_fuel_used_percent": 0.8645623451692817,
+                "input_bytes": 105,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "vbnet",
+                "filename": "probe.vb",
+                "call_count": 1,
+                "elapsed_ms": 0.188751,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24220000,
+                "fuel_consumed": 209331,
+                "total_fuel_consumed": 209331,
+                "max_fuel_used_percent": 0.864289843104872,
+                "input_bytes": 106,
+                "input_lines": 5,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/vbnet_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "vbnet",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "source_file",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 10
+            },
+            "structural_hash": "326d28a7fa1d8eab96f163425b19567d3df42d81ae98d18a694c06c667585d48",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "module_statement",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 10
+                },
+                "structural_hash": "7b39b1fcebf26e59ace428f2c0128e33ab6ce27429a545660ec1ab48ad16b4ca",
+                "children": [
+                  {
+                    "id": "0.0.1",
+                    "node_type": "function_statement",
+                    "label": "Answer",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 16
+                    },
+                    "structural_hash": "cbab0bba1bfed07644273b842d1798ca6c4aed01a318a053a8cb0606ab8bbcb1",
+                    "children": [
+                      {
+                        "id": "0.0.1.2",
+                        "node_type": "return_statement",
+                        "label": "Return 1",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 8,
+                          "end_line": 2,
+                          "end_col": 16
+                        },
+                        "structural_hash": "b1f1302c1ffd0817b2bc001c43fdc8cb6b5f1c62464cf4f9b63e53e662dbc907",
+                        "children": []
+                      }
+                    ],
+                    "parent_type": "Probe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 53.251
+    }
+  ],
+  "attempted_count": 11,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.185
+}

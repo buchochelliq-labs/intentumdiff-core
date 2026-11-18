@@ -19,6 +19,8 @@ Additional semantic helpers:
 | `complete_routed_review` | request JSON string: finalized tree changes, source/trees, filenames, language, optional schema/compile metadata | complete review DTO |
 | `parse_guardrail_policy` | YAML/JSON source string | normalized protected-rule array |
 | `apply_guardrail_policy` | request JSON string with diff, rules, old/new source and trees | complete diff with violations and guardrail metadata |
+| `live_negotiate_protocol` | hello request JSON string | hello success (`protocol_version`, `supported_protocol_versions`) or a protocol error: absent/null version = current (2); a supported integer is accepted; another integer → `unsupported_protocol_version`; a non-integer → `invalid_protocol_version` |
+| `guardrail_check_result` | request JSON string: `diffs` XOR `violations`, required `strict`, optional `checked_files`, `metadata` | complete guardrail check verdict (see below) |
 | `enrich_literal_labels` | tree JSON string, source string | enriched tree |
 | `review_trees_equivalent` | old tree JSON string, new tree JSON string | boolean |
 
@@ -54,6 +56,7 @@ lists — are their JSON forms).
 | `not_found` | an absent path / blob / working-tree file | `FileNotFoundError` / `fs.ErrNotExist` |
 | `value_error` | invalid input — including a **missing positional argument** (`"missing argument 0 (language)"`) | `ValueError` |
 | `bad_request` | the **args_json itself is malformed** (not a JSON array, e.g. `null`) | `ValueError` |
+| `size_limit` | an input, CST/tree or parser output exceeded a configured byte limit; the message names the diff-config setting that raises it (`max_cst_bytes` or `max_plugin_output_bytes`) and contains `size limit exceeded` | `ValueError` subclass / a "too large" file error |
 | `internal` | an engine panic caught at the boundary | `RuntimeError` |
 
 Two pinned behaviors binding authors rely on (see the Go/Java scaffold tests):
@@ -82,6 +85,35 @@ names with the `_json` suffix dropped (the two commit functions keep it).
 - Python: [`intentumdiff-python`](https://github.com/buchochelliq-labs/intentumdiff-python) (`src/intentumdiff/rust_core.py` — `_CtypesBackend`)
 - Go: [`intentumdiff-go`](https://github.com/buchochelliq-labs/intentumdiff-go)
 - Java: [`intentumdiff-java`](https://github.com/buchochelliq-labs/intentumdiff-java)
+
+### Commit cross-file index completeness (core #298)
+
+One changed file that cannot be indexed (parser fuel exhausted, parser error, malformed tree)
+no longer discards the commit's cross-file analysis. The file is excluded from **both** symbol
+tables (so none of its symbols are reported as moved/deleted), and the result says so
+explicitly. Every commit-level producer publishes the same four fields:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `cross_file_index_status` | `"complete"` \| `"partial"` | `"partial"` whenever `index_errors` is non-empty |
+| `cross_file_index_complete` | boolean | `true` only when every changed file was indexed |
+| `indexed_file_count` | integer | changed files that contributed to the index |
+| `index_errors` | array | one object per unindexed file (below) |
+
+Each `index_errors` entry: `{"path", "old_filename", "new_filename", "language", "side"
+("old" \| "new" \| "both"), "code", "reason"}`. `code` is stable and machine-readable —
+`fuel_exceeded`, `output_limit_exceeded`, `malformed_tree` or `parser_error` — so callers never
+parse `reason` text. `cross_file_changes` proves "no cross-file change" only when the status is
+`"complete"`; with `"partial"` it covers the indexed files only. A missing/unloadable parser
+component or a table/diff fault is not per-file and still fails the call.
+
+- `live_handle_review` puts the four fields in the response `metadata` (next to
+  `review_fuel_capped`), beside the unchanged `commit_diff`.
+- `commit_cross_file_index(files_json)` serves hosts that parse each file themselves (Python
+  `CommitDiffer.finalize_commit_diff`). `files_json` is an array of `{old_filename,
+  new_filename, language, old_tree, new_tree, old_error, new_error}`: a tree is a SemanticNode
+  object or `null` (empty side), an error is the host's parse-failure text or `null`. A file with
+  a side error is excluded and reported. Result: the four fields plus `cross_file_changes`.
 
 ### Incomplete-source review (core #21)
 
@@ -152,6 +184,80 @@ are open strings for forward compatibility. `ReviewOptions::settings` accepts th
 same configuration keys as native live review. Lower-level Rust operations remain
 public for callers supplying their own host I/O. See `examples/migration_probe.rs`.
 
+## Binding policy operations (0.0.3)
+
+Small, pure policy ops a binding needs so it never re-derives an engine rule locally.
+
+### Parser fuel budget (`fuel_budget`)
+
+`fuel_budget(config_json, content_len)` → `{"fuel": <u64>}` or `{"fuel": null}`; native
+`api::fuel_budget(config_json, content_len) -> Result<Option<u64>, ReviewError>`.
+`config_json` is a diff-config JSON object string (empty string = `{}`) validated exactly as
+every diff call validates it; `content_len` is a non-negative integer byte count (the source
+being parsed, or the payload handed to a renderer). The policy is the one the engine applies to
+every parse:
+
+- `plugin_fuel < 0` (either spelling) is **unlimited** → `{"fuel": null}`. Bindings pass this
+  through as "no fuel metering"; they must not substitute a positive budget.
+- `plugin_fuel` below 1,000,000 is a deliberate tight budget and is returned unchanged.
+- Otherwise `plugin_fuel` (default 10,000,000) is a **minimum**:
+  `fuel = max(plugin_fuel, 20_000_000 + 20_000 * content_len)` (saturating; a bounded config
+  never becomes unlimited).
+
+Malformed configs, a negative or non-integer `content_len`, or missing arguments return a
+`value_error` envelope.
+
+### Registry manifest validation (`validate_registry_manifest`)
+
+`validate_registry_manifest(manifest_json)` → `{"ok": bool, "errors": [{"path": str, "message": str}]}`;
+native `api::validate_registry_manifest(&Value) -> Vec<(path, message)>`. The host parses
+`registry.yaml` (or JSON) and passes the document as a JSON string. `path` is an RFC 6901 JSON
+Pointer into the manifest (`""` = root, `/plugins/<name>/ref`, `/plugins/<name>/capabilities/1`).
+Every problem is reported in one pass; wrong JSON types are errors, never exceptions. Only an
+unparseable `manifest_json` string is a `value_error` envelope. Rules (patterns are full-string):
+
+- Top level: object with `version` (integer ≥ 1), `plugins` (object keyed by package-safe name
+  `^(?:intentumdiff-)?[A-Za-z0-9][A-Za-z0-9._-]{0,127}$`), optional `renderer_components`; no
+  other keys. `renderer_components` needs `repository: "intentumdiff-core"`,
+  `artifact: "renderer-components"`, a 40-hex lowercase `ref` and exactly the four renderer pins.
+- Entry fields: `source` ∈ {`git`, `pypi`} (default `git`), `trust_tier` ∈ {`official`,
+  `community`} (default `official`); `ref`/`repo`/`description`/`abi_target`/
+  `provenance_manifest_ref` strings; `wasm_checksums` `{<name>.wasm: <64 lowercase hex>}`;
+  `dep_hashes` `{package==version: "sha256:<64 lowercase hex>"}`; `allowed_dependencies` string
+  array; unknown fields rejected. `abi_target`, when present, is `MAJOR.MINOR.PATCH`
+  (no leading zeros). Compatibility with the host contract is still decided at load time.
+- `capabilities`: a duplicate-free array drawn from the closed vocabulary derived from the
+  pinned WIT — the interface each `world` exports: `parser`, `renderer`, `enricher`,
+  `index-engine`, `diff-analyzer` (`host-utils` is an import, not a capability).
+- **Official tier** (the default): `git` entries need an immutable 40-hex lowercase commit
+  `ref`; `pypi` entries need an exact version `ref` (`^[0-9][A-Za-z0-9.+!-]{0,63}$`);
+  non-empty `wasm_checksums`, non-empty `capabilities` and an `abi_target` are required; a
+  custom `repo` is rejected (a custom source is community tier by definition).
+- **Community tier**: every field is optional (listed, installs unverified); any field that is
+  present must still be well-formed — a git `ref` must pass the non-strict
+  `validate_registry_ref` traversal guard, a pypi `ref` is empty (latest) or a version.
+
+### Parser allowlist identifiers (`parser_allowlist_matches`)
+
+One rule decides whether an `allowed_plugins` list admits a parser, used by
+`filename_selection_next`, `content_detection_plan/finish`, the native bundled resolver
+(`allowed_plugins` diff-config key) and bindings' discovery/inventory listings:
+
+- `null`/absent: **every** parser is allowed.
+- `[]`: **no** parser is allowed (distinct from `null`).
+- otherwise a parser is allowed when an entry exactly equals (case-sensitive; empty strings never
+  match) its **grammar id** (loaded `grammar-id`), its **plugin id** (catalogue/opaque plugin
+  identity, e.g. `acme/python`), one of its catalogue **aliases**, or one of its declared
+  **language ids**. Unknown identifiers select nothing; they are not errors.
+
+`parser_allowlist_matches(allowed_plugins, identity_json)` → `{"matches": bool, "matched_by":
+"unrestricted"|"grammar_id"|"plugin_id"|"alias"|"language"|null}` evaluates it for one parser.
+`allowed_plugins` is a JSON array of strings or `null` (not a JSON string); `identity_json` is a
+JSON string `{"plugin_id", "grammar_id", "languages": [..], "aliases": [..]}` (all optional).
+Native: `filename_selection::parser_allowlist_match(Option<&[String]>, &ParserIdentity)`.
+Grammar-id allowlists behave exactly as before; plugin, alias and language ids were previously
+ignored (selected nothing) and now select their parser.
+
 ## Shared guardrail policy
 
 Native Rust consumers use `guardrail_policy::parse_policy` and `guardrail_policy::apply_policy`.
@@ -159,6 +265,136 @@ Hosts discover/read policy files; Rust interprets root `protected` and nested `g
 forms, validates rules, evaluates changes, and marks edits to `intentumdiff.yaml` immutable.
 Absent severity defaults to `important`; explicit non-string or unsupported severity is an error.
 Applicable rules require both semantic trees. Errors must propagate through bindings.
+
+### Content class
+
+Every served review (`SemanticDiff`) carries `content_class`: `code` | `docs` | `config` |
+`data` | `text`, from the routed language (`content_class::content_class`; Markdown files on the
+generic text route are `docs`). It describes what was reviewed, never a risk. `ChangeGroup`
+carries no `impact`: group `kind` and `refactoring_kind` already state everything the engine
+has decided about a group, and an impact level would be a risk claim the engine cannot derive.
+
+### Review completeness (core #252)
+
+Every served review (`SemanticDiff`) carries `completeness` and `incomplete`. They are set
+at one shared boundary (`completeness::attach`, reached from `routed_review::complete` and
+from the lifecycle stamp every served diff passes), so `live_diff_contents`,
+`live_handle_diff`, `live_handle_review`, `diff_batch`, `diff_batch_commit_json`,
+`complete_routed_review`, `review_text`, `source_fallback_diff` and `finalize_file_lifecycle`
+all report the same state. `finalize_review` also returns `completeness` (and
+`equivalence_proof`) for bindings that complete the review themselves.
+
+| `completeness` | Meaning | `incomplete` |
+|---|---|---|
+| `complete` | `changes` are the review: at least one change, or byte-identical sources | `null` |
+| `equivalent` | Sources differ and equivalence was proved: `is_style_only=true`, or `is_style_only=false` with `metadata.equivalence_proof` naming the rule (e.g. `keyed_data.unordered_mapping_member_order`, `keyed_data.number_exact_decimal_respelling`) | `null` |
+| `incomplete` | Sources differ, no change survived and nothing proved equivalence | object (below) |
+
+Byte-identical input is `complete`, never `equivalent`, so it stays distinguishable from a
+proved style-only edit even on routes that also set `is_style_only` for identical input.
+An `incomplete` review keeps `changes=[]`, `has_semantic_changes=false`,
+`is_style_only=false` and `metadata.no_surviving_changes=true`: the core never fabricates
+semantic changes. It is not a clean review, and bindings must not render it as "no changes".
+
+```json
+"incomplete": {
+  "reason": "unexplained_source_delta",
+  "message": "IntentumDiff could not explain this change. ... Please report a bug at https://github.com/buchochelliq-labs/intentumdiff-core/issues/new (reason: unexplained_source_delta; language: go; core: 0.1.0).",
+  "report_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new",
+  "language": "go",
+  "core_version": "0.1.0",
+  "source_ranges": [{"old_start_byte": 26, "old_end_byte": 36, "new_start_byte": 26,
+    "new_end_byte": 36, "old_start_line": 2, "old_end_line": 4, "new_start_line": 2,
+    "new_end_line": 4}],
+  "source_ranges_truncated": false,
+  "source_ranges_available": true
+}
+```
+
+The `report_url` above is shown without its query for brevity: it is the pre-filled
+`https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…` URL of
+`report.issue_url` (described below).
+
+- `reason` is a stable code; `message` is core-authored text that every binding (Python,
+  VS Code, LSP, live server, CLI) shows verbatim. It names only the routed language id and
+  the core version: no filename, label, identifier or source text.
+- `source_ranges` are the changed line hunks (zero-based lines, exclusive end bytes),
+  capped at 64 with `source_ranges_truncated`. `source_ranges_available=false` only when a
+  source-less stage (`finalize_file_lifecycle` on a DTO without a prior verdict) had to
+  classify from `metadata.no_surviving_changes` alone.
+- `api::Review` exposes `completeness: Option<String>` and `incomplete: Option<Incomplete>`
+  (`Incomplete.attributes` carries `report`).
+
+#### Sanitised repro outline (`incomplete.report`)
+
+Core builds one bug-report outline so every binding scrubs identically:
+
+```json
+"report": {
+  "title": "Incomplete review: unexplained_source_delta (go, core 0.1.0)",
+  "body_markdown": "### IntentumDiff could not explain a change\n…",
+  "truncated": false,
+  "issue_url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/new?title=…&body=…",
+  "outline": {
+    "schema_version": 1, "reason": "unexplained_source_delta", "core_version": "0.1.0",
+    "language": "go", "plugin": {"id": "go", "version": "sha256:4b60…"},
+    "regions": [{"index": 1,
+      "old": {"start_line": 4, "start_col": 0, "end_line": 4, "end_col": 0, "bytes": 0},
+      "new": {"start_line": 4, "start_col": 0, "end_line": 5, "end_col": 0, "bytes": 13},
+      "old_skeleton": "source_file > function_declaration > block",
+      "old_shape": "block(statement_list(expression_statement(call_expression[id1](id1, argument_list(string(9), int))), …))",
+      "new_skeleton": "…", "new_shape": "…"}],
+    "regions_truncated": false, "structure_available": true,
+    "suppressions": [{"pass": "refine:suppress_descendant_noise",
+      "removed": [{"change_type": "MOVE", "node_type": "call_expression", "count": 2}], "added": []}],
+    "placeholder_count": 2
+  }
+}
+```
+
+- **Contents.** Core version, routed language id, parser plugin id and version (the
+  component's SHA-256, since the manifest records no version; `builtin` for the native
+  parser compiled into the core; `null` when the route did not resolve a plugin), the
+  node-kind skeleton (ancestors) and shape (nesting, depth ≤ 5, ≤ 8 children per node)
+  around each changed region, the passes that removed or added draft changes (pass names,
+  change types, node kinds; `suppressions: null` when the route records no trace), and
+  zero-based line/byte-column offsets plus byte sizes of each region.
+- **Privacy.** No source text: identifiers become placeholders (`id1`, `id2`, …) that are
+  consistent within one report and never hashed; literals become their type and length
+  (`string(12)`, `int`, `float`, `number`, `bool`, `null`); comments and docstrings are
+  dropped. A node kind that is not lowercase grammar vocabulary, or that equals an
+  identifier's text, is shown as `node`. No filename or path appears.
+- **URL.** `issue_url` (= `incomplete.report_url`) is at most 8000 bytes. When the body does
+  not fit, the URL carries a deterministic prefix of whole body lines plus a truncation note,
+  `truncated` is `true`, and `body_markdown` stays complete so a binding can offer
+  copy-to-clipboard.
+- **Determinism.** The same inputs produce a byte-identical `report`.
+- **Binding obligations.** Core never sends anything. A binding MUST show the user the
+  `title` and `body_markdown` for preview and MUST require explicit user confirmation before
+  opening `issue_url` (or copying the body). Never open the URL automatically, and never
+  add filenames, source text or other local data to it.
+- The CLI presentation (`render_cli_review`) shows an "Incomplete review" panel with
+  `message` instead of "No changes detected".
+
+### Guardrail check verdict (`guardrail_check_result`)
+
+`api::guardrail_check_result(&Value)` and the C-ABI op of the same name (args `[request_json]`)
+produce the one authoritative check verdict; bindings and the CLI render it and never recompute
+counts or the gate. Request: exactly one of `"diffs": [SemanticDiff…]` (their
+`guardrail_violations` are concatenated in order; an absent/null list counts as none) or
+`"violations": [GuardrailViolation…]`, plus `"strict": bool` (required), `"checked_files":
+int|null` (default: the number of diffs, or `null` for a bare violation list) and `"metadata":
+object|null` (passed through). Result, exactly:
+
+```json
+{"violations": [...], "violation_count": 3, "immutable_count": 1, "important_count": 2,
+ "checked_files": 4, "strict": true, "passed": false, "metadata": null}
+```
+
+**Gate rule:** under `strict`, ANY violation — `important` or `immutable` — fails the check;
+a non-strict check is advisory and always passes. Unknown/missing severity, a missing or
+non-boolean `strict`, both or neither of `diffs`/`violations`, and malformed counts/metadata
+are errors. The native CLI's `guardrails --strict` exit status (2) uses the same function.
 
 Native callers can use `routed_review::complete` for the same reconciliation as the C ABI.
 It owns invariance suppression, generic/Markdown replacement, group indices, style decisions
@@ -257,7 +493,7 @@ requested number of results is reached, without a finite over-fetch window.
 `content_detection_plan(request_json)` and `content_detection_finish(input_json)`
 delegate to supported Rust `content_detection::{plan, finish}`. The request carries
 loaded `entries` (`plugin_id`, `grammar_id`, `languages`, `priority`), `content`,
-optional `allowed_plugins` (grammar IDs), `candidates`, `plugin_id`, and
+optional `allowed_plugins` (see *Parser allowlist identifiers*), `candidates`, `plugin_id`, and
 `preferred_plugins` (language to plugin ID). A plan returns eligible source indices
 and a sample ending at the last complete UTF-8 character within 4096 bytes.
 
@@ -281,7 +517,7 @@ component loader or filename `detect_parser` failure/fallback policy (#108).
 to public Rust `filename_selection::next_action`. Request fields are catalogue
 `entries` (the candidate-planner DTO), `filename`, `content`, optional
 `old_content` (defaults to an empty string), optional
-`language_hint`/`plugin_id`/`allowed_plugins` (grammar IDs), and boolean `strict`.
+`language_hint`/`plugin_id`/`allowed_plugins` (see *Parser allowlist identifiers*), and boolean `strict`.
 For comparisons, hosts send the new source in `content` and previous source in
 `old_content`. Rust probes the new source whenever it is nonempty (including
 whitespace); only an exactly empty new source uses `old_content`. Single-source
@@ -322,10 +558,12 @@ is the compatible **new** operation for a host that has staged a component.
 The host performs permitted I/O to compute the lowercase or uppercase SHA-256
 of the *actual staged Wasm bytes*; the Rust core alone evaluates the compatibility
 policy and returns the same `reason`/`unavailable` shape. Only the component
-built and tested with fuel-enabled Wasmtime 48.0.7 on Windows ARM64 in
-PowerShell parser PR #5 (CI #40707156445; Core Rust API CI #40709266345)
-(SHA-256 `29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`)
-may bypass the PowerShell exclusion. Missing, partial, unexpected and legacy
+built and tested with fuel-enabled Wasmtime 48.0.7 on real Windows ARM64 may
+bypass the PowerShell exclusion: the registry #20 component from PowerShell parser
+PR #9 (SHA-256 `b47cff15ae39f73f753c26babb7fabb393089c3dac1dc1d1ef43d1aba49e3ff0`,
+parser CI #42994016353) and the earlier PR #5 component (SHA-256
+`29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15`, CI #40707156445;
+Core Rust API CI #40709266345). Missing, partial, unexpected and legacy
 digests **fail closed**, and earlier four-argument clients remain excluded.
 The digest is not a substitute for registry trust verification: hosts must
 check the signed/pinned source and checksum and must not rely on untrusted

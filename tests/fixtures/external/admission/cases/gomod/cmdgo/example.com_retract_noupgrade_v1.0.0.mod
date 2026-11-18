@@ -1,0 +1,6 @@
+module example.com/retract/noupgrade
+
+go 1.19
+
+retract v1.0.0 // bad
+

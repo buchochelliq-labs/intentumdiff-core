@@ -1,0 +1,2811 @@
+{
+  "language_id": "ocaml",
+  "options": {
+    "language_hint": "ocaml",
+    "strict_plugins": true
+  },
+  "completed_count": 11,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "dynamic/ocaml/identity",
+      "language_id": "ocaml",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "209b676480ee2fece0e0fcd694ad0b22f2571ac1a0cc4ccc1bf11715f5b6be61",
+      "new_sha256": "209b676480ee2fece0e0fcd694ad0b22f2571ac1a0cc4ccc1bf11715f5b6be61",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.287845,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 84045,
+                "total_fuel_consumed": 84045,
+                "max_fuel_used_percent": 0.3827185792349727,
+                "input_bytes": 49,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.14252399999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 83455,
+                "total_fuel_consumed": 83455,
+                "max_fuel_used_percent": 0.38003187613843353,
+                "input_bytes": 49,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "580b2a4582e4b00a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "2300cde1cb95f6be",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa62f73aa5042",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "580b2a4582e4b00a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "2300cde1cb95f6be",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa62f73aa5042",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4916.379
+    },
+    {
+      "id": "dynamic/ocaml/literal",
+      "language_id": "ocaml",
+      "category": "literal_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "209b676480ee2fece0e0fcd694ad0b22f2571ac1a0cc4ccc1bf11715f5b6be61",
+      "new_sha256": "f53156b36b84c5c70f661dbdfb881ee9327344c19325951de8d527645e06dd66",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('1') -> value_body('2')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "1",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "025aa62f73aa5042",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "2",
+              "position": {
+                "start_line": 0,
+                "start_col": 16,
+                "end_line": 0,
+                "end_col": 17
+              },
+              "structural_hash": "025aa52f73aa4e8f",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1"
+            ],
+            "new_labels": [
+              "2"
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.29872600000000005,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 84045,
+                "total_fuel_consumed": 84045,
+                "max_fuel_used_percent": 0.3827185792349727,
+                "input_bytes": 49,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.124912,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 83493,
+                "total_fuel_consumed": 83493,
+                "max_fuel_used_percent": 0.3802049180327869,
+                "input_bytes": 49,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "580b2a4582e4b00a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "2300cde1cb95f6be",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa62f73aa5042",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "2c5c2a7de2558904",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "6b84a9c41653c7bd",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa52f73aa4e8f",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 51.61
+    },
+    {
+      "id": "dynamic/ocaml/operator",
+      "language_id": "ocaml",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5dbe6dc6c5ef6608142af83c402623c97b076e0b432a9c1ead55aa57c92458c6",
+      "new_sha256": "3d7616a869513f09f42ba863a2f861d31b255bb48c5d9bfb6308a40809d28115",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ocaml_statement('let () = print_int (6 + 2)') -> ocaml_statement('let () = print_int (6 - 2)')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ocaml_statement",
+              "label": "let () = print_int (6 + 2)",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 26
+              },
+              "structural_hash": "72fe381b7a8364d3",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ocaml_statement",
+              "label": "let () = print_int (6 - 2)",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 26
+              },
+              "structural_hash": "8835a82aec9e5ab9",
+              "children": []
+            },
+            "text_diff": "let () = print_int (6 + 2) -> let () = print_int (6 - 2)"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "let () = print_int (6 + 2)"
+            ],
+            "new_labels": [
+              "let () = print_int (6 - 2)"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.222003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 39172,
+                "total_fuel_consumed": 39172,
+                "max_fuel_used_percent": 0.18582542694497153,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.103022,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 38582,
+                "total_fuel_consumed": 38582,
+                "max_fuel_used_percent": 0.18302656546489562,
+                "input_bytes": 27,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "d9805fab56362022",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (6 + 2)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "72fe381b7a8364d3",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "daa3b771aefd88ed",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (6 - 2)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 26
+                },
+                "structural_hash": "8835a82aec9e5ab9",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 51.245
+    },
+    {
+      "id": "dynamic/ocaml/language-feature",
+      "language_id": "ocaml",
+      "category": "declaration_or_language_feature",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "96d53ec7cae1fc6939ef9ae5e97a90641b7075dd586e1ccff931e2272262fe82",
+      "new_sha256": "ef02fe201c47ae70e20fca81c3cfd634051f4100923321d2616a1f57ab1065c8",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "type answer = Yes\\n"
+            ],
+            "new_labels": [
+              "type answer = Yes | No\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "type answer = Yes\\n",
+              "new_label": "type answer = Yes | No\\n",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "type answer = Yes\\n",
+              "new_label": "type answer = Yes | No\\n",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.205291,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20820000,
+                "fuel_consumed": 41267,
+                "total_fuel_consumed": 41267,
+                "max_fuel_used_percent": 0.1982084534101825,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.10818,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20820000,
+                "fuel_consumed": 40835,
+                "total_fuel_consumed": 40835,
+                "max_fuel_used_percent": 0.19613352545629203,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "b979a53954fe8b24",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "type",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 5,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "364002942fca0b6f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "b979a53954fe8b24",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "type",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 5,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "364002942fca0b6f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 49.792
+    },
+    {
+      "id": "dynamic/ocaml/spacing",
+      "language_id": "ocaml",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "c0c0629e9bfd95c2bf21e3879b6413345ab7a0f5169faf03d42e7b2052aeb6b1",
+      "new_sha256": "05d7bd73932cb57310fdb37aa558908cae78cfe4970c7a33cb26813f444346b7",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('1+2') -> value_body('1 + 2')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "1+2",
+              "position": {
+                "start_line": 0,
+                "start_col": 6,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "db845c7e2c65dd3b",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "1 + 2",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 13
+              },
+              "structural_hash": "fa7e8d25e5c50505",
+              "children": []
+            },
+            "text_diff": "1+2 -> 1 + 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1+2"
+            ],
+            "new_labels": [
+              "1 + 2"
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.256988,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21320000,
+                "fuel_consumed": 80563,
+                "total_fuel_consumed": 80563,
+                "max_fuel_used_percent": 0.377875234521576,
+                "input_bytes": 31,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.119392,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21320000,
+                "fuel_consumed": 80727,
+                "total_fuel_consumed": 80727,
+                "max_fuel_used_percent": 0.37864446529080675,
+                "input_bytes": 35,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True",
+        "is_style_only: expected True, got False"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5895a8d418cfc061",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "x",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "c57821b7b7a7d2ad",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1+2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "db845c7e2c65dd3b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int x",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 20
+                },
+                "structural_hash": "da3e69d725e8a06f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9703cbd49c29d316",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "x",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "877f4734afa8f1c6",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1 + 2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "fa7e8d25e5c50505",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int x",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 20
+                },
+                "structural_hash": "da3e69d725e8a06f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 51.276
+    },
+    {
+      "id": "dynamic/ocaml/unicode-value",
+      "language_id": "ocaml",
+      "category": "unicode_literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d288c6c2441fd3bb9e2283400aee82662ae7018153b000f02f8270dd06e79bbd",
+      "new_sha256": "c1370fa650578197f1d99f3936e8b181faad0cc870fef2fd88e93dcd66ee3489",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update ocaml_statement('let () = print_endline \"café\"') -> ocaml_statement('let () = print_endline \"cafè\"')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "ocaml_statement",
+              "label": "let () = print_endline \"café\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 30
+              },
+              "structural_hash": "a662afdecae3356f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "ocaml_statement",
+              "label": "let () = print_endline \"cafè\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 30
+              },
+              "structural_hash": "a65f8ddecae0c5d2",
+              "children": []
+            },
+            "text_diff": "let () = print_endline \"café\" -> let () = print_endline \"cafè\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "let () = print_endline \"café\""
+            ],
+            "new_labels": [
+              "let () = print_endline \"cafè\""
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.260063,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21240000,
+                "fuel_consumed": 39654,
+                "total_fuel_consumed": 39654,
+                "max_fuel_used_percent": 0.1866949152542373,
+                "input_bytes": 31,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.119803,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21240000,
+                "fuel_consumed": 39564,
+                "total_fuel_consumed": 39564,
+                "max_fuel_used_percent": 0.18627118644067797,
+                "input_bytes": 31,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "6ae2ee2606eac443",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline \"café\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 30
+                },
+                "structural_hash": "a662afdecae3356f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "0ce0d08591f8588c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline \"cafè\"",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 30
+                },
+                "structural_hash": "a65f8ddecae0c5d2",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 48.333
+    },
+    {
+      "id": "dynamic/ocaml/incomplete",
+      "language_id": "ocaml",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ce1a7aca01e8e81a15be59160e6b84aec3cf8c8b653b2e8da2e6b4d0d0aa7650",
+      "new_sha256": "7fe6f8777600d10bec4e80f9bb5329fb1f1cd961d5e81fd6d656d346646a28d2",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                13,
+                13
+              ],
+              "new_span": [
+                13,
+                14
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                13,
+                13
+              ],
+              "new_span": [
+                13,
+                14
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.217685,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20540000,
+                "fuel_consumed": 40962,
+                "total_fuel_consumed": 40962,
+                "max_fuel_used_percent": 0.1994255111976631,
+                "input_bytes": 13,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.111237,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20540000,
+                "fuel_consumed": 41061,
+                "total_fuel_consumed": 41061,
+                "max_fuel_used_percent": 0.19990749756572543,
+                "input_bytes": 14,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "ddce875d9e03e57c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "db5f49a88ac4cf5a",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "ddce875d9e03e57c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "db5f49a88ac4cf5a",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 52.554
+    },
+    {
+      "id": "dynamic/ocaml/comment",
+      "language_id": "ocaml",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "209b676480ee2fece0e0fcd694ad0b22f2571ac1a0cc4ccc1bf11715f5b6be61",
+      "new_sha256": "35acd11181859729f5570ee674fd18aee199344ac7e5fdbad274adb314324f45",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-ocaml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.ml",
+        "new_filename": "assessment.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "(* baseline comment *)\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "(* baseline comment *)\\n",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "(* baseline comment *)\\n",
+              "risk": "amber",
+              "language": "ocaml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.24577699999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22420000,
+                "fuel_consumed": 84045,
+                "total_fuel_consumed": 84045,
+                "max_fuel_used_percent": 0.3748661909009813,
+                "input_bytes": 49,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "assessment.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.125743,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22420000,
+                "fuel_consumed": 84686,
+                "total_fuel_consumed": 84686,
+                "max_fuel_used_percent": 0.37772524531668156,
+                "input_bytes": 72,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "580b2a4582e4b00a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "2300cde1cb95f6be",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa62f73aa5042",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "580b2a4582e4b00a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 4,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "2300cde1cb95f6be",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 16,
+                      "end_line": 1,
+                      "end_col": 17
+                    },
+                    "structural_hash": "025aa62f73aa5042",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_int (answer ())",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 30
+                },
+                "structural_hash": "477418bbb602ec1b",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 51.249
+    },
+    {
+      "id": "dynamic/ocaml/external-derived-edit",
+      "language_id": "ocaml",
+      "category": "external_derived_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ab72451c076ab8f82f0ee1c57d3004abead579da038ad472c65defb03fa2aa33",
+      "new_sha256": "57f977b419d770329e7ae30098497e1e705b0e5e99b5f097d80c702f71caef63",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.ml",
+        "new_filename": "upstream-derived.ml",
+        "language": "ocaml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('function 0 -> true | _ -> false') -> value_body('function 0 -> false | _ -> false')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "function 0 -> true | _ -> false",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 41
+              },
+              "structural_hash": "82343ed6b0fae655",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "function 0 -> false | _ -> false",
+              "position": {
+                "start_line": 0,
+                "start_col": 10,
+                "end_line": 0,
+                "end_col": 42
+              },
+              "structural_hash": "3495d6700ecae510",
+              "children": []
+            },
+            "text_diff": "function 0 -> true | _ -> false -> function 0 -> false | _ -> false"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "function 0 -> true | _ -> false"
+            ],
+            "new_labels": [
+              "function 0 -> false | _ -> false"
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "upstream-derived.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.262247,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23620000,
+                "fuel_consumed": 90805,
+                "total_fuel_consumed": 90805,
+                "max_fuel_used_percent": 0.3844411515664691,
+                "input_bytes": 90,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "upstream-derived.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.13269599999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23620000,
+                "fuel_consumed": 90910,
+                "total_fuel_consumed": 90910,
+                "max_fuel_used_percent": 0.3848856900931414,
+                "input_bytes": 91,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "8d077d6a13435898",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "eq0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "8561c17449a2d6eb",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "function 0 -> true | _ -> false",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 41
+                    },
+                    "structural_hash": "82343ed6b0fae655",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline (string_of_bool (eq0 0))",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 47
+                },
+                "structural_hash": "2ab2d399d4e7f017",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0232a0f27363a467",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "eq0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "e0862895e86281ce",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "function 0 -> false | _ -> false",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 42
+                    },
+                    "structural_hash": "3495d6700ecae510",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline (string_of_bool (eq0 0))",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 47
+                },
+                "structural_hash": "2ab2d399d4e7f017",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 52.65
+    },
+    {
+      "id": "dynamic/ocaml/external-derived-identity",
+      "language_id": "ocaml",
+      "category": "identity",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "ab72451c076ab8f82f0ee1c57d3004abead579da038ad472c65defb03fa2aa33",
+      "new_sha256": "ab72451c076ab8f82f0ee1c57d3004abead579da038ad472c65defb03fa2aa33",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.ml",
+        "new_filename": "upstream-derived.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "upstream-derived.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.22198199999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23600000,
+                "fuel_consumed": 90805,
+                "total_fuel_consumed": 90805,
+                "max_fuel_used_percent": 0.3847669491525424,
+                "input_bytes": 90,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "upstream-derived.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.149007,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23600000,
+                "fuel_consumed": 90215,
+                "total_fuel_consumed": 90215,
+                "max_fuel_used_percent": 0.38226694915254233,
+                "input_bytes": 90,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "8d077d6a13435898",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "eq0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "8561c17449a2d6eb",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "function 0 -> true | _ -> false",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 41
+                    },
+                    "structural_hash": "82343ed6b0fae655",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline (string_of_bool (eq0 0))",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 47
+                },
+                "structural_hash": "2ab2d399d4e7f017",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "8d077d6a13435898",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "eq0",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "8561c17449a2d6eb",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "function 0 -> true | _ -> false",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 10,
+                      "end_line": 0,
+                      "end_col": 41
+                    },
+                    "structural_hash": "82343ed6b0fae655",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "ocaml_statement",
+                "label": "let () = print_endline (string_of_bool (eq0 0))",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 47
+                },
+                "structural_hash": "2ab2d399d4e7f017",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 47.872
+    },
+    {
+      "id": "dynamic/ocaml/repo-playground-identity",
+      "language_id": "ocaml",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "634dedcdefff83d4528af011a1b111393d0adb87f8f7eae4e35f09c11e01a4a8",
+      "new_sha256": "634dedcdefff83d4528af011a1b111393d0adb87f8f7eae4e35f09c11e01a4a8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266"
+      ],
+      "review": {
+        "old_filename": "playground.ml",
+        "new_filename": "playground.ml",
+        "language": "ocaml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "playground.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.31231,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26160000,
+                "fuel_consumed": 215444,
+                "total_fuel_consumed": 215444,
+                "max_fuel_used_percent": 0.8235626911314985,
+                "input_bytes": 154,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "ocaml",
+                "filename": "playground.ml",
+                "call_count": 1,
+                "elapsed_ms": 0.249494,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26160000,
+                "fuel_consumed": 214854,
+                "total_fuel_consumed": 214854,
+                "max_fuel_used_percent": 0.8213073394495414,
+                "input_bytes": 154,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/ocaml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "7446c4640f5d627b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "base_rate",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "d33acf6d39124fbf",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "42",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "aa4e64a18a5d9ee1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "value",
+                "label": "apply_discount",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 18
+                },
+                "structural_hash": "b81af4623d0d97a2",
+                "children": [
+                  {
+                    "id": "0.1.rhs",
+                    "node_type": "value_body",
+                    "label": "price - base_rate",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 27,
+                      "end_line": 2,
+                      "end_col": 44
+                    },
+                    "structural_hash": "dd7d5c03c42107d7",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "value",
+                "label": "format_receipt",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 18
+                },
+                "structural_hash": "2571f8351b191290",
+                "children": [
+                  {
+                    "id": "0.2.rhs",
+                    "node_type": "value_body",
+                    "label": "\"Total: \" ^ string_of_int total",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 27,
+                      "end_line": 4,
+                      "end_col": 58
+                    },
+                    "structural_hash": "e1174fbeb4894008",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "value",
+                "label": "unused_helper",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 17
+                },
+                "structural_hash": "8c52ca4b0741c09d",
+                "children": [
+                  {
+                    "id": "0.3.rhs",
+                    "node_type": "value_body",
+                    "label": "x + 7",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 22,
+                      "end_line": 6,
+                      "end_col": 27
+                    },
+                    "structural_hash": "5d851b425e537851",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "ocaml",
+          "tree": {
+            "id": "0",
+            "node_type": "ocaml_file",
+            "label": "ocaml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "7446c4640f5d627b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "base_rate",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "d33acf6d39124fbf",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "42",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 16,
+                      "end_line": 0,
+                      "end_col": 18
+                    },
+                    "structural_hash": "aa4e64a18a5d9ee1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "value",
+                "label": "apply_discount",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 18
+                },
+                "structural_hash": "b81af4623d0d97a2",
+                "children": [
+                  {
+                    "id": "0.1.rhs",
+                    "node_type": "value_body",
+                    "label": "price - base_rate",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 27,
+                      "end_line": 2,
+                      "end_col": 44
+                    },
+                    "structural_hash": "dd7d5c03c42107d7",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "value",
+                "label": "format_receipt",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 18
+                },
+                "structural_hash": "2571f8351b191290",
+                "children": [
+                  {
+                    "id": "0.2.rhs",
+                    "node_type": "value_body",
+                    "label": "\"Total: \" ^ string_of_int total",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 27,
+                      "end_line": 4,
+                      "end_col": 58
+                    },
+                    "structural_hash": "e1174fbeb4894008",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "value",
+                "label": "unused_helper",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 17
+                },
+                "structural_hash": "8c52ca4b0741c09d",
+                "children": [
+                  {
+                    "id": "0.3.rhs",
+                    "node_type": "value_body",
+                    "label": "x + 7",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 22,
+                      "end_line": 6,
+                      "end_col": 27
+                    },
+                    "structural_hash": "5d851b425e537851",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.3: child outside parent range",
+        "old: 0.3.rhs: child outside parent range",
+        "old: 0.2.rhs: child outside parent range",
+        "old: 0.1.rhs: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.3: child outside parent range",
+        "new: 0.3.rhs: child outside parent range",
+        "new: 0.2.rhs: child outside parent range",
+        "new: 0.1.rhs: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 52.647
+    }
+  ],
+  "attempted_count": 11,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.377
+}

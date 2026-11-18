@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-table-redefine-2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "c4972a64d28e5e8603d297c43bc4963abc576ac7b5d103ccc7083101718c6573",
+  "observations": {
+    "error": "Cannot declare ('t1', 't2') twice (at line 3, column 7)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "c4972a64d28e5e8603d297c43bc4963abc576ac7b5d103ccc7083101718c6573",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

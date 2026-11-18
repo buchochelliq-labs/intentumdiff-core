@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-basic-41_slashy_urls",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "e7237d01c5184eacd7ae2bbfa4d8c83fd1d99070e1896f2d3af35ecabcaeacc0",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "e7237d01c5184eacd7ae2bbfa4d8c83fd1d99070e1896f2d3af35ecabcaeacc0",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

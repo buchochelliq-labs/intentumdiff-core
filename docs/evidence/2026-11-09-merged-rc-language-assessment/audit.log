@@ -1,0 +1,35 @@
+{
+  "counts": {
+    "passed": 596,
+    "failed": 86,
+    "bounded_incomplete_observation": 43,
+    "bounded_explicit_fallback": 32,
+    "invalid_result": 3
+  },
+  "gate_recomputed": {
+    "scope_languages": "all baseline languages",
+    "protected_passes": 584,
+    "regression_count": 0,
+    "regressions": [],
+    "improvements": [
+      "data_config.adf.known_retry_policy",
+      "data_config.adf.meaningful_1_value",
+      "data_config.adf.meaningful_3_body",
+      "data_config.adf.unicode_value",
+      "data_config.databricks-workflow.known_base_parameter",
+      "data_config.databricks-workflow.known_eof_identity",
+      "data_config.databricks-workflow.known_notebook_payload",
+      "data_config.databricks-workflow.meaningful_2_configuration",
+      "data_config.databricks.known_base_parameter",
+      "data_config.databricks.known_eof_identity",
+      "data_config.databricks.known_notebook_payload",
+      "data_config.databricks.meaningful_2_configuration"
+    ]
+  },
+  "source_position_nodes_checked": 24121,
+  "groups_checked": 769,
+  "references_checked": 600,
+  "issues": [],
+  "review_content_changes": 17,
+  "prior_pass_review_content_changes": 7
+}

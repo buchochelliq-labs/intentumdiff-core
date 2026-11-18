@@ -1,0 +1,34 @@
+{
+  "case_id": "gql-26",
+  "executed_utc": "2026-11-17T20:20:42+00:00",
+  "new_sha256": "41bf9f3f2fbc94a7e63a2444ff264150da35f84a3ad6ea81be2234d96b9eb46b",
+  "observations": {
+    "reference": {
+      "Breaking": [],
+      "Dangerous": [
+        [
+          "VALUE_ADDED_TO_ENUM",
+          "VALUE2 was added to enum type EnumType1."
+        ]
+      ]
+    },
+    "reference_equal": false,
+    "upstream": [
+      [
+        "Dangerous",
+        [
+          [
+            "Dangerous",
+            "VALUE_ADDED_TO_ENUM",
+            "VALUE2 was added to enum type EnumType1."
+          ]
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "c0284c5a926aba0ad643043a9dbcbbed3306c24abffbddd4f80194f5cede2d01",
+  "oracle": "graphql_breaking",
+  "reference": "graphql-js 16.15.0 findBreakingChanges/findDangerousChanges",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

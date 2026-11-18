@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "\n        let mut i: usize = 0;\n        for i in 0..str.len() {\n            let rstr: &str = &str[i..];\n            if is_palindrome_10(str) {\n                let nstr: &str = &str[0..i];\n                let n2str: String = nstr.chars().rev().collect();\n                return str.to_string()+&n2str;\n            }\n        }\n        let n2str: String = str.chars().rev().collect();\n        return str.to_string()+&n2str;\n    }\n",
+  "canonical_solution": "\n        let mut i: usize = 0;\n        for i in 0..str.len() {\n            let rstr: &str = &str[i..];\n            if is_palindrome_10(rstr) {\n                let nstr: &str = &str[0..i];\n                let n2str: String = nstr.chars().rev().collect();\n                return str.to_string()+&n2str;\n            }\n        }\n        let n2str: String = str.chars().rev().collect();\n        return str.to_string()+&n2str;\n    }\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn is_palindrome_10(str: &str) -> bool {\n        let s: String = str.chars().rev().collect();\n        return s==str;\n    }\n\nfn make_palindrome(str: &str) -> String {\n",
+  "docstring": "Find the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.",
+  "entry_point": "make_palindrome",
+  "example_test": "None",
+  "failure_symptoms": "stackoverflow",
+  "import": "",
+  "instruction": "Write a Rust function `make_palindrome(str: &str) -> String` to solve the following problem:\nFind the shortest palindrome that begins with a supplied string.\nAlgorithm idea is simple:\n- Find the longest postfix of supplied string that is a palindrome.\n- Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn is_palindrome_10(str: &str) -> bool {\n        let s: String = str.chars().rev().collect();\n        return s==str;\n    }\n\n/*\n Find the shortest palindrome that begins with a supplied string.\n    Algorithm idea is simple:\n    - Find the longest postfix of supplied string that is a palindrome.\n    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n    \n*/\nfn make_palindrome(str: &str) -> String {\n",
+  "signature": "make_palindrome(str: &str) -> String",
+  "task_id": "Rust/10",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n #[test]\n    fn test_make_palindrome() {\n        assert_eq!(make_palindrome(\"\"), \"\");\n        assert_eq!(make_palindrome(\"x\"), \"x\");\n        assert_eq!(make_palindrome(\"xyz\"), \"xyzyx\");\n        assert_eq!(make_palindrome(\"xyx\"), \"xyx\");\n        assert_eq!(make_palindrome(\"jerry\"), \"jerryrrej\");\n    }\n\n}\n",
+  "test_setup": ""
+}

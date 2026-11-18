@@ -1,0 +1,16 @@
+{
+  "case_id": "buf-breaking_extension_message_no_delete-1-comment",
+  "executed_utc": "2026-11-17T20:20:39+00:00",
+  "new_sha256": "0b339357d99b5a64573f243b36c578f0fa0678868967f57a1d191dbf0b3d7d9f",
+  "observations": {
+    "breaking_exit": 0,
+    "breaking_output": null,
+    "image_equal": true,
+    "reference_equal": true
+  },
+  "old_sha256": "1a75c20ecfa05c0be87fa5ad277488f3c5b70765c98fee67d7da51c8955145da",
+  "oracle": "proto_equivalent",
+  "reference": "buf 1.75.0 build --exclude-source-info image equality + breaking (FILE, WIRE_JSON)",
+  "summary": "reference says equal; claim preserved",
+  "verdict": "supports_claim"
+}

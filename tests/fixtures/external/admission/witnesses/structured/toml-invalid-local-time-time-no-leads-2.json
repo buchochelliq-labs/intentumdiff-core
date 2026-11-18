@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-local-time-time-no-leads-2",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "773efa1ef64470886b34e4a73afc1e9907c127b92c75333d35abb7ba29974e1d",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 2, column 6)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "773efa1ef64470886b34e4a73afc1e9907c127b92c75333d35abb7ba29974e1d",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-control-string-null",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "81e0c92d4db5593c8d279bee6e2119247e30b2e45f591af0150c8b04f83bb4a2",
+  "observations": {
+    "error": "Illegal character '\\x00' (at line 1, column 20)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "81e0c92d4db5593c8d279bee6e2119247e30b2e45f591af0150c8b04f83bb4a2",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

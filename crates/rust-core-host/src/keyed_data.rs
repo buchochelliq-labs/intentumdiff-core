@@ -385,6 +385,219 @@ pub(crate) fn js_style_group_from_suppression(
     Some((group, ignored))
 }
 
+/// A full-document proof is required before presentation scaffolding can be removed. Comparing
+/// labels (even positional item labels) says nothing about the values below those wrappers.
+pub(crate) fn yaml_representation_equivalent_sources(old_source: &str, new_source: &str) -> bool {
+    // The value decoder resolves aliases and does not retain anchor identities. Fail closed
+    // across the complete sources, including tokens outside the surviving change drafts.
+    // Directive/schema changes are also outside this YAML 1.2 proof. This deliberately also
+    // declines markers inside strings/comments rather than risking an identity change.
+    if [old_source, new_source].iter().any(|source| source.contains(['&', '*', '!', '%'])) {
+        return false;
+    }
+    fn numeric_looking(text: &str) -> bool {
+        static NUMBER: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+        NUMBER.get_or_init(|| regex::Regex::new(
+            r"(?ix)^[+-]?(?:0x[0-9a-f_]+|0o[0-7_]+|0b[01_]+|(?:[0-9][0-9_]*(?:\.[0-9_]*)?|\.[0-9][0-9_]*)(?:e[+-]?[0-9][0-9_]*)?|\.inf|\.nan)$"
+        ).expect("valid numeric-looking YAML scalar pattern")).is_match(text)
+    }
+    fn supported(value: &serde_yaml::Value) -> bool {
+        match value {
+            // Distinct decimal values and keys can round to the same f64. Equality after that
+            // conversion is not proof; leave float-containing documents to the ordinary diff.
+            serde_yaml::Value::Number(number) => !number.is_f64(),
+            // Unsupported integer ranges and overflowing float exponents can fall back to
+            // String in this decoder. Such a value cannot prove that an unquoted numeric
+            // scalar has the same YAML type as a quoted spelling (including mapping keys).
+            serde_yaml::Value::String(text) => !numeric_looking(text),
+            serde_yaml::Value::Sequence(items) => items.iter().all(supported),
+            serde_yaml::Value::Mapping(mapping) => mapping.iter()
+                .all(|(key, value)| supported(key) && supported(value)),
+            serde_yaml::Value::Tagged(_) => false,
+            _ => true,
+        }
+    }
+    fn has_float(value: &serde_yaml::Value) -> bool {
+        match value {
+            serde_yaml::Value::Number(number) => number.is_f64(),
+            serde_yaml::Value::Sequence(items) => items.iter().any(has_float),
+            serde_yaml::Value::Mapping(mapping) => mapping.iter().any(|(k, v)| has_float(k) || has_float(v)),
+            serde_yaml::Value::Tagged(tagged) => has_float(&tagged.value),
+            _ => false,
+        }
+    }
+    // Value decoding preserves scalar types, ordered sequence multiplicity, and full mapping
+    // payloads. Duplicate keys, invalid input and multi-document streams return errors: none
+    // may be treated as an equivalence proof.
+    let decode = |source: &str| serde_yaml::from_str::<serde_yaml::Value>(source).ok();
+    let (Some(mut old), Some(mut new)) = (decode(old_source), decode(new_source)) else {
+        return false;
+    };
+    // #285: floats are compared EXACTLY. Each plain scalar the decoder itself resolves to a
+    // float is replaced, in the source, by a quoted placeholder carrying its exact canonical
+    // decimal (sign, significant digits, exponent), then the documents are decoded again.
+    // f64 rounding can therefore never equate distinct decimals, while `1.5` / `1.50` /
+    // `15e-1` (one YAML 1.2 core value) still compare equal across block/flow restyles. Any
+    // float the scanner cannot place (block scalars, multi-line quotes) declines the proof.
+    if has_float(&old) || has_float(&new) {
+        let (Some(old_exact), Some(new_exact)) = (exact_float_source(old_source), exact_float_source(new_source)) else {
+            return false;
+        };
+        let (Some(o), Some(n)) = (decode(&old_exact), decode(&new_exact)) else {
+            return false;
+        };
+        // A placeholder is only sound as a WHOLE scalar. One that landed inside a longer
+        // plain scalar (`apples 1.5`, a multi-line plain continuation) would equate distinct
+        // strings (`1.5` vs `1.50`), so any embedded marker declines the proof.
+        fn placeholders_whole(value: &serde_yaml::Value) -> bool {
+            match value {
+                serde_yaml::Value::String(text) => !text.contains(EXACT_FLOAT_MARK)
+                    || (text.starts_with(EXACT_FLOAT_MARK) && text.matches(EXACT_FLOAT_MARK).count() == 1
+                        && exact_decimal_form(&text[EXACT_FLOAT_MARK.len_utf8()..])),
+                serde_yaml::Value::Sequence(items) => items.iter().all(placeholders_whole),
+                serde_yaml::Value::Mapping(mapping) => mapping.iter().all(|(k, v)| placeholders_whole(k) && placeholders_whole(v)),
+                serde_yaml::Value::Tagged(_) => false,
+                _ => true,
+            }
+        }
+        if !placeholders_whole(&o) || !placeholders_whole(&n) {
+            return false;
+        }
+        (old, new) = (o, n);
+    }
+    // The decoder also maps an empty/comment-only stream (zero documents) to Null. Decline
+    // top-level nulls rather than conflating that stream with a document whose root is null.
+    !matches!(&old, serde_yaml::Value::Null)
+        && !matches!(&new, serde_yaml::Value::Null)
+        && supported(&old) && supported(&new) && old == new
+}
+
+/// Marker that starts an exact-float placeholder; sources already containing it decline.
+const EXACT_FLOAT_MARK: char = '\u{E000}';
+
+/// The exact canonical decimal of a YAML 1.2 core float spelling: `[-]digits e exponent` with
+/// leading/trailing zeros removed (negative zero keeps its sign; `.inf`/`.nan` spelled out).
+/// `None` for anything that is not a core-schema float spelling.
+fn exact_decimal(token: &str) -> Option<String> {
+    let lower = token.to_ascii_lowercase();
+    let (negative, body) = match lower.as_bytes().first()? {
+        b'-' => (true, &lower[1..]),
+        b'+' => (false, &lower[1..]),
+        _ => (false, lower.as_str()),
+    };
+    let sign = if negative { "-" } else { "" };
+    if body == ".inf" {
+        return Some(format!("{sign}inf"));
+    }
+    if body == ".nan" && sign.is_empty() && !token.starts_with('+') {
+        return Some("nan".to_owned());
+    }
+    let (mantissa, exponent) = match body.split_once('e') {
+        Some((m, e)) => (m, e.parse::<i64>().ok()?),
+        None => (body, 0),
+    };
+    let (int, frac) = mantissa.split_once('.').unwrap_or((mantissa, ""));
+    if (int.is_empty() && frac.is_empty()) || !int.chars().chain(frac.chars()).all(|c| c.is_ascii_digit()) {
+        return None;
+    }
+    let digits = format!("{int}{frac}");
+    let leading = digits.len() - digits.trim_start_matches('0').len();
+    let significant = digits.trim_start_matches('0').trim_end_matches('0');
+    if significant.is_empty() {
+        return Some(format!("{sign}0"));
+    }
+    let trailing = digits.len() - leading - significant.len();
+    // value = digits * 10^(exponent - frac.len()); drop trailing zeros into the exponent.
+    let exp = exponent.checked_sub(frac.len() as i64)?.checked_add(trailing as i64)?;
+    Some(format!("{sign}{significant}e{exp}"))
+}
+
+/// Whether `text` is exactly an `exact_decimal` output (`[-]digits e [-]digits`, `[-]0`,
+/// `[-]inf`, `nan`).
+fn exact_decimal_form(text: &str) -> bool {
+    static FORM: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    FORM.get_or_init(|| regex::Regex::new(r"^(?:-?(?:[1-9][0-9]*e-?[0-9]+|0|inf)|nan)$").expect("valid exact decimal form"))
+        .is_match(text)
+}
+
+/// `source` with every plain scalar that the YAML decoder resolves to a float replaced by a
+/// double-quoted exact placeholder. `None` when the scan cannot be certain: block scalars,
+/// quotes left open at end of line, or the marker already present.
+fn exact_float_source(source: &str) -> Option<String> {
+    if source.contains(EXACT_FLOAT_MARK) {
+        return None;
+    }
+    let mut out = String::with_capacity(source.len() + 16);
+    for line in source.split_inclusive('\n') {
+        let chars: Vec<char> = line.chars().collect();
+        let mut i = 0;
+        let mut token_start = true;
+        while i < chars.len() {
+            let c = chars[i];
+            if token_start && (c == '"' || c == '\'') {
+                // A quoted scalar: copied verbatim, never a float.
+                let mut j = i + 1;
+                loop {
+                    let Some(&q) = chars.get(j) else { return None }; // open at end of line
+                    if c == '"' && q == '\\' { j += 2; continue; }
+                    if q == c {
+                        if c == '\'' && chars.get(j + 1) == Some(&'\'') { j += 2; continue; }
+                        break;
+                    }
+                    j += 1;
+                }
+                out.extend(&chars[i..=j]);
+                i = j + 1;
+                token_start = false;
+                continue;
+            }
+            if c == '#' && token_start {
+                out.extend(&chars[i..]); // comment to end of line
+                break;
+            }
+            if token_start && (c == '|' || c == '>') {
+                return None; // block scalar content is not scanned
+            }
+            if c.is_whitespace() || matches!(c, ',' | '[' | ']' | '{' | '}') {
+                out.push(c);
+                i += 1;
+                token_start = true;
+                continue;
+            }
+            if !token_start {
+                out.push(c);
+                i += 1;
+                continue;
+            }
+            // A plain token: up to whitespace / flow indicator; a trailing ':' is a key marker.
+            let mut j = i;
+            while j < chars.len() && !chars[j].is_whitespace() && !matches!(chars[j], ',' | '[' | ']' | '{' | '}') {
+                j += 1;
+            }
+            let raw: String = chars[i..j].iter().collect();
+            let (token, suffix) = match raw.strip_suffix(':') {
+                Some(token) => (token, ":"),
+                None => (raw.as_str(), ""),
+            };
+            let decoded_float = serde_yaml::from_str::<serde_yaml::Value>(token)
+                .is_ok_and(|v| matches!(v, serde_yaml::Value::Number(ref n) if n.is_f64()));
+            match exact_decimal(token).filter(|_| decoded_float) {
+                Some(exact) => {
+                    out.push('"');
+                    out.push(EXACT_FLOAT_MARK);
+                    out.push_str(&exact);
+                    out.push('"');
+                    out.push_str(suffix);
+                }
+                None => out.push_str(&raw),
+            }
+            i = j;
+            token_start = false;
+        }
+    }
+    Some(out)
+}
+
 /// python presentation._suppress_yaml_representation_equivalent_modifications (issue #57 yaml):
 /// block and flow styles present the SAME representation graph (YAML 1.2 §3), so style-wrapper
 /// churn (block_node↔flow_node MODIFICATIONs, scaffold item ADD/DELETEs with generic or
@@ -392,10 +605,16 @@ pub(crate) fn js_style_group_from_suppression(
 /// (&, *, !) change identity, not presentation — guarded out.
 pub(crate) fn suppress_yaml_representation_equivalent_drafts(
     changes: &mut Vec<ChangeDraft<'_>>,
+    old_source: &str,
+    new_source: &str,
 ) -> Option<Value> {
+    if !yaml_representation_equivalent_sources(old_source, new_source) {
+        return None;
+    }
     const SCAFFOLD: &[&str] = &[
         "block_node", "flow_node", "block_sequence", "flow_sequence", "block_mapping",
         "flow_mapping", "block_sequence_item", "flow_sequence_item",
+        "block_mapping_pair", "flow_pair",
     ];
     const SCALARS: &[&str] = &[
         "plain_scalar", "single_quote_scalar", "double_quote_scalar", "integer_scalar",
@@ -407,6 +626,7 @@ pub(crate) fn suppress_yaml_representation_equivalent_drafts(
             ("block_node", "flow_node") | ("flow_node", "block_node")
                 | ("block_sequence", "flow_sequence") | ("flow_sequence", "block_sequence")
                 | ("block_mapping", "flow_mapping") | ("flow_mapping", "block_mapping")
+                | ("block_mapping_pair", "flow_pair") | ("flow_pair", "block_mapping_pair")
         )
     }
     fn has_identity_tokens(node: &SemanticNode) -> bool {
@@ -459,7 +679,8 @@ pub(crate) fn suppress_yaml_representation_equivalent_drafts(
                     return true;
                 }
                 let positional = node.label.starts_with('[');
-                if !(node.label == node.node_type || positional) {
+                let pair = matches!(nt.as_str(), "block_mapping_pair" | "flow_pair");
+                if !(node.label == node.node_type || positional || pair) {
                     return true;
                 }
                 suppressed_labels.push(node.label.clone());
@@ -570,6 +791,8 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
     old_tree: &'a SemanticNode,
     new_tree: &'a SemanticNode,
     language: &str,
+    old_source: &str,
+    new_source: &str,
 ) -> Option<Value> {
     if !matches!(language, "json" | "yaml") {
         return None;
@@ -578,8 +801,16 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
     // an array element with IDENTICAL content whose positional label shifted after a sibling
     // insertion ([1]->[2]) is not a change — drop the MODIFICATION/REORDER pair noise,
     // carrying the suppression as evidence.
+    // A same-hash YAML node can also move because sequence order changed. Its own content
+    // cannot prove that its ordered context stayed equivalent, so require the document proof
+    // here too. On meaningful edits this deliberately retains positional noise with evidence.
+    let suppress_positional = language != "yaml"
+        || yaml_representation_equivalent_sources(old_source, new_source);
     let mut suppressed_labels: Vec<String> = Vec::new();
     changes.retain(|change| {
+        if !suppress_positional {
+            return true;
+        }
         if !matches!(change.change_type, "MODIFICATION" | "REORDER" | "MOVE") {
             return true;
         }
@@ -742,3 +973,289 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
 #[cfg(test)]
 #[path = "keyed_data_tests.rs"]
 mod tests;
+#[cfg(test)]
+#[path = "number_respelling_tests.rs"]
+mod number_respelling_tests;
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "number_respelling_source_tests.rs"]
+mod number_respelling_source_tests;
+
+/// Rule id recorded as `equivalence_proof` when a review's only delta is member order inside
+/// specification-unordered mappings (core #252).
+pub(crate) const UNORDERED_MAPPING_RULE: &str = "keyed_data.unordered_mapping_member_order";
+
+fn line_starts(source: &str) -> Vec<usize> {
+    std::iter::once(0).chain(source.match_indices('\n').map(|(i, _)| i + 1)).collect()
+}
+
+fn node_bytes<'s>(node: &SemanticNode, source: &'s str, starts: &[usize]) -> Option<&'s str> {
+    let p = &node.position;
+    let start = starts.get(p.start_line as usize)? + p.start_col as usize;
+    let end = starts.get(p.end_line as usize)? + p.end_col as usize;
+    source.get(start..end)
+}
+
+/// Canonical form where only the members of unordered containers are sorted. Leaves compare
+/// by their exact source bytes, so no value or spelling equivalence is assumed. `None`
+/// declines the proof (duplicate keys, unknown spans).
+fn unordered_canonical(node: &SemanticNode, source: &str, starts: &[usize], language: &str) -> Option<String> {
+    if node.children.is_empty() {
+        return Some(format!("{}:{:?}", node.node_type, node_bytes(node, source, starts)?));
+    }
+    let mut children = node.children.iter()
+        .map(|child| unordered_canonical(child, source, starts, language))
+        .collect::<Option<Vec<_>>>()?;
+    let unordered = match language {
+        "json" => node.node_type == "object",
+        "yaml" => matches!(node.node_type.as_str(), "block_mapping" | "flow_mapping"),
+        "toml" => matches!(node.node_type.as_str(), "document" | "table" | "inline_table"),
+        _ => false,
+    };
+    if unordered {
+        // Keys are the first child (json/yaml pairs) or the node label (toml pair/table).
+        let keys: Vec<String> = node.children.iter().zip(&children).map(|(child, canonical)| match language {
+            "toml" => format!("{}:{}", child.node_type, child.label),
+            _ => child.children.first()
+                .and_then(|key| unordered_canonical(key, source, starts, language))
+                .unwrap_or_else(|| canonical.clone()),
+        }).collect();
+        let unique: std::collections::BTreeSet<&String> = keys.iter().collect();
+        if unique.len() != keys.len() {
+            return None;
+        }
+        children.sort();
+    }
+    Some(format!("{}:{}({})", node.node_type, node.label, children.join(",")))
+}
+
+/// Whether two keyed-data sources differ only by the order of members of JSON objects
+/// (RFC 8259 §4), YAML mappings (YAML 1.2 §3.2.1.1) or TOML tables. Conservative: anchors,
+/// aliases, merge keys, tags and arrays of tables decline; so does any dropped token
+/// (the non-whitespace, non-separator character multisets must agree).
+pub(crate) fn unordered_mapping_equivalent(old_tree: &SemanticNode, new_tree: &SemanticNode,
+    old_source: &str, new_source: &str, language: &str) -> bool {
+    if !matches!(language, "json" | "yaml" | "toml") || old_source == new_source {
+        return false;
+    }
+    let risky = |source: &str| match language {
+        "yaml" => source.contains(['&', '*', '!']) || source.contains("<<"),
+        "toml" => source.contains("[["),
+        // Escaped keys could spell one key twice; reordering duplicates is not equivalent.
+        _ => source.contains('\\'),
+    };
+    if risky(old_source) || risky(new_source) {
+        return false;
+    }
+    let bag = |source: &str| {
+        let mut chars: Vec<char> = source.chars().filter(|c| !c.is_whitespace() && *c != ',').collect();
+        chars.sort_unstable();
+        chars
+    };
+    if bag(old_source) != bag(new_source) {
+        return false;
+    }
+    let (old_starts, new_starts) = (line_starts(old_source), line_starts(new_source));
+    match (unordered_canonical(old_tree, old_source, &old_starts, language),
+        unordered_canonical(new_tree, new_source, &new_starts, language)) {
+        (Some(old), Some(new)) => old == new,
+        _ => false,
+    }
+}
+
+/// Rule id of the number respelling equivalence: a `number` leaf whose source spelling changed
+/// while its exact decimal value did not (`9` -> `9.0`, `1000` -> `1e3`). Recorded as the
+/// invariance group `rule_id` for each proved pair and, when nothing else changed, as the
+/// review's `equivalence_proof` (core #252).
+pub(crate) const NUMBER_RESPELLING_RULE: &str = "keyed_data.number_exact_decimal_respelling";
+
+/// Routes whose `number` leaves are RFC 8259 JSON numbers: the JSON parser, and the
+/// configuration projections (plugin-sdk #36) of ADF and Databricks, whose number labels are
+/// the exact source token. YAML (`integer_scalar`/`float_scalar`, typed by the core schema) and
+/// TOML (`integer`/`float`) emit no `number` node and stay outside the rule.
+pub(crate) fn number_respelling_language(language: &str) -> bool {
+    matches!(language, "json" | "adf" | "databricks" | "databricks-workflow")
+}
+
+/// The projection domain of plugin-sdk #36 `canonical_decimal`: beyond it a spelling keeps its
+/// source identity, so no equivalence is claimed there either.
+const NUMBER_EXPONENT_BOUND: u64 = 1_000_000;
+
+/// The exact canonical decimal (`exact_decimal`) of a strict RFC 8259 §6 number token
+/// `-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?`, or `None`. Declines every spelling the
+/// grammar does not prove (`1_000`, `0x10`, `+1`, `.5`, `1.`, `01`, `Infinity`) and values
+/// whose explicit or effective exponent leaves the ±1,000,000 projection domain. Negative zero
+/// keeps its sign, so `-0` and `0` are never equated (signed zero is observable in IEEE
+/// consumers; the catalogue's number rule forbids hiding it).
+pub(crate) fn exact_json_number(token: &str) -> Option<String> {
+    static GRAMMAR: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let grammar = GRAMMAR.get_or_init(|| {
+        regex::Regex::new(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?$")
+            .expect("valid RFC 8259 number pattern")
+    });
+    if !grammar.is_match(token) {
+        return None;
+    }
+    if let Some(at) = token.find(['e', 'E']) {
+        if token[at + 1..].parse::<i64>().ok()?.unsigned_abs() > NUMBER_EXPONENT_BOUND {
+            return None;
+        }
+    }
+    let exact = exact_decimal(token)?;
+    if let Some((_, exponent)) = exact.split_once('e') {
+        if exponent.parse::<i64>().ok()?.unsigned_abs() > NUMBER_EXPONENT_BOUND {
+            return None;
+        }
+    }
+    Some(exact)
+}
+
+fn node_span(node: &SemanticNode, source: &str, starts: &[usize]) -> Option<(usize, usize)> {
+    let p = &node.position;
+    let start = starts.get(p.start_line as usize)? + p.start_col as usize;
+    let end = starts.get(p.end_line as usize)? + p.end_col as usize;
+    source.get(start..end).map(|_| (start, end))
+}
+
+/// The complete source token of a `number` leaf: its span must hold exactly the label, and the
+/// bytes on either side must not continue a number (a parser that split `1e+22` and kept only
+/// `22` proves nothing about the value).
+fn number_leaf_token(node: &SemanticNode, source: &str, starts: &[usize]) -> Option<(usize, usize)> {
+    if node.node_type != "number" || !node.children.is_empty() {
+        return None;
+    }
+    let (start, end) = node_span(node, source, starts)?;
+    let continues = |c: char| c.is_ascii_alphanumeric() || matches!(c, '.' | '+' | '-' | '_');
+    if source[start..end] != node.label
+        || source[..start].chars().next_back().is_some_and(continues)
+        || source[end..].chars().next().is_some_and(continues)
+    {
+        return None;
+    }
+    Some((start, end))
+}
+
+/// Leaf proof of one respelling: both nodes are whole `number` tokens with different
+/// spellings and the same exact decimal. Returns that canonical value.
+pub(crate) fn number_respelling_pair(
+    old: &SemanticNode, new: &SemanticNode,
+    old_source: &str, new_source: &str, old_starts: &[usize], new_starts: &[usize],
+) -> Option<String> {
+    number_leaf_token(old, old_source, old_starts)?;
+    number_leaf_token(new, new_source, new_starts)?;
+    if old.label == new.label {
+        return None;
+    }
+    let canonical = exact_json_number(&old.label)?;
+    (exact_json_number(&new.label)? == canonical).then_some(canonical)
+}
+
+pub(crate) fn source_line_starts(source: &str) -> Vec<usize> {
+    line_starts(source)
+}
+
+#[derive(PartialEq)]
+enum JsonToken<'s> {
+    Number(String),
+    Other(&'s str),
+}
+
+/// Whitespace-free RFC 8259 token stream (strings kept as exact bytes, numbers as exact
+/// decimals, with the spelling retained for the respelling count). `None` for anything that
+/// is not strictly lexable JSON, including numbers outside `exact_json_number`.
+fn json_tokens(source: &str) -> Option<Vec<(JsonToken<'_>, &str)>> {
+    let bytes = source.as_bytes();
+    let mut tokens = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        let start = i;
+        match bytes[i] {
+            b' ' | b'\t' | b'\n' | b'\r' => { i += 1; continue; }
+            b'{' | b'}' | b'[' | b']' | b':' | b',' => i += 1,
+            b'"' => {
+                i += 1;
+                loop {
+                    match *bytes.get(i)? {
+                        b'\\' => i += 2,
+                        b'"' => { i += 1; break; }
+                        c if c < 0x20 => return None,
+                        _ => i += 1,
+                    }
+                }
+            }
+            b'-' | b'0'..=b'9' => {
+                while i < bytes.len() && matches!(bytes[i], b'0'..=b'9' | b'.' | b'e' | b'E' | b'+' | b'-') {
+                    i += 1;
+                }
+                let text = source.get(start..i)?;
+                tokens.push((JsonToken::Number(exact_json_number(text)?), text));
+                continue;
+            }
+            _ => {
+                let rest = source.get(i..)?;
+                let word = ["true", "false", "null"].into_iter().find(|w| rest.starts_with(w))?;
+                i += word.len();
+            }
+        }
+        let text = source.get(start..i)?;
+        tokens.push((JsonToken::Other(text), text));
+    }
+    Some(tokens)
+}
+
+/// Whether two sources differ ONLY by respelling `number` values with equal exact decimals
+/// (at least one). JSON-lexable sources compare their whole token streams, so layout may
+/// differ too; any other source (Databricks YAML) must keep identical trees and identical
+/// bytes outside the number tokens. Never consults hashes or labels alone.
+pub(crate) fn number_respelling_equivalent(old_tree: &SemanticNode, new_tree: &SemanticNode,
+    old_source: &str, new_source: &str, language: &str) -> bool {
+    if !number_respelling_language(language) || old_source == new_source {
+        return false;
+    }
+    if let (Some(old), Some(new)) = (json_tokens(old_source), json_tokens(new_source)) {
+        return old.len() == new.len()
+            && old.iter().zip(&new).all(|((a, _), (b, _))| a == b)
+            && old.iter().zip(&new).any(|((_, a), (_, b))| a != b);
+    }
+    let (old_starts, new_starts) = (line_starts(old_source), line_starts(new_source));
+    let (mut old_spans, mut new_spans, mut respelled) = (Vec::new(), Vec::new(), 0usize);
+    fn walk(o: &SemanticNode, n: &SemanticNode, c: &mut (&str, &str, &[usize], &[usize],
+        &mut Vec<(usize, usize)>, &mut Vec<(usize, usize)>, &mut usize)) -> bool {
+        if o.node_type != n.node_type || o.children.len() != n.children.len() {
+            return false;
+        }
+        if !o.children.is_empty() {
+            return o.label == n.label && o.children.iter().zip(&n.children).all(|(a, b)| walk(a, b, c));
+        }
+        if let (Some(a), Some(b)) = (number_leaf_token(o, c.0, c.2), number_leaf_token(n, c.1, c.3)) {
+            if o.label != n.label {
+                if number_respelling_pair(o, n, c.0, c.1, c.2, c.3).is_none() {
+                    return false;
+                }
+                *c.6 += 1;
+            }
+            c.4.push(a);
+            c.5.push(b);
+            return true;
+        }
+        o.label == n.label
+            && matches!((node_bytes(o, c.0, c.2), node_bytes(n, c.1, c.3)), (Some(a), Some(b)) if a == b)
+    }
+    let mut context = (old_source, new_source, &old_starts[..], &new_starts[..], &mut old_spans, &mut new_spans, &mut respelled);
+    if !walk(old_tree, new_tree, &mut context) || respelled == 0 {
+        return false;
+    }
+    // Every byte outside the number tokens must be identical, so nothing the tree omits
+    // (a dropped token, a layout or comment change) is hidden by this proof.
+    fn outside<'s>(source: &'s str, spans: &mut [(usize, usize)]) -> Option<Vec<&'s str>> {
+        spans.sort_unstable();
+        let (mut pieces, mut at) = (Vec::new(), 0);
+        for &(start, end) in spans.iter() {
+            if start < at { return None; }
+            pieces.push(&source[at..start]);
+            at = end;
+        }
+        pieces.push(&source[at..]);
+        Some(pieces)
+    }
+    matches!((outside(old_source, &mut old_spans), outside(new_source, &mut new_spans)), (Some(a), Some(b)) if a == b)
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "jts-y_array_ending_with_newline-value-change",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "012489d33a4aa45b64f0903351f62477983480b7445fb810022fc00e8599421c",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "ebf893191b1752ae9ae33f5cb3a51ac4d097750be1dd7fe15be43a34821fa44f",
+  "oracle": "json_typed",
+  "reference": "CPython 3.13.18 json typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

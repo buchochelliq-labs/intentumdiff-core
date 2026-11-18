@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-bool-mixed-case",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "94bebffaba6da94b0321d2be1606cf7a6cebb65744f45b05387c65b6a7f4d22f",
+  "observations": {
+    "error": "Invalid value (at line 1, column 27)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "94bebffaba6da94b0321d2be1606cf7a6cebb65744f45b05387c65b6a7f4d22f",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

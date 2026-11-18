@@ -62,7 +62,39 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         }
     }
 
-    if !changes.is_empty() && rust_literal_invariance_language(language) {
+    if matches!(language, "css" | "scss") {
+        let mut kept = Vec::new();
+        for change in changes {
+            if let Some((group, ignored)) = rust_style_string_equivalence(&change, old_source, new_source, language) {
+                change_groups.push(group);
+                ignored_style_changes.push(ignored);
+            } else {
+                kept.push(change);
+            }
+        }
+        changes = kept;
+    }
+
+    // Number respellings (`9` -> `9.0`) in JSON-number routes: each proved pair leaves the
+    // review; a review it empties must also carry the whole-document proof, else every number
+    // change is kept (suppression alone never claims equivalence, core #252).
+    let mut equivalence_proof = None;
+    if !changes.is_empty() && number_respelling_language(language) {
+        let (kept, groups, ignored) =
+            rust_apply_number_respelling_equivalences(&changes, old_source, new_source, language);
+        if !groups.is_empty() && (!kept.is_empty()
+            || number_respelling_equivalent(&old_tree, &new_tree, old_source, new_source, language))
+        {
+            if kept.is_empty() {
+                equivalence_proof = Some(NUMBER_RESPELLING_RULE);
+            }
+            changes = kept;
+            change_groups.extend(groups);
+            ignored_style_changes.extend(ignored);
+        }
+    }
+
+    if !changes.is_empty() && (rust_literal_invariance_language(language) || embedded_script_value_language(language)) {
         let (kept, groups, ignored) =
             rust_apply_literal_equivalences(changes, old_source, new_source, language);
         changes = kept;
@@ -74,7 +106,67 @@ pub(crate) fn rust_apply_review_invariances(request: &Value) -> Result<Value, St
         "changes": changes,
         "change_groups": change_groups,
         "ignored_style_changes": ignored_style_changes,
+        "equivalence_proof": equivalence_proof,
     }))
+}
+
+/// `keyed_data.number_exact_decimal_respelling`: a MODIFICATION between two whole `number`
+/// leaf tokens whose spellings differ but whose exact decimals (`exact_json_number`) agree.
+/// Only that label-only respelling is removed, so a mixed edit keeps its real change; a value,
+/// sign or precision change, a number<->string change and any spelling the strict RFC 8259
+/// grammar does not prove all stay meaningful. Equal hashes alone are never used as proof.
+pub(crate) fn rust_apply_number_respelling_equivalences(
+    changes: &[Value],
+    old_source: &str,
+    new_source: &str,
+    language: &str,
+) -> (Vec<Value>, Vec<Value>, Vec<Value>) {
+    let (old_starts, new_starts) = (source_line_starts(old_source), source_line_starts(new_source));
+    let mut kept = Vec::new();
+    let mut groups = Vec::new();
+    let mut ignored = Vec::new();
+    for change in changes {
+        let proved = (rust_change_type(change) == "MODIFICATION")
+            .then(|| Some((rust_change_node(change, "old_node")?, rust_change_node(change, "new_node")?)))
+            .flatten()
+            .and_then(|(old, new)| {
+                let canonical = number_respelling_pair(
+                    &old, &new, old_source, new_source, &old_starts, &new_starts)?;
+                Some((old, new, canonical))
+            });
+        let Some((old, new, canonical)) = proved else {
+            kept.push(change.clone());
+            continue;
+        };
+        let metadata = json!({
+            "index_space": "invariance_input",
+            "reason": "Both number spellings denote the same exact decimal value; only the spelling changed.",
+            "equivalence_kind": "canonical_value_equivalence",
+            "canonical_old": format!("decimal({canonical})"),
+            "canonical_new": format!("decimal({canonical})"),
+            "old_label": old.label,
+            "new_label": new.label,
+            "old_node_type": old.node_type,
+            "new_node_type": new.node_type,
+            "risk": "green",
+            "language": language,
+        });
+        groups.push(json!({
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [old.label],
+            "new_labels": [new.label],
+            "old_node_ids": [old.id],
+            "new_node_ids": [new.id],
+            "confidence": 1.0,
+            "rule_id": NUMBER_RESPELLING_RULE,
+            "metadata": metadata.clone(),
+        }));
+        let mut item = metadata;
+        item["rule_id"] = json!(NUMBER_RESPELLING_RULE);
+        ignored.push(item);
+    }
+    (kept, groups, ignored)
 }
 
 pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, String> {
@@ -120,6 +212,13 @@ pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, S
         }
     }
 
+    // Name the comparison that actually established equivalence (#248): the generic text
+    // route compares lines and never builds a parser tree.
+    let reason = if request.get("evidence_source").and_then(Value::as_str) == Some("text_lines") {
+        "The line-level text comparison found no added, removed, changed or relocated content lines, so only blank-line or line-ending layout edits were ignored while preserving source-span evidence."
+    } else {
+        "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence."
+    };
     for (occurrence, evidence) in rust_changed_source_evidence(old_source, new_source)
         .into_iter()
         .filter(|item| !rust_evidence_covered_by_literal(item, &literal_spans))
@@ -128,7 +227,7 @@ pub(crate) fn rust_build_style_only_evidence(request: &Value) -> Result<Value, S
         let (group, ignored_item) = rust_source_group(
             &evidence,
             "generic.style_only_shortcut.source_equivalence",
-            "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+            reason,
             "syntactic_trivia",
             "amber",
             language,
@@ -217,6 +316,66 @@ pub(crate) fn rust_empty_invariance_result() -> Value {
     })
 }
 
+// Synthetic style values retain raw source spelling. Suppress only a whole,
+// matched leaf literal whose source bytes prove the same decoded string.
+fn rust_style_string_equivalence(
+    change: &Value, old_source: &str, new_source: &str, language: &str,
+) -> Option<(Value, Value)> {
+    if rust_change_type(change) != "MODIFICATION" { return None; }
+    let old = rust_change_node(change, "old_node")?;
+    let new = rust_change_node(change, "new_node")?;
+    if old.node_type != "property_value" || new.node_type != "property_value"
+        || !old.is_leaf() || !new.is_leaf() { return None; }
+    let old_span = rust_source_span_offsets(old_source, &old.position)?;
+    let new_span = rust_source_span_offsets(new_source, &new.position)?;
+    let old_raw = old_source.get(old_span.0..old_span.1)?;
+    let new_raw = new_source.get(new_span.0..new_span.1)?;
+    if old_raw != old.label || new_raw != new.label || old_raw == new_raw { return None; }
+    let decoded = decode_style_string(old_raw)?;
+    if decoded != decode_style_string(new_raw)? { return None; }
+    let evidence = RustSourceLiteralEvidence {
+        old_label: old_raw.into(), new_label: new_raw.into(),
+        canonical: format!("string({decoded})"), old_span, new_span,
+    };
+    let (mut group, ignored) = rust_source_literal_group(
+        &evidence, "core.style_string.decoded_value.safe",
+        "Both complete style string literals decode to the same plain string value.",
+        "canonical_value_equivalence", "amber", language, 0, "source_literal", 0.95,
+    );
+    group["old_node_ids"] = json!([old.id]);
+    group["new_node_ids"] = json!([new.id]);
+    Some((group, ignored))
+}
+
+// CSS/Sass escapes differ from programming-language escapes (e.g. \\n is
+// not a newline). Accept only quotes, backslashes and escaped physical line
+// endings here; unsupported escapes and Sass interpolation remain meaningful.
+fn decode_style_string(raw: &str) -> Option<String> {
+    let quote = raw.chars().next()?;
+    if !matches!(quote, '\'' | '"') || raw.len() < 2 || !raw.ends_with(quote)
+        || raw.contains("#{") { return None; }
+    let mut chars = raw[1..raw.len() - 1].chars().peekable();
+    let mut value = String::new();
+    while let Some(ch) = chars.next() {
+        if ch == quote || matches!(ch, '\r' | '\n' | '\u{000c}') { return None; }
+        if ch != '\\' { value.push(ch); continue; }
+        match chars.next()? {
+            ch @ ('\'' | '"' | '\\') => value.push(ch),
+            '\n' | '\u{000c}' => {},
+            '\r' => { if chars.peek() == Some(&'\n') { chars.next(); } },
+            _ => return None,
+        }
+    }
+    Some(value)
+}
+
+/// Component languages whose embedded JavaScript declaration initializers reach the core as
+/// `declaration_value` leaves (#272). Only the leaf-literal equivalence applies to them; the
+/// whole-source literal scans stay off, since their template markup is not JavaScript.
+pub(crate) fn embedded_script_value_language(language: &str) -> bool {
+    matches!(language, "astro" | "svelte")
+}
+
 pub(crate) fn rust_literal_invariance_language(language: &str) -> bool {
     matches!(
         language,
@@ -233,15 +392,86 @@ pub(crate) fn rust_apply_literal_equivalences(
     let mut kept = Vec::new();
     let mut groups = Vec::new();
     let mut ignored = Vec::new();
-    for (idx, change) in changes.into_iter().enumerate() {
-        if let Some((group, item)) = rust_integer_literal_equivalence_group(idx, &change, language)
+    for change in changes {
+        // A literal nested in a parent draft proves only that literal's
+        // spelling equivalent. Keep the parent draft whenever another paired
+        // node also changed, since dropping it would hide that semantic delta.
+        if let (Some(old), Some(new)) = (
+            rust_change_node(&change, "old_node"),
+            rust_change_node(&change, "new_node"),
+        ) {
+            if !old.children.is_empty() || !new.children.is_empty() {
+                let proven_literal_id = rust_integer_literal_equivalence_group(&change, language)
+                    .or_else(|| {
+                        rust_string_literal_equivalence_group(
+                            &change, old_source, new_source, language,
+                        )
+                    })
+                    .and_then(|(group, _)| {
+                        group["old_node_ids"].as_array()?.first()?.as_str().map(str::to_owned)
+                    });
+                let nodes = rust_owned_nodes_by_id(&new);
+                let old_nodes = rust_owned_nodes_by_id(&old);
+                let proven_literal_ancestors = proven_literal_id
+                    .as_deref()
+                    .map(|literal_id| {
+                        old.descendants()
+                            .into_iter()
+                            .filter(|node| rust_node_contains_id(node, literal_id))
+                            .map(|node| node.id.clone())
+                            .collect::<HashSet<_>>()
+                    })
+                    .unwrap_or_default();
+                let has_other_delta = old.node_type != new.node_type
+                    || old.label != new.label
+                    || old.parent_type != new.parent_type
+                    || old.type_info != new.type_info
+                    || old.facts != new.facts
+                    || proven_literal_ancestors.iter().any(|id| {
+                        let (Some(prior), Some(current)) =
+                            (old_nodes.get(id), nodes.get(id.as_str()))
+                        else {
+                            return true;
+                        };
+                        opaque_payload::changed(prior, current, old_source, new_source, language)
+                    })
+                    || old.descendants().iter().any(|prior| {
+                        if proven_literal_id.as_deref() == Some(prior.id.as_str()) {
+                            return false;
+                        }
+                        let Some(current) = nodes.get(prior.id.as_str()) else {
+                            return true;
+                        };
+                        prior.node_type != current.node_type
+                            || prior.label != current.label
+                            || prior.parent_type != current.parent_type
+                            || prior.type_info != current.type_info
+                            || prior.facts != current.facts
+                            || (!proven_literal_ancestors.contains(&prior.id)
+                                && prior.structural_hash != current.structural_hash)
+                    })
+                    || nodes.keys().any(|id| !old_nodes.contains_key(id));
+                if has_other_delta {
+                    kept.push(change);
+                    continue;
+                }
+            }
+        }
+        if let (Some(old),Some(new)) = (rust_change_node(&change,"old_node"),rust_change_node(&change,"new_node")) {
+            if (!old.children.is_empty() || !new.children.is_empty())
+                && opaque_payload::changed(&old,&new,old_source,new_source,language) {
+                kept.push(change);
+                continue; // A descendant literal cannot prove the parent's own payload equivalent.
+            }
+        }
+        if let Some((group, item)) = rust_integer_literal_equivalence_group(&change, language)
         {
             groups.push(group);
             ignored.push(item);
             continue;
         }
         if let Some((group, item)) =
-            rust_string_literal_equivalence_group(idx, &change, old_source, new_source, language)
+            rust_string_literal_equivalence_group(&change, old_source, new_source, language)
         {
             groups.push(group);
             ignored.push(item);
@@ -253,7 +483,6 @@ pub(crate) fn rust_apply_literal_equivalences(
 }
 
 pub(crate) fn rust_integer_literal_equivalence_group(
-    raw_index: usize,
     change: &Value,
     language: &str,
 ) -> Option<(Value, Value)> {
@@ -286,7 +515,7 @@ pub(crate) fn rust_integer_literal_equivalence_group(
     });
     let group = json!({
         "kind": "IGNORED_STYLE",
-        "raw_change_indices": [raw_index],
+        "raw_change_indices": [],
         "old_labels": [old_node.label],
         "new_labels": [new_node.label],
         "old_node_ids": [old_node.id],
@@ -301,7 +530,6 @@ pub(crate) fn rust_integer_literal_equivalence_group(
 }
 
 pub(crate) fn rust_string_literal_equivalence_group(
-    raw_index: usize,
     change: &Value,
     old_source: &str,
     new_source: &str,
@@ -312,7 +540,11 @@ pub(crate) fn rust_string_literal_equivalence_group(
     }
     let (old_node, new_node) = rust_first_literal_pair(change, "string")
         .or_else(|| rust_first_literal_pair(change, "string_literal"))
-        .or_else(|| rust_first_literal_pair(change, "character_literal"))?;
+        .or_else(|| rust_first_literal_pair(change, "character_literal"))
+        // #272: Astro frontmatter / Svelte <script> declarations project the initializer as a
+        // `declaration_value` leaf; decode it as the JavaScript string it is.
+        .or_else(|| embedded_script_value_language(language)
+            .then(|| rust_first_literal_pair(change, "declaration_value")).flatten())?;
     if !(old_node.is_leaf() && new_node.is_leaf()) {
         return None;
     }
@@ -346,7 +578,6 @@ pub(crate) fn rust_string_literal_equivalence_group(
         "invariance_input",
         0.95,
     );
-    group["raw_change_indices"] = json!([raw_index]);
     group["old_node_ids"] = json!([old_node.id]);
     group["new_node_ids"] = json!([new_node.id]);
     group["old_labels"] = json!([old_raw]);
@@ -410,6 +641,10 @@ pub(crate) fn rust_owned_nodes_by_id(root: &SemanticNode) -> HashMap<String, Sem
     result
 }
 
+fn rust_node_contains_id(node: &SemanticNode, id: &str) -> bool {
+    node.id == id || node.children.iter().any(|child| rust_node_contains_id(child, id))
+}
+
 pub(crate) fn canonical_integer_literal_for_invariance(label: &str) -> Option<String> {
     let mut stripped = label.trim();
     let mut sign = "";
@@ -464,7 +699,7 @@ pub(crate) fn decode_invariance_string_literal(raw: &str, language: &str) -> Opt
         {
             return None;
         }
-    } else if matches!(language, "javascript" | "typescript" | "tsx" | "csharp") {
+    } else if matches!(language, "javascript" | "typescript" | "tsx" | "csharp") || embedded_script_value_language(language) {
         if !prefix.is_empty() || trimmed.starts_with(['@', '$']) {
             return None;
         }
@@ -903,7 +1138,6 @@ pub(crate) fn rust_css_color_equivalence(
     if evidence.is_empty() {
         return None;
     }
-    let indices: Vec<usize> = (0..changes.len()).collect();
     let old_labels = rust_labels_from_change_values(changes, "old_node");
     let new_labels = rust_labels_from_change_values(changes, "new_node");
     let old_node_ids = rust_node_ids_from_change_values(changes, "old_node")
@@ -929,7 +1163,7 @@ pub(crate) fn rust_css_color_equivalence(
         });
         groups.push(json!({
             "kind": "IGNORED_STYLE",
-            "raw_change_indices": indices.clone(),
+            "raw_change_indices": [],
             "old_labels": rust_unique_strings([old_labels.clone(), vec![item.old_label.clone()]].concat()),
             "new_labels": rust_unique_strings([new_labels.clone(), vec![item.new_label.clone()]].concat()),
             "old_node_ids": old_node_ids.clone(),
@@ -1211,9 +1445,9 @@ pub(crate) fn rust_unique_strings(values: Vec<String>) -> Vec<String> {
 
 pub(crate) fn rust_source_span_offsets(source: &str, position: &NodePosition) -> Option<(usize, usize)> {
     let offsets = rust_line_offsets(source);
-    let start = rust_offset_from_line_col(&offsets, position.start_line, position.start_col)?;
-    let end = rust_offset_from_line_col(&offsets, position.end_line, position.end_col)?;
-    (start <= end && end <= source.len()).then_some((start, end))
+    let start = rust_offset_from_line_col(source, &offsets, position.start_line, position.start_col)?;
+    let end = rust_offset_from_line_col(source, &offsets, position.end_line, position.end_col)?;
+    (start <= end).then_some((start, end))
 }
 
 pub(crate) fn rust_line_offsets(source: &str) -> Vec<usize> {
@@ -1226,10 +1460,19 @@ pub(crate) fn rust_line_offsets(source: &str) -> Vec<usize> {
     offsets
 }
 
-pub(crate) fn rust_offset_from_line_col(offsets: &[usize], line: u32, col: u32) -> Option<usize> {
-    offsets
-        .get(line as usize)
-        .map(|line_start| line_start + col as usize)
+pub(crate) fn rust_offset_from_line_col(source: &str, offsets: &[usize], line: u32, col: u32) -> Option<usize> {
+    let line = line as usize;
+    let start = *offsets.get(line)?;
+    // Columns are UTF-8 byte offsets within the line's content, excluding CRLF.
+    // Keep original line starts so multiline spans still include every newline byte.
+    let end = if let Some(next) = offsets.get(line.checked_add(1)?) {
+        let end = next.checked_sub(1)?;
+        if end > start && source.as_bytes()[end - 1] == b'\r' { end - 1 } else { end }
+    } else {
+        source.len()
+    };
+    let offset = start.checked_add(col as usize)?;
+    (offset <= end && source.is_char_boundary(offset)).then_some(offset)
 }
 
 /// Style evidence must name unchanged matched calls, never surviving semantic edits.
@@ -1305,21 +1548,29 @@ pub(crate) fn apply_python_literal_invariances(
     old_source: &str,
     new_source: &str,
     finalization: &mut PythonReviewFinalization,
+    language: &str,
 ) {
+    let first_literal_group = finalization.change_groups.len();
     let mut remove_indices = HashSet::new();
     let mut covered_literal_labels = HashSet::new();
     for (idx, change) in changes.iter().enumerate() {
         if change.change_type != "MODIFICATION" {
             continue;
         }
-        if let Some(group) = integer_literal_equivalence_group(idx, change) {
+        if let (Some(old),Some(new)) = (change.old_node,change.new_node) {
+            if (!old.children.is_empty() || !new.children.is_empty())
+                && opaque_payload::changed(old,new,old_source,new_source,language) {
+                continue;
+            }
+        }
+        if let Some(group) = integer_literal_equivalence_group(change) {
             collect_literal_pair_labels(change, "integer", &mut covered_literal_labels);
             remove_indices.insert(idx);
             finalization.change_groups.push(group.0);
             finalization.ignored_style_changes.push(group.1);
             continue;
         }
-        if let Some(group) = string_literal_equivalence_group(idx, change, old_source, new_source) {
+        if let Some(group) = string_literal_equivalence_group(change, old_source, new_source, language) {
             collect_literal_pair_labels(change, "string", &mut covered_literal_labels);
             remove_indices.insert(idx);
             finalization.change_groups.push(group.0);
@@ -1327,7 +1578,7 @@ pub(crate) fn apply_python_literal_invariances(
         }
     }
     for (old_idx, new_idx, group, ignored) in
-        literal_add_delete_equivalence_groups(changes, old_source, new_source)
+        literal_add_delete_equivalence_groups(changes, old_source, new_source, language)
     {
         remove_indices.insert(old_idx);
         remove_indices.insert(new_idx);
@@ -1336,7 +1587,7 @@ pub(crate) fn apply_python_literal_invariances(
         finalization.ignored_style_changes.push(ignored);
     }
     if let Some((group, ignored)) =
-        source_string_quote_equivalence_group(old_tree, new_tree, old_source, new_source)
+        source_string_quote_equivalence_group(old_tree, new_tree, old_source, new_source, language)
     {
         if !finalization.change_groups.iter().any(|item| {
             item.get("rule_id").and_then(Value::as_str)
@@ -1347,7 +1598,29 @@ pub(crate) fn apply_python_literal_invariances(
             finalization.ignored_style_changes.push(ignored);
         }
     }
-    if !covered_literal_labels.is_empty() {
+    if language == "python" {
+        // A value occurring elsewhere in the file cannot own this edit. In
+        // particular, a quote-only proof for 'plain' must not erase an independent
+        // 'plain' -> b'plain' change through their formerly shared decoded label.
+        let mut covered_old_ids = HashSet::new();
+        let mut covered_new_ids = HashSet::new();
+        for group in &finalization.change_groups[first_literal_group..] {
+            for (key, covered) in [("old_node_ids", &mut covered_old_ids),
+                                   ("new_node_ids", &mut covered_new_ids)] {
+                if let Some(ids) = group.get(key).and_then(Value::as_array) {
+                    covered.extend(ids.iter().filter_map(Value::as_str));
+                }
+            }
+        }
+        for (idx, change) in changes.iter().enumerate() {
+            let covered = match change.change_type {
+                "DELETION" => change.old_node.is_some_and(|node| covered_old_ids.contains(node.id.as_str())),
+                "ADDITION" => change.new_node.is_some_and(|node| covered_new_ids.contains(node.id.as_str())),
+                _ => false,
+            };
+            if covered { remove_indices.insert(idx); }
+        }
+    } else if !covered_literal_labels.is_empty() {
         for (idx, change) in changes.iter().enumerate() {
             if !matches!(change.change_type, "ADDITION" | "DELETION") {
                 continue;
@@ -1422,7 +1695,6 @@ pub(crate) fn collect_invariance_group_labels(group: &Value, labels: &mut HashSe
 }
 
 pub(crate) fn integer_literal_equivalence_group(
-    raw_index: usize,
     change: &ChangeDraft<'_>,
 ) -> Option<(Value, Value)> {
     let (old_node, new_node) = first_literal_pair(change, "integer")?;
@@ -1433,7 +1705,7 @@ pub(crate) fn integer_literal_equivalence_group(
     }
     let group = json!({
         "kind": "IGNORED_STYLE",
-        "raw_change_indices": [raw_index],
+        "raw_change_indices": [],
         "old_labels": [old_node.label],
         "new_labels": [new_node.label],
         "old_node_ids": [old_node.id],
@@ -1458,22 +1730,23 @@ pub(crate) fn integer_literal_equivalence_group(
 }
 
 pub(crate) fn string_literal_equivalence_group(
-    raw_index: usize,
     change: &ChangeDraft<'_>,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
     let (old_node, new_node) = first_literal_pair(change, "string")?;
+    let old_span = rust_source_span_offsets(old_source, &old_node.position)?;
+    let new_span = rust_source_span_offsets(new_source, &new_node.position)?;
     let old_raw = source_slice(old_source, &old_node.position)?;
     let new_raw = source_slice(new_source, &new_node.position)?;
-    let old_decoded = decode_simple_python_string(old_raw)?;
-    let new_decoded = decode_simple_python_string(new_raw)?;
+    let (old_decoded, new_decoded) = literal_equivalent_values(old_raw, new_raw, language)?;
     if old_decoded != new_decoded || old_raw == new_raw {
         return None;
     }
     let group = json!({
         "kind": "IGNORED_STYLE",
-        "raw_change_indices": [raw_index],
+        "raw_change_indices": [],
         "old_labels": [old_decoded],
         "new_labels": [new_decoded],
         "old_node_ids": [old_node.id],
@@ -1486,8 +1759,8 @@ pub(crate) fn string_literal_equivalence_group(
             "old_label": old_raw,
             "new_label": new_raw,
             "evidence_depth": "source_span",
-            "old_span": [old_node.position.start_col, old_node.position.end_col],
-            "new_span": [new_node.position.start_col, new_node.position.end_col],
+            "old_span": [old_span.0, old_span.1],
+            "new_span": [new_span.0, new_span.1],
         },
     });
     let ignored = json!({
@@ -1504,6 +1777,7 @@ pub(crate) fn literal_add_delete_equivalence_groups(
     changes: &[ChangeDraft<'_>],
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Vec<(usize, usize, Value, Value)> {
     let mut result = Vec::new();
     let mut used_deletions = HashSet::new();
@@ -1527,10 +1801,10 @@ pub(crate) fn literal_add_delete_equivalence_groups(
             }
             let pair = match old_node.node_type.as_str() {
                 "integer" => {
-                    integer_literal_equivalence_values(old_idx, new_idx, old_node, new_node)
+                    integer_literal_equivalence_values(old_node, new_node)
                 }
                 "string" => string_literal_equivalence_values(
-                    old_idx, new_idx, old_node, new_node, old_source, new_source,
+                    old_node, new_node, old_source, new_source, language,
                 ),
                 _ => None,
             };
@@ -1547,8 +1821,6 @@ pub(crate) fn literal_add_delete_equivalence_groups(
 }
 
 pub(crate) fn integer_literal_equivalence_values(
-    old_idx: usize,
-    new_idx: usize,
     old_node: &SemanticNode,
     new_node: &SemanticNode,
 ) -> Option<(Value, Value)> {
@@ -1559,7 +1831,7 @@ pub(crate) fn integer_literal_equivalence_values(
     }
     let group = json!({
         "kind": "IGNORED_STYLE",
-        "raw_change_indices": [old_idx, new_idx],
+        "raw_change_indices": [],
         "old_labels": [old_node.label],
         "new_labels": [new_node.label],
         "old_node_ids": [old_node.id],
@@ -1584,24 +1856,25 @@ pub(crate) fn integer_literal_equivalence_values(
 }
 
 pub(crate) fn string_literal_equivalence_values(
-    old_idx: usize,
-    new_idx: usize,
     old_node: &SemanticNode,
     new_node: &SemanticNode,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
+    let old_span = rust_source_span_offsets(old_source, &old_node.position)?;
+    let new_span = rust_source_span_offsets(new_source, &new_node.position)?;
     let old_raw = source_slice(old_source, &old_node.position)?;
     let new_raw = source_slice(new_source, &new_node.position)?;
-    let old_decoded = decode_simple_python_string(old_raw)?;
-    let new_decoded = decode_simple_python_string(new_raw)?;
+    let (old_decoded, new_decoded) = literal_equivalent_values(old_raw, new_raw, language)?;
     if old_decoded != new_decoded || old_raw == new_raw {
         return None;
     }
     Some(string_literal_equivalence_payload(
-        &[old_idx, new_idx],
         old_node,
         new_node,
+        old_span,
+        new_span,
         old_raw,
         new_raw,
         &old_decoded,
@@ -1614,6 +1887,7 @@ pub(crate) fn source_string_quote_equivalence_group(
     new_tree: &SemanticNode,
     old_source: &str,
     new_source: &str,
+    language: &str,
 ) -> Option<(Value, Value)> {
     if old_source == new_source {
         return None;
@@ -1624,19 +1898,21 @@ pub(crate) fn source_string_quote_equivalence_group(
             .into_iter()
             .map(|(node, raw, decoded)| (node.id.as_str(), (node, raw, decoded)))
             .collect();
-    for (old_node, old_raw, old_decoded) in old_literals {
-        let Some((new_node, new_raw, new_decoded)) = new_by_id.get(old_node.id.as_str()) else {
+    for (old_node, old_raw, _) in old_literals {
+        let Some((new_node, new_raw, _)) = new_by_id.get(old_node.id.as_str()) else {
             continue;
         };
-        if old_decoded == new_decoded.as_str() && old_raw != new_raw.as_str() {
+        if old_raw == new_raw.as_str() { continue; }
+        if let Some((old_decoded, new_decoded)) = literal_equivalent_values(&old_raw, new_raw, language) {
             return Some(string_literal_equivalence_payload(
-                &[],
                 old_node,
                 *new_node,
+                rust_source_span_offsets(old_source, &old_node.position)?,
+                rust_source_span_offsets(new_source, &new_node.position)?,
                 &old_raw,
                 new_raw,
                 &old_decoded,
-                new_decoded,
+                &new_decoded,
             ));
         }
     }
@@ -1644,9 +1920,10 @@ pub(crate) fn source_string_quote_equivalence_group(
 }
 
 pub(crate) fn string_literal_equivalence_payload(
-    raw_indices: &[usize],
     old_node: &SemanticNode,
     new_node: &SemanticNode,
+    old_span: (usize, usize),
+    new_span: (usize, usize),
     old_raw: &str,
     new_raw: &str,
     old_decoded: &str,
@@ -1654,7 +1931,7 @@ pub(crate) fn string_literal_equivalence_payload(
 ) -> (Value, Value) {
     let group = json!({
         "kind": "IGNORED_STYLE",
-        "raw_change_indices": raw_indices,
+        "raw_change_indices": [],
         "old_labels": [old_decoded],
         "new_labels": [new_decoded],
         "old_node_ids": [old_node.id],
@@ -1667,8 +1944,8 @@ pub(crate) fn string_literal_equivalence_payload(
             "old_label": old_raw,
             "new_label": new_raw,
             "evidence_depth": "source_span",
-            "old_span": [old_node.position.start_col, old_node.position.end_col],
-            "new_span": [new_node.position.start_col, new_node.position.end_col],
+            "old_span": [old_span.0, old_span.1],
+            "new_span": [new_span.0, new_span.1],
         },
     });
     let ignored = json!({
@@ -1714,11 +1991,24 @@ pub(crate) fn canonical_integer_literal(label: &str) -> Option<String> {
 }
 
 pub(crate) fn source_slice<'a>(source: &'a str, position: &NodePosition) -> Option<&'a str> {
+    // Literal equivalence uses a deliberately single-line decoder. Coordinate
+    // conversion must not expand which Python literal forms it can certify.
     if position.start_line != position.end_line {
         return None;
     }
-    let line = source.lines().nth(position.start_line as usize)?;
-    line.get(position.start_col as usize..position.end_col as usize)
+    let (start, end) = rust_source_span_offsets(source, position)?;
+    source.get(start..end)
+}
+
+/// Native Python proofs retain runtime type and escape interpretation. Other
+/// language routes keep their existing decoder until their own contracts change.
+fn literal_equivalent_values(old: &str, new: &str, language: &str) -> Option<(String, String)> {
+    if language == "python" {
+        return python_literals::equivalent_values(old, new);
+    }
+    let old = decode_simple_python_string(old)?;
+    let new = decode_simple_python_string(new)?;
+    (old == new).then_some((old, new))
 }
 
 pub(crate) fn decode_simple_python_string(raw: &str) -> Option<String> {
@@ -1892,5 +2182,186 @@ mod css_value_scope_tests {
         ] {
             assert_ne!(canonical(old), canonical(new), "{old} versus {new}");
         }
+    }
+}
+
+#[cfg(test)]
+mod source_evidence_integrity_tests {
+    use super::*;
+
+    fn position(sl: u32, sc: u32, el: u32, ec: u32) -> NodePosition {
+        NodePosition { start_line: sl, start_col: sc, end_line: el, end_col: ec }
+    }
+
+    fn node(id: &str, pos: NodePosition) -> SemanticNode {
+        serde_json::from_value(json!({"id":id,"node_type":"string","label":"same",
+            "structural_hash":"same","position":pos,"children":[]})).unwrap()
+    }
+
+    #[test]
+    fn source_offsets_validate_rows_columns_and_utf8_boundaries() {
+        let source = "é\r\n雪\nlast";
+        assert_eq!(rust_source_span_offsets(source, &position(1,0,1,3)), Some((4,7)));
+        assert_eq!(rust_source_span_offsets(source, &position(0,0,1,3)), Some((0,7)));
+        for pos in [position(0,1,0,2), position(1,0,1,2), position(0,0,0,5),
+            position(0,0,0,3), position(7,0,7,0), position(2,4,2,3), position(1,u32::MAX,1,u32::MAX)] {
+            assert!(rust_source_span_offsets(source, &pos).is_none(), "invalid position accepted: {pos:?}");
+        }
+        assert_eq!(rust_source_span_offsets("x\n", &position(1,0,1,0)), Some((2,2)));
+        assert_eq!(rust_source_span_offsets("", &position(0,0,0,0)), Some((0,0)));
+    }
+
+    #[test]
+    fn multiline_offsets_preserve_crlf_without_expanding_literal_proofs() {
+        let source = "// é\r\nvalue = \"\"\"雪\r\nline\"\"\"\r\n";
+        let pos = position(1,8,2,7);
+        let (start, end) = rust_source_span_offsets(source, &pos).unwrap();
+        assert_eq!(source.get(start..end), Some("\"\"\"雪\r\nline\"\"\""));
+        assert!(source_slice(source, &pos).is_none());
+    }
+
+    #[test]
+    fn literal_evidence_producers_report_full_offsets_after_unicode_crlf() {
+        let old_source = "// é\r\nvalue = '雪'\r\n";
+        let new_source = "// 雪雪\r\nvalue = \"雪\"\r\n";
+        let old = node("s", position(1,8,1,13));
+        let new = node("s", position(1,8,1,13));
+        let change = ChangeDraft { change_type:"MODIFICATION", old_node:Some(&old), new_node:Some(&new),
+            old_index:None, new_index:None, confidence:1.0, description:String::new(), refactoring_kind:None, text_diff:None };
+        let modification = string_literal_equivalence_group(&change, old_source, new_source, "python")
+            .expect("multiline equivalent literal evidence").0;
+        let pair = string_literal_equivalence_values(&old, &new, old_source, new_source, "python")
+            .expect("multiline add/delete evidence").0;
+        for group in [modification, pair] {
+            assert_eq!(group["metadata"]["old_span"], json!([15,20]));
+            assert_eq!(group["metadata"]["new_span"], json!([19,24]));
+            assert_eq!(group["raw_change_indices"], json!([]));
+        }
+    }
+
+    #[test]
+    fn integer_invariance_producers_own_no_removed_changes() {
+        let mut old = node("i", position(0,0,0,2));
+        old.node_type = "integer".to_owned();
+        old.label = "1_0".to_owned();
+        let mut new = old.clone();
+        new.label = "10".to_owned();
+        let (_, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old,"new_node":new})], "1_0", "10", "python");
+        assert_eq!(groups[0]["raw_change_indices"], json!([]));
+        let change = ChangeDraft { change_type:"MODIFICATION", old_node:Some(&old), new_node:Some(&new),
+            old_index:None, new_index:None, confidence:1.0, description:String::new(), refactoring_kind:None, text_diff:None };
+        assert_eq!(integer_literal_equivalence_group(&change).unwrap().0["raw_change_indices"], json!([]));
+        assert_eq!(integer_literal_equivalence_values(&old, &new).unwrap().0["raw_change_indices"], json!([]));
+    }
+
+    #[test]
+    fn literal_invariance_producer_owns_no_removed_change() {
+        let old = node("s", position(0,0,0,3));
+        let new = node("s", position(0,0,0,3));
+        let (kept, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old,"new_node":new})], "'x'", "\"x\"", "python");
+        assert!(kept.is_empty());
+        assert_eq!(groups[0]["raw_change_indices"], json!([]));
+        assert_eq!(groups[0]["old_node_ids"], json!(["s"]));
+        assert_eq!(groups[0]["metadata"]["index_space"], "invariance_input");
+    }
+
+    #[test]
+    fn nested_literal_equivalence_keeps_unrelated_identifier_delta() {
+        let mut old_literal = node("n", position(0, 0, 0, 2));
+        old_literal.node_type = "integer".to_owned();
+        old_literal.label = "10".to_owned();
+        let mut new_literal = old_literal.clone();
+        new_literal.label = "0xa".to_owned();
+        let mut old_name = node("name", position(0, 3, 0, 7));
+        old_name.node_type = "identifier".to_owned();
+        old_name.label = "safe".to_owned();
+        let mut new_name = old_name.clone();
+        new_name.label = "danger".to_owned();
+        let mut old_parent = node("root", position(0, 0, 0, 7));
+        old_parent.node_type = "function_definition".to_owned();
+        old_parent.children = vec![old_literal, old_name];
+        let mut new_parent = old_parent.clone();
+        new_parent.position = position(0, 0, 0, 10);
+        new_parent.children = vec![new_literal, new_name];
+
+        let (kept, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent})],
+            "10 safe", "0xa danger", "python");
+        assert_eq!(kept.len(), 1, "parent modification carries the identifier change");
+        assert!(groups.is_empty(), "literal equivalence cannot consume the enclosing change");
+
+        let mut hash_only_name = old_parent.children[1].clone();
+        hash_only_name.structural_hash = "changed-hash".to_owned();
+        hash_only_name.facts = Some(json!({"semantic_value":"changed"}));
+        hash_only_name.position = position(0, 4, 0, 8);
+        let mut hash_only_parent = old_parent.clone();
+        hash_only_parent.position = position(0, 0, 0, 8);
+        hash_only_parent.children = vec![new_parent.children[0].clone(), hash_only_name];
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":hash_only_parent})],
+            "10 safe", "0xa safe", "python");
+        assert_eq!(kept.len(), 1, "paired sibling hash/facts delta must remain visible");
+
+        let mut old_facts_parent = old_parent.clone();
+        old_facts_parent.facts = Some(json!({"semantic_value":"before"}));
+        let mut new_facts_parent = old_facts_parent.clone();
+        new_facts_parent.facts = Some(json!({"semantic_value":"after"}));
+        new_facts_parent.position = position(0, 0, 0, 8);
+        new_facts_parent.children[0] = new_parent.children[0].clone();
+        new_facts_parent.children[1].position = position(0, 4, 0, 8);
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_facts_parent,"new_node":new_facts_parent})],
+            "10 safe", "0xa safe", "python");
+        assert_eq!(kept.len(), 1, "parent facts delta must remain visible");
+
+        let mut old_intermediate = node("args", position(0, 1, 0, 11));
+        old_intermediate.node_type = "argument_list".to_owned();
+        old_intermediate.structural_hash = "old-args".to_owned();
+        let mut new_intermediate = old_intermediate.clone();
+        new_intermediate.structural_hash = "new-args".to_owned();
+        let mut old_nested_literal = old_parent.children[0].clone();
+        old_nested_literal.position = position(0, 2, 0, 4);
+        let mut new_nested_literal = new_parent.children[0].clone();
+        new_nested_literal.position = position(0, 2, 0, 5);
+        let mut old_nested_name = old_parent.children[1].clone();
+        old_nested_name.position = position(0, 6, 0, 10);
+        let mut new_nested_name = old_nested_name.clone();
+        new_nested_name.position = position(0, 7, 0, 11);
+        old_intermediate.children = vec![old_nested_literal, old_nested_name];
+        new_intermediate.children = vec![new_nested_literal, new_nested_name];
+        let mut old_nested_parent = node("outer", position(0, 0, 0, 11));
+        old_nested_parent.node_type = "function_definition".to_owned();
+        old_nested_parent.structural_hash = "old-outer".to_owned();
+        old_nested_parent.children = vec![old_intermediate];
+        let mut new_nested_parent = old_nested_parent.clone();
+        new_nested_parent.position = position(0, 0, 0, 12);
+        new_nested_parent.structural_hash = "new-outer".to_owned();
+        new_nested_parent.children = vec![new_intermediate];
+        let (kept, _, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_nested_parent,"new_node":new_nested_parent})],
+            "f(10, safe)", "f(0xa; safe)", "python");
+        assert_eq!(kept.len(), 1, "intermediate source-owned token delta must remain visible");
+    }
+
+    #[test]
+    fn nested_literal_only_equivalence_still_suppresses_parent_draft() {
+        let mut old_literal = node("n", position(0, 0, 0, 2));
+        old_literal.node_type = "integer".to_owned();
+        old_literal.label = "10".to_owned();
+        let mut new_literal = old_literal.clone();
+        new_literal.label = "0xa".to_owned();
+        let mut old_parent = node("root", position(0, 0, 0, 2));
+        old_parent.node_type = "argument_list".to_owned();
+        old_parent.children = vec![old_literal];
+        let mut new_parent = old_parent.clone();
+        new_parent.children = vec![new_literal];
+
+        let (kept, groups, _) = rust_apply_literal_equivalences(
+            vec![json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent})],
+            "10", "0xa", "python");
+        assert!(kept.is_empty());
+        assert_eq!(groups.len(), 1);
     }
 }

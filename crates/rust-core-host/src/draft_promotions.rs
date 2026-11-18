@@ -107,7 +107,11 @@ pub(crate) fn collect_semantic_leaf_tokens(node: &SemanticNode, result: &mut Has
 
 pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
     changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
 ) {
+    let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
+    let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
     let deleted_by_id: HashMap<&str, &SemanticNode> = changes
         .iter()
         .filter(|change| change.change_type == "DELETION")
@@ -119,7 +123,6 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         return;
     }
     let mut promoted_ids: HashSet<String> = HashSet::new();
-    let mut promoted_label_pairs: HashSet<(String, String)> = HashSet::new();
     let mut promoted = Vec::new();
     for new_node in changes
         .iter()
@@ -130,9 +133,7 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         let Some(old_node) = deleted_by_id.get(new_node.id.as_str()) else {
             continue;
         };
-        let label_pair = (old_node.label.clone(), new_node.label.clone());
         if old_node.label == new_node.label
-            || promoted_label_pairs.contains(&label_pair)
             || change_pair_exists_drafts(
                 changes,
                 "REFACTORING",
@@ -142,8 +143,86 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         {
             continue;
         }
+        // Same positional IDs are not proof of a rename: unrelated reads in
+        // different callables can inherit the same ID after a parameter edit.
+        // This fast path is only for a parameter binder whose callable has the
+        // corresponding old/new parameter names. Body references are handled
+        // later by scope-correlated rename inference.
+        let is_changed_parameter = match (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        ) {
+            (Some(old_scope), Some(new_scope)) if old_scope == new_scope => {
+                match (old_by_id.get(old_scope.as_str()), new_by_id.get(new_scope.as_str())) {
+                    (Some(old_callable), Some(new_callable)) => {
+                        let old_params = parameter_identifier_nodes(old_callable);
+                        let new_params = parameter_identifier_nodes(new_callable);
+                        old_params.iter().zip(new_params.iter()).any(|(old_param, new_param)| {
+                            old_param.id == old_node.id
+                                && new_param.id == new_node.id
+                                && old_param.label == old_node.label
+                                && new_param.label == new_node.label
+                                && old_param.label != new_param.label
+                        })
+                    }
+                    _ => false,
+                }
+            }
+            _ => false,
+        };
+        // A local binder (JS declarator / loop binder, Python assignment / loop target, Go
+        // `:=` / `var` / `range` names) in the same declaring node of the same callable. Reads
+        // (an initializer, a loop iterable, an assignment value) are never binder slots.
+        let is_same_declaration_binder = local_binder_owner(old_tree, old_node.id.as_str())
+            .zip(local_binder_owner(new_tree, new_node.id.as_str()))
+            .is_some_and(|(old_owner, new_owner)| {
+                old_owner.id == new_owner.id
+                    && old_owner.node_type == new_owner.node_type
+                    && enclosing_callable_id(old_tree, old_node.id.as_str())
+                        == enclosing_callable_id(new_tree, new_node.id.as_str())
+            });
+        let is_same_call_target = direct_child_index(old_tree, old_node.id.as_str())
+            .zip(direct_child_index(new_tree, new_node.id.as_str()))
+            .is_some_and(|((old_parent, old_index), (new_parent, new_index))| {
+                old_parent.id == new_parent.id
+                    && old_parent.node_type == new_parent.node_type
+                    && matches!(old_parent.node_type.as_str(), "call" | "call_expression")
+                    && old_index == 0
+                    && new_index == 0
+                    // A declaration form (Elixir `def`/`defp`/`defmacro`/`defmodule`, ...) is a
+                    // call whose target is the declaring macro keyword, not a reference to a
+                    // binding: swapping `def` -> `defp` changes visibility, it renames nothing.
+                    && !is_declaration_form_call(old_parent, old_node)
+                    && !is_declaration_form_call(new_parent, new_node)
+                    && enclosing_callable_id(old_tree, old_node.id.as_str())
+                        == enclosing_callable_id(new_tree, new_node.id.as_str())
+            });
+        // A read of a binder that was itself renamed in the same callable: the binder pair
+        // (old label -> new label at one binder slot) is the rename proof, so this same-id read
+        // is its use. A read with no such binder in its own callable (an outer/global name, a
+        // name bound by another callable) is never promoted.
+        let is_read_of_renamed_binder = !is_changed_parameter
+            && !is_same_declaration_binder
+            && !is_same_call_target
+            && matches!(
+                (
+                    enclosing_callable_id(old_tree, old_node.id.as_str()),
+                    enclosing_callable_id(new_tree, new_node.id.as_str()),
+                ),
+                (Some(old_scope), Some(new_scope)) if old_scope == new_scope
+                    && renamed_binder_in_callable(
+                        old_tree, new_tree, &old_by_id, &new_by_id, old_scope.as_str(),
+                        old_node, new_node,
+                    )
+            );
+        if !is_changed_parameter
+            && !is_same_declaration_binder
+            && !is_same_call_target
+            && !is_read_of_renamed_binder
+        {
+            continue;
+        }
         promoted_ids.insert(old_node.id.clone());
-        promoted_label_pairs.insert(label_pair);
         promoted.push(ChangeDraft {
             change_type: "REFACTORING",
             old_node: Some(old_node),
@@ -169,24 +248,122 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         let Some(node) = change.old_node.or(change.new_node) else {
             return true;
         };
-        if promoted_ids.contains(node.id.as_str()) {
-            return false;
-        }
-        // Never sweep a whole NAMED ENTITY by label equality: a deleted function whose NAME
-        // merely equals a renamed identifier's old label (e.g. its call sites were renamed)
-        // is real removed code, not rename residue — sweeping it made the deleted
-        // calculate_discount function invisible (issue #32 follow-through; same disease as
-        // the literal-containment swallow fixed in issue #31).
-        if is_named_entity_type(node.node_type.as_str()) {
-            return true;
-        }
-        !promoted_label_pairs.iter().any(|(old_label, new_label)| {
-            (change.change_type == "DELETION" && node.label == *old_label)
-                || (change.change_type == "ADDITION" && node.label == *new_label)
-        })
+        !promoted_ids.contains(node.id.as_str())
     });
     changes.extend(promoted);
     suppress_modifications_covered_by_refactoring_ids(changes, &promoted_ids);
+}
+
+/// True when *call* is a declaration form headed by *target*: the call is named after the
+/// entity it declares (its label is neither the callee's name nor the generic node type) and
+/// that declared name reappears as the head of its arguments (`def value(), do: ...` labels the
+/// call `value` with head call `value`; `defmodule Answer` has head alias `Answer`). The callee
+/// of such a call is the declaring keyword (`def`, `defp`, `defmacro`, ...): replacing it is a
+/// declaration/visibility change, never evidence of a renamed variable binder or reference.
+fn is_declaration_form_call(call: &SemanticNode, target: &SemanticNode) -> bool {
+    let declared = call.label.as_str();
+    if declared.is_empty() || declared == call.node_type || declared == target.label {
+        return false;
+    }
+    call.children.iter().skip(1).any(|arguments| {
+        arguments.label == declared
+            || arguments.children.first().is_some_and(|head| head.label == declared)
+    })
+}
+
+/// True when callable *scope* (same id on both sides) binds `old_read.label` at a parameter or
+/// local binder slot in the old tree, and the same binder node binds `new_read.label` in the new
+/// tree: the binder was renamed within this callable. Binders of nested callables do not count.
+fn renamed_binder_in_callable(
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    old_by_id: &HashMap<&str, &SemanticNode>,
+    new_by_id: &HashMap<&str, &SemanticNode>,
+    scope: &str,
+    old_read: &SemanticNode,
+    new_read: &SemanticNode,
+) -> bool {
+    let (Some(old_callable), Some(new_callable)) = (old_by_id.get(scope), new_by_id.get(scope)) else {
+        return false;
+    };
+    let old_params: HashSet<&str> = parameter_identifier_nodes(old_callable).into_iter()
+        .map(|param| param.id.as_str()).collect();
+    let new_params: HashSet<&str> = parameter_identifier_nodes(new_callable).into_iter()
+        .map(|param| param.id.as_str()).collect();
+    old_callable.descendants().into_iter().any(|old_binder| {
+        old_binder.node_type == "identifier"
+            && old_binder.id != old_read.id
+            && old_binder.label == old_read.label
+            && (old_params.contains(old_binder.id.as_str())
+                || local_binder_owner(old_tree, old_binder.id.as_str()).is_some())
+            && new_by_id.get(old_binder.id.as_str()).is_some_and(|new_binder| {
+                new_binder.node_type == "identifier"
+                    && new_binder.label == new_read.label
+                    && (new_params.contains(new_binder.id.as_str())
+                        || local_binder_owner(new_tree, new_binder.id.as_str()).is_some())
+            })
+            && enclosing_callable_id(old_tree, old_binder.id.as_str()).as_deref() == Some(scope)
+            && enclosing_callable_id(new_tree, old_binder.id.as_str()).as_deref() == Some(scope)
+    })
+}
+
+/// The declaring node that binds the identifier *target_id*, when the identifier sits in a binder
+/// slot of a local declaration form: JS `variable_declarator` name; Python `assignment` /
+/// `augmented_assignment` target; JS `for_in_statement` and Python `for_statement` loop binder;
+/// Go `short_var_declaration` / `range_clause` left-hand names and `var_spec` names. A destructuring
+/// container (`pattern_list`, `array_pattern`, Go's left `expression_list`, ...) in the binder slot
+/// binds each identifier inside it. Values, iterables and initializers are never binder slots.
+fn local_binder_owner<'a>(tree: &'a SemanticNode, target_id: &str) -> Option<&'a SemanticNode> {
+    fn binder_slot(owner: &SemanticNode, index: usize) -> bool {
+        match owner.node_type.as_str() {
+            "variable_declarator" | "assignment" | "augmented_assignment" | "for_in_statement"
+            | "for_statement" | "short_var_declaration" | "range_clause" => index == 0,
+            // Go `var a, b T = ...`: the names are the leading identifier children; the type and
+            // the value `expression_list` follow them.
+            "var_spec" => owner.children.iter().take(index + 1)
+                .all(|child| child.node_type == "identifier"),
+            _ => false,
+        }
+    }
+    let (parent, index) = direct_child_index(tree, target_id)?;
+    if binder_slot(parent, index) {
+        return Some(parent);
+    }
+    if !matches!(parent.node_type.as_str(),
+        "pattern_list" | "tuple_pattern" | "list_pattern" | "array_pattern" | "expression_list")
+    {
+        return None;
+    }
+    let (owner, container_index) = direct_child_index(tree, parent.id.as_str())?;
+    // `var_spec` values live in an `expression_list` after the names: not a binder slot.
+    (owner.node_type != "var_spec" && binder_slot(owner, container_index)).then_some(owner)
+}
+
+fn direct_child_index<'a>(
+    tree: &'a SemanticNode,
+    target_id: &str,
+) -> Option<(&'a SemanticNode, usize)> {
+    for (index, child) in tree.children.iter().enumerate() {
+        if child.id == target_id {
+            return Some((tree, index));
+        }
+        if let Some(parent) = direct_child_index(child, target_id) {
+            return Some(parent);
+        }
+    }
+    None
+}
+
+fn direct_parent_of_id<'a>(tree: &'a SemanticNode, target_id: &str) -> Option<&'a SemanticNode> {
+    for child in &tree.children {
+        if child.id == target_id {
+            return Some(tree);
+        }
+        if let Some(parent) = direct_parent_of_id(child, target_id) {
+            return Some(parent);
+        }
+    }
+    None
 }
 
 pub(crate) fn suppress_modifications_covered_by_refactoring_ids(
@@ -674,7 +851,11 @@ pub(crate) fn collect_unique_callables(tree: &SemanticNode) -> HashMap<(String, 
 /// RENAME_VARIABLE (`a`→`x` reported twice: signature + body). Keep the first per
 /// (old_label, new_label) in position order — the signature/param occurrence — and drop the rest
 /// (the pairs stay matched; they are corroborating evidence, not separate review events).
-pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) {
+pub(crate) fn dedupe_variable_rename_drafts(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+) {
     let mut order: Vec<usize> = (0..changes.len()).collect();
     order.sort_by(|&a, &b| {
         let pos = |i: usize| {
@@ -686,7 +867,7 @@ pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) 
         };
         pos(a).cmp(&pos(b))
     });
-    let mut seen: HashSet<(String, String)> = HashSet::new();
+    let mut seen: HashSet<(String, String, Option<String>, Option<String>)> = HashSet::new();
     let mut drop = vec![false; changes.len()];
     for index in order {
         let change = &changes[index];
@@ -698,7 +879,13 @@ pub(crate) fn dedupe_variable_rename_drafts(changes: &mut Vec<ChangeDraft<'_>>) 
         let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
             continue;
         };
-        if !seen.insert((old_node.label.clone(), new_node.label.clone())) {
+        let key = (
+            old_node.label.clone(),
+            new_node.label.clone(),
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        );
+        if !seen.insert(key) {
             drop[index] = true;
         }
     }
@@ -719,7 +906,7 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
 ) {
     let old_callables = collect_unique_callables(old_tree);
     let new_callables = collect_unique_callables(new_tree);
-    let mut inferred: HashSet<(String, String)> = HashSet::new();
+    let mut inferred: HashSet<(String, String, String, String)> = HashSet::new();
     for (key, old_node) in &old_callables {
         let Some(new_node) = new_callables.get(key) else {
             continue;
@@ -740,7 +927,45 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
             if new_set.contains(old_label) || old_set.contains(new_label) {
                 continue;
             }
-            inferred.insert((old_label.clone(), new_label.clone()));
+            inferred.insert((
+                old_label.clone(),
+                new_label.clone(),
+                old_node.id.clone(),
+                new_node.id.clone(),
+            ));
+        }
+    }
+    // A local binder updated in place (Go `x := 1` -> `count := 1`, whose identifier churn was
+    // folded into its container's DELETE/ADD and resurfaces as a same-id leaf update) is the
+    // same proof as a renamed parameter: it corroborates reads of that name in its own callable.
+    for change in changes.iter() {
+        if change.change_type != "MODIFICATION" {
+            continue;
+        }
+        let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
+            continue;
+        };
+        if old_node.node_type != "identifier"
+            || new_node.node_type != "identifier"
+            || old_node.id != new_node.id
+            || old_node.label == new_node.label
+        {
+            continue;
+        }
+        let same_binder = local_binder_owner(old_tree, old_node.id.as_str())
+            .zip(local_binder_owner(new_tree, new_node.id.as_str()))
+            .is_some_and(|(old_owner, new_owner)| old_owner.id == new_owner.id
+                && old_owner.node_type == new_owner.node_type);
+        if !same_binder {
+            continue;
+        }
+        if let (Some(old_scope), Some(new_scope)) = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        ) {
+            if old_scope == new_scope {
+                inferred.insert((old_node.label.clone(), new_node.label.clone(), old_scope, new_scope));
+            }
         }
     }
     if inferred.is_empty() {
@@ -756,7 +981,18 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
         if old_node.node_type != "identifier" || new_node.node_type != "identifier" {
             continue;
         }
-        if inferred.contains(&(old_node.label.clone(), new_node.label.clone())) {
+        let scope_pair = (
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        );
+        if scope_pair.0.as_ref().zip(scope_pair.1.as_ref()).is_some_and(|(old_scope, new_scope)| {
+            inferred.contains(&(
+                old_node.label.clone(),
+                new_node.label.clone(),
+                old_scope.clone(),
+                new_scope.clone(),
+            ))
+        }) {
             change.change_type = "REFACTORING";
             change.refactoring_kind = Some("RENAME_VARIABLE");
             change.confidence = 0.95;
@@ -766,17 +1002,36 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
     }
 }
 
+fn enclosing_callable_id(tree: &SemanticNode, target_id: &str) -> Option<String> {
+    fn visit(
+        node: &SemanticNode,
+        target_id: &str,
+        nearest: Option<&str>,
+    ) -> Option<String> {
+        let is_callable = !node.label.is_empty()
+            && node
+                .children
+                .iter()
+                .any(|child| is_parameter_list_type(child.node_type.as_str()));
+        let nearest = if is_callable { Some(node.id.as_str()) } else { nearest };
+        if node.id == target_id {
+            return nearest.map(str::to_owned);
+        }
+        node.children
+            .iter()
+            .find_map(|child| visit(child, target_id, nearest))
+    }
+    visit(tree, target_id, None)
+}
+
+/// Parameter binder identifiers of a callable, across every grammar's parameter-list spelling
+/// (`is_parameter_list_type`: Python `parameters`, Go `parameter_list`, JS/TS
+/// `formal_parameters`, ...), in source order.
 pub(crate) fn parameter_identifier_nodes(node: &SemanticNode) -> Vec<&SemanticNode> {
-    let Some(parameters) = node
-        .children
+    node.children
         .iter()
-        .find(|child| child.node_type == "parameters")
-    else {
-        return Vec::new();
-    };
-    parameters
-        .descendants()
-        .into_iter()
+        .filter(|child| is_parameter_list_type(child.node_type.as_str()))
+        .flat_map(|parameters| parameters.descendants())
         .filter(|descendant| descendant.node_type == "identifier")
         .filter(|descendant| !matches!(descendant.label.as_str(), "int" | "str" | "None"))
         .collect()
@@ -1070,6 +1325,112 @@ pub(crate) fn promote_signature_changes_from_annotations_drafts<'a>(
             new_index: None,
             confidence: 0.85,
             description: format!("Signature change on '{}'", old_fn.label),
+            refactoring_kind: Some("CHANGE_SIGNATURE"),
+            text_diff: None,
+        });
+    }
+}
+
+/// The parameter facts that decide call compatibility (#297): counts/flags only, derived
+/// from the normalised tree so every parser that exposes a parameter list gets them.
+fn parameter_shape(fn_node: &SemanticNode) -> Option<Vec<(&'static str, Value)>> {
+    fn_node.children.iter().find(|c| is_parameter_list_type(c.node_type.as_str()))?;
+    let facts = derive_node_facts(fn_node)?;
+    Some(
+        ["param_count", "default_count", "keyword_only_count", "has_variadic", "has_kwargs"]
+            .into_iter()
+            .map(|key| (key, facts.get(key).cloned().unwrap_or(Value::Null)))
+            .collect(),
+    )
+}
+
+/// Definition-level CHANGE_SIGNATURE for parameter-list edits (#297). A uniquely named
+/// function whose parameter shape (count, defaults, keyword-only, variadics) changed is
+/// promoted to ONE member-level refactoring whose old/new nodes carry the parameter facts,
+/// so a consumer can tell "required parameter added" from "optional parameter added"
+/// without knowing each grammar's parameter node names. The raw parameter-list drafts
+/// become that refactoring's detail and are suppressed, as for annotation signature
+/// changes. A rename keeps the shape and stays a RENAME_VARIABLE (handled earlier).
+pub(crate) fn promote_parameter_shape_signature_changes_drafts<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    old_tree: &'a SemanticNode,
+    new_tree: &'a SemanticNode,
+) {
+    fn unique_by_key(root: &SemanticNode) -> HashMap<(&str, &str), Option<&SemanticNode>> {
+        let mut by_key: HashMap<(&str, &str), Option<&SemanticNode>> = HashMap::new();
+        for node in all_function_type_nodes(root) {
+            by_key
+                .entry((node.node_type.as_str(), node.label.as_str()))
+                .and_modify(|slot| *slot = None)
+                .or_insert(Some(node));
+        }
+        by_key
+    }
+    let old_functions = unique_by_key(old_tree);
+    let new_functions = unique_by_key(new_tree);
+    let mut promotions: Vec<(&SemanticNode, &SemanticNode)> = Vec::new();
+    let mut suppress_old_ids: HashSet<String> = HashSet::new();
+    let mut suppress_new_ids: HashSet<String> = HashSet::new();
+    let mut keys: Vec<&(&str, &str)> = new_functions.keys().collect();
+    keys.sort();
+    for key in keys {
+        let (Some(Some(old_fn)), Some(new_fn)) = (old_functions.get(key), new_functions[key])
+        else {
+            continue;
+        };
+        if old_fn.structural_hash == new_fn.structural_hash
+            || new_fn.label.is_empty()
+            || new_fn.label == "(anonymous)"
+        {
+            continue;
+        }
+        let (Some(old_shape), Some(new_shape)) = (parameter_shape(old_fn), parameter_shape(new_fn))
+        else {
+            continue;
+        };
+        if old_shape == new_shape
+            || change_pair_exists_drafts(
+                changes,
+                "REFACTORING",
+                Some(old_fn.id.as_str()),
+                Some(new_fn.id.as_str()),
+            )
+        {
+            continue;
+        }
+        let param_ids = |fn_node: &SemanticNode| -> HashSet<String> {
+            fn_node
+                .children
+                .iter()
+                .filter(|c| is_parameter_list_type(c.node_type.as_str()))
+                .flat_map(|list| std::iter::once(list).chain(list.descendants()))
+                .map(|node| node.id.clone())
+                .collect()
+        };
+        promotions.push((old_fn, new_fn));
+        suppress_old_ids.extend(param_ids(old_fn));
+        suppress_new_ids.extend(param_ids(new_fn));
+    }
+    if promotions.is_empty() {
+        return;
+    }
+    changes.retain(|change| {
+        if !matches!(change.change_type, "ADDITION" | "DELETION" | "MODIFICATION") {
+            return true;
+        }
+        let old_in = change.old_node.is_some_and(|n| suppress_old_ids.contains(&n.id));
+        let new_in = change.new_node.is_some_and(|n| suppress_new_ids.contains(&n.id));
+        !(old_in || new_in)
+    });
+    for (old_fn, new_fn) in promotions {
+        changes.push(ChangeDraft {
+            change_type: "REFACTORING",
+            old_node: Some(old_fn),
+            new_node: Some(new_fn),
+            old_index: None,
+            new_index: None,
+            confidence: 0.9,
+            description: format!("Change signature {}", format_node_ref(new_fn)),
             refactoring_kind: Some("CHANGE_SIGNATURE"),
             text_diff: None,
         });
@@ -1682,8 +2043,16 @@ pub(crate) fn suppress_add_delete_drafts_covered_by_pairings(changes: &mut Vec<C
                         })
                 });
                 if let (Some(delete_idx), Some(add_idx)) = (covering_delete, covering_add) {
-                    drop_indices.insert(delete_idx);
-                    drop_indices.insert(add_idx);
+                    // #253: one contained leaf pair is not proof — the containers may carry
+                    // further, unrelated edits. Drop them only when surviving evidence (the
+                    // leaf pairs and every other draft) reports their WHOLE delta.
+                    let (Some(old_container), Some(new_container)) =
+                        (changes[delete_idx].old_node, changes[add_idx].new_node) else { continue };
+                    let skip: HashSet<usize> = [delete_idx, add_idx].into_iter().collect();
+                    if DeltaCoverage::of(changes, &skip).covers(old_container, new_container) {
+                        drop_indices.insert(delete_idx);
+                        drop_indices.insert(add_idx);
+                    }
                 }
             }
             if !drop_indices.is_empty() {
@@ -1954,8 +2323,31 @@ pub(crate) fn same_position_leaf_partner<'a>(
     None
 }
 
-pub(crate) fn suppress_modifications_covered_by_refactoring_labels(changes: &mut Vec<ChangeDraft<'_>>) {
-    let refactoring_pairs = refactoring_label_pairs(changes);
+pub(crate) fn suppress_modifications_covered_by_refactoring_labels(
+    changes: &mut Vec<ChangeDraft<'_>>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+) {
+    // Scopes are the enclosing callables; `None` is the module/top-level scope, so a top-level
+    // binder rename (`for (const file of d)`) covers its top-level uses and nothing inside a
+    // callable, and a callable's rename covers only that callable's edits.
+    let refactoring_pairs: HashSet<(String, String, Option<String>, Option<String>)> = changes
+        .iter()
+        .filter(|change| {
+            change.change_type == "REFACTORING"
+                && change.refactoring_kind == Some("RENAME_VARIABLE")
+        })
+        .filter_map(|change| {
+            let old = change.old_node?;
+            let new = change.new_node?;
+            Some((
+                old.label.clone(),
+                new.label.clone(),
+                enclosing_callable_id(old_tree, old.id.as_str()),
+                enclosing_callable_id(new_tree, new.id.as_str()),
+            ))
+        })
+        .collect();
     if refactoring_pairs.is_empty() {
         return;
     }
@@ -1969,34 +2361,49 @@ pub(crate) fn suppress_modifications_covered_by_refactoring_labels(changes: &mut
         let Some(new_node) = change.new_node else {
             return true;
         };
-        if refactoring_pairs.contains(&(old_node.label.clone(), new_node.label.clone())) {
+        if refactoring_pairs.contains(&(
+            old_node.label.clone(),
+            new_node.label.clone(),
+            enclosing_callable_id(old_tree, old_node.id.as_str()),
+            enclosing_callable_id(new_tree, new_node.id.as_str()),
+        )) {
             return false;
         }
-        !all_leaf_deltas_are_refactoring_pairs(old_node, new_node, &refactoring_pairs)
+        !all_leaf_deltas_are_scoped_refactoring_pairs(
+            old_node,
+            new_node,
+            old_tree,
+            new_tree,
+            &refactoring_pairs,
+        )
     });
 }
 
-pub(crate) fn all_leaf_deltas_are_refactoring_pairs(
+fn all_leaf_deltas_are_scoped_refactoring_pairs(
     old_node: &SemanticNode,
     new_node: &SemanticNode,
-    refactoring_pairs: &HashSet<(String, String)>,
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    pairs: &HashSet<(String, String, Option<String>, Option<String>)>,
 ) -> bool {
     let old_leaves = leaf_nodes(old_node);
     let new_leaves = leaf_nodes(new_node);
-    let mut deltas = 0usize;
-    for (index, old_leaf) in old_leaves.iter().copied().enumerate() {
-        if let Some(new_leaf) =
-            same_position_leaf_partner(old_leaf, &new_leaves, index, &HashSet::new())
-        {
-            if old_leaf.label != new_leaf.label {
-                deltas += 1;
-                if !refactoring_pairs.contains(&(old_leaf.label.clone(), new_leaf.label.clone())) {
-                    return false;
-                }
-            }
+    let mut deltas = 0;
+    for (old_leaf, new_leaf) in old_leaves.iter().zip(&new_leaves) {
+        if old_leaf.node_type != new_leaf.node_type || old_leaf.label == new_leaf.label {
+            continue;
+        }
+        deltas += 1;
+        if !pairs.contains(&(
+            old_leaf.label.clone(),
+            new_leaf.label.clone(),
+            enclosing_callable_id(old_tree, old_leaf.id.as_str()),
+            enclosing_callable_id(new_tree, new_leaf.id.as_str()),
+        )) {
+            return false;
         }
     }
-    deltas > 0
+    deltas > 0 && old_leaves.len() == new_leaves.len()
 }
 
 /// python presentation._suppress_same_label_add_delete_pairs (issue #57 javascript Renames):
@@ -2053,38 +2460,18 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
         return;
     }
     // Truthiness guard (tighter than the python pass): the pair is only churn when the
-    // subtree CONTENT matches too — either identical descendant labels, or a delta fully
-    // covered by separately-reported renames (the js `fs.readdirSync(dir)` ->
-    // `fs.readdirSync(directory)` call around a reported dir->directory rename). Without
-    // this, a same-label container pair that is the ONLY representation of a real edit
-    // (go error-wrapping `return err` -> `return fmt.Errorf(...)`) would be erased —
-    // pinned by dying_no_delta_modification_cannot_swallow_its_add_delete_pair.
-    let rename_old_labels: HashSet<&str> = changes
-        .iter()
-        .filter(|c| c.change_type == "REFACTORING" || c.change_type == "MODIFICATION")
-        .filter_map(|c| Some((c.old_node?, c.new_node?)))
-        .map(|(o, _)| o.label.as_str())
-        .collect();
-    let rename_new_labels: HashSet<&str> = changes
-        .iter()
-        .filter(|c| c.change_type == "REFACTORING" || c.change_type == "MODIFICATION")
-        .filter_map(|c| Some((c.old_node?, c.new_node?)))
-        .map(|(_, n)| n.label.as_str())
-        .collect();
-    let label_set = |node: &SemanticNode| -> HashSet<String> {
-        std::iter::once(node)
-            .chain(node.descendants())
-            .filter(|n| !n.label.is_empty())
-            .map(|n| n.label.clone())
-            .collect()
-    };
+    // subtree CONTENT matches too — identical structure, or a delta fully covered by
+    // separately-reported evidence (the js `fs.readdirSync(dir)` -> `fs.readdirSync(directory)`
+    // call around a reported dir->directory rename). Without this, a same-label container pair
+    // that is the ONLY representation of a real edit (go error-wrapping `return err` ->
+    // `return fmt.Errorf(...)`) would be erased — pinned by
+    // dying_no_delta_modification_cannot_swallow_its_add_delete_pair. #253: the proof is
+    // positional (DeltaCoverage); equal label SETS hid reorders and changed multiplicity.
     let mut suppressed: HashSet<usize> = HashSet::new();
     let mut used_additions: HashSet<usize> = HashSet::new();
-    for (idx, change) in changes.iter().enumerate() {
-        if change.change_type != "DELETION" {
-            continue;
-        }
-        let Some(old_node) = change.old_node else {
+    let deletions: Vec<usize> = (0..changes.len()).filter(|&i| changes[i].change_type == "DELETION").collect();
+    for idx in deletions {
+        let Some(old_node) = changes[idx].old_node else {
             continue;
         };
         if is_root(old_node) || old_node.label.is_empty() {
@@ -2095,7 +2482,6 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
         else {
             continue;
         };
-        let old_labels = label_set(old_node);
         let mut chosen: Option<usize> = None;
         for &add_idx in candidates.iter() {
             if used_additions.contains(&add_idx) {
@@ -2104,14 +2490,8 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
             let Some(new_node) = changes[add_idx].new_node else {
                 continue;
             };
-            let new_labels = label_set(new_node);
-            let delta_covered = old_labels
-                .difference(&new_labels)
-                .all(|label| rename_old_labels.contains(label.as_str()))
-                && new_labels
-                    .difference(&old_labels)
-                    .all(|label| rename_new_labels.contains(label.as_str()));
-            if delta_covered {
+            let skip: HashSet<usize> = [idx, add_idx].into_iter().chain(suppressed.iter().copied()).collect();
+            if DeltaCoverage::of(changes, &skip).covers(old_node, new_node) {
                 chosen = Some(add_idx);
                 break;
             }
@@ -2134,8 +2514,26 @@ pub(crate) fn suppress_same_label_add_delete_pair_drafts(changes: &mut Vec<Chang
     });
 }
 
-pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(changes: &mut Vec<ChangeDraft<'_>>) {
+pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
+    changes: &mut Vec<ChangeDraft<'_>>, old_source: &str, new_source: &str, language: &str,
+) {
+    // #253: a same-label modification whose unpaired leaves are a real delta is still
+    // redundant when OTHER surviving drafts report that whole delta (a reported `abs(...)`
+    // wrapper around a moved operand). Proven per draft with DeltaCoverage.
+    let reported_elsewhere: Vec<bool> = (0..changes.len()).map(|index| {
+        let change = &changes[index];
+        match (change.change_type, change.old_node, change.new_node) {
+            ("MODIFICATION", Some(old), Some(new)) if old.node_type == new.node_type && old.label == new.label
+                && (!old.is_leaf() || !new.is_leaf()) => {
+                DeltaCoverage::of(changes, &std::iter::once(index).collect()).covers(old, new)
+            }
+            _ => false,
+        }
+    }).collect();
+    let mut index = 0;
     changes.retain(|change| {
+        let covered = reported_elsewhere[index];
+        index += 1;
         if change.change_type != "MODIFICATION" {
             return true;
         }
@@ -2149,13 +2547,35 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(changes
             return true;
         }
         if old_node.label != new_node.label {
-            return true;
+            // #270: a container whose structural hash is unchanged and whose raw label differs
+            // only by token-separating whitespace (`my $x=1+2` -> `my $x = 1 + 2`) carries no
+            // semantic delta — the hash already covers its children. Anything the hash or the
+            // opaque-payload check can see still survives.
+            let spacing_only = !old_node.is_leaf()
+                && !new_node.is_leaf()
+                && old_node.structural_hash == new_node.structural_hash
+                && strip_whitespace(&old_node.label) == strip_whitespace(&new_node.label);
+            return !spacing_only || opaque_payload::changed(old_node, new_node, old_source, new_source, language);
         }
-        subtree_has_leaf_label_delta(old_node, new_node)
+        // An id-aligned leaf edit always keeps the modification (unchanged rule); a delta made
+        // only of unpaired leaves keeps it unless other surviving drafts report it all.
+        leaf_label_delta(old_node, new_node, false)
+            || (leaf_label_delta(old_node, new_node, true) && !covered)
+            || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
 }
 
+fn strip_whitespace(text: &str) -> String {
+    text.chars().filter(|c| !c.is_whitespace()).collect()
+}
+
 pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    leaf_label_delta(old_node, new_node, true)
+}
+
+/// `include_unpaired = false` is the pre-#253 rule (id-aligned leaf label edits, or the
+/// positional fallback); `true` also counts unpaired leaves as a delta.
+fn leaf_label_delta(old_node: &SemanticNode, new_node: &SemanticNode, include_unpaired: bool) -> bool {
     if old_node.is_leaf() && new_node.is_leaf() {
         return old_node.label != new_node.label;
     }
@@ -2177,8 +2597,26 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     if id_delta {
         return true;
     }
-    if any_id_aligned {
+    if any_id_aligned && !include_unpaired {
         return false;
+    }
+    if any_id_aligned {
+        // #253: one aligned, unchanged leaf is not proof that the REST is unchanged. Leaves
+        // with no id-aligned partner (added, removed or re-identified) must match as an
+        // ordered (type, label) sequence on both sides, or they are a delta.
+        let old_by_id = all_descendant_node_refs_by_id(old_node);
+        let aligned = |leaf: &SemanticNode, other: &HashMap<&str, &SemanticNode>| {
+            other.get(leaf.id.as_str()).is_some_and(|o| o.is_leaf() && o.node_type == leaf.node_type)
+        };
+        let mut old_leaves = Vec::new();
+        let mut new_leaves = Vec::new();
+        collect_leaf_refs(old_node, &mut old_leaves);
+        collect_leaf_refs(new_node, &mut new_leaves);
+        let unpaired = |leaves: &[&SemanticNode], other: &HashMap<&str, &SemanticNode>| -> Vec<(String, String)> {
+            leaves.iter().filter(|leaf| !aligned(leaf, other))
+                .map(|leaf| (leaf.node_type.clone(), leaf.label.clone())).collect()
+        };
+        return unpaired(&old_leaves, &new_by_id) != unpaired(&new_leaves, &old_by_id);
     }
     // No leaf pairs align by id at all — a move across nesting levels renumbers the whole
     // subtree (csharp block -> file-scoped namespace), and the id-based comparison was
@@ -2189,6 +2627,11 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
     let mut new_leaves = Vec::new();
     collect_leaf_refs(old_node, &mut old_leaves);
     collect_leaf_refs(new_node, &mut new_leaves);
+    if include_unpaired && old_leaves.len() != new_leaves.len() {
+        // #253: a different number of leaves is itself a delta (a wrapper or operand was
+        // added/removed); whether other drafts report it is the caller's coverage question.
+        return true;
+    }
     old_leaves.len() == new_leaves.len()
         && old_leaves.iter().zip(&new_leaves).any(|(old_leaf, new_leaf)| {
             old_leaf.node_type == new_leaf.node_type && old_leaf.label != new_leaf.label
@@ -2197,15 +2640,12 @@ pub(crate) fn subtree_has_leaf_label_delta(old_node: &SemanticNode, new_node: &S
 
 pub(crate) fn suppress_low_signal_reorders_drafts(
     changes: &mut Vec<ChangeDraft<'_>>,
+    matching: &[MatchPair<'_>],
 ) -> (usize, Vec<usize>) {
-    // Same-identity sibling reorders are usually *positional shifts* (something was inserted or
-    // grew above the node) — noise to suppress. But a **genuine relocation** of a named entity
-    // (the user reordered two functions) must surface as moved code, not vanish into
-    // style-only output (issue #12). Distinguish them by relative order: within each parent,
-    // the reordered entities whose relative order is preserved (the longest increasing
-    // subsequence of new sibling indices, walked in old order) are insertion shifts; the rest
-    // genuinely moved and are promoted to MOVE drafts (mirroring the Python
-    // ``_suppress_low_signal_reorders`` entity promotion).
+    // Same-identity entity reorders use the existing LIS rule to suppress insertion displacement
+    // and promote genuine relocations to MOVE. Order-sensitive statements, arguments, and
+    // initializer children use matched sibling order as proof: an inversion is meaningful, a
+    // preserved rank is insertion displacement, and missing proof keeps a source-anchored edit.
     let rename_pairs: HashSet<(String, String)> = changes.iter()
         .filter(|c| c.refactoring_kind == Some("RENAME_SYMBOL"))
         .filter_map(|c| Some((c.old_node?.id.clone(), c.new_node?.id.clone())))
@@ -2218,8 +2658,122 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         rename_pairs.iter().any(|(o, n)| old.id.starts_with(&format!("{o}."))
             && new.id.starts_with(&format!("{n}.")))
     };
+    let parent_types: HashMap<(String, String), (String, String)> = matching.iter()
+        .map(|pair| ((pair.old_node.id.clone(), pair.new_node.id.clone()),
+            (pair.old_node.node_type.clone(), pair.new_node.node_type.clone())))
+        .collect();
+    let mut relevant_parent_pairs = HashSet::new();
+    for change in changes.iter().filter(|change| change.change_type == "REORDER") {
+        if let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) {
+            if let (Some((old_parent, _)), Some((new_parent, _))) =
+                (sibling_position(&old_node.id), sibling_position(&new_node.id))
+            {
+                relevant_parent_pairs.insert((old_parent, new_parent));
+            }
+        }
+    }
+    let mut matched_siblings: HashMap<(String, String), Vec<(String, String, usize, usize)>> = HashMap::new();
+    for pair in matching {
+        let Some((old_parent, old_index)) = sibling_position(&pair.old_node.id) else { continue; };
+        let Some((new_parent, new_index)) = sibling_position(&pair.new_node.id) else { continue; };
+        matched_siblings.entry((old_parent, new_parent)).or_default().push((
+            pair.old_node.id.clone(), pair.new_node.id.clone(), old_index, new_index));
+    }
+    let mut relative_order: HashMap<(String, String), (bool, usize, bool)> = HashMap::new();
+    for (parents, siblings) in matched_siblings.iter_mut() {
+        if !relevant_parent_pairs.contains(parents) {
+            continue;
+        }
+        siblings.sort_by_key(|(_, _, old_index, _)| *old_index);
+        let sequence: Vec<_> = siblings.iter().map(|(_, _, _, new_index)| *new_index).collect();
+        let stationary = longest_increasing_subsequence_positions(&sequence);
+        let sibling_count = siblings.len();
+        let mut suffix_min = vec![usize::MAX; sibling_count + 1];
+        for position in (0..sibling_count).rev() {
+            suffix_min[position] = suffix_min[position + 1].min(sequence[position]);
+        }
+        let mut prefix_max = None;
+        for (position, (old_id, new_id, _, _)) in siblings.iter().enumerate() {
+            let participates_in_inversion = prefix_max.is_some_and(|maximum| maximum > sequence[position])
+                || suffix_min[position + 1] < sequence[position];
+            relative_order.insert((old_id.clone(), new_id.clone()),
+                (stationary.contains(&position), sibling_count, participates_in_inversion));
+            prefix_max = Some(prefix_max.map_or(sequence[position], |maximum: usize| maximum.max(sequence[position])));
+        }
+    }
+    // Entity gate (python _is_entity_container subset): named entities, doc-component
+    // leaf entities (mdx jsx_component / markdown section — python _LEAF_ENTITY_TYPES),
+    // and export wrappers around an entity (ts `export function …` reorders as the
+    // export_statement node — python _is_exported_entity_wrapper). The ts/mdx pure-swap
+    // scenarios yielded ZERO changes routed because none of these passed the gate
+    // (the exact powershell issue #66 failure mode, wider vocabulary).
+    let reorder_entity = |node: &SemanticNode| -> bool {
+        let node_type = node.node_type.as_str();
+        if is_named_entity_type(node_type) {
+            return true;
+        }
+        if matches!(node_type, "jsx_component" | "section" | "markdown_section") {
+            return true;
+        }
+        matches!(node_type, "export_statement" | "export_default_declaration")
+            && node.children.iter().any(|child| {
+                let ct = child.node_type.to_lowercase();
+                is_named_entity_type(child.node_type.as_str())
+                    || ct.contains("function")
+                    || ct.contains("method")
+                    || ct.contains("class")
+            })
+    };
+    // An entity is a declaration, not an executable statement, even when its node type ends in
+    // `_statement` (`export_statement` wrapping a function/class, Lua/PowerShell
+    // `function_statement`): function and class declarations are hoisted / order-independent,
+    // so their reorder is a MOVE decided by the entity LIS below, never a behaviour change.
+    // Only non-entity statements, arguments and initializer children are order-sensitive.
+    let order_sensitive_kind = |node: &SemanticNode, parent_type: Option<&str>| {
+        let node_type = node.node_type.as_str();
+        if reorder_entity(node) {
+            None
+        } else if node_type.ends_with("_statement") {
+            Some("statement")
+        } else if matches!(node_type,
+            "argument" | "named_argument" | "positional_argument" | "spread_element")
+            || matches!(parent_type.or(node.parent_type.as_deref()), Some("arguments" | "argument_list"))
+        {
+            Some("argument")
+        } else if matches!(parent_type.or(node.parent_type.as_deref()),
+            Some("initializer_list" | "array_initializer"))
+        {
+            Some("initializer")
+        } else {
+            None
+        }
+    };
+    let insertion_displacement_proven = |change: &ChangeDraft<'_>, old_parent: &str, new_parent: &str| {
+        let (Some(old_index), Some(new_index)) = (change.old_index, change.new_index) else {
+            return false;
+        };
+        let mut displacement = 0isize;
+        for sibling in changes.iter() {
+            if sibling.change_type == "ADDITION" {
+                let added_before = sibling.new_node.and_then(|node| node.id.rsplit_once('.'))
+                    .is_some_and(|(parent, _)| parent == new_parent)
+                    && sibling.new_index.is_some_and(|index| index < new_index);
+                displacement += if added_before { 1 } else { 0 };
+            } else if sibling.change_type == "DELETION" {
+                let deleted_before = sibling.old_node.and_then(|node| node.id.rsplit_once('.'))
+                    .is_some_and(|(parent, _)| parent == old_parent)
+                    && sibling.old_index.is_some_and(|index| index < old_index);
+                displacement -= if deleted_before { 1 } else { 0 };
+            }
+        }
+        displacement != 0 && new_index as isize - old_index as isize == displacement
+    };
     let before = changes.len();
     let mut group_members: HashMap<String, Vec<(usize, usize, usize)>> = HashMap::new();
+    let mut order_sensitive_reorders: HashMap<(String, String), Vec<usize>> = HashMap::new();
+    let mut inversion_participants: HashSet<usize> = HashSet::new();
+    let mut genuine_movers: HashSet<usize> = HashSet::new();
+    let mut unproven_order_sensitive: HashSet<usize> = HashSet::new();
     for (idx, change) in changes.iter().enumerate() {
         if change.change_type != "REORDER" {
             continue;
@@ -2227,32 +2781,44 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
         let (Some(old_node), Some(new_node)) = (change.old_node, change.new_node) else {
             continue;
         };
-        // Entity gate (python _is_entity_container subset): named entities, doc-component
-        // leaf entities (mdx jsx_component / markdown section — python _LEAF_ENTITY_TYPES),
-        // and export wrappers around an entity (ts `export function …` reorders as the
-        // export_statement node — python _is_exported_entity_wrapper). The ts/mdx pure-swap
-        // scenarios yielded ZERO changes routed because none of these passed the gate
-        // (the exact powershell issue #66 failure mode, wider vocabulary).
-        let reorder_entity = |node: &SemanticNode| -> bool {
-            let node_type = node.node_type.as_str();
-            if is_named_entity_type(node_type) {
-                return true;
+        if !same_identity(old_node, new_node) {
+            continue;
+        }
+        let old_parent = old_node.id.rsplit_once('.').map(|(parent, _)| parent.to_owned());
+        let new_parent = new_node.id.rsplit_once('.').map(|(parent, _)| parent.to_owned());
+        let parent_pair = old_parent.zip(new_parent);
+        let parent_type = parent_pair.as_ref().and_then(|pair| parent_types
+            .get(&(pair.0.clone(), pair.1.clone())))
+            .map(|types| types.0.as_str());
+        let order_kind = order_sensitive_kind(old_node, parent_type);
+        if let Some(_kind) = order_kind {
+            if let Some(parent_pair) = parent_pair.as_ref() {
+                order_sensitive_reorders.entry(parent_pair.clone()).or_default().push(idx);
             }
-            if matches!(node_type, "jsx_component" | "section" | "markdown_section") {
-                return true;
+            if let Some((stationary, sibling_count, participates_in_inversion)) = relative_order
+                .get(&(old_node.id.clone(), new_node.id.clone())).copied()
+            {
+                if participates_in_inversion {
+                    inversion_participants.insert(idx);
+                }
+                if !stationary {
+                    genuine_movers.insert(idx);
+                } else if sibling_count == 1 && !insertion_displacement_proven(
+                    change, &parent_pair.as_ref().unwrap().0, &parent_pair.as_ref().unwrap().1,
+                ) {
+                    // A singleton rank cannot prove that an index change came from insertion
+                    // displacement. Keep the edit unless a matched sibling establishes order.
+                    unproven_order_sensitive.insert(idx);
+                }
+                // With peers and no inversion, ordered matching proves displacement only.
+            } else {
+                // Missing IDs/positions or a missing matched parent are not evidence of noise.
+                unproven_order_sensitive.insert(idx);
             }
-            matches!(node_type, "export_statement" | "export_default_declaration")
-                && node.children.iter().any(|child| {
-                    let ct = child.node_type.to_lowercase();
-                    is_named_entity_type(child.node_type.as_str())
-                        || ct.contains("function")
-                        || ct.contains("method")
-                        || ct.contains("class")
-                })
-        };
-        if !same_identity(old_node, new_node) || !(reorder_entity(old_node)
-            || old_node.node_type == "decorator" || inside_rename(old_node, new_node))
-        {
+            continue;
+        }
+        if !(reorder_entity(old_node) || old_node.node_type == "decorator"
+            || inside_rename(old_node, new_node)) {
             continue;
         }
         let (Some(old_index), Some(new_index)) = (change.old_index, change.new_index) else {
@@ -2268,7 +2834,18 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             .or_default()
             .push((idx, old_index, new_index));
     }
-    let mut genuine_movers: HashSet<usize> = HashSet::new();
+    for (_parents, indices) in order_sensitive_reorders {
+        let has_surviving_mover = indices.iter().any(|index| genuine_movers.contains(index));
+        let has_unproven_change = indices.iter().any(|index| unproven_order_sensitive.contains(index));
+        if !has_surviving_mover && !has_unproven_change {
+            // LIS can choose either side of a two-item swap as stationary. If the other side
+            // arrived as a MODIFICATION (rather than a REORDER draft), retain one explicit
+            // order change so that the inversion is never erased altogether.
+            if let Some(index) = indices.iter().find(|index| inversion_participants.contains(index)) {
+                genuine_movers.insert(*index);
+            }
+        }
+    }
     for members in group_members.values_mut() {
         members.sort_by_key(|(_, old_index, _)| *old_index);
         let sequence: Vec<usize> = members.iter().map(|(_, _, new_index)| *new_index).collect();
@@ -2303,11 +2880,25 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             // Reordering executable children within a renamed callable can change
             // behavior (e.g. increment then multiply). The rename only owns its name.
             let decorator_reorder = old_node.node_type == "decorator";
-            let behavior_reorder = decorator_reorder || change.new_node.is_some_and(|new_node|
-                inside_rename(old_node, new_node) && !is_named_entity_type(&old_node.node_type));
+            let parent_type = old_node.id.rsplit_once('.').and_then(|(parent, _)| {
+                change.new_node.and_then(|new_node| new_node.id.rsplit_once('.')
+                    .and_then(|(new_parent, _)| parent_types.get(&(parent.to_owned(), new_parent.to_owned())))
+                    .map(|types| types.0.as_str()))
+            });
+            let reorder_label = order_sensitive_kind(old_node, parent_type).unwrap_or("statement");
+            let behavior_reorder = decorator_reorder || (!reorder_entity(old_node)
+                && (inside_rename(old_node, change.new_node.unwrap())
+                    || order_sensitive_kind(old_node, parent_type).is_some()));
+            let action = if decorator_reorder {
+                "Reorder decorator".to_owned()
+            } else if behavior_reorder {
+                format!("Reorder {reorder_label}")
+            } else {
+                "Move".to_owned()
+            };
             let description = format!(
                 "{} {}('{}') from sibling {} to {}",
-                if decorator_reorder { "Reorder decorator" } else if behavior_reorder { "Reorder statement" } else { "Move" },
+                action,
                 old_node.node_type,
                 old_node.label,
                 change.old_index.map(|i| i.to_string()).unwrap_or_default(),
@@ -2324,6 +2915,21 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
             });
             continue;
         }
+        if unproven_order_sensitive.contains(&idx) {
+            let old_node = change.old_node.expect("order-sensitive reorder carries an old node");
+            let parent_type = old_node.id.rsplit_once('.').and_then(|(parent, _)| {
+                change.new_node.and_then(|new_node| new_node.id.rsplit_once('.')
+                    .and_then(|(new_parent, _)| parent_types.get(&(parent.to_owned(), new_parent.to_owned())))
+                    .map(|types| types.0.as_str()))
+            });
+            let kind = order_sensitive_kind(old_node, parent_type).unwrap_or("statement");
+            result.push(ChangeDraft {
+                change_type: "MODIFICATION",
+                description: format!("Reorder {kind} {}('{}') with unproven sibling order", old_node.node_type, old_node.label),
+                ..change
+            });
+            continue;
+        }
         // Insertion shift (or an index-less same-identity reorder): suppressed as noise.
     }
     let suppressed = before.saturating_sub(result.len());
@@ -2331,9 +2937,22 @@ pub(crate) fn suppress_low_signal_reorders_drafts(
     (suppressed, promoted_indices)
 }
 
+fn sibling_position(id: &str) -> Option<(String, usize)> {
+    let (parent, index) = id.rsplit_once('.')?;
+    Some((parent.to_owned(), index.parse().ok()?))
+}
+
 #[cfg(all(test, feature = "tier-c-wasm"))]
 #[path = "clojure_rename_source_tests.rs"]
 mod clojure_rename_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "elixir_visibility_source_tests.rs"]
+mod elixir_visibility_source_tests;
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "reorder_rename_source_tests.rs"]
+mod reorder_rename_source_tests;
 
 #[cfg(test)]
 mod clojure_interop_rename_tests {
@@ -2395,3 +3014,7 @@ mod clojure_interop_rename_tests {
         assert_eq!(changes[0].refactoring_kind, Some("RENAME_VARIABLE"));
     }
 }
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "signature_change_source_tests.rs"]
+mod signature_change_source_tests;

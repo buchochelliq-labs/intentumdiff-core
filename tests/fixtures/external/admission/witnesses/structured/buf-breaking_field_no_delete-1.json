@@ -1,0 +1,119 @@
+{
+  "case_id": "buf-breaking_field_no_delete-1",
+  "executed_utc": "2026-11-17T20:21:20+00:00",
+  "new_sha256": "a71ea07677afc51242d7acbb29889300c95034ed4e00ac4d41b371d0cb81e960",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          5,
+          1,
+          8,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          10,
+          1,
+          33,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          12,
+          5,
+          15,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          22,
+          3,
+          25,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_NO_DELETE",
+        [
+          57,
+          1,
+          60,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          5,
+          1,
+          8,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          10,
+          1,
+          33,
+          2
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          12,
+          5,
+          15,
+          6
+        ]
+      ],
+      [
+        "1.proto",
+        "FIELD_NO_DELETE",
+        [
+          22,
+          3,
+          25,
+          4
+        ]
+      ],
+      [
+        "2.proto",
+        "FIELD_NO_DELETE",
+        [
+          57,
+          1,
+          60,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "60fd6585f5a7add8540cc275b68cfc4084378d67a7c55dcb07bd78d0eb4fbb5b",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

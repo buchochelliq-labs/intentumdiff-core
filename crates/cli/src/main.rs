@@ -685,11 +685,11 @@ fn run_guardrails(repo: &str, old: &str, new: &str, strict: bool, opts: &DiffOpt
         return Err(format!("guardrail policy could not be evaluated natively: {reason}"));
     }
     let commit_diff = result.get("commit_diff").unwrap_or(&result);
+    // The engine owns the gate: counts, severity validation and the strict pass/fail rule come
+    // from the same `guardrail_check_result` every binding renders.
+    let check = check_guardrails(commit_diff, strict)?;
     let empty = Vec::new();
-    let violations = commit_diff
-        .get("guardrail_violations")
-        .and_then(|v| v.as_array())
-        .unwrap_or(&empty);
+    let violations = check["violations"].as_array().unwrap_or(&empty);
 
     if opts.json {
         println!("{}", serde_json::to_string_pretty(violations).map_err(|e| e.to_string())?);
@@ -709,11 +709,18 @@ fn run_guardrails(repo: &str, old: &str, new: &str, strict: bool, opts: &DiffOpt
         }
     }
 
-    if strict && !violations.is_empty() {
+    if check["passed"] == serde_json::Value::Bool(false) {
         // CI-gating exit code, matching the Python CLI's --strict.
         std::process::exit(2);
     }
     Ok(())
+}
+
+/// The engine's guardrail verdict for one served commit diff (absent violations = none).
+fn check_guardrails(commit_diff: &serde_json::Value, strict: bool) -> Result<serde_json::Value, String> {
+    let violations = commit_diff.get("guardrail_violations").cloned().unwrap_or_else(|| json!([]));
+    intentumdiff_rust_core::api::guardrail_check_result(&json!({"violations": violations, "strict": strict}))
+        .map_err(|e| e.to_string())
 }
 
 /// List the bundled parser plugins from `parser_manifest.json`. (Third-party plugin management —
@@ -946,5 +953,21 @@ fn main() -> ExitCode {
             }
             ExitCode::FAILURE
         }
+    }
+}
+
+#[cfg(test)]
+mod guardrail_gate_tests {
+    use super::check_guardrails;
+    use serde_json::json;
+
+    #[test]
+    fn strict_gate_uses_the_engine_verdict_for_any_violation() {
+        let diff = json!({"guardrail_violations": [{"rule_id": "r", "severity": "important"}]});
+        assert_eq!(check_guardrails(&diff, true).unwrap()["passed"], false);
+        assert_eq!(check_guardrails(&diff, false).unwrap()["passed"], true);
+        assert_eq!(check_guardrails(&json!({}), true).unwrap()["passed"], true);
+        let bad = json!({"guardrail_violations": [{"rule_id": "r", "severity": "critical"}]});
+        assert!(check_guardrails(&bad, true).is_err());
     }
 }

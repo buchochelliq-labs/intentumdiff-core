@@ -1,0 +1,973 @@
+{
+  "inventory": {
+    "path": "inventory.json",
+    "revision": "14119103c46f08cedc8b4313b1832c8daa511553",
+    "sha256": "37f27f7b6ea8c21b6f7af3f07a189d0c76d73ab8ea316f96eea20ef5559db4d7",
+    "url": "https://github.com/buchochelliq-labs/intentumdiff-python/blob/14119103c46f08cedc8b4313b1832c8daa511553/src/intentumdiff/wasm/parser_manifest.json"
+  },
+  "languages": [
+    {
+      "admission_status": "blocked",
+      "component": "abap_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "abap",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Community ABAP subset; not SAP certification.",
+      "source_url": "https://github.com/abaplint/abaplint/blob/main/docs/development.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "adf_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "adf",
+      "reason": "Vendor samples; schema/graph oracles and licensing must be admitted. No established edit benchmark verified.",
+      "source_url": "https://github.com/Azure/Azure-DataFactory"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "asciidoc_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "asciidoc",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/asciidoctor-contrib/asciidoctor-doctest"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "asm_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "asm",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://llvm.org/docs/TestingGuide.html"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "assemblyscript_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "assemblyscript",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/AssemblyScript/assemblyscript/blob/main/package.json"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "astro_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "astro",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/withastro/compiler/blob/main/internal/printer/printer_test.go"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "bash_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "bash",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.gnu.org/s/bash/manual/html_node/Basic-Installation.html"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "cpp_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "c",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "clojure_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "clojure",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/clojure/clojure"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "cmake_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "cmake",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/Kitware/CMake/blob/master/Tests/RunCMake/README.rst"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "cpp_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "cpp",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "csharp_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "csharp",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/dotnet/roslyn/blob/main/Compilers.slnf"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "css_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "css",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/web-platform-tests/wpt"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "dart_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "dart",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/dart-lang/sdk/blob/main/docs/Building.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "databricks_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "databricks",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+      "source_url": "https://github.com/databricks/cli/blob/main/AGENTS.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "databricks_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "databricks-workflow",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Prefer CLI acceptance fixtures; restricted bundle-example licensing is separate.",
+      "source_url": "https://github.com/databricks/cli/blob/main/AGENTS.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "dax_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "dax",
+      "reason": "DAXBench access, reusable licence, model/gold and reproducible harness remain unverified.",
+      "source_url": "https://www.daxbench.com/tasks"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "delphi_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "delphi",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Free Pascal Delphi-compatible subset only; not complete Embarcadero conformance.",
+      "source_url": "https://github.com/fpc/FPCSource"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "dockerfile_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "published specialist research benchmark",
+      "language_id": "dockerfile",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/STAR-RG/shipwright"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "elixir_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "elixir",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/elixir-lang/elixir/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "generic_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "generic",
+      "reason": "WikiAtomicEdits supplies text edits, not general file semantics or intent gold; select a prose profile and resolve attribution.",
+      "source_url": "https://github.com/google-research-datasets/wiki-atomic-edits"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "gitignore_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "gitignore",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/git/git/blob/master/t/t0008-ignores.sh"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "go_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "go",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "gomod_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "gomod",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://go.dev/src/cmd/go/testdata/script/mod_replace.txt"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "graphql_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "graphql",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/graphql/graphql-js"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "groovy_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "groovy",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/apache/groovy/blob/master/CONTRIBUTING.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "haskell_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "haskell",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://ghc.gitlab.haskell.org/homepage/blog/20190708-testsuite-work.html"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "terraform_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "published specialist research benchmark",
+      "language_id": "hcl",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://huggingface.co/datasets/autoiac-project/iac-eval"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "html_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "html",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/web-platform-tests/wpt"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "ini_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "ini",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/python/cpython/blob/main/Lib/test/test_configparser.py"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "java_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "java",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://github.com/pouryafard75/RM-ASTDiff"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "js_ts_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "javascript",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://github.com/tc39/test262"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "json_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "json",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/nst/JSONTestSuite"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "kotlin_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "kotlin",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/JetBrains/kotlin/blob/master/kotlin-native/HACKING.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "latex_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "latex",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/latex3/latex2e/tree/develop/base/testfiles"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "lua_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "lua",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.lua.org/tests/"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "dax_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "m",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/microsoft/DataConnectors/blob/master/testframework/tests/PQSDKTestSuites.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "make_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "make",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/mirror/make/blob/master/tests/scripts/variables/flavors"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "markdown_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "markdown",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/commonmark/commonmark-spec"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "mdx_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "mdx",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/mdx-js/mdx/blob/main/packages/mdx/test/compile.js"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "ocaml_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "ocaml",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/ocaml/ocaml"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "odin_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "odin",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/odin-lang/Odin/blob/master/.github/workflows/ci.yml"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "perl_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "perl",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://perldoc.perl.org/perlhack"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "php_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "php",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "plsql_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "plsql",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/utPLSQL/utPLSQL"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "po_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "po",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/autotools-mirror/gettext/blob/master/gettext-tools/tests/msgfmt-1"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "postscript_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "postscript",
+      "reason": "Public samples need usable per-file rights and reviewed rendering baselines; comprehensive public gold not verified.",
+      "source_url": "https://github.com/ArtifexSoftware/ghostpdl/tree/master/examples"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "powershell_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "powershell",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/PowerShell/PowerShell/blob/master/docs/testing-guidelines/testing-guidelines.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "proto_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "proto",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/bufbuild/buf/blob/main/private/bufpkg/bufcheck/breaking_test.go"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "puppet_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "puppet",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/puppetlabs/puppet/blob/main/spec/integration/parser/compiler_spec.rb"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "python_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "python",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "qsharp_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "qsharp",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/microsoft/qdk"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "r_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "r",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://svn.r-project.org/R/trunk/tests/README"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "reasonml_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "reasonml",
+      "reason": "Official test directory exists, but selected fixture inventory/oracles still require inspection.",
+      "source_url": "https://github.com/reasonml/reason"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "ruby_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "ruby",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "pilot_identity_only",
+      "component": "rust_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "rust",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Pilot repair semantic facts remain unadmitted.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "sas_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "sas",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. SASUnit and a matching SAS runtime are required; not a universal SAS edit benchmark.",
+      "source_url": "https://github.com/HMS-Analytical-Software/SASUnit"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "scala_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "scala",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/scala/scala/blob/2.13.x/CONTRIBUTING.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "scss_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "scss",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/sass/sass-spec"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "sql_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "sql",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. TPC-H/DS are workload supplements; derived diff metrics are not official TPC results.",
+      "source_url": "https://www.sqlite.org/sqllogictest/dir?name=test"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "squirrel_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "squirrel",
+      "reason": "Official samples exist; comprehensive conformance/edit oracle not verified.",
+      "source_url": "https://github.com/albertodemichelis/squirrel"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "svelte_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "svelte",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/sveltejs/svelte/tree/main/packages/svelte/tests"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "swift_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "swift",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.swift.org/contributing/"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "toml_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "established community / compatibility suite",
+      "language_id": "toml",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/toml-lang/toml-test"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "tsql_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "tsql",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/microsoft/SqlScriptDOM/blob/main/.github/instructions/testing.guidelines.instructions.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "js_ts_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "tsx",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "js_ts_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "recognised software-engineering research benchmark",
+      "language_id": "typescript",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.swebench.com/multilingual"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "vbnet_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "vbnet",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/dotnet/roslyn/blob/main/Compilers.slnf"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "vue_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "official upstream regression suite",
+      "language_id": "vue",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/vuejs/core/blob/main/packages/compiler-sfc/__tests__/compileStyle.spec.ts"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "wat_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "wast",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending. Use script/assertion semantics, not a module-only WAT reader.",
+      "source_url": "https://github.com/WebAssembly/spec/blob/main/interpreter/README.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "wat_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "wat",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/WebAssembly/spec/blob/main/interpreter/README.md"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "xml_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "xml",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://www.w3.org/XML/Test/"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "yaml_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "standards / conformance suite",
+      "language_id": "yaml",
+      "reason": "Selected; import, immutable pin, licence review and independent oracle validation pending.",
+      "source_url": "https://github.com/yaml/yaml-test-suite"
+    },
+    {
+      "admission_status": "blocked",
+      "component": "zig_parser.wasm",
+      "coverage": {
+        "change_understanding": "gap",
+        "parser_fidelity": "not_admitted",
+        "robustness": "not_admitted"
+      },
+      "evidence_class": "qualified external candidate; admission gap",
+      "language_id": "zig",
+      "reason": "Versioned executable examples are available; complete current canonical compiler-suite extraction was not verified.",
+      "source_url": "https://ziglang.org/documentation/0.15.1/"
+    }
+  ],
+  "schema_version": 1
+}

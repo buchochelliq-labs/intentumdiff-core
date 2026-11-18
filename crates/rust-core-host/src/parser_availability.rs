@@ -14,12 +14,24 @@ const LEGACY_ARM64_REASON: &str =
     "cranelift cannot emit one of its functions on Windows/aarch64 ('function too large'); loading it aborts the process";
 const UNVERIFIED_ARM64_REASON: &str =
     "PowerShell Wasm component is not verified under metered Wasmtime on Windows ARM64; refusing to compile a component that may abort the process";
-/// Exact parser payload built by PowerShell parser PR #5 and vetted in
-/// Windows ARM64 Wasmtime 48.0.7 host CI #40707156445, with fuel enabled.
-/// The same bytes are unsafe under 47.0.3; Cargo.toml and Cargo.lock must
-/// both pin patched 48.0.7 before the policy below permits this digest.
+/// Exact parser payload pinned by registry #20 (PowerShell parser PR #9, ref
+/// 471e723) and vetted on real Windows ARM64 with fuel-metered Wasmtime 48.0.7
+/// by that parser's "Verify Windows ARM64 metered Wasmtime 48.0.7" CI job
+/// (run #42994016353). The same class of bytes is unsafe under 47.0.3;
+/// Cargo.toml and Cargo.lock must both pin patched 48.0.7 before the policy
+/// below permits this digest.
 pub const METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256: &str =
+    "b47cff15ae39f73f753c26babb7fabb393089c3dac1dc1d1ef43d1aba49e3ff0";
+/// The earlier payload from PowerShell parser PR #5, vetted the same way in
+/// Windows ARM64 host CI #40707156445. Kept admitted so hosts still staging
+/// the 0.0.2-era component are not newly blocked.
+pub const METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256_PR5: &str =
     "29a7be79db83f80627e98da8513a160dc047ea972fae4e3be07d741793a30c15";
+/// Every PowerShell payload vetted under metered Wasmtime 48.0.7 on Windows ARM64.
+pub const METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_VETTED: [&str; 2] = [
+    METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256,
+    METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256_PR5,
+];
 
 fn is_windows_arm64(system: &str, machine: &str) -> bool {
     system.eq_ignore_ascii_case("windows")
@@ -46,7 +58,10 @@ pub fn incompatible_reason_with_digest(
     if name != "powershell" || !is_windows_arm64(system, machine) {
         return None;
     }
-    if component_sha256.eq_ignore_ascii_case(METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256) {
+    if METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_VETTED
+        .iter()
+        .any(|vetted| component_sha256.eq_ignore_ascii_case(vetted))
+    {
         None
     } else {
         Some(UNVERIFIED_ARM64_REASON)
@@ -166,6 +181,23 @@ pub fn availability_json_with_digest_impl(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn every_vetted_powershell_digest_is_admitted_and_nothing_else() {
+        for vetted in METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_VETTED {
+            for digest in [vetted.to_owned(), vetted.to_ascii_uppercase()] {
+                assert!(incompatible_reason_with_digest("powershell", "Windows", "ARM64", &digest).is_none());
+            }
+        }
+        assert_eq!(
+            METERED_WASMTIME_48_POWERSHELL_WINDOWS_ARM64_SHA256,
+            "b47cff15ae39f73f753c26babb7fabb393089c3dac1dc1d1ef43d1aba49e3ff0",
+            "the registry #20 PowerShell component is the one vetted on Windows ARM64"
+        );
+        for unknown in ["", "684c554cd5fb132275ff55f4e0ba1e1358d03c9bab32df769e81d70b445365de"] {
+            assert!(incompatible_reason_with_digest("powershell", "Windows", "ARM64", unknown).is_some());
+        }
+    }
+
     #[test]
     fn legacy_exclusion_is_limited_to_measured_platform_and_component() {
         for machine in ["ARM64", "aarch64", "AArch64"] {

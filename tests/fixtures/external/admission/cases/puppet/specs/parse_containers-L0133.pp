@@ -1,0 +1,1 @@
+define foo { define bar {}}

@@ -48,7 +48,8 @@ pub struct Outcome {
 }
 
 /// Validate loaded metadata, select eligible probes, and bound input to 4096 UTF-8 bytes.
-/// An empty allowlist excludes all plugins; an empty language filter is unrestricted.
+/// Allowlist entries follow `filename_selection::parser_allowlist_match` (grammar, plugin or
+/// language ids; an empty allowlist excludes all plugins); an empty language filter is unrestricted.
 pub fn plan(request: &Request) -> Result<Plan, String> {
     let mut seen = BTreeSet::new();
     for entry in &request.entries {
@@ -60,7 +61,9 @@ pub fn plan(request: &Request) -> Result<Plan, String> {
         }
     }
     let mut indices: Vec<_> = request.entries.iter().enumerate().filter_map(|(index, entry)| {
-        let allowed = request.allowed_plugins.as_ref().is_none_or(|ids| ids.contains(&entry.grammar_id));
+        let identity = crate::filename_selection::ParserIdentity { plugin_id: entry.plugin_id.clone(),
+            grammar_id: entry.grammar_id.clone(), languages: entry.languages.clone(), aliases: Vec::new() };
+        let allowed = crate::filename_selection::parser_allowlist_match(request.allowed_plugins.as_deref(), &identity).is_some();
         let selected = request.plugin_id.as_ref().is_none_or(|id| id == &entry.plugin_id);
         let language = request.candidates.is_empty() || entry.languages.iter().any(|id| request.candidates.contains(id));
         (allowed && selected && language).then_some(index)

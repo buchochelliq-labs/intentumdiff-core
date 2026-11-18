@@ -1,0 +1,97 @@
+{
+  "evidence_kind": "upstream supplied example-test execution; independent of IntentumDiff",
+  "cases": [
+    {
+      "language_id": "cpp",
+      "task_id": "CPP/0",
+      "toolchain": "g++ (Debian 14.2.0-19) 14.2.0",
+      "test_source": "retained upstream example_test",
+      "versions": {
+        "old": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": -6,
+          "run_stdout": "",
+          "run_stderr": "00-old: /tmp/compiled-source-witness-yr52iwb6/00-old.cpp:21: int main(): Assertion `has_close_elements({1.0, 2.0, 3.0}, 0.5) == false && \"failure 1\"' failed.\n"
+        },
+        "new": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": 0,
+          "run_stdout": "",
+          "run_stderr": ""
+        }
+      },
+      "witness_confirmed": true
+    },
+    {
+      "language_id": "cpp",
+      "task_id": "CPP/2",
+      "toolchain": "g++ (Debian 14.2.0-19) 14.2.0",
+      "test_source": "retained upstream example_test",
+      "versions": {
+        "old": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": -6,
+          "run_stdout": "",
+          "run_stderr": "02-old: /tmp/compiled-source-witness-yr52iwb6/02-old.cpp:12: int main(): Assertion `truncate_number(3.5) == 0.5' failed.\n"
+        },
+        "new": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": 0,
+          "run_stdout": "",
+          "run_stderr": ""
+        }
+      },
+      "witness_confirmed": true
+    },
+    {
+      "language_id": "cpp",
+      "task_id": "CPP/3",
+      "toolchain": "g++ (Debian 14.2.0-19) 14.2.0",
+      "test_source": "retained upstream example_test",
+      "versions": {
+        "old": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": -6,
+          "run_stdout": "",
+          "run_stderr": "03-old: /tmp/compiled-source-witness-yr52iwb6/03-old.cpp:20: int main(): Assertion `below_zero({1, 2, -4, 5}) == true' failed.\n"
+        },
+        "new": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": 0,
+          "run_stdout": "",
+          "run_stderr": ""
+        }
+      },
+      "witness_confirmed": true
+    },
+    {
+      "language_id": "cpp",
+      "task_id": "CPP/11",
+      "toolchain": "g++ (Debian 14.2.0-19) 14.2.0",
+      "test_source": "retained upstream example_test",
+      "versions": {
+        "old": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": -6,
+          "run_stdout": "",
+          "run_stderr": "11-old: /tmp/compiled-source-witness-yr52iwb6/11-old.cpp:33: int main(): Assertion `string_xor(\"010\", \"110\") == \"100\"' failed.\n"
+        },
+        "new": {
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "run_exit": 0,
+          "run_stdout": "",
+          "run_stderr": ""
+        }
+      },
+      "witness_confirmed": true
+    }
+  ]
+}

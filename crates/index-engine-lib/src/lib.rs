@@ -16,7 +16,7 @@
 //!   type annotations).
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 // ---------------------------------------------------------------------------
 // Input schema: matches SemanticNode JSON produced by the host
@@ -519,32 +519,36 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     let mut changes: Vec<CrossFileChange> = Vec::new();
 
     // --- Pass 1: MOVE_TO_MODULE -------------------------------------------
-    for (qname, old_defs) in &old_table {
+    // Consume definitions that remain in the same file first. A qualified
+    // name is not unique: taking the Cartesian product of duplicate names
+    // invents moves (and grows quadratically) even when the project is
+    // unchanged. Only one unmatched old/new pair is strong enough evidence
+    // for a move; duplicate unmatched groups stay ambiguous.
+    let mut qnames: Vec<&String> = old_table.keys().collect();
+    qnames.sort();
+    for qname in qnames {
+        let old_defs = &old_table[qname];
         if let Some(new_defs) = new_table.get(qname) {
-            for old_def in old_defs {
-                for new_def in new_defs {
-                    if old_def.file != new_def.file {
-                        changes.push(CrossFileChange {
-                            change_type: "MOVE_TO_MODULE",
-                            symbol_name: qname.clone(),
-                            old_file: old_def.file.clone(),
-                            new_file: new_def.file.clone(),
-                            old_node_id: Some(old_def.node_id.clone()),
-                            new_node_id: Some(new_def.node_id.clone()),
-                            old_position: Some(position_from_definition(old_def)),
-                            new_position: Some(position_from_definition(new_def)),
-                            old_language: old_def.language.clone(),
-                            new_language: new_def.language.clone(),
-                            node_type: old_def.node_type.clone(),
-                            symbol_kind: symbol_kind(&old_def.node_type).to_string(),
-                            confidence: 1.0,
-                            description: format!(
-                                "'{}' moved from '{}' to '{}'",
-                                qname, old_def.file, new_def.file
-                            ),
-                        });
-                    }
-                }
+            if let Some((old_def, new_def)) = unique_unmatched_cross_file_move(old_defs, new_defs) {
+                changes.push(CrossFileChange {
+                    change_type: "MOVE_TO_MODULE",
+                    symbol_name: qname.to_string(),
+                    old_file: old_def.file.clone(),
+                    new_file: new_def.file.clone(),
+                    old_node_id: Some(old_def.node_id.clone()),
+                    new_node_id: Some(new_def.node_id.clone()),
+                    old_position: Some(position_from_definition(old_def)),
+                    new_position: Some(position_from_definition(new_def)),
+                    old_language: old_def.language.clone(),
+                    new_language: new_def.language.clone(),
+                    node_type: old_def.node_type.clone(),
+                    symbol_kind: symbol_kind(&old_def.node_type).to_string(),
+                    confidence: 1.0,
+                    description: format!(
+                        "'{}' moved from '{}' to '{}'",
+                        qname, old_def.file, new_def.file
+                    ),
+                });
             }
         }
     }
@@ -552,7 +556,8 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     // --- Pass 1.5: SPLIT_MODULE ------------------------------------------
     // Aggregate exact symbol moves when one old file fans out into multiple
     // new files. Only unambiguous one-definition symbols contribute.
-    let mut split_candidates: HashMap<String, Vec<CrossFileChange>> = HashMap::new();
+    // BTreeMap, not HashMap: SPLIT_MODULE changes are emitted in iteration order (#251).
+    let mut split_candidates: BTreeMap<String, Vec<CrossFileChange>> = BTreeMap::new();
     for change in &changes {
         if change.change_type != "MOVE_TO_MODULE" {
             continue;
@@ -628,8 +633,8 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
     }
 
     // --- Pass 2: CROSS_FILE_RENAME ----------------------------------------
-    let old_names: std::collections::HashSet<&str> = old_table.keys().map(|s| s.as_str()).collect();
-    let new_names: std::collections::HashSet<&str> = new_table.keys().map(|s| s.as_str()).collect();
+    let old_names: BTreeSet<&str> = old_table.keys().map(|s| s.as_str()).collect();
+    let new_names: BTreeSet<&str> = new_table.keys().map(|s| s.as_str()).collect();
 
     let removed: Vec<&str> = old_names.difference(&new_names).cloned().collect();
     let added: Vec<&str> = new_names.difference(&old_names).cloned().collect();
@@ -641,7 +646,7 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
         format!("{}|{}|{}", defn.file, defn.node_type, parent)
     }
 
-    let mut removed_by_key: HashMap<String, Vec<(&str, &SymbolDefinition)>> = HashMap::new();
+    let mut removed_by_key: BTreeMap<String, Vec<(&str, &SymbolDefinition)>> = BTreeMap::new();
     for qname in &removed {
         let defs = &old_table[*qname];
         let key = group_key(qname, defs);
@@ -651,7 +656,7 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
             .push((qname, &defs[0]));
     }
 
-    let mut added_by_key: HashMap<String, Vec<(&str, &SymbolDefinition)>> = HashMap::new();
+    let mut added_by_key: BTreeMap<String, Vec<(&str, &SymbolDefinition)>> = BTreeMap::new();
     for qname in &added {
         let defs = &new_table[*qname];
         let key = group_key(qname, defs);
@@ -686,16 +691,145 @@ pub fn diff_symbol_tables_impl(old_json: &str, new_json: &str) -> String {
         }
     }
 
+    sort_cross_file_changes(&mut changes);
     match serde_json::to_string(&changes) {
         Ok(s) => s,
         Err(e) => format!(r#"{{"error":"Serialisation error: {}"}}"#, e),
     }
 }
 
+/// The documented total order of `diff_symbol_tables` output (#251): pass (moves, splits,
+/// renames), then symbol, files, node ids and positions. Identical inputs therefore produce
+/// identical arrays across calls and processes. The sort is stable and only reorders, so no
+/// distinct change is merged or dropped.
+fn sort_cross_file_changes(changes: &mut [CrossFileChange]) {
+    fn pass(change_type: &str) -> u8 {
+        match change_type {
+            "MOVE_TO_MODULE" => 0,
+            "SPLIT_MODULE" => 1,
+            "CROSS_FILE_RENAME" => 2,
+            _ => 3,
+        }
+    }
+    fn position(p: &Option<ReferencePosition>) -> Option<(u32, u32, u32, u32)> {
+        p.as_ref().map(|p| (p.start_line, p.start_col, p.end_line, p.end_col))
+    }
+    changes.sort_by(|a, b| {
+        (pass(a.change_type), &a.symbol_name, &a.old_file, &a.new_file)
+            .cmp(&(pass(b.change_type), &b.symbol_name, &b.old_file, &b.new_file))
+            .then_with(|| (&a.old_node_id, &a.new_node_id).cmp(&(&b.old_node_id, &b.new_node_id)))
+            .then_with(|| {
+                (position(&a.old_position), position(&a.new_position))
+                    .cmp(&(position(&b.old_position), position(&b.new_position)))
+            })
+    });
+}
+
+fn unique_unmatched_cross_file_move<'a>(
+    old_defs: &'a [SymbolDefinition],
+    new_defs: &'a [SymbolDefinition],
+) -> Option<(&'a SymbolDefinition, &'a SymbolDefinition)> {
+    let mut old_matched = vec![false; old_defs.len()];
+    let mut new_matched = vec![false; new_defs.len()];
+    let mut old_by_identity: HashMap<(String, String, String), usize> = HashMap::new();
+    let mut new_by_identity: HashMap<(String, String, String), Vec<usize>> = HashMap::new();
+    for old_def in old_defs {
+        *old_by_identity
+            .entry((old_def.file.clone(), old_def.language.clone(), old_def.node_type.clone()))
+            .or_default() += 1;
+    }
+    for (new_index, new_def) in new_defs.iter().enumerate() {
+        new_by_identity
+            .entry((new_def.file.clone(), new_def.language.clone(), new_def.node_type.clone()))
+            .or_default()
+            .push(new_index);
+    }
+    // A changed multiplicity in a duplicate file-local bucket cannot tell us
+    // whether a definition moved, was copied, or was deleted. Refuse to infer
+    // a move even if the arbitrary remainder would otherwise be one-to-one.
+    for (identity, &old_count) in &old_by_identity {
+        let new_count = new_by_identity.get(identity).map_or(0, Vec::len);
+        if old_count.max(new_count) > 1 && old_count != new_count {
+            return None;
+        }
+    }
+    for (identity, new_indices) in &new_by_identity {
+        let old_count = old_by_identity.get(identity).copied().unwrap_or(0);
+        if old_count.max(new_indices.len()) > 1 && old_count != new_indices.len() {
+            return None;
+        }
+    }
+    for (old_index, old_def) in old_defs.iter().enumerate() {
+        let identity = (old_def.file.clone(), old_def.language.clone(), old_def.node_type.clone());
+        if let Some(new_index) = new_by_identity.get_mut(&identity).and_then(|indices| indices.pop()) {
+            old_matched[old_index] = true;
+            new_matched[new_index] = true;
+        }
+    }
+
+    let old_unmatched: Vec<&SymbolDefinition> = old_defs
+        .iter()
+        .zip(old_matched)
+        .filter_map(|(definition, matched)| (!matched).then_some(definition))
+        .collect();
+    let new_unmatched: Vec<&SymbolDefinition> = new_defs
+        .iter()
+        .zip(new_matched)
+        .filter_map(|(definition, matched)| (!matched).then_some(definition))
+        .collect();
+    if let ([old_def], [new_def]) = (old_unmatched.as_slice(), new_unmatched.as_slice()) {
+        if old_def.file != new_def.file
+            && old_def.language == new_def.language
+            && old_def.node_type == new_def.node_type
+        {
+            return Some((*old_def, *new_def));
+        }
+    }
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use serde_json::{json, Value};
+
+    // #251: identical inputs give byte-identical change arrays. The old code appended
+    // SPLIT_MODULE and CROSS_FILE_RENAME changes while iterating randomly seeded HashMaps.
+    #[test]
+    fn diff_symbol_tables_output_order_is_deterministic() {
+        fn def(qname: &str, file: &str, line: u32) -> Value {
+            json!({"qualified_name": qname, "file": file, "node_id": format!("{file}:{line}"),
+                   "node_type": "function_definition", "language": "python",
+                   "start_line": line, "start_col": 0, "end_line": line + 1, "end_col": 0})
+        }
+        let mut old = serde_json::Map::new();
+        let mut new = serde_json::Map::new();
+        for i in 0..8 {
+            // A unique move per name, plus a same-scope rename per file pair.
+            old.insert(format!("f{i}"), json!([def(&format!("f{i}"), &format!("old{i}.py"), i)]));
+            new.insert(format!("f{i}"), json!([def(&format!("f{i}"), &format!("new{i}.py"), i)]));
+            old.insert(format!("g{i}"), json!([def(&format!("g{i}"), &format!("r{i}.py"), 40 + i)]));
+            new.insert(format!("h{i}"), json!([def(&format!("h{i}"), &format!("r{i}.py"), 40 + i)]));
+        }
+        // One old file split into two new files.
+        for (name, target) in [("s0", "split_a.py"), ("s1", "split_b.py")] {
+            old.insert(name.into(), json!([def(name, "whole.py", 90)]));
+            new.insert(name.into(), json!([def(name, target, 90)]));
+        }
+        let (old, new) = (Value::Object(old).to_string(), Value::Object(new).to_string());
+        let first = diff_symbol_tables_impl(&old, &new);
+        let changes: Vec<Value> = serde_json::from_str(&first).unwrap();
+        let kinds = |kind: &str| changes.iter().filter(|c| c["change_type"] == kind).count();
+        assert_eq!((kinds("MOVE_TO_MODULE"), kinds("SPLIT_MODULE"), kinds("CROSS_FILE_RENAME")), (10, 1, 8));
+        for _ in 0..30 {
+            // Re-parsing re-seeds every HashMap, so each call iterates in a fresh order.
+            assert_eq!(diff_symbol_tables_impl(&old, &new), first);
+        }
+        let names: Vec<&str> = changes.iter().map(|c| c["symbol_name"].as_str().unwrap()).collect();
+        let mut moves: Vec<&str> = names[..10].to_vec();
+        moves.sort();
+        assert_eq!(names[..10], moves[..], "moves are ordered by symbol name");
+    }
 
     fn pos() -> Value {
         json!({"start_line": 0, "start_col": 0, "end_line": 0, "end_col": 0})
@@ -718,6 +852,89 @@ mod tests {
 
     fn symbol_table(language: &str, tree: Value) -> Value {
         serde_json::from_str(&build_symbol_table_impl(&file(language, tree))).unwrap()
+    }
+
+    #[test]
+    fn unchanged_duplicate_names_are_not_reported_as_module_moves() {
+        for count in [2usize, 8, 32] {
+            let definitions: Vec<Value> = (0..count)
+                .map(|index| json!({
+                    "qualified_name": "f",
+                    "file": format!("module_{index}.py"),
+                    "node_type": "function_definition",
+                    "node_id": format!("node_{index}"),
+                    "start_line": 0,
+                    "start_col": 0,
+                    "end_line": 1,
+                    "end_col": 1,
+                    "language": "python"
+                }))
+                .collect();
+            let table = json!({"f": definitions});
+            let changes: Value = serde_json::from_str(&diff_symbol_tables_impl(
+                &table.to_string(),
+                &table.to_string(),
+            ))
+            .unwrap();
+            assert_eq!(changes, json!([]), "identical {count}-definition tables");
+        }
+    }
+
+    #[test]
+    fn duplicate_name_matching_preserves_copies_and_only_reports_unique_moves() {
+        let definition = |file: &str, node_id: &str| json!({
+            "qualified_name": "f",
+            "file": file,
+            "node_type": "function_definition",
+            "node_id": node_id,
+            "start_line": 0,
+            "start_col": 0,
+            "end_line": 1,
+            "end_col": 1,
+            "language": "python"
+        });
+        let identity = |old: Value, new: Value| -> Value {
+            serde_json::from_str(&diff_symbol_tables_impl(&old.to_string(), &new.to_string())).unwrap()
+        };
+
+        assert_eq!(
+            identity(json!({"f": [definition("a.py", "a")]}), json!({"f": [definition("b.py", "b")]})).as_array().unwrap().len(),
+            1,
+            "one unmatched old and new definition is a unique move",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "old")]}),
+                json!({"f": [definition("a.py", "retained"), definition("b.py", "copy")]}),
+            ),
+            json!([]),
+            "a same-file definition plus a new copy is not a move",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "a"), definition("b.py", "b")]}),
+                json!({"f": [definition("c.py", "c")]}),
+            ),
+            json!([]),
+            "an unmatched duplicate-name group is ambiguous",
+        );
+        assert_eq!(
+            identity(
+                json!({"f": [definition("a.py", "a1"), definition("a.py", "a2")]}),
+                json!({"f": [definition("a.py", "retained"), definition("b.py", "possible-copy")]}),
+            ),
+            json!([]),
+            "a duplicate same-file bucket with an imbalanced count cannot identify a moved occurrence",
+        );
+        let retained_and_moved = identity(
+            json!({"f": [definition("a.py", "retained-old"), definition("b.py", "old-move")]}),
+            json!({"f": [definition("a.py", "retained-new"), definition("c.py", "new-move")]}),
+        );
+        assert!(retained_and_moved.as_array().unwrap().iter().any(|change| {
+            change["change_type"] == "MOVE_TO_MODULE"
+                && change["old_file"] == "b.py"
+                && change["new_file"] == "c.py"
+        }), "same-file occurrences must be consumed before matching a unique move");
     }
 
     fn reference_table(language: &str, tree: Value) -> Value {

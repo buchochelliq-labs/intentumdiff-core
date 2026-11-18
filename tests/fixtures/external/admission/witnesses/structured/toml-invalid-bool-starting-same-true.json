@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-bool-starting-same-true",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "cff1ef95281fff32c6e6ab56d3d3280e919e235cffee64b37052504cad5d1d07",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 31)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "cff1ef95281fff32c6e6ab56d3d3280e919e235cffee64b37052504cad5d1d07",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

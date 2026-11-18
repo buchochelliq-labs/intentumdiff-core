@@ -1,0 +1,16 @@
+{
+  "case_id": "po-trailing-comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "df3280ed6aa09ca62288e18c42a3f5cc9de01b51b5f88d9037a7153d9b3e2137",
+  "observations": {
+    "mo_sha256": "1c63f4195c241ffb4ec02248c348712ae64baab2e659bd79e4bb27ea9fb43f5f",
+    "reference_accepts": true,
+    "stderr": "d 'Last-Translator' missing in header\nf.po:2: warning: header field 'Language-Team' missing in header\nf.po:2: warning: header field 'MIME-Version' missing in header\nf.po:2: warning: header field 'Content-Transfer-Encoding' missing in header\nf.po:2: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "df3280ed6aa09ca62288e18c42a3f5cc9de01b51b5f88d9037a7153d9b3e2137",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

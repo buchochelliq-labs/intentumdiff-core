@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-spec-array-of-tables-0-bump",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "ec30a970af8c301c6e48c65d93760eb7ae6764c3e6422d2455f791a26e843e0e",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "f56d1fb86994876c3d5e2f01a171f507e7cf2b00cbb0f880219665cf960a70ed",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

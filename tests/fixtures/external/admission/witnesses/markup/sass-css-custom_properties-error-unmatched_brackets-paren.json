@@ -1,0 +1,15 @@
+{
+  "case_id": "sass-css-custom_properties-error-unmatched_brackets-paren",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "ad449c8977f85ccecc78eb8b947b1ee3a7d5cd93a292d62e59cc6245376a14e7",
+  "observations": {
+    "error": "expected \";\".",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "ad449c8977f85ccecc78eb8b947b1ee3a7d5cd93a292d62e59cc6245376a14e7",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

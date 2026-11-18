@@ -1,0 +1,17 @@
+{
+  "bug_type": "excess logic",
+  "buggy_solution": "        return number % 1.0 + 1.0;\n    }\n}",
+  "canonical_solution": "        return number % 1.0;\n    }\n}",
+  "declaration": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    public double truncateNumber(double number) {\n",
+  "docstring": "Given a positive floating point number, it can be decomposed into\nand integer part (largest integer smaller than given number) and decimals\n(leftover part always smaller than 1).\nReturn the decimal part of the number.\n>>> truncateNumber(3.5)\n0.5",
+  "entry_point": "truncateNumber",
+  "example_test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n            s.truncateNumber(3.5) == 0.5\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Java function `public double truncateNumber(double number)` to solve the following problem:\nGiven a positive floating point number, it can be decomposed into\nand integer part (largest integer smaller than given number) and decimals\n(leftover part always smaller than 1).\nReturn the decimal part of the number.\n>>> truncateNumber(3.5)\n0.5",
+  "prompt": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    /**\n    Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncateNumber(3.5)\n    0.5\n     */\n    public double truncateNumber(double number) {\n",
+  "signature": "public double truncateNumber(double number)",
+  "task_id": "Java/2",
+  "test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n            s.truncateNumber(3.5) == 0.5,\n            Math.abs(s.truncateNumber(1.33) - 0.33) < 1e-6,\n            Math.abs(s.truncateNumber(123.456) - 0.456) < 1e-6\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}",
+  "test_setup": ""
+}

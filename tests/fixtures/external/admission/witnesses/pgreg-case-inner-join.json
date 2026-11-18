@@ -1,0 +1,104 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "pgreg-case-inner-join",
+  "comparison": {
+    "order": "bag",
+    "values": "text rendering per engine; NULL distinct from empty"
+  },
+  "engines": [
+    {
+      "name": "postgresql",
+      "version": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit"
+    },
+    {
+      "name": "sqlite",
+      "version": "SQLite 3.53.1 (Python sqlite3 module)"
+    }
+  ],
+  "new_sha256": "a63fd98fc1b3ef68045171276a91f785a3ac7edbda07d1f0846fb3e5b5305664",
+  "old_sha256": "45c604a0502a0da179a899f1f9536546971ccbfe6c3b707e1f4fe7524f9c2aef",
+  "oracle": "final_statement_result_set_comparison",
+  "results": {
+    "postgresql": {
+      "conclusion": "same",
+      "new": {
+        "outcome": "ok",
+        "rows": [
+          [
+            "4",
+            "",
+            "2",
+            "-2"
+          ],
+          [
+            "4",
+            "",
+            "2",
+            "-4"
+          ]
+        ]
+      },
+      "new_rows_sha256": "5b220c4ab5404a7f63279043bcbb3ce9a76c6dc9595e249118efcace833d0dbc",
+      "old": {
+        "outcome": "ok",
+        "rows": [
+          [
+            "4",
+            "",
+            "2",
+            "-2"
+          ],
+          [
+            "4",
+            "",
+            "2",
+            "-4"
+          ]
+        ]
+      },
+      "old_rows_sha256": "5b220c4ab5404a7f63279043bcbb3ce9a76c6dc9595e249118efcace833d0dbc"
+    },
+    "sqlite": {
+      "conclusion": "same",
+      "new": {
+        "outcome": "ok",
+        "rows": [
+          [
+            4,
+            null,
+            2,
+            -2
+          ],
+          [
+            4,
+            null,
+            2,
+            -4
+          ]
+        ]
+      },
+      "new_rows_sha256": "36cfce9da7ba71dcfea41b070da33e5fafc82b3b8af0914a3477e2e43d0feca6",
+      "old": {
+        "outcome": "ok",
+        "rows": [
+          [
+            4,
+            null,
+            2,
+            -2
+          ],
+          [
+            4,
+            null,
+            2,
+            -4
+          ]
+        ]
+      },
+      "old_rows_sha256": "36cfce9da7ba71dcfea41b070da33e5fafc82b3b8af0914a3477e2e43d0feca6"
+    }
+  },
+  "schema_version": 1,
+  "status": "executed",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-03-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "cbe0182b0ab7313049103547a61ab4fe2abbabc3c280a19afef2c5776bfda33a",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.007s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "c0aef7d658bd4482c168c05b8af35f08db607738088279c5bdccd746901e7913",
+  "new_test_sha256": "694572ff111ccb34d43cd16dd2de2a6939bed0ede08d48c1163eda7b66a081ce",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "cbe0182b0ab7313049103547a61ab4fe2abbabc3c280a19afef2c5776bfda33a",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "--- FAIL: TestBelowZero (0.00s)\n    main_test.go:11: \n        \tError Trace:\t/tmp/hep-witness-1e5mf_co/main_test.go:11\n        \tError:      \tNot equal: \n        \t            \texpected: false\n        \t            \tactual  : true\n        \tTest:       \tTestBelowZero\n    main_test.go:12: \n        \tError Trace:\t/tmp/hep-witness-1e5mf_co/main_test.go:12\n        \tError:      \tNot equal: \n        \t            \texpected: true\n        \t            \tactual  : false\n        \tTest:       \tTestBelowZero\n    main_test.go:13: \n        \tError Trace:\t/tmp/hep-witness-1e5mf_co/main_test.go:13\n        \tError:      \tNot equal: \n        \t            \texpected: false\n        \t            \tactual  : true\n        \tTest:       \tTestBelowZero\n    main_test.go:15: \n        \tError Trace:\t/tmp/hep-witness-1e5mf_co/main_test.go:15\n        \tError:      \tNot equal: \n        \t            \texpected: true\n        \t            \tactual  : false\n        \tTest:       \tTestBelowZero\nFAIL\nFAIL\thumanevalpack\t0.007s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "d440b2e55790b53462f4b5259c9640da55314d48b8c7ad9339c5ce9278794d54",
+  "old_test_sha256": "694572ff111ccb34d43cd16dd2de2a6939bed0ede08d48c1163eda7b66a081ce",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/03.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

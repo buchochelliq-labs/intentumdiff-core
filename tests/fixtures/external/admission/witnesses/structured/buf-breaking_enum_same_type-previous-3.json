@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_enum_same_type-previous-3",
+  "executed_utc": "2026-11-17T20:20:32+00:00",
+  "new_sha256": "c14088ab5ba59f1eaf60823f97568cb45ed0cc6f96e6a6d03fa8eaa55f7a168b",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "c14088ab5ba59f1eaf60823f97568cb45ed0cc6f96e6a6d03fa8eaa55f7a168b",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

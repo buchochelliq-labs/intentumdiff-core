@@ -1,0 +1,71 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-retract-golden",
+  "engines": [
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "abc"
+    },
+    "Replace": null,
+    "Require": null,
+    "Retract": [
+      {
+        "High": "v1.2.3",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.4",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.3",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.4",
+        "Low": "v1.2.3"
+      }
+    ],
+    "Tool": null
+  },
+  "new_sha256": "02fa705ae03d70b808a7d94708d317dd82c7948f5a0fe8d2465dadd467a097aa",
+  "old_observation": {
+    "Exclude": null,
+    "Module": {
+      "Path": "abc"
+    },
+    "Replace": null,
+    "Require": null,
+    "Retract": [
+      {
+        "High": "v1.2.3",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.4",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.3",
+        "Low": "v1.2.3"
+      },
+      {
+        "High": "v1.2.4",
+        "Low": "v1.2.3"
+      }
+    ],
+    "Tool": null
+  },
+  "old_sha256": "7408a1ed5db93755b583f13cc00b5b1e74e152643b5ed5aed5b3b3ecea861bc7",
+  "oracle": "go_mod_edit_json_equality",
+  "projection_equal": true,
+  "review": "cmd/go `go mod edit -json`: the module JSON documents equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "        List<Integer> result = new ArrayList<>();\n        if (numbers.size() == 0) {\n            return result;\n        }\n        int rollingMax = 1;\n        result.add(rollingMax);\n\n        for (int i = 1; i < numbers.size(); i++) {\n            if (numbers.get(i) > rollingMax) {\n                rollingMax = numbers.get(i);\n            }\n            result.add(rollingMax);\n        }\n\n        return result;\n    }\n}",
+  "canonical_solution": "        List<Integer> result = new ArrayList<>();\n        if (numbers.size() == 0) {\n            return result;\n        }\n        int rollingMax = numbers.get(0);\n        result.add(rollingMax);\n\n        for (int i = 1; i < numbers.size(); i++) {\n            if (numbers.get(i) > rollingMax) {\n                rollingMax = numbers.get(i);\n            }\n            result.add(rollingMax);\n        }\n\n        return result;\n    }\n}",
+  "declaration": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    public List<Integer> rollingMax(List<Integer> numbers) {\n",
+  "docstring": "From a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> rollingMax(Arrays.asList(1, 2, 3, 2, 3, 4, 2))\n[1, 2, 3, 3, 3, 4, 4]",
+  "entry_point": "rollingMax",
+  "example_test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.rollingMax(new ArrayList<>(List.of(1, 2, 3, 2, 3, 4, 2))).equals(List.of(1, 2, 3, 3, 3, 4, 4))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Java function `public List<Integer> rollingMax(List<Integer> numbers)` to solve the following problem:\nFrom a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.\n>>> rollingMax(Arrays.asList(1, 2, 3, 2, 3, 4, 2))\n[1, 2, 3, 3, 3, 4, 4]",
+  "prompt": "import java.util.*;\nimport java.lang.*;\n\nclass Solution {\n    /**\n    From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rollingMax(Arrays.asList(1, 2, 3, 2, 3, 4, 2))\n    [1, 2, 3, 3, 3, 4, 4]\n     */\n    public List<Integer> rollingMax(List<Integer> numbers) {\n",
+  "signature": "public List<Integer> rollingMax(List<Integer> numbers)",
+  "task_id": "Java/9",
+  "test": "public class Main {\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        List<Boolean> correct = Arrays.asList(\n                s.rollingMax(new ArrayList<>(List.of())).equals(List.of()),\n                s.rollingMax(new ArrayList<>(Arrays.asList(1, 2, 3, 4))).equals(Arrays.asList(1, 2, 3, 4)),\n                s.rollingMax(new ArrayList<>(Arrays.asList(4, 3, 2, 1))).equals(Arrays.asList(4, 4, 4, 4)),\n                s.rollingMax(new ArrayList<>(Arrays.asList(3, 2, 3, 100, 3))).equals(Arrays.asList(3, 3, 3, 100, 100))\n        );\n        if (correct.contains(false)) {\n            throw new AssertionError();\n        }\n    }\n}",
+  "test_setup": ""
+}

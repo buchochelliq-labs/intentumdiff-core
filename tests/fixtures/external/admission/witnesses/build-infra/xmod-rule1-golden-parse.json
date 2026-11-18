@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-rule1-golden-parse",
+  "cmd_go_error": "go: errors parsing go.mod:\n<TMP>/go.mod:3: repeated module statement\n<TMP>/go.mod:5: usage: require module/path v1.2.3\n<TMP>/go.mod:7: usage: require module/path v1.2.3",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "12807d309c21559b046bc8c5c8b289b6fdb9b24b02a9f4a48f9c5cb120df37a2",
+  "old_sha256": "12807d309c21559b046bc8c5c8b289b6fdb9b24b02a9f4a48f9c5cb120df37a2",
+  "oracle": "gomod_parse",
+  "reference_accepts": false,
+  "review": "the reference rejects the file: go.mod:3: repeated module statement\ngo.mod:5: usage: require module/path v1.2.3\ngo.mod:7: usage: require module/path v1.2.3",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [],
+  "verdict": "contradicts_claim",
+  "xmod_error": "go.mod:3: repeated module statement\ngo.mod:5: usage: require module/path v1.2.3\ngo.mod:7: usage: require module/path v1.2.3"
+}

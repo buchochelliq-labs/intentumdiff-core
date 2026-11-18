@@ -74,8 +74,37 @@ pub struct Review {
     pub has_semantic_changes: bool,
     pub is_style_only: bool,
     pub is_fallback: bool,
+    /// `code` | `docs` | `config` | `data` | `text`, from the routed language.
+    #[serde(default)]
+    pub content_class: Option<String>,
+    /// `complete` | `equivalent` | `incomplete` (core #252): whether `changes` explain the
+    /// source delta. `incomplete` is never a clean review; see [`Review::incomplete`].
+    #[serde(default)]
+    pub completeness: Option<String>,
+    /// Present only for `completeness == "incomplete"`: render `message` verbatim.
+    #[serde(default)]
+    pub incomplete: Option<Incomplete>,
     #[serde(default)]
     pub metadata: Map<String, Value>,
+    #[serde(flatten)]
+    pub attributes: Map<String, Value>,
+}
+/// Report-a-bug evidence for a review that could not explain its source delta. Contains no
+/// source text: only the routed language id, the core version and changed byte/line ranges.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Incomplete {
+    /// Stable reason code, e.g. `unexplained_source_delta`.
+    pub reason: String,
+    /// User-facing text produced by the core; bindings show it unchanged.
+    pub message: String,
+    pub report_url: String,
+    #[serde(default)]
+    pub language: String,
+    #[serde(default)]
+    pub core_version: String,
+    /// Zero-based lines, exclusive end bytes.
+    #[serde(default)]
+    pub source_ranges: Vec<Value>,
     #[serde(flatten)]
     pub attributes: Map<String, Value>,
 }
@@ -135,4 +164,26 @@ pub fn review_sources(
         return Err(ReviewError::Unsupported(reason.to_owned()));
     }
     serde_json::from_value(envelope["diff"].take()).map_err(ReviewError::InvalidResult)
+}
+
+/// The complete guardrail check verdict (counts + strict gate) for a set of reviews or a
+/// violation list. See [`crate::guardrail_policy::check_result`] for the request shape and the
+/// gate rule; bindings render this result and never recompute `passed`.
+pub fn guardrail_check_result(request: &Value) -> Result<Value, ReviewError> {
+    crate::guardrail_policy::check_result(request).map_err(ReviewError::Engine)
+}
+
+/// The effective parser Wasm fuel for `content_len` bytes under a diff config JSON object (the
+/// same policy the engine applies to every parse; `None` = unlimited, i.e. `plugin_fuel < 0`).
+/// Bindings that run their own components (renderers, probes) use this instead of re-deriving
+/// the scaling, so the unlimited sentinel and the minimum-scaling rule stay in one place.
+pub fn fuel_budget(config_json: &str, content_len: u64) -> Result<Option<u64>, ReviewError> {
+    crate::fuel_budget_for_content(config_json, content_len).map_err(ReviewError::Engine)
+}
+
+/// Validate an `intentumdiff-registry` manifest (parsed from YAML/JSON) against the registry
+/// schema and trust policy. Returns every `(json_pointer_path, message)` problem; empty = valid.
+/// See docs/C_ABI.md "Registry manifest validation" for the official/community rules.
+pub fn validate_registry_manifest(manifest: &Value) -> Vec<(String, String)> {
+    crate::registry::validate_registry_manifest(manifest)
 }

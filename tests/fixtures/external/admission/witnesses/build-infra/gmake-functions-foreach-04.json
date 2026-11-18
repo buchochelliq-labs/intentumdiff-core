@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-functions-foreach-04",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 512,
+    "expected_output": "work/functions/foreach.mk.4:2: *** insufficient number of arguments (1) to function 'foreach'.  Stop.\n",
+    "line": 77,
+    "options": "",
+    "script": "functions/foreach"
+  },
+  "new_sha256": "8938f291d8d50fd3a7ae96bf57e2a42f2d789b4a5a467eb65e8c25d57afdaf14",
+  "old_sha256": "8938f291d8d50fd3a7ae96bf57e2a42f2d789b4a5a467eb65e8c25d57afdaf14",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": true,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

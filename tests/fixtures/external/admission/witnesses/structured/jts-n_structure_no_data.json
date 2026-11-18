@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_structure_no_data",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "observations": {
+    "error": "Expecting value: line 1 column 1 (char 0)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

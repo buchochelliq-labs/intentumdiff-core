@@ -36,6 +36,43 @@ pub enum Action {
     Failure { event: usize },
 }
 
+/// Everything a parser allowlist may name. Bindings fill it from the loaded component
+/// metadata (`grammar_id`, `languages`) and the catalogue entry (`plugin_id`, `aliases`).
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+pub struct ParserIdentity {
+    #[serde(default)] pub plugin_id: String,
+    #[serde(default)] pub grammar_id: String,
+    #[serde(default)] pub languages: Vec<String>,
+    #[serde(default)] pub aliases: Vec<String>,
+}
+
+/// The one parser-allowlist rule (python #311), shared by filename selection, content
+/// detection and bindings: `None` allows every parser (`"unrestricted"`); `Some([])` allows
+/// none; otherwise an entry selects the parser when it EXACTLY (case-sensitive, non-empty)
+/// equals its grammar id, plugin/catalogue id, a catalogue alias, or a declared language id.
+/// Returns which identifier kind matched (`grammar_id` > `plugin_id` > `alias` > `language`).
+pub fn parser_allowlist_match(allowed: Option<&[String]>, identity: &ParserIdentity) -> Option<&'static str> {
+    let Some(allowed) = allowed else { return Some("unrestricted") };
+    let named = |id: &str| !id.is_empty() && allowed.iter().any(|a| a == id);
+    if named(&identity.grammar_id) { return Some("grammar_id"); }
+    if named(&identity.plugin_id) { return Some("plugin_id"); }
+    if identity.aliases.iter().any(|a| named(a)) { return Some("alias"); }
+    if identity.languages.iter().any(|l| named(l)) { return Some("language"); }
+    None
+}
+
+/// C ABI `parser_allowlist_matches(allowed_plugins|null, identity_json)` ->
+/// `{"matches": bool, "matched_by": "unrestricted"|"grammar_id"|"plugin_id"|"alias"|"language"|null}`.
+pub(crate) fn parser_allowlist_matches_json_impl(allowed: Option<Vec<String>>, identity: &str) -> Result<String, String> {
+    let identity: serde_json::Value = serde_json::from_str(identity).map_err(|e| format!("parser identity: {e}"))?;
+    if !identity.is_object() {
+        return Err("parser identity must be a JSON object".into());
+    }
+    let identity: ParserIdentity = serde_json::from_value(identity).map_err(|e| format!("parser identity: {e}"))?;
+    let matched = parser_allowlist_match(allowed.as_deref(), &identity);
+    Ok(serde_json::json!({"matches": matched.is_some(), "matched_by": matched}).to_string())
+}
+
 fn terminal(action: Action, cursor: usize, events: &[Event]) -> Result<Action, String> {
     if cursor != events.len() { return Err("unsolicited filename selection events after outcome".into()); }
     Ok(action)
@@ -110,7 +147,9 @@ pub fn next_action(request: &Request, events: &[Event]) -> Result<Action, String
         });
         for index in indices {
             let (grammar, languages, _) = loaded[&index];
-            if request.allowed_plugins.as_ref().is_some_and(|allow| !allow.iter().any(|id| id == grammar)) { continue; }
+            let identity = ParserIdentity { plugin_id: request.entries[index].id.clone(), grammar_id: grammar.to_owned(),
+                languages: languages.to_vec(), aliases: request.entries[index].aliases.clone() };
+            if parser_allowlist_match(request.allowed_plugins.as_deref(), &identity).is_none() { continue; }
             if hint_phase {
                 let hint = request.language_hint.as_ref().expect("hint phase");
                 let declared = languages.contains(hint);

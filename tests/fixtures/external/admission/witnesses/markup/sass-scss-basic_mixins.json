@@ -1,0 +1,16 @@
+{
+  "case_id": "sass-scss-basic_mixins",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2f3eb2e533a452fe89e57261d11097b1110bdc02f33ca5cb0dd9e27af41b90df",
+  "observations": {
+    "css_equal": true,
+    "error": null,
+    "reference_accepts": true,
+    "upstream_accepts": true
+  },
+  "old_sha256": "2f3eb2e533a452fe89e57261d11097b1110bdc02f33ca5cb0dd9e27af41b90df",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

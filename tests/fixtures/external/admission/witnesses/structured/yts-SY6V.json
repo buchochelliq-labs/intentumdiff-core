@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-SY6V",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "58f226c9db5b7ec334224c8e3e1bfca63c41d7e76656102ceb7ffb7a4fdd8f14",
+  "observations": {
+    "error": "ScannerError: sequence entries are not allowed here\n  in \"<unicode string>\", line 1, column 9:\n    &anchor - sequence entry\n            ^ (line: 1)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "58f226c9db5b7ec334224c8e3e1bfca63c41d7e76656102ceb7ffb7a4fdd8f14",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

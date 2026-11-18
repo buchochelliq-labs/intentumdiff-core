@@ -1,0 +1,2841 @@
+{
+  "language_id": "reasonml",
+  "options": {
+    "language_hint": "reasonml",
+    "strict_plugins": true
+  },
+  "completed_count": 11,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "dynamic/reasonml/identity",
+      "language_id": "reasonml",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "2d4603e3b1d4d6157537cb87e7028e7c720e19c91e4afd10078df8499ace53db",
+      "new_sha256": "2d4603e3b1d4d6157537cb87e7028e7c720e19c91e4afd10078df8499ace53db",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.315396,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 83877,
+                "total_fuel_consumed": 83877,
+                "max_fuel_used_percent": 0.38617403314917126,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.659014,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 83287,
+                "total_fuel_consumed": 83287,
+                "max_fuel_used_percent": 0.3834576427255985,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d914f1d790306155",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "48b1791a99e5255f",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd5424461dc84",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d914f1d790306155",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "48b1791a99e5255f",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd5424461dc84",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 5153.042
+    },
+    {
+      "id": "dynamic/reasonml/literal",
+      "language_id": "reasonml",
+      "category": "literal_value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "2d4603e3b1d4d6157537cb87e7028e7c720e19c91e4afd10078df8499ace53db",
+      "new_sha256": "10300d276fab61728249290fe8922d81938bdfe9001d305198ed65296f3bdfd0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('() => 1') -> value_body('() => 2')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "() => 1",
+              "position": {
+                "start_line": 0,
+                "start_col": 13,
+                "end_line": 0,
+                "end_col": 20
+              },
+              "structural_hash": "6fffd5424461dc84",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "() => 2",
+              "position": {
+                "start_line": 0,
+                "start_col": 13,
+                "end_line": 0,
+                "end_col": 20
+              },
+              "structural_hash": "6fffd8424461e19d",
+              "children": []
+            },
+            "text_diff": "() => 1 -> () => 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "() => 1"
+            ],
+            "new_labels": [
+              "() => 2"
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.24984399999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 83877,
+                "total_fuel_consumed": 83877,
+                "max_fuel_used_percent": 0.38617403314917126,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.12098400000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21720000,
+                "fuel_consumed": 83287,
+                "total_fuel_consumed": 83287,
+                "max_fuel_used_percent": 0.3834576427255985,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d914f1d790306155",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "48b1791a99e5255f",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd5424461dc84",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "53d7efa8d1ebbdc5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "7dad1e545406f2de",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd8424461e19d",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 83.737
+    },
+    {
+      "id": "dynamic/reasonml/operator",
+      "language_id": "reasonml",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "dbc8a843e2dc8727e2e6a2ee6f45e8227728592c1086c4eaa18415484bc4bf61",
+      "new_sha256": "ca81c03fa894bc45ceaa07bbcb0f44d574a67faf0a31043360eeb300be00e522",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update reasonml_statement('print_int(6 + 2)') -> reasonml_statement('print_int(6 - 2)')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "reasonml_statement",
+              "label": "print_int(6 + 2)",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "ab5b9ba716f383cb",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "reasonml_statement",
+              "label": "print_int(6 - 2)",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 16
+              },
+              "structural_hash": "c0930bb6890e79b1",
+              "children": []
+            },
+            "text_diff": "print_int(6 + 2) -> print_int(6 - 2)"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "print_int(6 + 2)"
+            ],
+            "new_labels": [
+              "print_int(6 - 2)"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.31189,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 37958,
+                "total_fuel_consumed": 37958,
+                "max_fuel_used_percent": 0.1831949806949807,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.134289,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 37368,
+                "total_fuel_consumed": 37368,
+                "max_fuel_used_percent": 0.18034749034749034,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "a28b9041ab067fe5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "reasonml_statement",
+                "label": "print_int(6 + 2)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 16
+                },
+                "structural_hash": "ab5b9ba716f383cb",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "2e937c47a50ec0e6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "reasonml_statement",
+                "label": "print_int(6 - 2)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 16
+                },
+                "structural_hash": "c0930bb6890e79b1",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 97.233
+    },
+    {
+      "id": "dynamic/reasonml/language-feature",
+      "language_id": "reasonml",
+      "category": "declaration_or_language_feature",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "0fa2ac66043902534487ea1f22695455350831569f311d00fdbe3229763d5a0c",
+      "new_sha256": "d4a875aa6a76f08dd36188c8ef25c757f4accac5c10b4fc1e4fed60b94487bd0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "type answer = Yes;\\n"
+            ],
+            "new_labels": [
+              "type answer = Yes | No;\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "type answer = Yes;\\n",
+              "new_label": "type answer = Yes | No;\\n",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                19
+              ],
+              "new_span": [
+                0,
+                24
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "type answer = Yes;\\n",
+              "new_label": "type answer = Yes | No;\\n",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                19
+              ],
+              "new_span": [
+                0,
+                24
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.236399,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 41719,
+                "total_fuel_consumed": 41719,
+                "max_fuel_used_percent": 0.19999520613614574,
+                "input_bytes": 19,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.102009,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 41354,
+                "total_fuel_consumed": 41354,
+                "max_fuel_used_percent": 0.19824544582933845,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1c38366ea516b8b2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "type",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 5,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "364002942fca0b6f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1c38366ea516b8b2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "type",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 5,
+                  "end_line": 0,
+                  "end_col": 11
+                },
+                "structural_hash": "364002942fca0b6f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 58.237
+    },
+    {
+      "id": "dynamic/reasonml/spacing",
+      "language_id": "reasonml",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ce2e511b57b0b6ce474b3b364ed01bdbce71db6a70fead531d9ad2ff839d7adc",
+      "new_sha256": "174371214dae823928910d9c31326ffd703627136dde3991fe1bb0fd2ca6fde9",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('1+2') -> value_body('1 + 2')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "1+2",
+              "position": {
+                "start_line": 0,
+                "start_col": 6,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "db845c7e2c65dd3b",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "1 + 2",
+              "position": {
+                "start_line": 0,
+                "start_col": 8,
+                "end_line": 0,
+                "end_col": 13
+              },
+              "structural_hash": "fa7e8d25e5c50505",
+              "children": []
+            },
+            "text_diff": "1+2 -> 1 + 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "1+2"
+            ],
+            "new_labels": [
+              "1 + 2"
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.254162,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 79718,
+                "total_fuel_consumed": 79718,
+                "max_fuel_used_percent": 0.378168880455408,
+                "input_bytes": 25,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.221942,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 79882,
+                "total_fuel_consumed": 79882,
+                "max_fuel_used_percent": 0.37894686907020875,
+                "input_bytes": 29,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected False, got True",
+        "is_style_only: expected True, got False"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "18fe63f70450d5ec",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "x",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "c57821b7b7a7d2ad",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1+2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 6,
+                      "end_line": 0,
+                      "end_col": 9
+                    },
+                    "structural_hash": "db845c7e2c65dd3b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(x)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "fee34c0e263910bc",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "b95eaf3ea64295d7",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "x",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "877f4734afa8f1c6",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "1 + 2",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 8,
+                      "end_line": 0,
+                      "end_col": 13
+                    },
+                    "structural_hash": "fa7e8d25e5c50505",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(x)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 12
+                },
+                "structural_hash": "fee34c0e263910bc",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 56.91
+    },
+    {
+      "id": "dynamic/reasonml/unicode-value",
+      "language_id": "reasonml",
+      "category": "unicode_literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "892cc7e2ec3df8fb9df322df116f26bb92fc0e63bc506cf868b2ed28362237fd",
+      "new_sha256": "f9bab0115049aee9598497947bc1be0d371262b1036385479aa7fe937e9c9674",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update reasonml_statement('print_endline(\"café\")') -> reasonml_statement('print_endline(\"cafè\")')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "reasonml_statement",
+              "label": "print_endline(\"café\")",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 22
+              },
+              "structural_hash": "d2f92479cf54cfe4",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "reasonml_statement",
+              "label": "print_endline(\"cafè\")",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 22
+              },
+              "structural_hash": "ca421379ca6147fb",
+              "children": []
+            },
+            "text_diff": "print_endline(\"café\") -> print_endline(\"cafè\")"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "print_endline(\"café\")"
+            ],
+            "new_labels": [
+              "print_endline(\"cafè\")"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.24357299999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20960000,
+                "fuel_consumed": 38933,
+                "total_fuel_consumed": 38933,
+                "max_fuel_used_percent": 0.18574904580152674,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.116477,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20960000,
+                "fuel_consumed": 38343,
+                "total_fuel_consumed": 38343,
+                "max_fuel_used_percent": 0.1829341603053435,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "e625499215570127",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(\"café\")",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "d2f92479cf54cfe4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "7f8655b1d6d9410c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(\"cafè\")",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "ca421379ca6147fb",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 57.439
+    },
+    {
+      "id": "dynamic/reasonml/incomplete",
+      "language_id": "reasonml",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "50f892592ec4fd8c194dbbf734c44122081e72ce5497178e0850c88b99b2bc25",
+      "new_sha256": "34f96ce4508786736213023a982fa36e589f4ab21dd2cc79def0b31f77f106e4",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                15
+              ],
+              "new_span": [
+                15,
+                16
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                15,
+                15
+              ],
+              "new_span": [
+                15,
+                16
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.197407,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 62247,
+                "total_fuel_consumed": 62247,
+                "max_fuel_used_percent": 0.30187681862269644,
+                "input_bytes": 15,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.15582000000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 62376,
+                "total_fuel_consumed": 62376,
+                "max_fuel_used_percent": 0.30250242483026185,
+                "input_bytes": 16,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "5e6a5253c5f1c1d3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "8ea04b8cf234a518",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "(",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "025a9f2f73aa445d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "5e6a5253c5f1c1d3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "8ea04b8cf234a518",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "(",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 14
+                    },
+                    "structural_hash": "025a9f2f73aa445d",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 57.526
+    },
+    {
+      "id": "dynamic/reasonml/comment",
+      "language_id": "reasonml",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "2d4603e3b1d4d6157537cb87e7028e7c720e19c91e4afd10078df8499ace53db",
+      "new_sha256": "f311131c1c0fe0f46d24aa8cd9896704306ea8bc8f04aacfdc78341f1413c147",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-reasonml-parser#7"
+      ],
+      "review": {
+        "old_filename": "assessment.re",
+        "new_filename": "assessment.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "/* baseline comment */\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "/* baseline comment */\\n",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "/* baseline comment */\\n",
+              "risk": "amber",
+              "language": "reasonml",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.311809,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22180000,
+                "fuel_consumed": 83877,
+                "total_fuel_consumed": 83877,
+                "max_fuel_used_percent": 0.37816501352569887,
+                "input_bytes": 43,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "assessment.re",
+                "call_count": 1,
+                "elapsed_ms": 0.206253,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22180000,
+                "fuel_consumed": 84519,
+                "total_fuel_consumed": 84519,
+                "max_fuel_used_percent": 0.3810595130748422,
+                "input_bytes": 66,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "d914f1d790306155",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 10
+                },
+                "structural_hash": "48b1791a99e5255f",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 1",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 13,
+                      "end_line": 0,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd5424461dc84",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "d914f1d790306155",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 4,
+                  "end_line": 1,
+                  "end_col": 10
+                },
+                "structural_hash": "48b1791a99e5255f",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "() => 1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 13,
+                      "end_line": 1,
+                      "end_col": 20
+                    },
+                    "structural_hash": "6fffd5424461dc84",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_int(answer())",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 19
+                },
+                "structural_hash": "5896d1d602195b0d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.21
+    },
+    {
+      "id": "dynamic/reasonml/external-derived-edit",
+      "language_id": "reasonml",
+      "category": "external_derived_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "25f3324ddf69449d199bcece0e356e1d333a9c42060dcb8bbdac070eec49a298",
+      "new_sha256": "108b6f3aa755f74770f6d84e8df287f0aca803877e8783860a5ebc8e081cc6ba",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.re",
+        "new_filename": "upstream-derived.re",
+        "language": "reasonml",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update value_body('\"😁\"') -> value_body('\"😃\"')",
+            "old_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "\"😁\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 0,
+                "end_col": 24
+              },
+              "structural_hash": "7560fafea0a1a719",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.rhs",
+              "node_type": "value_body",
+              "label": "\"😃\"",
+              "position": {
+                "start_line": 0,
+                "start_col": 18,
+                "end_line": 0,
+                "end_col": 24
+              },
+              "structural_hash": "755a2afea09bd9fb",
+              "children": []
+            },
+            "text_diff": "\"😁\" -> \"😃\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\"😁\""
+            ],
+            "new_labels": [
+              "\"😃\""
+            ],
+            "old_node_ids": [
+              "0.0.rhs"
+            ],
+            "new_node_ids": [
+              "0.0.rhs"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "upstream-derived.re",
+                "call_count": 1,
+                "elapsed_ms": 0.25911100000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 86077,
+                "total_fuel_consumed": 86077,
+                "max_fuel_used_percent": 0.3884341155234657,
+                "input_bytes": 54,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "upstream-derived.re",
+                "call_count": 1,
+                "elapsed_ms": 0.12956099999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 85487,
+                "total_fuel_consumed": 85487,
+                "max_fuel_used_percent": 0.3857716606498195,
+                "input_bytes": 54,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "14c4de0030b1bf37",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "utf8_string",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "91470991140de564",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "\"😁\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "7560fafea0a1a719",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(utf8_string)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 26
+                },
+                "structural_hash": "c3c6497803c1e1dd",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "33a03827c5c862a3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "utf8_string",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "6995806f8559ca8c",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "\"😃\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "755a2afea09bd9fb",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(utf8_string)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 26
+                },
+                "structural_hash": "c3c6497803c1e1dd",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 59.546
+    },
+    {
+      "id": "dynamic/reasonml/external-derived-identity",
+      "language_id": "reasonml",
+      "category": "identity",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "25f3324ddf69449d199bcece0e356e1d333a9c42060dcb8bbdac070eec49a298",
+      "new_sha256": "25f3324ddf69449d199bcece0e356e1d333a9c42060dcb8bbdac070eec49a298",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "upstream-derived.re",
+        "new_filename": "upstream-derived.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "upstream-derived.re",
+                "call_count": 1,
+                "elapsed_ms": 0.284979,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 86077,
+                "total_fuel_consumed": 86077,
+                "max_fuel_used_percent": 0.3884341155234657,
+                "input_bytes": 54,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "upstream-derived.re",
+                "call_count": 1,
+                "elapsed_ms": 0.14887599999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22160000,
+                "fuel_consumed": 85487,
+                "total_fuel_consumed": 85487,
+                "max_fuel_used_percent": 0.3857716606498195,
+                "input_bytes": 54,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "14c4de0030b1bf37",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "utf8_string",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "91470991140de564",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "\"😁\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "7560fafea0a1a719",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(utf8_string)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 26
+                },
+                "structural_hash": "c3c6497803c1e1dd",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "14c4de0030b1bf37",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "utf8_string",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "91470991140de564",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "\"😁\"",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 18,
+                      "end_line": 0,
+                      "end_col": 24
+                    },
+                    "structural_hash": "7560fafea0a1a719",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "reasonml_statement",
+                "label": "print_endline(utf8_string)",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 26
+                },
+                "structural_hash": "c3c6497803c1e1dd",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.1: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 55.132
+    },
+    {
+      "id": "dynamic/reasonml/repo-playground-identity",
+      "language_id": "reasonml",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "c537e31db38169ab70d3a9b196c4be0dc8189fe0158a076a2727508b313ec47d",
+      "new_sha256": "c537e31db38169ab70d3a9b196c4be0dc8189fe0158a076a2727508b313ec47d",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#266"
+      ],
+      "review": {
+        "old_filename": "playground.re",
+        "new_filename": "playground.re",
+        "language": "reasonml",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "playground.re",
+                "call_count": 1,
+                "elapsed_ms": 0.321918,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26560000,
+                "fuel_consumed": 221234,
+                "total_fuel_consumed": 221234,
+                "max_fuel_used_percent": 0.8329593373493975,
+                "input_bytes": 164,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "reasonml",
+                "filename": "playground.re",
+                "call_count": 1,
+                "elapsed_ms": 0.290409,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 26560000,
+                "fuel_consumed": 220644,
+                "total_fuel_consumed": 220644,
+                "max_fuel_used_percent": 0.8307379518072289,
+                "input_bytes": 164,
+                "input_lines": 7,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/reasonml_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "657f3ac2b12ac765",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "baseRate",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "2687ed14d8ebb4fe",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "42",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "aa4e64a18a5d9ee1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "value",
+                "label": "applyDiscount",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 17
+                },
+                "structural_hash": "7612a39eb2d1b49e",
+                "children": [
+                  {
+                    "id": "0.1.rhs",
+                    "node_type": "value_body",
+                    "label": "price => price - baseRate",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 20,
+                      "end_line": 2,
+                      "end_col": 45
+                    },
+                    "structural_hash": "9b1071f5d9866588",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "value",
+                "label": "formatReceipt",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 17
+                },
+                "structural_hash": "fa3319f6c0aae18d",
+                "children": [
+                  {
+                    "id": "0.2.rhs",
+                    "node_type": "value_body",
+                    "label": "total => \"Total: \" ++ string_of_int(total)",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 20,
+                      "end_line": 4,
+                      "end_col": 62
+                    },
+                    "structural_hash": "58f3d69a3573b4b6",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "value",
+                "label": "unusedHelper",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 16
+                },
+                "structural_hash": "aae4f1951dbec3c4",
+                "children": [
+                  {
+                    "id": "0.3.rhs",
+                    "node_type": "value_body",
+                    "label": "x => x + 7",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 19,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "b352dbcf2f76ed14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "reasonml",
+          "tree": {
+            "id": "0",
+            "node_type": "reasonml_file",
+            "label": "reasonml",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "657f3ac2b12ac765",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "value",
+                "label": "baseRate",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 4,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "2687ed14d8ebb4fe",
+                "children": [
+                  {
+                    "id": "0.0.rhs",
+                    "node_type": "value_body",
+                    "label": "42",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 15,
+                      "end_line": 0,
+                      "end_col": 17
+                    },
+                    "structural_hash": "aa4e64a18a5d9ee1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.1",
+                "node_type": "value",
+                "label": "applyDiscount",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 17
+                },
+                "structural_hash": "7612a39eb2d1b49e",
+                "children": [
+                  {
+                    "id": "0.1.rhs",
+                    "node_type": "value_body",
+                    "label": "price => price - baseRate",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 20,
+                      "end_line": 2,
+                      "end_col": 45
+                    },
+                    "structural_hash": "9b1071f5d9866588",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "value",
+                "label": "formatReceipt",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 4,
+                  "end_line": 4,
+                  "end_col": 17
+                },
+                "structural_hash": "fa3319f6c0aae18d",
+                "children": [
+                  {
+                    "id": "0.2.rhs",
+                    "node_type": "value_body",
+                    "label": "total => \"Total: \" ++ string_of_int(total)",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 20,
+                      "end_line": 4,
+                      "end_col": 62
+                    },
+                    "structural_hash": "58f3d69a3573b4b6",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "value",
+                "label": "unusedHelper",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 4,
+                  "end_line": 6,
+                  "end_col": 16
+                },
+                "structural_hash": "aae4f1951dbec3c4",
+                "children": [
+                  {
+                    "id": "0.3.rhs",
+                    "node_type": "value_body",
+                    "label": "x => x + 7",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 19,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "b352dbcf2f76ed14",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.3: child outside parent range",
+        "old: 0.3.rhs: child outside parent range",
+        "old: 0.2.rhs: child outside parent range",
+        "old: 0.1.rhs: child outside parent range",
+        "old: 0.0.rhs: child outside parent range",
+        "new: 0.3: child outside parent range",
+        "new: 0.3.rhs: child outside parent range",
+        "new: 0.2.rhs: child outside parent range",
+        "new: 0.1.rhs: child outside parent range",
+        "new: 0.0.rhs: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.559
+    }
+  ],
+  "attempted_count": 11,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.558
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "    balance := 0\n    for _, op := range operations {\n        balance += op\n        if balance == 0 {\n            return true\n        }\n    }\n    return false\n}\n\n",
+  "canonical_solution": "    balance := 0\n    for _, op := range operations {\n        balance += op\n        if balance < 0 {\n            return true\n        }\n    }\n    return false\n}\n\n",
+  "declaration": "\nfunc BelowZero(operations []int) bool {\n",
+  "docstring": "You're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> BelowZero([1, 2, 3])\nfalse\n>>> BelowZero([1, 2, -4, 5])\ntrue",
+  "entry_point": "BelowZero",
+  "example_test": "func TestBelowZero(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(false, BelowZero([]int{1, 2, 3}))\n    assert.Equal(true, BelowZero([]int{1, 2, -4, 5}))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Go function `func BelowZero(operations []int) bool` to solve the following problem:\nYou're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return true. Otherwise it should return false.\n>>> BelowZero([1, 2, 3])\nfalse\n>>> BelowZero([1, 2, -4, 5])\ntrue",
+  "prompt": "\n// You're given a list of deposit and withdrawal operations on a bank account that starts with\n// zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n// at that point function should return true. Otherwise it should return false.\n// >>> BelowZero([1, 2, 3])\n// false\n// >>> BelowZero([1, 2, -4, 5])\n// true\nfunc BelowZero(operations []int) bool {\n",
+  "signature": "func BelowZero(operations []int) bool",
+  "task_id": "Go/3",
+  "test": "func TestBelowZero(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(false, BelowZero([]int{}))\n    assert.Equal(false, BelowZero([]int{1, 2, -3, 1, 2, -3}))\n    assert.Equal(true, BelowZero([]int{1, 2, -4, 5, 6}))\n    assert.Equal(false, BelowZero([]int{1, -1, 2, -2, 5, -5, 4, -4}))\n    assert.Equal(true, BelowZero([]int{1, -1, 2, -2, 5, -5, 4, -5}))\n    assert.Equal(true, BelowZero([]int{1, -2, 2, -2, 5, -5, 4, -4}))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

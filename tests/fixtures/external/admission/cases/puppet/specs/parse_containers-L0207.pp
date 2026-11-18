@@ -1,0 +1,1 @@
+node foo, x::bar, default {}

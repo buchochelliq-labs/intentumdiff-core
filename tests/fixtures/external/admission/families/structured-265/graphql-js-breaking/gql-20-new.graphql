@@ -1,0 +1,7 @@
+
+      directive @DirectiveName(
+        newRequiredArg: String!
+        newOptionalArg1: Int
+        newOptionalArg2: Int! = 0
+      ) on FIELD_DEFINITION
+    

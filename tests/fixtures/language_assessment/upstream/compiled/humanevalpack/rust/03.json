@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "\n\nlet mut balance:i32 = 0;\nfor op in operations {\n    balance = balance + op;\n    if balance == 0 {\n        return true;\n        }\n    }\n    return false;\n}\n",
+  "canonical_solution": "\n\nlet mut balance:i32 = 0;\nfor op in operations {\n    balance = balance + op;\n    if balance < 0 {\n        return true;\n        }\n    }\n    return false;\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn below_zero(operations:Vec<i32>) -> bool{\n",
+  "docstring": "You're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.",
+  "entry_point": "below_zero",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `below_zero(operations:Vec<i32>) -> bool` to solve the following problem:\nYou're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    \n*/\nfn below_zero(operations:Vec<i32>) -> bool{\n",
+  "signature": "below_zero(operations:Vec<i32>) -> bool",
+  "task_id": "Rust/3",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n#[test]\n    fn test_below_zero() {\n        assert_eq!(below_zero(vec![]), false);\n        assert_eq!(below_zero(vec![1, 2, -3, 1, 2, -3]), false);\n        assert_eq!(below_zero(vec![1, 2, -4, 5, 6]), true);\n        assert_eq!(below_zero(vec![1, -1, 2, -2, 5, -5, 4, -4]), false);\n        assert_eq!(below_zero(vec![1, -1, 2, -2, 5, -5, 4, -5]), true);\n        assert_eq!(below_zero(vec![1, -2, 2, -2, 5, -5, 4, -4]), true);\n    }\n\n}\n",
+  "test_setup": ""
+}

@@ -28,6 +28,66 @@ pub fn live_error_response_impl(seq: i64, code: &str, message: &str, op: &str) -
     error_obj(seq, code, message, op).to_string()
 }
 
+/// The live protocol version this engine speaks, and every version it accepts (#260).
+pub const LIVE_PROTOCOL_VERSION: i64 = 2;
+pub const LIVE_SUPPORTED_PROTOCOL_VERSIONS: &[i64] = &[2];
+
+/// Negotiate a `hello` request's `protocol_version` (#260). One rule for every transport:
+/// - absent or null: the client takes the current version (`protocol_version` 2);
+/// - an integer in `LIVE_SUPPORTED_PROTOCOL_VERSIONS`: accepted as requested;
+/// - any other integer: rejected with `unsupported_protocol_version` (never silently
+///   answered with a different version);
+/// - anything else (string, float, bool, negative): rejected as `invalid_protocol_version`.
+/// Returns either `{"op":"hello","seq",ok:true,"protocol_version",
+/// "supported_protocol_versions"}` or the standard protocol error object, which also carries
+/// `supported_protocol_versions` so a client can retry.
+pub fn live_negotiate_protocol_impl(hello: &Value) -> Value {
+    let seq = hello.get("seq").and_then(Value::as_i64).unwrap_or(0);
+    let supported = json!(LIVE_SUPPORTED_PROTOCOL_VERSIONS);
+    let reject = |code: &str, message: String| {
+        let mut response = error_obj(seq, code, &message, "hello");
+        response["error"]["supported_protocol_versions"] = supported.clone();
+        response
+    };
+    let version = match hello.get("protocol_version") {
+        None | Some(Value::Null) => LIVE_PROTOCOL_VERSION,
+        Some(Value::Number(n)) if n.is_u64() => i64::try_from(n.as_u64().unwrap_or(u64::MAX)).unwrap_or(i64::MAX),
+        Some(value) => return reject("invalid_protocol_version",
+            format!("protocol_version must be a non-negative integer, got {value}")),
+    };
+    if !LIVE_SUPPORTED_PROTOCOL_VERSIONS.contains(&version) {
+        return reject("unsupported_protocol_version",
+            format!("protocol_version {version} is not supported; supported: {LIVE_SUPPORTED_PROTOCOL_VERSIONS:?}"));
+    }
+    json!({"op": "hello", "seq": seq, "ok": true, "protocol_version": version,
+        "supported_protocol_versions": supported})
+}
+
+#[cfg(test)]
+mod protocol_negotiation_tests {
+    use super::*;
+
+    #[test]
+    fn hello_versions_have_deterministic_outcomes() {
+        let ok = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 1, "protocol_version": 2}));
+        assert_eq!(ok["ok"], true);
+        assert_eq!(ok["protocol_version"], 2);
+        let missing = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 2}));
+        assert_eq!(missing["ok"], true);
+        assert_eq!(missing["protocol_version"], LIVE_PROTOCOL_VERSION);
+        let unsupported = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 3, "protocol_version": 999}));
+        assert_eq!(unsupported["ok"], false, "999 must not be answered as accepted: {unsupported}");
+        assert_eq!(unsupported["seq"], 3);
+        assert_eq!(unsupported["error"]["code"], "unsupported_protocol_version");
+        assert_eq!(unsupported["error"]["supported_protocol_versions"], json!([2]));
+        assert!(unsupported.get("protocol_version").is_none());
+        for bad in [json!("2"), json!(2.5), json!(2.0), json!(-1), json!(true), json!([2])] {
+            let r = live_negotiate_protocol_impl(&json!({"op": "hello", "seq": 4, "protocol_version": bad}));
+            assert_eq!(r["error"]["code"], "invalid_protocol_version", "{bad}: {r}");
+        }
+    }
+}
+
 /// python `LiveServer._limits` (pure Rust).
 pub fn live_limits_impl() -> String {
     json!({
@@ -111,17 +171,39 @@ pub fn live_normalise_request_path_impl(path: &str) -> String {
 /// python `LiveServer._request_seq` — `int(request.get("seq", 0))` with the try/except guard.
 /// Absent seq -> 0; a JSON number (float truncates toward zero) or numeric string parses;
 /// null / list / object -> `invalid_seq`.
+///
+/// Every accepted seq must be the exact i64 the client sent (#258): a value outside
+/// [i64::MIN, i64::MAX] is `invalid_seq`, never clamped onto another request's identity.
 fn parse_seq(req: &Value) -> Result<i64, ()> {
     match req.get("seq") {
         None => Ok(0),
-        Some(Value::Number(n)) => n
-            .as_i64()
-            .or_else(|| n.as_f64().map(|f| f.trunc() as i64))
-            .ok_or(()),
+        Some(Value::Number(n)) => {
+            if let Some(i) = n.as_i64() {
+                return Ok(i);
+            }
+            if n.is_u64() {
+                return Err(()); // an integer above i64::MAX
+            }
+            float_seq(n.as_f64().ok_or(())?)
+        }
         Some(Value::String(s)) => s.trim().parse::<i64>().map_err(|_| ()),
         Some(Value::Bool(b)) => Ok(i64::from(*b)), // Python: int(True)==1, int(False)==0
         _ => Err(()), // null / array / object -> TypeError in Python
     }
+}
+
+/// A fractional JSON seq truncates toward zero (Python `int(4.9) == 4`), but only inside the
+/// range where every integer is exactly representable as f64 (|n| <= 2^53). serde_json parses
+/// an integer literal beyond i64/u64 (e.g. -9223372036854775809) into the nearest f64, so a
+/// larger float can no longer be told apart from a neighbouring request id; `as i64` would also
+/// saturate 1e30 to i64::MAX. Exact integers of any i64 size arrive through `as_i64` instead.
+fn float_seq(f: f64) -> Result<i64, ()> {
+    const MAX_EXACT: f64 = 9_007_199_254_740_992.0; // 2^53
+    let t = f.trunc();
+    if !t.is_finite() || t.abs() > MAX_EXACT {
+        return Err(());
+    }
+    Ok(t as i64)
 }
 
 /// python `LiveServer._request_seq` -> `{"seq": N}` or `{"error": <response>}` (pure Rust).
@@ -164,10 +246,26 @@ pub fn live_parse_diff_request_impl(request_json: &str, default_ref: &str) -> Re
         _ => return err("invalid_path", "path must be a string"),
     };
 
-    // content (optional, default ""; must be a string; UTF-8 byte cap)
+    // deltas (optional list; count cap; per-entry validation stays in the Python shell)
+    let deltas = match req.get("deltas") {
+        None | Some(Value::Null) => Vec::new(),
+        Some(Value::Array(a)) => a.clone(),
+        Some(_) => return err("invalid_deltas", "deltas must be a list"),
+    };
+
+    // content (required string; UTF-8 byte cap). An omitted buffer is not an empty one (#257):
+    // treating it as "" reported the user's edit as deletion of the whole file. Deltas are
+    // incremental-parse hints over the full buffer, so a delta-only request is unsupported on
+    // every transport rather than a way to describe the new content.
     let content = match req.get("content") {
-        None => String::new(),
         Some(Value::String(s)) => s.clone(),
+        None if !deltas.is_empty() => {
+            return err(
+                "unsupported_feature",
+                "delta-only diff requests are not supported; send the full buffer as content",
+            )
+        }
+        None => return err("invalid_content", "content is required"),
         Some(_) => return err("invalid_content", "content must be a string"),
     };
     if content.len() as u64 > MAX_CONTENT_BYTES {
@@ -192,12 +290,6 @@ pub fn live_parse_diff_request_impl(request_json: &str, default_ref: &str) -> Re
         Some(_) => return err("invalid_stream", "stream must be a boolean"),
     };
 
-    // deltas (optional list; count cap; per-entry validation stays in the Python shell)
-    let deltas = match req.get("deltas") {
-        None | Some(Value::Null) => Vec::new(),
-        Some(Value::Array(a)) => a.clone(),
-        Some(_) => return err("invalid_deltas", "deltas must be a list"),
-    };
     if deltas.len() as u64 > MAX_DELTAS {
         return err(
             "too_many_deltas",
@@ -660,6 +752,22 @@ fn python_style_only_live_diff(old_source: &str, new_source: &str, path: &str) -
 /// The shared compute tail: resolve the parser, load the guardrail policy, and serve via
 /// the native wasm chain (non-Python) or the certified batch (Python). Returns the
 /// `{"diff"}` / `{"fallback"}` JSON both public entry points emit.
+/// Name the parser plugin of an incomplete review in its repro outline (core #252): the
+/// manifest id plus the component's SHA-256 (the manifest records no version), or `builtin`
+/// for the native parser compiled into the core. Never a path.
+fn annotate_incomplete_plugin(diff: &mut Value, resolved: &crate::parser_registry::ResolvedParser) {
+    if diff.get("completeness").and_then(Value::as_str) != Some(crate::completeness::INCOMPLETE) {
+        return;
+    }
+    let version = if resolved.wasm_path.is_empty() {
+        Some("builtin".to_owned())
+    } else {
+        use sha2::Digest;
+        std::fs::read(&resolved.wasm_path).ok().map(|bytes| format!("sha256:{}", hex::encode(sha2::Sha256::digest(&bytes))))
+    };
+    crate::completeness::annotate_plugin(diff, &resolved.plugin_id, version.as_deref());
+}
+
 fn diff_resolved_sources(
     repo_path: &str,
     path: &str,
@@ -706,6 +814,7 @@ fn diff_resolved_sources(
             guardrail_rules.as_deref(),
         ) {
             Ok(mut diff) => {
+                annotate_incomplete_plugin(&mut diff, &resolved);
                 if let Some(context) = crate::compile_context::discover(path, &resolved.language, std::path::Path::new(repo_path))? {
                     diff["metadata"]["compile_commands"] = context;
                 }
@@ -749,7 +858,11 @@ fn diff_resolved_sources(
         Ok(result) => match result.get("diffs").and_then(Value::as_array).and_then(|d| d.first()) {
             Some(item) if item.get("status").and_then(Value::as_str) == Some("complete") => {
                 match item.get("diff") {
-                    Some(diff) => Ok(certified_live_diff_response(diff.clone(), path)),
+                    Some(diff) => {
+                        let mut diff = diff.clone();
+                        annotate_incomplete_plugin(&mut diff, &resolved);
+                        Ok(certified_live_diff_response(diff, path))
+                    }
                     None => fallback("batch item missing diff"),
                 }
             }
@@ -900,9 +1013,19 @@ pub fn live_handle_review_impl(
     // Cross-file changes (MOVE_TO_MODULE / SPLIT_MODULE / CROSS_FILE_RENAME) — mirror
     // CommitDiffer: build a per-side symbol table from the changed files' trees and diff them. The
     // certified commit payload leaves this empty, so compute + inject it for BOTH branches so the
-    // native review matches `CommitDiffer.diff_commit`. Best-effort (empty on any failure).
-    let (cross_file_changes, mut index_telemetry) =
-        crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
+    // native review matches `CommitDiffer.diff_commit`. A file that cannot be indexed (e.g. fuel
+    // exhausted) is excluded and reported (#298): the response metadata then carries
+    // `cross_file_index_status: "partial"` plus structured `index_errors`, never a silent
+    // "complete". Bundle/table faults still fail the review.
+    let commit_index = crate::compute_commit_cross_file_changes(&files, config_json, wasm_dir)?;
+    let mut review_metadata = review_metadata;
+    if let (Some(target), Value::Object(fields)) =
+        (review_metadata.as_object_mut(), commit_index.completeness())
+    {
+        target.extend(fields);
+    }
+    let cross_file_changes = commit_index.changes;
+    let mut index_telemetry = commit_index.telemetry;
 
     if !any_non_python {
         // All-Python: the certified commit path, unchanged (preserves the A2 parity contract).
@@ -1037,6 +1160,7 @@ pub fn live_handle_review_impl(
                 Err(reason) => return fallback(&format!("{}: {reason}", f.path)),
             }
         };
+        annotate_incomplete_plugin(&mut diff, &f.resolved);
         // An incomplete/malformed per-file parse declines the ENTIRE commit,
         // preserving the file and parser cause rather than manufacturing
         // commit-level parse_errors: [] (#193). The native transport is a relay.
@@ -1454,6 +1578,69 @@ mod tests {
         // absent -> 0
         let v = parse(r#"{"path":"a.py","content":"x"}"#);
         assert_eq!(v["parsed"]["seq"], 0);
+    }
+
+    // #258: an accepted seq is exactly the client's value; out-of-range values are rejected
+    // instead of being clamped onto i64::MIN/MAX, where distinct requests would collide.
+    #[test]
+    fn seq_out_of_range_is_rejected_not_saturated() {
+        let seq = |raw: &str| parse(&format!(r#"{{"path":"a.py","content":"x","seq":{raw}}}"#));
+        for (raw, expected) in [
+            ("9223372036854775807", i64::MAX),
+            ("9223372036854775806", i64::MAX - 1),
+            ("-9223372036854775808", i64::MIN),
+            ("-9223372036854775807", i64::MIN + 1),
+            ("9007199254740992.5", 9_007_199_254_740_992),
+            ("\"9223372036854775807\"", i64::MAX),
+            ("-0.5", 0),
+        ] {
+            assert_eq!(seq(raw)["parsed"]["seq"], expected, "{raw}");
+        }
+        for raw in [
+            "9223372036854775808",
+            "18446744073709551615",
+            "1000000000000000000000000000000",
+            "-9223372036854775809",
+            "9.223372036854775808e18",
+            "-9.223372036854775808e18",
+            "9007199254740994.0",
+            "1e300",
+            "-1e300",
+            "\"9223372036854775808\"",
+            "\"-9223372036854775809\"",
+        ] {
+            assert_eq!(seq(raw)["error"]["error"]["code"], "invalid_seq", "{raw}");
+        }
+        let distinct = |raw: &str| {
+            serde_json::from_str::<Value>(&live_request_seq_impl(&format!(r#"{{"seq":{raw}}}"#)).unwrap())
+                .unwrap()
+        };
+        assert_eq!(distinct("9223372036854775807")["seq"], i64::MAX);
+        assert!(distinct("9223372036854775808").get("error").is_some());
+    }
+
+    // #257: omitted content is not an empty replacement buffer.
+    #[test]
+    fn delta_only_and_missing_content_are_explicit_errors() {
+        let v = parse(
+            r#"{"op":"diff","seq":33,"path":"a.py","deltas":[{"range":{"start":{"line":0,"character":4},"end":{"line":0,"character":5}},"text":"3"}]}"#,
+        );
+        assert_eq!(v["error"]["error"]["code"], "unsupported_feature");
+        assert_eq!(v["error"]["seq"], 33);
+        assert_eq!(v["error"]["op"], "diff");
+        let v = parse(r#"{"op":"diff","seq":34,"path":"a.py"}"#);
+        assert_eq!(v["error"]["error"]["code"], "invalid_content");
+        let v = parse(r#"{"op":"diff","seq":35,"path":"a.py","deltas":[]}"#);
+        assert_eq!(v["error"]["error"]["code"], "invalid_content");
+        // An explicit empty buffer is still a valid full-buffer deletion.
+        let v = parse(r#"{"op":"diff","seq":36,"path":"a.py","content":""}"#);
+        assert_eq!(v["parsed"]["content"], "");
+        // Full content with deltas still parses: deltas remain incremental-parse hints.
+        let v = parse(
+            r#"{"op":"diff","seq":37,"path":"a.py","content":"x = 3\n","deltas":[{"range":{"start":{"line":0,"character":4},"end":{"line":0,"character":5}},"text":"3"}]}"#,
+        );
+        assert_eq!(v["parsed"]["content"], "x = 3\n");
+        assert_eq!(v["parsed"]["deltas"].as_array().unwrap().len(), 1);
     }
 
     // ── asset_diff (intentumdiff-vscode#25) ────────────────────────────────────────────────

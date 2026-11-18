@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_message_same_json_format-current-3",
+  "executed_utc": "2026-11-17T20:20:37+00:00",
+  "new_sha256": "b1d586bee6bd1551dd6e80a231bb66cb79bbcbcc07f5399233dd7f3d9a9472a4",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "b1d586bee6bd1551dd6e80a231bb66cb79bbcbcc07f5399233dd7f3d9a9472a4",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

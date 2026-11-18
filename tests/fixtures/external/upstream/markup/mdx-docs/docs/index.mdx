@@ -1,0 +1,137 @@
+import {Chart} from './_component/snowfall.jsx'
+
+export {Home as default} from './_component/home.jsx'
+export const info = {
+  author: [
+    {github: 'johno', name: 'John Otander'},
+    {github: 'wooorm', name: 'Titus Wormer'}
+  ],
+  modified: new Date('2025-01-27'),
+  published: new Date('2017-12-23'),
+  schemaOrg: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "additionalType": "ComputerLanguage",
+    "applicationCategory": "DeveloperApplication",
+    "description": "an authorable format for writing JSX in markdown documents",
+    "name": "MDX",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "operatingSystem": "Windows, MacOS, Linux",
+    "sameAs": [
+      "https://www.wikidata.org/wiki/Q95971592",
+      "https://www.wikidata.org/wiki/Q27966906",
+      "https://www.wikidata.org/wiki/Q95961071",
+      "https://en.wikipedia.org/wiki/MDX_(markup_language)",
+      "https://github.com/mdx-js/mdx"
+    ],
+    "url": "https://mdxjs.com"
+  }
+}
+export const year = 2023
+
+{/* lint disable heading-style */}
+
+Markdown for the\
+**component era**
+=================
+
+MDX lets you use JSX in your markdown content.
+You can import components, such as interactive charts or alerts, and embed them
+within your content.
+This makes writing long-form content with components a blast. {/* more */}
+🚀
+[Continue reading »][what]
+
+<div className="card big">
+  ## New: MDX 3!
+
+  A small major this time, nothing big, which is also nice sometimes!
+  This mainly drops support for old Node (use 16 or later), adds modern ES2024
+  support in MDX, supports `await` in MDX (if your framework does too), and
+  removes several deprecated options.
+
+  [Continue reading »][v3]
+</div>
+
+## What does MDX do?
+
+<div className="big-columns">
+  <div>
+    You write markdown with embedded components through JSX:
+
+    ```mdx path="example.mdx"
+    import {Chart} from './snowfall.js'
+    export const year = 2023
+
+    # Last year’s snowfall
+
+    In {year}, the snowfall was above average.
+    It was followed by a warm spring which caused
+    flood conditions in many of the nearby rivers.
+
+    <Chart color="#fcb32c" year={year} />
+    ```
+  </div>
+
+  <div>
+    It gets compiled to JavaScript that you can use in any framework that
+    supports JSX:
+
+    {/* lint disable no-multiple-toplevel-headings */}
+
+    <div className="home-preview">
+      # Last year’s snowfall
+
+      In {year}, the snowfall was above average.
+      It was followed by a warm spring which caused flood conditions in many of
+      the nearby rivers.
+
+      <Chart color="#fcb32c" year={year} />
+    </div>
+
+    {/* lint enable no-multiple-toplevel-headings */}
+  </div>
+</div>
+
+We made an interactive playground where you can try MDX out and see what it
+turns into.
+[Play »][playground]
+
+## Get started
+
+There are integrations for most bundlers, frameworks, and editors.
+Whether you build with Docusaurus, Next.js, or Vite.
+You prefer Rollup, esbuild, or webpack.
+You’re using React, Preact, or Vue.
+[Get started »][getting-started]
+
+## MDX in short
+
+<div className="emoji-list">
+  * ❤️ **Powerful**: MDX blends markdown and JSX syntax to fit perfectly in
+    JSX-based projects
+  * 💻 **Everything is a component**: Use existing components in your
+    MDX and import other MDX files as components
+  * 🔧 **Customizable**: Decide which component is rendered for each markdown
+    construct (`{h1: MyHeading}`)
+  * 📚 **Markdown-based**: The simplicity and elegance of markdown remains,
+    you use JSX only when you want to
+  * 🔥 **Blazingly blazing fast**: MDX has no runtime, all compilation occurs
+    during the build stage
+</div>
+
+> lol mdx is so good
+>
+> — **@dan\_abramov**
+
+[getting-started]: /docs/getting-started/
+
+[playground]: /playground/
+
+[v3]: /blog/v3/
+
+[what]: /docs/what-is-mdx/

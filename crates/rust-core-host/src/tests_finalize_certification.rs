@@ -265,11 +265,32 @@ use crate::*;
                 "description": "Move function_definition('discount') -> function_definition('discount')"
             },
             {
+                // #297: `discount` gained an optional parameter (`vip=False`), so the moved
+                // definition also carries ONE definition-level signature change.
+                "old_filename": "billing.py",
+                "new_filename": "billing.py",
+                "change_type": "REFACTORING",
+                "old": {
+                    "id": "0.0.2.0",
+                    "node_type": "function_definition",
+                    "label": "discount",
+                    "position": {"start_line": 1, "start_col": 4, "end_line": 4, "end_col": 16}
+                },
+                "new": {
+                    "id": "0.0",
+                    "node_type": "function_definition",
+                    "label": "discount",
+                    "position": {"start_line": 0, "start_col": 0, "end_line": 5, "end_col": 12}
+                },
+                "refactoring_kind": "CHANGE_SIGNATURE",
+                "description": "Change signature function_definition('discount')"
+            },
+            {
                 "old_filename": "billing.py",
                 "new_filename": "billing.py",
                 "change_type": "MODIFICATION",
                 "old": {
-                    "id": "0.0.2.0.2.0.0.1",
+                    "id": "0.0.2.0.2.0.0.2",
                     "node_type": "integer",
                     "label": "100",
                     "position": {
@@ -280,7 +301,7 @@ use crate::*;
                     }
                 },
                 "new": {
-                    "id": "0.0.2.1.0.1",
+                    "id": "0.0.2.1.0.2",
                     "node_type": "integer",
                     "label": "150",
                     "position": {
@@ -294,6 +315,39 @@ use crate::*;
                 "description": "Update integer('100') -> integer('150')"
             },
             {
+                // #253: the new `if vip: return subtotal * 0.2` branch is matched to the old
+                // `return 0`. The same-label return MODIFICATION was discarded as "no leaf
+                // delta" because the leaf counts differ, which left the new branch with no
+                // evidence at all. A different leaf count is a delta no other draft reports.
+                "old_filename": "billing.py",
+                "new_filename": "billing.py",
+                "change_type": "MODIFICATION",
+                "old": {
+                    "id": "0.0.2.0.2.1",
+                    "node_type": "return_statement",
+                    "label": "return_statement",
+                    "position": {
+                        "start_line": 4,
+                        "start_col": 8,
+                        "end_line": 4,
+                        "end_col": 16
+                    }
+                },
+                "new": {
+                    "id": "0.0.2.0.1.0",
+                    "node_type": "return_statement",
+                    "label": "return_statement",
+                    "position": {
+                        "start_line": 2,
+                        "start_col": 8,
+                        "end_line": 2,
+                        "end_col": 29
+                    }
+                },
+                "refactoring_kind": "",
+                "description": "Update return_statement('return_statement') -> return_statement('return_statement')"
+            },
+            {
                 // The call site gained a new argument (`order.get("vip", False)`). Before the
                 // label-match parent-anchoring fix (issue #31) this real addition was hidden
                 // by a bogus cross-scope label match; the signature now reports it.
@@ -302,7 +356,7 @@ use crate::*;
                 "change_type": "ADDITION",
                 "old": null,
                 "new": {
-                    "id": "0.1.2.1.0.1.1.1",
+                    "id": "0.1.2.1.0.2.1.1",
                     "node_type": "call",
                     "label": "call",
                     "position": {
@@ -313,7 +367,7 @@ use crate::*;
                     }
                 },
                 "refactoring_kind": "",
-                "description": "Insert -> call('call')"
+                "description": "Insert -> call('order.get(\"vip\", False)')"
             }
         ]);
 
@@ -420,7 +474,7 @@ use crate::*;
                     }
                 },
                 "refactoring_kind": "",
-                "description": "Insert -> import_from_statement('import_from_statement')"
+                "description": "Insert -> import_from_statement('from src.pricing import calculate_discount_for_customer')"
             },
             {
                 "old_filename": "src/billing.py",
@@ -456,7 +510,7 @@ use crate::*;
                 "new_filename": "src/billing.py",
                 "change_type": "REFACTORING",
                 "old": {
-                    "id": "0.1.2.0.0.1.0",
+                    "id": "0.1.2.0.0.2.0",
                     "node_type": "identifier",
                     "label": "calculate_discount",
                     "position": {
@@ -467,7 +521,7 @@ use crate::*;
                     }
                 },
                 "new": {
-                    "id": "0.1.2.0.0.1.0",
+                    "id": "0.1.2.0.0.2.0",
                     "node_type": "identifier",
                     "label": "calculate_discount_for_customer",
                     "position": {

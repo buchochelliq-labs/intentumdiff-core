@@ -128,6 +128,9 @@ fn same_body(old: &SemanticNode, new: &SemanticNode, sources: Option<(&str, &str
     })
 }
 
+/// Maximum open-old x open-new callable pairs `seed_renamed_callables` evaluates (#255).
+pub(crate) const CALLABLE_RENAME_PAIR_BUDGET: usize = 250_000;
+
 pub(crate) fn seed_renamed_callables<'a>(
     old: &TreeIndex<'a>,
     new: &TreeIndex<'a>,
@@ -137,15 +140,17 @@ pub(crate) fn seed_renamed_callables<'a>(
 ) {
     let occupied_old: HashSet<&str> = pairs.iter().map(|p| p.old_node.id.as_str()).collect();
     let occupied_new: HashSet<&str> = pairs.iter().map(|p| p.new_node.id.as_str()).collect();
+    let open_old: Vec<&'a SemanticNode> = old.named_entities.iter().copied().filter(|o| !occupied_old.contains(o.id.as_str())).collect();
+    let open_new: Vec<&'a SemanticNode> = new.named_entities.iter().copied().filter(|n| !occupied_new.contains(n.id.as_str())).collect();
+    // #255: the candidate graph is all open old x open new callables, each edge costing a
+    // body-token / source comparison. Past the budget no continuity is inferred — the
+    // entities stay honest ADDITION/DELETION evidence instead of an unbounded search.
+    if open_old.len().saturating_mul(open_new.len()) > CALLABLE_RENAME_PAIR_BUDGET {
+        return;
+    }
     let mut candidates = Vec::new();
-    for o in &old.named_entities {
-        if occupied_old.contains(o.id.as_str()) {
-            continue;
-        }
-        for n in &new.named_entities {
-            if occupied_new.contains(n.id.as_str()) {
-                continue;
-            }
+    for o in &open_old {
+        for n in &open_new {
             // Enclosing named scope must retain its identity. Do not infer cross-scope renames.
             let same_scope = scope_path(old, o) == scope_path(new, n);
             if same_scope
@@ -167,10 +172,14 @@ pub(crate) fn seed_renamed_callables<'a>(
     candidates.retain(|(o, n)| {
         same_body(o, n, sources) || !exact.iter().any(|(eo, en)| eo.id == o.id || en.id == n.id)
     });
+    let mut old_degree: HashMap<&str, usize> = HashMap::new();
+    let mut new_degree: HashMap<&str, usize> = HashMap::new();
     for (o, n) in &candidates {
-        if candidates.iter().filter(|(a, _)| a.id == o.id).count() == 1
-            && candidates.iter().filter(|(_, b)| b.id == n.id).count() == 1
-        {
+        *old_degree.entry(o.id.as_str()).or_default() += 1;
+        *new_degree.entry(n.id.as_str()).or_default() += 1;
+    }
+    for (o, n) in &candidates {
+        if old_degree[o.id.as_str()] == 1 && new_degree[n.id.as_str()] == 1 {
             pairs.push(MatchPair {
                 old_node: o,
                 new_node: n,

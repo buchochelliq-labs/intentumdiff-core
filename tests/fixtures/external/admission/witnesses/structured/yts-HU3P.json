@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-HU3P",
+  "executed_utc": "2026-11-17T20:20:27+00:00",
+  "new_sha256": "71c945395fafb87f25a6598ed895ba2e49108526a32cbe8bf28983a7ab2d17d4",
+  "observations": {
+    "error": "ScannerError: mapping values are not allowed here\n  in \"<unicode string>\", line 3, column 5:\n      no: key\n        ^ (line: 3)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "71c945395fafb87f25a6598ed895ba2e49108526a32cbe8bf28983a7ab2d17d4",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

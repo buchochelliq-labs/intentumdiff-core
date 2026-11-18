@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "  var sum_value = 0, prod_value = 0;\n  for (const n of numbers) {\n    sum_value += n;\n    prod_value *= n;\n  }\n  return [sum_value, prod_value];\n}\n\n",
+  "canonical_solution": "  var sum_value = 0, prod_value = 1;\n  for (const n of numbers) {\n    sum_value += n;\n    prod_value *= n;\n  }\n  return [sum_value, prod_value];\n}\n\n",
+  "declaration": "\nconst sumProduct = (numbers, int) => {\n",
+  "docstring": "For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\nEmpty sum should be equal to 0 and empty product should be equal to 1.\n>>> sumProduct([])\n(0, 1)\n>>> sumProduct([1, 2, 3, 4])\n(10, 24)",
+  "entry_point": "sumProduct",
+  "example_test": "const testSumProduct = () => {\n  console.assert(JSON.stringify(sumProduct([])) === JSON.stringify([0, 1]))\n  console.assert(\n    JSON.stringify(sumProduct([1, 2,3,4])) === JSON.stringify([10, 24])\n  )\n}\ntestSumProduct()\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a JavaScript function `const sumProduct = (numbers, int)` to solve the following problem:\nFor a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\nEmpty sum should be equal to 0 and empty product should be equal to 1.\n>>> sumProduct([])\n(0, 1)\n>>> sumProduct([1, 2, 3, 4])\n(10, 24)",
+  "prompt": "/* For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n  Empty sum should be equal to 0 and empty product should be equal to 1.\n  >>> sumProduct([])\n  (0, 1)\n  >>> sumProduct([1, 2, 3, 4])\n  (10, 24)\n  */\nconst sumProduct = (numbers, int) => {\n",
+  "signature": "const sumProduct = (numbers, int)",
+  "task_id": "JavaScript/8",
+  "test": "const testSumProduct = () => {\n  console.assert(JSON.stringify(sumProduct([])) === JSON.stringify([0, 1]))\n  console.assert(\n    JSON.stringify(sumProduct([1, 1, 1])) === JSON.stringify([3, 1])\n  )\n  console.assert(\n    JSON.stringify(sumProduct([100, 0])) === JSON.stringify([100, 0])\n  )\n  console.assert(\n    JSON.stringify(\n      sumProduct([3, 5, 7])) === JSON.stringify([3 + 5 + 7, 3 * 5 * 7])\n  )\n  console.assert(JSON.stringify(sumProduct([10])) === JSON.stringify([10, 10]))\n}\n\ntestSumProduct()\n",
+  "test_setup": ""
+}

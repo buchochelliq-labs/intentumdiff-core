@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-M7A3",
+  "executed_utc": "2026-11-17T20:20:28+00:00",
+  "new_sha256": "ab86c48ade9d0fd106857b346cf128926065eaf41d330d3535c8a47d2737d839",
+  "observations": {
+    "error": "ParserError: while parsing a block node\nexpected the node content, but found '<document end>'\n  in \"<unicode string>\", line 5, column 1:\n    ...\n    ^ (line: 5)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "ab86c48ade9d0fd106857b346cf128926065eaf41d330d3535c8a47d2737d839",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

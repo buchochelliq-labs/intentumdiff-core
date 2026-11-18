@@ -109,6 +109,296 @@ pub(crate) fn validate_dep_hashes_impl(
     errors
 }
 
+// ── Registry manifest validator (python #329) ─────────────────────────────────────────────
+//
+// The structural + policy validator for an `intentumdiff-registry` manifest (`registry.yaml`
+// parsed to JSON). Every problem is returned as `{path, message}` (RFC 6901 JSON Pointer into
+// the manifest) — wrong JSON types are errors, never panics. Policy:
+//
+// - official tier (the default when `trust_tier` is omitted): a `git` entry needs an immutable
+//   40-hex lowercase `ref`; a `pypi` entry needs an exact version `ref`; non-empty
+//   `wasm_checksums`; a non-empty `capabilities` list; an `abi_target`; and no custom `repo`
+//   (a custom repo is by definition not the org-built source).
+// - community tier: every field is optional; any field that IS present must be well-formed
+//   (`ref` must pass the non-strict registry-ref traversal guard / version pattern,
+//   checksums must be lowercase SHA-256, capabilities from the vocabulary, abi_target
+//   MAJOR.MINOR.PATCH). Community entries are listed but install unverified.
+// - `capabilities` come from a closed vocabulary derived from the WIT: the interface each
+//   `world` exports (`parser`, `renderer`, `enricher`, `index-engine`, `diff-analyzer`);
+//   duplicates are rejected.
+
+static PLUGIN_NAME_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^(?:intentumdiff-)?[A-Za-z0-9][A-Za-z0-9._-]{0,127}$").unwrap());
+static WASM_FILE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^[A-Za-z0-9._-]+\.wasm$").unwrap());
+static SHA256_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^[a-f0-9]{64}$").unwrap());
+static MANIFEST_DEP_KEY_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[A-Za-z0-9][A-Za-z0-9._-]*==[^=\s]+$").unwrap());
+static MANIFEST_DEP_HASH_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^sha256:[a-f0-9]{64}$").unwrap());
+static ABI_VERSION_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$").unwrap());
+static PYPI_VERSION_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[0-9][A-Za-z0-9.+!-]{0,63}$").unwrap());
+
+const ENTRY_FIELDS: &[&str] = &[
+    "source", "ref", "repo", "description", "wasm_checksums", "dep_hashes",
+    "allowed_dependencies", "trust_tier", "capabilities", "abi_target", "provenance_manifest_ref",
+];
+const TOP_LEVEL_FIELDS: &[&str] = &["version", "plugins", "renderer_components"];
+const RENDERER_FILES: &[&str] =
+    &["html_renderer.wasm", "llm_renderer.wasm", "patch_renderer.wasm", "terminal_renderer.wasm"];
+
+/// The closed capability vocabulary: every interface a `world` in the pinned WIT exports.
+pub(crate) fn plugin_capability_vocabulary() -> &'static [String] {
+    static VOCAB: LazyLock<Vec<String>> = LazyLock::new(|| {
+        let mut names: Vec<String> = include_str!("../wit/plugin.wit")
+            .lines()
+            .filter_map(|line| line.trim().strip_prefix("export ")?.strip_suffix(';').map(str::to_owned))
+            .collect();
+        names.sort();
+        names.dedup();
+        names
+    });
+    &VOCAB
+}
+
+fn pointer(base: &str, token: &str) -> String {
+    format!("{base}/{}", token.replace('~', "~0").replace('/', "~1"))
+}
+
+fn type_name(value: &serde_json::Value) -> &'static str {
+    match value {
+        serde_json::Value::Null => "null",
+        serde_json::Value::Bool(_) => "boolean",
+        serde_json::Value::Number(_) => "number",
+        serde_json::Value::String(_) => "string",
+        serde_json::Value::Array(_) => "array",
+        serde_json::Value::Object(_) => "object",
+    }
+}
+
+struct ManifestErrors(Vec<(String, String)>);
+impl ManifestErrors {
+    fn push(&mut self, path: impl Into<String>, message: impl Into<String>) {
+        self.0.push((path.into(), message.into()));
+    }
+    fn wrong_type(&mut self, path: impl Into<String>, expected: &str, value: &serde_json::Value) {
+        self.push(path, format!("must be {expected}, got {}", type_name(value)));
+    }
+}
+
+fn validate_manifest_entry(where_: &str, entry: &serde_json::Value, errors: &mut ManifestErrors) {
+    use serde_json::Value;
+    let Some(fields) = entry.as_object() else {
+        return errors.wrong_type(where_, "an object", entry);
+    };
+    let mut unknown: Vec<&str> = fields.keys().map(String::as_str).filter(|k| !ENTRY_FIELDS.contains(k)).collect();
+    unknown.sort_unstable();
+    for key in unknown {
+        errors.push(pointer(where_, key), "unknown field");
+    }
+    let enum_field = |errors: &mut ManifestErrors, key: &str, allowed: &[&'static str], default: &'static str| -> Option<&'static str> {
+        match fields.get(key) {
+            None => Some(default),
+            Some(Value::String(s)) => match allowed.iter().find(|a| **a == s.as_str()) {
+                Some(found) => Some(*found),
+                None => { errors.push(pointer(where_, key), format!("{s:?} is not one of {allowed:?}")); None }
+            },
+            Some(other) => { errors.wrong_type(pointer(where_, key), "a string", other); None }
+        }
+    };
+    let source = enum_field(errors, "source", &["git", "pypi"], "git");
+    let tier = enum_field(errors, "trust_tier", &["official", "community"], "official");
+    let string = |errors: &mut ManifestErrors, key: &str| -> Option<String> {
+        match fields.get(key) {
+            None => None,
+            Some(Value::String(s)) => Some(s.clone()),
+            Some(other) => { errors.wrong_type(pointer(where_, key), "a string", other); None }
+        }
+    };
+    let git_ref = string(errors, "ref");
+    let repo = string(errors, "repo");
+    let abi_target = string(errors, "abi_target");
+    string(errors, "description");
+    string(errors, "provenance_manifest_ref");
+    let official = tier == Some("official");
+
+    match (source, git_ref.as_deref()) {
+        (Some("git"), Some(r)) if official && !COMMIT_SHA_RE.is_match(r) => errors.push(
+            pointer(where_, "ref"), "official git entries need an immutable 40-character lowercase commit SHA"),
+        (Some("git"), Some(r)) if validate_registry_ref_impl(r, false).is_err() => errors.push(
+            pointer(where_, "ref"), "not a safe git ref (branch, tag or commit SHA without traversal)"),
+        (Some("pypi"), Some(r)) if !(r.is_empty() && !official) && !PYPI_VERSION_RE.is_match(r) => errors.push(
+            pointer(where_, "ref"), if official { "official pypi entries need an exact version" } else { "not a version string" }),
+        (Some(_), None) if official => errors.push(
+            pointer(where_, "ref"), "required for official entries (an immutable commit SHA or exact version)"),
+        _ => {}
+    }
+    if official && repo.as_deref().is_some_and(|r| !r.is_empty()) {
+        errors.push(pointer(where_, "repo"), "official entries are built from the org repository; a custom repo is community tier");
+    }
+    match abi_target.as_deref() {
+        Some(v) if !ABI_VERSION_RE.is_match(v) => errors.push(pointer(where_, "abi_target"), "must be MAJOR.MINOR.PATCH"),
+        None if official => errors.push(pointer(where_, "abi_target"), "required for official entries"),
+        _ => {}
+    }
+
+    let checksum_path = pointer(where_, "wasm_checksums");
+    match fields.get("wasm_checksums") {
+        None if official => errors.push(checksum_path, "required for official entries"),
+        None => {}
+        Some(Value::Object(map)) => {
+            if official && map.is_empty() {
+                errors.push(checksum_path.clone(), "official entries must pin at least one component");
+            }
+            for (file, digest) in map {
+                let path = pointer(&checksum_path, file);
+                if !WASM_FILE_RE.is_match(file) {
+                    errors.push(path.clone(), "key is not a .wasm filename");
+                }
+                if !digest.as_str().is_some_and(|d| SHA256_RE.is_match(d)) {
+                    errors.push(path, "not a lowercase SHA-256 hex digest");
+                }
+            }
+        }
+        Some(other) => errors.wrong_type(checksum_path, "an object", other),
+    }
+
+    let dep_path = pointer(where_, "dep_hashes");
+    match fields.get("dep_hashes") {
+        None => {}
+        Some(Value::Object(map)) => {
+            for (key, value) in map {
+                let path = pointer(&dep_path, key);
+                if !MANIFEST_DEP_KEY_RE.is_match(key) {
+                    errors.push(path.clone(), "key is not 'package==version'");
+                }
+                if !value.as_str().is_some_and(|v| MANIFEST_DEP_HASH_RE.is_match(v)) {
+                    errors.push(path, "not 'sha256:<lowercase hex>'");
+                }
+            }
+        }
+        Some(other) => errors.wrong_type(dep_path, "an object", other),
+    }
+
+    for key in ["allowed_dependencies", "capabilities"] {
+        let path = pointer(where_, key);
+        let Some(value) = fields.get(key) else {
+            if key == "capabilities" && official {
+                errors.push(path, "required for official entries");
+            }
+            continue;
+        };
+        let Some(items) = value.as_array() else {
+            errors.wrong_type(path, "an array of strings", value);
+            continue;
+        };
+        let mut seen = std::collections::BTreeSet::new();
+        for (index, item) in items.iter().enumerate() {
+            let item_path = pointer(&path, &index.to_string());
+            let Some(text) = item.as_str() else {
+                errors.wrong_type(item_path, "a string", item);
+                continue;
+            };
+            if key == "capabilities" {
+                if !plugin_capability_vocabulary().iter().any(|c| c == text) {
+                    errors.push(item_path.clone(), format!("unknown capability {text:?}; expected one of {:?}", plugin_capability_vocabulary()));
+                }
+                if !seen.insert(text) {
+                    errors.push(item_path, format!("duplicate capability {text:?}"));
+                }
+            }
+        }
+        if key == "capabilities" && official && items.is_empty() {
+            errors.push(path, "official entries must declare at least one capability");
+        }
+    }
+}
+
+fn validate_renderer_bundle(bundle: &serde_json::Value, errors: &mut ManifestErrors) {
+    let where_ = "/renderer_components";
+    let Some(fields) = bundle.as_object() else {
+        return errors.wrong_type(where_, "an object", bundle);
+    };
+    for key in fields.keys().filter(|k| !["repository", "ref", "artifact", "wasm_checksums"].contains(&k.as_str())) {
+        errors.push(pointer(where_, key), "unknown field");
+    }
+    for (key, required) in [("repository", "intentumdiff-core"), ("artifact", "renderer-components")] {
+        if fields.get(key).and_then(serde_json::Value::as_str) != Some(required) {
+            errors.push(pointer(where_, key), format!("must be {required:?}"));
+        }
+    }
+    if !fields.get("ref").and_then(serde_json::Value::as_str).is_some_and(|r| COMMIT_SHA_RE.is_match(r)) {
+        errors.push(pointer(where_, "ref"), "must be an immutable 40-character lowercase commit SHA");
+    }
+    let pins_path = pointer(where_, "wasm_checksums");
+    match fields.get("wasm_checksums") {
+        Some(serde_json::Value::Object(pins)) => {
+            for file in RENDERER_FILES.iter().filter(|f| !pins.contains_key(**f)) {
+                errors.push(pointer(&pins_path, file), "missing renderer pin");
+            }
+            for (file, digest) in pins {
+                let path = pointer(&pins_path, file);
+                if !RENDERER_FILES.contains(&file.as_str()) {
+                    errors.push(path.clone(), "unexpected renderer component");
+                }
+                if !digest.as_str().is_some_and(|d| SHA256_RE.is_match(d)) {
+                    errors.push(path, "not a lowercase SHA-256 hex digest");
+                }
+            }
+        }
+        Some(other) => errors.wrong_type(pins_path, "an object", other),
+        None => errors.push(pins_path, "required"),
+    }
+}
+
+/// Validate a registry manifest (already parsed from YAML/JSON). `[]` = valid. Each error is
+/// `(json_pointer_path, message)`; ordering is deterministic (document order, keys sorted).
+pub(crate) fn validate_registry_manifest(manifest: &serde_json::Value) -> Vec<(String, String)> {
+    let mut errors = ManifestErrors(Vec::new());
+    let Some(top) = manifest.as_object() else {
+        errors.wrong_type("", "an object", manifest);
+        return errors.0;
+    };
+    for key in top.keys().filter(|k| !TOP_LEVEL_FIELDS.contains(&k.as_str())) {
+        errors.push(pointer("", key), "unknown top-level field");
+    }
+    match top.get("version") {
+        Some(v) if v.as_u64().is_some_and(|n| n >= 1) => {}
+        Some(v) => errors.push("/version", format!("must be an integer >= 1, got {v}")),
+        None => errors.push("/version", "required"),
+    }
+    if let Some(bundle) = top.get("renderer_components") {
+        validate_renderer_bundle(bundle, &mut errors);
+    }
+    match top.get("plugins") {
+        Some(serde_json::Value::Object(plugins)) => {
+            for (name, entry) in plugins {
+                let where_ = pointer("/plugins", name);
+                if !PLUGIN_NAME_RE.is_match(name) {
+                    errors.push(where_.clone(), "not a package-safe plugin name");
+                }
+                validate_manifest_entry(&where_, entry, &mut errors);
+            }
+        }
+        Some(other) => errors.wrong_type("/plugins", "an object of name -> entry", other),
+        None => errors.push("/plugins", "required"),
+    }
+    errors.0
+}
+
+/// C ABI `validate_registry_manifest`: `{"ok": bool, "errors": [{"path","message"}]}`.
+pub(crate) fn validate_registry_manifest_json_impl(manifest_json: &str) -> Result<String, String> {
+    let manifest: serde_json::Value =
+        serde_json::from_str(manifest_json).map_err(|e| format!("manifest JSON: {e}"))?;
+    let errors = validate_registry_manifest(&manifest);
+    Ok(serde_json::json!({
+        "ok": errors.is_empty(),
+        "errors": errors.into_iter().map(|(path, message)| serde_json::json!({"path": path, "message": message})).collect::<Vec<_>>(),
+    })
+    .to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

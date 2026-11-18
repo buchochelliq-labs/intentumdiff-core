@@ -1,0 +1,18 @@
+{
+  "case_id": "po-wrap-translator_comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "7ca9c2ff28aadae1a894b95904e8b94e7cdc9e8e7c2ad5faa99ac9d20c7b0622",
+  "observations": {
+    "new": {
+      "stderr": "f.po: warning: Charset missing in header.\n               Message conversion to user's charset will not work.\nmsgfmt: f.po: warning: PO file header missing or invalid\n              warning: charset conversion will not work\nmsgfmt: found 1 fatal error\n"
+    },
+    "old": {
+      "stderr": "f.po: warning: Charset missing in header.\n               Message conversion to user's charset will not work.\nmsgfmt: f.po: warning: PO file header missing or invalid\n              warning: charset conversion will not work\nmsgfmt: found 1 fatal error\n"
+    }
+  },
+  "old_sha256": "efbb7fa3daab4cea47d3250c18d1dab60069fb88cb36ca31bd7953fdb7ef860d",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}

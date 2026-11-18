@@ -1,0 +1,53 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-resource-l0246-equivalent-9ca5d1",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_observation": {
+    "ordering": [],
+    "refresh": [],
+    "resources": {
+      "Class[Settings]": {
+        "name": "\"Settings\""
+      },
+      "Class[main]": {
+        "name": "\"main\""
+      },
+      "Notify[thisisa[bug]]": {
+        "name": "\"thisisa[bug]\""
+      },
+      "Stage[main]": {
+        "name": "\"main\""
+      }
+    }
+  },
+  "new_sha256": "8fdfcc3c3b19a5f0071a7241ea1387442787b61bac4d7e10106f09243648477b",
+  "old_observation": {
+    "ordering": [],
+    "refresh": [],
+    "resources": {
+      "Class[Settings]": {
+        "name": "\"Settings\""
+      },
+      "Class[main]": {
+        "name": "\"main\""
+      },
+      "Notify[thisisa[bug]]": {
+        "name": "\"thisisa[bug]\""
+      },
+      "Stage[main]": {
+        "name": "\"main\""
+      }
+    }
+  },
+  "old_sha256": "44eaeba474f7a6ce7e303d40bd408ff87166c08fa0915b4172541536977ae6e0",
+  "oracle": "puppet_catalog_equality",
+  "projection_equal": true,
+  "review": "Puppet 8.10.0 catalog: the normalised catalogs equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

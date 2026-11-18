@@ -1,0 +1,4335 @@
+{
+  "language_id": "sas",
+  "options": {
+    "language_hint": "sas",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.sas.meaningful_1_value",
+      "language_id": "sas",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "ccab7ed68368bb01645dea8530b8cb7b6f9610c2276689dc900e375753a39c74",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update sas_statement('%let target = World') -> sas_statement('%let target = Team')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "sas_statement",
+              "label": "%let target = World",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 20
+              },
+              "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "sas_statement",
+              "label": "%let target = Team",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 19
+              },
+              "structural_hash": "0941276e57e9532cad87aac9b2d466e593e4c06ace7693524f8c4f1e738cf2de",
+              "children": []
+            },
+            "text_diff": "%let target = World -> %let target = Team"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "%let target = World"
+            ],
+            "new_labels": [
+              "%let target = Team"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.436542,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 31980000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 1.8271607254534084,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.370388,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 31980000,
+                "fuel_consumed": 583302,
+                "total_fuel_consumed": 583302,
+                "max_fuel_used_percent": 1.8239587242026265,
+                "input_bytes": 299,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "9739f982e0951d7df26ce219e2672e887d070b0215f56a95ea8dd05a0cbc43b6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = Team",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 19
+                },
+                "structural_hash": "0941276e57e9532cad87aac9b2d466e593e4c06ace7693524f8c4f1e738cf2de",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.4: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 5658.215
+    },
+    {
+      "id": "data_config.sas.meaningful_2_declaration",
+      "language_id": "sas",
+      "category": "declaration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "51129067111b8882975bcda8e8344ce5c991ef2df2aa2c55084d7c5eea830194",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update data_step('WORK.GREETING') -> data_step('WORK.SALUTATION')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "data_step",
+              "label": "WORK.GREETING",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 8,
+                "end_col": 0
+              },
+              "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+              "children": [
+                {
+                  "id": "0.1.0",
+                  "node_type": "sas_statement",
+                  "label": "name    = \"&target\"",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 2,
+                    "end_line": 3,
+                    "end_col": 22
+                  },
+                  "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                  "children": []
+                },
+                {
+                  "id": "0.1.1",
+                  "node_type": "sas_statement",
+                  "label": "suffix  = \"!\"",
+                  "position": {
+                    "start_line": 4,
+                    "start_col": 2,
+                    "end_line": 4,
+                    "end_col": 16
+                  },
+                  "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                  "children": []
+                },
+                {
+                  "id": "0.1.2",
+                  "node_type": "sas_statement",
+                  "label": "message = cats(\"Hello, \", name, suffix)",
+                  "position": {
+                    "start_line": 5,
+                    "start_col": 2,
+                    "end_line": 5,
+                    "end_col": 42
+                  },
+                  "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                  "children": []
+                },
+                {
+                  "id": "0.1.3",
+                  "node_type": "sas_statement",
+                  "label": "length  = lengthn(message)",
+                  "position": {
+                    "start_line": 6,
+                    "start_col": 2,
+                    "end_line": 6,
+                    "end_col": 29
+                  },
+                  "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                  "children": []
+                },
+                {
+                  "id": "0.1.4",
+                  "node_type": "sas_statement",
+                  "label": "put message= length=",
+                  "position": {
+                    "start_line": 7,
+                    "start_col": 2,
+                    "end_line": 7,
+                    "end_col": 23
+                  },
+                  "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "data_step",
+              "label": "WORK.SALUTATION",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 8,
+                "end_col": 0
+              },
+              "structural_hash": "55ac62e240dfb544ba286a6177b35ac6842078dcad4ed665bf80567175871e04",
+              "children": [
+                {
+                  "id": "0.1.0",
+                  "node_type": "sas_statement",
+                  "label": "name    = \"&target\"",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 2,
+                    "end_line": 3,
+                    "end_col": 22
+                  },
+                  "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                  "children": []
+                },
+                {
+                  "id": "0.1.1",
+                  "node_type": "sas_statement",
+                  "label": "suffix  = \"!\"",
+                  "position": {
+                    "start_line": 4,
+                    "start_col": 2,
+                    "end_line": 4,
+                    "end_col": 16
+                  },
+                  "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                  "children": []
+                },
+                {
+                  "id": "0.1.2",
+                  "node_type": "sas_statement",
+                  "label": "message = cats(\"Hello, \", name, suffix)",
+                  "position": {
+                    "start_line": 5,
+                    "start_col": 2,
+                    "end_line": 5,
+                    "end_col": 42
+                  },
+                  "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                  "children": []
+                },
+                {
+                  "id": "0.1.3",
+                  "node_type": "sas_statement",
+                  "label": "length  = lengthn(message)",
+                  "position": {
+                    "start_line": 6,
+                    "start_col": 2,
+                    "end_line": 6,
+                    "end_col": 29
+                  },
+                  "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                  "children": []
+                },
+                {
+                  "id": "0.1.4",
+                  "node_type": "sas_statement",
+                  "label": "put message= length=",
+                  "position": {
+                    "start_line": 7,
+                    "start_col": 2,
+                    "end_line": 7,
+                    "end_col": 23
+                  },
+                  "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                  "children": []
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "WORK.GREETING",
+              "name    = \"&target\"",
+              "suffix  = \"!\"",
+              "message = cats(\"Hello, \", name, suffix)",
+              "length  = lengthn(message)",
+              "put message= length="
+            ],
+            "new_labels": [
+              "WORK.SALUTATION",
+              "name    = \"&target\"",
+              "suffix  = \"!\"",
+              "message = cats(\"Hello, \", name, suffix)",
+              "length  = lengthn(message)",
+              "put message= length="
+            ],
+            "old_node_ids": [
+              "0.1",
+              "0.1.0",
+              "0.1.1",
+              "0.1.2",
+              "0.1.3",
+              "0.1.4"
+            ],
+            "new_node_ids": [
+              "0.1",
+              "0.1.0",
+              "0.1.1",
+              "0.1.2",
+              "0.1.3",
+              "0.1.4"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.439246,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32040000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 1.8237390761548062,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.38935400000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32040000,
+                "fuel_consumed": 584010,
+                "total_fuel_consumed": 584010,
+                "max_fuel_used_percent": 1.822752808988764,
+                "input_bytes": 302,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "481c57b1e8e876015e6abdf534b9153b73a52ec3439bcc8db92cf442a41a493d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.SALUTATION",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "55ac62e240dfb544ba286a6177b35ac6842078dcad4ed665bf80567175871e04",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.4: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 81.213
+    },
+    {
+      "id": "data_config.sas.meaningful_3_body",
+      "language_id": "sas",
+      "category": "body",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "ab261f35dbbc3ebc0df0f2253dd4ac0a0d50748fb410d2bd9b3712c80737751c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update sas_statement('attempts = 4') -> sas_statement('attempts = 4 + 1')",
+            "old_node": {
+              "id": "0.2.0",
+              "node_type": "sas_statement",
+              "label": "attempts = 4",
+              "position": {
+                "start_line": 11,
+                "start_col": 2,
+                "end_line": 11,
+                "end_col": 15
+              },
+              "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.0",
+              "node_type": "sas_statement",
+              "label": "attempts = 4 + 1",
+              "position": {
+                "start_line": 11,
+                "start_col": 2,
+                "end_line": 11,
+                "end_col": 19
+              },
+              "structural_hash": "641a12ea766db7d0f187b6e48c52cfa2777d79f8279b9f0c5f5af2d19fe6ce2c",
+              "children": []
+            },
+            "text_diff": "attempts = 4 -> attempts = 4 + 1"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "attempts = 4"
+            ],
+            "new_labels": [
+              "attempts = 4 + 1"
+            ],
+            "old_node_ids": [
+              "0.2.0"
+            ],
+            "new_node_ids": [
+              "0.2.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.6223770000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32080000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 1.8214650872817955,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.411054,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32080000,
+                "fuel_consumed": 586963,
+                "total_fuel_consumed": 586963,
+                "max_fuel_used_percent": 1.829685162094763,
+                "input_bytes": 304,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4 + 1",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 19
+                    },
+                    "structural_hash": "641a12ea766db7d0f187b6e48c52cfa2777d79f8279b9f0c5f5af2d19fe6ce2c",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.4: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 76.419
+    },
+    {
+      "id": "data_config.sas.identity",
+      "language_id": "sas",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.552207,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32000000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 1.82601875,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.356193,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32000000,
+                "fuel_consumed": 583736,
+                "total_fuel_consumed": 583736,
+                "max_fuel_used_percent": 1.824175,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.4: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 61.231
+    },
+    {
+      "id": "data_config.sas.safe_preservation",
+      "language_id": "sas",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "abb17aa87e09871774858c5fed3f7ea6e62f42cfde74fc047ed8b88bf819c317",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "/* ordinary assessment comment */\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "/* ordinary assessment comment */\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                34
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "/* ordinary assessment comment */\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                34
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.47293999999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32680000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 1.7880232558139535,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.328311,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32680000,
+                "fuel_consumed": 591253,
+                "total_fuel_consumed": 591253,
+                "max_fuel_used_percent": 1.80921970624235,
+                "input_bytes": 334,
+                "input_lines": 20,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 19,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 2,
+                      "end_line": 8,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 2,
+                      "end_line": 12,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 17,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 16,
+                      "start_col": 2,
+                      "end_line": 16,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 19,
+                  "start_col": 0,
+                  "end_line": 19,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.4: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.617
+    },
+    {
+      "id": "data_config.sas.incomplete",
+      "language_id": "sas",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "2aae9b9386ea760fe574a15e73eedb138fbbcd66a94955f77de882253bceb44e",
+      "new_sha256": "a3deaee0c77af01254405df7521ce0b2f52be5a1956696d2414c3665e2857b5c",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete sas_statement('message = cats(\"Hello, \", name, suffix)')",
+            "old_node": {
+              "id": "0.1.2",
+              "node_type": "sas_statement",
+              "label": "message = cats(\"Hello, \", name, suffix)",
+              "position": {
+                "start_line": 5,
+                "start_col": 2,
+                "end_line": 5,
+                "end_col": 42
+              },
+              "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> sas_statement('message = cats(\"')",
+            "new_node": {
+              "id": "0.1.2",
+              "node_type": "sas_statement",
+              "label": "message = cats(\"",
+              "position": {
+                "start_line": 5,
+                "start_col": 2,
+                "end_line": 5,
+                "end_col": 18
+              },
+              "structural_hash": "5021e6e0cf1023f0ed5dc4ffd8c0d1e30809a39bea13c3b7bb0f24aaeecfcd82",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete sas_statement('length  = lengthn(message)')",
+            "old_node": {
+              "id": "0.1.3",
+              "node_type": "sas_statement",
+              "label": "length  = lengthn(message)",
+              "position": {
+                "start_line": 6,
+                "start_col": 2,
+                "end_line": 6,
+                "end_col": 29
+              },
+              "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete sas_statement('put message= length=')",
+            "old_node": {
+              "id": "0.1.4",
+              "node_type": "sas_statement",
+              "label": "put message= length=",
+              "position": {
+                "start_line": 7,
+                "start_col": 2,
+                "end_line": 7,
+                "end_col": 23
+              },
+              "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete data_step('WORK.SCRATCH')",
+            "old_node": {
+              "id": "0.2",
+              "node_type": "data_step",
+              "label": "WORK.SCRATCH",
+              "position": {
+                "start_line": 10,
+                "start_col": 0,
+                "end_line": 12,
+                "end_col": 0
+              },
+              "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+              "children": [
+                {
+                  "id": "0.2.0",
+                  "node_type": "sas_statement",
+                  "label": "attempts = 4",
+                  "position": {
+                    "start_line": 11,
+                    "start_col": 2,
+                    "end_line": 11,
+                    "end_col": 15
+                  },
+                  "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete data_step('WORK.AUDIT')",
+            "old_node": {
+              "id": "0.3",
+              "node_type": "data_step",
+              "label": "WORK.AUDIT",
+              "position": {
+                "start_line": 14,
+                "start_col": 0,
+                "end_line": 16,
+                "end_col": 0
+              },
+              "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+              "children": [
+                {
+                  "id": "0.3.0",
+                  "node_type": "sas_statement",
+                  "label": "checked = 9",
+                  "position": {
+                    "start_line": 15,
+                    "start_col": 2,
+                    "end_line": 15,
+                    "end_col": 14
+                  },
+                  "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete proc_step('PRINT (DATA=WORK.GREETING)')",
+            "old_node": {
+              "id": "0.4",
+              "node_type": "proc_step",
+              "label": "PRINT (DATA=WORK.GREETING)",
+              "position": {
+                "start_line": 18,
+                "start_col": 0,
+                "end_line": 18,
+                "end_col": 35
+              },
+              "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "message = cats(\"Hello, \", name, suffix)"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1.2"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "message = cats(\""
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.1.2"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              2
+            ],
+            "old_labels": [
+              "length  = lengthn(message)"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1.3"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              3
+            ],
+            "old_labels": [
+              "put message= length="
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1.4"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              4
+            ],
+            "old_labels": [
+              "WORK.SCRATCH",
+              "attempts = 4"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.2",
+              "0.2.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              5
+            ],
+            "old_labels": [
+              "WORK.AUDIT",
+              "checked = 9"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.3",
+              "0.3.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              6
+            ],
+            "old_labels": [
+              "PRINT (DATA=WORK.GREETING)"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.4"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.49185500000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28000000,
+                "fuel_consumed": 584326,
+                "total_fuel_consumed": 584326,
+                "max_fuel_used_percent": 2.0868785714285716,
+                "input_bytes": 300,
+                "input_lines": 19,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.27427,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 28000000,
+                "fuel_consumed": 246432,
+                "total_fuel_consumed": 246432,
+                "max_fuel_used_percent": 0.8801142857142856,
+                "input_bytes": 100,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 18,
+              "end_col": 0
+            },
+            "structural_hash": "abfce52920481c0a47370fab2a2838add3c3f0b3f8bfe9e8d679b33151cc1948",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"Hello, \", name, suffix)",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 42
+                    },
+                    "structural_hash": "514e532ba297376156dc91ef5431c12afb4914884efb1c5bf6676fd7770faade",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.3",
+                    "node_type": "sas_statement",
+                    "label": "length  = lengthn(message)",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 2,
+                      "end_line": 6,
+                      "end_col": 29
+                    },
+                    "structural_hash": "ea4af822fbbe4937adcd90f6aa306b35a8d440841c91f99449e9b9a800eb54a5",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.4",
+                    "node_type": "sas_statement",
+                    "label": "put message= length=",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 2,
+                      "end_line": 7,
+                      "end_col": 23
+                    },
+                    "structural_hash": "e21ed3f3d4e8d2073872b2764953aa15dd73f101ee36810733df0763a4e08567",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.2",
+                "node_type": "data_step",
+                "label": "WORK.SCRATCH",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "2424e7d52b4b807452044cbf28fd0c8ca835aa9fe5a48d83d4271f4dad6eb94a",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "sas_statement",
+                    "label": "attempts = 4",
+                    "position": {
+                      "start_line": 11,
+                      "start_col": 2,
+                      "end_line": 11,
+                      "end_col": 15
+                    },
+                    "structural_hash": "019e42511b4dbadbed1b93079929e3cf1ea9c3bd274888e75b0448c619865e25",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "data_step",
+                "label": "WORK.AUDIT",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 0
+                },
+                "structural_hash": "456bb6c4d9c0f2d4d7baddacffa64f0db0fe3e3f0b9f9c758bd619e978237581",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "sas_statement",
+                    "label": "checked = 9",
+                    "position": {
+                      "start_line": 15,
+                      "start_col": 2,
+                      "end_line": 15,
+                      "end_col": 14
+                    },
+                    "structural_hash": "d2f73f93fa884bf81ebb85a8bf5c055f49003f2f505a3e7f0d091ddb9df8c6e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "proc_step",
+                "label": "PRINT (DATA=WORK.GREETING)",
+                "position": {
+                  "start_line": 18,
+                  "start_col": 0,
+                  "end_line": 18,
+                  "end_col": 35
+                },
+                "structural_hash": "5c5428b28633b52c57e2172626290dd77fdd20ef7a95ab57c29e198f46674fa4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 5,
+              "end_col": 0
+            },
+            "structural_hash": "30a31be15917cea385cd0d9fe9546d8827f91bb4780321fe0ca0c5e04e9e1988",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "sas_statement",
+                "label": "%let target = World",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 20
+                },
+                "structural_hash": "8073d26fcd25c114b2472bd32951f59c6cd2ecfe7a029f4c63ca3e7f9ea84e52",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "data_step",
+                "label": "WORK.GREETING",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 5,
+                  "end_col": 0
+                },
+                "structural_hash": "f96f1c939b42ee48f904d503462f700f9f16759f6cfd0de0fbb9a603feef7acd",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "sas_statement",
+                    "label": "name    = \"&target\"",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 2,
+                      "end_line": 3,
+                      "end_col": 22
+                    },
+                    "structural_hash": "a135b60bf55c2eb38d8cdfbe45270148961ca4bff6a395cf9403ac0b29bc1c96",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "sas_statement",
+                    "label": "suffix  = \"!\"",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 2,
+                      "end_line": 4,
+                      "end_col": 16
+                    },
+                    "structural_hash": "efa540d8040e6a74c6b39e12e80cdf89fd90a309f44481f7d32c249f8623ac8c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.2",
+                    "node_type": "sas_statement",
+                    "label": "message = cats(\"",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 2,
+                      "end_line": 5,
+                      "end_col": 18
+                    },
+                    "structural_hash": "5021e6e0cf1023f0ed5dc4ffd8c0d1e30809a39bea13c3b7bb0f24aaeecfcd82",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.4: child outside parent range",
+        "new: 0.1.2: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 78.756
+    },
+    {
+      "id": "data_config.sas.unicode_value",
+      "language_id": "sas",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1355f368064d34b8b6cde661eb5e0449c2f5a8121acb790263342c4f77a4683e",
+      "new_sha256": "420d7347fc94e75909b4cd5a9d97ea6586d3a6046693cd05147e80c801463d2d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update sas_statement('label = \"λ\"') -> sas_statement('label = \"μ\"')",
+            "old_node": {
+              "id": "0.0.0",
+              "node_type": "sas_statement",
+              "label": "label = \"λ\"",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 15
+              },
+              "structural_hash": "69a31b285a552df43c1414f5c5c80cea1a3a729019e5b562f270d1d31b078a8a",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0.0",
+              "node_type": "sas_statement",
+              "label": "label = \"μ\"",
+              "position": {
+                "start_line": 1,
+                "start_col": 2,
+                "end_line": 1,
+                "end_col": 15
+              },
+              "structural_hash": "ecd1c9e4d31784bd339bc22d25c989c99c5c075c33c1f6b145886bc03ce95328",
+              "children": []
+            },
+            "text_diff": "label = \"λ\" -> label = \"μ\""
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "label = \"λ\""
+            ],
+            "new_labels": [
+              "label = \"μ\""
+            ],
+            "old_node_ids": [
+              "0.0.0"
+            ],
+            "new_node_ids": [
+              "0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.26235800000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 123501,
+                "total_fuel_consumed": 123501,
+                "max_fuel_used_percent": 0.573889405204461,
+                "input_bytes": 38,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.163334,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 122911,
+                "total_fuel_consumed": 122911,
+                "max_fuel_used_percent": 0.5711477695167286,
+                "input_bytes": 38,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "444c5dc995ab66918b01624787154ad2a664040d09be901561a4bbfd22fea73e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "data_step",
+                "label": "WORK.LABEL",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "f25b712187f77dee62eddd2dbcf6667044ced247a8c2b9db35787b7e41325bf0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "label = \"λ\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 15
+                    },
+                    "structural_hash": "69a31b285a552df43c1414f5c5c80cea1a3a729019e5b562f270d1d31b078a8a",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "444c5dc995ab66918b01624787154ad2a664040d09be901561a4bbfd22fea73e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "data_step",
+                "label": "WORK.LABEL",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "f25b712187f77dee62eddd2dbcf6667044ced247a8c2b9db35787b7e41325bf0",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "label = \"μ\"",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 15
+                    },
+                    "structural_hash": "ecd1c9e4d31784bd339bc22d25c989c99c5c075c33c1f6b145886bc03ce95328",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 60.001
+    },
+    {
+      "id": "data_config.sas.known_inline_statement",
+      "language_id": "sas",
+      "category": "value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "e1f8c54e3eba30a79bb9c3313653f757958c32f3686123b96a310b8dd7a6e06f",
+      "new_sha256": "e8d3992fefda7a355da3fad46709077c406857ff64e095976fae9a7d4558b52d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "data a; x=1; run;\\n"
+            ],
+            "new_labels": [
+              "data a; x=2; run;\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "data a; x=1; run;\\n",
+              "new_label": "data a; x=2; run;\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                18
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "data a; x=1; run;\\n",
+              "new_label": "data a; x=2; run;\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                18
+              ],
+              "new_span": [
+                0,
+                18
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.25729799999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 80021,
+                "total_fuel_consumed": 80021,
+                "max_fuel_used_percent": 0.38620173745173747,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.151051,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20720000,
+                "fuel_consumed": 79431,
+                "total_fuel_consumed": 79431,
+                "max_fuel_used_percent": 0.38335424710424715,
+                "input_bytes": 18,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1006c2accf3586762ade85e2734523a222e7cbe17f8fca223b02050ffdc91e28",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "data_step",
+                "label": "A",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "c592ccc3bff402052663aa1436fdde2ffdcb1c9431da2a6073e817327add908e",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "1006c2accf3586762ade85e2734523a222e7cbe17f8fca223b02050ffdc91e28",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "data_step",
+                "label": "A",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "c592ccc3bff402052663aa1436fdde2ffdcb1c9431da2a6073e817327add908e",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 55.142
+    },
+    {
+      "id": "data_config.sas.known_macro_default",
+      "language_id": "sas",
+      "category": "configuration",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "3d75ef58d1185856fd7d5edbe3272c90d0da4ca93203cdf47a2f4f61ded44e2b",
+      "new_sha256": "4ff0f1050a1e8b8413afbd87ed4f6c028a0abf69a0be572ef404b904a6ec0696",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "%macro greet(x=one);\\n"
+            ],
+            "new_labels": [
+              "%macro greet(x=two);\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "%macro greet(x=one);\\n",
+              "new_label": "%macro greet(x=two);\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                21
+              ],
+              "new_span": [
+                0,
+                21
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "%macro greet(x=one);\\n",
+              "new_label": "%macro greet(x=two);\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                21
+              ],
+              "new_span": [
+                0,
+                21
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.316068,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 189136,
+                "total_fuel_consumed": 189136,
+                "max_fuel_used_percent": 0.8612750455373406,
+                "input_bytes": 49,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.248371,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21960000,
+                "fuel_consumed": 188546,
+                "total_fuel_consumed": 188546,
+                "max_fuel_used_percent": 0.8585883424408015,
+                "input_bytes": 49,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "cc0268e7c8fbe0f24a85e17efc5059dd8f017bb775607690966bf4d7060dd5a3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "macro",
+                "label": "GREET",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "96ee15825851a516793cb6175a6b98ff00ebd62b8ef7ce22684ce22b3d1127ca",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "%put &x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "740e1fed068e256940750122917de7662b6bb2d2c84dd0c72fd605be6ce06c0b",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sas_statement",
+                    "label": "%mend",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 6
+                    },
+                    "structural_hash": "0b9ebbb5c965f99f994d1a27bf679ddf23f760ebc68092abe6db592bd9715968",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sas_statement",
+                    "label": "%greet()",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 9
+                    },
+                    "structural_hash": "f3f0f65355a80911a24b8eb1c5a774044b24ee63274f78582efe037f1de3b7e3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "cc0268e7c8fbe0f24a85e17efc5059dd8f017bb775607690966bf4d7060dd5a3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "macro",
+                "label": "GREET",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "96ee15825851a516793cb6175a6b98ff00ebd62b8ef7ce22684ce22b3d1127ca",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "%put &x",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 10
+                    },
+                    "structural_hash": "740e1fed068e256940750122917de7662b6bb2d2c84dd0c72fd605be6ce06c0b",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "sas_statement",
+                    "label": "%mend",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 0,
+                      "end_line": 2,
+                      "end_col": 6
+                    },
+                    "structural_hash": "0b9ebbb5c965f99f994d1a27bf679ddf23f760ebc68092abe6db592bd9715968",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "sas_statement",
+                    "label": "%greet()",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 9
+                    },
+                    "structural_hash": "f3f0f65355a80911a24b8eb1c5a774044b24ee63274f78582efe037f1de3b7e3",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0.2: child outside parent range",
+        "new: 0.0.2: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 59.049
+    },
+    {
+      "id": "data_config.sas.known_proc_option",
+      "language_id": "sas",
+      "category": "configuration",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d9c76e775489446dcbbfa641d7269a62678513027054516bd85769fe72d1ecd9",
+      "new_sha256": "b7a340f8cd3b74c70c37be3e7d28531a9d68d18aa763dd69d1818ffaa0a879f0",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-sas-parser#9"
+      ],
+      "review": {
+        "old_filename": "playground.sas",
+        "new_filename": "playground.sas",
+        "language": "sas",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "proc sort data=work.input out=work.output;\\n"
+            ],
+            "new_labels": [
+              "proc sort data=work.input out=work.output nodupkey;\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "proc sort data=work.input out=work.output;\\n",
+              "new_label": "proc sort data=work.input out=work.output nodupkey;\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                43
+              ],
+              "new_span": [
+                0,
+                52
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "proc sort data=work.input out=work.output;\\n",
+              "new_label": "proc sort data=work.input out=work.output nodupkey;\\n",
+              "risk": "amber",
+              "language": "sas",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                43
+              ],
+              "new_span": [
+                0,
+                52
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.34167600000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22460000,
+                "fuel_consumed": 134749,
+                "total_fuel_consumed": 134749,
+                "max_fuel_used_percent": 0.5999510240427427,
+                "input_bytes": 57,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "sas",
+                "filename": "playground.sas",
+                "call_count": 1,
+                "elapsed_ms": 0.183521,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22460000,
+                "fuel_consumed": 136280,
+                "total_fuel_consumed": 136280,
+                "max_fuel_used_percent": 0.6067675868210152,
+                "input_bytes": 66,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/sas_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "86addad251721050492dd15e0f6825db73b5106e6a6c053fbd7885753aef9310",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "proc_step",
+                "label": "SORT (DATA=WORK.INPUT)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "d052789a032a9d104a02460c81f63f387c02e884c378cd7f6d06ca8ea79fc152",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "by id",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "9f33a9543c0d21b06f1b42ec3783182f0a2fb626c9d87bd1a4aac372a4b3db4e",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "sas",
+          "tree": {
+            "id": "0",
+            "node_type": "sas_program",
+            "label": "sas_program",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "86addad251721050492dd15e0f6825db73b5106e6a6c053fbd7885753aef9310",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "proc_step",
+                "label": "SORT (DATA=WORK.INPUT)",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "d052789a032a9d104a02460c81f63f387c02e884c378cd7f6d06ca8ea79fc152",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "sas_statement",
+                    "label": "by id",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 2,
+                      "end_line": 1,
+                      "end_col": 8
+                    },
+                    "structural_hash": "9f33a9543c0d21b06f1b42ec3783182f0a2fb626c9d87bd1a4aac372a4b3db4e",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 56.173
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 7.031
+}

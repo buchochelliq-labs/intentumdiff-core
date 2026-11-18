@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-scss-nested-extend",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c97b08fc0dfd059cb95a9270e0ccc9441e50686d63b78ac18ebfb0368f932f66",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "c97b08fc0dfd059cb95a9270e0ccc9441e50686d63b78ac18ebfb0368f932f66",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

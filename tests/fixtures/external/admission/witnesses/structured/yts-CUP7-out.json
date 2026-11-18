@@ -1,0 +1,14 @@
+{
+  "case_id": "yts-CUP7-out",
+  "executed_utc": "2026-11-17T20:20:26+00:00",
+  "new_sha256": "44e8f435f0afe9702860aff82a85e7da33ada3cc0b9c62f5f0e01bd3031c7ea3",
+  "observations": {
+    "new": "ConstructorError: could not determine a constructor for the tag '!local'\n  in \"<unicode string>\", line 1, column 11:\n    anchored: &anchor !local value\n              ^ (line: 1)",
+    "old": "ConstructorError: could not determine a constructor for the tag '!local'\n  in \"<unicode string>\", line 1, column 18:\n    anchored: !local &anchor value\n                     ^ (line: 1)"
+  },
+  "old_sha256": "a0809d51f216c4d9c8d2e11a8d39ab71bc6fd3e4b5beb4688b8b29d43d76dc42",
+  "oracle": "yaml_typed",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2 typed equality",
+  "summary": "reference could not load both sides",
+  "verdict": "inconclusive"
+}

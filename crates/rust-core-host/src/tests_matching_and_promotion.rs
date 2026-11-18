@@ -56,6 +56,110 @@ fn assert_function_rename(result: &Value, old: &str, new: &str) {
 }
 
 #[test]
+fn python_global_read_survives_parameter_rename_in_another_function() {
+    let old = "def f(a):\n    return a\ndef g():\n    return a\n";
+    let new = "def f(b):\n    return b\ndef g():\n    return b\n";
+    for (route, result) in rename_review_routes(old, new) {
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|change| {
+            change["change_type"] == "MODIFICATION"
+                && change["old_node"]["position"]["start_line"] == 3
+        }), "{route}: unrelated global read in g must remain a semantic edit: {result}");
+    }
+}
+
+#[test]
+fn same_id_variable_binder_rename_preserves_unrelated_read_of_the_same_name() {
+    fn node(id: &str, kind: &str, label: &str, children: Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode {
+            id: id.to_owned(),
+            node_type: kind.to_owned(),
+            label: label.to_owned(),
+            position: NodePosition { start_line: 0, start_col: 0, end_line: 0, end_col: 1 },
+            structural_hash: id.to_owned(),
+            children,
+            parent_type: None,
+            type_info: None,
+            facts: None,
+        }
+    }
+    let old_binder = node("0.0.0", "identifier", "hasCloseElements", vec![]);
+    let new_binder = node("0.0.0", "identifier", "nearbyElements", vec![]);
+    let old_initializer = node("0.0.1", "identifier", "sourceName", vec![]);
+    let new_initializer = node("0.0.1", "identifier", "renamedSource", vec![]);
+    let old_read = node("0.1.1", "identifier", "hasCloseElements", vec![]);
+    let new_read = node("0.1.1", "identifier", "nearbyElements", vec![]);
+    let old_call_target = node("0.2.0.0", "identifier", "oldFunction", vec![]);
+    let new_call_target = node("0.2.0.0", "identifier", "newFunction", vec![]);
+    let old_call_argument = node("0.2.0.1", "identifier", "oldArgument", vec![]);
+    let new_call_argument = node("0.2.0.1", "identifier", "newArgument", vec![]);
+    let old_tree = node("0", "module", "module", vec![
+        node("0.0", "variable_declarator", "declarator", vec![old_binder.clone(), old_initializer.clone()]),
+        node("0.1", "function_definition", "g", vec![old_read.clone()]),
+        node("0.2", "function_definition", "h", vec![node("0.2.0", "call", "call", vec![old_call_target.clone(), old_call_argument.clone()])]),
+    ]);
+    let new_tree = node("0", "module", "module", vec![
+        node("0.0", "variable_declarator", "declarator", vec![new_binder.clone(), new_initializer.clone()]),
+        node("0.1", "function_definition", "g", vec![new_read.clone()]),
+        node("0.2", "function_definition", "h", vec![node("0.2.0", "call", "call", vec![new_call_target.clone(), new_call_argument.clone()])]),
+    ]);
+    let mut changes = vec![
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_binder), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_binder),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_initializer), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_initializer),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_call_target), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_call_target),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_call_argument), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_call_argument),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "DELETION", old_node: Some(&old_read), new_node: None,
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+        ChangeDraft { change_type: "ADDITION", old_node: None, new_node: Some(&new_read),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+    ];
+
+    promote_same_id_identifier_renames_from_add_delete_drafts(&mut changes, &old_tree, &new_tree);
+
+    assert_eq!(changes.len(), 8, "only binder and callee pairs are promoted");
+    assert!(changes.iter().any(|change| change.change_type == "REFACTORING"
+        && change.refactoring_kind == Some("RENAME_VARIABLE")
+        && change.old_node.is_some_and(|node| node.id == "0.0.0")));
+    assert!(changes.iter().any(|change| change.change_type == "DELETION"
+        && change.old_node.is_some_and(|node| node.id == "0.1.1")));
+    assert!(changes.iter().any(|change| change.change_type == "ADDITION"
+        && change.new_node.is_some_and(|node| node.id == "0.1.1")));
+    assert!(changes.iter().any(|change| change.change_type == "DELETION"
+        && change.old_node.is_some_and(|node| node.id == "0.0.1")));
+    assert!(changes.iter().any(|change| change.change_type == "ADDITION"
+        && change.new_node.is_some_and(|node| node.id == "0.0.1")));
+    assert!(changes.iter().any(|change| change.change_type == "REFACTORING"
+        && change.refactoring_kind == Some("RENAME_VARIABLE")
+        && change.old_node.is_some_and(|node| node.id == "0.2.0.0")));
+    assert!(changes.iter().any(|change| change.change_type == "DELETION"
+        && change.old_node.is_some_and(|node| node.id == "0.2.0.1")));
+    assert!(changes.iter().any(|change| change.change_type == "ADDITION"
+        && change.new_node.is_some_and(|node| node.id == "0.2.0.1")));
+}
+
+#[test]
 fn rename_prefers_unique_exact_body_over_position() {
     for (old, new) in [
         ("def a(x): return x + 1\ndef b(x): return x + 2\n", "def c(x): return x + 2\n"),
@@ -152,6 +256,105 @@ fn python_operator_change_is_a_semantic_modification_on_every_route() {
                 "{route} {old:?}->{new:?}: operator change filed as IGNORED_STYLE: {result}"
             );
         }
+    }
+}
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+fn order_sensitive_statement_swap_survives_python_and_javascript_finalization() {
+    let python_old = "x = 1\nx += 2\nx *= 3\n";
+    let python_new = "x = 1\nx *= 3\nx += 2\n";
+    for (route, result) in rename_review_routes(python_old, python_new) {
+        if route == "batch" {
+            assert_eq!(result["has_semantic_changes"], true, "{route}: {result}");
+        }
+        let change = result["changes"].as_array().unwrap().iter().find(|change|
+            change["change_type"] == "MODIFICATION"
+                && change["description"].as_str().unwrap().contains("Reorder statement"))
+            .unwrap_or_else(|| panic!("{route}: executable order change disappeared: {result}"));
+        let old_line = change["old_node"]["position"]["start_line"].as_u64().unwrap() as usize;
+        let new_line = change["new_node"]["position"]["start_line"].as_u64().unwrap() as usize;
+        assert_ne!(old_line, new_line, "{route}: reorder evidence must point to both locations");
+        for (source, line) in [(python_old, old_line), (python_new, new_line)] {
+            assert!(matches!(source.lines().nth(line), Some("x += 2" | "x *= 3")),
+                "{route}: source anchor must select a reordered statement, line {line}: {change}");
+        }
+    }
+
+    let javascript_old = "let x = 1;\nx += 2;\nx *= 3;\n";
+    let javascript_new = "let x = 1;\nx *= 3;\nx += 2;\n";
+    let wasm = bundled_wasm_path("js_ts_parser.wasm");
+    let (old_json, new_json) = run_python_wasm_process_pair(
+        &wasm, javascript_old, "", "example.js", javascript_new, "", "example.js",
+        u64::MAX, 16 * 1024 * 1024, "javascript",
+    ).expect("JavaScript parser must produce both semantic trees");
+    let old_tree = parse_semantic_tree_json(&old_json).expect("old JavaScript tree");
+    let new_tree = parse_semantic_tree_json(&new_json).expect("new JavaScript tree");
+    let result: Value = serde_json::from_str(&finalize_review_impl(
+        &serde_json::to_string(&old_tree).unwrap(),
+        &serde_json::to_string(&new_tree).unwrap(),
+        javascript_old, javascript_new, "javascript", "{}",
+    ).unwrap()).unwrap();
+    let change = result["changes"].as_array().unwrap().iter().find(|change|
+        change["change_type"] == "MODIFICATION"
+            && change["description"].as_str().unwrap().contains("Reorder statement"))
+        .unwrap_or_else(|| panic!("JavaScript executable order change disappeared: {result}"));
+    let old_line = change["old_node"]["position"]["start_line"].as_u64().unwrap() as usize;
+    let new_line = change["new_node"]["position"]["start_line"].as_u64().unwrap() as usize;
+    assert_ne!(old_line, new_line, "JavaScript reorder evidence must point to both locations");
+    for (source, line) in [(javascript_old, old_line), (javascript_new, new_line)] {
+        assert!(matches!(source.lines().nth(line), Some("x += 2;" | "x *= 3;")),
+            "JavaScript source anchor must select a reordered statement, line {line}: {change}");
+    }
+
+    let arguments_old = "invoke(alpha, beta);\n";
+    let arguments_new = "invoke(beta, alpha);\n";
+    let (old_json, new_json) = run_python_wasm_process_pair(
+        &wasm, arguments_old, "", "example.js", arguments_new, "", "example.js",
+        u64::MAX, 16 * 1024 * 1024, "javascript",
+    ).expect("JavaScript parser must produce both argument trees");
+    let old_tree = parse_semantic_tree_json(&old_json).expect("old JavaScript argument tree");
+    let new_tree = parse_semantic_tree_json(&new_json).expect("new JavaScript argument tree");
+    let result: Value = serde_json::from_str(&finalize_review_impl(
+        &serde_json::to_string(&old_tree).unwrap(),
+        &serde_json::to_string(&new_tree).unwrap(),
+        arguments_old, arguments_new, "javascript", "{}",
+    ).unwrap()).unwrap();
+    let change = result["changes"].as_array().unwrap().iter().find(|change|
+        change["change_type"] == "MODIFICATION"
+            && change["description"].as_str().unwrap().contains("Reorder argument"))
+        .unwrap_or_else(|| panic!("JavaScript ordered argument change disappeared: {result}"));
+    assert_ne!(change["old_node"]["position"]["start_col"],
+        change["new_node"]["position"]["start_col"], "argument source anchors must move: {change}");
+
+    let initializer_old = "int values[] = {1, 2, 3};\n";
+    let initializer_new = "int values[] = {3, 2, 1};\n";
+    let cpp_wasm_dir = std::env::var_os("INTENTUMDIFF_TEST_WASM_DIR")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(|| {
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../src/intentumdiff/wasm")
+        });
+    let cpp_wasm = cpp_wasm_dir.join("cpp_parser.wasm");
+    if cpp_wasm.is_file() {
+        let cpp_wasm = cpp_wasm.to_string_lossy();
+        let (old_json, new_json) = run_python_wasm_process_pair(
+            &cpp_wasm, initializer_old, "", "example.cpp", initializer_new, "", "example.cpp",
+            u64::MAX, 16 * 1024 * 1024, "cpp",
+        ).expect("C++ parser must produce both initializer trees");
+        let old_tree = parse_semantic_tree_json(&old_json).expect("old C++ initializer tree");
+        let new_tree = parse_semantic_tree_json(&new_json).expect("new C++ initializer tree");
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &serde_json::to_string(&old_tree).unwrap(),
+            &serde_json::to_string(&new_tree).unwrap(),
+            initializer_old, initializer_new, "cpp", "{}",
+        ).unwrap()).unwrap();
+        assert!(result["changes"].as_array().unwrap().iter().any(|change|
+            change["change_type"] == "MODIFICATION"
+                && change["description"].as_str().unwrap().contains("Reorder initializer")),
+            "C++ ordered initializer change disappeared: {result}");
+    } else {
+        eprintln!("Skipping C++ initializer route: no cpp_parser.wasm staged in {cpp_wasm_dir:?}");
     }
 }
 
@@ -323,12 +526,19 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         );
     }
     #[test]
-    fn generic_text_reordered_lines_net_to_zero() {
+    fn generic_text_reordered_lines_are_one_move() {
+        // #14 pairs the relocated line instead of add+delete; #248 keeps it visible.
         let old = "line one\nline two\nline three\n";
         let new = "line two\nline one\nline three\n";
         let payload: Value =
             serde_json::from_str(&generic_text_review_json(old, new, 0).unwrap()).unwrap();
-        assert_eq!(payload["changes"].as_array().unwrap().len(), 0);
+        let changes = payload["changes"].as_array().unwrap();
+        assert_eq!(changes.len(), 1, "{changes:?}");
+        assert_eq!(changes[0]["change_type"], "MOVE");
+        assert_ne!(
+            changes[0]["old_node"]["position"]["start_line"],
+            changes[0]["new_node"]["position"]["start_line"]
+        );
         assert!(payload["group"].is_null(), "no raw churn -> no audit group");
     }
     #[test]
@@ -438,7 +648,7 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
             reorder_draft(&old_a, &new_a, 0, 1),
             reorder_draft(&old_b, &new_b, 1, 0),
         ];
-        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut swapped);
+        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut swapped, &[]);
         assert_eq!(suppressed, 1, "one side of the swap is the mover: {swapped:?}");
         assert_eq!(promoted, vec![0], "the mover's index is reported for grouping");
         assert_eq!(swapped.len(), 1);
@@ -455,10 +665,229 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
             reorder_draft(&old_c, &new_c, 0, 1),
             reorder_draft(&old_d, &new_d, 1, 2),
         ];
-        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut shifted);
+        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut shifted, &[]);
         assert_eq!(suppressed, 2, "insertion shifts remain suppressed: {shifted:?}");
         assert!(promoted.is_empty());
         assert!(shifted.is_empty());
+    }
+
+    #[test]
+    fn ordered_argument_and_initializer_permutations_survive_but_insertion_shift_does_not() {
+        for (node_type, parent_type, description) in [
+            ("identifier", "argument_list", "Reorder argument"),
+            ("initializer_element", "initializer_list", "Reorder initializer"),
+        ] {
+            let mut old_left = node("root.0", node_type, "left", vec![]);
+            let mut new_left = node("root.1", node_type, "left", vec![]);
+            let mut old_right = node("root.1", node_type, "right", vec![]);
+            let mut new_right = node("root.0", node_type, "right", vec![]);
+            for item in [&mut old_left, &mut new_left, &mut old_right, &mut new_right] {
+                item.parent_type = Some(parent_type.to_owned());
+            }
+            let old_parent = node("root", parent_type, "", vec![]);
+            let new_parent = node("root", parent_type, "", vec![]);
+            let matching = vec![
+                MatchPair { old_node: &old_parent, new_node: &new_parent },
+                MatchPair { old_node: &old_left, new_node: &new_left },
+                MatchPair { old_node: &old_right, new_node: &new_right },
+            ];
+            let mut swapped = vec![
+                reorder_draft(&old_left, &new_left, 0, 1),
+                reorder_draft(&old_right, &new_right, 1, 0),
+            ];
+            let (suppressed, _) = suppress_low_signal_reorders_drafts(&mut swapped, &matching);
+            assert_eq!(suppressed, 1, "ordered {parent_type} permutation: {swapped:?}");
+            assert_eq!(swapped.len(), 1, "ordered {parent_type} permutation: {swapped:?}");
+            assert_eq!(swapped[0].change_type, "MODIFICATION");
+            assert!(swapped[0].description.contains(description), "{swapped:?}");
+        }
+    }
+
+    #[test]
+    fn executable_statement_reorder_is_preserved_but_insertion_displacement_is_suppressed() {
+        let old_first = node("root.0", "expression_statement", "x += 2", vec![]);
+        let new_first = node("root.1", "expression_statement", "x += 2", vec![]);
+        let old_second = node("root.1", "expression_statement", "x *= 3", vec![]);
+        let new_second = node("root.0", "expression_statement", "x *= 3", vec![]);
+        let mut swapped = vec![
+            reorder_draft(&old_first, &new_first, 0, 1),
+            reorder_draft(&old_second, &new_second, 1, 0),
+        ];
+
+        let old_parent = node("root", "block", "", vec![]);
+        let new_parent = node("root", "block", "", vec![]);
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_first, new_node: &new_first },
+            MatchPair { old_node: &old_second, new_node: &new_second },
+        ];
+        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut swapped, &matching);
+
+        assert_eq!(suppressed, 1, "one executable statement must survive: {swapped:?}");
+        assert!(promoted.is_empty(), "statement edits are not entity moves: {swapped:?}");
+        assert_eq!(swapped.len(), 1);
+        assert_eq!(swapped[0].change_type, "MODIFICATION");
+        assert!(swapped[0].description.contains("Reorder statement"));
+
+        let old_a = node("root.0", "expression_statement", "a()", vec![]);
+        let new_a = node("root.1", "expression_statement", "a()", vec![]);
+        let old_b = node("root.1", "expression_statement", "b()", vec![]);
+        let new_b = node("root.2", "expression_statement", "b()", vec![]);
+        let inserted_shift = node("root.0", "expression_statement", "x()", vec![]);
+        let mut shifted = vec![
+            reorder_draft(&old_a, &new_a, 0, 1),
+            reorder_draft(&old_b, &new_b, 1, 2),
+            ChangeDraft {
+                change_type: "ADDITION", old_node: None, new_node: Some(&inserted_shift),
+                old_index: None, new_index: Some(0), confidence: 1.0,
+                description: "Insert unrelated statement".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_a, new_node: &new_a },
+            MatchPair { old_node: &old_b, new_node: &new_b },
+        ];
+        let (suppressed, promoted) = suppress_low_signal_reorders_drafts(&mut shifted, &matching);
+        assert_eq!(suppressed, 2, "insertion displacement remains noise: {shifted:?}");
+        assert!(promoted.is_empty());
+        assert_eq!(shifted.len(), 1, "unrelated insertion survives displacement suppression");
+        assert_eq!(shifted[0].change_type, "ADDITION");
+
+        let old_a = node("root.0", "expression_statement", "a()", vec![]);
+        let old_b = node("root.1", "expression_statement", "b()", vec![]);
+        let old_c = node("root.2", "expression_statement", "c()", vec![]);
+        let new_x = node("root.0", "expression_statement", "x()", vec![]);
+        let new_c = node("root.1", "expression_statement", "c()", vec![]);
+        let new_b = node("root.2", "expression_statement", "b()", vec![]);
+        let new_a = node("root.3", "expression_statement", "a()", vec![]);
+        let mut mixed = vec![
+            reorder_draft(&old_a, &new_a, 0, 3),
+            reorder_draft(&old_b, &new_b, 1, 2),
+            reorder_draft(&old_c, &new_c, 2, 1),
+            ChangeDraft {
+                change_type: "ADDITION", old_node: None, new_node: Some(&new_x),
+                old_index: None, new_index: Some(0), confidence: 1.0,
+                description: "Insert unrelated statement".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_a, new_node: &new_a },
+            MatchPair { old_node: &old_b, new_node: &new_b },
+            MatchPair { old_node: &old_c, new_node: &new_c },
+        ];
+        let (suppressed, _) = suppress_low_signal_reorders_drafts(&mut mixed, &matching);
+        assert!(suppressed > 0, "one side of the real reorder is compacted: {mixed:?}");
+        assert!(mixed.iter().any(|change| change.change_type == "MODIFICATION"),
+            "the reorder remains meaningful alongside insertion: {mixed:?}");
+        assert!(mixed.iter().any(|change| change.change_type == "ADDITION"
+            && change.new_node.is_some_and(|node| node.label == "x()")),
+            "the unrelated insertion remains visible: {mixed:?}");
+
+        let old_moved = node("root.0", "expression_statement", "move()", vec![]);
+        let new_moved = node("root.1", "expression_statement", "move()", vec![]);
+        let old_edited = node("root.1", "expression_statement", "before()", vec![]);
+        let new_edited = node("root.0", "expression_statement", "after()", vec![]);
+        let mut reorder_with_modification = vec![
+            reorder_draft(&old_moved, &new_moved, 0, 1),
+            ChangeDraft {
+                change_type: "MODIFICATION", old_node: Some(&old_edited), new_node: Some(&new_edited),
+                old_index: Some(1), new_index: Some(0), confidence: 1.0,
+                description: "Edit the other statement".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_moved, new_node: &new_moved },
+            MatchPair { old_node: &old_edited, new_node: &new_edited },
+        ];
+        suppress_low_signal_reorders_drafts(&mut reorder_with_modification, &matching);
+        assert!(reorder_with_modification.iter().any(|change| change.change_type == "MODIFICATION"
+            && change.description.contains("Reorder statement")),
+            "a MODIFICATION counterpart cannot hide the only order change: {reorder_with_modification:?}");
+
+        // An inversion among entity siblings must not promote a stationary statement
+        // displacement elsewhere in the same parent.
+        let old_function_a = node("root.0", "function_declaration", "a", vec![]);
+        let old_function_b = node("root.1", "function_declaration", "b", vec![]);
+        let new_function_a = node("root.1", "function_declaration", "a", vec![]);
+        let new_function_b = node("root.0", "function_declaration", "b", vec![]);
+        let old_stationary_a = node("root.2", "expression_statement", "a()", vec![]);
+        let old_stationary_b = node("root.3", "expression_statement", "b()", vec![]);
+        let new_stationary_a = node("root.3", "expression_statement", "a()", vec![]);
+        let new_stationary_b = node("root.4", "expression_statement", "b()", vec![]);
+        let new_insertion = node("root.2", "expression_statement", "inserted()", vec![]);
+        let mut unrelated_inversion = vec![
+            reorder_draft(&old_function_a, &new_function_a, 0, 1),
+            reorder_draft(&old_function_b, &new_function_b, 1, 0),
+            reorder_draft(&old_stationary_a, &new_stationary_a, 2, 3),
+            ChangeDraft {
+                change_type: "ADDITION", old_node: None, new_node: Some(&new_insertion),
+                old_index: None, new_index: Some(2), confidence: 1.0,
+                description: "Insert before stationary statements".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_function_a, new_node: &new_function_a },
+            MatchPair { old_node: &old_function_b, new_node: &new_function_b },
+            MatchPair { old_node: &old_stationary_a, new_node: &new_stationary_a },
+            MatchPair { old_node: &old_stationary_b, new_node: &new_stationary_b },
+        ];
+        suppress_low_signal_reorders_drafts(&mut unrelated_inversion, &matching);
+        assert!(!unrelated_inversion.iter().any(|change| change.description.contains("Reorder statement")),
+            "an unrelated entity inversion cannot promote insertion displacement: {unrelated_inversion:?}");
+        assert!(unrelated_inversion.iter().any(|change| change.change_type == "ADDITION"));
+
+        let old_only = node("root.0", "expression_statement", "only()", vec![]);
+        let new_only = node("root.1", "expression_statement", "only()", vec![]);
+        let mut unproven = vec![reorder_draft(&old_only, &new_only, 0, 1)];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_only, new_node: &new_only },
+        ];
+        suppress_low_signal_reorders_drafts(&mut unproven, &matching);
+        assert_eq!(unproven.len(), 1, "a singleton has no relative-order proof: {unproven:?}");
+        assert_eq!(unproven[0].change_type, "MODIFICATION");
+
+        let inserted_before = node("root.0", "expression_statement", "inserted()", vec![]);
+        let mut inserted_shift = vec![
+            reorder_draft(&old_only, &new_only, 0, 1),
+            ChangeDraft {
+                change_type: "ADDITION", old_node: None, new_node: Some(&inserted_before),
+                old_index: None, new_index: Some(0), confidence: 1.0,
+                description: "Insert before the only matched statement".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        suppress_low_signal_reorders_drafts(&mut inserted_shift, &matching);
+        assert_eq!(inserted_shift.len(), 1, "proven insertion displacement is suppressed");
+        assert_eq!(inserted_shift[0].change_type, "ADDITION");
+
+        let deleted_before = node("root.0", "expression_statement", "deleted()", vec![]);
+        let old_after_deletion = node("root.1", "expression_statement", "after()", vec![]);
+        let new_after_deletion = node("root.0", "expression_statement", "after()", vec![]);
+        let mut deleted_shift = vec![
+            reorder_draft(&old_after_deletion, &new_after_deletion, 1, 0),
+            ChangeDraft {
+                change_type: "DELETION", old_node: Some(&deleted_before), new_node: None,
+                old_index: Some(0), new_index: None, confidence: 1.0,
+                description: "Delete before the only matched statement".to_owned(),
+                refactoring_kind: None, text_diff: None,
+            },
+        ];
+        let matching = vec![
+            MatchPair { old_node: &old_parent, new_node: &new_parent },
+            MatchPair { old_node: &old_after_deletion, new_node: &new_after_deletion },
+        ];
+        suppress_low_signal_reorders_drafts(&mut deleted_shift, &matching);
+        assert_eq!(deleted_shift.len(), 1, "proven deletion displacement is suppressed");
+        assert_eq!(deleted_shift[0].change_type, "DELETION");
     }
     #[test]
     fn diff_semantic_tree_detects_javascript_function_move() {
@@ -785,20 +1214,23 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         // Oracle (issue #57 dart flip): a body identifier rename (`a`->`x`) corroborated by an
         // anchored callable's parameter rename becomes a RENAME_VARIABLE; an uncorroborated one
         // (and a param swap) stay put — the routed analogue of refactoring.py inferred_rename_pairs.
-        fn callable(param_labels: &[&str]) -> SemanticNode {
+        fn callable(param_labels: &[&str], body_labels: &[&str]) -> SemanticNode {
             let params: Vec<SemanticNode> = param_labels
                 .iter()
                 .enumerate()
                 .map(|(i, l)| node(&format!("0.0.2.{i}"), "formal_parameter", l, Vec::new()))
                 .collect();
             let plist = node("0.0.2", "formal_parameter_list", "formal_parameter_list", params);
-            node("0", "module", "module", vec![node("0.0", "function_signature", "add", vec![plist])])
+            let body = node("0.0.3", "block", "block", body_labels.iter().enumerate()
+                .map(|(i, label)| node(&format!("0.0.3.{i}"), "identifier", label, Vec::new()))
+                .collect());
+            node("0", "module", "module", vec![node("0.0", "function_definition", "add", vec![plist, body])])
         }
-        let old_root: &'static SemanticNode = Box::leak(Box::new(callable(&["a", "b"])));
-        let new_root: &'static SemanticNode = Box::leak(Box::new(callable(&["x", "y"])));
+        let old_root: &'static SemanticNode = Box::leak(Box::new(callable(&["a", "b"], &["a", "b"])));
+        let new_root: &'static SemanticNode = Box::leak(Box::new(callable(&["x", "y"], &["x", "y"])));
 
-        let body_a: &'static SemanticNode = Box::leak(Box::new(node("9.0", "identifier", "a", Vec::new())));
-        let body_x: &'static SemanticNode = Box::leak(Box::new(node("9.1", "identifier", "x", Vec::new())));
+        let body_a: &'static SemanticNode = Box::leak(Box::new(old_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
+        let body_x: &'static SemanticNode = Box::leak(Box::new(new_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
         let foo: &'static SemanticNode = Box::leak(Box::new(node("9.2", "identifier", "foo", Vec::new())));
         let bar: &'static SemanticNode = Box::leak(Box::new(node("9.3", "identifier", "bar", Vec::new())));
         let modif = |o: &'static SemanticNode, n: &'static SemanticNode| ChangeDraft {
@@ -821,9 +1253,9 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
         assert_eq!(changes[1].refactoring_kind, None);
 
         // A parameter SWAP (a,b)->(b,a) infers nothing — the body reference stays a MODIFICATION.
-        let swap_new: &'static SemanticNode = Box::leak(Box::new(callable(&["b", "a"])));
-        let sb: &'static SemanticNode = Box::leak(Box::new(node("8.0", "identifier", "a", Vec::new())));
-        let sb2: &'static SemanticNode = Box::leak(Box::new(node("8.1", "identifier", "b", Vec::new())));
+        let swap_new: &'static SemanticNode = Box::leak(Box::new(callable(&["b", "a"], &["b", "a"])));
+        let sb: &'static SemanticNode = Box::leak(Box::new(old_root.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
+        let sb2: &'static SemanticNode = Box::leak(Box::new(swap_new.descendants().into_iter().find(|n| n.id == "0.0.3.0").unwrap().clone()));
         let mut swap_changes = vec![modif(sb, sb2)];
         promote_corroborated_variable_renames(&mut swap_changes, old_root, swap_new);
         assert_eq!(swap_changes[0].change_type, "MODIFICATION");
@@ -1143,6 +1575,127 @@ fn user_xml_dialect_predicate_and_coordinate_key() {
     }))
     .expect("spec parses");
     assert!(!xml_tree_matches_user_dialect(&unpredicated, &tree));
+}
+
+#[test]
+fn variable_rename_inference_does_not_cross_callable_scope() {
+    fn tree(f_param: &str, f_ref: &str, g_param: &str, g_ref: &str) -> SemanticNode {
+        let callable = |id: &str, name: &str, param: &str, reference: &str| {
+            node(id, "function_definition", name, vec![
+                node(&format!("{id}.0"), "parameters", "parameters", vec![
+                    node(&format!("{id}.0.0"), "identifier", param, vec![]),
+                ]),
+                node(&format!("{id}.1"), "block", "block", vec![
+                    node(&format!("{id}.1.0"), "identifier", reference, vec![]),
+                ]),
+            ])
+        };
+        node("0", "module", "module", vec![
+            callable("0.0", "f", f_param, f_ref),
+            callable("0.1", "g", g_param, g_ref),
+        ])
+    }
+    let old_tree = tree("a", "a", "a", "a");
+    let new_tree = tree("b", "b", "a", "b");
+    let old_ref = old_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let new_ref = new_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let mut changes = vec![ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_ref),
+        new_node: Some(new_ref), old_index: None, new_index: None, confidence: 1.0,
+        description: String::new(), refactoring_kind: None, text_diff: None }];
+    promote_corroborated_variable_renames(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes[0].change_type, "MODIFICATION");
+    assert_eq!(changes[0].refactoring_kind, None);
+}
+
+#[test]
+fn duplicate_variable_rename_labels_keep_one_anchor_per_callable() {
+    fn tree(name: &str, param: &str) -> SemanticNode {
+        let function = |id: &str| node(id, "function_definition", name, vec![
+            node(&format!("{id}.0"), "parameters", "parameters", vec![
+                node(&format!("{id}.0.0"), "identifier", param, vec![]),
+            ]),
+            node(&format!("{id}.1"), "block", "block", vec![]),
+        ]);
+        node("0", "module", "module", vec![function("0.0"), function("0.1")])
+    }
+    let old_tree = tree("f", "a");
+    let new_tree = tree("f", "b");
+    let old_a = old_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let new_b = new_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let old_a2 = old_tree.descendants().into_iter().find(|n| n.id == "0.1.0.0").unwrap();
+    let new_b2 = new_tree.descendants().into_iter().find(|n| n.id == "0.1.0.0").unwrap();
+    let mut changes = vec![
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_a), new_node: Some(&new_b),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_a2), new_node: Some(&new_b2),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+    ];
+    dedupe_variable_rename_drafts(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes.len(), 2, "same labels in separate callable binders are distinct");
+}
+
+#[test]
+fn rename_label_pair_does_not_suppress_an_independent_callable_edit() {
+    let callable = |id: &str, name: &str, param: &str, reference: &str| {
+        node(id, "function_definition", name, vec![
+            node(&format!("{id}.0"), "parameters", "parameters", vec![
+                node(&format!("{id}.0.0"), "identifier", param, vec![]),
+            ]),
+            node(&format!("{id}.1"), "block", "block", vec![
+                node(&format!("{id}.1.0"), "identifier", reference, vec![]),
+            ]),
+        ])
+    };
+    let old_tree = node("0", "module", "module", vec![
+        callable("0.0", "f", "a", "a"),
+        callable("0.1", "g", "x", "a"),
+    ]);
+    let new_tree = node("0", "module", "module", vec![
+        callable("0.0", "f", "b", "b"),
+        callable("0.1", "g", "x", "b"),
+    ]);
+    let old_rename = old_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let new_rename = new_tree.descendants().into_iter().find(|n| n.id == "0.0.0.0").unwrap();
+    let old_other = old_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let new_other = new_tree.descendants().into_iter().find(|n| n.id == "0.1.1.0").unwrap();
+    let mut changes = vec![
+        ChangeDraft { change_type: "REFACTORING", old_node: Some(old_rename), new_node: Some(new_rename),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: Some("RENAME_VARIABLE"), text_diff: None },
+        ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_other), new_node: Some(new_other),
+            old_index: None, new_index: None, confidence: 1.0, description: String::new(),
+            refactoring_kind: None, text_diff: None },
+    ];
+    suppress_modifications_covered_by_refactoring_labels(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes.len(), 2, "a rename in another callable cannot own this edit");
+}
+
+#[test]
+fn outer_parameter_rename_does_not_capture_nested_callable_edit() {
+    let tree = |outer_param: &str, nested_ref: &str| {
+        node("0", "module", "module", vec![node("0.0", "function_definition", "outer", vec![
+            node("0.0.0", "parameters", "parameters", vec![
+                node("0.0.0.0", "identifier", outer_param, vec![]),
+            ]),
+            node("0.0.1", "block", "block", vec![node("0.0.1.0", "function_definition", "inner", vec![
+                node("0.0.1.0.0", "parameters", "parameters", vec![]),
+                node("0.0.1.0.1", "block", "block", vec![
+                    node("0.0.1.0.1.0", "identifier", nested_ref, vec![]),
+                ]),
+            ])]),
+        ])])
+    };
+    let old_tree = tree("a", "a");
+    let new_tree = tree("b", "b");
+    let old_ref = old_tree.descendants().into_iter().find(|n| n.id == "0.0.1.0.1.0").unwrap();
+    let new_ref = new_tree.descendants().into_iter().find(|n| n.id == "0.0.1.0.1.0").unwrap();
+    let mut changes = vec![ChangeDraft { change_type: "MODIFICATION", old_node: Some(old_ref),
+        new_node: Some(new_ref), old_index: None, new_index: None, confidence: 1.0,
+        description: String::new(), refactoring_kind: None, text_diff: None }];
+    promote_corroborated_variable_renames(&mut changes, &old_tree, &new_tree);
+    assert_eq!(changes[0].change_type, "MODIFICATION");
 }
 
 #[test]

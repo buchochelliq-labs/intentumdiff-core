@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-scss-newlines_in_selectors",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2d4eae266c30e1c5c64df3b1692e3db5bc519149d64972c2f800f7f4018c0767",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "2d4eae266c30e1c5c64df3b1692e3db5bc519149d64972c2f800f7f4018c0767",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

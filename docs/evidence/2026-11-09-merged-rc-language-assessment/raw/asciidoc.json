@@ -1,0 +1,2832 @@
+{
+  "language_id": "asciidoc",
+  "options": {
+    "language_hint": "asciidoc",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-asciidoc-prose",
+      "language_id": "asciidoc",
+      "category": "meaningful_prose",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ee51fbf7fab0bbb62018646124b37289cbed76b683e7564ef090653f5716a43c",
+      "new_sha256": "0dffb5b7925274df00ee76c4660148dacb8c29db04138cfe832b24d4ef8fc8a6",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update paragraph('Keep backups for 7 days.') -> paragraph('Keep backups for 30 days.')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "paragraph",
+              "label": "Keep backups for 7 days.",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 24
+              },
+              "structural_hash": "9054ad8903ef76de",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "paragraph",
+              "label": "Keep backups for 30 days.",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 25
+              },
+              "structural_hash": "5c48764f9b01e6ec",
+              "children": []
+            },
+            "text_diff": "Keep backups for 7 days. -> Keep backups for 30 days."
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Keep backups for 7 days."
+            ],
+            "new_labels": [
+              "Keep backups for 30 days."
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.241318,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21380000,
+                "fuel_consumed": 64053,
+                "total_fuel_consumed": 64053,
+                "max_fuel_used_percent": 0.2995930776426567,
+                "input_bytes": 34,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.107019,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21380000,
+                "fuel_consumed": 63114,
+                "total_fuel_consumed": 63114,
+                "max_fuel_used_percent": 0.29520112254443404,
+                "input_bytes": 35,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "0a282c165beb447a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups for 7 days.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 24
+                },
+                "structural_hash": "9054ad8903ef76de",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "a23c609cd6fc0188",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups for 30 days.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 25
+                },
+                "structural_hash": "5c48764f9b01e6ec",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4925.374
+    },
+    {
+      "id": "web-asciidoc-include_filter",
+      "language_id": "asciidoc",
+      "category": "meaningful_include_filter",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "adc545432ab59214684b4ca90e7d0d2de2f42e4ae025d047aaf9da96b97ca65e",
+      "new_sha256": "873d51acd5ee6cbb74be163ef121c52ef25e0257b2078a298259f0258065e7a7",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "include::file.txt[lines=1..3]\\n"
+            ],
+            "new_labels": [
+              "include::file.txt[lines=4..6]\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "include::file.txt[lines=1..3]\\n",
+              "new_label": "include::file.txt[lines=4..6]\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                30
+              ],
+              "new_span": [
+                0,
+                30
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "include::file.txt[lines=1..3]\\n",
+              "new_label": "include::file.txt[lines=4..6]\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                30
+              ],
+              "new_span": [
+                0,
+                30
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.214598,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21200000,
+                "fuel_consumed": 38795,
+                "total_fuel_consumed": 38795,
+                "max_fuel_used_percent": 0.18299528301886792,
+                "input_bytes": 30,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.10365300000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21200000,
+                "fuel_consumed": 38205,
+                "total_fuel_consumed": 38205,
+                "max_fuel_used_percent": 0.18021226415094338,
+                "input_bytes": 30,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "22367955910c93fe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "include_directive",
+                "label": "file.txt",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "e6189fcd423eee9d",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "22367955910c93fe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "include_directive",
+                "label": "file.txt",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "e6189fcd423eee9d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 45.011
+    },
+    {
+      "id": "web-asciidoc-image_alt",
+      "language_id": "asciidoc",
+      "category": "meaningful_image_alt",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "ee9b70a2f5c0ea0f7364e48f77812b0fa407b31b54f5ec97e9c5ba4b1be27b88",
+      "new_sha256": "a0d52a6720a2d75e2967daf0ff0519ce29ee46089e2030a96ed22dffcc035be6",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "image::logo.png[Safe]\\n"
+            ],
+            "new_labels": [
+              "image::logo.png[Danger]\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "image::logo.png[Safe]\\n",
+              "new_label": "image::logo.png[Danger]\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                24
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "image::logo.png[Safe]\\n",
+              "new_label": "image::logo.png[Danger]\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                22
+              ],
+              "new_span": [
+                0,
+                24
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.16509700000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 38784,
+                "total_fuel_consumed": 38784,
+                "max_fuel_used_percent": 0.18539196940726577,
+                "input_bytes": 22,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.097071,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 38253,
+                "total_fuel_consumed": 38253,
+                "max_fuel_used_percent": 0.18285372848948375,
+                "input_bytes": 24,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "a349eb869a41f072",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "image",
+                "label": "logo.png",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "199851fd2a964d9e",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "a349eb869a41f072",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "image",
+                "label": "logo.png",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "199851fd2a964d9e",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 48.334
+    },
+    {
+      "id": "web-asciidoc-heading_level",
+      "language_id": "asciidoc",
+      "category": "meaningful_heading_level",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "593829bd8e667b0ac13d019322177efe561083e04d0fbc277be59c849b34a686",
+      "new_sha256": "d68f06582cc3e0337977364a31e7303b18d9b9ad7486a734cd2df1ce782e29b7",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete section_level_2('Setup')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "section_level_2",
+              "label": "Setup",
+              "position": {
+                "start_line": 2,
+                "start_col": 3,
+                "end_line": 2,
+                "end_col": 8
+              },
+              "structural_hash": "d4fa31e003bdf993",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> section_level_3('Setup')",
+            "new_node": {
+              "id": "0.1",
+              "node_type": "section_level_3",
+              "label": "Setup",
+              "position": {
+                "start_line": 2,
+                "start_col": 4,
+                "end_line": 2,
+                "end_col": 9
+              },
+              "structural_hash": "50f92a0ee9c35384",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Setup"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "Setup"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.237982,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 65113,
+                "total_fuel_consumed": 65113,
+                "max_fuel_used_percent": 0.31394889103182255,
+                "input_bytes": 18,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.145972,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20740000,
+                "fuel_consumed": 64523,
+                "total_fuel_consumed": 64523,
+                "max_fuel_used_percent": 0.31110414657666347,
+                "input_bytes": 19,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ad90d087d420f51e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "section_level_2",
+                "label": "Setup",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 3,
+                  "end_line": 2,
+                  "end_col": 8
+                },
+                "structural_hash": "d4fa31e003bdf993",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "6adc874c61ba4ebe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "section_level_3",
+                "label": "Setup",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 4,
+                  "end_line": 2,
+                  "end_col": 9
+                },
+                "structural_hash": "50f92a0ee9c35384",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 50.521
+    },
+    {
+      "id": "web-asciidoc-identity",
+      "language_id": "asciidoc",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "db1eda6371d2ae7ee86238cd974d123dad73052b719ee2222fa3d0b2936b96fe",
+      "new_sha256": "db1eda6371d2ae7ee86238cd974d123dad73052b719ee2222fa3d0b2936b96fe",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.17516600000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 62862,
+                "total_fuel_consumed": 62862,
+                "max_fuel_used_percent": 0.30048757170172086,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.16663999999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20920000,
+                "fuel_consumed": 62272,
+                "total_fuel_consumed": 62272,
+                "max_fuel_used_percent": 0.2976673040152964,
+                "input_bytes": 23,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5ffcb8312e2dd58b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 13
+                },
+                "structural_hash": "b1ccce724406694f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5ffcb8312e2dd58b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 13
+                },
+                "structural_hash": "b1ccce724406694f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 48.533
+    },
+    {
+      "id": "web-asciidoc-preservation",
+      "language_id": "asciidoc",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "1f9ae0b216f5c7bd4f9ca6a90409d2486485cff9cb9bfffe1dc1d8a32f4bfb2d",
+      "new_sha256": "108b9f2cb6e56b3b71e8a29acc003917a3d5a65d3c97ed79abd7d243a15bfdbb",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "// internal note A\\n"
+            ],
+            "new_labels": [
+              "// internal note B\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "// internal note A\\n",
+              "new_label": "// internal note B\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                8,
+                27
+              ],
+              "new_span": [
+                8,
+                27
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "// internal note A\\n",
+              "new_label": "// internal note B\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                8,
+                27
+              ],
+              "new_span": [
+                8,
+                27
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.23547800000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21680000,
+                "fuel_consumed": 68078,
+                "total_fuel_consumed": 68078,
+                "max_fuel_used_percent": 0.3140129151291513,
+                "input_bytes": 42,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.14666200000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21680000,
+                "fuel_consumed": 67488,
+                "total_fuel_consumed": 67488,
+                "max_fuel_used_percent": 0.3112915129151292,
+                "input_bytes": 42,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "5ffcb8312e2dd58b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                "structural_hash": "b1ccce724406694f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "5ffcb8312e2dd58b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Keep backups.",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 13
+                },
+                "structural_hash": "b1ccce724406694f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 55.238
+    },
+    {
+      "id": "web-asciidoc-incomplete",
+      "language_id": "asciidoc",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "5ac63836f2ca21db152f4de5ac201f53aba00244615c20e84f2cb7f1c1ecee38",
+      "new_sha256": "180160704a1079e7b682de78ebd3e64d74aaa9e03203b713f0fb47dce6278148",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete section_level_1('Guide')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "section_level_1",
+              "label": "Guide",
+              "position": {
+                "start_line": 0,
+                "start_col": 2,
+                "end_line": 0,
+                "end_col": 7
+              },
+              "structural_hash": "c1c9cf590cbf0e2f",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> section_level_2('Guide')",
+            "new_node": {
+              "id": "0.0",
+              "node_type": "section_level_2",
+              "label": "Guide",
+              "position": {
+                "start_line": 0,
+                "start_col": 3,
+                "end_line": 0,
+                "end_col": 8
+              },
+              "structural_hash": "7c8bb649a0f5300e",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Guide"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "Guide"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.23064900000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21020000,
+                "fuel_consumed": 61760,
+                "total_fuel_consumed": 61760,
+                "max_fuel_used_percent": 0.2938154138915319,
+                "input_bytes": 25,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.19366,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21020000,
+                "fuel_consumed": 61121,
+                "total_fuel_consumed": 61121,
+                "max_fuel_used_percent": 0.2907754519505233,
+                "input_bytes": 26,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "327db45050005c37",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "image",
+                "label": "logo.png",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 8
+                },
+                "structural_hash": "199851fd2a964d9e",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "e52d7d362ea9d9b5",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_2",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 3,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "7c8bb649a0f5300e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "image",
+                "label": "logo.png",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 8
+                },
+                "structural_hash": "199851fd2a964d9e",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 67.087
+    },
+    {
+      "id": "web-asciidoc-unicode",
+      "language_id": "asciidoc",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "b16495e7ef88eb1ea3bfb4f3837b74c350252cac3892a02bd52e429b5b72548f",
+      "new_sha256": "443b892ac100e456e54caa5636626222e054256569e39800d203e5c3d6f47fb9",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update paragraph('Café costs €5.') -> paragraph('Café costs €6.')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "paragraph",
+              "label": "Café costs €5.",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 17
+              },
+              "structural_hash": "2c7342c173a056cc",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "paragraph",
+              "label": "Café costs €6.",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 17
+              },
+              "structural_hash": "2c6fe4c1739d813b",
+              "children": []
+            },
+            "text_diff": "Café costs €5. -> Café costs €6."
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Café costs €5."
+            ],
+            "new_labels": [
+              "Café costs €6."
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.198719,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 63243,
+                "total_fuel_consumed": 63243,
+                "max_fuel_used_percent": 0.3000142314990512,
+                "input_bytes": 27,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.12227700000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21080000,
+                "fuel_consumed": 62653,
+                "total_fuel_consumed": 62653,
+                "max_fuel_used_percent": 0.29721537001897536,
+                "input_bytes": 27,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "f985a01d08a6e815",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Café costs €5.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 17
+                },
+                "structural_hash": "2c7342c173a056cc",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "bb4c15357556bc43",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section_level_1",
+                "label": "Guide",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 2,
+                  "end_line": 0,
+                  "end_col": 7
+                },
+                "structural_hash": "c1c9cf590cbf0e2f",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "Café costs €6.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 17
+                },
+                "structural_hash": "2c6fe4c1739d813b",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 57.048
+    },
+    {
+      "id": "web-asciidoc-external-paragraph-bound",
+      "language_id": "asciidoc",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20",
+      "new_sha256": "569ed924b34be4ba2d500720f540b1d44b58b83afb3e4d4999f1198198bf5036",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update paragraph('A paragraph is just one or more lines of consecutive text.') -> paragraph('A paragraph is just two or more lines of consecutive text.')",
+            "old_node": {
+              "id": "0.9",
+              "node_type": "paragraph",
+              "label": "A paragraph is just one or more lines of consecutive text.",
+              "position": {
+                "start_line": 16,
+                "start_col": 0,
+                "end_line": 16,
+                "end_col": 58
+              },
+              "structural_hash": "b50153008c4a934f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "paragraph",
+              "label": "A paragraph is just two or more lines of consecutive text.",
+              "position": {
+                "start_line": 2,
+                "start_col": 0,
+                "end_line": 2,
+                "end_col": 58
+              },
+              "structural_hash": "f8a1f397d6927bed",
+              "children": []
+            },
+            "text_diff": "A paragraph is just one or more lines of consecutive text. -> A paragraph is just two or more lines of consecutive text."
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [],
+            "new_labels": [],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.8,
+            "rule_id": "refinement.suppress_low_signal_reorders",
+            "metadata": {
+              "suppressed_count": 8
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "A paragraph is just one or more lines of consecutive text."
+            ],
+            "new_labels": [
+              "A paragraph is just two or more lines of consecutive text."
+            ],
+            "old_node_ids": [
+              "0.9"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.326767,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 42240000,
+                "fuel_consumed": 278879,
+                "total_fuel_consumed": 278879,
+                "max_fuel_used_percent": 0.6602249053030304,
+                "input_bytes": 556,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.294217,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 42240000,
+                "fuel_consumed": 278289,
+                "total_fuel_consumed": 278289,
+                "max_fuel_used_percent": 0.658828125,
+                "input_bytes": 556,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 0
+            },
+            "structural_hash": "33f8c71d7490e179",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "paragraph",
+                "label": ".Paragraphs",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 11
+                },
+                "structural_hash": "95e72aff764de0ce",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "anchor",
+                "label": "para-1.red",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 10
+                },
+                "structural_hash": "25313e1a118e9a07",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.9",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 0
+            },
+            "structural_hash": "adf255992bf21e95",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "A paragraph is just two or more lines of consecutive text.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 58
+                },
+                "structural_hash": "f8a1f397d6927bed",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "paragraph",
+                "label": ".Paragraphs",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 11
+                },
+                "structural_hash": "95e72aff764de0ce",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "anchor",
+                "label": "para-1.red",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 10
+                },
+                "structural_hash": "25313e1a118e9a07",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.9",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.9: child outside parent range",
+        "new: 0.9: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 72.284
+    },
+    {
+      "id": "web-asciidoc-external-comment-marker",
+      "language_id": "asciidoc",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20",
+      "new_sha256": "9ef7e4f9d3459a0c6b87d5177a98973df96a587902c767554555b7ad3110b992",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.adoc",
+        "new_filename": "assessment.adoc",
+        "language": "asciidoc",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "// .basic\\n"
+            ],
+            "new_labels": [
+              "// .basic-control\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "// .basic\\n",
+              "new_label": "// .basic-control\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                10
+              ],
+              "new_span": [
+                0,
+                18
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "// .basic\\n",
+              "new_label": "// .basic-control\\n",
+              "risk": "amber",
+              "language": "asciidoc",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                10
+              ],
+              "new_span": [
+                0,
+                18
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.48579199999999995,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 42400000,
+                "fuel_consumed": 278879,
+                "total_fuel_consumed": 278879,
+                "max_fuel_used_percent": 0.6577334905660377,
+                "input_bytes": 556,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "asciidoc",
+                "filename": "assessment.adoc",
+                "call_count": 1,
+                "elapsed_ms": 0.309164,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 42400000,
+                "fuel_consumed": 278518,
+                "total_fuel_consumed": 278518,
+                "max_fuel_used_percent": 0.6568820754716981,
+                "input_bytes": 564,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/asciidoc_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 0
+            },
+            "structural_hash": "33f8c71d7490e179",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "paragraph",
+                "label": ".Paragraphs",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 11
+                },
+                "structural_hash": "95e72aff764de0ce",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "anchor",
+                "label": "para-1.red",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 10
+                },
+                "structural_hash": "25313e1a118e9a07",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.9",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "asciidoc",
+          "tree": {
+            "id": "0",
+            "node_type": "asciidoc_document",
+            "label": "asciidoc",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 16,
+              "end_col": 0
+            },
+            "structural_hash": "33f8c71d7490e179",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "paragraph",
+                "label": ".Paragraphs",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 11
+                },
+                "structural_hash": "95e72aff764de0ce",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "paragraph",
+                "label": "To begin a new paragraph, separate it by at least one blank line.",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 0,
+                  "end_line": 11,
+                  "end_col": 65
+                },
+                "structural_hash": "022c4f0b53e515fd",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "anchor",
+                "label": "para-1.red",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 10
+                },
+                "structural_hash": "25313e1a118e9a07",
+                "children": []
+              },
+              {
+                "id": "0.8",
+                "node_type": "paragraph",
+                "label": "Paragraphs don't require any special markup in AsciiDoc.",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 56
+                },
+                "structural_hash": "29f6f8baa67c75c6",
+                "children": []
+              },
+              {
+                "id": "0.9",
+                "node_type": "paragraph",
+                "label": "A paragraph is just one or more lines of consecutive text.",
+                "position": {
+                  "start_line": 16,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 58
+                },
+                "structural_hash": "b50153008c4a934f",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.9: child outside parent range",
+        "new: 0.9: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 68.185
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.611
+}

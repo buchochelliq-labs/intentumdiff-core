@@ -1,0 +1,18 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "puppet-parse-conditionals-l0076",
+  "engines": [
+    {
+      "name": "puppet",
+      "version": "puppet 8.10.0 ruby 3.3.6"
+    }
+  ],
+  "new_sha256": "ec63e43d61b5607ef714cca1b543e7d53d6daa8ab1869a091838fb670115770c",
+  "old_sha256": "ec63e43d61b5607ef714cca1b543e7d53d6daa8ab1869a091838fb670115770c",
+  "oracle": "puppet_parse",
+  "reference_accepts": false,
+  "reference_error": "Puppet::ParseErrorWithIssue: Syntax error at 'elsif' (line: 1, column: 25)",
+  "review": "Puppet 8.10.0 Parser#parse_string raises: Puppet::ParseErrorWithIssue: Syntax error at 'elsif' (line: 1, column: 25), as the spec expects.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

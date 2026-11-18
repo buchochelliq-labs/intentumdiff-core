@@ -1,0 +1,32 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "xmod-block-golden-parse",
+  "cmd_go_error": "go: errors parsing go.mod:\n<TMP>/go.mod:2: unknown directive: x\n<TMP>/go.mod:5: unknown block type: block\n<TMP>/go.mod:24: unknown block type: block1\n<TMP>/go.mod:27: unknown directive: block2\n<TMP>/go.mod:29: unknown block type: block3 \"w\"\n<TMP>/go.mod:32: unknown directive: block4\n<TMP>/go.mod:34: unknown directive: block5",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    },
+    {
+      "name": "go",
+      "version": "go version go1.24.7 linux/amd64"
+    }
+  ],
+  "new_sha256": "83fc7586efc53825bea17b058fa5affd03724060af3e3be4d8ef00a85c62bb3a",
+  "old_sha256": "83fc7586efc53825bea17b058fa5affd03724060af3e3be4d8ef00a85c62bb3a",
+  "oracle": "gomod_parse",
+  "reference_accepts": false,
+  "review": "the reference rejects the file: go.mod:2: unknown directive: x\ngo.mod:5: unknown block type: block\ngo.mod:24: unknown block type: block1\ngo.mod:27: unknown directive: block2\ngo.mod:29: unknown block type: block3 \"w\"\ngo.mod:32: unknown directive: block4\ngo.mod:34: unknown directive: block5",
+  "schema_version": 1,
+  "tool": "golang.org/x/mod/modfile.Parse",
+  "unit_starts": [],
+  "verdict": "contradicts_claim",
+  "xmod_error": "go.mod:2: unknown directive: x\ngo.mod:5: unknown block type: block\ngo.mod:24: unknown block type: block1\ngo.mod:27: unknown directive: block2\ngo.mod:29: unknown block type: block3 \"w\"\ngo.mod:32: unknown directive: block4\ngo.mod:34: unknown directive: block5"
+}

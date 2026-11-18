@@ -1,0 +1,17 @@
+{
+  "case_id": "vue-parse-003",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "a47d34cb00b147fc3e97f597c9eae8696bccab2c41adb6a16c36aa5e918f3c70",
+  "observations": {
+    "errors": [
+      "At least one <template> or <script> is required in a single file component. Fixture.vue"
+    ],
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "a47d34cb00b147fc3e97f597c9eae8696bccab2c41adb6a16c36aa5e918f3c70",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

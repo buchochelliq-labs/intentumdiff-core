@@ -1,0 +1,5296 @@
+{
+  "language_id": "make",
+  "options": {
+    "language_hint": "make",
+    "strict_plugins": true
+  },
+  "completed_count": 8,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.make.meaningful_1_value",
+      "language_id": "make",
+      "category": "value",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "3a49f78fa1cf75a8576cba8e55d883e6c687f44b611d5a9defb4977d6d73f799",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Parser payload changed in variable_assignment(\"CC\"); source evidence retained",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "variable_assignment",
+              "label": "CC",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "variable_assignment",
+              "label": "CC",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "4adb7bd7cbe91697509efa54822d2d931247bda785406261dfea3a1eebd08861",
+              "children": []
+            },
+            "text_diff": "CC = gcc\n -> CC = clang\n"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "CC"
+            ],
+            "new_labels": [
+              "CC"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.278946,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27800000,
+                "fuel_consumed": 2323676,
+                "total_fuel_consumed": 2323676,
+                "max_fuel_used_percent": 8.35854676258993,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.897518,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27800000,
+                "fuel_consumed": 2330386,
+                "total_fuel_consumed": 2330386,
+                "max_fuel_used_percent": 8.38268345323741,
+                "input_bytes": 196,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "4357325b600ab6e87723b8f168e7413abf515c349e3bed985148fb5a96c3267d",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "4adb7bd7cbe91697509efa54822d2d931247bda785406261dfea3a1eebd08861",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 16308.465
+    },
+    {
+      "id": "data_config.make.meaningful_2_configuration",
+      "language_id": "make",
+      "category": "configuration",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "6a544bffc2832345cd985521ff5a89ccf45ae82cdfff1935dd3cbaf5eb4225c6",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update prerequisites('main.c utils.c') -> prerequisites('main.c utils.c config.h')",
+            "old_node": {
+              "id": "0.2.1",
+              "node_type": "prerequisites",
+              "label": "main.c utils.c",
+              "position": {
+                "start_line": 3,
+                "start_col": 7,
+                "end_line": 3,
+                "end_col": 21
+              },
+              "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.1",
+              "node_type": "prerequisites",
+              "label": "main.c utils.c config.h",
+              "position": {
+                "start_line": 3,
+                "start_col": 7,
+                "end_line": 3,
+                "end_col": 30
+              },
+              "structural_hash": "fe749291e2340b850dae29e0dcc6bc3ba78f2961c713140247acc05b64427551",
+              "children": []
+            },
+            "text_diff": "main.c utils.c -> main.c utils.c config.h"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "main.c utils.c"
+            ],
+            "new_labels": [
+              "main.c utils.c config.h"
+            ],
+            "old_node_ids": [
+              "0.2.1"
+            ],
+            "new_node_ids": [
+              "0.2.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.3106039999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27940000,
+                "fuel_consumed": 2322877,
+                "total_fuel_consumed": 2322877,
+                "max_fuel_used_percent": 8.313804581245526,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.899871,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27940000,
+                "fuel_consumed": 2379723,
+                "total_fuel_consumed": 2379723,
+                "max_fuel_used_percent": 8.517261989978525,
+                "input_bytes": 203,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "04a34b34e18e555a3bd1f335ba940bd0ec8e37a2c1ad24baa27c78ba26009dc9",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "f70d883219a4915c11de8d286f35189ba8c96c2437b12432558f08eefc3300ae",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c config.h",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 30
+                    },
+                    "structural_hash": "fe749291e2340b850dae29e0dcc6bc3ba78f2961c713140247acc05b64427551",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 30,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 89.105
+    },
+    {
+      "id": "data_config.make.meaningful_3_body",
+      "language_id": "make",
+      "category": "body",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "9aa82711173ddb4ba23d067a9e5e173f8ea1b6c2fb93de045abe8c3030cd56e7",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update recipe_line('$(CC) -O2 -o app main.c utils.c $(LDFLAGS)') -> recipe_line('$(CC) -O0 -o app main.c utils.c $(LDFLAGS)')",
+            "old_node": {
+              "id": "0.2.2.0",
+              "node_type": "recipe_line",
+              "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+              "position": {
+                "start_line": 4,
+                "start_col": 1,
+                "end_line": 4,
+                "end_col": 43
+              },
+              "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.2.2.0",
+              "node_type": "recipe_line",
+              "label": "$(CC) -O0 -o app main.c utils.c $(LDFLAGS)",
+              "position": {
+                "start_line": 4,
+                "start_col": 1,
+                "end_line": 4,
+                "end_col": 43
+              },
+              "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+              "children": []
+            },
+            "text_diff": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS) -> $(CC) -O0 -o app main.c utils.c $(LDFLAGS)"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)"
+            ],
+            "new_labels": [
+              "$(CC) -O0 -o app main.c utils.c $(LDFLAGS)"
+            ],
+            "old_node_ids": [
+              "0.2.2.0"
+            ],
+            "new_node_ids": [
+              "0.2.2.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.083472,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27760000,
+                "fuel_consumed": 2323325,
+                "total_fuel_consumed": 2323325,
+                "max_fuel_used_percent": 8.36932636887608,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.866901,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27760000,
+                "fuel_consumed": 2323799,
+                "total_fuel_consumed": 2323799,
+                "max_fuel_used_percent": 8.37103386167147,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O0 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 79.321
+    },
+    {
+      "id": "data_config.make.identity",
+      "language_id": "make",
+      "category": "identity",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.1448369999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27760000,
+                "fuel_consumed": 2323215,
+                "total_fuel_consumed": 2323215,
+                "max_fuel_used_percent": 8.368930115273775,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.858966,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27760000,
+                "fuel_consumed": 2323213,
+                "total_fuel_consumed": 2323213,
+                "max_fuel_used_percent": 8.368922910662825,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 79.659
+    },
+    {
+      "id": "data_config.make.safe_preservation",
+      "language_id": "make",
+      "category": "preservation",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "f19d3ebcc3b86dbf90839ba3bb1a51928399e24cb31d14e3b8f6f636767e74ea",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "CC = gcc\\n"
+            ],
+            "new_labels": [
+              "CC=gcc\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "CC = gcc\\n",
+              "new_label": "CC=gcc\\n",
+              "risk": "amber",
+              "language": "make",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                9
+              ],
+              "new_span": [
+                0,
+                7
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "CC = gcc\\n",
+              "new_label": "CC=gcc\\n",
+              "risk": "amber",
+              "language": "make",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                9
+              ],
+              "new_span": [
+                0,
+                7
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.079084,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27720000,
+                "fuel_consumed": 2322846,
+                "total_fuel_consumed": 2322846,
+                "max_fuel_used_percent": 8.379675324675324,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.851241,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 27720000,
+                "fuel_consumed": 2315703,
+                "total_fuel_consumed": 2315703,
+                "max_fuel_used_percent": 8.353906926406927,
+                "input_bytes": 192,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 74.149
+    },
+    {
+      "id": "data_config.make.incomplete",
+      "language_id": "make",
+      "category": "incomplete",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "7fc31d0155057f9e834e13bfb140c99b64a9bd39730c4cfefa61f8603961bff9",
+      "new_sha256": "4ba1a6f8eaa019ae59e9435242cb7d6dbfbdcc02a911737e56e990bf62bf7822",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete variable_assignment('CC')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "variable_assignment",
+              "label": "CC",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+              "children": []
+            }
+          },
+          {
+            "change_type": "ADDITION",
+            "confidence": 1.0,
+            "description": "Insert -> rule('all')",
+            "new_node": {
+              "id": "0.0",
+              "node_type": "rule",
+              "label": "all",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "68871efb728c103ab473bf8bb40fd5dc5deae83bddb064ddfbbd33d4f86d9ba2",
+              "children": [
+                {
+                  "id": "0.0.0",
+                  "node_type": "targets",
+                  "label": "all",
+                  "position": {
+                    "start_line": 0,
+                    "start_col": 0,
+                    "end_line": 0,
+                    "end_col": 3
+                  },
+                  "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                  "children": []
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete variable_assignment('LDFLAGS')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "variable_assignment",
+              "label": "LDFLAGS",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 3,
+                "end_col": 0
+              },
+              "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+              "children": []
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete rule('build')",
+            "old_node": {
+              "id": "0.2",
+              "node_type": "rule",
+              "label": "build",
+              "position": {
+                "start_line": 3,
+                "start_col": 0,
+                "end_line": 6,
+                "end_col": 0
+              },
+              "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+              "children": [
+                {
+                  "id": "0.2.0",
+                  "node_type": "targets",
+                  "label": "build",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 0,
+                    "end_line": 3,
+                    "end_col": 5
+                  },
+                  "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                  "children": []
+                },
+                {
+                  "id": "0.2.1",
+                  "node_type": "prerequisites",
+                  "label": "main.c utils.c",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 7,
+                    "end_line": 3,
+                    "end_col": 21
+                  },
+                  "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                  "children": []
+                },
+                {
+                  "id": "0.2.2",
+                  "node_type": "recipe",
+                  "label": "recipe",
+                  "position": {
+                    "start_line": 3,
+                    "start_col": 21,
+                    "end_line": 6,
+                    "end_col": 0
+                  },
+                  "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                  "children": [
+                    {
+                      "id": "0.2.2.0",
+                      "node_type": "recipe_line",
+                      "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                      "position": {
+                        "start_line": 4,
+                        "start_col": 1,
+                        "end_line": 4,
+                        "end_col": 43
+                      },
+                      "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete rule('test')",
+            "old_node": {
+              "id": "0.3",
+              "node_type": "rule",
+              "label": "test",
+              "position": {
+                "start_line": 6,
+                "start_col": 0,
+                "end_line": 9,
+                "end_col": 0
+              },
+              "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+              "children": [
+                {
+                  "id": "0.3.0",
+                  "node_type": "targets",
+                  "label": "test",
+                  "position": {
+                    "start_line": 6,
+                    "start_col": 0,
+                    "end_line": 6,
+                    "end_col": 4
+                  },
+                  "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                  "children": []
+                },
+                {
+                  "id": "0.3.1",
+                  "node_type": "prerequisites",
+                  "label": "build",
+                  "position": {
+                    "start_line": 6,
+                    "start_col": 6,
+                    "end_line": 6,
+                    "end_col": 11
+                  },
+                  "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                  "children": []
+                },
+                {
+                  "id": "0.3.2",
+                  "node_type": "recipe",
+                  "label": "recipe",
+                  "position": {
+                    "start_line": 6,
+                    "start_col": 11,
+                    "end_line": 9,
+                    "end_col": 0
+                  },
+                  "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                  "children": [
+                    {
+                      "id": "0.3.2.0",
+                      "node_type": "recipe_line",
+                      "label": "./app --selftest",
+                      "position": {
+                        "start_line": 7,
+                        "start_col": 1,
+                        "end_line": 7,
+                        "end_col": 17
+                      },
+                      "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete rule('lint')",
+            "old_node": {
+              "id": "0.4",
+              "node_type": "rule",
+              "label": "lint",
+              "position": {
+                "start_line": 9,
+                "start_col": 0,
+                "end_line": 12,
+                "end_col": 0
+              },
+              "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+              "children": [
+                {
+                  "id": "0.4.0",
+                  "node_type": "targets",
+                  "label": "lint",
+                  "position": {
+                    "start_line": 9,
+                    "start_col": 0,
+                    "end_line": 9,
+                    "end_col": 4
+                  },
+                  "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                  "children": []
+                },
+                {
+                  "id": "0.4.1",
+                  "node_type": "recipe",
+                  "label": "recipe",
+                  "position": {
+                    "start_line": 9,
+                    "start_col": 5,
+                    "end_line": 12,
+                    "end_col": 0
+                  },
+                  "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                  "children": [
+                    {
+                      "id": "0.4.1.0",
+                      "node_type": "recipe_line",
+                      "label": "cppcheck --enable=warning main.c",
+                      "position": {
+                        "start_line": 10,
+                        "start_col": 1,
+                        "end_line": 10,
+                        "end_col": 33
+                      },
+                      "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete rule('archive')",
+            "old_node": {
+              "id": "0.5",
+              "node_type": "rule",
+              "label": "archive",
+              "position": {
+                "start_line": 12,
+                "start_col": 0,
+                "end_line": 14,
+                "end_col": 0
+              },
+              "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+              "children": [
+                {
+                  "id": "0.5.0",
+                  "node_type": "targets",
+                  "label": "archive",
+                  "position": {
+                    "start_line": 12,
+                    "start_col": 0,
+                    "end_line": 12,
+                    "end_col": 7
+                  },
+                  "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                  "children": []
+                },
+                {
+                  "id": "0.5.1",
+                  "node_type": "recipe",
+                  "label": "recipe",
+                  "position": {
+                    "start_line": 12,
+                    "start_col": 8,
+                    "end_line": 14,
+                    "end_col": 0
+                  },
+                  "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                  "children": [
+                    {
+                      "id": "0.5.1.0",
+                      "node_type": "recipe_line",
+                      "label": "tar -czf app.tgz app",
+                      "position": {
+                        "start_line": 13,
+                        "start_col": 1,
+                        "end_line": 13,
+                        "end_col": 21
+                      },
+                      "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "CC"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [],
+            "new_labels": [
+              "all",
+              "all"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [
+              "0.0",
+              "0.0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              2
+            ],
+            "old_labels": [
+              "LDFLAGS"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              3
+            ],
+            "old_labels": [
+              "build",
+              "build",
+              "main.c utils.c",
+              "recipe",
+              "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.2",
+              "0.2.0",
+              "0.2.1",
+              "0.2.2",
+              "0.2.2.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              4
+            ],
+            "old_labels": [
+              "test",
+              "test",
+              "build",
+              "recipe",
+              "./app --selftest"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.3",
+              "0.3.0",
+              "0.3.1",
+              "0.3.2",
+              "0.3.2.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              5
+            ],
+            "old_labels": [
+              "lint",
+              "lint",
+              "recipe",
+              "cppcheck --enable=warning main.c"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.4",
+              "0.4.0",
+              "0.4.1",
+              "0.4.1.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              6
+            ],
+            "old_labels": [
+              "archive",
+              "archive",
+              "recipe",
+              "tar -czf app.tgz app"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.5",
+              "0.5.0",
+              "0.5.1",
+              "0.5.1.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 1.057704,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24160000,
+                "fuel_consumed": 2323207,
+                "total_fuel_consumed": 2323207,
+                "max_fuel_used_percent": 9.615923013245032,
+                "input_bytes": 194,
+                "input_lines": 14,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.292844,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 24160000,
+                "fuel_consumed": 699195,
+                "total_fuel_consumed": 699195,
+                "max_fuel_used_percent": 2.8940190397350993,
+                "input_bytes": 14,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "30c035fa3c98d23b2e6a37c69612196e170da4f1ba93a688132b0e1a19780fa0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "CC",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "a614dae3f5646e9af92731af72c7f2983d819fd96acf8f0cfe983cb7e66b89d3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "LDFLAGS",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "d4e34fddcf7b12c46183d7e796c6fa78ca745725390b5b919aeca56e31661d94",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "rule",
+                "label": "build",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "9f34dd194be2530a8b83b865cefd2190c8be430fcabc1fe3a6d80c8c451d8072",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "targets",
+                    "label": "build",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 5
+                    },
+                    "structural_hash": "23a4bbd55b2519977be009f3833013219fb19815992e5982f470c1d569704d45",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "prerequisites",
+                    "label": "main.c utils.c",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 7,
+                      "end_line": 3,
+                      "end_col": 21
+                    },
+                    "structural_hash": "985ba4073bc5c0fc40c7e39769668e45cd0ace50acf1a633850ee5116fcdef14",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 21,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0cf6e523ec0e26830182c827feb73d7b90926e18fa9ee0f327c64e5a055d0ff9",
+                    "children": [
+                      {
+                        "id": "0.2.2.0",
+                        "node_type": "recipe_line",
+                        "label": "$(CC) -O2 -o app main.c utils.c $(LDFLAGS)",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 1,
+                          "end_line": 4,
+                          "end_col": 43
+                        },
+                        "structural_hash": "278eb82cdc1349b0bda0954cb1ff657deccb27694742f80a035a66af7c5ea72e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": "test",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 9,
+                  "end_col": 0
+                },
+                "structural_hash": "771254524331d494f669ec88dec81f7221c7e5740d7d6587cfe5008b365ad87d",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": "test",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 4
+                    },
+                    "structural_hash": "909199206a69be1e29950bc06c5a57cea619bf9e40e1f9b687ee4968a64a1f67",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "build",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 6,
+                      "end_line": 6,
+                      "end_col": 11
+                    },
+                    "structural_hash": "1d6ee091feecaaf47e0f53c84ff5298558391462e2b1ced4d639a16a99721326",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 6,
+                      "start_col": 11,
+                      "end_line": 9,
+                      "end_col": 0
+                    },
+                    "structural_hash": "d1bf91774da039bb3fc0f501d541a97f4052c333dfeec3064fbd102cd0f699f0",
+                    "children": [
+                      {
+                        "id": "0.3.2.0",
+                        "node_type": "recipe_line",
+                        "label": "./app --selftest",
+                        "position": {
+                          "start_line": 7,
+                          "start_col": 1,
+                          "end_line": 7,
+                          "end_col": 17
+                        },
+                        "structural_hash": "d6d873c77c732150a22db61930fe326c0e32c8933702f5f63050926a7120dba9",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "lint",
+                "position": {
+                  "start_line": 9,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 0
+                },
+                "structural_hash": "666dce76aa0353faad4b8b5beb830344d316093b61ff34e707942040054988cd",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "lint",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 4
+                    },
+                    "structural_hash": "a9ce23d7be05238105a83254107c142c3346c9eacebf7a4f6aec2f7cda7bbccc",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 5,
+                      "end_line": 12,
+                      "end_col": 0
+                    },
+                    "structural_hash": "36a0a1b0d757780f50290e1bfe6f9e2269e20c2efb6e0b9d0dd94da7d3705482",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "cppcheck --enable=warning main.c",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 1,
+                          "end_line": 10,
+                          "end_col": 33
+                        },
+                        "structural_hash": "04ec143ece1a9ac2b19a32838c4ca791ceff44ef097d8ec0905104d1d934135f",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "0.5",
+                "node_type": "rule",
+                "label": "archive",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 0
+                },
+                "structural_hash": "a235d1bb2cd0b34c05a3d1c0a60771f65553581e136fe66d5fb7ccdf32dcad5a",
+                "children": [
+                  {
+                    "id": "0.5.0",
+                    "node_type": "targets",
+                    "label": "archive",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 0,
+                      "end_line": 12,
+                      "end_col": 7
+                    },
+                    "structural_hash": "c53d66893bd66d29b3fa964aa19da2f2c8ede1516d065242b9ee44e5a33f823a",
+                    "children": []
+                  },
+                  {
+                    "id": "0.5.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 8,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "840ce879c3e755710842731dbf0401869fbe5a5defd035f6777c71d43cfdcf35",
+                    "children": [
+                      {
+                        "id": "0.5.1.0",
+                        "node_type": "recipe_line",
+                        "label": "tar -czf app.tgz app",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 1,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "8f6ac9e29c0897a9382b1b9a5a09882d042ac7a0eb845d37d3b4fdfa54010fc2",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 9
+            },
+            "structural_hash": "67bfabffcc154fc00cf09807662c3ff5b348fff37104178fc38c0885b4694dbe",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "rule",
+                "label": "all",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "68871efb728c103ab473bf8bb40fd5dc5deae83bddb064ddfbbd33d4f86d9ba2",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "targets",
+                    "label": "all",
+                    "position": {
+                      "start_line": 0,
+                      "start_col": 0,
+                      "end_line": 0,
+                      "end_col": 3
+                    },
+                    "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 78.659
+    },
+    {
+      "id": "data_config.make.unicode_value",
+      "language_id": "make",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "8c33c4222a865ed013f3b5b0eb970ff296369cc34ab98f474ad3cdf0d3e92369",
+      "new_sha256": "0d0ccc7c137776e3e0cde31bfca72e241898d87f531ccb7d747c4263320c4486",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Parser payload changed in variable_assignment(\"LABEL\"); source evidence retained",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "variable_assignment",
+              "label": "LABEL",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "528112851a019daad6f50e96b3486b436883d9594278670dff95f9c513429bf0",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "variable_assignment",
+              "label": "LABEL",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 0
+              },
+              "structural_hash": "c0074f7624021473623a6ae3779700abdb90715d40278506693ea71e8ff719aa",
+              "children": []
+            },
+            "text_diff": "LABEL = λ\n -> LABEL = μ\n"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "LABEL"
+            ],
+            "new_labels": [
+              "LABEL"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.5884729999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 670478,
+                "total_fuel_consumed": 670478,
+                "max_fuel_used_percent": 3.1507424812030074,
+                "input_bytes": 32,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.301821,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21280000,
+                "fuel_consumed": 670094,
+                "total_fuel_consumed": 670094,
+                "max_fuel_used_percent": 3.148937969924812,
+                "input_bytes": 32,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "d780368f7c08df070d1837890a7c74f6a566bf6c8cf42827e36da068786dffb6",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "LABEL",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "528112851a019daad6f50e96b3486b436883d9594278670dff95f9c513429bf0",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule",
+                "label": "all",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "79742892f7db023b03311f5f3d92ce19b695934d8fc8f560d7c633fcb84c6b39",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "targets",
+                    "label": "all",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 3
+                    },
+                    "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 0
+                    },
+                    "structural_hash": "da9f408033918ed3717535be03b9b3f607866c26b499433f3168ba5e4921e923",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "recipe_line",
+                        "label": "@echo $(LABEL)",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 1,
+                          "end_line": 2,
+                          "end_col": 15
+                        },
+                        "structural_hash": "4b9cc9a84baa45102db820b110b5998fb1843056876fea07c7f77029ed930537",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "bf1da86952c2bc89deffd7d07dc7e3e2c00a0341cd75ba814bce72b027244288",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "LABEL",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "c0074f7624021473623a6ae3779700abdb90715d40278506693ea71e8ff719aa",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "rule",
+                "label": "all",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "79742892f7db023b03311f5f3d92ce19b695934d8fc8f560d7c633fcb84c6b39",
+                "children": [
+                  {
+                    "id": "0.1.0",
+                    "node_type": "targets",
+                    "label": "all",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 0,
+                      "end_line": 1,
+                      "end_col": 3
+                    },
+                    "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.1.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 3,
+                      "end_col": 0
+                    },
+                    "structural_hash": "da9f408033918ed3717535be03b9b3f607866c26b499433f3168ba5e4921e923",
+                    "children": [
+                      {
+                        "id": "0.1.1.0",
+                        "node_type": "recipe_line",
+                        "label": "@echo $(LABEL)",
+                        "position": {
+                          "start_line": 2,
+                          "start_col": 1,
+                          "end_line": 2,
+                          "end_col": 15
+                        },
+                        "structural_hash": "4b9cc9a84baa45102db820b110b5998fb1843056876fea07c7f77029ed930537",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 55.886
+    },
+    {
+      "id": "data_config.make.known_assignment_flavor",
+      "language_id": "make",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "126e0ef63794f15335d513d73d1dd0c73df04af8eba80079dd638f6d4375cc0e",
+      "new_sha256": "a792e0f53ddb0217d9edd623f9b65368894b6232dda64198a21507ef0c4a002d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-make-parser#4"
+      ],
+      "review": {
+        "old_filename": "playground.mk",
+        "new_filename": "playground.mk",
+        "language": "make",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "X = $(Y)\\n"
+            ],
+            "new_labels": [
+              "X := $(Y)\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "X = $(Y)\\n",
+              "new_label": "X := $(Y)\\n",
+              "risk": "amber",
+              "language": "make",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                11,
+                20
+              ],
+              "new_span": [
+                11,
+                21
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "X = $(Y)\\n",
+              "new_label": "X := $(Y)\\n",
+              "risk": "amber",
+              "language": "make",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                11,
+                20
+              ],
+              "new_span": [
+                11,
+                21
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.742078,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22380000,
+                "fuel_consumed": 1352853,
+                "total_fuel_consumed": 1352853,
+                "max_fuel_used_percent": 6.044919571045576,
+                "input_bytes": 59,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "make",
+                "filename": "playground.mk",
+                "call_count": 1,
+                "elapsed_ms": 0.589445,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22380000,
+                "fuel_consumed": 1353174,
+                "total_fuel_consumed": 1353174,
+                "max_fuel_used_percent": 6.046353887399464,
+                "input_bytes": 60,
+                "input_lines": 6,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/make_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "0c3ee5fc76c05448a1d18d4a2b9c764dc853db9a74647a09c94d8d30d1ea4290",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "Y",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "2ff94138d5ba3fd618267342e19ff92dec886c5339345c3b5718607da126a7b2",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "X",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "db2a1c1ae221b159025139b1bdde1b3f8f4b769c76c902874260dfd5ed79884b",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "variable_assignment",
+                "label": "Y",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "5be873887945cc05e09a0413de892c8f7de5b88a761451338c168de491db771d",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": ".PHONY",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "f1d5cc4b1b121151872b195ee2a7cc4e8f97056fc6132201721a39eb91520dc5",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": ".PHONY",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 6
+                    },
+                    "structural_hash": "a4db96c363474722a79571103f6e97d002ccf0d628c5444d541f81e7c461ac92",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "all",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 8,
+                      "end_line": 3,
+                      "end_col": 11
+                    },
+                    "structural_hash": "85719d49f01394d6856f3f8f1553fcc3103086581bea60dbc0855778b912e1e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "all",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "528eda41980f202d9d6d52742c9e56697b3f93923cf6d3cb16ed838e3f8c8a06",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "all",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 3
+                    },
+                    "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "5f13b95368fb146fef6575ed653f88e2c5e991384547ab501bd8321f78ab7402",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "@echo $(X)",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 11
+                        },
+                        "structural_hash": "1c01c6ae20e52e0c671619018cc56eeb4b660d32d00c0ef5120e999f789ad39e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "make",
+          "tree": {
+            "id": "0",
+            "node_type": "makefile",
+            "label": "makefile",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 6,
+              "end_col": 0
+            },
+            "structural_hash": "0c3ee5fc76c05448a1d18d4a2b9c764dc853db9a74647a09c94d8d30d1ea4290",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "variable_assignment",
+                "label": "Y",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "2ff94138d5ba3fd618267342e19ff92dec886c5339345c3b5718607da126a7b2",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "variable_assignment",
+                "label": "X",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 0
+                },
+                "structural_hash": "db2a1c1ae221b159025139b1bdde1b3f8f4b769c76c902874260dfd5ed79884b",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "variable_assignment",
+                "label": "Y",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 0
+                },
+                "structural_hash": "5be873887945cc05e09a0413de892c8f7de5b88a761451338c168de491db771d",
+                "children": []
+              },
+              {
+                "id": "0.3",
+                "node_type": "rule",
+                "label": ".PHONY",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 4,
+                  "end_col": 0
+                },
+                "structural_hash": "f1d5cc4b1b121151872b195ee2a7cc4e8f97056fc6132201721a39eb91520dc5",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "targets",
+                    "label": ".PHONY",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 6
+                    },
+                    "structural_hash": "a4db96c363474722a79571103f6e97d002ccf0d628c5444d541f81e7c461ac92",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "prerequisites",
+                    "label": "all",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 8,
+                      "end_line": 3,
+                      "end_col": 11
+                    },
+                    "structural_hash": "85719d49f01394d6856f3f8f1553fcc3103086581bea60dbc0855778b912e1e1",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "rule",
+                "label": "all",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 0
+                },
+                "structural_hash": "528eda41980f202d9d6d52742c9e56697b3f93923cf6d3cb16ed838e3f8c8a06",
+                "children": [
+                  {
+                    "id": "0.4.0",
+                    "node_type": "targets",
+                    "label": "all",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 3
+                    },
+                    "structural_hash": "6f4f2f1fe278dd21093ef6218333b9da5a565b2dcbb5b608bc27dd71f84a0f1c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.4.1",
+                    "node_type": "recipe",
+                    "label": "recipe",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 4,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "5f13b95368fb146fef6575ed653f88e2c5e991384547ab501bd8321f78ab7402",
+                    "children": [
+                      {
+                        "id": "0.4.1.0",
+                        "node_type": "recipe_line",
+                        "label": "@echo $(X)",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 1,
+                          "end_line": 5,
+                          "end_col": 11
+                        },
+                        "structural_hash": "1c01c6ae20e52e0c671619018cc56eeb4b660d32d00c0ef5120e999f789ad39e",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 59.731
+    }
+  ],
+  "attempted_count": 8,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 17.616
+}

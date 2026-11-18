@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "    for i := 0; i < len(numbers); i++ {\n        for j := i + 1; j < len(numbers); j++ {\n            var distance float64 = numbers[i] - numbers[j]\n            if distance < threshold {\n                return true\n            }\n        }\n    }\n    return false\n}\n\n",
+  "canonical_solution": "    for i := 0; i < len(numbers); i++ {\n        for j := i + 1; j < len(numbers); j++ {\n            var distance float64 = math.Abs(numbers[i] - numbers[j])\n            if distance < threshold {\n                return true\n            }\n        }\n    }\n    return false\n}\n\n",
+  "declaration": "\nfunc HasCloseElements(numbers []float64, threshold float64) bool {\n",
+  "docstring": "Check if in given list of numbers, are any two numbers closer to each other than given threshold.\n>>> HasCloseElements([]float64{1.0, 2.0, 3.0}, 0.5)\nfalse\n>>> HasCloseElements([]float64{1.0, 2.8, 3.0, 4.0, 5.0, 2.0}, 0.3)\ntrue",
+  "entry_point": "HasCloseElements",
+  "example_test": "func TestHasCloseElements(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(false, HasCloseElements([]float64{1.0, 2.0, 3.0}, 0.5))\n    assert.Equal(true, HasCloseElements([]float64{1.0, 2.8, 3.0, 4.0, 5.0, 2.0}, 0.3))\n}\n",
+  "failure_symptoms": "incorrect output",
+  "import": "import (\n    \"math\"\n)\n",
+  "instruction": "Write a Go function `func HasCloseElements(numbers []float64, threshold float64) bool` to solve the following problem:\nCheck if in given list of numbers, are any two numbers closer to each other than given threshold.\n>>> HasCloseElements([]float64{1.0, 2.0, 3.0}, 0.5)\nfalse\n>>> HasCloseElements([]float64{1.0, 2.8, 3.0, 4.0, 5.0, 2.0}, 0.3)\ntrue",
+  "prompt": "import (\n    \"math\"\n)\n\n// Check if in given list of numbers, are any two numbers closer to each other than given threshold.\n// >>> HasCloseElements([]float64{1.0, 2.0, 3.0}, 0.5)\n// false\n// >>> HasCloseElements([]float64{1.0, 2.8, 3.0, 4.0, 5.0, 2.0}, 0.3)\n// true\nfunc HasCloseElements(numbers []float64, threshold float64) bool {\n",
+  "signature": "func HasCloseElements(numbers []float64, threshold float64) bool",
+  "task_id": "Go/0",
+  "test": "func TestHasCloseElements(t *testing.T) {\n    assert := assert.New(t)\n    assert.Equal(true, HasCloseElements([]float64{11.0, 2.0, 3.9, 4.0, 5.0, 2.2}, 0.3))\n    assert.Equal(false, HasCloseElements([]float64{1.0, 2.0, 3.9, 4.0, 5.0, 2.2}, 0.05))\n    assert.Equal(true, HasCloseElements([]float64{1.0, 2.0, 5.9, 4.0, 5.0}, 0.95))\n    assert.Equal(false, HasCloseElements([]float64{1.0, 2.0, 5.9, 4.0, 5.0}, 0.8))\n    assert.Equal(true, HasCloseElements([]float64{1.0, 2.0, 3.0, 4.0, 5.0, 2.0}, 0.1))\n    assert.Equal(true, HasCloseElements([]float64{1.1, 2.2, 3.1, 4.1, 5.1}, 1.0))\n    assert.Equal(false, HasCloseElements([]float64{1.1, 2.2, 3.1, 4.1, 5.1}, 0.5))\n}\n",
+  "test_setup": "package main\n\nimport (\n    \"testing\"\n    \"github.com/stretchr/testify/assert\"\n)\n"
+}

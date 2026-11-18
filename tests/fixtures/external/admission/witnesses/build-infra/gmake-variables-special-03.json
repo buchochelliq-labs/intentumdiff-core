@@ -1,0 +1,28 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "gmake-variables-special-03",
+  "engines": [
+    {
+      "name": "make",
+      "version": "GNU Make 4.3"
+    },
+    {
+      "name": "perl",
+      "version": "perl v5.38.2"
+    }
+  ],
+  "harness": {
+    "expected_exit_status": 512,
+    "expected_output": "work/variables/special.mk.3:2: *** missing separator.  Stop.\n",
+    "line": 127,
+    "options": "",
+    "script": "variables/special"
+  },
+  "new_sha256": "efb035eeb01a3e66ebba0d1b24c8248cb9bba245584d5d5f25a17aa24886725c",
+  "old_sha256": "efb035eeb01a3e66ebba0d1b24c8248cb9bba245584d5d5f25a17aa24886725c",
+  "oracle": "gnu_make_harness",
+  "reference_accepts": false,
+  "review": "The upstream run_make_tests.pl harness, run on GNU Make 4.3, reproduced the expected output and exit status of this run_make_test call, which is a makefile read error.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

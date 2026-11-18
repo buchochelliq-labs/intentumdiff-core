@@ -1,0 +1,2839 @@
+{
+  "language_id": "odin",
+  "options": {
+    "language_hint": "odin",
+    "strict_plugins": true
+  },
+  "completed_count": 9,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "odin-literal-value",
+      "language_id": "odin",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "2afa950faa237520ceb0f295b25b2b8a84555ab3c06a88a30b50304e5afa001e",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update number('1') -> number('2')",
+            "old_node": {
+              "id": "0.1.1.2.0.0",
+              "node_type": "number",
+              "label": "1",
+              "position": {
+                "start_line": 1,
+                "start_col": 33,
+                "end_line": 1,
+                "end_col": 34
+              },
+              "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.1.2.0.0",
+              "node_type": "number",
+              "label": "2",
+              "position": {
+                "start_line": 1,
+                "start_col": 33,
+                "end_line": 1,
+                "end_col": 34
+              },
+              "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+              "children": []
+            },
+            "text_diff": "1 -> 2"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer",
+              "1"
+            ],
+            "new_labels": [
+              "answer",
+              "2"
+            ],
+            "old_node_ids": [
+              "0.1.1.2.0.0"
+            ],
+            "new_node_ids": [
+              "0.1.1.2.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.1",
+              "old_entity_node_id": "0.1",
+              "new_entity_node_id": "0.1",
+              "old_entity_label": "answer",
+              "new_entity_label": "answer",
+              "entity_type": "procedure_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 1.192455,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 682996,
+                "total_fuel_consumed": 682996,
+                "max_fuel_used_percent": 3.0988929219600725,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.389142,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 682762,
+                "total_fuel_consumed": 682762,
+                "max_fuel_used_percent": 3.097831215970962,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "aa490b2e9875161f602258682b942c5dbaa5f733c6f530ad59b352be00ac88a4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "50f8c3ca79dad88093efca0782ab8ba563ebca7998bc59657c3cb0e9adb606fe",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "2",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "5871fc03c9db73b4c3d835f9843f94df5fa601c66d13e123bc7e6e6ada5c8199",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 14324.075
+    },
+    {
+      "id": "odin-declaration-api",
+      "language_id": "odin",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "cfe11cdc8e6575b377e05f326ef8337e1ed06ef2976496d90c4fdb18179c542d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "REFACTORING",
+            "confidence": 1.0,
+            "description": "Rename procedure_declaration('answer') -> ('result')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "procedure_declaration",
+              "label": "answer",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 36
+              },
+              "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+              "children": [
+                {
+                  "id": "0.1.1.2.0.0",
+                  "node_type": "number",
+                  "label": "1",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 33,
+                    "end_line": 1,
+                    "end_col": 34
+                  },
+                  "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                  "children": []
+                }
+              ]
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "procedure_declaration",
+              "label": "result",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 36
+              },
+              "structural_hash": "f2d8fa5806f8de440233e05235d3be11f2b6eb804f3cef56be6096cb969d66d3",
+              "children": [
+                {
+                  "id": "0.1.1.2.0.0",
+                  "node_type": "number",
+                  "label": "1",
+                  "position": {
+                    "start_line": 1,
+                    "start_col": 33,
+                    "end_line": 1,
+                    "end_col": 34
+                  },
+                  "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                  "children": []
+                }
+              ]
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "NOISE_SUPPRESSED",
+            "raw_change_indices": [],
+            "old_labels": [
+              "answer",
+              "1"
+            ],
+            "new_labels": [
+              "result",
+              "1"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.82,
+            "rule_id": "presentation.compact_superseded_meaningful_group",
+            "metadata": {
+              "reason": "refactoring_groups_replace_lower_level_meaningful_changes",
+              "suppressed_count": 1
+            }
+          },
+          {
+            "kind": "REFACTORING",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer"
+            ],
+            "new_labels": [
+              "result"
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_refactoring_group",
+            "metadata": {
+              "index_space": "final_changes"
+            },
+            "refactoring_kind": "RENAME_SYMBOL"
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.882159,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 682853,
+                "total_fuel_consumed": 682853,
+                "max_fuel_used_percent": 3.098244101633394,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.345352,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 683080,
+                "total_fuel_consumed": 683080,
+                "max_fuel_used_percent": 3.099274047186933,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ff5df741c48a2856acabec83074022a30f94dfe8ccfea359067d7bda2b25638c",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "result",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "f2d8fa5806f8de440233e05235d3be11f2b6eb804f3cef56be6096cb969d66d3",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 78.538
+    },
+    {
+      "id": "odin-body-operator",
+      "language_id": "odin",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "fd1375bb796442c1a2335c4bd8685242569751ada9e249795771e89dcf239b72",
+      "new_sha256": "e15744116aa71eca9b3a5015cfd74c8ed477b5ab751149f10395c9ff3627882f",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268",
+        "buchochelliq-labs/intentumdiff-odin-parser#4"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "combine :: proc(a, b: int) -> int { return a + b }\\n"
+            ],
+            "new_labels": [
+              "combine :: proc(a, b: int) -> int { return a - b }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "combine :: proc(a, b: int) -> int { return a + b }\\n",
+              "new_label": "combine :: proc(a, b: int) -> int { return a - b }\\n",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                14,
+                65
+              ],
+              "new_span": [
+                14,
+                65
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "combine :: proc(a, b: int) -> int { return a + b }\\n",
+              "new_label": "combine :: proc(a, b: int) -> int { return a - b }\\n",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                14,
+                65
+              ],
+              "new_span": [
+                14,
+                65
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.682237,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22600000,
+                "fuel_consumed": 1008658,
+                "total_fuel_consumed": 1008658,
+                "max_fuel_used_percent": 4.463088495575221,
+                "input_bytes": 65,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.312951,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22600000,
+                "fuel_consumed": 1008382,
+                "total_fuel_consumed": 1008382,
+                "max_fuel_used_percent": 4.461867256637168,
+                "input_bytes": 65,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "29d27ffcae4569229567fb29fbb629b7e8bca0f1bd6d0db21631d4e0e92a6100",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "combine",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 50
+                },
+                "structural_hash": "4e2323296d9f4cce11f4db5651206df37e75793c8d9d722801706979073bc51d",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "29d27ffcae4569229567fb29fbb629b7e8bca0f1bd6d0db21631d4e0e92a6100",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "combine",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 50
+                },
+                "structural_hash": "4e2323296d9f4cce11f4db5651206df37e75793c8d9d722801706979073bc51d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 48.876
+    },
+    {
+      "id": "odin-identity",
+      "language_id": "odin",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.519304,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 682692,
+                "total_fuel_consumed": 682692,
+                "max_fuel_used_percent": 3.097513611615245,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.300608,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22040000,
+                "fuel_consumed": 682741,
+                "total_fuel_consumed": 682741,
+                "max_fuel_used_percent": 3.0977359346642466,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 52.963
+    },
+    {
+      "id": "odin-ordinary-comment",
+      "language_id": "odin",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "2cfec0d765a905add8f83a86b6f85f9ab38ceddd9a38429fef7e7be8cdde8ccf",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// Ordinary comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.52778,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22440000,
+                "fuel_consumed": 682905,
+                "total_fuel_consumed": 682905,
+                "max_fuel_used_percent": 3.0432486631016045,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.32682700000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22440000,
+                "fuel_consumed": 728342,
+                "total_fuel_consumed": 728342,
+                "max_fuel_used_percent": 3.245730837789661,
+                "input_bytes": 71,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 3,
+              "end_col": 0
+            },
+            "structural_hash": "293b0159c6359d68dc74c1c89460fc832f2e4a3304fec12a89ce27f6134ab783",
+            "children": [
+              {
+                "id": "0.1",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.2.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 33,
+                      "end_line": 2,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 53.326
+    },
+    {
+      "id": "odin-layout",
+      "language_id": "odin",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "7f35f8bc425e91ec0822a03e6931b4ef902f632e20337aef17eb8bca128f8045",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                51,
+                51
+              ],
+              "new_span": [
+                52,
+                53
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "odin",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                51,
+                51
+              ],
+              "new_span": [
+                52,
+                53
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.587882,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22080000,
+                "fuel_consumed": 682955,
+                "total_fuel_consumed": 682955,
+                "max_fuel_used_percent": 3.0930932971014493,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.2853,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22080000,
+                "fuel_consumed": 685283,
+                "total_fuel_consumed": 685283,
+                "max_fuel_used_percent": 3.1036367753623186,
+                "input_bytes": 53,
+                "input_lines": 4,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 1,
+              "start_col": 0,
+              "end_line": 4,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 33,
+                      "end_line": 2,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 63.83
+    },
+    {
+      "id": "odin-incomplete",
+      "language_id": "odin",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "36a8e7c3e354d883bb8f95e901fd8c51714bb132c6acc50ca807369a4e2a9857",
+      "new_sha256": "f29b876d8c29883eb03578c718acbcaecf450757ca2888ee2658cfb62cc8e564",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Delete number('1')",
+            "old_node": {
+              "id": "0.1.1.2.0.0",
+              "node_type": "number",
+              "label": "1",
+              "position": {
+                "start_line": 1,
+                "start_col": 33,
+                "end_line": 1,
+                "end_col": 34
+              },
+              "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "answer",
+              "1"
+            ],
+            "new_labels": [
+              "answer"
+            ],
+            "old_node_ids": [
+              "0.1.1.2.0.0"
+            ],
+            "new_node_ids": [],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.1",
+              "old_entity_node_id": "0.1",
+              "new_entity_node_id": "0.1",
+              "old_entity_label": "answer",
+              "new_entity_label": "answer",
+              "entity_type": "procedure_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.916282,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21620000,
+                "fuel_consumed": 683192,
+                "total_fuel_consumed": 683192,
+                "max_fuel_used_percent": 3.16,
+                "input_bytes": 51,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.7340139999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21620000,
+                "fuel_consumed": 1103807,
+                "total_fuel_consumed": 1103807,
+                "max_fuel_used_percent": 5.1054902867715075,
+                "input_bytes": 30,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "1464cbc8ed1462c9f2f1055597d8396cd63b77314b0e80dc55e2cd21813c39f3",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 36
+                },
+                "structural_hash": "97818487f2b37268925c6d3843043910fddb9379543160c8bb87202c921eefdc",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0",
+                    "node_type": "number",
+                    "label": "1",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 33,
+                      "end_line": 1,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8831223cda2028f442d5b06998e47bc748b11574bba849699d32244fd77d7329",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "5bcd7a7eb7010fd32154cec6607c15153210eff7aa9f2fa349ecc713804d7228",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "answer",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 15
+                },
+                "structural_hash": "668fcbc17ab27b31a71f158f8158726c31152b0a73c936ff45cb8fc42df10493",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 62.237
+    },
+    {
+      "id": "odin-unicode-payload",
+      "language_id": "odin",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "af839a2c7b93d34a6faa17a45d1d0b931b904ea79043e75c01dfa92d6f85d205",
+      "new_sha256": "c465050a31ca7659f4435839474551ccdb13120a4ce5bf8c952122e23ff503a9",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.odin",
+        "new_filename": "probe.odin",
+        "language": "odin",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 1.0,
+            "description": "Update string_content('café') -> string_content('cafe雪')",
+            "old_node": {
+              "id": "0.1.1.2.0.0.0",
+              "node_type": "string_content",
+              "label": "café",
+              "position": {
+                "start_line": 1,
+                "start_col": 38,
+                "end_line": 1,
+                "end_col": 43
+              },
+              "structural_hash": "f44bb3a42a69959fb4213c3d7f46fc8f8fd2deb12703ed642405bb3e7f8bb7b6",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1.1.2.0.0.0",
+              "node_type": "string_content",
+              "label": "cafe雪",
+              "position": {
+                "start_line": 1,
+                "start_col": 38,
+                "end_line": 1,
+                "end_col": 45
+              },
+              "structural_hash": "f8aaefdd40f2c50621d5b0ccbdce26e05e0e778ef2725847691ddd3aaa83ceb6",
+              "children": []
+            },
+            "text_diff": "café -> cafe雪"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "message",
+              "café"
+            ],
+            "new_labels": [
+              "message",
+              "cafe雪"
+            ],
+            "old_node_ids": [
+              "0.1.1.2.0.0.0"
+            ],
+            "new_node_ids": [
+              "0.1.1.2.0.0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "refinement.entity_child_content_changed",
+            "metadata": {
+              "index_space": "final_changes",
+              "entity_node_id": "0.1",
+              "old_entity_node_id": "0.1",
+              "new_entity_node_id": "0.1",
+              "old_entity_label": "message",
+              "new_entity_label": "message",
+              "entity_type": "procedure_declaration"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.689321,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22480000,
+                "fuel_consumed": 741954,
+                "total_fuel_consumed": 741954,
+                "max_fuel_used_percent": 3.3005071174377223,
+                "input_bytes": 61,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "probe.odin",
+                "call_count": 1,
+                "elapsed_ms": 0.391036,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22480000,
+                "fuel_consumed": 743054,
+                "total_fuel_consumed": 743054,
+                "max_fuel_used_percent": 3.3054003558718863,
+                "input_bytes": 63,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "9f750db2f584705b0bd8f72d9ef2d1c469800b88e10a7ebf693865ca0b5affb8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "message",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 46
+                },
+                "structural_hash": "ebbe4e9e0bc819e275f691bec54bdf6e1a5ff55466053bbec6e726c86ed2f2e4",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0.0",
+                    "node_type": "string_content",
+                    "label": "café",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 38,
+                      "end_line": 1,
+                      "end_col": 43
+                    },
+                    "structural_hash": "f44bb3a42a69959fb4213c3d7f46fc8f8fd2deb12703ed642405bb3e7f8bb7b6",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "14d8bc2f6f5055ba01b01613f37e476dbf075fd7774fcdbdb23d0b29a6fd79ae",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 13
+                },
+                "structural_hash": "6edc6071a39c276fcf7f333816d9fd592e093a64fdd7e8fac5a6035f3908b1e1",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "procedure_declaration",
+                "label": "message",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 48
+                },
+                "structural_hash": "fce9a4382d7080303bc15ba0989a71352ee85235075464231b204192ba3fb7e9",
+                "children": [
+                  {
+                    "id": "0.1.1.2.0.0.0",
+                    "node_type": "string_content",
+                    "label": "cafe雪",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 38,
+                      "end_line": 1,
+                      "end_col": 45
+                    },
+                    "structural_hash": "f8aaefdd40f2c50621d5b0ccbdce26e05e0e778ef2725847691ddd3aaa83ceb6",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.289
+    },
+    {
+      "id": "odin-repo-fixture-identity",
+      "language_id": "odin",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "4aec3c444bffd3fa1410baababbf85e078f4f298e43e7bcecd5d464a2a74a6f5",
+      "new_sha256": "4aec3c444bffd3fa1410baababbf85e078f4f298e43e7bcecd5d464a2a74a6f5",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.odin",
+        "new_filename": "playground.odin",
+        "language": "odin",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "playground.odin",
+                "call_count": 1,
+                "elapsed_ms": 2.045079,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32680000,
+                "fuel_consumed": 4830741,
+                "total_fuel_consumed": 4830741,
+                "max_fuel_used_percent": 14.781949204406363,
+                "input_bytes": 317,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "odin",
+                "filename": "playground.odin",
+                "call_count": 1,
+                "elapsed_ms": 1.4584190000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 32680000,
+                "fuel_consumed": 4830935,
+                "total_fuel_consumed": 4830935,
+                "max_fuel_used_percent": 14.782542839657284,
+                "input_bytes": 317,
+                "input_lines": 17,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/odin_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 17,
+              "end_col": 0
+            },
+            "structural_hash": "9230325ca4b6d23e14bb3b58dc5bc49634a271606712484c164f1212c99561fb",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "main",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "a4ecf15b8a17d1e335d8bccf3aad8a81c751d276c110fbaba0527e5dfb726c04",
+                "children": []
+              },
+              {
+                "id": "0.1.0.0",
+                "node_type": "string_content",
+                "label": "core:fmt",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 8,
+                  "end_line": 2,
+                  "end_col": 16
+                },
+                "structural_hash": "ef627064c648ecaa3578af451aad5e3af2333445ed00f248f39c878a20b127d2",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "procedure_declaration",
+                "label": "greet",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "b46fcd8de266a586cc6f9e8a0c167ff40cb53515feaaf03ecee2ad7e55b484c6",
+                "children": [
+                  {
+                    "id": "0.2.1.1.0.1.1.0",
+                    "node_type": "string_content",
+                    "label": "Hello, %s!",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 16,
+                      "end_line": 5,
+                      "end_col": 26
+                    },
+                    "structural_hash": "08b12dd06c890a18199cecd637f86d636bcdf68238bf583f71687670f13b51b2",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "procedure_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 46
+                },
+                "structural_hash": "d2685683f6ed9bfe6cfd733dc22e0a95f2582909b9901b3772595f173442f46b",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "procedure_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 10,
+                  "end_col": 51
+                },
+                "structural_hash": "4eb5b51d88fb79f5c9e9cc24fa2e6a62b8e5e0dab35ebc20d2c7cdcd83ab63d2",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "procedure_declaration",
+                "label": "main",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 1
+                },
+                "structural_hash": "95e21de8294be004bd9b6cdce058154c0270cba0e2dbaf72870abf59a34b5373",
+                "children": [
+                  {
+                    "id": "0.5.1.1",
+                    "node_type": "block",
+                    "label": "",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 15,
+                      "end_line": 16,
+                      "end_col": 1
+                    },
+                    "structural_hash": "af2cb0a0776aaa7f9a0ff25996a385fd99d3b979d546d5885057acf934b8b170",
+                    "children": [
+                      {
+                        "id": "0.5.1.1.0.1.0",
+                        "node_type": "string_content",
+                        "label": "World",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 11,
+                          "end_line": 13,
+                          "end_col": 16
+                        },
+                        "structural_hash": "f4f0e97a66da4967d3d6f59e10f3bf5644aeaeb369845858d189bfa2bff89e9b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.5.1.1.1.1",
+                        "node_type": "call_expression",
+                        "label": "",
+                        "position": {
+                          "start_line": 14,
+                          "start_col": 8,
+                          "end_line": 14,
+                          "end_col": 34
+                        },
+                        "structural_hash": "946e6f94074e55bf67864353f87f965ec970de9d1fc9e80346ea2cf6469b2862",
+                        "children": [
+                          {
+                            "id": "0.5.1.1.1.1.1.0",
+                            "node_type": "string_content",
+                            "label": "add:",
+                            "position": {
+                              "start_line": 14,
+                              "start_col": 17,
+                              "end_line": 14,
+                              "end_col": 21
+                            },
+                            "structural_hash": "927835567dea007d1b0962ec463c6e5df9c552057070dd63d9e88aa42a15c6be",
+                            "children": []
+                          },
+                          {
+                            "id": "0.5.1.1.1.1.2",
+                            "node_type": "call_expression",
+                            "label": "",
+                            "position": {
+                              "start_line": 14,
+                              "start_col": 24,
+                              "end_line": 14,
+                              "end_col": 33
+                            },
+                            "structural_hash": "bbaf506fc42ff540827f31067c5930a80d9e962c9c65d327f6d5c6b58be02b42",
+                            "children": [
+                              {
+                                "id": "0.5.1.1.1.1.2.1",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 14,
+                                  "start_col": 28,
+                                  "end_line": 14,
+                                  "end_col": 29
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.5.1.1.1.1.2.2",
+                                "node_type": "number",
+                                "label": "4",
+                                "position": {
+                                  "start_line": 14,
+                                  "start_col": 31,
+                                  "end_line": 14,
+                                  "end_col": 32
+                                },
+                                "structural_hash": "598649171abafb7fc1b028cd8d5a3c05060fc6ab75503b89a97856e35adefa61",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.5.1.1.2.1",
+                        "node_type": "call_expression",
+                        "label": "",
+                        "position": {
+                          "start_line": 15,
+                          "start_col": 8,
+                          "end_line": 15,
+                          "end_col": 39
+                        },
+                        "structural_hash": "4f0c6e5e1cca7acd72ce0f1a26c89502e019d8056015acc5d3a5e31898183f3e",
+                        "children": [
+                          {
+                            "id": "0.5.1.1.2.1.1.0",
+                            "node_type": "string_content",
+                            "label": "mul:",
+                            "position": {
+                              "start_line": 15,
+                              "start_col": 17,
+                              "end_line": 15,
+                              "end_col": 21
+                            },
+                            "structural_hash": "4f86e811df47bfbc7f684b9ef116459375b8ba9aafe7ed98a9f9782ed48753fa",
+                            "children": []
+                          },
+                          {
+                            "id": "0.5.1.1.2.1.2",
+                            "node_type": "call_expression",
+                            "label": "",
+                            "position": {
+                              "start_line": 15,
+                              "start_col": 24,
+                              "end_line": 15,
+                              "end_col": 38
+                            },
+                            "structural_hash": "99d52d99da309a31607e6d81a820330f345e9362cdc2e7d06af5ceae8a97cf5f",
+                            "children": [
+                              {
+                                "id": "0.5.1.1.2.1.2.1",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 15,
+                                  "start_col": 33,
+                                  "end_line": 15,
+                                  "end_col": 34
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.5.1.1.2.1.2.2",
+                                "node_type": "number",
+                                "label": "4",
+                                "position": {
+                                  "start_line": 15,
+                                  "start_col": 36,
+                                  "end_line": 15,
+                                  "end_col": 37
+                                },
+                                "structural_hash": "598649171abafb7fc1b028cd8d5a3c05060fc6ab75503b89a97856e35adefa61",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "odin",
+          "tree": {
+            "id": "0",
+            "node_type": "source_file",
+            "label": "",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 17,
+              "end_col": 0
+            },
+            "structural_hash": "9230325ca4b6d23e14bb3b58dc5bc49634a271606712484c164f1212c99561fb",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "package_declaration",
+                "label": "main",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "a4ecf15b8a17d1e335d8bccf3aad8a81c751d276c110fbaba0527e5dfb726c04",
+                "children": []
+              },
+              {
+                "id": "0.1.0.0",
+                "node_type": "string_content",
+                "label": "core:fmt",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 8,
+                  "end_line": 2,
+                  "end_col": 16
+                },
+                "structural_hash": "ef627064c648ecaa3578af451aad5e3af2333445ed00f248f39c878a20b127d2",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "procedure_declaration",
+                "label": "greet",
+                "position": {
+                  "start_line": 4,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 1
+                },
+                "structural_hash": "b46fcd8de266a586cc6f9e8a0c167ff40cb53515feaaf03ecee2ad7e55b484c6",
+                "children": [
+                  {
+                    "id": "0.2.1.1.0.1.1.0",
+                    "node_type": "string_content",
+                    "label": "Hello, %s!",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 16,
+                      "end_line": 5,
+                      "end_col": 26
+                    },
+                    "structural_hash": "08b12dd06c890a18199cecd637f86d636bcdf68238bf583f71687670f13b51b2",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "procedure_declaration",
+                "label": "add",
+                "position": {
+                  "start_line": 8,
+                  "start_col": 0,
+                  "end_line": 8,
+                  "end_col": 46
+                },
+                "structural_hash": "d2685683f6ed9bfe6cfd733dc22e0a95f2582909b9901b3772595f173442f46b",
+                "children": []
+              },
+              {
+                "id": "0.4",
+                "node_type": "procedure_declaration",
+                "label": "multiply",
+                "position": {
+                  "start_line": 10,
+                  "start_col": 0,
+                  "end_line": 10,
+                  "end_col": 51
+                },
+                "structural_hash": "4eb5b51d88fb79f5c9e9cc24fa2e6a62b8e5e0dab35ebc20d2c7cdcd83ab63d2",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "procedure_declaration",
+                "label": "main",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 16,
+                  "end_col": 1
+                },
+                "structural_hash": "95e21de8294be004bd9b6cdce058154c0270cba0e2dbaf72870abf59a34b5373",
+                "children": [
+                  {
+                    "id": "0.5.1.1",
+                    "node_type": "block",
+                    "label": "",
+                    "position": {
+                      "start_line": 12,
+                      "start_col": 15,
+                      "end_line": 16,
+                      "end_col": 1
+                    },
+                    "structural_hash": "af2cb0a0776aaa7f9a0ff25996a385fd99d3b979d546d5885057acf934b8b170",
+                    "children": [
+                      {
+                        "id": "0.5.1.1.0.1.0",
+                        "node_type": "string_content",
+                        "label": "World",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 11,
+                          "end_line": 13,
+                          "end_col": 16
+                        },
+                        "structural_hash": "f4f0e97a66da4967d3d6f59e10f3bf5644aeaeb369845858d189bfa2bff89e9b",
+                        "children": []
+                      },
+                      {
+                        "id": "0.5.1.1.1.1",
+                        "node_type": "call_expression",
+                        "label": "",
+                        "position": {
+                          "start_line": 14,
+                          "start_col": 8,
+                          "end_line": 14,
+                          "end_col": 34
+                        },
+                        "structural_hash": "946e6f94074e55bf67864353f87f965ec970de9d1fc9e80346ea2cf6469b2862",
+                        "children": [
+                          {
+                            "id": "0.5.1.1.1.1.1.0",
+                            "node_type": "string_content",
+                            "label": "add:",
+                            "position": {
+                              "start_line": 14,
+                              "start_col": 17,
+                              "end_line": 14,
+                              "end_col": 21
+                            },
+                            "structural_hash": "927835567dea007d1b0962ec463c6e5df9c552057070dd63d9e88aa42a15c6be",
+                            "children": []
+                          },
+                          {
+                            "id": "0.5.1.1.1.1.2",
+                            "node_type": "call_expression",
+                            "label": "",
+                            "position": {
+                              "start_line": 14,
+                              "start_col": 24,
+                              "end_line": 14,
+                              "end_col": 33
+                            },
+                            "structural_hash": "bbaf506fc42ff540827f31067c5930a80d9e962c9c65d327f6d5c6b58be02b42",
+                            "children": [
+                              {
+                                "id": "0.5.1.1.1.1.2.1",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 14,
+                                  "start_col": 28,
+                                  "end_line": 14,
+                                  "end_col": 29
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.5.1.1.1.1.2.2",
+                                "node_type": "number",
+                                "label": "4",
+                                "position": {
+                                  "start_line": 14,
+                                  "start_col": 31,
+                                  "end_line": 14,
+                                  "end_col": 32
+                                },
+                                "structural_hash": "598649171abafb7fc1b028cd8d5a3c05060fc6ab75503b89a97856e35adefa61",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "0.5.1.1.2.1",
+                        "node_type": "call_expression",
+                        "label": "",
+                        "position": {
+                          "start_line": 15,
+                          "start_col": 8,
+                          "end_line": 15,
+                          "end_col": 39
+                        },
+                        "structural_hash": "4f0c6e5e1cca7acd72ce0f1a26c89502e019d8056015acc5d3a5e31898183f3e",
+                        "children": [
+                          {
+                            "id": "0.5.1.1.2.1.1.0",
+                            "node_type": "string_content",
+                            "label": "mul:",
+                            "position": {
+                              "start_line": 15,
+                              "start_col": 17,
+                              "end_line": 15,
+                              "end_col": 21
+                            },
+                            "structural_hash": "4f86e811df47bfbc7f684b9ef116459375b8ba9aafe7ed98a9f9782ed48753fa",
+                            "children": []
+                          },
+                          {
+                            "id": "0.5.1.1.2.1.2",
+                            "node_type": "call_expression",
+                            "label": "",
+                            "position": {
+                              "start_line": 15,
+                              "start_col": 24,
+                              "end_line": 15,
+                              "end_col": 38
+                            },
+                            "structural_hash": "99d52d99da309a31607e6d81a820330f345e9362cdc2e7d06af5ceae8a97cf5f",
+                            "children": [
+                              {
+                                "id": "0.5.1.1.2.1.2.1",
+                                "node_type": "number",
+                                "label": "3",
+                                "position": {
+                                  "start_line": 15,
+                                  "start_col": 33,
+                                  "end_line": 15,
+                                  "end_col": 34
+                                },
+                                "structural_hash": "6845427f830f56d3687d9ab7327c2f4a6b381e237c2d3cdab92f5d57d34ebe8c",
+                                "children": []
+                              },
+                              {
+                                "id": "0.5.1.1.2.1.2.2",
+                                "node_type": "number",
+                                "label": "4",
+                                "position": {
+                                  "start_line": 15,
+                                  "start_col": 36,
+                                  "end_line": 15,
+                                  "end_col": 37
+                                },
+                                "structural_hash": "598649171abafb7fc1b028cd8d5a3c05060fc6ab75503b89a97856e35adefa61",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 86.833
+    }
+  ],
+  "attempted_count": 9,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 15.467
+}

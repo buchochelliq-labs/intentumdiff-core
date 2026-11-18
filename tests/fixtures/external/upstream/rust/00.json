@@ -1,0 +1,17 @@
+{
+  "bug_type": "missing logic",
+  "buggy_solution": "\n    for i in 0..numbers.len(){\n        for j in 1..numbers.len(){\n\n            if i != j {\n                let distance:f32 = numbers[i] - numbers[j];\n\n            if distance < threshold{\n                return true;\n            }\n\n            }\n            \n        }\n    }\n\n    return false;\n\n}\n",
+  "canonical_solution": "\n    for i in 0..numbers.len(){\n        for j in 1..numbers.len(){\n\n            if i != j {\n                let distance:f32 = numbers[i] - numbers[j];\n\n            if distance.abs() < threshold{\n                return true;\n            }\n\n            }\n            \n        }\n    }\n\n    return false;\n\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn has_close_elements(numbers:Vec<f32>, threshold: f32) -> bool{\n",
+  "docstring": "Check if in given list of numbers, are any two numbers closer to each other than\ngiven threshold.",
+  "entry_point": "has_close_elements",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `has_close_elements(numbers:Vec<f32>, threshold: f32) -> bool` to solve the following problem:\nCheck if in given list of numbers, are any two numbers closer to each other than\ngiven threshold.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    \n*/\nfn has_close_elements(numbers:Vec<f32>, threshold: f32) -> bool{\n",
+  "signature": "has_close_elements(numbers:Vec<f32>, threshold: f32) -> bool",
+  "task_id": "Rust/0",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_has_close_elements() {\n        assert_eq!(has_close_elements(vec![11.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3), true);\n        assert_eq!(has_close_elements(vec![1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05), false);\n        assert_eq!(has_close_elements(vec![1.0, 2.0, 5.9, 4.0, 5.0], 0.95), true);\n        assert_eq!(has_close_elements(vec![1.0, 2.0, 5.9, 4.0, 5.0], 0.8), false);\n        assert_eq!(has_close_elements(vec![1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1), true);\n        assert_eq!(has_close_elements(vec![1.1, 2.2, 3.1, 4.1, 5.1], 1.0), true);\n        assert_eq!(has_close_elements(vec![1.1, 2.2, 3.1, 4.1, 5.1], 0.5), false);\n    }\n\n}\n",
+  "test_setup": ""
+}

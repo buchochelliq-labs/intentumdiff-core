@@ -1,0 +1,1548 @@
+{
+  "baseline": "/workspace/intentumdiff-batch3/baseline/docs/evidence/2026-11-08-merged-rc-language-baseline.json",
+  "baseline_sha256": "178addef636347d966ab128979f5bcad0139a06d9f207de1d381f45cc654c704",
+  "baseline_source_errors": [
+    {
+      "case_id": "data_config.databricks.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.databricks.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.plsql.incomplete",
+      "error": "0: range outside source (5,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.plsql.known_no_final_newline",
+      "error": "0: range outside source (3,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.plsql.known_no_final_newline",
+      "error": "0: range outside source (3,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.tsql.incomplete",
+      "error": "0: range outside source (5,0)",
+      "side": "new"
+    }
+  ],
+  "candidate": "/workspace/intentumdiff-batch3/full-cloud-assessment/rc-059fc9-merged/results.json",
+  "candidate_sha256": "606b056e84dbd8384249e160d90ef05d986dd5658bc315d123175d9873a103d2",
+  "cases": 760,
+  "content_normalization": "committed measurement exclusions; telemetry calls/fuel_hotspots plugin path basename only",
+  "counts": {
+    "bounded_explicit_fallback": 32,
+    "bounded_incomplete_observation": 43,
+    "failed": 86,
+    "invalid_result": 3,
+    "passed": 596
+  },
+  "eof_target_witnesses": [
+    {
+      "actual_root_eof": {
+        "new": [
+          1,
+          9
+        ],
+        "old": [
+          1,
+          9
+        ]
+      },
+      "case_id": "data_config.databricks.known_eof_identity",
+      "expected_eof": [
+        1,
+        9
+      ],
+      "identity_and_bounds_passed": true,
+      "status": "passed"
+    },
+    {
+      "actual_root_eof": {
+        "new": [
+          1,
+          9
+        ],
+        "old": [
+          1,
+          9
+        ]
+      },
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "expected_eof": [
+        1,
+        9
+      ],
+      "identity_and_bounds_passed": true,
+      "status": "passed"
+    }
+  ],
+  "gate_recomputed": {
+    "improvements": [
+      "data_config.adf.known_retry_policy",
+      "data_config.adf.meaningful_1_value",
+      "data_config.adf.meaningful_3_body",
+      "data_config.adf.unicode_value",
+      "data_config.databricks-workflow.known_base_parameter",
+      "data_config.databricks-workflow.known_eof_identity",
+      "data_config.databricks-workflow.known_notebook_payload",
+      "data_config.databricks-workflow.meaningful_2_configuration",
+      "data_config.databricks.known_base_parameter",
+      "data_config.databricks.known_eof_identity",
+      "data_config.databricks.known_notebook_payload",
+      "data_config.databricks.meaningful_2_configuration"
+    ],
+    "protected_passes": 584,
+    "regression_count": 0,
+    "regressions": [],
+    "scope_languages": "all baseline languages"
+  },
+  "groups_checked": 769,
+  "issues": [],
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "new_source_errors": [],
+  "numeric_notation_limit": "Scalar numeric spelling remains conservative; no source oracle is relaxed.",
+  "preflight_without_new_components": false,
+  "prior_pass_cloud_context_policy": "retained without normalization; requires manual source review",
+  "prior_pass_review_content_changes": [
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_2_type",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_1_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_3_body",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.unicode_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_1_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_3_body",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.unicode_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    }
+  ],
+  "raw_worker_sha256": {
+    "abap": "8ab83865abae8f209a7711a3db46e9e8e74874ba926af09d4f308e140fb8c5c9",
+    "adf": "b677192a32359b748e05fb77256c8ed882cb4dcae1834e5f81bb87379b964ec3",
+    "asciidoc": "6d15474d19dbf953f3bed9591ee25b3987bcbb246fb0057ef8602bddce4dfa5d",
+    "asm": "b2eb5e9bee4aa83da837633cf5fe6c02651f2f7826717a8bed545f9bb266b35d",
+    "assemblyscript": "3ac8e1472653a4b2033efd1477d48a20aa2f4667d3a65777c5019d43de8c652e",
+    "astro": "8ded379a50dfddad270b1f5a84409522ab94e6819dab72b064463597f5f2df9d",
+    "bash": "44296af3d9208f2cacb236b05577c73d2c0c971482add4fd37aecc3a4fc30ff2",
+    "c": "07aff9af0d73447828dedd1218a266c3ebe7dfcb1337f49188f7a430ff42a437",
+    "clojure": "6648fc6333b7b402a59ac6b7a6559c83d1a25f0cb16ed00f433391fdbc790bcd",
+    "cmake": "01a659ba4c0113d14bff1e8ae44ae4e723efc1d3f3962faaf0b87fb4f57a958f",
+    "cpp": "f0ff85777aa440a2eb8830d00217a7544663b96bea66f5aa53f38ba0430b18a6",
+    "csharp": "295de6ad6cfd9e494720cb829a6730e87a61ce86652ef095af3587b4baa50fb8",
+    "css": "f31b20ce8eb40f84e91996a5741231fc6d3ac4dbfd67ad25ec57a27f7efbcfe9",
+    "dart": "203bebdc2dc67fd57b51cc182b7f3335c6e448b0623f73324ec4f16d85b0412d",
+    "databricks": "c24120d89a0b4c8a0a4fbf7e28879756fafb3d8bc50226ef9f58a7e687715c9e",
+    "databricks-workflow": "b68acce23a5ee63584fee13b8d437ea7afcfef2c52a322a8fc24d5a6504b2063",
+    "dax": "6c806342361ead9f5c453ae0a0d337a438acab423d73edc90ec09e3973863e9a",
+    "delphi": "6b4a0d974404f832ce80afd32b222a28b52f9b808761e05ba41518c7a656196f",
+    "dockerfile": "a3ec5cec4ef161d5c745accb789ae3d92b7da43c4f7fc33d09069e2d67ba7918",
+    "elixir": "bc2f141f1edbfd82f328b209a198c6c7aef8e4045da4ffd2d4bed232090bffbe",
+    "generic": "67c18dc76c136de36c27ce4c3b530d178781a05d81005454342214f599842df2",
+    "gitignore": "207e333ac1c5ec82b3b43d34469a5a4f21f0dd66da7eb8d4b68a1e5bc9a6b7d0",
+    "go": "a4433e54c02754201cc442fae0ee2be8590c9da55127a3d396f1302ef0c1d389",
+    "gomod": "d4d2fddae69164cb442ee13318c4c8286436fd66fc14217e16c05a4e3d7fe20c",
+    "graphql": "48a6c992e1cbe9406ff22d7ed9732fa26e949a3443a29a8bed71139ab10aba49",
+    "groovy": "3ebe1f62332ef5d09357ee77e416547c4bd76945353c03896d1202d18becea9f",
+    "haskell": "62b964d649ac3198e4f89702e90256420bd0659d63e13b4d59c0535a30cc88b0",
+    "hcl": "c2626d9e9b24fa1f74b09a9adc0a778bdac96460ce891c1811429b009f956663",
+    "html": "e82b8f3e784dded088dffdd91411b70ca910f22d8b429beb20de1d0345d32e3a",
+    "ini": "46f6cec1a17e371df3b66ec7772d892883d06ec4c261b9fe2906eca84b3b1d01",
+    "java": "cbf76fb2a1bff8fd2d094c811ac867b83c6b6bb469fe16e5e34aac4b895e048b",
+    "javascript": "64da6d0fbb5e49eebb173dbd36bd6209030fc464708baf445a1cd7d182873650",
+    "json": "c2e320138daea282fdac5f7c0988d53ad9361bcdc9cc2c5247f080db5076f188",
+    "kotlin": "54f26305429bcfabb852333de5925a593dc7c6a375aed01f948a6c292100a832",
+    "latex": "c7caae761eca2d92f95342b9ecd33dc9e9704278c10d23d0de24052d7d9b15cd",
+    "lua": "c8d9e80e81494a9b7228b7f3d894b8ffa0304db6758e28d8b0c392dd799a4bbd",
+    "m": "ae95f4be308523e9e3ce872c746dd16692d978cbcd1d30ab2008689730fb5bd8",
+    "make": "aac4027843ef45de3580477907f4f7eebb4ab532b80bd665447cda84ffd5541e",
+    "markdown": "e54ade40878eba55e10a6691933a5000696c04037b1194c34ebc17f2eaed3b60",
+    "mdx": "5da63e0db406f9c49589e645aebedd7c4ea56a7d37d24df4cce648e67c968d32",
+    "ocaml": "b3891919dc422913693be9fda11ca2e29c158c868aa03f26666add2e27f169c8",
+    "odin": "a320f61f67042e14963954a91777be30dea7ddd6b8126cbaf7d1de45b0404876",
+    "perl": "273d0056b9031aab9cd119f861f0aee7cb13633ed5b3c2687603e54977e50dec",
+    "php": "3a265573f3c7e43691bcf29cd25d6d62092de06145c4273cb7eb7e368e14b7ae",
+    "plsql": "40587b0e0e596dc4ae5763415da353e151f5024b7d62cd7ada3cf34a9713f343",
+    "po": "8118917dc29ef2258827652999400584aac1661acb56e0c9f3a45dd258d934c8",
+    "postscript": "79af4dc802d71590cb7e7fedd0324c47c009a0d471adb131d5279ec06836549c",
+    "powershell": "237e8235183904ba1e69269922486c898a88badfc17857ef96109371f43003a2",
+    "proto": "2da2008fa7848a924bac8497bace505cea8eea8f15db2b4bd7db6bf2cdba9b3e",
+    "puppet": "61be8873b23f0596c531e85c708039925b2481f8e365ebb021e5d3b91e270753",
+    "python": "e2ce594128864c9bbd7e35a6129695310e3db9f1c5f411c00f49b62e8f4936f4",
+    "qsharp": "19fd5bc4cee59cd7149bf3b8a59cc9649d74f730fed35e0c5955523c5bb21d98",
+    "r": "b9996773f8a9431926c09c8e4ac710986df63a5acdc0c2cf7953568e64409d0a",
+    "reasonml": "573fb25c7e81141ff557cb2a996e5ab33f34dd3de02fee7ef1251f3ea78413e5",
+    "ruby": "79dffe57fcf0cdd7d474e1a4a9f55b60ee130c2db4602c917fee7a3be2466f5f",
+    "rust": "9c4ff66f77252d274397ccd6b08f0de4d012b34c6b5044ee2c98ff080fe5edb3",
+    "sas": "678ae308462b041234cdd0113479472de8a6ad7000d97e9b3aeef5a2310f9d17",
+    "scala": "989eedbe7627ba879b8994b6af9234f31ad91a5dcdf0034b294b95434520070d",
+    "scss": "fb60d87680687b517f8de255d0e2d2283553e74e2e3e8ca6e0a3eab3d9dae279",
+    "sql": "86303f86ea6734d58515aa0dfd586c06ba825d78449290e90317e24d2011df71",
+    "squirrel": "517c6d39153c08434f218bd878edbe8785c0d26c4773a0eaff64e1271333ea2b",
+    "svelte": "0fdb6581bf29acb81bf862b21a4b34438aa8ffbaa7186e68e0591d97f48b4ccd",
+    "swift": "3bcfef38a0bc95d46e837c2b4cdc5b8de2ab6405857d0ee3954db051020b8b1d",
+    "toml": "d431b6a5c5c0482a907071798fda6ba2a3e2b9be858a0100c98264e612d87695",
+    "tsql": "923cd71af3a6f2bfb0bbb4d1d232c2080459987eae56ff9dc81f90f2d5fe7543",
+    "tsx": "4b3243410d83ccf9a8a17b2877486fb73cb00cb3c1bfc3e2e4b3d1df7855c173",
+    "typescript": "382a05cebdf429cb1d290d02b4abe0be63ac6acb4c17ad2438d239b15e65e8f3",
+    "vbnet": "4c87dc7b8b4896412bfca0eea603b5fddcb448f7b0aaeab6744d32c889a8908e",
+    "vue": "d979fbe927e60e5d6de48c0fe4926dccff468f17d37925b20ded21e6d8308399",
+    "wast": "f28d091cf2f696508bbd78118f22b0385e9f7aac98009df7ee204857e2264279",
+    "wat": "2de1e4d3feb70bbeb741e958fd74567a386c257d47ca320ed64cbdfbe9bef00a",
+    "xml": "5904e193ef3c55c371207cacfb8cd063ac3bdfa5636454055df5c5a416eb0514",
+    "yaml": "bdf1de2d588bbeed679dde133bc54480b074ba9bd9903800bec5d2440b539c72",
+    "zig": "09247dfaa89d351346e143d13d019f895a185b33472893b20ee5bd4031e23428"
+  },
+  "reference_errors": [],
+  "references_checked": 600,
+  "resolved_source_errors": [
+    {
+      "case_id": "data_config.databricks.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.databricks.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "error": "0: range outside source (2,0)",
+      "side": "new"
+    }
+  ],
+  "review_content_changes": [
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_1_value",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_2_type",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_3_body",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.unicode_value",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.known_retry_policy",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "adf"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_1_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_2_configuration",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_3_body",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.unicode_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.known_notebook_payload",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.known_base_parameter",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_1_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_2_configuration",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_3_body",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "passed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.unicode_value",
+      "changed_paths": [
+        "change_groups.length",
+        "changes.length"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.known_notebook_payload",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks-workflow"
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.known_base_parameter",
+      "changed_paths": [
+        "change_groups[0].confidence",
+        "change_groups[0].kind",
+        "change_groups[0].metadata.equivalence_kind",
+        "change_groups[0].metadata.evidence_depth",
+        "change_groups[0].metadata.index_space",
+        "change_groups[0].metadata.language",
+        "change_groups[0].metadata.new_label",
+        "change_groups[0].metadata.new_span",
+        "change_groups[0].metadata.occurrence",
+        "change_groups[0].metadata.old_label",
+        "change_groups[0].metadata.old_span",
+        "change_groups[0].metadata.reason",
+        "change_groups[0].metadata.risk",
+        "change_groups[0].new_labels[0]",
+        "change_groups[0].new_node_ids.length",
+        "change_groups[0].old_labels[0]",
+        "change_groups[0].old_node_ids.length",
+        "change_groups[0].raw_change_indices.length",
+        "change_groups[0].rule_id",
+        "changes.length",
+        "has_semantic_changes",
+        "is_style_only",
+        "metadata.ignored_style_changes"
+      ],
+      "language_id": "databricks-workflow"
+    }
+  ],
+  "routes": 74,
+  "semantic_target_witnesses": [
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_1_value",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            124,
+            131
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "archive",
+              "node_id": "0.param.0.config.declaration.0:1",
+              "node_type": "string",
+              "source_sha256": "d32d6d5eeb28879723113a09a04aac8ec79466cce4e534ee3cf9a29cbf43da24",
+              "source_slice": "\"archive\"",
+              "span": [
+                123,
+                132
+              ]
+            }
+          ],
+          "old_edit_range": [
+            124,
+            130
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "output",
+              "node_id": "0.param.0.config.declaration.0:1",
+              "node_type": "string",
+              "source_sha256": "4bbb1f9446ff0829909d2fa9e71d95f6c7df7e30ac16ddf96e9a6b429d6b3ebf",
+              "source_slice": "\"output\"",
+              "span": [
+                123,
+                131
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.meaningful_3_body",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            941,
+            945
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "Failed",
+              "node_id": "0.act.3.dep.0.config.dependency.1:2",
+              "node_type": "string",
+              "source_sha256": "a4364c1ff0695334402e90be14486d8dec8b732be0decccbc60da5cb5e1cf696",
+              "source_slice": "\"Failed\"",
+              "span": [
+                940,
+                948
+              ]
+            }
+          ],
+          "old_edit_range": [
+            941,
+            948
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "Succeeded",
+              "node_id": "0.act.3.dep.0.config.dependency.1:2",
+              "node_type": "string",
+              "source_sha256": "7ef0f3603ea2ded375d03b5b85d72d533301670ab1857e9bafe7b9d71297a1c5",
+              "source_slice": "\"Succeeded\"",
+              "span": [
+                940,
+                951
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.unicode_value",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            125,
+            126
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "\u03bc",
+              "node_id": "0.param.0.config.declaration.0:1",
+              "node_type": "string",
+              "source_sha256": "d752c1fd766802097db128b4499026dce2adb40427cd1f03abfa1cea8d19d5b8",
+              "source_slice": "\"\u03bc\"",
+              "span": [
+                123,
+                127
+              ]
+            }
+          ],
+          "old_edit_range": [
+            125,
+            126
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "\u03bb",
+              "node_id": "0.param.0.config.declaration.0:1",
+              "node_type": "string",
+              "source_sha256": "2f41a8d4394e2476ebc91714bd664b93a5173034e5ac7ee6ab569fe938e23748",
+              "source_slice": "\"\u03bb\"",
+              "span": [
+                123,
+                127
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.adf.known_retry_policy",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            91,
+            92
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 1,
+              "change_type": "ADDITION",
+              "is_primary_change_node": true,
+              "label": "3",
+              "node_id": "0.act.0.config.activity.1:3",
+              "node_type": "number",
+              "source_sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+              "source_slice": "3",
+              "span": [
+                91,
+                92
+              ]
+            }
+          ],
+          "old_edit_range": [
+            91,
+            92
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "DELETION",
+              "is_primary_change_node": true,
+              "label": "0",
+              "node_id": "0.act.0.config.activity.1:3",
+              "node_type": "number",
+              "source_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+              "source_slice": "0",
+              "span": [
+                91,
+                92
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.meaningful_2_configuration",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "insert",
+          "new_edit_range": [
+            143,
+            146
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/ingest_v2",
+              "node_id": "0.task.0.config.0:3",
+              "node_type": "string",
+              "source_sha256": "83456ee370de3bfd607985bd029cc84ccb6f2cb07f46660cc3fc715ddd0b3b47",
+              "source_slice": "/notebooks/ingest_v2",
+              "span": [
+                126,
+                146
+              ]
+            }
+          ],
+          "old_edit_range": [
+            143,
+            143
+          ],
+          "old_fact_anchors": []
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.known_notebook_payload",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            86,
+            87
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/b",
+              "node_id": "0.task.0.config.0:7",
+              "node_type": "string",
+              "source_sha256": "76d8d4620122d245807c1f6bf338142cf5794e78e5533de2bccf85cb839df9c3",
+              "source_slice": "/notebooks/b",
+              "span": [
+                75,
+                87
+              ]
+            }
+          ],
+          "old_edit_range": [
+            86,
+            87
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/a",
+              "node_id": "0.task.0.config.0:7",
+              "node_type": "string",
+              "source_sha256": "3fcaa425968ad4a238b5776ac7d5291df2b40e17a2b39ba90997b4b8b7a6981b",
+              "source_slice": "/notebooks/a",
+              "span": [
+                75,
+                87
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks.known_base_parameter",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            124,
+            131
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "staging",
+              "node_id": "0.task.0.config.0:5",
+              "node_type": "string",
+              "source_sha256": "e919a75364398a449f860aeadddc57fa0502145a4e63959ddb33c417a48dc0da",
+              "source_slice": "staging",
+              "span": [
+                124,
+                131
+              ]
+            }
+          ],
+          "old_edit_range": [
+            124,
+            128
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "prod",
+              "node_id": "0.task.0.config.0:5",
+              "node_type": "string",
+              "source_sha256": "6754af9632a2745e85c293e5aac0863370d9bd3330b9938c00cadfd215227d77",
+              "source_slice": "prod",
+              "span": [
+                124,
+                128
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_2_configuration",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "insert",
+          "new_edit_range": [
+            143,
+            146
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/ingest_v2",
+              "node_id": "0.task.0.config.0:3",
+              "node_type": "string",
+              "source_sha256": "83456ee370de3bfd607985bd029cc84ccb6f2cb07f46660cc3fc715ddd0b3b47",
+              "source_slice": "/notebooks/ingest_v2",
+              "span": [
+                126,
+                146
+              ]
+            }
+          ],
+          "old_edit_range": [
+            143,
+            143
+          ],
+          "old_fact_anchors": []
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.known_notebook_payload",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            86,
+            87
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/b",
+              "node_id": "0.task.0.config.0:7",
+              "node_type": "string",
+              "source_sha256": "76d8d4620122d245807c1f6bf338142cf5794e78e5533de2bccf85cb839df9c3",
+              "source_slice": "/notebooks/b",
+              "span": [
+                75,
+                87
+              ]
+            }
+          ],
+          "old_edit_range": [
+            86,
+            87
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "/notebooks/a",
+              "node_id": "0.task.0.config.0:7",
+              "node_type": "string",
+              "source_sha256": "3fcaa425968ad4a238b5776ac7d5291df2b40e17a2b39ba90997b4b8b7a6981b",
+              "source_slice": "/notebooks/a",
+              "span": [
+                75,
+                87
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "candidate_status": "passed",
+      "case_id": "data_config.databricks-workflow.known_base_parameter",
+      "distinct_root_hashes": true,
+      "meaningful_review_passed": true,
+      "source_edit_witnesses": [
+        {
+          "covered": true,
+          "kind": "replace",
+          "new_edit_range": [
+            124,
+            131
+          ],
+          "new_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "staging",
+              "node_id": "0.task.0.config.0:5",
+              "node_type": "string",
+              "source_sha256": "e919a75364398a449f860aeadddc57fa0502145a4e63959ddb33c417a48dc0da",
+              "source_slice": "staging",
+              "span": [
+                124,
+                131
+              ]
+            }
+          ],
+          "old_edit_range": [
+            124,
+            128
+          ],
+          "old_fact_anchors": [
+            {
+              "change_index": 0,
+              "change_type": "MODIFICATION",
+              "is_primary_change_node": true,
+              "label": "prod",
+              "node_id": "0.task.0.config.0:5",
+              "node_type": "string",
+              "source_sha256": "6754af9632a2745e85c293e5aac0863370d9bd3330b9938c00cadfd215227d77",
+              "source_slice": "prod",
+              "span": [
+                124,
+                128
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_errors": [
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "web-generic-incomplete",
+      "error": "0: range outside source (1,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.plsql.incomplete",
+      "error": "0: range outside source (5,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.plsql.known_no_final_newline",
+      "error": "0: range outside source (3,0)",
+      "side": "old"
+    },
+    {
+      "case_id": "data_config.plsql.known_no_final_newline",
+      "error": "0: range outside source (3,0)",
+      "side": "new"
+    },
+    {
+      "case_id": "data_config.tsql.incomplete",
+      "error": "0: range outside source (5,0)",
+      "side": "new"
+    }
+  ],
+  "source_position_nodes_checked": 24121,
+  "status_changes": [
+    {
+      "case_id": "data_config.adf.meaningful_1_value",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.adf.meaningful_3_body",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.adf.unicode_value",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.adf.known_retry_policy",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks.meaningful_2_configuration",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks.known_notebook_payload",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks.known_base_parameter",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks.known_eof_identity",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.meaningful_2_configuration",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_notebook_payload",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_base_parameter",
+      "new": "passed",
+      "old": "failed"
+    },
+    {
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "new": "passed",
+      "old": "failed"
+    }
+  ],
+  "tree_content_changes": [
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.adf.meaningful_1_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.adf.meaningful_2_type",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.adf.meaningful_3_body",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.adf.identity",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.adf.safe_preservation",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.adf.unicode_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.adf.known_retry_policy",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks.meaningful_1_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks.meaningful_2_configuration",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks.meaningful_3_body",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks.identity",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks.safe_preservation",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks.unicode_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks.known_notebook_payload",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks.known_base_parameter",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks.known_eof_identity",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.position.end_col",
+        "new.tree.position.end_line",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.position.end_col",
+        "old.tree.position.end_line",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_1_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks-workflow.meaningful_2_configuration",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks-workflow.meaningful_3_body",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks-workflow.identity",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks-workflow.safe_preservation",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "passed",
+      "case_id": "data_config.databricks-workflow.unicode_value",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks-workflow.known_notebook_payload",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks-workflow.known_base_parameter",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.structural_hash"
+      ]
+    },
+    {
+      "baseline_status": "failed",
+      "case_id": "data_config.databricks-workflow.known_eof_identity",
+      "changed_paths": [
+        "new.tree.children.length",
+        "new.tree.position.end_col",
+        "new.tree.position.end_line",
+        "new.tree.structural_hash",
+        "old.tree.children.length",
+        "old.tree.position.end_col",
+        "old.tree.position.end_line",
+        "old.tree.structural_hash"
+      ]
+    }
+  ]
+}

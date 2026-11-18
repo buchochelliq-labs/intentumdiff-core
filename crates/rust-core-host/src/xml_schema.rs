@@ -74,12 +74,21 @@ pub(crate) const MSBUILD_INCLUDE_TAGS: &[&str] = &[
     "Using",
 ];
 
+/// The value of an MSBuild attribute label (`Name=value`, source case kept) when its
+/// name is `name`. MSBuild attribute names are case-insensitive (`Include`, `include`
+/// and `INCLUDE` are one attribute); XML labels keep their source case (#246), so the
+/// name is compared case-insensitively and the label itself is never rewritten.
+fn msbuild_attribute_value<'a>(label: &'a str, name: &str) -> Option<&'a str> {
+    let (attr, value) = label.split_once('=')?;
+    attr.trim().eq_ignore_ascii_case(name).then_some(value)
+}
+
 pub(crate) fn xml_tree_is_msbuild(tree: &SemanticNode) -> bool {
     tree.children.iter().any(|top| {
         top.node_type == "element"
             && top.label == "Project"
             && top.children.iter().any(|c| {
-                (c.node_type == "attribute" && c.label.starts_with("sdk="))
+                (c.node_type == "attribute" && msbuild_attribute_value(&c.label, "Sdk").is_some())
                     || (c.node_type == "element"
                         && matches!(c.label.as_str(), "ItemGroup" | "PropertyGroup" | "Target"))
             })
@@ -95,10 +104,9 @@ pub(crate) fn msbuild_coordinate_key(node: &SemanticNode) -> Option<Vec<String>>
         if c.node_type != "attribute" {
             return None;
         }
-        c.label
-            .strip_prefix("include=")
-            .or_else(|| c.label.strip_prefix("update=") )
-            .map(|v| v.to_string())
+        msbuild_attribute_value(&c.label, "Include")
+            .or_else(|| msbuild_attribute_value(&c.label, "Update"))
+            .map(str::to_string)
     })?;
     Some(vec![
         "xml".to_string(),
@@ -106,17 +114,6 @@ pub(crate) fn msbuild_coordinate_key(node: &SemanticNode) -> Option<Vec<String>>
         node.label.clone(),
         include,
     ])
-}
-
-pub(crate) fn xml_msbuild_key(
-    node: &SemanticNode,
-    by_id: &HashMap<&str, &SemanticNode>,
-) -> Option<Vec<String>> {
-    xml_schema_key(node, by_id, &msbuild_coordinate_key)
-}
-
-pub(crate) fn xml_pom_key(node: &SemanticNode, by_id: &HashMap<&str, &SemanticNode>) -> Option<Vec<String>> {
-    xml_schema_key(node, by_id, &pom_coordinate_key)
 }
 
 /// Shared key body for XML schema profiles: the element's own coordinate, or its nearest
@@ -280,3 +277,29 @@ pub(crate) fn matching_user_xml_dialect(
         })
         .cloned()
 }
+
+/// A node's OWN coordinate identity key under an XML schema profile.
+pub(crate) type XmlCoordinateFn = Box<dyn Fn(&SemanticNode) -> Option<Vec<String>>>;
+
+/// The XML schema profile claiming this tree pair, as its coordinate-key function: bundled
+/// POM, then bundled MSBuild, then the first user-registered dialect (#86). `None` when no
+/// profile applies. One selection for every consumer — path-profile matching keys through
+/// it, and the #299 sub-expression suppressor treats a coordinate-keyed element as an
+/// identity boundary.
+pub(crate) fn xml_schema_coordinate_fn(
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+) -> Option<XmlCoordinateFn> {
+    if xml_tree_is_pom(old_tree) || xml_tree_is_pom(new_tree) {
+        return Some(Box::new(pom_coordinate_key));
+    }
+    if xml_tree_is_msbuild(old_tree) || xml_tree_is_msbuild(new_tree) {
+        return Some(Box::new(msbuild_coordinate_key));
+    }
+    let dialect = matching_user_xml_dialect(old_tree, new_tree)?;
+    Some(Box::new(move |node| user_dialect_coordinate_key(&dialect, node)))
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "msbuild_attribute_case_source_tests.rs"]
+mod msbuild_attribute_case_source_tests;

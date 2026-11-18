@@ -1,0 +1,3638 @@
+{
+  "schema_version": 1,
+  "family": "web",
+  "languages": [
+    "asciidoc",
+    "astro",
+    "css",
+    "generic",
+    "html",
+    "latex",
+    "markdown",
+    "mdx",
+    "po",
+    "postscript",
+    "scss",
+    "svelte",
+    "tsx",
+    "vue"
+  ],
+  "cases": [
+    {
+      "id": "web-asciidoc-prose",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "meaningful_prose",
+      "old": "= Guide\n\nKeep backups for 7 days.\n",
+      "new": "= Guide\n\nKeep backups for 30 days.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "AsciiDoc paragraph content changes the documented retention requirement from 7 to 30 days.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-include_filter",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "meaningful_include_filter",
+      "old": "include::file.txt[lines=1..3]\n",
+      "new": "include::file.txt[lines=4..6]\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "AsciiDoc include lines option selects a different source range. Dependency contents are not loaded; the observable configuration contract itself changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-image_alt",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "meaningful_image_alt",
+      "old": "image::logo.png[Safe]\n",
+      "new": "image::logo.png[Danger]\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "AsciiDoc image positional attribute supplies alternative text, changing accessible document content for the same image.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-heading_level",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "meaningful_heading_level",
+      "old": "= Guide\n\n== Setup\n",
+      "new": "= Guide\n\n=== Setup\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Changing section nesting changes the document hierarchy and outline; section title text alone is insufficient identity.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-identity",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "identity",
+      "old": "= Guide\n\nKeep backups.\n",
+      "new": "= Guide\n\nKeep backups.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-preservation",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "preservation",
+      "old": "= Guide\n// internal note A\n\nKeep backups.\n",
+      "new": "= Guide\n// internal note B\n\nKeep backups.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "A standalone // line is an AsciiDoc comment. Changing its body preserves this ordinary rendered document; raw-source processors excluded.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-incomplete",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "incomplete",
+      "old": "= Guide\n\nimage::logo.png[",
+      "new": "== Guide\n\nimage::logo.png[",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-unicode",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "unicode",
+      "old": "= Guide\n\nCafé costs €5.\n",
+      "new": "= Guide\n\nCafé costs €6.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Unicode paragraph value edit changes the visible price while exercising multibyte source spans.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-asciidoc-parser#6"
+      ]
+    },
+    {
+      "id": "web-astro-frontmatter_value",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "meaningful_frontmatter_value",
+      "old": "---\nconst title = \"Old\";\n---\n<h1>{title}</h1>\n",
+      "new": "---\nconst title = \"New\";\n---\n<h1>{title}</h1>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Astro frontmatter binds title and template interpolation renders that changed string.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-attribute",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "meaningful_attribute",
+      "old": "<button type=\"button\">Go</button>\n",
+      "new": "<button type=\"submit\">Go</button>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The emitted button type changes its form activation contract; default DOM/HTML semantics apply.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-child_text",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "meaningful_child_text",
+      "old": "<main><p>Ready</p></main>\n",
+      "new": "<main><p>Failed</p></main>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Astro static template text is emitted as HTML text content, so the status message changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-expression",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "meaningful_expression",
+      "old": "---\nconst count = 2;\n---\n<p>{count + 1}</p>\n",
+      "new": "---\nconst count = 2;\n---\n<p>{count - 1}</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Astro expression result changes from 3 to 1 for the literal count; operator identity must survive projection.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-identity",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "identity",
+      "old": "---\nconst title = \"Ready\";\n---\n<h1>{title}</h1>\n",
+      "new": "---\nconst title = \"Ready\";\n---\n<h1>{title}</h1>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-preservation",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "preservation",
+      "old": "---\nconst title = 'Ready';\n---\n<h1>{title}</h1>\n",
+      "new": "---\nconst title = \"Ready\";\n---\n<h1>{title}</h1>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Equivalent JS quote spellings have the same decoded string in frontmatter; template whitespace unchanged, no source-text preprocessing.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-incomplete",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "incomplete",
+      "old": "---\nconst title = \"",
+      "new": "---\nconst name = \"",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-astro-unicode",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "unicode",
+      "old": "<p>你好，世界</p>\n",
+      "new": "<p>你好，朋友</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Changed Unicode text alters the emitted greeting and exercises multibyte source spans.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-value",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "meaningful_value",
+      "old": ".card { margin: 8px; }\n",
+      "new": ".card { margin: 12px; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CSS margin value changes layout for a matching element absent overriding declarations.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-selector",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "meaningful_selector",
+      "old": ".card { color: red; }\n",
+      "new": ".notice { color: red; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Changing selector changes which class matches the style rule; observe a DOM containing one element of each class.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-cascade_order",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "meaningful_cascade_order",
+      "old": ".card { color: red; color: blue; }\n",
+      "new": ".card { color: blue; color: red; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Both declarations have equal cascade priority, so the last valid color wins; rule-internal declaration order is meaningful.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-important",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "meaningful_important",
+      "old": ".card { color: red; }\n",
+      "new": ".card { color: red !important; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "!important changes cascade priority under a competing normal declaration; the public stylesheet contract changes even when no competitor is supplied here.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-identity",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "identity",
+      "old": ".card { color: red; }\n",
+      "new": ".card { color: red; }\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-preservation",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "preservation",
+      "old": ".card { color: red; }\n",
+      "new": ".card { /* note */ color: red; }\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "CSS comment between tokens does not change the selector, property or value; no source-text inspection.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-incomplete",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "incomplete",
+      "old": ".card { color: rgb(",
+      "new": ".notice { color: rgb(",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-css-unicode",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "unicode",
+      "old": ".card::before { content: \"Café\"; }\n",
+      "new": ".card::before { content: \"Thé\"; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CSS content string determines generated text for a matching element; the Unicode visible label changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-number",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "meaningful_number",
+      "old": "Keep backups for 7 days.\n",
+      "new": "Keep backups for 30 days.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Plain prose review domain: the stated retention requirement changes. This is meaningful review content, not a claim about executable behavior.",
+        "behavior": "unknown",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-negation",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "meaningful_negation",
+      "old": "Deploy only after approval.\n",
+      "new": "Deploy before approval.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Plain prose review domain: the operational instruction changes from after to before approval; program behavior is unknown.",
+        "behavior": "unknown",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-order",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "meaningful_order",
+      "old": "First validate the upload.\nThen publish the upload.\n",
+      "new": "First publish the upload.\nThen validate the upload.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Ordered prose instructions express a different procedure; content ordering must remain reviewable without assigning programming semantics.",
+        "behavior": "unknown",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-status",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "meaningful_status",
+      "old": "Release status: blocked.\n",
+      "new": "Release status: approved.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The human-readable release decision changes; no interpreter or arbitrary-file equivalence claim.",
+        "behavior": "unknown",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-identity",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "identity",
+      "old": "Release status: approved.\n",
+      "new": "Release status: approved.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-preservation",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "preservation",
+      "old": "Release status: approved.\r\nKeep backups.\r\n",
+      "new": "Release status: approved.\nKeep backups.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "For this explicitly plain-prose logical-line profile, CRLF and LF encode the same two logical lines and message. This control does not generalize to arbitrary binary or source files.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-incomplete",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "incomplete",
+      "old": "The upload is accepted when (",
+      "new": "The upload is accepted unless (",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-generic-unicode",
+      "language_id": "generic",
+      "filename": "assessment.txt",
+      "category": "unicode",
+      "old": "Résumé: Café opens at 08:00.\n",
+      "new": "Résumé: Café opens at 09:00.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Changed time is meaningful prose content; Unicode spans are exercised without any claim about program execution.",
+        "behavior": "unknown",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-text",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "meaningful_text",
+      "old": "<!doctype html><p>Safe</p>\n",
+      "new": "<!doctype html><p>Danger</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "HTML p text node content changes the displayed and accessible message.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-url",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "meaningful_url",
+      "old": "<a href=\"/safe\">Go</a>\n",
+      "new": "<a href=\"/danger\">Go</a>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "href changes navigation target and the DOM reflected link URL; fixed document base.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-button_type",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "meaningful_button_type",
+      "old": "<button type=\"button\">Go</button>\n",
+      "new": "<button type=\"submit\">Go</button>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "HTML button type changes activation/form submission behavior under an ordinary form.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-pre_whitespace",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "meaningful_pre_whitespace",
+      "old": "<pre>a b</pre>\n",
+      "new": "<pre>a  b</pre>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "HTML pre preserves spaces in its rendered content; this whitespace edit is meaningful, not blanket formatting.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-identity",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "identity",
+      "old": "<p title=\"Ready\">Hello</p>\n",
+      "new": "<p title=\"Ready\">Hello</p>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-preservation",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "preservation",
+      "old": "<p title='Ready'>Hello</p>\n",
+      "new": "<p title=\"Ready\">Hello</p>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Single and double attribute quote delimiters produce the same parsed title value and identical text nodes here; raw markup serialization excluded.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-incomplete",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "incomplete",
+      "old": "<a href=\"",
+      "new": "<a title=\"",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-html-unicode",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "unicode",
+      "old": "<p>你好，世界</p>\n",
+      "new": "<p>你好，朋友</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Unicode text node edit changes the document greeting while exercising byte/column evidence.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-latex-class_option",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "meaningful_class_option",
+      "old": "\\documentclass[10pt]{article}\n\\begin{document}Hello\\end{document}\n",
+      "new": "\\documentclass[12pt]{article}\n\\begin{document}Hello\\end{document}\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Standard article class font-size option changes document typesetting; options are semantic payload.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-package_option",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "meaningful_package_option",
+      "old": "\\documentclass{article}\n\\usepackage[draft]{graphicx}\n\\begin{document}Hello\\end{document}\n",
+      "new": "\\documentclass{article}\n\\usepackage[final]{graphicx}\n\\begin{document}Hello\\end{document}\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "graphicx draft/final options change image inclusion policy. The package configuration changes independently of image availability.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-trailing_prose",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "meaningful_trailing_prose",
+      "old": "\\section{Title} safe\n",
+      "new": "\\section{Title} danger\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Text after a section command remains document text; recognizing the command must not discard the rest of its line.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-same_line_environment",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "meaningful_same_line_environment",
+      "old": "\\begin{document}safe\\end{document}\n",
+      "new": "\\begin{document}danger\\end{document}\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The document environment body is visible content even when opening/body/closing commands share a line.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-identity",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "identity",
+      "old": "\\section{Introduction}\nHello.\n",
+      "new": "\\section{Introduction}\nHello.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-preservation",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "preservation",
+      "old": "\\section{Introduction}% note A\nHello.\n",
+      "new": "\\section{Introduction}% note B\nHello.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "With standard TeX catcodes, a % comment ignores the remainder of its line. Only comment bytes change; linebreak suppression is identical.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-incomplete",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "incomplete",
+      "old": "\\section{Intro",
+      "new": "\\section{Method",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-latex-unicode",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "unicode",
+      "old": "\\section{Résumé}\nCafé costs 5 euros.\n",
+      "new": "\\section{Résumé}\nCafé costs 6 euros.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "In UTF-8 LaTeX text, the numerical prose fact changes. No PDF was compiled; fixed modern UTF-8 LaTeX assumptions.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ]
+    },
+    {
+      "id": "web-markdown-text",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "meaningful_text",
+      "old": "# Guide\n\nKeep backups for 7 days.\n",
+      "new": "# Guide\n\nKeep backups for 30 days.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CommonMark paragraph text content changes the stated requirement.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-heading_level",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "meaningful_heading_level",
+      "old": "# Guide\n",
+      "new": "## Guide\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CommonMark ATX heading marker count changes the HTML heading level/document hierarchy.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-url",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "meaningful_url",
+      "old": "[Go](/safe)\n",
+      "new": "[Go](/danger)\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CommonMark link destination is emitted as href; navigation target changes with fixed base URL.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-hard_break",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "meaningful_hard_break",
+      "old": "alpha\nbeta\n",
+      "new": "alpha  \nbeta\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "CommonMark two trailing spaces create a hard line break; ordinary soft line break differs in rendered structure.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-identity",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "identity",
+      "old": "# Guide\n\nKeep backups.\n",
+      "new": "# Guide\n\nKeep backups.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-preservation",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "preservation",
+      "old": "# Guide\n",
+      "new": "# Guide #\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "CommonMark optional closing ATX hash sequence is not heading content; both inputs produce an h1 with text Guide.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-incomplete",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "incomplete",
+      "old": "[link](",
+      "new": "[other](",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-markdown-unicode",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "unicode",
+      "old": "# Résumé\n\nCafé costs €5.\n",
+      "new": "# Résumé\n\nCafé costs €6.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Unicode prose value edit changes rendered paragraph text and exercises multibyte spans.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-mdx-export_value",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "meaningful_export_value",
+      "old": "export const count = 1\n\nCount: {count}\n",
+      "new": "export const count = 2\n\nCount: {count}\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "MDX exported JavaScript value and rendered interpolation change from 1 to 2; fixed MDX2+/JSX runtime.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-boolean_prop",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "meaningful_boolean_prop",
+      "old": "<Button disabled />\n",
+      "new": "<Button />\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "JSX shorthand disabled prop passes true; removing it changes the component prop contract. Component implementation is not inferred.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-heading_level",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "meaningful_heading_level",
+      "old": "# Page\n",
+      "new": "## Page\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "MDX Markdown heading level changes emitted document hierarchy under the default component mapping.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-import_binding",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "meaningful_import_binding",
+      "old": "import { Safe } from \"./widgets\"\n\n<Safe />\n",
+      "new": "import { Danger as Safe } from \"./widgets\"\n\n<Safe />\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The local JSX identifier binds to a different imported public export; module contents need not be executed to establish the binding change.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-identity",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "identity",
+      "old": "export const title = \"Ready\"\n\n# {title}\n",
+      "new": "export const title = \"Ready\"\n\n# {title}\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-preservation",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "preservation",
+      "old": "export const title = 'Ready'\n\n# {title}\n",
+      "new": "export const title = \"Ready\"\n\n# {title}\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Equivalent JavaScript string quote spellings preserve the exported title and rendered expression; template bytes unchanged.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-incomplete",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "incomplete",
+      "old": "export const x = {",
+      "new": "export const y = {",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-mdx-unicode",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "unicode",
+      "old": "# Café\n\nBonjour, 世界.\n",
+      "new": "# Café\n\nBonsoir, 世界.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "MDX paragraph text changes the visible greeting; Unicode source evidence must remain anchored.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-mdx-parser#7"
+      ]
+    },
+    {
+      "id": "web-po-translation",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "meaningful_translation",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Enregistrer\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Supprimer\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "For a non-fuzzy UTF-8 catalog entry, msgstr changes the translation returned for the same Save key.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-context",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "meaningful_context",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgctxt \"verb\"\nmsgid \"Open\"\nmsgstr \"Ouvrir\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgctxt \"adjective\"\nmsgid \"Open\"\nmsgstr \"Ouvrir\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Gettext lookup identity includes msgctxt; changing context rekeys the translation even with identical msgid/msgstr.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-plural_translation",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "meaningful_plural_translation",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"file\"\nmsgid_plural \"files\"\nmsgstr[0] \"fichier\"\nmsgstr[1] \"fichiers\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"file\"\nmsgid_plural \"files\"\nmsgstr[0] \"fichier\"\nmsgstr[1] \"documents\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "For n=2 under the stated Plural-Forms header, the selected plural translation changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-key",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "meaningful_key",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Enregistrer\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Delete\"\nmsgstr \"Enregistrer\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Gettext msgid forms the lookup key; the same translation is now associated with a different source message.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-identity",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "identity",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Enregistrer\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Enregistrer\"\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-preservation",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "preservation",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"Enregistrer\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"\"\n\"Enregis\"\n\"trer\"\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "PO adjacent quoted strings concatenate without adding characters; decoded msgstr and lookup identity are identical.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-incomplete",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "incomplete",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Save\"\nmsgstr \"",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Delete\"\nmsgstr \"",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-po-unicode",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "unicode",
+      "old": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Coffee\"\nmsgstr \"Café\"\n",
+      "new": "msgid \"\"\nmsgstr \"\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\"Plural-Forms: nplurals=2; plural=(n != 1);\\n\"\n\nmsgid \"Coffee\"\nmsgstr \"Thé\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "UTF-8 catalog translation string changes for the same key; Unicode positions and decoded payload matter.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-postscript-inline_procedure",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "meaningful_inline_procedure",
+      "old": "%!PS\n/f { 1 } def\nf ==\n",
+      "new": "%!PS\n/f { 2 } def\nf ==\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Standard PostScript procedure f pushes 1 versus 2; == prints the resulting differing operand. Opening-line body content is executable.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-closing_line_body",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "meaningful_closing_line_body",
+      "old": "%!PS\n/f {\n  1 } def\nf ==\n",
+      "new": "%!PS\n/f {\n  2 } def\nf ==\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "A procedure body on its closing row is still executed; f == prints 1 versus 2.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-operator",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "meaningful_operator",
+      "old": "%!PS\n2 3 add ==\n",
+      "new": "%!PS\n2 3 mul ==\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "PostScript arithmetic output changes from 5 to 6; standard operator definitions, no rebinding.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-paint_color",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "meaningful_paint_color",
+      "old": "%!PS\n0 0 0 setrgbcolor\n72 72 40 40 rectfill\nshowpage\n",
+      "new": "%!PS\n1 0 0 setrgbcolor\n72 72 40 40 rectfill\nshowpage\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Standard PostScript paints the same rectangle black versus red under a fixed RGB device; no raster execution claimed.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-identity",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "identity",
+      "old": "%!PS\n/f { 1 } def\nf ==\n",
+      "new": "%!PS\n/f { 1 } def\nf ==\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-preservation",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "preservation",
+      "old": "%!PS\n2 3 add ==\n",
+      "new": "%!PS\n2  3   add  ==\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "PostScript whitespace between number/operator tokens preserves the operand stack and printed result; strings/currentfile/raw data excluded.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-incomplete",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "incomplete",
+      "old": "%!PS\n/f { 1",
+      "new": "%!PS\n/f { 2",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-postscript-unicode",
+      "language_id": "postscript",
+      "filename": "assessment.ps",
+      "category": "unicode",
+      "old": "%!PS\n(Café) ==\n",
+      "new": "%!PS\n(Thé) ==\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "PostScript string literals carry different UTF-8 byte sequences and == outputs different escaped byte strings; no Unicode font rendering claim.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-postscript-parser#6"
+      ]
+    },
+    {
+      "id": "web-scss-variable_value",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "meaningful_variable_value",
+      "old": "$gap: 8px;\n.card { margin: $gap; }\n",
+      "new": "$gap: 12px;\n.card { margin: $gap; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Sass substitutes gap into the emitted margin, changing resulting CSS layout value.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-mixin_body",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "meaningful_mixin_body",
+      "old": "@mixin shade { color: red; }\n.card { @include shade; }\n",
+      "new": "@mixin shade { color: blue; }\n.card { @include shade; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Changing an included mixin body changes the emitted .card color declaration.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-nesting",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "meaningful_nesting",
+      "old": ".card { &:hover { color: red; } }\n",
+      "new": ".card { .hover { color: red; } }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Sass parent selector emits .card:hover versus descendant .card .hover, changing matched DOM states/elements.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-cascade_order",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "meaningful_cascade_order",
+      "old": ".card { color: red; color: blue; }\n",
+      "new": ".card { color: blue; color: red; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Sass preserves these plain declarations in output order; the final same-priority CSS color changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-identity",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "identity",
+      "old": "$gap: 8px;\n.card { margin: $gap; }\n",
+      "new": "$gap: 8px;\n.card { margin: $gap; }\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-preservation",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "preservation",
+      "old": "$gap: 8px;\n.card { margin: $gap; }\n",
+      "new": "$gap: 8px;\n.card {\n  margin: $gap;\n}\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Ordinary Sass block formatting preserves variable substitution and compiled CSS declarations; source maps/serialization excluded.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-incomplete",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "incomplete",
+      "old": "$gap: 8px;\n.card { color:",
+      "new": " $gap: 8px;\n.notice { color:",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-scss-unicode",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "unicode",
+      "old": ".card::before { content: \"Café\"; }\n",
+      "new": ".card::before { content: \"Thé\"; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Sass emits the changed CSS generated-content string; UTF-8 visible label differs.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-svelte-script_value",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "meaningful_script_value",
+      "old": "<script>let count = 1;</script>\n<p>{count}</p>\n",
+      "new": "<script>let count = 2;</script>\n<p>{count}</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Svelte initial render interpolates count, changing displayed value from 1 to 2.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-text",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "meaningful_text",
+      "old": "<p>Ready</p>\n",
+      "new": "<p>Failed</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Svelte static template text is emitted into DOM text content, changing the message.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-head_script_src",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "meaningful_head_script_src",
+      "old": "<svelte:head>\n<script src=\"./safe.js\"></script>\n</svelte:head>\n<div>Hello</div>\n",
+      "new": "<svelte:head>\n<script src=\"./danger.js\"></script>\n</svelte:head>\n<div>Hello</div>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Nested head script src selects a different external resource; compare the resource/configuration contract without assuming its contents.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-module_context",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "meaningful_module_context",
+      "old": "<script>console.log(1);</script>\n<div>Hello</div>\n",
+      "new": "<script module>console.log(1);</script>\n<div>Hello</div>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Under Svelte 5 module script executes once on module evaluation, ordinary instance script runs per component instance; execution lifetime changes.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-identity",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "identity",
+      "old": "<script>const title = \"Ready\";</script>\n<h1>{title}</h1>\n",
+      "new": "<script>const title = \"Ready\";</script>\n<h1>{title}</h1>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-preservation",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "preservation",
+      "old": "<script>const title = 'Ready';</script>\n<h1>{title}</h1>\n",
+      "new": "<script>const title = \"Ready\";</script>\n<h1>{title}</h1>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Equivalent JavaScript quote spellings preserve decoded title and rendered heading; no raw-source preprocessors.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-incomplete",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "incomplete",
+      "old": "<script>let count =",
+      "new": "<script>let total =",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-svelte-unicode",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "unicode",
+      "old": "<p>Café: 5 €</p>\n",
+      "new": "<p>Café: 6 €</p>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Svelte template text edit changes a displayed price and tests multibyte source evidence.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-svelte-parser#7"
+      ]
+    },
+    {
+      "id": "web-tsx-disabled_prop",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "meaningful_disabled_prop",
+      "old": "export const Action = () => <button disabled={true}>Go</button>;\n",
+      "new": "export const Action = () => <button disabled={false}>Go</button>;\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "React-compatible intrinsic button disabled prop changes enabled interaction behavior; fixed JSX runtime.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-child_text",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "meaningful_child_text",
+      "old": "export const Status = () => <p>Ready</p>;\n",
+      "new": "export const Status = () => <p>Failed</p>;\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "JSX child string changes emitted UI text under the same JSX factory.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-callback_body",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "meaningful_callback_body",
+      "old": "export const calc = (x: number) => <p>{x + 1}</p>;\n",
+      "new": "export const calc = (x: number) => <p>{x - 1}</p>;\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "For x=2 the returned JSX child expression is 3 versus 1; arithmetic body change is meaningful independent of formatting.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-public_type",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "meaningful_public_type",
+      "old": "export interface Props { count: number }\nexport const Value = (p: Props) => <p>{p.count}</p>;\n",
+      "new": "export interface Props { count: string }\nexport const Value = (p: Props) => <p>{p.count}</p>;\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Exported Props changes the static caller contract from numeric to string count. Runtime erasure does not make a public type edit mere style.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-identity",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "identity",
+      "old": "const title: string = \"Ready\";\nexport const H = () => <h1>{title}</h1>;\n",
+      "new": "const title: string = \"Ready\";\nexport const H = () => <h1>{title}</h1>;\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-preservation",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "preservation",
+      "old": "const title: string = 'Ready';\nexport const H = () => <h1>{title}</h1>;\n",
+      "new": "const title: string = \"Ready\";\nexport const H = () => <h1>{title}</h1>;\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Equivalent JS string quote spellings preserve type, literal value and JSX result; source-based transforms/serialization excluded.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-incomplete",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "incomplete",
+      "old": "export const H = () => <p>{",
+      "new": "export const H = () => <h1>{",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-tsx-unicode",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "unicode",
+      "old": "export const H = () => <p>Café: 5 €</p>;\n",
+      "new": "export const H = () => <p>Café: 6 €</p>;\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "JSX text edit changes the visible price; Unicode evidence must remain source-anchored.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": []
+    },
+    {
+      "id": "web-vue-inline_script",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "meaningful_inline_script",
+      "old": "<script setup>const title = \"Old\";</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "new": "<script setup>const title = \"New\";</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Vue 3 script-setup binding feeds template interpolation, changing the rendered title; inline SFC region payload is semantic.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-inline_template",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "meaningful_inline_template",
+      "old": "<template><div>safe</div></template>\n",
+      "new": "<template><div>danger</div></template>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Inline Vue template body changes rendered DOM text, even with both outer tags on one row.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-script_src",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "meaningful_script_src",
+      "old": "<script src=\"./safe.js\"></script>\n",
+      "new": "<script src=\"./danger.js\"></script>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Vue SFC external script src points to a different module dependency; no invented module contents are required for resource-identity change.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-style_scope",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "meaningful_style_scope",
+      "old": "<template><h1>Ready</h1></template>\n<style>h1 { color: red; }</style>\n",
+      "new": "<template><h1>Ready</h1></template>\n<style scoped>h1 { color: red; }</style>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Vue scoped adds component-specific matching to emitted selectors, changing the stylesheet reach to external h1 elements; fixed compiler filename/id.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-identity",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "identity",
+      "old": "<script setup>const title = \"Ready\";</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "new": "<script setup>const title = \"Ready\";</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "oracle": {
+        "basis": "Exactly identical source bytes cannot introduce any changed document, value, public interface or behavior.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-preservation",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "preservation",
+      "old": "<script setup>const title = 'Ready';</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "new": "<script setup>const title = \"Ready\";</script>\n<template><h1>{{ title }}</h1></template>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Equivalent JS string quote spellings preserve script setup binding and rendered title; template/style and compiler context unchanged.",
+        "behavior": "preserved",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-incomplete",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "incomplete",
+      "old": "<template><div>{{",
+      "new": "<template><span>{{",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Incomplete editor input: require bounded handling, valid evidence ranges or explicit parse/fallback/rejection. Do not infer semantic equivalence from failure to parse.",
+        "behavior": "unknown",
+        "limitations": "No expectation for semantic/style flags on incomplete input; this is a robustness probe, not a syntactic rejection oracle."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-vue-unicode",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "unicode",
+      "old": "<template><p>Café: 5 €</p></template>\n",
+      "new": "<template><p>Café: 6 €</p></template>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Vue template text edit changes the visible price and exercises multibyte source evidence.",
+        "behavior": "changed",
+        "limitations": "Source/specification reviewed microtest; no external runtime was executed. Fixed ordinary language implementation and the stated observation domain; source serialization/debug metadata excluded."
+      },
+      "provenance": {
+        "class": "handwritten_regression",
+        "url": "https://github.com/buchochelliq-labs/intentumdiff-core/issues/263",
+        "revision": "assessment-web-2026-11-08",
+        "license": "MIT (original assessment microtest; repository LICENSE)"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-vue-parser#6"
+      ]
+    },
+    {
+      "id": "web-asciidoc-external-paragraph-bound",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "external_meaningful",
+      "old": "// .basic\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-title\n.Paragraphs\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-id-and-role\n[#para-1.red]\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n",
+      "new": "// .basic\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just two or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-title\n.Paragraphs\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-id-and-role\n[#para-1.red]\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The original Asciidoctor paragraph example states that a paragraph may have one or more consecutive lines. Changing one to two changes this visible document assertion.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/asciidoctor-contrib/asciidoctor-doctest/blob/1f48884cb953e0315490837fbc30c1558c5752a0/data/examples/asciidoc/paragraph.adoc",
+        "revision": "1f48884cb953e0315490837fbc30c1558c5752a0",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/asciidoctor-doctest/paragraph.adoc",
+        "sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-asciidoc-external-comment-marker",
+      "language_id": "asciidoc",
+      "filename": "assessment.adoc",
+      "category": "external_preservation",
+      "old": "// .basic\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-title\n.Paragraphs\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-id-and-role\n[#para-1.red]\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n",
+      "new": "// .basic-control\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-title\n.Paragraphs\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n\nTo begin a new paragraph, separate it by at least one blank line.\n\n// .with-id-and-role\n[#para-1.red]\nParagraphs don't require any special markup in AsciiDoc.\nA paragraph is just one or more lines of consecutive text.\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "A standalone AsciiDoc // comment changes without changing paragraph/title/attribute source. Observation domain is ordinary rendered AsciiDoc, excluding DocTest source-case selection markers.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/asciidoctor-contrib/asciidoctor-doctest/blob/1f48884cb953e0315490837fbc30c1558c5752a0/data/examples/asciidoc/paragraph.adoc",
+        "revision": "1f48884cb953e0315490837fbc30c1558c5752a0",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/asciidoctor-doctest/paragraph.adoc",
+        "sha256": "93ff270f07c639492fd9856b6f2def58e29a11fa505cd0b36049478364b72a20"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-astro-external-button-text",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "external_meaningful",
+      "old": "<button>Click</button>",
+      "new": "<button>Stop</button>",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Astro printer fixture basic (no frontmatter) contains static button text Click. Replacing it with Stop changes emitted HTML text content.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/withastro/compiler/blob/3f9a7761992d1216a38239b306e255c5d263c5b4/internal/printer/printer_test.go",
+        "revision": "3f9a7761992d1216a38239b306e255c5d263c5b4",
+        "license": "MIT; internal/ also contains Go BSD notice in LICENSE",
+        "path": "tests/fixtures/language_assessment/upstream/web/astro/printer_test.go",
+        "sha256": "dad01dd730425e6bb404bc56268e79d96c3876dccb68f30311c7e33faeb24f58"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-astro-external-start-tag-space",
+      "language_id": "astro",
+      "filename": "assessment.astro",
+      "category": "external_preservation",
+      "old": "<button>Click</button>",
+      "new": "<button >Click</button>",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Whitespace inside this start tag before > creates no attributes or text nodes; parsed HTML button, children and emitted interactive contract are the same.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/withastro/compiler/blob/3f9a7761992d1216a38239b306e255c5d263c5b4/internal/printer/printer_test.go",
+        "revision": "3f9a7761992d1216a38239b306e255c5d263c5b4",
+        "license": "MIT; internal/ also contains Go BSD notice in LICENSE",
+        "path": "tests/fixtures/language_assessment/upstream/web/astro/printer_test.go",
+        "sha256": "dad01dd730425e6bb404bc56268e79d96c3876dccb68f30311c7e33faeb24f58"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-css-external-computed-color",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "external_meaningful",
+      "old": "#target { color: black; }\n",
+      "new": "#target { color: white; }\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "WPT rows independently expect black as rgb(0,0,0) and white as rgb(255,255,255). A matching target without overrides receives different computed color.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/web-platform-tests/wpt/blob/991f40f670cdda32b2f163a74f43188785dafd94/css/css-color/parsing/color-computed-named-color.html",
+        "revision": "991f40f670cdda32b2f163a74f43188785dafd94",
+        "license": "BSD-3-Clause",
+        "path": "tests/fixtures/language_assessment/upstream/web/wpt/color-computed-named-color.html",
+        "sha256": "ffbb15d445a6d1f3ec7b065aeea23b8cf6d5f0ecca62bc9c836bfd7365de87d5"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-css-external-keyword-case",
+      "language_id": "css",
+      "filename": "assessment.css",
+      "category": "external_preservation",
+      "old": "#target { color: black; }\n",
+      "new": "#target { color: BLACK; }\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "WPT expects both black and BLACK to compute to rgb(0,0,0); CSS named-color keyword casing preserves the computed color and selector contract.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/web-platform-tests/wpt/blob/991f40f670cdda32b2f163a74f43188785dafd94/css/css-color/parsing/color-computed-named-color.html",
+        "revision": "991f40f670cdda32b2f163a74f43188785dafd94",
+        "license": "BSD-3-Clause",
+        "path": "tests/fixtures/language_assessment/upstream/web/wpt/color-computed-named-color.html",
+        "sha256": "ffbb15d445a6d1f3ec7b065aeea23b8cf6d5f0ecca62bc9c836bfd7365de87d5"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-html-external-button-type",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "external_meaningful",
+      "old": "<button type=\"button\"></button>\n",
+      "new": "<button type=\"submit\"></button>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "WPT asserts the button type property accepts button and submit as distinct valid states. Equivalent explicit markup changes the form activation contract.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/web-platform-tests/wpt/blob/991f40f670cdda32b2f163a74f43188785dafd94/html/semantics/forms/the-button-element/button-type.html",
+        "revision": "991f40f670cdda32b2f163a74f43188785dafd94",
+        "license": "BSD-3-Clause",
+        "path": "tests/fixtures/language_assessment/upstream/web/wpt/button-type.html",
+        "sha256": "620d896d1041ce554543828affda3843112488d4791ed10e20ce0a5ba33fbd9f"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-html-external-attribute-quotes",
+      "language_id": "html",
+      "filename": "assessment.html",
+      "category": "external_preservation",
+      "old": "<button type=\"button\"></button>\n",
+      "new": "<button type='button'></button>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Single and double quote delimiters yield identical parsed type attribute string button. The resulting DOM attributes and child nodes are identical.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/web-platform-tests/wpt/blob/991f40f670cdda32b2f163a74f43188785dafd94/html/semantics/forms/the-button-element/button-type.html",
+        "revision": "991f40f670cdda32b2f163a74f43188785dafd94",
+        "license": "BSD-3-Clause",
+        "path": "tests/fixtures/language_assessment/upstream/web/wpt/button-type.html",
+        "sha256": "620d896d1041ce554543828affda3843112488d4791ed10e20ce0a5ba33fbd9f"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-latex-external-article-option",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "external_meaningful",
+      "old": "\\RequirePackage[current]{latexrelease}\n\\documentclass{article}\n\\begin{filecontents}{foo43.sty}\n\\ProvidesPackage{foo43}[2018-05-04 New package 1]\n\\endinput\n\\end{filecontents}\n\\begin{filecontents}{bar43.sty}\n\\ProvidesPackage{bar43}[2018-05-04 New package 2]\n\\RequirePackage{foo43}[2018-05-04]\n\\endinput\n\\end{filecontents}\n\\input{test2e}\n\\START\n\\usepackage{bar43}\n\\END\n",
+      "new": "\\RequirePackage[current]{latexrelease}\n\\documentclass[12pt]{article}\n\\begin{filecontents}{foo43.sty}\n\\ProvidesPackage{foo43}[2018-05-04 New package 1]\n\\endinput\n\\end{filecontents}\n\\begin{filecontents}{bar43.sty}\n\\ProvidesPackage{bar43}[2018-05-04 New package 2]\n\\RequirePackage{foo43}[2018-05-04]\n\\endinput\n\\end{filecontents}\n\\input{test2e}\n\\START\n\\usepackage{bar43}\n\\END\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "LaTeX article defaults to 10pt, while explicit 12pt selects different font-size class configuration. This public typesetting configuration changes even though this package-loading test normalizes its log.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/latex3/latex2e/blob/910abf03262d81961d0a1ce582b3202331218065/base/testfiles/github-0043.lvt",
+        "revision": "910abf03262d81961d0a1ce582b3202331218065",
+        "license": "LPPL-1.3c",
+        "path": "tests/fixtures/language_assessment/upstream/web/latex2e/github-0043.lvt",
+        "sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-latex-external-comment-insertion",
+      "language_id": "latex",
+      "filename": "assessment.tex",
+      "category": "external_preservation",
+      "old": "\\RequirePackage[current]{latexrelease}\n\\documentclass{article}\n\\begin{filecontents}{foo43.sty}\n\\ProvidesPackage{foo43}[2018-05-04 New package 1]\n\\endinput\n\\end{filecontents}\n\\begin{filecontents}{bar43.sty}\n\\ProvidesPackage{bar43}[2018-05-04 New package 2]\n\\RequirePackage{foo43}[2018-05-04]\n\\endinput\n\\end{filecontents}\n\\input{test2e}\n\\START\n\\usepackage{bar43}\n\\END\n",
+      "new": "\\RequirePackage[current]{latexrelease}\n\\documentclass{article}\n% assessment-only source note\n\\begin{filecontents}{foo43.sty}\n\\ProvidesPackage{foo43}[2018-05-04 New package 1]\n\\endinput\n\\end{filecontents}\n\\begin{filecontents}{bar43.sty}\n\\ProvidesPackage{bar43}[2018-05-04 New package 2]\n\\RequirePackage{foo43}[2018-05-04]\n\\endinput\n\\end{filecontents}\n\\input{test2e}\n\\START\n\\usepackage{bar43}\n\\END\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "With standard LaTeX catcodes, a standalone percent comment line adds no TeX tokens to this preamble; package definitions and harness commands remain the same.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/latex3/latex2e/blob/910abf03262d81961d0a1ce582b3202331218065/base/testfiles/github-0043.lvt",
+        "revision": "910abf03262d81961d0a1ce582b3202331218065",
+        "license": "LPPL-1.3c",
+        "path": "tests/fixtures/language_assessment/upstream/web/latex2e/github-0043.lvt",
+        "sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-markdown-external-heading-tab",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "external_meaningful",
+      "old": "#\tFoo\n",
+      "new": "##\tFoo\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The original example supplies an h1 oracle for a tab-separated ATX heading. Adding a second opening # changes it to an h2 under the same CommonMark ATX rule.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/commonmark/commonmark-spec/blob/9103e341a973013013bb1a80e13567007c5cef6f/spec.txt",
+        "revision": "9103e341a973013013bb1a80e13567007c5cef6f",
+        "license": "CC-BY-SA-4.0",
+        "path": "tests/fixtures/language_assessment/upstream/web/commonmark-spec/spec-lines-1-800.txt",
+        "sha256": "188924cfaa26764d54bb05c93166b7e2e96b7b02b201d0cb712a4afb31aea194"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-markdown-external-code-block-form",
+      "language_id": "markdown",
+      "filename": "assessment.md",
+      "category": "external_preservation",
+      "old": "    \\[\\]\n",
+      "new": "~~~\n\\[\\]\n~~~\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "The specification independently gives identical HTML for these indented and fenced code block inputs, including literal backslashes. Preservation concerns rendered HTML; source structure still changes.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/commonmark/commonmark-spec/blob/9103e341a973013013bb1a80e13567007c5cef6f/spec.txt",
+        "revision": "9103e341a973013013bb1a80e13567007c5cef6f",
+        "license": "CC-BY-SA-4.0",
+        "path": "tests/fixtures/language_assessment/upstream/web/commonmark-spec/spec-lines-1-800.txt",
+        "sha256": "188924cfaa26764d54bb05c93166b7e2e96b7b02b201d0cb712a4afb31aea194"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-mdx-external-rendered-heading",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "external_meaningful",
+      "old": "# hi!",
+      "new": "# hi?",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Original MDX tests render # hi! as <h1>hi!</h1> and # hi? as <h1>hi?</h1>; the differing punctuation changes rendered heading text.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/mdx-js/mdx/blob/52285a6758fa078ec57f3d4bd8803d9cbfb12065/packages/mdx/test/compile.js",
+        "revision": "52285a6758fa078ec57f3d4bd8803d9cbfb12065",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/mdx/compile.js",
+        "sha256": "b661a518fafb311021d310fb7a01b7d02bb33a393871410f78b0a33b3e4a980d"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-mdx-external-closing-heading-marker",
+      "language_id": "mdx",
+      "filename": "assessment.mdx",
+      "category": "external_preservation",
+      "old": "# hi!",
+      "new": "# hi! #",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "MDX default Markdown syntax inherits optional closing ATX heading hashes. Both sources form a heading with the same text hi!, under fixed default component mapping.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/mdx-js/mdx/blob/52285a6758fa078ec57f3d4bd8803d9cbfb12065/packages/mdx/test/compile.js",
+        "revision": "52285a6758fa078ec57f3d4bd8803d9cbfb12065",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/mdx/compile.js",
+        "sha256": "b661a518fafb311021d310fb7a01b7d02bb33a393871410f78b0a33b3e4a980d"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-po-external-message-translation",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "external_meaningful",
+      "old": "msgid\t\"msg 1\"\nmsgstr\t\"msg 1 translation\"\n",
+      "new": "msgid\t\"msg 1\"\nmsgstr\t\"changed translation\"\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The original ASCII PO record maps msg 1 to msg 1 translation. Replacing only msgstr changes the translation lookup result for that key.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/autotools-mirror/gettext/blob/d605cde87401d418a98ffe44705af2738b9e7f4e/gettext-tools/tests/msgfmt-1",
+        "revision": "d605cde87401d418a98ffe44705af2738b9e7f4e",
+        "license": "GNU GPLv3 (repository COPYING; fixture has no individual license header)",
+        "path": "tests/fixtures/language_assessment/upstream/web/gettext/msgfmt-1",
+        "sha256": "34c39389900ab78e9b823a959e89da0a8694c900d9f974ca52141b9d012cdd28"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-po-external-translation-concatenation",
+      "language_id": "po",
+      "filename": "assessment.po",
+      "category": "external_preservation",
+      "old": "msgid\t\"msg 1\"\nmsgstr\t\"msg 1 translation\"\n",
+      "new": "msgid\t\"msg 1\"\nmsgstr\t\"\"\n\"msg 1 \"\n\"translation\"\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "PO adjacent quoted strings concatenate to the same msg 1 translation bytes, leaving lookup key and decoded translation unchanged.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/autotools-mirror/gettext/blob/d605cde87401d418a98ffe44705af2738b9e7f4e/gettext-tools/tests/msgfmt-1",
+        "revision": "d605cde87401d418a98ffe44705af2738b9e7f4e",
+        "license": "GNU GPLv3 (repository COPYING; fixture has no individual license header)",
+        "path": "tests/fixtures/language_assessment/upstream/web/gettext/msgfmt-1",
+        "sha256": "34c39389900ab78e9b823a959e89da0a8694c900d9f974ca52141b9d012cdd28"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-scss-external-escaped-string-value",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "external_meaningful",
+      "old": "a {\n  b: 'line1 \\\n      line2';\n}\n\n",
+      "new": "a {\n  b: 'line1 \\\n      changed';\n}\n\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The original Sass reference emits a string containing line1, seven spaces and line2. Changing line2 inside the same escaped-newline string changes the emitted declaration value.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/sass/sass-spec/blob/acbdcd3914a2ebae45b99014e1dc827df8343946/spec/values/strings.hrx",
+        "revision": "acbdcd3914a2ebae45b99014e1dc827df8343946",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/sass-spec/strings.hrx",
+        "sha256": "c720a6a5b877ac0e69791897fe49bf01290378e3f2844b2e597112b6e6da54b9"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-scss-external-escaped-string-spelling",
+      "language_id": "scss",
+      "filename": "assessment.scss",
+      "category": "external_preservation",
+      "old": "a {\n  b: 'line1 \\\n      line2';\n}\n\n",
+      "new": "a {\n  b: \"line1       line2\";\n}\n\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "The supplied output.css records the decoded string value of the escaped-newline SCSS input. That plain output is also valid SCSS and emits the same declaration string; compare CSS value semantics, excluding source maps.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/sass/sass-spec/blob/acbdcd3914a2ebae45b99014e1dc827df8343946/spec/values/strings.hrx",
+        "revision": "acbdcd3914a2ebae45b99014e1dc827df8343946",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/sass-spec/strings.hrx",
+        "sha256": "c720a6a5b877ac0e69791897fe49bf01290378e3f2844b2e597112b6e6da54b9"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-svelte-external-static-class",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "external_meaningful",
+      "old": "<div class='foo'></div>",
+      "new": "<div class='bar'></div>",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "The original Svelte runtime fixture expects a div with class foo; changing the class to bar changes the DOM attribute and stylesheet matching contract.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/sveltejs/svelte/blob/c60f6e1da05a79d39ea11fdc3153e4d07be35936/packages/svelte/tests/runtime-legacy/samples/attribute-static/main.svelte",
+        "revision": "c60f6e1da05a79d39ea11fdc3153e4d07be35936",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/svelte/attribute-static/main.svelte",
+        "sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-svelte-external-static-quote-spelling",
+      "language_id": "svelte",
+      "filename": "assessment.svelte",
+      "category": "external_preservation",
+      "old": "<div class='foo'></div>",
+      "new": "<div class=\"foo\"></div>",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "The original expected rendered HTML uses double quotes for the same foo class. Both Svelte markup spellings yield identical DOM attributes and children.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/sveltejs/svelte/blob/c60f6e1da05a79d39ea11fdc3153e4d07be35936/packages/svelte/tests/runtime-legacy/samples/attribute-static/main.svelte",
+        "revision": "c60f6e1da05a79d39ea11fdc3153e4d07be35936",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/svelte/attribute-static/main.svelte",
+        "sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-tsx-external-component-prop",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "external_meaningful",
+      "old": "// @filename: file.tsx\r\n// @jsx: preserve\r\n// @noLib: true\r\n// @skipLibCheck: true\r\n// @libFiles: react.d.ts,lib.d.ts\r\n\r\nimport React = require('react');\r\n\r\ninterface Prop {\r\n    a: number,\r\n    b: string,\r\n    children: string | JSX.Element\r\n}\r\n\r\nfunction Comp(p: Prop) {\r\n    return <div>{p.b}</div>;\r\n}\r\n\r\n// OK\r\nlet k = <Comp a={10} b=\"hi\" children =\"lol\" />;\r\nlet k1 =\r\n    <Comp a={10} b=\"hi\">\r\n        hi hi hi!\r\n    </Comp>;\r\nlet k2 =\r\n    <Comp a={10} b=\"hi\">\r\n        <div>hi hi hi!</div>\r\n    </Comp>;",
+      "new": "// @filename: file.tsx\r\n// @jsx: preserve\r\n// @noLib: true\r\n// @skipLibCheck: true\r\n// @libFiles: react.d.ts,lib.d.ts\r\n\r\nimport React = require('react');\r\n\r\ninterface Prop {\r\n    a: number,\r\n    b: string,\r\n    children: string | JSX.Element\r\n}\r\n\r\nfunction Comp(p: Prop) {\r\n    return <div>{p.b}</div>;\r\n}\r\n\r\n// OK\r\nlet k = <Comp a={10} b=\"bye\" children =\"lol\" />;\r\nlet k1 =\r\n    <Comp a={10} b=\"hi\">\r\n        hi hi hi!\r\n    </Comp>;\r\nlet k2 =\r\n    <Comp a={10} b=\"hi\">\r\n        <div>hi hi hi!</div>\r\n    </Comp>;",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Comp returns <div>{p.b}</div>; changing the first Comp b prop from hi to bye changes that element's component input and rendered text under the original React-compatible JSX contract.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/microsoft/TypeScript/blob/c63de15a992d37f0d6cec03ac7631872838602cb/tests/cases/conformance/jsx/checkJsxChildrenProperty1.tsx",
+        "revision": "c63de15a992d37f0d6cec03ac7631872838602cb",
+        "license": "Apache-2.0",
+        "path": "tests/fixtures/language_assessment/upstream/web/typescript/checkJsxChildrenProperty1.tsx",
+        "sha256": "4856d9de34cf1861c362ea5acd68b5413c193a859fcc2ba9d72af5b27989058f"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-tsx-external-module-quote-spelling",
+      "language_id": "tsx",
+      "filename": "assessment.tsx",
+      "category": "external_preservation",
+      "old": "// @filename: file.tsx\r\n// @jsx: preserve\r\n// @noLib: true\r\n// @skipLibCheck: true\r\n// @libFiles: react.d.ts,lib.d.ts\r\n\r\nimport React = require('react');\r\n\r\ninterface Prop {\r\n    a: number,\r\n    b: string,\r\n    children: string | JSX.Element\r\n}\r\n\r\nfunction Comp(p: Prop) {\r\n    return <div>{p.b}</div>;\r\n}\r\n\r\n// OK\r\nlet k = <Comp a={10} b=\"hi\" children =\"lol\" />;\r\nlet k1 =\r\n    <Comp a={10} b=\"hi\">\r\n        hi hi hi!\r\n    </Comp>;\r\nlet k2 =\r\n    <Comp a={10} b=\"hi\">\r\n        <div>hi hi hi!</div>\r\n    </Comp>;",
+      "new": "// @filename: file.tsx\r\n// @jsx: preserve\r\n// @noLib: true\r\n// @skipLibCheck: true\r\n// @libFiles: react.d.ts,lib.d.ts\r\n\r\nimport React = require(\"react\");\r\n\r\ninterface Prop {\r\n    a: number,\r\n    b: string,\r\n    children: string | JSX.Element\r\n}\r\n\r\nfunction Comp(p: Prop) {\r\n    return <div>{p.b}</div>;\r\n}\r\n\r\n// OK\r\nlet k = <Comp a={10} b=\"hi\" children =\"lol\" />;\r\nlet k1 =\r\n    <Comp a={10} b=\"hi\">\r\n        hi hi hi!\r\n    </Comp>;\r\nlet k2 =\r\n    <Comp a={10} b=\"hi\">\r\n        <div>hi hi hi!</div>\r\n    </Comp>;",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Both import-equals module strings decode to react, preserving the module binding, Prop type and all JSX expressions; CRLF and other source bytes remain unchanged.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/microsoft/TypeScript/blob/c63de15a992d37f0d6cec03ac7631872838602cb/tests/cases/conformance/jsx/checkJsxChildrenProperty1.tsx",
+        "revision": "c63de15a992d37f0d6cec03ac7631872838602cb",
+        "license": "Apache-2.0",
+        "path": "tests/fixtures/language_assessment/upstream/web/typescript/checkJsxChildrenProperty1.tsx",
+        "sha256": "4856d9de34cf1861c362ea5acd68b5413c193a859fcc2ba9d72af5b27989058f"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-vue-external-scoped-color",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "external_meaningful",
+      "old": "<style scoped>h1 { color: red; }</style>\n",
+      "new": "<style scoped>h1 { color: blue; }</style>\n",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "oracle": {
+        "basis": "Vue original test expects scoped h1 selector and red declaration. Changing declaration to blue changes emitted component stylesheet color for a matching h1.",
+        "behavior": "changed",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/vuejs/core/blob/8b479a89445868d474f17e2d837765e7c9ece5e4/packages/compiler-sfc/__tests__/compileStyle.spec.ts",
+        "revision": "8b479a89445868d474f17e2d837765e7c9ece5e4",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/vue/compileStyle.spec.ts",
+        "sha256": "fcd6ddb4100383f2b06d73747cfe59b696a385842a0b2881f28a0225e029a0c0"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    },
+    {
+      "id": "web-vue-external-scoped-css-formatting",
+      "language_id": "vue",
+      "filename": "assessment.vue",
+      "category": "external_preservation",
+      "old": "<style scoped>h1 { color: red; }</style>\n",
+      "new": "<style scoped>h1 {\n  color: red;\n}</style>\n",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "oracle": {
+        "basis": "Ordinary whitespace between CSS declaration tokens preserves the scoped h1 selector and red value. Vue filename/id and scoped compilation options are fixed; serialized CSS bytes and maps excluded.",
+        "behavior": "preserved",
+        "limitations": "Source-reviewed external-derived comparison under the stated rendering/value/interface domain. The upstream compiler/browser/runtime was not executed here; original upstream assertions are retained but do not constitute an executed full conformance benchmark."
+      },
+      "provenance": {
+        "class": "reviewed_external_derived",
+        "url": "https://github.com/vuejs/core/blob/8b479a89445868d474f17e2d837765e7c9ece5e4/packages/compiler-sfc/__tests__/compileStyle.spec.ts",
+        "revision": "8b479a89445868d474f17e2d837765e7c9ece5e4",
+        "license": "MIT",
+        "path": "tests/fixtures/language_assessment/upstream/web/vue/compileStyle.spec.ts",
+        "sha256": "fcd6ddb4100383f2b06d73747cfe59b696a385842a0b2881f28a0225e029a0c0"
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ]
+    }
+  ]
+}

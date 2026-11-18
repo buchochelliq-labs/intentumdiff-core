@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-11-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "d611552e822f646ea1ba59d81f6ba940433e2a13b2c70e11519c1ba519840116",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.004s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "56d50644b2222f591abb61d10ca1d466bc6cf18a82d78fd364275b2db53b29d9",
+  "new_test_sha256": "c9cd0bc7a976453c9d0c3781eef2cd210dea86b1aa439bafe0528452d6c89408",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "d611552e822f646ea1ba59d81f6ba940433e2a13b2c70e11519c1ba519840116",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "--- FAIL: TestStringXor (0.00s)\n    main_test.go:10: \n        \tError Trace:\t/tmp/hep-witness-6eo0m6zu/main_test.go:10\n        \tError:      \tNot equal: \n        \t            \texpected: \"010010\"\n        \t            \tactual  : \"110010\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-010010\n        \t            \t+110010\n        \tTest:       \tTestStringXor\n    main_test.go:12: \n        \tError Trace:\t/tmp/hep-witness-6eo0m6zu/main_test.go:12\n        \tError:      \tNot equal: \n        \t            \texpected: \"0101\"\n        \t            \tactual  : \"1101\"\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1 +1 @@\n        \t            \t-0101\n        \t            \t+1101\n        \tTest:       \tTestStringXor\nFAIL\nFAIL\thumanevalpack\t0.004s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "36b1a738b20e3089be882bedd1219eadc09eb03c33780cd9cecae159d27d1be1",
+  "old_test_sha256": "c9cd0bc7a976453c9d0c3781eef2cd210dea86b1aa439bafe0528452d6c89408",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/11.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

@@ -53,14 +53,16 @@ value changed and *from → to*, which the intent explainer and release notes co
 ## Config knobs (`DiffConfig`)
 
 - `guardrails_enabled: bool = True` — run project `intentumdiff.yaml` checks.
-- `guardrails_strict: bool = False` — a direct CLI diff exits **non-zero** when any `immutable`
-  violation is present (for CI gating).
+- `guardrails_strict: bool = False` — strict checks fail (CLI exits **2**) when ANY violation
+  (important or immutable) is present; non-strict checks are advisory and always pass. The
+  verdict comes from the engine's `guardrail_check_result` (C ABI + `api::`), which owns the
+  counts and the gate — bindings render it and never recompute `passed`.
 - `guardrail_policy_path: Path | None` — explicit policy override.
 When diagnostics are enabled, guardrail hits are also recorded as `guardrails` trace events.
 
 ## How guardrails surface
 
-- **CLI:** `SemanticDiff.guardrail_violations`; strict mode → non-zero exit on immutable hits.
+- **CLI:** `SemanticDiff.guardrail_violations`; strict mode → exit 2 on any violation (`guardrail_check_result`).
 - **VS Code extension:** violations become `vscode.Diagnostic`s in the Problems panel, are
   **pinned at the top** of the Semantic Changes tree and review panel, and map to **critical**
   risk in intent/release-notes (see `intentumdiff-vscode` / `intentumdiff-release-notes`). They are

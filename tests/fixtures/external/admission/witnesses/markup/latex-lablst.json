@@ -1,0 +1,15 @@
+{
+  "case_id": "latex-lablst",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c0379b65605e7f877f21432441919ab95b534c581a10e79df52846fb37b0d7b6",
+  "observations": {
+    "error": "! Emergency stop.",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "c0379b65605e7f877f21432441919ab95b534c581a10e79df52846fb37b0d7b6",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

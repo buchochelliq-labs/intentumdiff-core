@@ -1,0 +1,15 @@
+{
+  "case_id": "sass-errors-fn-varargs-at-start",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "8ab96ccdc7fcd9c72a8906ad2322d5d3c8308e36f1dd298e780c5753d2d79ffc",
+  "observations": {
+    "error": "expected \")\".",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "8ab96ccdc7fcd9c72a8906ad2322d5d3c8308e36f1dd298e780c5753d2d79ffc",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

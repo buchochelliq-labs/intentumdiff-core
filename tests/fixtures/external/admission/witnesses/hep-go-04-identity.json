@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "hep-go-04-identity",
+  "config": "go",
+  "new": {
+    "outcome": "build_failed",
+    "program_sha256": "28dd4ffbcf47c48a3263315d095ada4377d770dddd2eb522f0573ce3c26f6bf5",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "# humanevalpack [humanevalpack.test]\n./main_test.go:10:24: undefined: math\n./main_test.go:11:24: undefined: math\n./main_test.go:12:24: undefined: math\n",
+        "stdout_tail": "FAIL\thumanevalpack [build failed]\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "709f0bb98556a0ad07d0c51f78d3265dd33102a8c7b408e03166d2fbd3e6dae4",
+  "new_test_sha256": "46f140704357115c144459b7146b7e43c4fc6507bb97b38f4b197707f260a893",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "build_failed",
+    "program_sha256": "28dd4ffbcf47c48a3263315d095ada4377d770dddd2eb522f0573ce3c26f6bf5",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "# humanevalpack [humanevalpack.test]\n./main_test.go:10:24: undefined: math\n./main_test.go:11:24: undefined: math\n./main_test.go:12:24: undefined: math\n",
+        "stdout_tail": "FAIL\thumanevalpack [build failed]\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "709f0bb98556a0ad07d0c51f78d3265dd33102a8c7b408e03166d2fbd3e6dae4",
+  "old_test_sha256": "46f140704357115c144459b7146b7e43c4fc6507bb97b38f4b197707f260a893",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/04.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "inconclusive"
+}

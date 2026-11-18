@@ -1,0 +1,27 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "runcmake-commandspaces-argument-split",
+  "engines": [
+    {
+      "name": "cmake",
+      "version": "cmake version 3.28.3"
+    }
+  ],
+  "new_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nExample Message\nExample Message\nExample  Message\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "new_sha256": "cf9958922b68ac6247a0f816798613857079c1c91254a1ad78bc203bf2aaacf1",
+  "old_observation": {
+    "exit_status": 0,
+    "stderr": "Example Message\nExample Message\nExample Message\nExample Message\nExample Message\nExample Message\n",
+    "stdout": "-- Configuring done (Ts)\n-- Generating done (Ts)\n-- Build files have been written to: <TMP>/build\n"
+  },
+  "old_sha256": "043b21ca9048ad880d8aa0f5f739edb0c66e60aa5d6b98569422dae516e1f7d7",
+  "oracle": "cmake_configure_output_equality",
+  "projection_equal": false,
+  "review": "cmake 3.28.3 configure: exit status, stdout and stderr differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

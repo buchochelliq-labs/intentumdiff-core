@@ -1,0 +1,16 @@
+{
+  "case_id": "po-save-as-mofile",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "dff2cd7c3fdfe7499040a88e83bc157e91c8b8a549641ead88c779938dd10c4d",
+  "observations": {
+    "mo_sha256": "8ffbf062a2980a8e789c7c1f5b2d84d7f1a82682cdc3aa34103f23497b94f858",
+    "reference_accepts": true,
+    "stderr": "f.po:7: warning: header field 'Project-Id-Version' still has the initial default value\nf.po:7: warning: header field 'Language-Team' still has the initial default value\nf.po:7: warning: header field 'Language' missing in header\n",
+    "upstream_accepts": true
+  },
+  "old_sha256": "dff2cd7c3fdfe7499040a88e83bc157e91c8b8a549641ead88c779938dd10c4d",
+  "oracle": "msgfmt_check",
+  "reference": "msgfmt_check: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

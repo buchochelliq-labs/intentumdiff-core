@@ -1,0 +1,29 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "t0008-dirs-gitignore-dir-negation-removed",
+  "engines": [
+    {
+      "name": "git",
+      "version": "git version 2.43.0"
+    }
+  ],
+  "new_observation": [
+    "data/data1/file1",
+    "data/data1/file1.txt",
+    "data/data2/file2",
+    "data/data2/file2.txt",
+    "data/file"
+  ],
+  "new_sha256": "7e524c3808936df20c520185a6cc7c5de41ffdc49812437d48f9dc416fe382da",
+  "old_observation": [
+    "data/data1/file1",
+    "data/data2/file2",
+    "data/file"
+  ],
+  "old_sha256": "fececf4a735443a187b2edbe19e797994d563035e650e3054d2baa6fc0b98cb1",
+  "oracle": "git_check_ignore_membership",
+  "projection_equal": false,
+  "review": "git check-ignore --no-index: the ignored path sets differ on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

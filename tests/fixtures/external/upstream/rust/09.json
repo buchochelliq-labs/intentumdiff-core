@@ -1,0 +1,17 @@
+{
+  "bug_type": "variable misuse",
+  "buggy_solution": "\n    let mut running_max :Option<i32> = None;\n    let mut result:Vec<i32> = vec![];\n\n    for n in numbers{\n        if running_max == None {\n            running_max = Some(n);\n\n        }else{\n            running_max = max(running_max, Some(n));\n        }\n    }\n    return result;\n\n}\n",
+  "canonical_solution": "\n    let mut running_max :Option<i32> = None;\n    let mut result:Vec<i32> = vec![];\n\n    for n in numbers{\n        if running_max == None {\n            running_max = Some(n);\n\n        }else{\n            running_max = max(running_max, Some(n));\n        }\n\n        result.push(running_max.unwrap());\n    }\n    return result;\n\n}\n",
+  "declaration": "\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\nfn rolling_max(numbers:Vec<i32>) -> Vec<i32>{\n",
+  "docstring": "From a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.",
+  "entry_point": "rolling_max",
+  "example_test": "None",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Rust function `rolling_max(numbers:Vec<i32>) -> Vec<i32>` to solve the following problem:\nFrom a given list of integers, generate a list of rolling maximum element found until given moment\nin the sequence.",
+  "prompt": "fn main(){}\n\nuse std::{slice::Iter, cmp::{max, self}, mem::replace, collections::{HashSet, HashMap}, ops::Index, ascii::AsciiExt};\nuse rand::Rng;\nuse regex::Regex;\nuse md5;\nuse std::any::{Any, TypeId};\n\n/*\n From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    \n*/\nfn rolling_max(numbers:Vec<i32>) -> Vec<i32>{\n",
+  "signature": "rolling_max(numbers:Vec<i32>) -> Vec<i32>",
+  "task_id": "Rust/9",
+  "test": "\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n #[test]\n    fn test_rolling_max() {\n        assert!(rolling_max(vec![]) == vec![]);\n        assert!(rolling_max(vec![1, 2, 3, 4]) == vec![1, 2, 3, 4]);\n        assert!(rolling_max(vec![4, 3, 2, 1]) == vec![4, 4, 4, 4]);\n        assert!(rolling_max(vec![3, 2, 3, 100, 3]) == vec![3, 3, 3, 100, 100]);\n    }\n\n}\n",
+  "test_setup": ""
+}

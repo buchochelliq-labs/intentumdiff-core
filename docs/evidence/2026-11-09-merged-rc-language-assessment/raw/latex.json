@@ -1,0 +1,2974 @@
+{
+  "language_id": "latex",
+  "options": {
+    "language_hint": "latex",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "web-latex-class_option",
+      "language_id": "latex",
+      "category": "meaningful_class_option",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "91b4f7c4efc2198bf9ed4c6f134352a4440f4ecf9a0c2a380d85304a7f8003a5",
+      "new_sha256": "dab5faad73917774da26e4c091e0be5777881e2e9b8af5cc687f698de097204d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\documentclass[10pt]{article}\\n"
+            ],
+            "new_labels": [
+              "\\documentclass[12pt]{article}\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\documentclass[10pt]{article}\\n",
+              "new_label": "\\documentclass[12pt]{article}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                30
+              ],
+              "new_span": [
+                0,
+                30
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\documentclass[10pt]{article}\\n",
+              "new_label": "\\documentclass[12pt]{article}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                30
+              ],
+              "new_span": [
+                0,
+                30
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.330204,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22640000,
+                "fuel_consumed": 121914,
+                "total_fuel_consumed": 121914,
+                "max_fuel_used_percent": 0.5384893992932862,
+                "input_bytes": 66,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.22445700000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22640000,
+                "fuel_consumed": 121324,
+                "total_fuel_consumed": 121324,
+                "max_fuel_used_percent": 0.5358833922261483,
+                "input_bytes": 66,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "29ab30ece29c89cd",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 21,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "29ab30ece29c89cd",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 21,
+                  "end_line": 0,
+                  "end_col": 28
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 4968.838
+    },
+    {
+      "id": "web-latex-package_option",
+      "language_id": "latex",
+      "category": "meaningful_package_option",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "dc6a30d4a2ad75a022ba7e218a336ae0adcf3a76c5b2502fa66d8750fdf57fab",
+      "new_sha256": "05baf48920091cb8fb8332e24f27e6be80f0277120660db895ab7c9e3d044ccf",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\usepackage[draft]{graphicx}\\n"
+            ],
+            "new_labels": [
+              "\\usepackage[final]{graphicx}\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\usepackage[draft]{graphicx}\\n",
+              "new_label": "\\usepackage[final]{graphicx}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                24,
+                53
+              ],
+              "new_span": [
+                24,
+                53
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\usepackage[draft]{graphicx}\\n",
+              "new_label": "\\usepackage[final]{graphicx}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                24,
+                53
+              ],
+              "new_span": [
+                24,
+                53
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.34635299999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23560000,
+                "fuel_consumed": 193560,
+                "total_fuel_consumed": 193560,
+                "max_fuel_used_percent": 0.8215619694397283,
+                "input_bytes": 89,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.193129,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23560000,
+                "fuel_consumed": 193004,
+                "total_fuel_consumed": 193004,
+                "max_fuel_used_percent": 0.819202037351443,
+                "input_bytes": 89,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ed710955c23ab9f2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 15,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "graphicx",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 19,
+                  "end_line": 1,
+                  "end_col": 27
+                },
+                "structural_hash": "2b6a2d0a85a2429b",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "ed710955c23ab9f2",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 15,
+                  "end_line": 0,
+                  "end_col": 22
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "package",
+                "label": "graphicx",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 19,
+                  "end_line": 1,
+                  "end_col": 27
+                },
+                "structural_hash": "2b6a2d0a85a2429b",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.2: child outside parent range",
+        "new: 0.2: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 61.738
+    },
+    {
+      "id": "web-latex-trailing_prose",
+      "language_id": "latex",
+      "category": "meaningful_trailing_prose",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "cf4b4c6b9a41c0439974d912c902884f82b863288bcc0f7448c2390cbbc3a8ea",
+      "new_sha256": "6d1103a419386731c84d723e9609df8effd8a5c0633944a514151415c58492ee",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\section{Title} safe\\n"
+            ],
+            "new_labels": [
+              "\\section{Title} danger\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\section{Title} safe\\n",
+              "new_label": "\\section{Title} danger\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                21
+              ],
+              "new_span": [
+                0,
+                23
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\section{Title} safe\\n",
+              "new_label": "\\section{Title} danger\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                21
+              ],
+              "new_span": [
+                0,
+                23
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.19743699999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 88133,
+                "total_fuel_consumed": 88133,
+                "max_fuel_used_percent": 0.4220929118773946,
+                "input_bytes": 21,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.118971,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20880000,
+                "fuel_consumed": 88131,
+                "total_fuel_consumed": 88131,
+                "max_fuel_used_percent": 0.42208333333333337,
+                "input_bytes": 23,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "51249a08bad56f1b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Title",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20722de5aff494a4",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "51249a08bad56f1b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Title",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "20722de5aff494a4",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 54.715
+    },
+    {
+      "id": "web-latex-same_line_environment",
+      "language_id": "latex",
+      "category": "meaningful_same_line_environment",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "20ef00630e20bdd0b3b892cd47418a78291b1a8d589c3180813c7eee4f75cb07",
+      "new_sha256": "9960f791c766f563865adeccd19e690a8300606b02722a677a86aa7ef9a7ed9a",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\begin{document}safe\\end{document}\\n"
+            ],
+            "new_labels": [
+              "\\begin{document}danger\\end{document}\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\begin{document}safe\\end{document}\\n",
+              "new_label": "\\begin{document}danger\\end{document}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                35
+              ],
+              "new_span": [
+                0,
+                37
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\begin{document}safe\\end{document}\\n",
+              "new_label": "\\begin{document}danger\\end{document}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                35
+              ],
+              "new_span": [
+                0,
+                37
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.23691099999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 48618,
+                "total_fuel_consumed": 48618,
+                "max_fuel_used_percent": 0.22676305970149255,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.106858,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21440000,
+                "fuel_consumed": 48240,
+                "total_fuel_consumed": 48240,
+                "max_fuel_used_percent": 0.22499999999999998,
+                "input_bytes": 37,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "0dbb41b68d7e9fca",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "0dbb41b68d7e9fca",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "environment",
+                "label": "document",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 8
+                },
+                "structural_hash": "7572d97664eda709",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 50.741
+    },
+    {
+      "id": "web-latex-identity",
+      "language_id": "latex",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "d393ce5334d5fa83e15a997a8a4f61b0bd3101e2050e07e9f3cee11eea899bd8",
+      "new_sha256": "d393ce5334d5fa83e15a997a8a4f61b0bd3101e2050e07e9f3cee11eea899bd8",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.264592,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21200000,
+                "fuel_consumed": 152116,
+                "total_fuel_consumed": 152116,
+                "max_fuel_used_percent": 0.7175283018867925,
+                "input_bytes": 30,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.165267,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21200000,
+                "fuel_consumed": 151526,
+                "total_fuel_consumed": 151526,
+                "max_fuel_used_percent": 0.714745283018868,
+                "input_bytes": 30,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0472c5278e721d1a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Introduction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "57421eba40afd13e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Hello.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "2687a1d8ef60b3e6",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0472c5278e721d1a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Introduction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "57421eba40afd13e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Hello.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "2687a1d8ef60b3e6",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 46.731
+    },
+    {
+      "id": "web-latex-preservation",
+      "language_id": "latex",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "854e72c167e86f9b4f2058fd81855a2f9c8a89d7dcef331e2011c6afe74a1c98",
+      "new_sha256": "be40be9c8103738137c46b92f5c76c868eb64c293c952c7536ed036a0347ff24",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\section{Introduction}% note A\\n"
+            ],
+            "new_labels": [
+              "\\section{Introduction}% note B\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\section{Introduction}% note A\\n",
+              "new_label": "\\section{Introduction}% note B\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                31
+              ],
+              "new_span": [
+                0,
+                31
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\section{Introduction}% note A\\n",
+              "new_label": "\\section{Introduction}% note B\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                31
+              ],
+              "new_span": [
+                0,
+                31
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.267186,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 152225,
+                "total_fuel_consumed": 152225,
+                "max_fuel_used_percent": 0.7073652416356877,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.164566,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21520000,
+                "fuel_consumed": 151635,
+                "total_fuel_consumed": 151635,
+                "max_fuel_used_percent": 0.7046236059479554,
+                "input_bytes": 38,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0472c5278e721d1a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Introduction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "57421eba40afd13e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Hello.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "2687a1d8ef60b3e6",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "0472c5278e721d1a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Introduction",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 21
+                },
+                "structural_hash": "57421eba40afd13e",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Hello.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "2687a1d8ef60b3e6",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 57.137
+    },
+    {
+      "id": "web-latex-incomplete",
+      "language_id": "latex",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "6cc1f60ecca01a62cee45cb4952cc4886a3663b6305d224ee2a0c49665fc2a9d",
+      "new_sha256": "2bd85c25d9b35bccf07c5a23395368f9b51da4ea83ae164a80a757e7f66a709c",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update text('\\section{Intro') -> text('\\section{Method')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "text",
+              "label": "\\section{Intro",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 14
+              },
+              "structural_hash": "735b9e6eae236266",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "text",
+              "label": "\\section{Method",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 15
+              },
+              "structural_hash": "e091a0f268b69e7d",
+              "children": []
+            },
+            "text_diff": "\\section{Intro -> \\section{Method"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "\\section{Intro"
+            ],
+            "new_labels": [
+              "\\section{Method"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.313162,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20580000,
+                "fuel_consumed": 83815,
+                "total_fuel_consumed": 83815,
+                "max_fuel_used_percent": 0.40726433430515063,
+                "input_bytes": 14,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.163344,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20580000,
+                "fuel_consumed": 83795,
+                "total_fuel_consumed": 83795,
+                "max_fuel_used_percent": 0.4071671525753159,
+                "input_bytes": 15,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "63c0fca9268c347e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\section{Intro",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 14
+                },
+                "structural_hash": "735b9e6eae236266",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "c42bfe2c84f0c1b4",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\section{Method",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 15
+                },
+                "structural_hash": "e091a0f268b69e7d",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 47.886
+    },
+    {
+      "id": "web-latex-unicode",
+      "language_id": "latex",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "4a569695b3fad2c391a9beab6a6ccbe3b50b2f7b67e5873906c8b4e19989a4a7",
+      "new_sha256": "eed176fb635923d7fa34553bf1894e99fc7036b623c65a3e255581417b678b45",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-latex-parser#4"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update text('Café costs 5 euros.') -> text('Café costs 6 euros.')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "text",
+              "label": "Café costs 5 euros.",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 20
+              },
+              "structural_hash": "621c5a4144c0fde1",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "text",
+              "label": "Café costs 6 euros.",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 20
+              },
+              "structural_hash": "5d6eb7f1f58cbb62",
+              "children": []
+            },
+            "text_diff": "Café costs 5 euros. -> Café costs 6 euros."
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "Café costs 5 euros."
+            ],
+            "new_labels": [
+              "Café costs 6 euros."
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.22075999999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21600000,
+                "fuel_consumed": 155112,
+                "total_fuel_consumed": 155112,
+                "max_fuel_used_percent": 0.7181111111111111,
+                "input_bytes": 40,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.095868,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21600000,
+                "fuel_consumed": 154522,
+                "total_fuel_consumed": 154522,
+                "max_fuel_used_percent": 0.7153796296296296,
+                "input_bytes": 40,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "9b65524f6a1b9775",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Résumé",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "60b03621110d9df3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Café costs 5 euros.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 20
+                },
+                "structural_hash": "621c5a4144c0fde1",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "7da153566aa693dd",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "section",
+                "label": "Résumé",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 9,
+                  "end_line": 0,
+                  "end_col": 17
+                },
+                "structural_hash": "60b03621110d9df3",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "text",
+                "label": "Café costs 6 euros.",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 20
+                },
+                "structural_hash": "5d6eb7f1f58cbb62",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 51.49
+    },
+    {
+      "id": "web-latex-external-article-option",
+      "language_id": "latex",
+      "category": "external_meaningful",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e",
+      "new_sha256": "eb93169b705ebbc6ac5534903bd65f3b67544ae2676caa35f80727ed7e3d93c8",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "\\documentclass{article}\\n"
+            ],
+            "new_labels": [
+              "\\documentclass[12pt]{article}\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\documentclass{article}\\n",
+              "new_label": "\\documentclass[12pt]{article}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                39,
+                63
+              ],
+              "new_span": [
+                39,
+                69
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "\\documentclass{article}\\n",
+              "new_label": "\\documentclass[12pt]{article}\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                39,
+                63
+              ],
+              "new_span": [
+                39,
+                69
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.659905,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 34760000,
+                "fuel_consumed": 884748,
+                "total_fuel_consumed": 884748,
+                "max_fuel_used_percent": 2.5453049482163403,
+                "input_bytes": 366,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.541536,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 34760000,
+                "fuel_consumed": 884274,
+                "total_fuel_consumed": 884274,
+                "max_fuel_used_percent": 2.5439413118527043,
+                "input_bytes": 372,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "b8ee66553d3a6ef0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\RequirePackage[current]{latexrelease}",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "26130b5478197e79",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 15,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 12
+                },
+                "structural_hash": "038f2ac6c60cdad8",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{foo43}[2018-05-04 New package 1]",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 49
+                    },
+                    "structural_hash": "668db5a84df0158c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 12
+                },
+                "structural_hash": "9a5b3a2a602f9aef",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{bar43}[2018-05-04 New package 2]",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 49
+                    },
+                    "structural_hash": "a068bafdbeee0130",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "text",
+                    "label": "\\RequirePackage{foo43}[2018-05-04]",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8938b2b87957b4fa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "input",
+                "label": "test2e",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 7,
+                  "end_line": 11,
+                  "end_col": 13
+                },
+                "structural_hash": "c5c3143be394b23e",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "text",
+                "label": "\\START",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 6
+                },
+                "structural_hash": "faac8fcd795bbf6c",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "package",
+                "label": "bar43",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 12,
+                  "end_line": 13,
+                  "end_col": 17
+                },
+                "structural_hash": "c5c347565e38f971",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "text",
+                "label": "\\END",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 4
+                },
+                "structural_hash": "fb7d5edc7fae5f75",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "b8ee66553d3a6ef0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\RequirePackage[current]{latexrelease}",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "26130b5478197e79",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 21,
+                  "end_line": 1,
+                  "end_col": 28
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 12
+                },
+                "structural_hash": "038f2ac6c60cdad8",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{foo43}[2018-05-04 New package 1]",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 49
+                    },
+                    "structural_hash": "668db5a84df0158c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 12
+                },
+                "structural_hash": "9a5b3a2a602f9aef",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{bar43}[2018-05-04 New package 2]",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 49
+                    },
+                    "structural_hash": "a068bafdbeee0130",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "text",
+                    "label": "\\RequirePackage{foo43}[2018-05-04]",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8938b2b87957b4fa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "input",
+                "label": "test2e",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 7,
+                  "end_line": 11,
+                  "end_col": 13
+                },
+                "structural_hash": "c5c3143be394b23e",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "text",
+                "label": "\\START",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 6
+                },
+                "structural_hash": "faac8fcd795bbf6c",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "package",
+                "label": "bar43",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 12,
+                  "end_line": 13,
+                  "end_col": 17
+                },
+                "structural_hash": "c5c347565e38f971",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "text",
+                "label": "\\END",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 4
+                },
+                "structural_hash": "fb7d5edc7fae5f75",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.7: child outside parent range",
+        "old: 0.3.2: child outside parent range",
+        "old: 0.3.1: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "old: 0.2.1: child outside parent range",
+        "old: 0.2.0: child outside parent range",
+        "new: 0.7: child outside parent range",
+        "new: 0.3.2: child outside parent range",
+        "new: 0.3.1: child outside parent range",
+        "new: 0.3.0: child outside parent range",
+        "new: 0.2.1: child outside parent range",
+        "new: 0.2.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 74.075
+    },
+    {
+      "id": "web-latex-external-comment-insertion",
+      "language_id": "latex",
+      "category": "external_preservation",
+      "provenance_class": "reviewed_external_derived",
+      "old_sha256": "b6ded6eb6f22e528e06adce0e9cfd161a61a53dfeef4f4a0e19967a5202b360e",
+      "new_sha256": "d6aa4b2e14c053d486dab2fdedf3e91c2ccbafa40c71b450ca6ba7c82a2ae110",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#263",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "assessment.tex",
+        "new_filename": "assessment.tex",
+        "language": "latex",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "% assessment-only source note\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "% assessment-only source note\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                63,
+                63
+              ],
+              "new_span": [
+                63,
+                93
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "% assessment-only source note\\n",
+              "risk": "amber",
+              "language": "latex",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                63,
+                63
+              ],
+              "new_span": [
+                63,
+                93
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.33229800000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 35240000,
+                "fuel_consumed": 884748,
+                "total_fuel_consumed": 884748,
+                "max_fuel_used_percent": 2.5106356413166853,
+                "input_bytes": 366,
+                "input_lines": 15,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "latex",
+                "filename": "assessment.tex",
+                "call_count": 1,
+                "elapsed_ms": 0.259742,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 35240000,
+                "fuel_consumed": 885248,
+                "total_fuel_consumed": 885248,
+                "max_fuel_used_percent": 2.51205448354143,
+                "input_bytes": 396,
+                "input_lines": 16,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/latex_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 14,
+              "end_col": 0
+            },
+            "structural_hash": "b8ee66553d3a6ef0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\RequirePackage[current]{latexrelease}",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "26130b5478197e79",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 15,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 12
+                },
+                "structural_hash": "038f2ac6c60cdad8",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{foo43}[2018-05-04 New package 1]",
+                    "position": {
+                      "start_line": 3,
+                      "start_col": 0,
+                      "end_line": 3,
+                      "end_col": 49
+                    },
+                    "structural_hash": "668db5a84df0158c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 6,
+                  "start_col": 0,
+                  "end_line": 6,
+                  "end_col": 12
+                },
+                "structural_hash": "9a5b3a2a602f9aef",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{bar43}[2018-05-04 New package 2]",
+                    "position": {
+                      "start_line": 7,
+                      "start_col": 0,
+                      "end_line": 7,
+                      "end_col": 49
+                    },
+                    "structural_hash": "a068bafdbeee0130",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "text",
+                    "label": "\\RequirePackage{foo43}[2018-05-04]",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8938b2b87957b4fa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "input",
+                "label": "test2e",
+                "position": {
+                  "start_line": 11,
+                  "start_col": 7,
+                  "end_line": 11,
+                  "end_col": 13
+                },
+                "structural_hash": "c5c3143be394b23e",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "text",
+                "label": "\\START",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 0,
+                  "end_line": 12,
+                  "end_col": 6
+                },
+                "structural_hash": "faac8fcd795bbf6c",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "package",
+                "label": "bar43",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 12,
+                  "end_line": 13,
+                  "end_col": 17
+                },
+                "structural_hash": "c5c347565e38f971",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "text",
+                "label": "\\END",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 0,
+                  "end_line": 14,
+                  "end_col": 4
+                },
+                "structural_hash": "fb7d5edc7fae5f75",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "latex",
+          "tree": {
+            "id": "0",
+            "node_type": "latex_document",
+            "label": "latex",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "b8ee66553d3a6ef0",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "text",
+                "label": "\\RequirePackage[current]{latexrelease}",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 38
+                },
+                "structural_hash": "26130b5478197e79",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "document_class",
+                "label": "article",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 15,
+                  "end_line": 1,
+                  "end_col": 22
+                },
+                "structural_hash": "aa55015e87cf64a3",
+                "children": []
+              },
+              {
+                "id": "0.2",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 3,
+                  "start_col": 0,
+                  "end_line": 3,
+                  "end_col": 12
+                },
+                "structural_hash": "038f2ac6c60cdad8",
+                "children": [
+                  {
+                    "id": "0.2.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{foo43}[2018-05-04 New package 1]",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 4,
+                      "end_col": 49
+                    },
+                    "structural_hash": "668db5a84df0158c",
+                    "children": []
+                  },
+                  {
+                    "id": "0.2.1",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 5,
+                      "start_col": 0,
+                      "end_line": 5,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.3",
+                "node_type": "environment",
+                "label": "filecontents",
+                "position": {
+                  "start_line": 7,
+                  "start_col": 0,
+                  "end_line": 7,
+                  "end_col": 12
+                },
+                "structural_hash": "9a5b3a2a602f9aef",
+                "children": [
+                  {
+                    "id": "0.3.0",
+                    "node_type": "text",
+                    "label": "\\ProvidesPackage{bar43}[2018-05-04 New package 2]",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 8,
+                      "end_col": 49
+                    },
+                    "structural_hash": "a068bafdbeee0130",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.1",
+                    "node_type": "text",
+                    "label": "\\RequirePackage{foo43}[2018-05-04]",
+                    "position": {
+                      "start_line": 9,
+                      "start_col": 0,
+                      "end_line": 9,
+                      "end_col": 34
+                    },
+                    "structural_hash": "8938b2b87957b4fa",
+                    "children": []
+                  },
+                  {
+                    "id": "0.3.2",
+                    "node_type": "text",
+                    "label": "\\endinput",
+                    "position": {
+                      "start_line": 10,
+                      "start_col": 0,
+                      "end_line": 10,
+                      "end_col": 9
+                    },
+                    "structural_hash": "10a8804b80ac744b",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "0.4",
+                "node_type": "input",
+                "label": "test2e",
+                "position": {
+                  "start_line": 12,
+                  "start_col": 7,
+                  "end_line": 12,
+                  "end_col": 13
+                },
+                "structural_hash": "c5c3143be394b23e",
+                "children": []
+              },
+              {
+                "id": "0.5",
+                "node_type": "text",
+                "label": "\\START",
+                "position": {
+                  "start_line": 13,
+                  "start_col": 0,
+                  "end_line": 13,
+                  "end_col": 6
+                },
+                "structural_hash": "faac8fcd795bbf6c",
+                "children": []
+              },
+              {
+                "id": "0.6",
+                "node_type": "package",
+                "label": "bar43",
+                "position": {
+                  "start_line": 14,
+                  "start_col": 12,
+                  "end_line": 14,
+                  "end_col": 17
+                },
+                "structural_hash": "c5c347565e38f971",
+                "children": []
+              },
+              {
+                "id": "0.7",
+                "node_type": "text",
+                "label": "\\END",
+                "position": {
+                  "start_line": 15,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 4
+                },
+                "structural_hash": "fb7d5edc7fae5f75",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.7: child outside parent range",
+        "old: 0.3.2: child outside parent range",
+        "old: 0.3.1: child outside parent range",
+        "old: 0.3.0: child outside parent range",
+        "old: 0.2.1: child outside parent range",
+        "old: 0.2.0: child outside parent range",
+        "new: 0.7: child outside parent range",
+        "new: 0.3.2: child outside parent range",
+        "new: 0.3.1: child outside parent range",
+        "new: 0.3.0: child outside parent range",
+        "new: 0.2.1: child outside parent range",
+        "new: 0.2.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 64.92
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.135
+}

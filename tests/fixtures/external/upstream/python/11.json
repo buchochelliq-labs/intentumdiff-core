@@ -1,0 +1,17 @@
+{
+  "bug_type": "value misuse",
+  "buggy_solution": "    def xor(i, j):\n        if i == j:\n            return '1'\n        else:\n            return '0'\n\n    return ''.join(xor(x, y) for x, y in zip(a, b))\n",
+  "canonical_solution": "    def xor(i, j):\n        if i == j:\n            return '0'\n        else:\n            return '1'\n\n    return ''.join(xor(x, y) for x, y in zip(a, b))\n",
+  "declaration": "from typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n",
+  "docstring": "Input are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> string_xor('010', '110')\n'100'",
+  "entry_point": "string_xor",
+  "example_test": "def check(string_xor):\n    assert string_xor('010', '110') == '100'\ncheck(string_xor)\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Python function `string_xor(a: str, b: str) -> str` to solve the following problem:\nInput are two strings a and b consisting only of 1s and 0s.\nPerform binary XOR on these inputs and return result also as a string.\n>>> string_xor('010', '110')\n'100'",
+  "prompt": "from typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n",
+  "signature": "string_xor(a: str, b: str) -> str",
+  "task_id": "Python/11",
+  "test": "\n\n\n\n\ndef check(string_xor):\n    assert string_xor('111000', '101010') == '010010'\n    assert string_xor('1', '1') == '0'\n    assert string_xor('0101', '0000') == '0101'\n\ncheck(string_xor)",
+  "test_setup": ""
+}

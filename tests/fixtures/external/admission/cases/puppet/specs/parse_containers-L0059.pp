@@ -1,0 +1,1 @@
+class foo($a, $b) inherits belgo::bar{}

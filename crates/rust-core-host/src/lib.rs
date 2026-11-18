@@ -1,5 +1,11 @@
 mod source_fallback;
 mod operator_tokens;
+mod atx_heading;
+mod markdown_code_block;
+mod opaque_payload;
+mod python_literals;
+#[cfg(all(test, feature = "tier-c-wasm"))]
+mod semantic_payload_tests;
 
 /// Batch decline reason when the trivia-filtered CSTs hash equal (a style-only edit). The
 /// certified batch leaves style-only presentation to the caller; the native live server serves
@@ -46,6 +52,11 @@ pub mod schema_profiles;
 mod schema_context;
 pub mod host_utils;
 pub mod guardrail_policy;
+mod declaration_facts;
+mod source_text;
+pub mod content_class;
+pub mod completeness;
+mod repro_outline;
 pub mod routed_review;
 pub mod patch_source;
 /// Shared typed symbol/reference API for native Rust consumers.
@@ -202,6 +213,8 @@ pub(crate) fn diff_python_cst_impl(
     // compute. Without this call the two entry points disagreed about the same source.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", "python");
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", "python");
     validate_unique_ids(&old_tree).map_err(|exc| format!("old semantic tree: {exc}"))?;
     validate_unique_ids(&new_tree).map_err(|exc| format!("new semantic tree: {exc}"))?;
 
@@ -280,6 +293,8 @@ fn diff_semantic_tree_impl(
     // path) are left untouched. Only changes labels/facts, not structure.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    declaration_facts::enrich_declaration_facts(&mut old_tree, "", language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, "", language);
 
     let old_count = 1 + old_tree.descendants().len();
     let new_count = 1 + new_tree.descendants().len();
@@ -1313,18 +1328,10 @@ fn augment_html_path_matching<'a>(
     let key_fn: Box<dyn Fn(&SemanticNode, &HashMap<&str, &SemanticNode>) -> Option<Vec<String>>> =
         match language {
             "html" => Box::new(html_path_key),
-            "xml" if xml_tree_is_pom(old_tree) || xml_tree_is_pom(new_tree) => {
-                Box::new(xml_pom_key)
-            }
-            "xml" if xml_tree_is_msbuild(old_tree) || xml_tree_is_msbuild(new_tree) => {
-                Box::new(xml_msbuild_key)
-            }
-            // User-registered dialects (issue #86): interpreted through the same
-            // xml_schema_key body; bundled dialects above outrank them.
-            "xml" => match matching_user_xml_dialect(old_tree, new_tree) {
-                Some(dialect) => Box::new(move |node, by_id| {
-                    xml_schema_key(node, by_id, &|n| user_dialect_coordinate_key(&dialect, n))
-                }),
+            // Bundled POM/MSBuild outrank user-registered dialects (issue #86); all are
+            // interpreted through the same xml_schema_key body.
+            "xml" => match xml_schema_coordinate_fn(old_tree, new_tree) {
+                Some(coordinate_fn) => Box::new(move |node, by_id| xml_schema_key(node, by_id, &*coordinate_fn)),
                 None => return matching,
             },
             _ => return matching,
@@ -1445,6 +1452,13 @@ fn finalize_review_impl(
     // Idempotent for trees whose labels already carry the operator. Retire with core#230.
     operator_tokens::recover_operator_tokens(&mut old_tree, old_source, language);
     operator_tokens::recover_operator_tokens(&mut new_tree, new_source, language);
+    // #275: ATX heading level and optional closing sequence are re-derived from the heading
+    // line (the components drop the level and keep `#` closers in the label).
+    atx_heading::normalize_atx_headings(&mut old_tree, old_source, language);
+    atx_heading::normalize_atx_headings(&mut new_tree, new_source, language);
+    // #274: CommonMark code blocks compare by rendered content + info string, not form.
+    markdown_code_block::normalize_code_blocks(&mut old_tree, old_source, language);
+    markdown_code_block::normalize_code_blocks(&mut new_tree, new_source, language);
 
     if config.fallback_to_token_diff && (
         source_fallback::parse_errors_present_impl(old_source, old_tree_json, language)? == "true" ||
@@ -1453,7 +1467,7 @@ fn finalize_review_impl(
         let diff = source_fallback::source_fallback_diff_impl(old_source, new_source, "", "", language, "parse_errors")?;
         return Ok(json!({"used":true,"engine":"rust_source_fallback_v1", "changes":diff["changes"],
             "change_groups":diff["change_groups"],"is_style_only":false,"no_surviving_changes":!diff["has_semantic_changes"].as_bool().unwrap_or(false),
-            "ignored_style_changes":[],"fallback_diff":diff}).to_string());
+            "completeness":diff["completeness"],"ignored_style_changes":[],"fallback_diff":diff}).to_string());
     }
 
     let old_count = 1 + old_tree.descendants().len();
@@ -1475,6 +1489,9 @@ fn finalize_review_impl(
     // Cross-language NodeFacts (issue #70): fill facts for function entities lacking them.
     enrich_tree_facts(&mut old_tree);
     enrich_tree_facts(&mut new_tree);
+    // Declaration visibility + stub sentinel (language rules; header re-read from source).
+    declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, language);
+    declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, language);
 
     // Source absence, not child count, determines a lifecycle boundary. Leaf trees
     // may represent populated files. Never expose the empty placeholder as a change.
@@ -1513,14 +1530,15 @@ fn finalize_review_impl(
             "change_groups": [],
             "is_style_only": false,
             "no_surviving_changes": false,
+            "completeness": completeness::COMPLETE,
             "ignored_style_changes": [],
         })
         .to_string());
     }
 
-    if config.collect_trace {
-        finalize_trace_start();
-    }
+    // Always traced: the per-pass record feeds both diagnostics (`collect_trace`) and the
+    // suppression outline of an incomplete review (core #252).
+    finalize_trace_start();
     let matching = compute_matching_with_diagnostics_indexed(
         &TreeIndex::new(&old_tree),
         &TreeIndex::new(&new_tree),
@@ -1552,7 +1570,9 @@ fn finalize_review_impl(
     // identity within their statement, so an added JOIN doesn't shift FROM into a bogus MOVE.
     let matching = augment_sql_query_matching(&old_tree, &new_tree, matching, language);
     let script =
-        generate_edit_script_with_diagnostics(&old_tree, &new_tree, &matching, None);
+        generate_edit_script_with_diagnostics_indexed_source_aware(
+            &TreeIndex::new(&old_tree), &TreeIndex::new(&new_tree), &matching, None,
+            Some((old_source, new_source, language)));
     let mut drafts: Vec<ChangeDraft> = script.ops.into_iter().map(edit_op_to_draft).collect();
     // Snapshot the raw drafts so js/ts style suppression residue can be relabelled as
     // IGNORED_STYLE evidence after the passes run (python _style_groups_from_suppression).
@@ -1602,39 +1622,46 @@ fn finalize_review_impl(
             finalization.change_groups.push(group);
         }
     }
+    finalize_debug_probe("review:language_scaffold_churn", &drafts);
 
     // Resource-profile change augmentation (issue #39): promote same-key attribute value
     // changes to attribute-level MODIFICATIONs and surface keyed review-container add/delete.
     // No-op for non-resource languages.
     augment_resource_profile_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_resource_profile_changes", &drafts);
     // Statement-profile change augmentation (issue #57 asm/bash/delphi): demote a same-key
     // MOVE/REORDER (a stable-identity statement merely shifted by an insertion) to a MODIFICATION
     // or drop it. No-op for other languages.
     augment_statement_profile_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_statement_profile_changes", &drafts);
     // Statement-profile scaffold suppression (issue #57 bash/delphi): fold sub-token churn under a
     // MODIFIED review container into the one MODIFICATION (the general descendant-noise pass only
     // roots on ADD/DELETE/MOVE, not a MODIFICATION). No-op for other languages.
     suppress_statement_container_descendant_noise_drafts(&mut drafts, language);
+    finalize_debug_probe("review:suppress_statement_container_descendant_noise", &drafts);
     // Query-profile change augmentation (issue #57 sql): demote same-key clause MOVEs (positional
     // displacement from an inserted JOIN) and recover keyed clause/field add/deletes.
     augment_sql_query_changes_drafts(&mut drafts, &old_tree, &new_tree, language);
+    finalize_debug_probe("review:augment_sql_query_changes", &drafts);
     // Keyed-data change augmentation (issue #57 json/yaml): recover keyed pair/item ADD/DELETEs
     // hidden by coarse container matches; identical-content positional-label churn suppresses
     // with evidence.
     if let Some(group) =
-        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language)
+        augment_keyed_data_changes_drafts(&mut drafts, &old_tree, &new_tree, language, old_source, new_source)
     {
         finalization.change_groups.push(group);
     }
+    finalize_debug_probe("review:augment_keyed_data_changes", &drafts);
     // YAML representation-graph equivalence (issue #57 yaml): block↔flow style churn suppresses
     // with evidence; a diff fully consumed by it is style-only.
     if language == "yaml" {
-        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts) {
+        if let Some(group) = suppress_yaml_representation_equivalent_drafts(&mut drafts, old_source, new_source) {
             finalization.change_groups.push(group);
             if drafts.is_empty() {
                 finalization.is_style_only = true;
             }
         }
+        finalize_debug_probe("review:suppress_yaml_representation_equivalent", &drafts);
     }
     // js/ts style rule (issue #57 javascript): relabel suppression residue as IGNORED_STYLE.
     if let Some((group, ignored)) =
@@ -1647,11 +1674,21 @@ fn finalize_review_impl(
     // The issue #51 style discriminator, mirrored from the batch finalization: an empty
     // result on differing sources is style-only ONLY under (normalized) tree equality.
     if drafts.is_empty() && old_source != new_source {
-        let style_equivalent = old_tree.structural_hash == new_tree.structural_hash
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
+        let style_equivalent = opaque_payload::trees_equivalent(&old_tree, &new_tree,
+            Some((old_source, new_source, language)));
         if style_equivalent {
             finalization.is_style_only = true;
+        } else if unordered_mapping_equivalent(&old_tree, &new_tree, old_source, new_source, language) {
+            // Member order of an unordered mapping is not a change: an explicit proof, so
+            // the review is `equivalent` (core #252), not style-only and not incomplete.
+            finalization.is_style_only = false;
+            finalization.equivalence_proof = Some(UNORDERED_MAPPING_RULE);
+            finalization.change_groups.push(json!({
+                "kind": "NOISE_SUPPRESSED", "raw_change_indices": [], "confidence": 1.0,
+                "rule_id": UNORDERED_MAPPING_RULE,
+                "metadata": {"index_space": "equivalence_proof", "reason":
+                    "Only the order of members of an unordered mapping changed; keys and values are identical."},
+            }));
         } else {
             finalization.is_style_only = false;
             finalization.no_surviving_changes = true;
@@ -1667,13 +1704,20 @@ fn finalize_review_impl(
         change_groups.push(group);
         ignored_style_changes.push(ignored);
     }
+    finalize_debug_probe("review:final", &drafts);
+    let records = finalize_trace_take();
     let trace: Vec<Value> = if config.collect_trace {
-        finalize_trace_take()
-            .into_iter()
-            .map(|(pass, count)| json!({"pass": pass, "changes_after": count}))
+        records.iter()
+            .map(|(pass, kinds)| json!({"pass": pass, "changes_after": kinds.len()}))
             .collect()
     } else {
         Vec::new()
+    };
+    // Which passes removed which drafts, only when nothing survived on differing sources.
+    let suppression_trace = if drafts.is_empty() && old_source != new_source {
+        suppression_trace_value(&records)
+    } else {
+        Value::Null
     };
     Ok(json!({
         "used": true,
@@ -1683,7 +1727,11 @@ fn finalize_review_impl(
         "change_groups": change_groups,
         "is_style_only": finalization.is_style_only,
         "no_surviving_changes": finalization.no_surviving_changes,
+        "equivalence_proof": finalization.equivalence_proof,
+        "completeness": completeness::classify(!serialized.changes.is_empty(), Some(old_source == new_source),
+            finalization.is_style_only, finalization.equivalence_proof.is_some(), finalization.no_surviving_changes),
         "ignored_style_changes": ignored_style_changes,
+        "suppression_trace": suppression_trace,
         "trace": trace,
     })
     .to_string())
@@ -1704,46 +1752,37 @@ fn synthetic_structural_hash(node_type: &str, label: &str, children: &[SemanticN
     format!("{:x}", hasher.finalize())
 }
 
+/// Identity enrichment adds information; its exported projection must not erase
+/// opaque payload already represented by the parser's original structural hash.
+fn enriched_structural_hash(node: &SemanticNode, label: &str, children: &[SemanticNode]) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(node.structural_hash.as_bytes());
+    hasher.update(b"\0enriched_projection\0");
+    hasher.update(synthetic_structural_hash(&node.node_type, label, children).as_bytes());
+    format!("{:x}", hasher.finalize())
+}
+
 /// python statement_profiles._source_slice + _compact_source: the node's source span,
-/// whitespace-collapsed. asm/delphi parsers emit 1-based lines (python parity).
+/// whitespace-collapsed. All parsers emit 0-based rows and UTF-8 byte columns (#52, #249).
+/// A span running past its line or the source is clamped, but a column that splits a code
+/// point yields no snippet (the parser label is kept).
 fn profile_source_snippet(source_lines: &[&str], node: &SemanticNode) -> String {
-    if source_lines.is_empty() {
-        return String::new();
-    }
     let pos = &node.position;
-    // All parsers emit 0-based rows (issue #52); the asm/delphi one_based
-    // compensation that lived here died with their 1-based emission.
-    let start_line = pos.start_line as i64;
-    let end_line = pos.end_line as i64;
-    if start_line < 0 || start_line as usize >= source_lines.len() {
+    let start_line = pos.start_line as usize;
+    if start_line >= source_lines.len() {
         return String::new();
     }
-    let start_line = start_line as usize;
-    let end_line = (end_line.max(start_line as i64) as usize).min(source_lines.len() - 1);
-    let clip = |line: &str, from: Option<usize>, to: Option<usize>| -> String {
-        let chars: Vec<char> = line.chars().collect();
-        let from = from.unwrap_or(0).min(chars.len());
-        let to = to.unwrap_or(chars.len()).min(chars.len());
-        if from >= to {
-            return String::new();
-        }
-        chars[from..to].iter().collect()
-    };
-    let raw = if start_line == end_line {
-        clip(
-            source_lines[start_line],
-            Some(pos.start_col as usize),
-            Some(pos.end_col as usize),
-        )
+    let requested_end = (pos.end_line as usize).max(start_line);
+    let (end_line, end_col) = if requested_end < source_lines.len() {
+        (requested_end, pos.end_col as usize)
     } else {
-        let mut parts = vec![clip(source_lines[start_line], Some(pos.start_col as usize), None)];
-        for line in &source_lines[start_line + 1..end_line] {
-            parts.push((*line).to_string());
-        }
-        parts.push(clip(source_lines[end_line], None, Some(pos.end_col as usize)));
-        parts.join("\n")
+        let last = source_lines.len() - 1;
+        (last, source_lines[last].len())
     };
-    raw.split_whitespace().collect::<Vec<_>>().join(" ")
+    let end_col = if end_line == start_line { end_col.max(pos.start_col as usize) } else { end_col };
+    label_enrichment::utf8_source_span(source_lines, start_line, pos.start_col as usize, end_line, end_col)
+        .map(|raw| raw.split_whitespace().collect::<Vec<_>>().join(" "))
+        .unwrap_or_default()
 }
 
 /// python statement_profiles._bash_command_label_from_children.
@@ -1785,7 +1824,12 @@ fn enrich_profile_labels_impl(
         let source_lines: Vec<&str> = source.lines().collect();
         enrich_statement_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "css" | "scss" | "html" | "xml" | "mdx") {
-        let source_lines: Vec<&str> = source.lines().collect();
+        // Style values retain exact CRLF bytes, including escaped continuations.
+        let source_lines: Vec<&str> = if matches!(language.as_str(), "css" | "scss") {
+            source.split('\n').collect()
+        } else {
+            source.lines().collect()
+        };
         enrich_path_profile_labels_node(&tree, &source_lines, &language)
     } else if matches!(language.as_str(), "json" | "yaml") {
         // python keyed identity set: id/key/name + normalized schema identity fields.
@@ -2497,10 +2541,24 @@ impl RustCoreConfig {
     }
 }
 
+/// Marker every size-limit error carries, so the C ABI can classify it (`size_limit`)
+/// however a caller prefixes the message.
+pub(crate) const SIZE_LIMIT_MARKER: &str = "size limit exceeded";
+
+pub(crate) fn is_size_limit_error(message: &str) -> bool {
+    message.contains(SIZE_LIMIT_MARKER)
+}
+
+/// Enforce a configured byte limit (#301). The error names the diff-config setting that
+/// raises it: parser output is bounded by `max_plugin_output_bytes`, sources/CSTs/trees by
+/// `max_cst_bytes`.
 fn check_byte_limit(label: &str, text: &str, limit: usize) -> Result<(), String> {
     let size = text.len();
     if size > limit {
-        Err(format!("{label} is {size} bytes; limit is {limit} bytes"))
+        let setting = if label.contains("parser output") { "max_plugin_output_bytes" } else { "max_cst_bytes" };
+        Err(format!(
+            "{SIZE_LIMIT_MARKER}: {label} is {size} bytes; limit is {limit} bytes (raise diff config `{setting}`)"
+        ))
     } else {
         Ok(())
     }
@@ -2799,6 +2857,9 @@ struct PythonReviewFinalization {
     ignored_style_changes: Vec<Value>,
     is_style_only: bool,
     no_surviving_changes: bool,
+    /// Rule id of a suppressor that proved the sources equivalent although they are not
+    /// style-only (core #252). Read by the completeness boundary; `None` = no proof.
+    equivalence_proof: Option<&'static str>,
 }
 
 #[derive(Clone, Debug)]
@@ -2931,8 +2992,82 @@ struct WasmProcessPair {
     cache_key: String,
 }
 
-static PARSER_COMPONENT_CACHE: OnceLock<Mutex<HashMap<String, Arc<CachedParserComponent>>>> =
+static PARSER_COMPONENT_CACHE: OnceLock<Mutex<BoundedComponentCache<Arc<CachedParserComponent>>>> =
     OnceLock::new();
+
+/// Most compiled parser components kept per process (#259): every bundled grammar in both
+/// metering modes fits, while churn through distinct paths stops growing at this ceiling.
+const MAX_CACHED_PARSER_COMPONENTS: usize = 192;
+/// Budget on the summed component file sizes the cache retains (compiled code is roughly
+/// proportional), so a few huge components cannot pin unbounded memory either.
+const MAX_CACHED_PARSER_COMPONENT_BYTES: u64 = 2 * 1024 * 1024 * 1024;
+
+/// Process-global compiled-component cache with deterministic bounds (#259). Keys are
+/// `path|len=..|mtime=..|metered=..`; a new revision of a path (same path + metering,
+/// different len/mtime) replaces the old one, and beyond the entry/byte budgets the least
+/// recently used entry is evicted. Evicted values stay valid for holders of their `Arc`.
+struct BoundedComponentCache<V> {
+    entries: HashMap<String, (V, u64, u64)>,
+    tick: u64,
+    max_entries: usize,
+    max_bytes: u64,
+}
+
+impl<V: Clone> BoundedComponentCache<V> {
+    fn new(max_entries: usize, max_bytes: u64) -> Self {
+        Self { entries: HashMap::new(), tick: 0, max_entries, max_bytes }
+    }
+
+    fn get(&mut self, key: &str) -> Option<V> {
+        self.tick += 1;
+        let tick = self.tick;
+        self.entries.get_mut(key).map(|(value, _, used)| {
+            *used = tick;
+            value.clone()
+        })
+    }
+
+    /// The identity of a key without its revision (`path` + metering).
+    fn identity(key: &str) -> (&str, &str) {
+        let path = key.split("|len=").next().unwrap_or(key);
+        let metered = key.rsplit("|metered=").next().unwrap_or("");
+        (path, metered)
+    }
+
+    fn bytes_of(key: &str) -> u64 {
+        key.split("|len=").nth(1).and_then(|rest| rest.split('|').next())
+            .and_then(|n| n.parse().ok()).unwrap_or(0)
+    }
+
+    /// Insert unless present; returns the value now cached for `key`.
+    fn insert(&mut self, key: String, value: V) -> V {
+        self.tick += 1;
+        if let Some((existing, _, used)) = self.entries.get_mut(&key) {
+            *used = self.tick;
+            return existing.clone();
+        }
+        let identity = Self::identity(&key);
+        let stale: Vec<String> = self.entries.keys()
+            .filter(|k| Self::identity(k) == identity).cloned().collect();
+        for k in stale {
+            self.entries.remove(&k);
+        }
+        let bytes = Self::bytes_of(&key);
+        self.entries.insert(key, (value.clone(), bytes, self.tick));
+        while self.entries.len() > self.max_entries
+            || (self.entries.len() > 1 && self.entries.values().map(|(_, b, _)| *b).sum::<u64>() > self.max_bytes)
+        {
+            let Some(oldest) = self.entries.iter().min_by_key(|(k, (_, _, used))| (*used, (*k).clone()))
+                .map(|(k, _)| k.clone()) else { break };
+            self.entries.remove(&oldest);
+        }
+        value
+    }
+
+    fn len(&self) -> usize {
+        self.entries.len()
+    }
+}
 
 impl ParserHostState {
     fn new() -> Self {
@@ -3182,7 +3317,7 @@ fn diff_python_sources_final_impl(
         && (old_ts_tree.root_node().has_error() || new_ts_tree.root_node().has_error())
     {
         let mut diff = source_fallback::source_fallback_diff_impl(old_source, new_source, old_filename, new_filename, "python", "parse_errors")?;
-        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle);
+        apply_file_lifecycle_to_diff(&mut diff, &file_lifecycle, Some((old_source, new_source)));
         return Ok(diff);
     }
     let (
@@ -3258,7 +3393,7 @@ fn diff_python_sources_final_impl(
             diff["metadata"]["rust_core"]["used"] = json!(true);
             diff["metadata"]["rust_phase_timings"] =
                 diff["metadata"]["rust_core"]["details"]["phase_timings"].clone();
-            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
             return Ok(diff);
         }
         let max_cst_nodes = old_cst_nodes.max(new_cst_nodes);
@@ -3348,7 +3483,7 @@ fn diff_python_sources_final_impl(
             diff["metadata"]["rust_core"]["used"] = json!(true);
             diff["metadata"]["rust_phase_timings"] =
                 diff["metadata"]["rust_core"]["details"]["phase_timings"].clone();
-            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+            apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
             return Ok(diff);
         }
 
@@ -3433,6 +3568,8 @@ fn diff_python_sources_final_impl(
     probe.measure("rust_semantic_facts_enrich", || {
         enrich_tree_facts(&mut old_tree);
         enrich_tree_facts(&mut new_tree);
+        declaration_facts::enrich_declaration_facts(&mut old_tree, old_source, "python");
+        declaration_facts::enrich_declaration_facts(&mut new_tree, new_source, "python");
         Ok::<(), String>(())
     })?;
     let old_index = TreeIndex::new(&old_tree);
@@ -3463,11 +3600,12 @@ fn diff_python_sources_final_impl(
     let matching = matching_report.pairs;
     let initial_diff_started = probe.enabled().then(Instant::now);
     let draft_generation_started = probe.enabled().then(Instant::now);
-    let script = generate_edit_script_with_diagnostics_indexed(
+    let script = generate_edit_script_with_diagnostics_indexed_source_aware(
         &old_index,
         &new_index,
         &matching,
         Some(&mut probe),
+        Some((old_source, new_source, "python")),
     );
     let mut change_report = ChangeGenerationReport {
         drafts: script.ops.into_iter().map(edit_op_to_draft).collect(),
@@ -3480,6 +3618,7 @@ fn diff_python_sources_final_impl(
     let initial_add_delete_noise = add_delete_noise_count_drafts(&change_report.drafts);
     let refinement_started = probe.enabled().then(Instant::now);
     let draft_refinement_started = probe.enabled().then(Instant::now);
+    finalize_trace_start();
     refine_candidate_drafts(&mut change_report.drafts, &matching, Some(&mut probe), "python", Some((old_source, new_source)));
     probe.push_elapsed("rust_change_draft_refinement", draft_refinement_started);
     probe.push_elapsed("rust_candidate_refinement", refinement_started);
@@ -3499,6 +3638,13 @@ fn diff_python_sources_final_impl(
         "rust_python_review_finalization",
         review_finalization_started,
     );
+    finalize_debug_probe("review:final", &change_report.drafts);
+    let suppression_trace = if change_report.drafts.is_empty() && old_source != new_source {
+        suppression_trace_value(&finalize_trace_take())
+    } else {
+        finalize_trace_take();
+        Value::Null
+    };
     let serialization_started = probe.enabled().then(Instant::now);
     let serialized_changes = if probe.enabled() {
         serialize_change_drafts_with_size_maps(
@@ -3535,9 +3681,8 @@ fn diff_python_sources_final_impl(
         // DIFFER, suppression reduced a real semantic delta to zero — that must never be
         // presented as style equivalence (the #41 pass -> print false negative rode the old
         // blanket claim, with fabricated source-equivalence evidence).
-        let style_equivalent = old_tree.structural_hash == new_tree.structural_hash
-            || whitespace_normalized_tree_hash(&old_tree)
-                == whitespace_normalized_tree_hash(&new_tree);
+        let style_equivalent = opaque_payload::trees_equivalent(&old_tree, &new_tree,
+            Some((old_source, new_source, "python")));
         if style_equivalent {
             review_finalization.is_style_only = true;
             if let Ok(style_evidence) = rust_build_style_only_evidence(&json!({
@@ -3642,12 +3787,13 @@ fn diff_python_sources_final_impl(
         "finalized":{"changes":diff["changes"], "change_groups":diff["change_groups"],
             "is_style_only":diff["is_style_only"],
             "ignored_style_changes":diff["metadata"]["ignored_style_changes"],
-            "no_surviving_changes":diff["metadata"]["no_surviving_changes"]}
+            "no_surviving_changes":diff["metadata"]["no_surviving_changes"],
+            "suppression_trace":suppression_trace}
     }))?;
-    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only"] {
+    for key in ["changes", "change_groups", "has_semantic_changes", "is_style_only", "completeness", "incomplete"] {
         diff[key] = completed[key].clone();
     }
-    for key in ["ignored_style_changes", "no_surviving_changes"] {
+    for key in ["ignored_style_changes", "no_surviving_changes", "equivalence_proof"] {
         if let Some(value) = completed["metadata"].get(key) { diff["metadata"][key] = value.clone(); }
     }
     // Scope indices also refer to the surviving final change list.
@@ -3659,7 +3805,7 @@ fn diff_python_sources_final_impl(
     } else {
         diff["metadata"].as_object_mut().unwrap().remove("scope_trails");
     }
-    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
     Ok(diff)
 }
 
@@ -4264,7 +4410,7 @@ fn diff_batch_file_item(
             match incomplete {
                 Ok(Some(mut diff)) => {
                     attach_content_type_metadata(&mut diff, old_source, new_source);
-                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+                    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
                     return BatchItemResult::complete(json!({"index":index,"old_filename":old_filename,
                         "new_filename":new_filename,"language":"python","status":COMPLETE,"diff":diff}), false);
                 }
@@ -4308,7 +4454,7 @@ fn diff_batch_file_item(
         );
         diff["metadata"]["rust_core"]["engine"] = json!(BATCH_ENGINE);
         attach_content_type_metadata(&mut diff, old_source, new_source);
-        apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+        apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
         return BatchItemResult::complete(
             json!({
                 "index": index,
@@ -4665,12 +4811,11 @@ fn serialize_ts_node(node: tree_sitter::Node<'_>, source: &[u8]) -> Result<CstNo
         }
     }
     let keep_text = children.is_empty() || matches!(node.kind(), "string" | "integer" | "float");
+    // The full text: it is identity (structural hashing and literal semantics read it), so a
+    // cap made a suffix-only edit past it hash-equal and the review fell back (#289). Display
+    // labels apply their own bounds downstream.
     let text = if keep_text {
-        node.utf8_text(source)
-            .unwrap_or("")
-            .chars()
-            .take(4096)
-            .collect()
+        node.utf8_text(source).unwrap_or("").to_owned()
     } else {
         String::new()
     };
@@ -4785,6 +4930,39 @@ fn fuel_budget(floor: u64, candidate: u64) -> u64 {
     }
 }
 
+/// The content-scaled parser fuel policy every single-source / pair parse uses: the configured
+/// `plugin_fuel` is a documented MINIMUM that scales to `20_000_000 + 20_000 * content_len` for
+/// real-world files; `u64::MAX` (any negative `plugin_fuel`) stays unlimited; a deliberately
+/// tight budget below 1M is kept exactly (fuel-exhaustion tests). Saturating, so an arbitrary
+/// binding-supplied length cannot wrap into a small budget (or saturate into unlimited).
+pub(crate) fn content_fuel_budget(plugin_fuel: u64, content_len: u64) -> u64 {
+    // Capped below u64::MAX: a saturated candidate must never turn a bounded config unlimited.
+    let candidate = 20_000_000u64.saturating_add(content_len.saturating_mul(20_000)).min(u64::MAX - 1);
+    fuel_budget(plugin_fuel, candidate)
+}
+
+/// C ABI / API `fuel_budget`: the effective Wasm fuel for `content_len` bytes of source under
+/// `config_json` (same validation as every diff config). `None` = unlimited.
+pub(crate) fn fuel_budget_for_content(config_json: &str, content_len: u64) -> Result<Option<u64>, String> {
+    let fuel = content_fuel_budget(RustCoreConfig::from_json(config_json)?.plugin_fuel, content_len);
+    Ok((fuel != u64::MAX).then_some(fuel))
+}
+
+/// `Err("plugin returned error (<side>): <message>")` when a parser returned the in-band error
+/// envelope instead of a tree. Non-JSON or tree output is left to the stage that decodes it.
+fn reject_plugin_error_envelope(raw: &str, side: &str) -> Result<(), String> {
+    match serde_json::from_str::<Value>(raw) {
+        Ok(value) => match value.get("error") {
+            Some(error) => Err(format!(
+                "plugin returned error ({side}): {}",
+                error.as_str().map(str::to_string).unwrap_or_else(|| error.to_string())
+            )),
+            None => Ok(()),
+        },
+        Err(_) => Ok(()),
+    }
+}
+
 fn parse_semantic_tree_json(raw: &str) -> Result<SemanticNode, String> {
     let value: Value = serde_json::from_str(raw)
         .map_err(|exc| format!("parse plugin SemanticNode JSON: {exc}"))?;
@@ -4840,14 +5018,16 @@ fn cached_parser_component(
         None
     };
     let cache_key = parser_component_cache_key(wasm_path, metered)?;
-    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
+    let cache = PARSER_COMPONENT_CACHE.get_or_init(|| {
+        Mutex::new(BoundedComponentCache::new(MAX_CACHED_PARSER_COMPONENTS, MAX_CACHED_PARSER_COMPONENT_BYTES))
+    });
     {
-        let guard = cache
+        let mut guard = cache
             .lock()
             .map_err(|_| "parser component cache lock poisoned".to_owned())?;
         if let Some(cached) = guard.get(&cache_key) {
             return Ok(ParserComponentLookup {
-                cached: Arc::clone(cached),
+                cached,
                 cache_hit: true,
                 cache_key,
             });
@@ -4866,9 +5046,9 @@ fn cached_parser_component(
     let mut guard = cache
         .lock()
         .map_err(|_| "parser component cache lock poisoned".to_owned())?;
-    let cached = guard.entry(cache_key.clone()).or_insert_with(|| cached);
+    let cached = guard.insert(cache_key.clone(), cached);
     Ok(ParserComponentLookup {
-        cached: Arc::clone(cached),
+        cached,
         cache_hit: false,
         cache_key,
     })
@@ -5133,6 +5313,7 @@ fn native_generic_text_diff(
             "old_source": old_source,
             "new_source": new_source,
             "language": language,
+            "evidence_source": "text_lines",
         })) {
             if let Some(groups) = evidence.get("change_groups").and_then(Value::as_array) {
                 change_groups.extend(groups.iter().cloned());
@@ -5173,7 +5354,7 @@ fn native_generic_text_diff(
         "metadata": metadata,
     });
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
     Ok(diff)
 }
 
@@ -5217,7 +5398,7 @@ pub fn parse_to_tree(
     } else if !resolved.wasm_path.is_empty() {
         // Non-Python: parse via the resolved full-parse Wasm grammar. Both pair sides are the same
         // content (one wasted parse — cheaper than a single-side parser API); take one tree.
-        let fuel = fuel_budget(config.plugin_fuel, 20_000_000 + content.len() as u64 * 20_000);
+        let fuel = content_fuel_budget(config.plugin_fuel, content.len() as u64);
         let (tree, _) = run_python_wasm_process_pair(
             &resolved.wasm_path,
             content,
@@ -5294,10 +5475,8 @@ pub(crate) fn native_wasm_single_diff(
     // yields the python-parity DELETION+ADDITION shape.
     // Size-scaled budget (the flat 20M floor starved real-world files — a ~25KB .rs blob
     // traps with "all fuel consumed"; the batch scales ~200k fuel per CST node, ~20k/byte).
-    let adaptive_fuel = fuel_budget(
-        config.plugin_fuel,
-        20_000_000 + (old_source.len() + new_source.len()) as u64 * 20_000,
-    );
+    let adaptive_fuel =
+        content_fuel_budget(config.plugin_fuel, (old_source.len() + new_source.len()) as u64);
     let mut parser_calls = Vec::new();
     let (old_tree_json, new_tree_json) = if old_source.is_empty() && new_source.is_empty() {
         (
@@ -5356,6 +5535,11 @@ pub(crate) fn native_wasm_single_diff(
     // Stage 4-7 literal-label enrichment (differ.py:1604) BEFORE the profile pass: string
     // literals carry their decoded VALUE as label — keyed enrichment + guardrail semantic paths
     // key off them (unlabeled pairs = zero guardrail paths).
+    // A parser that cannot parse a side returns the WIT `{"error": ...}` envelope. Report it as
+    // the parser's error before any stage decodes the output as a tree; decoding it first
+    // surfaced a misleading "literal enrich ...: missing field `id`" (core #280).
+    reject_plugin_error_envelope(&old_tree_json, "old")?;
+    reject_plugin_error_envelope(&new_tree_json, "new")?;
     let old_tree_json = enrich_literal_labels_json_str(&old_tree_json, old_source)
         .map_err(|exc| format!("literal enrich (old): {exc}"))?;
     let new_tree_json = enrich_literal_labels_json_str(&new_tree_json, new_source)
@@ -5400,7 +5584,7 @@ pub(crate) fn native_wasm_single_diff(
         if schema_metadata["provider_id"] != "none" || schema_metadata["errors"].as_array().is_some_and(|e|!e.is_empty()) {
         diff["metadata"]["schema"] = schema_metadata;
     }
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
         if let Some(rules) = guardrail_rules {
             let violations = evaluate_guardrail_rules_for_diff(
                 &diff, rules, language, old_filename, new_filename, "null", "null")?;
@@ -5422,7 +5606,7 @@ pub(crate) fn native_wasm_single_diff(
     }
     // File lifecycle (add/delete/modify) — mirrors differ's _apply_file_lifecycle_to_diff.
     let lifecycle = infer_file_lifecycle(None, old_source, new_source, None);
-    apply_file_lifecycle_to_diff(&mut diff, lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, lifecycle, Some((old_source, new_source)));
     // Protected-path guardrail rules (#100): evaluated AFTER lifecycle like the differ
     // (apply_guardrails_to_diff runs on the routed diff), using the same enriched trees.
     if let Some(rules) = guardrail_rules {
@@ -5515,8 +5699,10 @@ fn python_wasm_filtered_cst(source: &str) -> Result<String, String> {
 /// sides parse to trees the SAME way `differ.parse` does — Python through the bundled Wasm parser
 /// in interpret-cst mode (fed the trivia-stripped CST), other languages through their full-parse
 /// Wasm parser — so the symbol tables (and thus the cross-file changes) match the differ's. Builds
-/// the two symbol tables and diffs them. Every required parse/index failure aborts the
-/// commit review: an empty cross-file result is valid only after successful indexing. *files* are the same commit-batch file objects the
+/// the two symbol tables and diffs them. A per-file parse/index failure excludes only that file
+/// and is reported in `index_errors` with `cross_file_index_status: "partial"` (#298); an empty
+/// cross-file result proves "no cross-file change" only when the status is "complete". Bundle
+/// and table faults still abort. *files* are the same commit-batch file objects the
 /// per-file diffs used; *wasm_dir* is the bundled parser dir (for the Python parser wasm).
 // A symbol named "error" is valid source data: only the typed table schema
 // distinguishes it from the index engine's string-valued error envelope.
@@ -5564,15 +5750,187 @@ mod symbol_index_error_name_tests {
     }
 }
 
+/// `cross_file_index_status` when every changed file contributed to the commit symbol index.
+pub(crate) const CROSS_FILE_INDEX_COMPLETE: &str = "complete";
+/// `cross_file_index_status` when at least one changed file could not be indexed (#298).
+pub(crate) const CROSS_FILE_INDEX_PARTIAL: &str = "partial";
+
+/// Outcome of commit-wide symbol indexing (#298). One changed file that cannot be indexed (fuel
+/// exhausted, parser error, malformed tree) no longer discards the cross-file analysis of the
+/// others: the file is left out of BOTH side tables — so none of its symbols can masquerade as
+/// moved or deleted — and is reported in `index_errors`. Fail-closed honesty is kept by the
+/// explicit `cross_file_index_status` ("partial" whenever `index_errors` is non-empty): an
+/// empty or short `cross_file_changes` list only proves "no cross-file change" when the status
+/// is "complete".
+pub(crate) struct CommitCrossFileIndex {
+    pub(crate) changes: Value,
+    pub(crate) index_errors: Vec<Value>,
+    pub(crate) indexed_file_count: usize,
+    pub(crate) telemetry: HashMap<(String, String), Vec<Value>>,
+}
+
+impl CommitCrossFileIndex {
+    pub(crate) fn status(&self) -> &'static str {
+        if self.index_errors.is_empty() { CROSS_FILE_INDEX_COMPLETE } else { CROSS_FILE_INDEX_PARTIAL }
+    }
+
+    /// The structured completeness fields every commit-level caller publishes (live review
+    /// response metadata, `commit_cross_file_index` C ABI result).
+    pub(crate) fn completeness(&self) -> Value {
+        json!({
+            "cross_file_index_status": self.status(),
+            "cross_file_index_complete": self.index_errors.is_empty(),
+            "indexed_file_count": self.indexed_file_count,
+            "index_errors": self.index_errors,
+        })
+    }
+}
+
+/// Stable machine code for a per-file index failure, so callers never parse error text.
+fn commit_index_error_code(reason: &str) -> &'static str {
+    let lower = reason.to_ascii_lowercase();
+    if lower.contains("fuel_exceeded") || lower.contains("all fuel consumed")
+        || lower.contains("out of fuel") || lower.contains("outoffuel")
+    {
+        "fuel_exceeded"
+    } else if lower.contains("exceeds") && lower.contains("limit") {
+        "output_limit_exceeded"
+    } else {
+        "parser_error"
+    }
+}
+
+fn commit_index_error(
+    old_filename: &str,
+    new_filename: &str,
+    language: &str,
+    side: &str,
+    code: &str,
+    reason: &str,
+) -> Value {
+    let path = if new_filename.is_empty() { old_filename } else { new_filename };
+    json!({"path": path, "old_filename": old_filename, "new_filename": new_filename,
+        "language": language, "side": side, "code": code, "reason": reason})
+}
+
+/// A parser tree is indexable only as a SemanticNode object, never an error envelope.
+fn commit_index_tree(raw: &str) -> Result<Value, String> {
+    let tree: Value = serde_json::from_str(raw).map_err(|reason| format!("invalid tree: {reason}"))?;
+    if !tree.is_object() || tree.get("error").is_some() {
+        return Err(format!("malformed tree: {}", tree.get("error").unwrap_or(&tree)));
+    }
+    Ok(tree)
+}
+
+/// Build both side tables from the indexed files and diff them. Table/diff failures are not
+/// per-file input problems and still abort (fail closed).
+fn diff_commit_symbol_tables(old_files: Vec<Value>, new_files: Vec<Value>) -> Result<Value, String> {
+    let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
+    let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
+    for (side, table) in [("old", &old_table), ("new", &new_table)] {
+        validate_symbol_index_table(table, side)?;
+    }
+    let changes: Value = serde_json::from_str(
+        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
+    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
+    if !changes.is_array() {
+        return Err(format!("symbol-index diff did not return changes: {changes}"));
+    }
+    Ok(changes)
+}
+
+/// C ABI `commit_cross_file_index` (#298): the commit-wide cross-file analysis for hosts that
+/// parse each changed file themselves (Python `CommitDiffer.finalize_commit_diff`). *files_json*
+/// is an array of `{old_filename, new_filename, language, old_tree, new_tree, old_error,
+/// new_error}`; a side's tree is a SemanticNode object or null (empty side: add/delete), and a
+/// side's error is the host's parse failure text or null. The partial-index policy lives here,
+/// not in the binding: a file with any side error (or a malformed tree) is excluded from both
+/// tables and reported in `index_errors`, and the result carries `cross_file_index_status`.
+pub(crate) fn commit_cross_file_index_impl(files_json: &str) -> Result<String, String> {
+    let files: Vec<Value> = serde_json::from_str(files_json)
+        .map_err(|reason| format!("files_json must be a JSON array: {reason}"))?;
+    let mut old_files = Vec::with_capacity(files.len());
+    let mut new_files = Vec::with_capacity(files.len());
+    let mut index_errors = Vec::new();
+    let mut indexed_file_count = 0;
+    for (position, file) in files.iter().enumerate() {
+        if !file.is_object() {
+            return Err(format!("files_json[{position}] must be an object"));
+        }
+        let text = |snake: &str, camel: &str| -> Result<&str, String> {
+            match file.get(snake).or_else(|| file.get(camel)) {
+                None | Some(Value::Null) => Ok(""),
+                Some(Value::String(s)) => Ok(s.as_str()),
+                Some(_) => Err(format!("files_json[{position}].{snake} must be a string or null")),
+            }
+        };
+        let (old_p, new_p) = (text("old_filename", "oldFilename")?, text("new_filename", "newFilename")?);
+        let language = text("language", "language")?;
+        if old_p.is_empty() && new_p.is_empty() {
+            return Err(format!("files_json[{position}] requires old_filename or new_filename"));
+        }
+        let mut failure: Option<Value> = None;
+        let mut sides: [Option<Value>; 2] = [None, None];
+        for (slot, (side, tree_key, tree_camel, error_key, error_camel)) in [
+            ("old", "old_tree", "oldTree", "old_error", "oldError"),
+            ("new", "new_tree", "newTree", "new_error", "newError"),
+        ].into_iter().enumerate() {
+            if failure.is_some() { break; }
+            let error = text(error_key, error_camel)?;
+            if !error.is_empty() {
+                failure = Some(commit_index_error(old_p, new_p, language, side,
+                    commit_index_error_code(error), error));
+                continue;
+            }
+            match file.get(tree_key).or_else(|| file.get(tree_camel)) {
+                None | Some(Value::Null) => {}
+                Some(tree) if tree.is_object() && tree.get("error").is_none() => {
+                    sides[slot] = Some(tree.clone());
+                }
+                Some(tree) => {
+                    failure = Some(commit_index_error(old_p, new_p, language, side, "malformed_tree",
+                        &format!("malformed tree: {}", tree.get("error").unwrap_or(tree))));
+                }
+            }
+        }
+        if let Some(error) = failure {
+            index_errors.push(error);
+            continue;
+        }
+        let [old_tree, new_tree] = sides;
+        if old_tree.is_none() && new_tree.is_none() {
+            continue;
+        }
+        indexed_file_count += 1;
+        if let Some(tree) = old_tree {
+            old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
+        }
+        if let Some(tree) = new_tree {
+            new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
+        }
+    }
+    let index = CommitCrossFileIndex {
+        changes: diff_commit_symbol_tables(old_files, new_files)?,
+        index_errors,
+        indexed_file_count,
+        telemetry: HashMap::new(),
+    };
+    let mut result = index.completeness();
+    result["cross_file_changes"] = index.changes;
+    Ok(result.to_string())
+}
+
 pub(crate) fn compute_commit_cross_file_changes(
     files: &[Value],
     config_json: &str,
     wasm_dir: &str,
-) -> Result<(Value, HashMap<(String, String), Vec<Value>>), String> {
+) -> Result<CommitCrossFileIndex, String> {
     let config = RustCoreConfig::from_json(config_json)?;
     let mut telemetry = HashMap::new();
+    let mut index_errors: Vec<Value> = Vec::new();
+    let mut indexed_file_count = 0;
     if files.is_empty() {
-        return Ok((json!([]), telemetry));
+        return Ok(CommitCrossFileIndex { changes: json!([]), index_errors, indexed_file_count, telemetry });
     }
     if wasm_dir.is_empty() {
         return Err("commit symbol indexing requires the verified parser bundle".to_owned());
@@ -5590,10 +5948,7 @@ pub(crate) fn compute_commit_cross_file_changes(
         let language = get("language", "language");
         let wasm_path = get("parser_wasm_path", "parserWasmPath");
         // Size-scaled like the diff chain — the flat 20M floor trapped on real-world files.
-        let fuel = fuel_budget(
-            config.plugin_fuel,
-            20_000_000 + (old_c.len() + new_c.len()) as u64 * 20_000,
-        );
+        let fuel = content_fuel_budget(config.plugin_fuel, (old_c.len() + new_c.len()) as u64);
         // Python (empty wasm_path in the manifest -> native diff, but for indexing we need the
         // differ-matching tree): the interpret-cst Wasm parser fed the trivia-stripped CST
         // (computed below for the sides actually parsed). Other languages: full-parse.
@@ -5624,17 +5979,34 @@ pub(crate) fn compute_commit_cross_file_changes(
         if parse_old_src.is_empty() && parse_new_src.is_empty() {
             continue;
         }
+        // A component that cannot be loaded at all is a bundle/deployment fault for every file of
+        // that language, not a property of this file's input: keep failing closed on it.
+        cached_parser_component(parser_path, fuel != u64::MAX)
+            .map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        // Per-file input failures (#298) — CST, fuel, parser error, malformed tree — exclude
+        // this file from BOTH tables and are reported, so the other files still get cross-file
+        // analysis and the result is explicitly partial rather than silently complete.
         let (old_side_cst, new_side_cst) = if wasm_path.is_empty() {
-            (
-                python_wasm_filtered_cst(parse_old_src)
-                    .map_err(|reason| format!("symbol-index CST for {old_p}: {reason}"))?,
-                python_wasm_filtered_cst(parse_new_src)
-                    .map_err(|reason| format!("symbol-index CST for {new_p}: {reason}"))?,
-            )
+            let mut csts = Vec::with_capacity(2);
+            for (side, source) in [("old", parse_old_src), ("new", parse_new_src)] {
+                match python_wasm_filtered_cst(source) {
+                    Ok(cst) => csts.push(cst),
+                    Err(reason) => {
+                        index_errors.push(commit_index_error(old_p, new_p, language, side,
+                            commit_index_error_code(&reason), &format!("symbol-index CST: {reason}")));
+                        break;
+                    }
+                }
+            }
+            if csts.len() != 2 {
+                continue;
+            }
+            let new_cst = csts.pop().unwrap_or_default();
+            (csts.pop().unwrap_or_default(), new_cst)
         } else {
             (String::new(), String::new())
         };
-        let mut pair = run_python_wasm_process_pair_detailed(
+        let mut pair = match run_python_wasm_process_pair_detailed(
             parser_path,
             parse_old_src,
             &old_side_cst,
@@ -5645,41 +6017,60 @@ pub(crate) fn compute_commit_cross_file_changes(
             fuel,
             config.max_plugin_output_bytes,
             language,
-        ).map_err(|reason| format!("symbol-index parser for {old_p} -> {new_p}: {reason}"))?;
+        ) {
+            Ok(pair) => pair,
+            Err(reason) => {
+                // The pair runner names the side it was processing; a lone side is parsed as
+                // both pair sides, so attribute the failure to the side that actually exists.
+                let side = if !both {
+                    if old_parse.is_some() { "old" } else { "new" }
+                } else if reason.contains("new source") || reason.contains("new parser") {
+                    "new"
+                } else if reason.contains("old source") || reason.contains("old parser") {
+                    "old"
+                } else {
+                    "both"
+                };
+                index_errors.push(commit_index_error(old_p, new_p, language, side,
+                    commit_index_error_code(&reason), &format!("symbol-index parser: {reason}")));
+                continue;
+            }
+        };
         for call in &mut pair.calls {
             call["plugin"] = json!(parser_path);
             call["purpose"] = json!("symbol_index");
         }
         telemetry.insert((old_p.to_owned(), new_p.to_owned()), pair.calls);
-        if both || old_parse.is_some() {
-            let tree: Value = serde_json::from_str(&pair.old_tree)
-                .map_err(|reason| format!("symbol-index invalid old tree for {old_p}: {reason}"))?;
-            if !tree.is_object() || tree.get("error").is_some() {
-                return Err(format!("symbol-index malformed old tree for {old_p}"));
+        let old_tree = match old_parse.map(|_| commit_index_tree(&pair.old_tree)).transpose() {
+            Ok(tree) => tree,
+            Err(reason) => {
+                index_errors.push(commit_index_error(old_p, new_p, language, "old",
+                    "malformed_tree", &format!("symbol-index {reason}")));
+                continue;
             }
+        };
+        let new_tree = match new_parse.map(|_| commit_index_tree(&pair.new_tree)).transpose() {
+            Ok(tree) => tree,
+            Err(reason) => {
+                index_errors.push(commit_index_error(old_p, new_p, language, "new",
+                    "malformed_tree", &format!("symbol-index {reason}")));
+                continue;
+            }
+        };
+        indexed_file_count += 1;
+        if let Some(tree) = old_tree {
             old_files.push(json!({"filename": old_p, "language": language, "tree": tree}));
         }
-        if both || new_parse.is_some() {
-            let tree: Value = serde_json::from_str(&pair.new_tree)
-                .map_err(|reason| format!("symbol-index invalid new tree for {new_p}: {reason}"))?;
-            if !tree.is_object() || tree.get("error").is_some() {
-                return Err(format!("symbol-index malformed new tree for {new_p}"));
-            }
+        if let Some(tree) = new_tree {
             new_files.push(json!({"filename": new_p, "language": language, "tree": tree}));
         }
     }
-    let old_table = index_engine_lib::build_symbol_table_impl(&Value::Array(old_files).to_string());
-    let new_table = index_engine_lib::build_symbol_table_impl(&Value::Array(new_files).to_string());
-    for (side, table) in [("old", &old_table), ("new", &new_table)] {
-        validate_symbol_index_table(table, side)?;
-    }
-    let changes: Value = serde_json::from_str(
-        &index_engine_lib::diff_symbol_tables_impl(&old_table, &new_table)
-    ).map_err(|reason| format!("symbol-index diff is invalid: {reason}"))?;
-    if !changes.is_array() {
-        return Err(format!("symbol-index diff did not return changes: {changes}"));
-    }
-    Ok((changes, telemetry))
+    Ok(CommitCrossFileIndex {
+        changes: diff_commit_symbol_tables(old_files, new_files)?,
+        index_errors,
+        indexed_file_count,
+        telemetry,
+    })
 }
 
 pub(crate) fn run_python_wasm_process_pair_detailed(
@@ -6069,9 +6460,9 @@ fn python_node_facts_value(node: &CstNode) -> Option<Value> {
                     _ => {}
                 }
             }
-            if default_count > 0 {
-                facts.insert("default_count".to_owned(), json!(default_count));
-            }
+            // Always present with a parameter list (#297): 0 means "no defaults", which a
+            // consumer must be able to tell apart from "unknown".
+            facts.insert("default_count".to_owned(), json!(default_count));
             if keyword_only_count > 0 {
                 facts.insert("keyword_only_count".to_owned(), json!(keyword_only_count));
             }
@@ -6594,15 +6985,26 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
         // Anything after `*args` or a bare `*` is keyword-only.
         let mut after_splat = false;
         for p in &params.children {
+            // C# keeps `int n = 0` as a `parameter` whose pruned default value follows its
+            // name; a parameter pattern can never contain a literal, so no other grammar
+            // spelling is mistaken for one.
+            let csharp_default = p.node_type == "parameter"
+                && p.children.iter().skip_while(|c| c.node_type != "identifier").skip(1)
+                    .any(|c| semantic_literal_kind(&c.node_type).is_some());
+            if csharp_default {
+                default_count += 1;
+                continue;
+            }
             match p.node_type.as_str() {
+                // `assignment_pattern` is a JavaScript `x = 1` parameter default.
                 "default_parameter" | "typed_default_parameter" | "optional_parameter"
-                | "default_value" => {
+                | "default_value" | "assignment_pattern" => {
                     default_count += 1;
                     if after_splat {
                         keyword_only_count += 1;
                     }
                 }
-                "list_splat_pattern" | "variadic_parameter" | "rest_parameter" => {
+                "list_splat_pattern" | "variadic_parameter" | "rest_parameter" | "rest_pattern" => {
                     has_variadic = true;
                     after_splat = true;
                 }
@@ -6616,9 +7018,9 @@ fn derive_node_facts(node: &SemanticNode) -> Option<Value> {
                 _ => {}
             }
         }
-        if default_count > 0 {
-            facts.insert("default_count".to_owned(), json!(default_count));
-        }
+        // Always present with a parameter list (#297): 0 means "no defaults", which a
+        // consumer must be able to tell apart from "unknown".
+        facts.insert("default_count".to_owned(), json!(default_count));
         if keyword_only_count > 0 {
             facts.insert("keyword_only_count".to_owned(), json!(keyword_only_count));
         }
@@ -6863,19 +7265,16 @@ fn convert_cst_with_hash_memo(
         None
     };
     let child_parent_class = own_class.as_deref().or(parent_class);
-    // Operator leaves (#229) are named `<parent>.op<k>` and do not take a sibling slot, so every
-    // other child keeps the id it had before operators were carried - and the same id the
-    // Wasm route's source recovery produces (native/Wasm candidate parity).
+    // Ids are dotted child-index paths over every kept CST child, operator leaves (#229)
+    // included: the plugin SDK's semantic-token contract (PLUGIN_GUIDE "IDs", core#230), which
+    // the shipped python_parser.wasm now emits itself. A native-only `<parent>.op<k>` scheme
+    // shifted every following sibling's id against that component, so the certified and a
+    // custom Python route disagreed on node ids (intentumdiff-python#346). Host recovery for
+    // components that still drop operators keeps its own `.op<k>` names (operator_tokens.rs):
+    // it inserts into a guest tree whose ids are already fixed.
     let mut children: Vec<SemanticNode> = Vec::with_capacity(node.children.len());
-    let (mut idx, mut op_idx) = (0usize, 0usize);
-    for child in &node.children {
-        let child_id = if child.node_type == operator_tokens::OPERATOR_NODE_TYPE {
-            op_idx += 1;
-            format!("{id_prefix}.op{}", op_idx - 1)
-        } else {
-            idx += 1;
-            format!("{id_prefix}.{}", idx - 1)
-        };
+    for (idx, child) in node.children.iter().enumerate() {
+        let child_id = format!("{id_prefix}.{idx}");
         if let Some(converted) =
             convert_cst_with_hash_memo(child, &child_id, child_parent_class, hash_memo)
         {
@@ -8402,7 +8801,17 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     old_index: &TreeIndex<'a>,
     new_index: &TreeIndex<'a>,
     matching: &[MatchPair<'a>],
+    probe: Option<&mut PhaseProbe>,
+) -> EditScriptReport<'a> {
+    generate_edit_script_with_diagnostics_indexed_source_aware(old_index, new_index, matching, probe, None)
+}
+
+fn generate_edit_script_with_diagnostics_indexed_source_aware<'a>(
+    old_index: &TreeIndex<'a>,
+    new_index: &TreeIndex<'a>,
+    matching: &[MatchPair<'a>],
     mut probe: Option<&mut PhaseProbe>,
+    sources: Option<(&str, &str, &str)>,
 ) -> EditScriptReport<'a> {
     let old_to_new: HashMap<&str, &SemanticNode> = matching
         .iter()
@@ -8546,7 +8955,9 @@ fn generate_edit_script_with_diagnostics_indexed<'a>(
     });
     measure_value_optional(probe.as_deref_mut(), "rust_edit_update_generation", || {
         for pair in matching {
-            if pair.old_node.label != pair.new_node.label || should_report_structural_update(pair) {
+            if pair.old_node.label != pair.new_node.label || should_report_structural_update(pair)
+                || sources.is_some_and(|(old, new, language)| opaque_payload::changed(
+                    pair.old_node, pair.new_node, old, new, language)) {
                 let kind = if update_looks_moved(
                     pair,
                     &old_index.parent,
@@ -9107,6 +9518,9 @@ fn refine_candidate_drafts<'a>(
     language: &str,
     sources: Option<(&str, &str)>,
 ) {
+    if let Some((old, new)) = sources {
+        opaque_payload::annotate(changes, old, new, language);
+    }
     callable_renames::promote_rename_updates(changes, sources);
     finalize_debug_probe("refine:input", changes);
     measure_value_optional(
@@ -9142,7 +9556,7 @@ fn refine_candidate_drafts<'a>(
     measure_value_optional(
         probe.as_deref_mut(),
         "rust_refine_suppress_same_label_delete",
-        || suppress_same_label_function_delete_for_addition_drafts(changes),
+        || suppress_same_label_function_delete_for_addition_drafts(changes, matching),
     );
     finalize_debug_probe("refine:suppress_same_label_delete", changes);
     measure_value_optional(
@@ -9166,7 +9580,7 @@ fn refine_candidate_drafts<'a>(
     measure_value_optional(
         probe.as_deref_mut(),
         "rust_refine_suppress_parent_modifications",
-        || suppress_parent_modifications_drafts(changes, language),
+        || suppress_parent_modifications_drafts(changes, language, sources),
     );
     finalize_debug_probe("refine:suppress_parent_modifications", changes);
     measure_value_optional(
@@ -9196,7 +9610,10 @@ fn refine_candidate_drafts<'a>(
 thread_local! {
     /// Per-pass trace for diagnostics mode (issue #54): None = off; Some = collecting
     /// (pass name, surviving change count) after every probed refine/finalize pass.
-    static FINALIZE_TRACE: std::cell::RefCell<Option<Vec<(String, usize)>>> =
+    /// Each record also keeps the surviving drafts' (change type, node kind) pairs — grammar
+    /// vocabulary only, never labels — so an incomplete review can name which pass removed
+    /// which drafts (core #252 repro outline).
+    static FINALIZE_TRACE: std::cell::RefCell<Option<Vec<(String, Vec<(String, String)>)>>> =
         const { std::cell::RefCell::new(None) };
 }
 
@@ -9204,14 +9621,43 @@ fn finalize_trace_start() {
     FINALIZE_TRACE.with(|trace| *trace.borrow_mut() = Some(Vec::new()));
 }
 
-fn finalize_trace_take() -> Vec<(String, usize)> {
+fn finalize_trace_take() -> Vec<(String, Vec<(String, String)>)> {
     FINALIZE_TRACE.with(|trace| trace.borrow_mut().take().unwrap_or_default())
+}
+
+/// Per-pass removals (and additions) of draft kinds between consecutive trace records.
+/// Deterministic: passes in execution order, kinds sorted.
+fn suppression_trace_value(records: &[(String, Vec<(String, String)>)]) -> Value {
+    use std::collections::BTreeMap;
+    let count = |kinds: &[(String, String)]| {
+        let mut map: BTreeMap<(String, String), i64> = BTreeMap::new();
+        for kind in kinds { *map.entry(kind.clone()).or_default() += 1; }
+        map
+    };
+    let mut passes = Vec::new();
+    for window in records.windows(2) {
+        let (before, after) = (count(&window[0].1), count(&window[1].1));
+        let delta = |from: &BTreeMap<(String, String), i64>, to: &BTreeMap<(String, String), i64>| -> Vec<Value> {
+            from.iter().filter_map(|(kind, n)| {
+                let lost = n - to.get(kind).copied().unwrap_or(0);
+                (lost > 0).then(|| json!({"change_type": kind.0, "node_type": kind.1, "count": lost}))
+            }).collect()
+        };
+        let (removed, added) = (delta(&before, &after), delta(&after, &before));
+        if !removed.is_empty() || !added.is_empty() {
+            passes.push(json!({"pass": window[1].0, "removed": removed, "added": added}));
+        }
+    }
+    json!(passes)
 }
 
 fn finalize_debug_probe(stage: &str, changes: &[ChangeDraft<'_>]) {
     FINALIZE_TRACE.with(|trace| {
         if let Some(records) = trace.borrow_mut().as_mut() {
-            records.push((stage.to_string(), changes.len()));
+            records.push((stage.to_string(), changes.iter().map(|change| {
+                let node = change.new_node.or(change.old_node);
+                (change.change_type.to_string(), node.map(|n| n.node_type.clone()).unwrap_or_default())
+            }).collect()));
         }
     });
     if std::env::var("INTENTUMDIFF_FINALIZE_DEBUG").is_err() {
@@ -9251,7 +9697,7 @@ fn finalize_python_review_drafts<'a>(
 ) {
     finalize_debug_probe("finalize:input", changes);
     probed!(changes, "promote_named_additions_to_moves", promote_named_additions_to_moves_from_old_tree(changes, old_tree));
-    probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes));
+    probed!(changes, "promote_same_id_identifier_renames", promote_same_id_identifier_renames_from_add_delete_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_clojure_defn_parameter_renames", promote_clojure_defn_parameter_renames(changes, old_tree, new_tree, language));
     probed!(changes, "promote_python_signature_changes", promote_python_signature_changes_from_sources(
         changes, old_tree, new_tree, old_source, new_source,
@@ -9261,6 +9707,8 @@ fn finalize_python_review_drafts<'a>(
     ));
     probed!(changes, "promote_parameter_renames", promote_parameter_renames_from_signature_changes(changes));
     probed!(changes, "promote_parameter_identifier_renames", promote_parameter_identifier_modification_renames(changes, old_tree, new_tree));
+    // After the rename promoters: a shape change must not feed the positional param zip.
+    probed!(changes, "promote_parameter_shape_signature_changes", promote_parameter_shape_signature_changes_drafts(changes, old_tree, new_tree));
     probed!(changes, "promote_moved_empty_read_condition", promote_moved_empty_read_condition_updates(changes));
     probed!(changes, "promote_descendant_leaf_updates", promote_descendant_leaf_updates_drafts(changes, matching));
     probed!(changes, "promote_tree_leaf_value_updates", promote_tree_leaf_value_updates_drafts(changes, old_tree, new_tree, language, matching));
@@ -9275,22 +9723,26 @@ fn finalize_python_review_drafts<'a>(
     // One review event per rename: entity anchoring matches every occurrence of a renamed
     // identifier (issue #57 anchors port), and each matched occurrence would otherwise promote to
     // its own RENAME_VARIABLE — the python side reports a scoped rename ONCE.
-    probed!(changes, "dedupe_variable_renames", dedupe_variable_rename_drafts(changes));
+    probed!(changes, "dedupe_variable_renames", dedupe_variable_rename_drafts(changes, old_tree, new_tree));
     probed!(changes, "suppress_add_delete_by_signature", suppress_add_delete_noise_covered_by_signature_refactorings(changes));
     probed!(changes, "suppress_deletions_by_literal_mods", suppress_deletions_covered_by_literal_modifications(changes));
     // The no-delta filter must run BEFORE the pairings suppression: a same-label
     // MODIFICATION with no id-stable leaf delta is about to die, so it must not first
     // swallow the ADD+DELETE pair it covers — that composition erased the go
     // error-wrapping edit entirely (issue #57 pilot: only the import addition survived).
-    probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(changes));
+    probed!(changes, "suppress_same_label_mods_no_delta", suppress_same_label_modifications_without_leaf_label_delta(
+        changes, old_source, new_source, language));
     probed!(changes, "suppress_add_delete_by_pairings", suppress_add_delete_drafts_covered_by_pairings(changes));
     probed!(changes, "suppress_same_label_add_delete_pairs", suppress_same_label_add_delete_pair_drafts(changes, language));
-    probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes));
+    probed!(changes, "suppress_mods_by_refactoring_labels", suppress_modifications_covered_by_refactoring_labels(changes, old_tree, new_tree));
     probed!(changes, "suppress_child_moves_under_refactoring_pairs", suppress_child_moves_under_refactoring_pair_drafts(changes));
-    probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(changes, language));
+    probed!(changes, "suppress_subexpression_moves_in_modified_statement", suppress_subexpression_moves_inside_modified_statement_drafts(
+        changes, old_tree, new_tree, language));
+    probed!(changes, "suppress_parent_modifications", suppress_parent_modifications_drafts(
+        changes, language, Some((old_source,new_source))));
     probed!(changes, "suppress_child_mods_under_parent", suppress_child_modifications_under_preferred_parent_drafts(changes));
     let (suppressed_reorders, promoted_indices) =
-        suppress_low_signal_reorders_drafts(changes);
+        suppress_low_signal_reorders_drafts(changes, matching);
     if !promoted_indices.is_empty() {
         // python refinement.entity_reorder_to_moved_code: the promoted entity reorders
         // are one review event of moved code.
@@ -9348,6 +9800,7 @@ fn finalize_python_review_drafts<'a>(
         old_source,
         new_source,
         finalization,
+        language,
     );
     // A changed AssemblyScript operator and its operand edits belong to one
     // continuing binary-expression change; do not present them as orphan edits.
@@ -9358,6 +9811,9 @@ fn finalize_python_review_drafts<'a>(
     // not a proven rename or ignored formatting. Run after all suppression.
     probed!(changes, "preserve_clojure_ordered_parameter_permutations",
         preserve_clojure_ordered_parameter_permutations(changes, old_tree, new_tree, language));
+    // #300: say WHAT changed — bounded source text for statement modifications and the
+    // deleted/added text of unlabelled nodes. Evidence only; runs after every decision.
+    source_text::annotate_source_text_drafts(changes, old_source, new_source);
     sort_candidate_drafts(changes);
 }
 
@@ -9620,7 +10076,7 @@ fn rust_finalize_stage11_value(request: &Value) -> Result<Value, String> {
     diff["change_groups"] = Value::Array(change_groups);
     diff["metadata"] = metadata;
     attach_scope_trails_metadata(&mut diff, &changes, &old_index, &new_index);
-    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle);
+    apply_file_lifecycle_to_diff(&mut diff, file_lifecycle, Some((old_source, new_source)));
 
     Ok(json!({
         "schema_version": 1,
@@ -10630,7 +11086,15 @@ fn infer_file_lifecycle_from_file(file: &Value) -> &'static str {
     infer_file_lifecycle(explicit, old_source, new_source, staging_status)
 }
 
-fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str) {
+fn apply_file_lifecycle_to_diff(diff: &mut Value, lifecycle: &str, sources: Option<(&str, &str)>) {
+    // Every served diff passes through here; stamp the content class alongside the lifecycle,
+    // and the completeness state (core #252) after the lifecycle adjusts the flags.
+    content_class::attach(diff);
+    apply_file_lifecycle_flags(diff, lifecycle);
+    completeness::attach(diff, sources);
+}
+
+fn apply_file_lifecycle_flags(diff: &mut Value, lifecycle: &str) {
     if !diff.get("metadata").is_some_and(Value::is_object) {
         diff["metadata"] = json!({});
     }
@@ -10703,7 +11167,7 @@ fn whitespace_normalized_tree_hash(node: &SemanticNode) -> String {
 fn review_trees_equivalent_impl(old_json: &str, new_json: &str) -> Result<String, String> {
     let old: SemanticNode = serde_json::from_str(old_json).map_err(|e| format!("old tree: {e}"))?;
     let new: SemanticNode = serde_json::from_str(new_json).map_err(|e| format!("new tree: {e}"))?;
-    Ok(json!(whitespace_normalized_tree_hash(&old) == whitespace_normalized_tree_hash(&new)).to_string())
+    Ok(json!(opaque_payload::trees_equivalent(&old, &new, None)).to_string())
 }
 
 fn semantic_diff_payload(
@@ -10850,6 +11314,10 @@ fn node_signature_value(node: Option<&Value>) -> Value {
 }
 
 #[cfg(test)]
+#[path = "tests_python_literal_semantics.rs"]
+mod tests_python_literal_semantics;
+
+#[cfg(test)]
 #[path = "tests_inline.rs"]
 mod tests;
 
@@ -10883,6 +11351,13 @@ mod native_parser_telemetry_tests {
         assert_eq!(fuel_budget(999_999, 100_000_000), 999_999);
         assert_eq!(fuel_budget(1_000_000, 100_000_000), 100_000_000);
         assert_eq!(fuel_budget(u64::MAX, 100_000_000), u64::MAX);
+        // The content-scaled policy the `fuel_budget` C ABI op exposes (#308).
+        assert_eq!(content_fuel_budget(10_000_000, 0), 20_000_000);
+        assert_eq!(content_fuel_budget(10_000_000, 1_000), 40_000_000);
+        assert_eq!(content_fuel_budget(500_000_000, 1_000), 500_000_000);
+        assert_eq!(content_fuel_budget(999_999, 1_000_000), 999_999);
+        assert_eq!(content_fuel_budget(u64::MAX, 1_000), u64::MAX);
+        assert_eq!(content_fuel_budget(10_000_000, u64::MAX), u64::MAX - 1, "saturates, never wraps or turns unlimited");
     }
 
     #[test]
@@ -10953,9 +11428,11 @@ mod native_commit_index_fail_closed_tests {
             "old_filename": "changed.py", "new_filename": "changed.py",
             "language": "python", "parser_wasm_path": ""
         })];
-        let error = compute_commit_cross_file_changes(&changed, "{}", "").unwrap_err();
+        let error = compute_commit_cross_file_changes(&changed, "{}", "").err().unwrap();
         assert!(error.contains("parser bundle"), "{error}");
-        assert!(compute_commit_cross_file_changes(&[], "{}", "").unwrap().0.as_array().unwrap().is_empty());
+        let empty = compute_commit_cross_file_changes(&[], "{}", "").unwrap();
+        assert!(empty.changes.as_array().unwrap().is_empty());
+        assert_eq!(empty.status(), CROSS_FILE_INDEX_COMPLETE);
     }
 
     #[test]
@@ -10968,8 +11445,117 @@ mod native_commit_index_fail_closed_tests {
             "parser_wasm_path": "/__intentumdiff_missing__/parser.wasm"
         })];
         let error = compute_commit_cross_file_changes(&changed, "{}", "/__intentumdiff_missing__")
-            .unwrap_err();
+            .err().unwrap();
         assert!(error.contains("broken.js"), "{error}");
         assert!(error.contains("symbol-index parser"), "{error}");
+    }
+}
+
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "commit_index_partial_tests.rs"]
+mod commit_index_partial_tests;
+
+#[cfg(test)]
+mod plugin_error_envelope_tests {
+    use super::reject_plugin_error_envelope;
+
+    // core #280: an incomplete source makes the parser return the WIT error envelope; it must be
+    // reported as the parser's error, not decoded as a tree ("missing field `id`").
+    #[test]
+    fn error_envelope_is_reported_as_the_plugin_error() {
+        let err = reject_plugin_error_envelope(r#"{"error":"Unclosed script or style block"}"#, "old")
+            .unwrap_err();
+        assert_eq!(err, "plugin returned error (old): Unclosed script or style block");
+        assert!(!err.contains("missing field"));
+        let err = reject_plugin_error_envelope(r#"{"error":{"code":"x"}}"#, "new").unwrap_err();
+        assert_eq!(err, r#"plugin returned error (new): {"code":"x"}"#);
+    }
+
+    #[test]
+    fn trees_and_non_json_pass_through() {
+        assert!(reject_plugin_error_envelope(r#"{"id":"0","node_type":"module"}"#, "old").is_ok());
+        assert!(reject_plugin_error_envelope("not json", "old").is_ok());
+    }
+}
+
+#[cfg(test)]
+#[path = "size_limit_tests.rs"]
+mod size_limit_tests;
+
+#[cfg(test)]
+mod component_cache_tests {
+    use super::*;
+
+    fn key(path: &str, len: u64, mtime: u64, metered: bool) -> String {
+        format!("{path}|len={len}|mtime={mtime}.0|metered={metered}")
+    }
+
+    #[test]
+    fn churn_stops_at_the_entry_ceiling_and_evicts_least_recently_used() {
+        let mut cache = BoundedComponentCache::new(3, u64::MAX);
+        for i in 0..10 {
+            cache.insert(key(&format!("/p{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 3);
+        assert_eq!(cache.get(&key("/p9.wasm", 10, 1, true)), Some(9));
+        assert_eq!(cache.get(&key("/p0.wasm", 10, 1, true)), None);
+        // Touching p7 keeps it; the next insert evicts p8 (least recently used).
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        cache.insert(key("/q.wasm", 10, 1, true), 100);
+        assert_eq!(cache.get(&key("/p7.wasm", 10, 1, true)), Some(7));
+        assert_eq!(cache.get(&key("/p8.wasm", 10, 1, true)), None);
+    }
+
+    #[test]
+    fn a_new_revision_replaces_the_old_one_per_metering_mode() {
+        let mut cache = BoundedComponentCache::new(100, u64::MAX);
+        for mtime in 0..20 {
+            cache.insert(key("/a.wasm", 10 + mtime, mtime, true), mtime);
+        }
+        cache.insert(key("/a.wasm", 99, 99, false), 99);
+        assert_eq!(cache.len(), 2, "one revision per path and metering mode");
+        assert_eq!(cache.get(&key("/a.wasm", 29, 19, true)), Some(19));
+        // Same key: the first cached value wins and is returned (identical identity).
+        assert_eq!(cache.insert(key("/a.wasm", 29, 19, true), 1000), 19);
+    }
+
+    #[test]
+    fn byte_budget_bounds_retained_component_bytes() {
+        let mut cache = BoundedComponentCache::new(100, 25);
+        for i in 0..5 {
+            cache.insert(key(&format!("/b{i}.wasm"), 10, 1, true), i);
+        }
+        assert_eq!(cache.len(), 2);
+        // A single component larger than the budget is still cached (never zero entries).
+        let mut tiny = BoundedComponentCache::new(100, 5);
+        tiny.insert(key("/huge.wasm", 50, 1, true), 1);
+        assert_eq!(tiny.len(), 1);
+    }
+
+    #[cfg(feature = "tier-c-wasm")]
+    #[test]
+    fn real_component_revisions_do_not_accumulate() {
+        let staged = std::env::var("INTENTUMDIFF_TEST_WASM_DIR").expect("staged parser components");
+        let source = std::path::Path::new(&staged).join("json_parser.wasm");
+        let dir = std::env::temp_dir().join(format!("intentumdiff-cache-{}-{}", std::process::id(),
+            std::time::SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let copy = dir.join("json_parser.wasm");
+        std::fs::copy(&source, &copy).unwrap();
+        let path = copy.to_string_lossy().into_owned();
+        let identity = |key: &str| BoundedComponentCache::<()>::identity(key).0.to_owned();
+        let first = cached_parser_component(&path, true).unwrap();
+        let file = std::fs::File::options().write(true).open(&copy).unwrap();
+        file.set_modified(std::time::SystemTime::now() + std::time::Duration::from_secs(5)).unwrap();
+        drop(file);
+        let second = cached_parser_component(&path, true).unwrap();
+        assert_ne!(first.cache_key, second.cache_key);
+        let guard = PARSER_COMPONENT_CACHE.get().unwrap().lock().unwrap();
+        let held = guard.entries.keys().filter(|k| identity(k) == identity(&second.cache_key)).count();
+        assert_eq!(held, 1, "the older revision was replaced");
+        drop(guard);
+        // The evicted revision stays usable by its holder.
+        assert!(Arc::strong_count(&first.cached) >= 1);
+        std::fs::remove_dir_all(&dir).ok();
     }
 }

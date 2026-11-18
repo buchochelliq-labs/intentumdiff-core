@@ -18,6 +18,19 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         let mut groups = fin.get("change_groups").and_then(Value::as_array).cloned().unwrap_or_default();
         let mut ignored = fin.get("ignored_style_changes").and_then(Value::as_array).cloned().unwrap_or_default();
         let mut style = fin.get("is_style_only").and_then(Value::as_bool).unwrap_or(false);
+        let mut suppression_trace = fin.get("suppression_trace").cloned().unwrap_or(Value::Null);
+        // Rule id of a proof that the sources are equivalent although not style-only (#252).
+        let mut proof = fin.get("equivalence_proof").filter(|p| p.is_string()).cloned();
+        let kinds = |changes: &[Value]| -> Vec<Value> {
+            let mut counts: std::collections::BTreeMap<(String, String), u64> = Default::default();
+            for change in changes {
+                let node = if change["new_node"].is_object() { &change["new_node"] } else { &change["old_node"] };
+                *counts.entry((change["change_type"].as_str().unwrap_or("").to_owned(),
+                    node["node_type"].as_str().unwrap_or("").to_owned())).or_default() += 1;
+            }
+            counts.into_iter().map(|((change_type, node_type), count)|
+                json!({"change_type":change_type,"node_type":node_type,"count":count})).collect()
+        };
         if !changes.is_empty() {
             let inv = crate::invariance_groups::rust_apply_invariances_value(&json!({
                 "changes":changes,"old_tree":request["old_tree"],"new_tree":request["new_tree"],
@@ -63,7 +76,21 @@ pub fn complete(request: &Value) -> Result<Value, String> {
                     group["raw_change_indices"] = json!(mapped);
                     true
                 });
-                if kept.is_empty() && old_source != new_source { style = true; }
+                // An invariance that proved value equivalence names its rule instead of
+                // claiming style-only (e.g. a number respelling, `9` -> `9.0`).
+                let inv_proof = inv.get("equivalence_proof").filter(|p| p.is_string()).cloned();
+                if kept.is_empty() && old_source != new_source {
+                    match inv_proof {
+                        Some(rule) => proof = Some(rule),
+                        None => style = true,
+                    }
+                }
+                if kept.is_empty() {
+                    // Record the pass for an incomplete report (the invariances removed every change).
+                    let mut passes = suppression_trace.as_array().cloned().unwrap_or_default();
+                    passes.push(json!({"pass":"routed_review:invariances","removed":kinds(&changes),"added":[]}));
+                    suppression_trace = json!(passes);
+                }
             }
             changes = kept;
             groups.extend(inv["change_groups"].as_array().cloned().unwrap_or_default());
@@ -71,9 +98,11 @@ pub fn complete(request: &Value) -> Result<Value, String> {
             specific.extend(ignored);
             ignored = specific;
         }
-        if changes.is_empty() && !style {
-            style = old_source == new_source || crate::review_trees_equivalent_impl(
-                &request["old_tree"].to_string(), &request["new_tree"].to_string())? == "true";
+        if changes.is_empty() && !style && proof.is_none() {
+            style = old_source == new_source || crate::opaque_payload::trees_equivalent(
+                &serde_json::from_value(request["old_tree"].clone()).map_err(|e| format!("old tree: {e}"))?,
+                &serde_json::from_value(request["new_tree"].clone()).map_err(|e| format!("new tree: {e}"))?,
+                Some((old_source, new_source, language)));
         }
         // Suppression alone is not proof of equivalence. Never fabricate style evidence
         // for different source trees merely because no changes survived refinement.
@@ -89,11 +118,27 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         if fin["no_surviving_changes"] == true || (changes.is_empty() && !style && old_source != new_source) {
             metadata["no_surviving_changes"] = json!(true);
         }
-        json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
+        // A suppressor that proved equivalence names its rule; completeness reads it (#252).
+        if changes.is_empty() && !style {
+            if let Some(proof) = proof {
+                metadata["equivalence_proof"] = proof;
+                metadata.as_object_mut().unwrap().remove("no_surviving_changes");
+            }
+        }
+        reconcile_groups_to_final_changes(&changes, &mut groups);
+        let mut diff = json!({"old_filename":old_filename,"new_filename":new_filename,"language":language,
             "has_semantic_changes":!changes.is_empty() && !style,"is_style_only":style,
             "changes":changes,"change_groups":groups,"metadata":metadata,
-            "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]})
+            "parse_errors":[],"llm_summary":"","gitignore_excluded":false,"is_fallback":false,"guardrail_violations":[]});
+        // The shared completeness boundary (#252): every routed review states whether its
+        // changes explain the source delta, with a sanitised repro outline when they do not.
+        let context = crate::repro_outline::ReproContext { old_tree: &request["old_tree"],
+            new_tree: &request["new_tree"], suppression_trace: &suppression_trace };
+        crate::completeness::attach_with_context(&mut diff, Some((old_source, new_source)), Some(&context));
+        diff
     };
+    crate::content_class::attach(&mut diff);
+    crate::completeness::attach(&mut diff, Some((old_source, new_source)));
     diff["metadata"]["engine_owner"] = json!("rust");
     diff["metadata"]["semantic_contract"] = json!("rust_finalize_review_v1");
     diff["metadata"]["rust_core"] = json!({"engine":"rust_finalize_review_v1", "stage":"per_stage_finalize_routing", "used":true});
@@ -101,4 +146,32 @@ pub fn complete(request: &Value) -> Result<Value, String> {
         if let Some(value) = request.get(input).filter(|v| !v.is_null()) { diff["metadata"][output] = value.clone(); }
     }
     Ok(diff)
+}
+
+/// Restore final-array ownership after every invariance/source group is appended.
+/// Node identity survives filtering and sorting; metadata retains evidence provenance.
+fn reconcile_groups_to_final_changes(changes: &[Value], groups: &mut [Value]) {
+    for group in groups {
+        let ids = |field: &str| group[field].as_array().into_iter().flatten()
+            .filter_map(Value::as_str).collect::<std::collections::HashSet<_>>();
+        let old_ids = ids("old_node_ids");
+        let new_ids = ids("new_node_ids");
+        let indices: Vec<usize> = if !old_ids.is_empty() || !new_ids.is_empty() {
+            changes.iter().enumerate().filter_map(|(i, change)| {
+                let owns = change["old_node"]["id"].as_str().is_some_and(|id| old_ids.contains(id))
+                    || change["new_node"]["id"].as_str().is_some_and(|id| new_ids.contains(id));
+                owns.then_some(i)
+            }).collect()
+        } else {
+            match group["metadata"]["index_space"].as_str() {
+                Some("final_changes") => group["raw_change_indices"].as_array().into_iter().flatten()
+                    .filter_map(Value::as_u64).filter_map(|i| usize::try_from(i).ok())
+                    .filter(|i| *i < changes.len()).collect(),
+                Some("presentation_input" | "mixed") => Vec::new(),
+                // Source evidence owns no changes; its producer emits honest [].
+                _ => continue,
+            }
+        };
+        group["raw_change_indices"] = json!(indices);
+    }
 }

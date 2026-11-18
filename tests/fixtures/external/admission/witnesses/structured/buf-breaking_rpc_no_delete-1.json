@@ -1,0 +1,59 @@
+{
+  "case_id": "buf-breaking_rpc_no_delete-1",
+  "executed_utc": "2026-11-17T20:21:25+00:00",
+  "new_sha256": "4d6e1ab91e305c3968141637bc0dd0109133cc34329eb4e94a95977028462bcf",
+  "observations": {
+    "annotations": [
+      [
+        "1.proto",
+        "RPC_NO_DELETE",
+        [
+          7,
+          1,
+          10,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "RPC_NO_DELETE",
+        [
+          31,
+          1,
+          34,
+          2
+        ]
+      ]
+    ],
+    "exit": 100,
+    "reference_equal": false,
+    "stderr": null,
+    "upstream_assertions": [
+      [
+        "1.proto",
+        "RPC_NO_DELETE",
+        [
+          7,
+          1,
+          10,
+          2
+        ]
+      ],
+      [
+        "2.proto",
+        "RPC_NO_DELETE",
+        [
+          31,
+          1,
+          34,
+          2
+        ]
+      ]
+    ]
+  },
+  "old_sha256": "1dc3ed5e3b9d5b71fd16a04e12a210f74886e05670fc34f61c5d8bddce223c22",
+  "oracle": "buf_breaking",
+  "reference": "buf 1.75.0 breaking (case buf.yaml)",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

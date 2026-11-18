@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-4QFQ",
+  "executed_utc": "2026-11-17T20:20:24+00:00",
+  "new_sha256": "e24e06f3edca7385c9cd0a3295e61060762683f5861636f15def68aeca8eef64",
+  "observations": {
+    "error": "ScannerError: more indented follow up line than first in a block scalar\n  in \"<unicode string>\", line 6, column 3:\n      # detected\n      ^ (line: 6)",
+    "reference_accepts": false,
+    "upstream_accepts": true
+  },
+  "old_sha256": "e24e06f3edca7385c9cd0a3295e61060762683f5861636f15def68aeca8eef64",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference disagrees with the upstream label",
+  "verdict": "contradicts_claim"
+}

@@ -277,6 +277,11 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         ).map(|v|json!(v).to_string()),
 
         "live_capabilities" => Ok(crate::live_server::live_capabilities_impl()),
+        "live_negotiate_protocol" => {
+            let hello: Value = serde_json::from_str(arg_str(args, 0, "hello_json")?)
+                .map_err(|e| format!("hello_json is not valid JSON: {e}"))?;
+            Ok(crate::live_server::live_negotiate_protocol_impl(&hello).to_string())
+        }
         "live_limits" => Ok(crate::live_server::live_limits_impl()),
         "live_normalise_request_path" => Ok(crate::live_server::live_normalise_request_path_impl(
             arg_str(args, 0, "path")?,
@@ -408,6 +413,10 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 0, "old_json")?,
             arg_str(args, 1, "new_json")?,
         )),
+        // Commit-wide cross-file analysis with the partial-index policy (#298).
+        "commit_cross_file_index" => {
+            crate::commit_cross_file_index_impl(arg_str(args, 0, "files_json")?)
+        }
         "apply_invariances" => {
             value_request(args, crate::invariance_groups::rust_apply_invariances_value)
         }
@@ -470,6 +479,11 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             serde_json::to_string(&crate::guardrail_policy::apply_policy(&request)?)
                 .map_err(|e| format!("serialize: {e}"))
         }
+        "guardrail_check_result" => {
+            let request: Value = serde_json::from_str(arg_str(args, 0, "request_json")?)
+                .map_err(|e| format!("request_json is not valid JSON: {e}"))?;
+            serde_json::to_string(&crate::guardrail_policy::check_result(&request)?).map_err(|e| e.to_string())
+        }
         "parse_guardrail_policy" => {
             serde_json::to_string(&crate::guardrail_policy::parse_policy(arg_str(args, 0, "source")?)?)
                 .map_err(|e| format!("serialize: {e}"))
@@ -526,6 +540,15 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 2, "ref_a")?,
             arg_str(args, 3, "ref_b")?,
         ),
+        // The content-scaled parser fuel policy (python #308): `{"fuel": u64}` or `{"fuel": null}`
+        // (unlimited — a negative `plugin_fuel`). Bindings forward this budget unchanged.
+        "fuel_budget" => {
+            let content_len = arg_i64(args, 1, "content_len")?;
+            let content_len = u64::try_from(content_len)
+                .map_err(|_| "argument 1 (content_len) must be a non-negative integer".to_owned())?;
+            crate::fuel_budget_for_content(arg_str(args, 0, "config_json")?, content_len)
+                .map(|fuel| json!({"fuel": fuel}).to_string())
+        }
         // Registry-client #88 security validators. validate_registry_ref returns null on a
         // clean ref (the guard passed); validate_dep_hashes returns the JSON list of errors.
         "validate_registry_ref" => crate::registry::validate_registry_ref_impl(
@@ -540,6 +563,10 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_opt_str(args, 3, "install_target")?,
         ))
         .map_err(|e| format!("serialize dep-hash errors: {e}")),
+        // Registry-manifest validator (python #329): `{"ok": bool, "errors": [{"path","message"}]}`.
+        "validate_registry_manifest" => crate::registry::validate_registry_manifest_json_impl(
+            arg_str(args, 0, "manifest_json")?,
+        ),
         // Deterministic cache-key derivation — the shared, binding-agnostic key module. A key is a
         // SHA-256 hex string (never valid JSON), so the envelope carries it verbatim.
         "cache_make_key" => Ok(crate::cache_keys::cache_make_key(arg_json(args, 0, "parts")?)),
@@ -833,6 +860,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
         // detect_content_type sniffs leading bytes; over the ABI the head slice arrives as a JSON
         // array of byte values (dependency-free, and a head slice is small). Never errors.
         "filename_selection_next" => crate::filename_selection::next_action_json_impl(arg_str(args, 0, "request")?),
+        "parser_allowlist_matches" => crate::filename_selection::parser_allowlist_matches_json_impl(
+            arg_opt_json(args, 0, "allowed_plugins")?, arg_str(args, 1, "identity_json")?),
         "content_detection_plan" => crate::content_detection::plan_json_impl(arg_str(args, 0, "request")?),
         "content_detection_finish" => crate::content_detection::finish_json_impl(arg_str(args, 0, "request")?),
         "parser_availability" => Ok(crate::parser_availability::availability_json_impl(arg_str(args, 0, "name")?, arg_str(args, 1, "filename")?, arg_str(args, 2, "system")?, arg_str(args, 3, "machine")?)),
@@ -877,6 +906,8 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
     })();
     match outcome {
         Ok(output) => success_envelope(&output),
+        // Size limits (#301) are their own kind so callers can say why a file was not reviewed.
+        Err(message) if crate::is_size_limit_error(&message) => error_envelope(&message, "size_limit"),
         Err(message) => error_envelope(&message, "value_error"),
     }
 }
@@ -932,6 +963,32 @@ mod tests {
         assert!(style_only.contains("Formatting changed"));
         assert_eq!(call("render_cli_review", json!(["{}"]))["ok"], false);
         assert_eq!(call("render_cli_review", json!([]))["ok"], false);
+    }
+
+    #[test]
+    fn fuel_budget_envelopes() {
+        assert_eq!(call("fuel_budget", json!(["{}", 0])), json!({"ok":true,"result":{"fuel":20_000_000}}));
+        assert_eq!(call("fuel_budget", json!(["", 1000]))["result"], json!({"fuel":40_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":500000000}"#, 1000]))["result"], json!({"fuel":500_000_000}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":999}"#, 1000]))["result"], json!({"fuel":999}));
+        assert_eq!(call("fuel_budget", json!([r#"{"plugin_fuel":-1}"#, 1000]))["result"], json!({"fuel":null}));
+        assert_eq!(call("fuel_budget", json!([r#"{"pluginFuel":-1}"#, 0]))["result"], json!({"fuel":null}));
+        for bad in [json!(["{}", -1]), json!(["{}", "1"]), json!(["{}"]), json!([r#"{"plugin_fuel":"x"}"#, 1]), json!(["[]", 1])] {
+            let out = call("fuel_budget", bad.clone());
+            assert_eq!(out["ok"], false, "{bad}");
+            assert_eq!(out["error_type"], "value_error", "{bad}");
+        }
+    }
+
+    #[test]
+    fn parser_allowlist_envelopes() {
+        let identity = json!({"plugin_id":"acme/py","grammar_id":"python","languages":["python","py3"],"aliases":["py"]}).to_string();
+        assert_eq!(call("parser_allowlist_matches", json!([null, identity])), json!({"ok":true,"result":{"matches":true,"matched_by":"unrestricted"}}));
+        assert_eq!(call("parser_allowlist_matches", json!([[], identity]))["result"], json!({"matches":false,"matched_by":null}));
+        assert_eq!(call("parser_allowlist_matches", json!([["py3"], identity]))["result"], json!({"matches":true,"matched_by":"language"}));
+        assert_eq!(call("parser_allowlist_matches", json!([["acme/py"], identity]))["result"]["matched_by"], "plugin_id");
+        assert_eq!(call("parser_allowlist_matches", json!([["x", 1], identity]))["ok"], false);
+        assert_eq!(call("parser_allowlist_matches", json!([null, "[]"]))["ok"], false);
     }
 
     #[test]
@@ -1008,6 +1065,39 @@ mod tests {
         assert_eq!(applied["ok"], true, "{applied}");
         assert_eq!(applied["result"]["metadata"]["guardrails"]["immutable_count"], 1);
         assert_eq!(call("apply_guardrail_policy", json!(["{}"]))["ok"], false);
+    }
+
+    #[test]
+    fn live_protocol_negotiation_round_trips_the_abi() {
+        let env = call("live_negotiate_protocol", json!([json!({"op":"hello","seq":1,"protocol_version":999}).to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        assert_eq!(env["result"]["ok"], false);
+        assert_eq!(env["result"]["error"]["code"], "unsupported_protocol_version");
+        let env = call("live_negotiate_protocol", json!([json!({"op":"hello","seq":1}).to_string()]));
+        assert_eq!(env["result"]["protocol_version"], 2);
+        assert_eq!(call("live_negotiate_protocol", json!(["{"]))["ok"], false);
+    }
+
+    #[test]
+    fn guardrail_check_result_round_trips_the_abi() {
+        let violation = json!({"rule_id":"r","severity":"important","file":"a.json","language":"json",
+            "semantic_path":"secret","node_type":"pair","old_node_id":null,"new_node_id":null,
+            "old_value":"1","new_value":"2","message":"m"});
+        let request = json!({"diffs":[{"guardrail_violations":[violation]},{}],"strict":true});
+        let env = call("guardrail_check_result", json!([request.to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        assert_eq!(env["result"], crate::api::guardrail_check_result(&request).unwrap());
+        assert_eq!(env["result"]["passed"], false);
+        assert_eq!(env["result"]["checked_files"], 2);
+        assert_eq!(env["result"]["important_count"], 1);
+        let advisory = call("guardrail_check_result",
+            json!([json!({"violations":[violation],"strict":false}).to_string()]));
+        assert_eq!(advisory["result"]["passed"], true);
+        for bad in [json!(["{\"violations\":[]}"]), json!(["not json"]), json!([])] {
+            let env = call("guardrail_check_result", bad);
+            assert_eq!(env["ok"], false, "{env}");
+            assert_eq!(env["error_type"], "value_error");
+        }
     }
 
     #[test]
@@ -1400,6 +1490,70 @@ mod tests {
         let _ = std::fs::remove_dir_all(&dir);
     }
 
+    /// #298: a host-side parse failure (e.g. fuel) on one file is reported structurally and
+    /// marks the index partial, while a real move between the other two files is still found.
+    #[test]
+    fn commit_cross_file_index_reports_unindexed_file_and_keeps_other_moves() {
+        let func = |name: &str, line: u64| json!({
+            "id": format!("0.{line}"), "node_type": "function_definition", "label": name,
+            "position": {"start_line": line, "start_col": 0, "end_line": line + 1, "end_col": 0},
+            "children": []
+        });
+        let module = |children: Vec<Value>| json!({
+            "id": "0", "node_type": "module", "label": "",
+            "position": {"start_line": 0, "start_col": 0, "end_line": 9, "end_col": 0},
+            "children": children
+        });
+        let files = json!([
+            {"old_filename": "pkg/big.py", "new_filename": "pkg/big.py", "language": "python",
+             "old_tree": null, "new_tree": null,
+             "old_error": "FUEL_EXCEEDED: 100.0M fuel budget exhausted", "new_error": null},
+            {"old_filename": "pkg/a.py", "new_filename": "pkg/a.py", "language": "python",
+             "old_tree": module(vec![func("moved", 0), func("keep", 3)]),
+             "new_tree": module(vec![func("keep", 0)])},
+            {"old_filename": "pkg/b.py", "new_filename": "pkg/b.py", "language": "python",
+             "old_tree": module(vec![func("other", 0)]),
+             "new_tree": module(vec![func("other", 0), func("moved", 3)])},
+        ]);
+        let env = call("commit_cross_file_index", json!([files.to_string()]));
+        assert_eq!(env["ok"], true, "{env}");
+        let result = &env["result"];
+        assert_eq!(result["cross_file_index_status"], "partial", "{result:#}");
+        assert_eq!(result["cross_file_index_complete"], false);
+        assert_eq!(result["indexed_file_count"], 2);
+        let errors = result["index_errors"].as_array().unwrap();
+        assert_eq!(errors.len(), 1, "{result:#}");
+        assert_eq!(errors[0]["path"], "pkg/big.py");
+        assert_eq!(errors[0]["side"], "old");
+        assert_eq!(errors[0]["code"], "fuel_exceeded");
+        let moves: Vec<&Value> = result["cross_file_changes"].as_array().unwrap().iter()
+            .filter(|c| c["change_type"] == "MOVE_TO_MODULE").collect();
+        assert_eq!(moves.len(), 1, "{result:#}");
+        assert!(moves[0].to_string().contains("moved"), "{result:#}");
+
+        // Same input with every file indexed: complete, no errors.
+        let mut clean = files.clone();
+        clean[0] = json!({"old_filename": "pkg/big.py", "new_filename": "pkg/big.py",
+            "language": "python", "old_tree": module(vec![func("f0", 0)]),
+            "new_tree": module(vec![func("f0", 0)])});
+        let env = call("commit_cross_file_index", json!([clean.to_string()]));
+        assert_eq!(env["result"]["cross_file_index_status"], "complete", "{env}");
+        assert_eq!(env["result"]["cross_file_index_complete"], true);
+        assert_eq!(env["result"]["index_errors"], json!([]));
+        assert_eq!(env["result"]["indexed_file_count"], 3);
+
+        // An error-envelope tree is a malformed_tree index error, never a silent omission.
+        let mut malformed = clean.clone();
+        malformed[0]["new_tree"] = json!({"error": "boom"});
+        let env = call("commit_cross_file_index", json!([malformed.to_string()]));
+        assert_eq!(env["result"]["cross_file_index_status"], "partial", "{env}");
+        assert_eq!(env["result"]["index_errors"][0]["code"], "malformed_tree");
+        assert_eq!(env["result"]["index_errors"][0]["side"], "new");
+        // Malformed request shapes stay error envelopes.
+        assert_eq!(call("commit_cross_file_index", json!(["{}"]))["ok"], false);
+        assert_eq!(call("commit_cross_file_index", json!([r#"[{"language":"python"}]"#]))["ok"], false);
+    }
+
     #[test]
     fn index_and_value_helpers_dispatch() {
         // Certified-language predicate marshals a bool result.
@@ -1416,6 +1570,63 @@ mod tests {
         assert!(env["error"].as_str().unwrap().contains("request JSON"));
         // A well-formed (if minimal) request dispatches to the engine and returns an envelope.
         assert!(call("scope_trails", json!(["{}"]))["ok"].is_boolean());
+    }
+
+    #[test]
+    fn apply_invariances_abi_preserves_parent_with_unrelated_identifier_delta() {
+        let leaf = |id: &str, node_type: &str, label: &str, start: u32, end: u32| {
+            json!({"id":id,"node_type":node_type,"label":label,"structural_hash":label,
+                "position":{"start_line":0,"start_col":start,"end_line":0,"end_col":end},"children":[]})
+        };
+        let parent = |literal: Value, name: Value, end_col: u32| {
+            json!({"id":"root","node_type":"function_definition","label":"function",
+                "structural_hash":"parent","position":{"start_line":0,"start_col":0,"end_line":0,"end_col":end_col},
+                "children":[literal,name]})
+        };
+        let result = |request: Value| {
+            let env = call("apply_invariances", json!([request.to_string()]));
+            assert_eq!(env["ok"], true, "{env}");
+            match &env["result"] {
+                Value::String(encoded) => serde_json::from_str(encoded).unwrap(),
+                value => value.clone(),
+            }
+        };
+        for language in ["python", "javascript", "typescript", "tsx", "csharp"] {
+            let old_parent = parent(
+                leaf("number", "integer", "10", 0, 2),
+                leaf("name", "identifier", "safe", 3, 7),
+                7,
+            );
+            let new_parent = parent(
+                leaf("number", "integer", "0xa", 0, 3),
+                leaf("name", "identifier", "danger", 4, 10),
+                10,
+            );
+            let change = json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent});
+            let request = json!({"language":language,"old_source":"10 safe","new_source":"0xa danger",
+                "old_tree":old_parent,"new_tree":new_parent,"changes":[change]});
+            let output = result(request);
+            assert_eq!(output["changes"].as_array().unwrap().len(), 1, "{language}");
+            assert_eq!(output["change_groups"], json!([]), "{language}");
+        }
+        for language in ["python", "javascript", "typescript", "tsx"] {
+            let old_parent = parent(
+                leaf("string", "string", "'x'", 0, 3),
+                leaf("name", "identifier", "safe", 4, 8),
+                8,
+            );
+            let new_parent = parent(
+                leaf("string", "string", "\"x\"", 0, 3),
+                leaf("name", "identifier", "danger", 4, 10),
+                10,
+            );
+            let change = json!({"change_type":"MODIFICATION","old_node":old_parent,"new_node":new_parent});
+            let request = json!({"language":language,"old_source":"'x' safe","new_source":"\"x\" danger",
+                "old_tree":old_parent,"new_tree":new_parent,"changes":[change]});
+            let output = result(request);
+            assert_eq!(output["changes"].as_array().unwrap().len(), 1, "{language}");
+            assert_eq!(output["change_groups"], json!([]), "{language}");
+        }
     }
 
     #[test]

@@ -1,0 +1,2456 @@
+{
+  "language_id": "qsharp",
+  "options": {
+    "language_hint": "qsharp",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "qsharp-literal-value",
+      "language_id": "qsharp",
+      "category": "literal",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "ceeca4b351109c36d4b0a0802666c0d64e53ea3decfc436b352ac8c13e147c73",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function Answer() : Int { return 1; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function Answer() : Int { return 2; } }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function Answer() : Int { return 2; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                58
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function Answer() : Int { return 2; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                58
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.26157600000000003,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22320000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.4277912186379928,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.195052,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22320000,
+                "fuel_consumed": 94893,
+                "total_fuel_consumed": 94893,
+                "max_fuel_used_percent": 0.42514784946236556,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 5076.722
+    },
+    {
+      "id": "qsharp-declaration-api",
+      "language_id": "qsharp",
+      "category": "declaration_or_type",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "3093708abd6a29d9561586196a85c5f3eecd469adc8caacd315d85a8640711ae",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function Answer() : Int { return 1; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function ResultValue() : Int { return 1; } }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function ResultValue() : Int { return 1; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                63
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function ResultValue() : Int { return 1; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                63
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.20696399999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22420000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.4258831400535236,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.185154,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22420000,
+                "fuel_consumed": 96061,
+                "total_fuel_consumed": 96061,
+                "max_fuel_used_percent": 0.4284611953612846,
+                "input_bytes": 63,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 54.433
+    },
+    {
+      "id": "qsharp-body-operator",
+      "language_id": "qsharp",
+      "category": "operator_or_body",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "2f21fc7b717c0fd15d6c36916238110edafc641021a500c559c6504500dda968",
+      "new_sha256": "d5240c560259d266e3a77ee1bf5599c0ecc4dd2ac18c0aace22026568e692648",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function Combine(a : Int, b : Int) : Int { return a + b; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function Combine(a : Int, b : Int) : Int { return a - b; } }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Combine(a : Int, b : Int) : Int { return a + b; } }\\n",
+              "new_label": "namespace Probe { function Combine(a : Int, b : Int) : Int { return a - b; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                79
+              ],
+              "new_span": [
+                0,
+                79
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Combine(a : Int, b : Int) : Int { return a + b; } }\\n",
+              "new_label": "namespace Probe { function Combine(a : Int, b : Int) : Int { return a - b; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                79
+              ],
+              "new_span": [
+                0,
+                79
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.219297,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23160000,
+                "fuel_consumed": 99986,
+                "total_fuel_consumed": 99986,
+                "max_fuel_used_percent": 0.43171848013816927,
+                "input_bytes": 79,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.141403,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23160000,
+                "fuel_consumed": 99396,
+                "total_fuel_consumed": 99396,
+                "max_fuel_used_percent": 0.4291709844559586,
+                "input_bytes": 79,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 51.999
+    },
+    {
+      "id": "qsharp-identity",
+      "language_id": "qsharp",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.220389,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22320000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.4277912186379928,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.139238,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22320000,
+                "fuel_consumed": 94893,
+                "total_fuel_consumed": 94893,
+                "max_fuel_used_percent": 0.42514784946236556,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 52.367
+    },
+    {
+      "id": "qsharp-ordinary-comment",
+      "language_id": "qsharp",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "e5b2fd69f82b721447d053b5a88dec1ff5dd6f73a5d141166a1bea5e19d4b689",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "// Ordinary comment\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "// Ordinary comment\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                20
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.26912,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.4202596830985916,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.130783,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22720000,
+                "fuel_consumed": 97037,
+                "total_fuel_consumed": 97037,
+                "max_fuel_used_percent": 0.4270994718309859,
+                "input_bytes": 78,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 54.254
+    },
+    {
+      "id": "qsharp-layout",
+      "language_id": "qsharp",
+      "category": "safe_preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "d7b39b4fbed57bf1f491ffdcdb6d3bba2610dbf912eda22790f89a076460f93d",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                58,
+                58
+              ],
+              "new_span": [
+                59,
+                60
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            },
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 1,
+              "evidence_depth": "source_span",
+              "old_span": [
+                58,
+                58
+              ],
+              "new_span": [
+                59,
+                60
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.27346800000000004,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.42702593917710197,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.146882,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22360000,
+                "fuel_consumed": 98074,
+                "total_fuel_consumed": 98074,
+                "max_fuel_used_percent": 0.43861359570661895,
+                "input_bytes": 60,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 124.091
+    },
+    {
+      "id": "qsharp-incomplete",
+      "language_id": "qsharp",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "992ca836fe312db75ca6a898f30dda6e8eb0011a246a39abbc6fa199247720a9",
+      "new_sha256": "77e8cb7ce33276ae9b6132cdaa7405588f2740f8b2e07d330609cb55efebb3a7",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function Answer() : Int { return 1; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function Answer(\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function Answer(\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                35
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Answer() : Int { return 1; } }\\n",
+              "new_label": "namespace Probe { function Answer(\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                58
+              ],
+              "new_span": [
+                0,
+                35
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.234215,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21860000,
+                "fuel_consumed": 95483,
+                "total_fuel_consumed": 95483,
+                "max_fuel_used_percent": 0.4367932296431839,
+                "input_bytes": 58,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.16144,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 21860000,
+                "fuel_consumed": 88819,
+                "total_fuel_consumed": 88819,
+                "max_fuel_used_percent": 0.40630832570905767,
+                "input_bytes": 35,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 102.979
+    },
+    {
+      "id": "qsharp-unicode-payload",
+      "language_id": "qsharp",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "cd28b3a74f112cef11e964e2e21cdb5d037955b68c30d2d7523617c445fd6b63",
+      "new_sha256": "4e4a491decf6869fc05a75cddccf48985dd487f284ef179ee3765d7960c6d1e5",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264",
+        "buchochelliq-labs/intentumdiff-core#268"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function MessageText() : String { return \"café\"; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function MessageText() : String { return \"cafe雪\"; } }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function MessageText() : String { return \"café\"; } }\\n",
+              "new_label": "namespace Probe { function MessageText() : String { return \"cafe雪\"; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                72
+              ],
+              "new_span": [
+                0,
+                74
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function MessageText() : String { return \"café\"; } }\\n",
+              "new_label": "namespace Probe { function MessageText() : String { return \"cafe雪\"; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                72
+              ],
+              "new_span": [
+                0,
+                74
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.230638,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22920000,
+                "fuel_consumed": 100075,
+                "total_fuel_consumed": 100075,
+                "max_fuel_used_percent": 0.4366273996509598,
+                "input_bytes": 72,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.14777400000000002,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 22920000,
+                "fuel_consumed": 99052,
+                "total_fuel_consumed": 99052,
+                "max_fuel_used_percent": 0.43216404886561954,
+                "input_bytes": 74,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 56.132
+    },
+    {
+      "id": "qsharp-repo-fixture-identity",
+      "language_id": "qsharp",
+      "category": "identity_repo_fixture",
+      "provenance_class": "repo_fixture",
+      "old_sha256": "0cc54e03651db6579fb5860032fd076ba00f4729fc5a7bdf93edc588af92a260",
+      "new_sha256": "0cc54e03651db6579fb5860032fd076ba00f4729fc5a7bdf93edc588af92a260",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "playground.qs",
+        "new_filename": "playground.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "playground.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.587131,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33200000,
+                "fuel_consumed": 716331,
+                "total_fuel_consumed": 716331,
+                "max_fuel_used_percent": 2.157623493975904,
+                "input_bytes": 330,
+                "input_lines": 16,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "playground.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.528431,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 33200000,
+                "fuel_consumed": 715741,
+                "total_fuel_consumed": 715741,
+                "max_fuel_used_percent": 2.155846385542169,
+                "input_bytes": 330,
+                "input_lines": 16,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "4a37f6ec02cfb5a5ff2e5284839df92bca9b32f19cf331df23dd33ab4bd4d092",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Demo",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 0
+                },
+                "structural_hash": "cea217c9a8cf1baf58e5acb92d100f1a5dbfede15bad4d6cb84630b725371770",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "qs_statement",
+                    "label": "open Microsoft.Quantum.Intrinsic",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 36
+                    },
+                    "structural_hash": "cd92f982623dc605f6b47e8847ac312106059e35240c8a800fd532563522b42e",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "qs_statement",
+                    "label": "open Microsoft.Quantum.Canon",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 32
+                    },
+                    "structural_hash": "a59324d46c244c49303de8e3d25eb6286a3a569d805917370b51672aed6aa6e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "operation",
+                    "label": "SayHello",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "3144605eb3e7e492dc04ae23cf6a082dbd9017fd7f68f59359c9bc05f40db16b",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "qs_signature",
+                        "label": "operation SayHello(name : String) : Unit",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 4,
+                          "end_line": 4,
+                          "end_col": 44
+                        },
+                        "structural_hash": "c711ba959c39ba968442388ce0225080e5b40182bff2ad8f90c9f1eb792078f0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "qs_statement",
+                        "label": "Message($\"Hello, {name}!\")",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 8,
+                          "end_line": 5,
+                          "end_col": 34
+                        },
+                        "structural_hash": "25d3a5253d06ff387da13e30875e5d34dca7b8cb289d11126122cd0f58a3a1fc",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "operation",
+                    "label": "FlipBit",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0f27fc0fdbdf601a3a65c24d8fcde93fbe7bb96756ef7de9888a7f452f22e199",
+                    "children": [
+                      {
+                        "id": "0.0.3.0",
+                        "node_type": "qs_signature",
+                        "label": "operation FlipBit() : Result",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 4,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "a2b38db3342541bcd9c7620044a6172168a91336f5b54dae3481aea3ed65f23a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.1",
+                        "node_type": "qs_statement",
+                        "label": "use q = Qubit()",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 8,
+                          "end_line": 9,
+                          "end_col": 23
+                        },
+                        "structural_hash": "57590154132fa69cb709f542a394ee66b69f857cba0f2a474fbf0c30063bc2c2",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.2",
+                        "node_type": "qs_statement",
+                        "label": "X(q)",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 8,
+                          "end_line": 10,
+                          "end_col": 12
+                        },
+                        "structural_hash": "fb3d498a5fca630141f9c264d8bd490d855958dc6402a76f05bfa193ded79626",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.3",
+                        "node_type": "qs_statement",
+                        "label": "let result = M(q)",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 25
+                        },
+                        "structural_hash": "023c0b27e60548f4d01ed45f19c9878bc17e469426be6cd60604e6b6682da2f4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.4",
+                        "node_type": "qs_statement",
+                        "label": "Reset(q)",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 8,
+                          "end_line": 12,
+                          "end_col": 16
+                        },
+                        "structural_hash": "c083c3ff81dea001f0e105ae952bd0cb69f8817d0e2c717bc635f54dec0ebb9a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.5",
+                        "node_type": "qs_statement",
+                        "label": "return result",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "b2ad1613bedff9b36dbf4de84c8356ddc6d1a27307b317035633dce6ba8d9a24",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 15,
+              "end_col": 0
+            },
+            "structural_hash": "4a37f6ec02cfb5a5ff2e5284839df92bca9b32f19cf331df23dd33ab4bd4d092",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Demo",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 15,
+                  "end_col": 0
+                },
+                "structural_hash": "cea217c9a8cf1baf58e5acb92d100f1a5dbfede15bad4d6cb84630b725371770",
+                "children": [
+                  {
+                    "id": "0.0.0",
+                    "node_type": "qs_statement",
+                    "label": "open Microsoft.Quantum.Intrinsic",
+                    "position": {
+                      "start_line": 1,
+                      "start_col": 4,
+                      "end_line": 1,
+                      "end_col": 36
+                    },
+                    "structural_hash": "cd92f982623dc605f6b47e8847ac312106059e35240c8a800fd532563522b42e",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.1",
+                    "node_type": "qs_statement",
+                    "label": "open Microsoft.Quantum.Canon",
+                    "position": {
+                      "start_line": 2,
+                      "start_col": 4,
+                      "end_line": 2,
+                      "end_col": 32
+                    },
+                    "structural_hash": "a59324d46c244c49303de8e3d25eb6286a3a569d805917370b51672aed6aa6e0",
+                    "children": []
+                  },
+                  {
+                    "id": "0.0.2",
+                    "node_type": "operation",
+                    "label": "SayHello",
+                    "position": {
+                      "start_line": 4,
+                      "start_col": 0,
+                      "end_line": 6,
+                      "end_col": 0
+                    },
+                    "structural_hash": "3144605eb3e7e492dc04ae23cf6a082dbd9017fd7f68f59359c9bc05f40db16b",
+                    "children": [
+                      {
+                        "id": "0.0.2.0",
+                        "node_type": "qs_signature",
+                        "label": "operation SayHello(name : String) : Unit",
+                        "position": {
+                          "start_line": 4,
+                          "start_col": 4,
+                          "end_line": 4,
+                          "end_col": 44
+                        },
+                        "structural_hash": "c711ba959c39ba968442388ce0225080e5b40182bff2ad8f90c9f1eb792078f0",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.2.1",
+                        "node_type": "qs_statement",
+                        "label": "Message($\"Hello, {name}!\")",
+                        "position": {
+                          "start_line": 5,
+                          "start_col": 8,
+                          "end_line": 5,
+                          "end_col": 34
+                        },
+                        "structural_hash": "25d3a5253d06ff387da13e30875e5d34dca7b8cb289d11126122cd0f58a3a1fc",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "0.0.3",
+                    "node_type": "operation",
+                    "label": "FlipBit",
+                    "position": {
+                      "start_line": 8,
+                      "start_col": 0,
+                      "end_line": 14,
+                      "end_col": 0
+                    },
+                    "structural_hash": "0f27fc0fdbdf601a3a65c24d8fcde93fbe7bb96756ef7de9888a7f452f22e199",
+                    "children": [
+                      {
+                        "id": "0.0.3.0",
+                        "node_type": "qs_signature",
+                        "label": "operation FlipBit() : Result",
+                        "position": {
+                          "start_line": 8,
+                          "start_col": 4,
+                          "end_line": 8,
+                          "end_col": 32
+                        },
+                        "structural_hash": "a2b38db3342541bcd9c7620044a6172168a91336f5b54dae3481aea3ed65f23a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.1",
+                        "node_type": "qs_statement",
+                        "label": "use q = Qubit()",
+                        "position": {
+                          "start_line": 9,
+                          "start_col": 8,
+                          "end_line": 9,
+                          "end_col": 23
+                        },
+                        "structural_hash": "57590154132fa69cb709f542a394ee66b69f857cba0f2a474fbf0c30063bc2c2",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.2",
+                        "node_type": "qs_statement",
+                        "label": "X(q)",
+                        "position": {
+                          "start_line": 10,
+                          "start_col": 8,
+                          "end_line": 10,
+                          "end_col": 12
+                        },
+                        "structural_hash": "fb3d498a5fca630141f9c264d8bd490d855958dc6402a76f05bfa193ded79626",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.3",
+                        "node_type": "qs_statement",
+                        "label": "let result = M(q)",
+                        "position": {
+                          "start_line": 11,
+                          "start_col": 8,
+                          "end_line": 11,
+                          "end_col": 25
+                        },
+                        "structural_hash": "023c0b27e60548f4d01ed45f19c9878bc17e469426be6cd60604e6b6682da2f4",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.4",
+                        "node_type": "qs_statement",
+                        "label": "Reset(q)",
+                        "position": {
+                          "start_line": 12,
+                          "start_col": 8,
+                          "end_line": 12,
+                          "end_col": 16
+                        },
+                        "structural_hash": "c083c3ff81dea001f0e105ae952bd0cb69f8817d0e2c717bc635f54dec0ebb9a",
+                        "children": []
+                      },
+                      {
+                        "id": "0.0.3.5",
+                        "node_type": "qs_statement",
+                        "label": "return result",
+                        "position": {
+                          "start_line": 13,
+                          "start_col": 8,
+                          "end_line": 13,
+                          "end_col": 21
+                        },
+                        "structural_hash": "b2ad1613bedff9b36dbf4de84c8356ddc6d1a27307b317035633dce6ba8d9a24",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 69.374
+    },
+    {
+      "id": "qsharp-quoted-comment-marker",
+      "language_id": "qsharp",
+      "category": "known_gap_regression",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "68320edd9fccce0748853569a6fc11011c8aba49cafca2d5703a26ce59cb9497",
+      "new_sha256": "e6309cbfe6c7723078f2839b15c414daefaca38c82fd742f7d9bc0ddfcc21828",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-qsharp-parser#8",
+        "buchochelliq-labs/intentumdiff-core#264"
+      ],
+      "review": {
+        "old_filename": "probe.qs",
+        "new_filename": "probe.qs",
+        "language": "qsharp",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "namespace Probe { function Url() : String { return \"https://a.example\"; } }\\n"
+            ],
+            "new_labels": [
+              "namespace Probe { function Url() : String { return \"https://b.example\"; } }\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Url() : String { return \"https://a.example\"; } }\\n",
+              "new_label": "namespace Probe { function Url() : String { return \"https://b.example\"; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                76
+              ],
+              "new_span": [
+                0,
+                76
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "namespace Probe { function Url() : String { return \"https://a.example\"; } }\\n",
+              "new_label": "namespace Probe { function Url() : String { return \"https://b.example\"; } }\\n",
+              "risk": "amber",
+              "language": "qsharp",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                76
+              ],
+              "new_span": [
+                0,
+                76
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.242871,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23040000,
+                "fuel_consumed": 94863,
+                "total_fuel_consumed": 94863,
+                "max_fuel_used_percent": 0.41173177083333334,
+                "input_bytes": 76,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "qsharp",
+                "filename": "probe.qs",
+                "call_count": 1,
+                "elapsed_ms": 0.11490299999999999,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 23040000,
+                "fuel_consumed": 94273,
+                "total_fuel_consumed": 94273,
+                "max_fuel_used_percent": 0.4091710069444444,
+                "input_bytes": 76,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/qsharp_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "qsharp",
+          "tree": {
+            "id": "0",
+            "node_type": "compilation_unit",
+            "label": "compilation_unit",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "081cc630da425f1b5fadbae5bc9b284f0f47600f2bd91afc9e50a7090fea0a98",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "namespace",
+                "label": "Probe",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 0
+                },
+                "structural_hash": "ad85da5843d683c2b9bece3ce69ae96ddc88e788c49af4af385112f4819bed57",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 57.119
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 6.607
+}

@@ -1,0 +1,2368 @@
+{
+  "language_id": "gitignore",
+  "options": {
+    "language_hint": "gitignore",
+    "strict_plugins": true
+  },
+  "completed_count": 10,
+  "peak_rss_kib": 150116,
+  "native_library_path": "/tmp/core242-clean/crates/rust-core-host/target/debug/libintentumdiff_rust_core.so",
+  "native_library_sha256": "5bd0015c25f37bded22b53be871236918caac21b4ad86456a7d0a848e9c4c165",
+  "cases": [
+    {
+      "id": "data_config.gitignore.meaningful_1_value",
+      "language_id": "gitignore",
+      "category": "value",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "a144cfbca6a2c5bc30e490fd2a69eb0646b3db463a78d724fcb0f8f324411f06",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('*.log') -> pattern('*.tmp')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "*.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 5
+              },
+              "structural_hash": "67171fa03bf67f61",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "*.tmp",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 5
+              },
+              "structural_hash": "9924349fc7dcecbe",
+              "children": []
+            },
+            "text_diff": "*.log -> *.tmp"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "*.log"
+            ],
+            "new_labels": [
+              "*.tmp"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.206173,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20840000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.2642514395393474,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.108471,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20840000,
+                "fuel_consumed": 54480,
+                "total_fuel_consumed": 54480,
+                "max_fuel_used_percent": 0.2614203454894434,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "32765c1c4be8066e",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.tmp",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "9924349fc7dcecbe",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 4742.991
+    },
+    {
+      "id": "data_config.gitignore.meaningful_2_operator",
+      "language_id": "gitignore",
+      "category": "operator",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "f280ed5a0486e657670365545db383b037f5675ca1f35efd204d1415bffb9084",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update negated_pattern('!important.log') -> pattern('important.log')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "negated_pattern",
+              "label": "!important.log",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 14
+              },
+              "structural_hash": "c25ea3a4894de9d9",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "pattern",
+              "label": "important.log",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 13
+              },
+              "structural_hash": "d7666afec58df4c1",
+              "children": []
+            },
+            "text_diff": "!important.log -> important.log"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "!important.log"
+            ],
+            "new_labels": [
+              "important.log"
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.6029800000000001,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20820000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.2645052833813641,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.130402,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20820000,
+                "fuel_consumed": 53356,
+                "total_fuel_consumed": 53356,
+                "max_fuel_used_percent": 0.2562728146013449,
+                "input_bytes": 20,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "c89b33643568314b",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "pattern",
+                "label": "important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 13
+                },
+                "structural_hash": "d7666afec58df4c1",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 60.344
+    },
+    {
+      "id": "data_config.gitignore.meaningful_3_configuration",
+      "language_id": "gitignore",
+      "category": "configuration",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "52166920155ac9e7e3283109ddd7a3054a9191024265a4a730479a5e063ea659",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('*.log') -> pattern('/*.log')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "*.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 5
+              },
+              "structural_hash": "67171fa03bf67f61",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "/*.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 6
+              },
+              "structural_hash": "ff80b78df1d1c238",
+              "children": []
+            },
+            "text_diff": "*.log -> /*.log"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "*.log"
+            ],
+            "new_labels": [
+              "/*.log"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.23551799999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.26399808245445827,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.13965,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 54543,
+                "total_fuel_consumed": 54543,
+                "max_fuel_used_percent": 0.2614717162032598,
+                "input_bytes": 22,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "7a4a5850a6bf3941",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "/*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 6
+                },
+                "structural_hash": "ff80b78df1d1c238",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 70.192
+    },
+    {
+      "id": "data_config.gitignore.identity",
+      "language_id": "gitignore",
+      "category": "identity",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": true
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.22034,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20840000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.2642514395393474,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.18167699999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20840000,
+                "fuel_consumed": 54480,
+                "total_fuel_consumed": 54480,
+                "max_fuel_used_percent": 0.2614203454894434,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 56.139
+    },
+    {
+      "id": "data_config.gitignore.safe_preservation",
+      "language_id": "gitignore",
+      "category": "preservation",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "fa06944a3fb0b380fa416a72214491a20a60111784ccc3e2dae399f5318f94e2",
+      "expected": {
+        "has_semantic_changes": false,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "<empty>"
+            ],
+            "new_labels": [
+              "<whitespace>"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "gitignore",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "<empty>",
+              "new_label": "<whitespace>",
+              "risk": "amber",
+              "language": "gitignore",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                0
+              ],
+              "new_span": [
+                0,
+                1
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.30364399999999997,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.26399808245445827,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.140191,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20860000,
+                "fuel_consumed": 54899,
+                "total_fuel_consumed": 54899,
+                "max_fuel_used_percent": 0.26317833173537875,
+                "input_bytes": 22,
+                "input_lines": 3,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 2,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 2,
+                  "start_col": 0,
+                  "end_line": 2,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 71.944
+    },
+    {
+      "id": "data_config.gitignore.incomplete",
+      "language_id": "gitignore",
+      "category": "incomplete",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "00c70b80242a7e51bbc09a79d470669274d907522a7b7e9e136c8a673fca46d3",
+      "new_sha256": "8ed852821f43b46e126c227ed3a4256805a8e514b91c866fddac85a366df966a",
+      "expected": {
+        "has_semantic_changes": null,
+        "is_style_only": null,
+        "changes_empty": null
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('*.log') -> pattern('[unclosed')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "*.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 5
+              },
+              "structural_hash": "67171fa03bf67f61",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "[unclosed",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 9
+              },
+              "structural_hash": "21ea7d808cbf24b5",
+              "children": []
+            },
+            "text_diff": "*.log -> [unclosed"
+          },
+          {
+            "change_type": "DELETION",
+            "confidence": 1.0,
+            "description": "Removes the exception for important.log",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "negated_pattern",
+              "label": "!important.log",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 14
+              },
+              "structural_hash": "c25ea3a4894de9d9",
+              "children": []
+            }
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "*.log"
+            ],
+            "new_labels": [
+              "[unclosed"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          },
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              1
+            ],
+            "old_labels": [
+              "!important.log"
+            ],
+            "new_labels": [],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [],
+            "confidence": 1.0,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.208036,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 55070,
+                "total_fuel_consumed": 55070,
+                "max_fuel_used_percent": 0.26707080504364694,
+                "input_bytes": 21,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.110475,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20620000,
+                "fuel_consumed": 35575,
+                "total_fuel_consumed": 35575,
+                "max_fuel_used_percent": 0.1725266731328807,
+                "input_bytes": 10,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "969b10bbcd796508",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "*.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 5
+                },
+                "structural_hash": "67171fa03bf67f61",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "negated_pattern",
+                "label": "!important.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 14
+                },
+                "structural_hash": "c25ea3a4894de9d9",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "ee11575f9fb70152",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "[unclosed",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 9
+                },
+                "structural_hash": "21ea7d808cbf24b5",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": false,
+      "status": "bounded_incomplete_observation",
+      "handling": "accepted_without_diagnostics",
+      "elapsed_ms": 58.38
+    },
+    {
+      "id": "data_config.gitignore.unicode_value",
+      "language_id": "gitignore",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "2d62c18c53a871c7fd684bfca043a6fb9e3244e36edb3a0cc66f38a749f93eb9",
+      "new_sha256": "461a9368ce77cac384fb10cfde7420cc80a54b6e4ab58e9ea0edfaa0d93ac41d",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('cache/λ.log') -> pattern('cache/μ.log')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "cache/λ.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 12
+              },
+              "structural_hash": "a734d22fc5f87945",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "cache/μ.log",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 12
+              },
+              "structural_hash": "2f0dd8363fa6ec18",
+              "children": []
+            },
+            "text_diff": "cache/λ.log -> cache/μ.log"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "cache/λ.log"
+            ],
+            "new_labels": [
+              "cache/μ.log"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.19383,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20520000,
+                "fuel_consumed": 36373,
+                "total_fuel_consumed": 36373,
+                "max_fuel_used_percent": 0.17725633528265106,
+                "input_bytes": 13,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.16411499999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20520000,
+                "fuel_consumed": 35783,
+                "total_fuel_consumed": 35783,
+                "max_fuel_used_percent": 0.17438109161793372,
+                "input_bytes": 13,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "c85a41f026d14de8",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "cache/λ.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "a734d22fc5f87945",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "45a3c4ebd9253f1a",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "cache/μ.log",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 12
+                },
+                "structural_hash": "2f0dd8363fa6ec18",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 66.224
+    },
+    {
+      "id": "data_config.gitignore.known_leading_space",
+      "language_id": "gitignore",
+      "category": "significant_whitespace",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "421252c22b796b07fd7f33226064ae609ccdad7b10055c7e632101c45514e5fb",
+      "new_sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": false,
+        "is_style_only": true,
+        "changes": [],
+        "change_groups": [
+          {
+            "kind": "IGNORED_STYLE",
+            "raw_change_indices": [],
+            "old_labels": [
+              "foo\\n"
+            ],
+            "new_labels": [
+              "foo\\n"
+            ],
+            "old_node_ids": [],
+            "new_node_ids": [],
+            "confidence": 0.75,
+            "rule_id": "generic.style_only_shortcut.source_equivalence",
+            "metadata": {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "foo\\n",
+              "new_label": "foo\\n",
+              "risk": "amber",
+              "language": "gitignore",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                5
+              ],
+              "new_span": [
+                0,
+                4
+              ]
+            }
+          }
+        ],
+        "metadata": {
+          "ignored_style_changes": [
+            {
+              "index_space": "style_only_shortcut",
+              "reason": "The parser-normalized tree is unchanged after trivia filtering, so source-only layout or comment edits were ignored while preserving source-span evidence.",
+              "equivalence_kind": "syntactic_trivia",
+              "old_label": "foo\\n",
+              "new_label": "foo\\n",
+              "risk": "amber",
+              "language": "gitignore",
+              "occurrence": 0,
+              "evidence_depth": "source_span",
+              "old_span": [
+                0,
+                5
+              ],
+              "new_span": [
+                0,
+                4
+              ],
+              "rule_id": "generic.style_only_shortcut.source_equivalence"
+            }
+          ],
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.211863,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20180000,
+                "fuel_consumed": 35926,
+                "total_fuel_consumed": 35926,
+                "max_fuel_used_percent": 0.17802775024777007,
+                "input_bytes": 5,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.098453,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20180000,
+                "fuel_consumed": 35235,
+                "total_fuel_consumed": 35235,
+                "max_fuel_used_percent": 0.17460356788899903,
+                "input_bytes": 4,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [
+        "has_semantic_changes: expected True, got False",
+        "is_style_only: expected False, got True",
+        "changes_empty: expected False, got True"
+      ],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "d8a72dfadf381555",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "foo",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 3
+                },
+                "structural_hash": "ffb69bb4d4b1e6db",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "d8a72dfadf381555",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "foo",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 3
+                },
+                "structural_hash": "ffb69bb4d4b1e6db",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "failed",
+      "elapsed_ms": 54.3
+    },
+    {
+      "id": "data_config.gitignore.known_escaped_trailing_space",
+      "language_id": "gitignore",
+      "category": "significant_whitespace",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7124c45c6a9c04a7ffe9ef033c8f66f0e07f89234c829304a0b9c182a8fc9fc1",
+      "new_sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('foo\\') -> pattern('foo')",
+            "old_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "foo\\",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 4
+              },
+              "structural_hash": "35311b456a4ab765",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.0",
+              "node_type": "pattern",
+              "label": "foo",
+              "position": {
+                "start_line": 0,
+                "start_col": 0,
+                "end_line": 0,
+                "end_col": 3
+              },
+              "structural_hash": "ffb69bb4d4b1e6db",
+              "children": []
+            },
+            "text_diff": "foo\\ -> foo"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "foo\\"
+            ],
+            "new_labels": [
+              "foo"
+            ],
+            "old_node_ids": [
+              "0.0"
+            ],
+            "new_node_ids": [
+              "0.0"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.224507,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20200000,
+                "fuel_consumed": 36022,
+                "total_fuel_consumed": 36022,
+                "max_fuel_used_percent": 0.17832673267326732,
+                "input_bytes": 6,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.12789799999999998,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20200000,
+                "fuel_consumed": 35235,
+                "total_fuel_consumed": 35235,
+                "max_fuel_used_percent": 0.17443069306930692,
+                "input_bytes": 4,
+                "input_lines": 1,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "5e8b35f189301530",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "foo\\",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 4
+                },
+                "structural_hash": "35311b456a4ab765",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 0,
+              "end_col": 0
+            },
+            "structural_hash": "d8a72dfadf381555",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "pattern",
+                "label": "foo",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 3
+                },
+                "structural_hash": "ffb69bb4d4b1e6db",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.0: child outside parent range",
+        "new: 0.0: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 55.33
+    },
+    {
+      "id": "data_config.gitignore.unicode_prefix_span",
+      "language_id": "gitignore",
+      "category": "unicode",
+      "provenance_class": "handwritten_regression",
+      "old_sha256": "7c088f31d85fbc7850cdc3886841eec52ed55f64edb8925629422f10eaf756f8",
+      "new_sha256": "3e88e4aca2ad3e1ac48d3ef9a063a8eb9e1468a06d2c83277643b9aa6623e48c",
+      "expected": {
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes_empty": false
+      },
+      "related_issues": [
+        "buchochelliq-labs/intentumdiff-gitignore-parser#4",
+        "buchochelliq-labs/intentumdiff-gitignore-parser#5"
+      ],
+      "review": {
+        "old_filename": ".gitignore",
+        "new_filename": ".gitignore",
+        "language": "gitignore",
+        "has_semantic_changes": true,
+        "is_style_only": false,
+        "changes": [
+          {
+            "change_type": "MODIFICATION",
+            "confidence": 0.9,
+            "description": "Update pattern('μ.log') -> pattern('ν.log')",
+            "old_node": {
+              "id": "0.1",
+              "node_type": "pattern",
+              "label": "μ.log",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 6
+              },
+              "structural_hash": "14e4c7e2ca83277f",
+              "children": []
+            },
+            "new_node": {
+              "id": "0.1",
+              "node_type": "pattern",
+              "label": "ν.log",
+              "position": {
+                "start_line": 1,
+                "start_col": 0,
+                "end_line": 1,
+                "end_col": 6
+              },
+              "structural_hash": "856404c5c9c6d318",
+              "children": []
+            },
+            "text_diff": "μ.log -> ν.log"
+          }
+        ],
+        "change_groups": [
+          {
+            "kind": "MEANINGFUL_CHANGE",
+            "raw_change_indices": [
+              0
+            ],
+            "old_labels": [
+              "μ.log"
+            ],
+            "new_labels": [
+              "ν.log"
+            ],
+            "old_node_ids": [
+              "0.1"
+            ],
+            "new_node_ids": [
+              "0.1"
+            ],
+            "confidence": 0.9,
+            "rule_id": "presentation.final_meaningful_group",
+            "metadata": {
+              "index_space": "final_changes"
+            }
+          }
+        ],
+        "metadata": {
+          "engine_owner": "rust",
+          "semantic_contract": "rust_finalize_review_v1",
+          "rust_core": {
+            "engine": "rust_finalize_review_v1",
+            "stage": "per_stage_finalize_routing",
+            "used": true
+          },
+          "file_lifecycle": "modified",
+          "engine_telemetry": {
+            "schema_version": 1,
+            "calls": [
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.184012,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20560000,
+                "fuel_consumed": 53809,
+                "total_fuel_consumed": 53809,
+                "max_fuel_used_percent": 0.26171692607003894,
+                "input_bytes": 14,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              },
+              {
+                "function": "process",
+                "engine_owner": "rust",
+                "engine": "rust_wasmtime_plugin_host",
+                "provenance": "sandboxed_wasm_plugin",
+                "trusted": false,
+                "language": "gitignore",
+                "filename": ".gitignore",
+                "call_count": 1,
+                "elapsed_ms": 0.111106,
+                "statuses": {
+                  "ok": 1
+                },
+                "fuel_budget": 20560000,
+                "fuel_consumed": 53219,
+                "total_fuel_consumed": 53219,
+                "max_fuel_used_percent": 0.2588472762645914,
+                "input_bytes": 14,
+                "input_lines": 2,
+                "plugin": "/workspace/intentumdiff-batch3/parsers-cloud-ci/gitignore_parser.wasm"
+              }
+            ],
+            "fuel_hotspots": []
+          }
+        },
+        "parse_errors": [],
+        "llm_summary": "",
+        "gitignore_excluded": false,
+        "is_fallback": false,
+        "guardrail_violations": []
+      },
+      "classification_errors": [],
+      "parse_errors": [],
+      "review_errors": [],
+      "tree_errors": [],
+      "trees": {
+        "old": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "91ba0775d11ba9cf",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "comment",
+                "label": "# λ",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 4
+                },
+                "structural_hash": "28946ab0c5a87270",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "pattern",
+                "label": "μ.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "14e4c7e2ca83277f",
+                "children": []
+              }
+            ]
+          }
+        },
+        "new": {
+          "language": "gitignore",
+          "tree": {
+            "id": "0",
+            "node_type": "gitignore_file",
+            "label": "gitignore",
+            "position": {
+              "start_line": 0,
+              "start_col": 0,
+              "end_line": 1,
+              "end_col": 0
+            },
+            "structural_hash": "c94398b10f62cad1",
+            "children": [
+              {
+                "id": "0.0",
+                "node_type": "comment",
+                "label": "# λ",
+                "position": {
+                  "start_line": 0,
+                  "start_col": 0,
+                  "end_line": 0,
+                  "end_col": 4
+                },
+                "structural_hash": "28946ab0c5a87270",
+                "children": []
+              },
+              {
+                "id": "0.1",
+                "node_type": "pattern",
+                "label": "ν.log",
+                "position": {
+                  "start_line": 1,
+                  "start_col": 0,
+                  "end_line": 1,
+                  "end_col": 6
+                },
+                "structural_hash": "856404c5c9c6d318",
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "span_relationship_observations": [
+        "old: 0.1: child outside parent range",
+        "new: 0.1: child outside parent range"
+      ],
+      "deterministic": true,
+      "oracle_evaluated": true,
+      "status": "passed",
+      "elapsed_ms": 62.349
+    }
+  ],
+  "attempted_count": 10,
+  "worker_error": null,
+  "stderr": "",
+  "wall_seconds": 5.936
+}

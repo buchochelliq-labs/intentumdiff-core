@@ -1,0 +1,174 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-kartar-entrypoint-oddities-env-equals-form",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "Labels": [
+                {
+                  "Key": "maintainer",
+                  "Value": "James Turnbull \"james@example.com\""
+                }
+              ]
+            },
+            "type": "*instructions.LabelCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "REFRESHED_AT",
+                  "Value": "2014-06-01"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get --no-install-recommends install -y redis-server redis-tools"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Ports": [
+                "6379"
+              ]
+            },
+            "type": "*instructions.ExposeCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "/usr/bin/redis-server"
+              ],
+              "Files": null,
+              "PrependShell": false
+            },
+            "type": "*instructions.EntrypointCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "new_sha256": "776fccbd70859a416544f1dc0cf137a66c468d41190279c316e310f6a97cd725",
+  "old_observation": {
+    "escape_token": "\\",
+    "meta_args": null,
+    "stages": [
+      {
+        "base": "ubuntu:14.04",
+        "commands": [
+          {
+            "fields": {
+              "Labels": [
+                {
+                  "Key": "maintainer",
+                  "Value": "James Turnbull \"james@example.com\""
+                }
+              ]
+            },
+            "type": "*instructions.LabelCommand"
+          },
+          {
+            "fields": {
+              "Env": [
+                {
+                  "Key": "REFRESHED_AT",
+                  "Value": "2014-06-01"
+                }
+              ]
+            },
+            "type": "*instructions.EnvCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get update"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "apt-get --no-install-recommends install -y redis-server redis-tools"
+              ],
+              "Files": null,
+              "FlagsUsed": [],
+              "PrependShell": true
+            },
+            "type": "*instructions.RunCommand"
+          },
+          {
+            "fields": {
+              "Ports": [
+                "6379"
+              ]
+            },
+            "type": "*instructions.ExposeCommand"
+          },
+          {
+            "fields": {
+              "CmdLine": [
+                "/usr/bin/redis-server"
+              ],
+              "Files": null,
+              "PrependShell": false
+            },
+            "type": "*instructions.EntrypointCommand"
+          }
+        ],
+        "name": "",
+        "platform": ""
+      }
+    ]
+  },
+  "old_sha256": "8fc84ce42f9f90632dd17348ecaff033b7ee21b1dca8efe0e692f5ba9d6b58bf",
+  "oracle": "buildkit_instructions_equality",
+  "projection_equal": true,
+  "review": "BuildKit instructions.Parse: the typed instruction lists equal on old and new.",
+  "schema_version": 1,
+  "verdict": "supports_claim"
+}

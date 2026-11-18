@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-scss-ie-backslash",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "ff367f2d2ee5b08117ed1f098d5bedad4b0e4068aadfd83563c1195acf593cae",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "ff367f2d2ee5b08117ed1f098d5bedad4b0e4068aadfd83563c1195acf593cae",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

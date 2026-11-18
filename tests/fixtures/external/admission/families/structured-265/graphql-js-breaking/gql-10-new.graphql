@@ -1,0 +1,10 @@
+
+      type Type1 {
+        field1(
+          arg1: String,
+          newRequiredArg: String!
+          newOptionalArg1: Int
+          newOptionalArg2: Int! = 0
+        ): String
+      }
+    

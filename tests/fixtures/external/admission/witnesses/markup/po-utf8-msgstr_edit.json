@@ -1,0 +1,15 @@
+{
+  "case_id": "po-utf8-msgstr_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "6054ba8bea36ca81d617ce97c185774909db6360d6f1769c2f22be5dae1764a3",
+  "observations": {
+    "new_mo_sha256": "9d9caa4212aa78b5f48393a4bb04fec91e0a86a3e6e65916029f514adf0a5f9e",
+    "old_mo_sha256": "47e28a3ee50c32194fbf97d4fb9dac5535a946bf85987f119c3139864ab4446c",
+    "reference_equal": false
+  },
+  "old_sha256": "5e11bc4f8079024e9dd319718d2839ff115e844719af98f23d4e14dce5235790",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

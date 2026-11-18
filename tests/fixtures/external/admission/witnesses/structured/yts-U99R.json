@@ -1,0 +1,15 @@
+{
+  "case_id": "yts-U99R",
+  "executed_utc": "2026-11-17T20:20:30+00:00",
+  "new_sha256": "e16fd94da5b6bcadc48fc6e549fe760921aa44e7371016ea1248210fc62fafcd",
+  "observations": {
+    "error": "ConstructorError: could not determine a constructor for the tag 'tag:yaml.org,2002:str,'\n  in \"<unicode string>\", line 1, column 3:\n    - !!str, xxx\n      ^ (line: 1)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "e16fd94da5b6bcadc48fc6e549fe760921aa44e7371016ea1248210fc62fafcd",
+  "oracle": "yaml_parse",
+  "reference": "ruamel.yaml 0.18.16 safe loader (pure), YAML 1.2",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

@@ -1,0 +1,1 @@
+<template>hi</template><style scoped>::v-slotted(h1){color:red;}</style>

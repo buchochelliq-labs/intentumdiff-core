@@ -1,0 +1,29 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "tf-invalid-resources-ignorechanges-all-legacymix-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "5a3bebe542a6021c890ba66826d796310d40c9b39382a86fbc9f6c6b377426d1",
+  "old_sha256": "5a3bebe542a6021c890ba66826d796310d40c9b39382a86fbc9f6c6b377426d1",
+  "oracle": "hcl_native_syntax",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "hclsyntax.ParseConfig accepts the document (native syntax). Upstream directory label: invalid-files.",
+  "schema_version": 1,
+  "tool": "hashicorp/hcl/v2 hclsyntax.ParseConfig",
+  "unit_starts": [
+    0
+  ],
+  "verdict": "supports_claim"
+}

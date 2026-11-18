@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-01-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "c2ac7b2caddfb3f1276b4ff6aad00e06924a8c0d8dc3cb8215037c1392c9b89a",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.007s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "494f3ba0d1bc1b30af6e9eb01d0fc947cf300cdcc139ff333fb4758d3de167a6",
+  "new_test_sha256": "1d6cd28f689ea7408fdd72ebd1d9f2f7254790e4147ac7131a896106ac7652c3",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "c2ac7b2caddfb3f1276b4ff6aad00e06924a8c0d8dc3cb8215037c1392c9b89a",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "    \t- (string) (len=6) \"((()))\",\n        \t            \t- (string) (len=8) \"(((())))\"\n        \t            \t+([]string) {\n        \t            \t }\n        \tTest:       \tTestSeparateParenGroups\n    main_test.go:12: \n        \tError Trace:\t/tmp/hep-witness-q2frsmlv/main_test.go:12\n        \tError:      \tNot equal: \n        \t            \texpected: []string{\"(()(())((())))\"}\n        \t            \tactual  : []string{}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,3 +1,2 @@\n        \t            \t-([]string) (len=1) {\n        \t            \t- (string) (len=14) \"(()(())((())))\"\n        \t            \t+([]string) {\n        \t            \t }\n        \tTest:       \tTestSeparateParenGroups\n    main_test.go:13: \n        \tError Trace:\t/tmp/hep-witness-q2frsmlv/main_test.go:13\n        \tError:      \tNot equal: \n        \t            \texpected: []string{\"()\", \"(())\", \"(()())\"}\n        \t            \tactual  : []string{}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,5 +1,2 @@\n        \t            \t-([]string) (len=3) {\n        \t            \t- (string) (len=2) \"()\",\n        \t            \t- (string) (len=4) \"(())\",\n        \t            \t- (string) (len=6) \"(()())\"\n        \t            \t+([]string) {\n        \t            \t }\n        \tTest:       \tTestSeparateParenGroups\nFAIL\nFAIL\thumanevalpack\t0.005s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "a934b6454436b529d505986354e916d9baf747f37fa84f8691ecc03f3467d78f",
+  "old_test_sha256": "1d6cd28f689ea7408fdd72ebd1d9f2f7254790e4147ac7131a896106ac7652c3",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/01.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

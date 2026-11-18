@@ -1,0 +1,14 @@
+{
+  "case_id": "sass-basic-21_one_builtin_function",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "b88c57cce21597fb9d56501c820444204797370ceceadb7bb001900de991b75e",
+  "observations": {
+    "css_equal": false,
+    "error": null
+  },
+  "old_sha256": "b88c57cce21597fb9d56501c820444204797370ceceadb7bb001900de991b75e",
+  "oracle": "sass_compile",
+  "reference": "sass_compile: dart-sass\t1.108.2\t(Sass Compiler)\t[Dart]\ndart2js\t3.13.7\t(Dart Compiler)\t[Dart]",
+  "summary": "Dart Sass output differs from expected_output.css",
+  "verdict": "inconclusive"
+}

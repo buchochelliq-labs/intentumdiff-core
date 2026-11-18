@@ -1,0 +1,13 @@
+{
+  "case_id": "toml-valid-array-open-parent-table-string",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "1444f2d59d730100262227b22b5ee6a577891cab3ea59cd7f3860668de75fc74",
+  "observations": {
+    "reference_equal": false
+  },
+  "old_sha256": "d426629c09b215be0b6820373943674170b942b5a312014dae0e1c405bb69d3f",
+  "oracle": "toml_typed",
+  "reference": "CPython 3.13.18 tomllib typed equality",
+  "summary": "reference says different; claim changed",
+  "verdict": "supports_claim"
+}

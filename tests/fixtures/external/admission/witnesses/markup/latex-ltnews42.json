@@ -1,0 +1,16 @@
+{
+  "case_id": "latex-ltnews42",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "2165634eac5f1a6f63ce847c9ad961b450a68e87235c7d27f29d2030bee30431",
+  "observations": {
+    "error": "! LaTeX Error: File `pdfmanagement-testphase.sty' not found.",
+    "missing": [
+      "pdfmanagement-testphase.sty"
+    ]
+  },
+  "old_sha256": "2165634eac5f1a6f63ce847c9ad961b450a68e87235c7d27f29d2030bee30431",
+  "oracle": "latex_compile",
+  "reference": "latex_compile: pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "summary": "document needs files absent from the reference TeX installation",
+  "verdict": "inconclusive"
+}

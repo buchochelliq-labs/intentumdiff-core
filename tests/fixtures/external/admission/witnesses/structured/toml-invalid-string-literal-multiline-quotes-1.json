@@ -1,0 +1,15 @@
+{
+  "case_id": "toml-invalid-string-literal-multiline-quotes-1",
+  "executed_utc": "2026-11-17T20:20:31+00:00",
+  "new_sha256": "309ab79bd7cc57bd74ca1b46c91207d05dfdddc6e136a2601b79e0bf9d334445",
+  "observations": {
+    "error": "Expected newline or end of document after a statement (at line 1, column 28)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "309ab79bd7cc57bd74ca1b46c91207d05dfdddc6e136a2601b79e0bf9d334445",
+  "oracle": "toml_parse",
+  "reference": "CPython 3.13.18 tomllib (TOML 1.0.0)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

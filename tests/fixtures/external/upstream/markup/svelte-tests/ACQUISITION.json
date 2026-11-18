@@ -1,0 +1,1503 @@
+{
+  "enumeration": {
+    "candidates": 139,
+    "complete": false,
+    "method": "probe recalled sample directory names (no in-suite index)",
+    "migrate_found": [
+      "accessors",
+      "css-ignore",
+      "derivations",
+      "effects",
+      "event-handlers",
+      "event-handlers-with-alias",
+      "export-props-multiple-declarations",
+      "jsdoc-with-comments",
+      "named-slots",
+      "not-blank-css-if-error",
+      "props",
+      "props-and-labeled",
+      "props-export-alias",
+      "props-interface",
+      "props-rest-props",
+      "props-ts",
+      "reactive-statements-reorder-1",
+      "reactive-statements-reorder-2",
+      "reactive-statements-reorder-not-deleting-additions",
+      "remove-blocks-whitespace",
+      "self-closing-elements",
+      "shadowed-forwarded-slot",
+      "single-assignment-labeled",
+      "slot-non-identifier",
+      "slot-shadow-props",
+      "slot-use_ts",
+      "slots",
+      "slots-below-imports",
+      "slots-custom-element",
+      "slots-with-$$props",
+      "state-and-derivations-sequence",
+      "state-no-initial",
+      "state-ts",
+      "svelte-component",
+      "svelte-self",
+      "svelte-self-name-conflict",
+      "svelte-self-skip-filename"
+    ],
+    "parser_legacy_found": [
+      "action",
+      "action-duplicate",
+      "action-with-call",
+      "action-with-identifier",
+      "action-with-literal",
+      "animation",
+      "attribute-containing-solidus",
+      "attribute-curly-bracket",
+      "attribute-dynamic",
+      "attribute-dynamic-boolean",
+      "attribute-escaped",
+      "attribute-multiple",
+      "attribute-shorthand",
+      "attribute-static",
+      "attribute-static-boolean",
+      "attribute-with-whitespace",
+      "await-catch",
+      "await-then-catch",
+      "binding",
+      "binding-shorthand",
+      "comment",
+      "comment-with-ignores",
+      "component-dynamic",
+      "convert-entities",
+      "convert-entities-in-element",
+      "css",
+      "dynamic-element-string",
+      "dynamic-element-variable",
+      "dynamic-import",
+      "each-block",
+      "each-block-destructured",
+      "each-block-else",
+      "each-block-indexed",
+      "each-block-keyed",
+      "element-with-attribute",
+      "element-with-attribute-empty-string",
+      "element-with-mustache",
+      "element-with-text",
+      "elements",
+      "event-handler",
+      "generic-snippets",
+      "if-block",
+      "if-block-else",
+      "if-block-elseif",
+      "implicitly-closed-li",
+      "implicitly-closed-li-block",
+      "javascript-comments",
+      "nbsp",
+      "no-error-if-before-closing",
+      "raw-mustaches",
+      "refs",
+      "script",
+      "script-attribute-with-curly-braces",
+      "script-comment-only",
+      "self-closing-element",
+      "self-reference",
+      "slotted-element",
+      "space-between-mustaches",
+      "spread",
+      "style-inside-head",
+      "textarea-children",
+      "textarea-end-tag",
+      "transition-intro",
+      "transition-intro-no-params",
+      "unusual-identifier",
+      "whitespace-after-script-tag",
+      "whitespace-after-style-tag",
+      "whitespace-leading-trailing",
+      "whitespace-normal"
+    ],
+    "parser_modern_found": [
+      "attachments",
+      "comment-before-function-binding",
+      "comment-before-script",
+      "comment-in-tag",
+      "css-nth-syntax",
+      "css-pseudo-classes",
+      "each-block-object-pattern",
+      "each-block-object-pattern-special-characters",
+      "generic-snippets",
+      "if-block",
+      "if-block-else",
+      "if-block-elseif",
+      "options",
+      "semicolon-inside-quotes",
+      "snippets",
+      "template-shadowroot",
+      "typescript-in-event-handler",
+      "loose-invalid-block",
+      "loose-invalid-expression",
+      "loose-unclosed-open-tag",
+      "loose-unclosed-tag",
+      "loose-valid-each-as",
+      "script-style-no-markup"
+    ]
+  },
+  "files": {
+    "LICENSE.md": {
+      "bytes": 1126,
+      "sha256": "06257f4847b13a49a039efb17b944c141e71b12fd8d231b362d86919067d77a3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/LICENSE.md"
+    },
+    "packages/svelte/tests/migrate/samples/accessors/input.svelte": {
+      "bytes": 190,
+      "sha256": "8e8a401e612eed1a4d8afad010dd30c9392efe93efcac45a033ae2c9362b2245",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/accessors/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/accessors/output.svelte": {
+      "bytes": 297,
+      "sha256": "e574254ffd633a00a0e98edb5ed412978718b1cec54c9adb6a92d0804ff88fef",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/accessors/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/css-ignore/input.svelte": {
+      "bytes": 209,
+      "sha256": "c35f0414918554d03d6e73deecc0ff77edc0541d847e1f6972c93c396ae958a1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/css-ignore/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/css-ignore/output.svelte": {
+      "bytes": 216,
+      "sha256": "f664f1dc80824cc8e2c83054512d3f407bafaa9a7c631bff1fd397caea577490",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/css-ignore/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/derivations/input.svelte": {
+      "bytes": 426,
+      "sha256": "142fc189f0e85bc0d3d39dd455e7655d68f764dd76fed426a9bc7c50947b5961",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/derivations/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/derivations/output.svelte": {
+      "bytes": 461,
+      "sha256": "7bff484649efd17571d2d9ec6913e961570ccb033e4524e6d21b155c82776b7c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/derivations/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/effects/input.svelte": {
+      "bytes": 261,
+      "sha256": "d5ee26b02c40c7a61a503523dd318978e71524e1dda8278a7ed8e5c271f27d2e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/effects/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/effects/output.svelte": {
+      "bytes": 382,
+      "sha256": "2106c67c158f4a03f7b128ff44b902005969072178a9a12a557b784591117d07",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/effects/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/event-handlers-with-alias/input.svelte": {
+      "bytes": 2772,
+      "sha256": "33ac989ead386b9b25b10e0e055f38e3af39980d0c1d7770d344168c8ecd93de",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/event-handlers-with-alias/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/event-handlers-with-alias/output.svelte": {
+      "bytes": 3585,
+      "sha256": "91b4d4708385c4ed7ea078edad8cac1f6155947301802e40e2bcac7e813271d4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/event-handlers-with-alias/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/event-handlers/input.svelte": {
+      "bytes": 2644,
+      "sha256": "f93d3861bff24d601e89512407e9773774c651379a06f51c07008e5c0f5122c2",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/event-handlers/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/event-handlers/output.svelte": {
+      "bytes": 3188,
+      "sha256": "d4f917563e8a8b112fb10ff25d84e81dce1ad0697125e0a1e5bf7da0b1277eb7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/event-handlers/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/export-props-multiple-declarations/input.svelte": {
+      "bytes": 75,
+      "sha256": "2721dc3f64ace1899c9828b8cea696d1273807d677b1cbbca90ab0a819afada5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/export-props-multiple-declarations/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/export-props-multiple-declarations/output.svelte": {
+      "bytes": 84,
+      "sha256": "42e874574121d0a4998822501f7d7594e2f25f522a528e619818d99eef59415b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/export-props-multiple-declarations/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/jsdoc-with-comments/input.svelte": {
+      "bytes": 1101,
+      "sha256": "0f42d5fbaf4d3e74026e358ca8ef5fe947b1de0879b80ca283078af400b45f8a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/jsdoc-with-comments/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/jsdoc-with-comments/output.svelte": {
+      "bytes": 1330,
+      "sha256": "f1af55d26567d2783544f3c8c7078192fa6c3a95aa49e9610c353d947da3b910",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/jsdoc-with-comments/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/named-slots/input.svelte": {
+      "bytes": 128,
+      "sha256": "ef9262d59017c4c4c8ec55d07dae7dc58b6ebef6b9dead25f105e3119d0f3960",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/named-slots/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/named-slots/output.svelte": {
+      "bytes": 263,
+      "sha256": "311bb74092f18f61cf2b12de4585933bb059e623a3677725a431764defae30bd",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/named-slots/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/not-blank-css-if-error/input.svelte": {
+      "bytes": 111,
+      "sha256": "6b314077058efab3ddc4e96b5b3dca73351b536b51670890453f841bef7f16e9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/not-blank-css-if-error/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/not-blank-css-if-error/output.svelte": {
+      "bytes": 261,
+      "sha256": "5bdc110f188108fc4df3ac6c981da6947a8c2d21e3bf4f4564351de6f67a275c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/not-blank-css-if-error/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-and-labeled/input.svelte": {
+      "bytes": 130,
+      "sha256": "113cf259817f65e2234d3b1d39f91f581a2f5733eb317067ffc6d0081e7232e5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-and-labeled/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-and-labeled/output.svelte": {
+      "bytes": 261,
+      "sha256": "128630a3b0b3afedff676270958589ea80d6225448476eca8ae230da578217f3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-and-labeled/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-export-alias/input.svelte": {
+      "bytes": 104,
+      "sha256": "5106f7fa1dbb5e675de31a6b7185b8efed60ab6ebf4fee0ffd420b5afc8ce43d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-export-alias/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-export-alias/output.svelte": {
+      "bytes": 148,
+      "sha256": "ea7a52d59af7e1cef3eb519306169765ce56190eea82a3531f00e48b15330171",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-export-alias/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-interface/input.svelte": {
+      "bytes": 223,
+      "sha256": "050841f9f9924b5764778da17358d034cac2d8eb9f5b8bb9619efb9c5e6f6adc",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-interface/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-interface/output.svelte": {
+      "bytes": 224,
+      "sha256": "f5880db1a11fb67ded241869998da86baeec5533ab3a99da785d30104fd0c952",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-interface/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-rest-props/input.svelte": {
+      "bytes": 89,
+      "sha256": "91c7941df3ea966336e9b365ba6c0fe5090472b80015f3b0a6f0ee200039c679",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-rest-props/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-rest-props/output.svelte": {
+      "bytes": 98,
+      "sha256": "939aaeba18fd9526221324446b37ffe012fdc243ed381384d84577ba07e09d14",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-rest-props/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-ts/input.svelte": {
+      "bytes": 750,
+      "sha256": "1d0d41cb8d291250c1566ef7a1498f0b4cc10b5c9344f923a65b0286e77f482a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-ts/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props-ts/output.svelte": {
+      "bytes": 991,
+      "sha256": "f6ac3e12f0b70a3317bfbf7dfe0dd75ca7d1bb372e94846cef4a38e25ecb8926",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props-ts/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props/input.svelte": {
+      "bytes": 289,
+      "sha256": "05497560d08b06e4be3f5ca293148bb16b5e1bf6a3a59d0456adae1977d7331b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/props/output.svelte": {
+      "bytes": 469,
+      "sha256": "abc90bc3a2dbdbe3200deed004766d4d0bc0803c4fa052bbde576e68a51d6f88",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/props/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-1/input.svelte": {
+      "bytes": 100,
+      "sha256": "1967e2130010692aba56ea53458d519851e43b88f6e014f93d84ee78cf0cc5ed",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-1/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-1/output.svelte": {
+      "bytes": 121,
+      "sha256": "d05833c612f596438faf00fea728e94e0b2d89f3b820632893738a591891a0e1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-1/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-2/input.svelte": {
+      "bytes": 104,
+      "sha256": "778e1797da7cdacf05975e146970a57b20d9bf26b32d4e72b931762faba4f9fa",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-2/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-2/output.svelte": {
+      "bytes": 169,
+      "sha256": "7d13c12d055ba2427d40fdca7270f227328c090972ebcc4a8638bd62be885cb6",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-2/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-not-deleting-additions/input.svelte": {
+      "bytes": 131,
+      "sha256": "07f075a3d3c4e7848a330fe89aedfb567f94b44e06dea59680499178e7cf0a73",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-not-deleting-additions/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-not-deleting-additions/output.svelte": {
+      "bytes": 208,
+      "sha256": "c9fe95e954ee2c0acd0d65172225c053018d884e78fcf2e855c95845d5dcff65",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/reactive-statements-reorder-not-deleting-additions/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/remove-blocks-whitespace/input.svelte": {
+      "bytes": 289,
+      "sha256": "2bc17e6cff580656983fa02940fce09ebf2e551cd67ae1c749bad9fef3bdcae3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/remove-blocks-whitespace/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/remove-blocks-whitespace/output.svelte": {
+      "bytes": 226,
+      "sha256": "75c861afecd02f0afb43d1e2b4962cad8dec76ce0f48d01a75476fcdd9447d45",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/remove-blocks-whitespace/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/self-closing-elements/input.svelte": {
+      "bytes": 74,
+      "sha256": "314157323bcb5da73ba3f88eec6dc59be5760787e06802e9e995088898fd5bcf",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/self-closing-elements/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/self-closing-elements/output.svelte": {
+      "bytes": 89,
+      "sha256": "a653f43c9376c32c114ea10eb55a20a382dcd2009c0f6e29fdea0fa1672722ff",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/self-closing-elements/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/shadowed-forwarded-slot/input.svelte": {
+      "bytes": 340,
+      "sha256": "0cf719090e7c87df04fa754e62fb2a5a8f281f806de395d46a88aace9d7d1258",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/shadowed-forwarded-slot/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/shadowed-forwarded-slot/output.svelte": {
+      "bytes": 846,
+      "sha256": "24b7006af45afc6b9f224554a90dbc366f644304018210d614ad4662b11f34dc",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/shadowed-forwarded-slot/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/single-assignment-labeled/input.svelte": {
+      "bytes": 881,
+      "sha256": "8be2ef2dfbdd20646fef8e28b195a0bc65b90310512f53f9b66f8d03ee4144bf",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/single-assignment-labeled/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/single-assignment-labeled/output.svelte": {
+      "bytes": 1038,
+      "sha256": "669168482f200169a0a01ef3219780234a9f69a47fce81b39ea364ac07dfd07f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/single-assignment-labeled/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-non-identifier/input.svelte": {
+      "bytes": 916,
+      "sha256": "06533c48bb8cd62e965816428fbb7dc531abfbd7111f301228faace245c02c65",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-non-identifier/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-non-identifier/output.svelte": {
+      "bytes": 1745,
+      "sha256": "1ed21f9704c03c7e8355573f4449ab59d3af1dcaf879803d354699ffdb623fd6",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-non-identifier/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-shadow-props/input.svelte": {
+      "bytes": 449,
+      "sha256": "6abbf816d1465ae1d7b1504ab7c5e8de0d7aa39809bbe2fa84a4b1c5efb28c1e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-shadow-props/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-shadow-props/output.svelte": {
+      "bytes": 873,
+      "sha256": "c573b1e7716b0e865aa7e6576430d6639334b5f5ccdc9b0a48d8eef29d180c01",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-shadow-props/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-use_ts/_config.js": {
+      "bytes": 76,
+      "sha256": "0610908c94cddf8402a2e7b30569e3a54a37f2ce76041f5359e131f154f8bb82",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-use_ts/_config.js"
+    },
+    "packages/svelte/tests/migrate/samples/slot-use_ts/input.svelte": {
+      "bytes": 8,
+      "sha256": "7486df25ea03d68e8346590439b8075a5704402807b730511766c4ae040d528b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-use_ts/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slot-use_ts/output.svelte": {
+      "bytes": 151,
+      "sha256": "43c1903bb9d016ba197d813122fb936a21b8de5fde494ed8c4f6c36b1373be45",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slot-use_ts/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-below-imports/input.svelte": {
+      "bytes": 70,
+      "sha256": "eb551498260ea5249e6f0be931bccecfc9c588c960da732734d708365b9c35b9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-below-imports/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-below-imports/output.svelte": {
+      "bytes": 226,
+      "sha256": "4be836c0e4b56a148bff33dfbd8ff3ca8221b3ae46b01c9cb2173f508fee8e2e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-below-imports/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-custom-element/input.svelte": {
+      "bytes": 436,
+      "sha256": "e76fd637bcf9650921116bdb9b2b4de2cf6b61e7dccc7c4e40c6c85ea50aa295",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-custom-element/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-custom-element/output.svelte": {
+      "bytes": 442,
+      "sha256": "6d24a13e426d77a5a832f863725cd934fbcaa48dd250355c623acb33d343a965",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-custom-element/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-with-$$props/input.svelte": {
+      "bytes": 252,
+      "sha256": "289d4ab12a692afabde149b540c0bfccf78dbf70eb95301a06f409652e0aeccf",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-with-$$props/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots-with-$$props/output.svelte": {
+      "bytes": 587,
+      "sha256": "5fbf2ef84b32ad8d797ef9defc94fbfd6263314132b7a5905d8d1cca6e38a2f4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots-with-$$props/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots/input.svelte": {
+      "bytes": 248,
+      "sha256": "3ca7e2b456896b7baf3cc697ba29bf74a578b223583e27c41ecd75f4996968a5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/slots/output.svelte": {
+      "bytes": 528,
+      "sha256": "6ba73056be6f04c30a9685e8bd323a5dc5516464ecae28f8bfe2154fecd1ef8e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/slots/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-and-derivations-sequence/input.svelte": {
+      "bytes": 419,
+      "sha256": "fe593d306fa612c167572285c3f64c7ab5707b9a73bf18add0d9cda574da6537",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-and-derivations-sequence/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-and-derivations-sequence/output.svelte": {
+      "bytes": 466,
+      "sha256": "975d25f06abaddb696bb8a4f487d8658056a98bce3dcbc8e56fc7877c981b46b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-and-derivations-sequence/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-no-initial/input.svelte": {
+      "bytes": 307,
+      "sha256": "d8a128b5ff04ae77bf2bd54636151c53c1d341f05d549a2332b3ae338c90774e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-no-initial/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-no-initial/output.svelte": {
+      "bytes": 328,
+      "sha256": "96119b7c9efa254b898687fbce2f5eafc268f8d442d5859c9c273bca69109011",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-no-initial/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-ts/input.svelte": {
+      "bytes": 175,
+      "sha256": "8daa60c5a9b5f1e7e7ac15983df42bbe8cf3abc3313388c2735788146d10524c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-ts/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/state-ts/output.svelte": {
+      "bytes": 192,
+      "sha256": "5180a94682b08a7e74d550c73eac9805cbdcd27481334ba2e1e1862e91107026",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/state-ts/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-component/input.svelte": {
+      "bytes": 3974,
+      "sha256": "3c5104d967501b41728e6589859701c878671b1ffbf0500b0181dbf1ea4078b5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-component/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-component/output.svelte": {
+      "bytes": 4464,
+      "sha256": "9e050612b8c13e4f1c0beb3cb5a23440355b80e1f2956452b6a055021288d748",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-component/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self-name-conflict/input.svelte": {
+      "bytes": 321,
+      "sha256": "bd5e89c9c1a8925b7c4d62f56c9f82f4c5af1ce2b63dc180671212ada27f2533",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self-name-conflict/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self-name-conflict/output.svelte": {
+      "bytes": 395,
+      "sha256": "7b3a92956bc2479f6c77aab3a8ecdd0d2ff6b3b1843f5e42e794d507f18606e4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self-name-conflict/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self-skip-filename/_config.js": {
+      "bytes": 268,
+      "sha256": "cf583d08697ee2babcb33c4acc3d3c4f8757c7f999aa3112df73889612d507f7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self-skip-filename/_config.js"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self-skip-filename/input.svelte": {
+      "bytes": 34,
+      "sha256": "525e58297fb48a1b36bbada65a5e176d86b5fad32ed9f05e0a2d266b30f209d5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self-skip-filename/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self-skip-filename/output.svelte": {
+      "bytes": 132,
+      "sha256": "bc4dcc7bd1415bb42129110e0053526b6133c1545e95847f1804db4e54dc8a5d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self-skip-filename/output.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self/input.svelte": {
+      "bytes": 287,
+      "sha256": "c01677f1d56731bfdbb06116a5f617746f71f47f89e2968c3a7fcc84c0fc1110",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self/input.svelte"
+    },
+    "packages/svelte/tests/migrate/samples/svelte-self/output.svelte": {
+      "bytes": 358,
+      "sha256": "5350374afbc286d0b90d344e6abe82271cc9f1aebcb0b512001bd9cc3d4076de",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/migrate/samples/svelte-self/output.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-duplicate/input.svelte": {
+      "bytes": 35,
+      "sha256": "ebbdf9aa14081e040ba53c22b0b234f20c5081a5be99727d38a44a3b0dd89314",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-duplicate/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-duplicate/output.json": {
+      "bytes": 938,
+      "sha256": "e16dde31a9727daac5b8da72bafa08b2fc5f66ebcae6ce3c041c597f2cd0321b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-duplicate/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-call/input.svelte": {
+      "bytes": 41,
+      "sha256": "7490cd7fb1e83c1c06531185b30a30a71eb98fbfb043283bd00ad03fa6e04959",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-call/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-call/output.json": {
+      "bytes": 1512,
+      "sha256": "1b2f3eafc0340dd9b37a0ab08a807dcddd26811157e9726069d6d486ba90f572",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-call/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-identifier/input.svelte": {
+      "bytes": 30,
+      "sha256": "1ae0de25201b194253a00c9657ed2ef257a4bae426e1b515f590f3d27462ff8e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-identifier/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-identifier/output.json": {
+      "bytes": 838,
+      "sha256": "ee19e1f0049f9c20737f482e216d815be3862b197e5e5871314c07a8c2db347b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-identifier/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-literal/input.svelte": {
+      "bytes": 38,
+      "sha256": "854277e2196cb4a3c975f99d0d24b7e40e88c7cbf546d0d0c6b36b99f7471bea",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-literal/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action-with-literal/output.json": {
+      "bytes": 871,
+      "sha256": "ba2a11b05f7c3e6600674b7aebf61be0530c5e03e78dc4ad7186045038e68cb8",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action-with-literal/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action/input.svelte": {
+      "bytes": 22,
+      "sha256": "968fabe5817d17112b3f7099f030283bfb76e493595903445438bb172a54b8ea",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/action/output.json": {
+      "bytes": 576,
+      "sha256": "bf213199a0c643043643d85d7081797c8d44c59f5298d58f8d3fd0457890da57",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/action/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/animation/input.svelte": {
+      "bytes": 70,
+      "sha256": "9bbba5cfe744114413972d221b762ab3d45c1e1d8d111d77b235707c44000f15",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/animation/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/animation/output.json": {
+      "bytes": 1665,
+      "sha256": "3ec20e687073a20cb4a74da456add80a0cb289dd47914f0cd0e986863e5d9120",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/animation/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-containing-solidus/input.svelte": {
+      "bytes": 42,
+      "sha256": "0aa3e95cbf01bb1ba4b018a3a462b548324c0bf76c5bffbc41196ae52b2ac540",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-containing-solidus/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-containing-solidus/output.json": {
+      "bytes": 831,
+      "sha256": "414a9c01b94c5deaeb96029a2b0dec17e0a4060294d6599fce4bb4966faee468",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-containing-solidus/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-curly-bracket/input.svelte": {
+      "bytes": 19,
+      "sha256": "8251ed6d8e6b69fccbadd99a5ad7eff79de6644c612c32e8de5614f4f6e406cb",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-curly-bracket/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-curly-bracket/output.json": {
+      "bytes": 1094,
+      "sha256": "3b2bebabea471f06b91c3ae56ca22948b773274c111c63532f7436ad6dd93bf6",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-curly-bracket/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-dynamic-boolean/input.svelte": {
+      "bytes": 42,
+      "sha256": "281f33fdaef2d94eeeeec9eaef24bd1a95e57a81511dc9f3389381c3a7ab246a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-dynamic-boolean/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-dynamic-boolean/output.json": {
+      "bytes": 972,
+      "sha256": "f737e23a542beec028478d9bf39d29758ae9945d7fee693c0f6a8e5817fdbf9d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-dynamic-boolean/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-dynamic/input.svelte": {
+      "bytes": 43,
+      "sha256": "df293a4a5c2fdfd75cc33699dc119d0056d519dcf01ed13dbccfddafa7b58a29",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-dynamic/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-dynamic/output.json": {
+      "bytes": 1587,
+      "sha256": "99aa332e3c9586040289a80ccddb575a3e0f26b972e633dbdb232be20e2954e8",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-dynamic/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-escaped/input.svelte": {
+      "bytes": 84,
+      "sha256": "04182ddd13a547210d4f2c8a649ee71115fa1f5dde7393752012475829597237",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-escaped/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-escaped/output.json": {
+      "bytes": 783,
+      "sha256": "606bde35e8033c34e610b3217e7db306a71367d1e58addf4895ab990d0f2a4d7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-escaped/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-multiple/input.svelte": {
+      "bytes": 28,
+      "sha256": "257cdaa53c58afb7b62611ce0bd1855adda3641b69d161ae9cd01689fac7f416",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-multiple/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-multiple/output.json": {
+      "bytes": 1126,
+      "sha256": "7bab065662cc24ac8060c0c0461062f588ba4b64928ff42f0c338b340ca459c6",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-multiple/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-shorthand/input.svelte": {
+      "bytes": 17,
+      "sha256": "5360b12295021929a1d153513c74453102cb838b3768f385d2a36f977ad7aac3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-shorthand/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-shorthand/output.json": {
+      "bytes": 1004,
+      "sha256": "e5beffba06cb5094353a24ca2d39e7a68edc445be19847d8a765bc80d123f4fb",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-shorthand/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-static-boolean/input.svelte": {
+      "bytes": 30,
+      "sha256": "e14b9840eccc94c1abb9bbf790ba52986ceb9655812e8f8cce84c7859de3c4ef",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-static-boolean/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-static-boolean/output.json": {
+      "bytes": 556,
+      "sha256": "53f5934c4b89925e450a746c3070f1f304aca61460c46bf66e4c70f48f0d0b73",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-static-boolean/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-static/input.svelte": {
+      "bytes": 23,
+      "sha256": "b46d4c60a25e954cc29d8cce1a7a10def7dcf37185341c2690909d9939fd2724",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-static/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-static/output.json": {
+      "bytes": 676,
+      "sha256": "72742e73ce52ae884dc14e66069e72678df216992bf1d49bbd05a1fce0db5628",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-static/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-with-whitespace/input.svelte": {
+      "bytes": 39,
+      "sha256": "003f3d4732662993fc6929d91da9a259a026ad778aa047eb596f5bde8b812312",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-with-whitespace/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/attribute-with-whitespace/output.json": {
+      "bytes": 960,
+      "sha256": "78fa30ef88b2bba541b65e842dc568ebac6df7c031157318ca89aa52efac5bbc",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/attribute-with-whitespace/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/await-catch/input.svelte": {
+      "bytes": 99,
+      "sha256": "0c93e6fbfa53616603b64009aa1d81b5176307caca0e140ff62e2254d0f0ddfd",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/await-catch/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/await-catch/output.json": {
+      "bytes": 3366,
+      "sha256": "882b1ca16d50a11ff6e0c024dde1229d2bc6c1348fbd0dcac597c278b8b6c6df",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/await-catch/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/await-then-catch/input.svelte": {
+      "bytes": 148,
+      "sha256": "af81555f621bf321b5248de3cc2db0e44a4f12081d0237eeed02edf5fada9699",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/await-then-catch/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/await-then-catch/output.json": {
+      "bytes": 4653,
+      "sha256": "326165720530bb41ef182f4e8250febff49e5268dd91a325b7a9321fb157d7f5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/await-then-catch/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/binding-shorthand/input.svelte": {
+      "bytes": 48,
+      "sha256": "566ec44fd4813bf99a4f4f39c91e762b304c436543de2cecc1385889a1188351",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/binding-shorthand/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/binding-shorthand/output.json": {
+      "bytes": 1953,
+      "sha256": "4ec9f5b0c9b726b37e425360e67da24e468b982f60c86aad44d0d0300a0a4aa3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/binding-shorthand/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/binding/input.svelte": {
+      "bytes": 56,
+      "sha256": "7518c408a6ac5a813d8aa9407250fca46f7db7c442c329df7df8b71cdd1c259c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/binding/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/binding/output.json": {
+      "bytes": 2116,
+      "sha256": "90608f695aba6e056525169ffee12a3278115e67b4fb0feb16f0ec39937de078",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/binding/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/comment-with-ignores/input.svelte": {
+      "bytes": 32,
+      "sha256": "0b33f03dcc75458fd6801690018802121e1e34623ef8e8b0efa5167ddcfe8ccd",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/comment-with-ignores/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/comment-with-ignores/output.json": {
+      "bytes": 237,
+      "sha256": "8c60cafeca8e7300124595982faf55b9656105997dbc724244c67b29536b7b6e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/comment-with-ignores/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/comment/input.svelte": {
+      "bytes": 18,
+      "sha256": "8ebd6904a5b4cd22eb49ecbeec68f8f6c6c71675fd138f03abf856c8b4d7a9a3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/comment/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/comment/output.json": {
+      "bytes": 196,
+      "sha256": "d58e8a3ef3acfe93e942fc9628174b36de4cc78f5c4630a6758315d4f80c3070",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/comment/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/component-dynamic/input.svelte": {
+      "bytes": 62,
+      "sha256": "63cc01e6ba2b5174b3e5487ed3dd5201ff58aedf3f877d047efe46fd7da748f5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/component-dynamic/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/component-dynamic/output.json": {
+      "bytes": 1280,
+      "sha256": "5bbea5cbc60faba2ebe1f18c3af595e2882c5c0b3bad53fbaa6f4335d34d7f4b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/component-dynamic/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/convert-entities-in-element/input.svelte": {
+      "bytes": 24,
+      "sha256": "1d3b7891c7e58f305904368f048808099d75941feb56766d35c2d68bade6a516",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/convert-entities-in-element/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/convert-entities-in-element/output.json": {
+      "bytes": 349,
+      "sha256": "5ea9afd0942ed8d1a7ce1fd7d73e65984f096a46fda1064849e24a0186873017",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/convert-entities-in-element/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/convert-entities/input.svelte": {
+      "bytes": 17,
+      "sha256": "c714d9318d97e0e6e4740caeae6e8b2a9ee5de23e46b12822a88386e945f9e6a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/convert-entities/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/convert-entities/output.json": {
+      "bytes": 208,
+      "sha256": "771006dd7f0dd264d42e9b8c888ab7aad8c90518861bc9430384ec78f127e005",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/convert-entities/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/css/input.svelte": {
+      "bytes": 56,
+      "sha256": "8a99a593e429e679aac293dfea5505c0743d71d1c1c0bc171f00e33caff663f8",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/css/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/css/output.json": {
+      "bytes": 1306,
+      "sha256": "7b275e7b5e419ac3eca7c3211791a818987c6f7d7fe292b268f088e3c6585f55",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/css/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-element-string/input.svelte": {
+      "bytes": 293,
+      "sha256": "cbe42d7e28dd2876ffb818b948b0fe27d974c074e79b111f673767ae6e98a303",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-element-string/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-element-string/output.json": {
+      "bytes": 2922,
+      "sha256": "e1a94887495f809be53559681b66df3b6b2bae8d287370c1902a3301ca7eccd4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-element-string/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-element-variable/input.svelte": {
+      "bytes": 101,
+      "sha256": "15254ec0fb281a3682e1f2438f684e57b42c738c439d50552b5c1eec6e93e9cd",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-element-variable/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-element-variable/output.json": {
+      "bytes": 1420,
+      "sha256": "97956cadd08b0691bd93970b46acfa25f65894a4a1efd540b16a7c6b57851b28",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-element-variable/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-import/input.svelte": {
+      "bytes": 146,
+      "sha256": "f8c796dbe0414e9a2279e0fd9953b8e692196ec2c0eb2cbcfd9949a9e8482e00",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-import/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/dynamic-import/output.json": {
+      "bytes": 11160,
+      "sha256": "248bb25a628ff254a7373545866289c1a978111bc971bef46c000d019ca287c9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/dynamic-import/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-destructured/input.svelte": {
+      "bytes": 113,
+      "sha256": "d959c23a8e9e5046ebd8d03f99207aed428fa1f4e7a61be52b2816eab9e2568d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-destructured/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-destructured/output.json": {
+      "bytes": 4529,
+      "sha256": "b8de9295616dd8cdb970c4c7ae29b8bc166136d4058c02a66d76904d03302a87",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-destructured/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-else/input.svelte": {
+      "bytes": 78,
+      "sha256": "9d9b92a20e25a9bf80597a1a830f961e30d07ff51dca099c74e8f4fe900ccc93",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-else/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-else/output.json": {
+      "bytes": 1698,
+      "sha256": "6c7dd23830519405a57ad521a4ac63f1da6e7f9e1ce8ef28896ee4806d795f63",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-else/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-indexed/input.svelte": {
+      "bytes": 59,
+      "sha256": "eb95bd82b84e9bef1dfbe631494f86bddc762c6e3aadd4c4de37e64522287a30",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-indexed/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-indexed/output.json": {
+      "bytes": 1836,
+      "sha256": "d48b10695731485775e72ad2fe13bda0bd2f706b285adf74a4ae57f987c64e3f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-indexed/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-keyed/input.svelte": {
+      "bytes": 55,
+      "sha256": "1bd6705cb0baf1b440912d757b2742c8bb7667cce0c83c8ae5c050fb8dd473c0",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-keyed/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block-keyed/output.json": {
+      "bytes": 2097,
+      "sha256": "6666492c73e1274b0f74f76eba9a5515979eedf2a71ce16aa8fd9a0db5000404",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block-keyed/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block/input.svelte": {
+      "bytes": 51,
+      "sha256": "0f20ce2485af5bed2c95b754b1febe06675c6f8b864bae4296f5052a60e98a53",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/each-block/output.json": {
+      "bytes": 1289,
+      "sha256": "d0436ee8b3c745b7fed82f7b9f2e23df68c6a2fb0d6b434fcb3d290dea501e2b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/each-block/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-attribute-empty-string/input.svelte": {
+      "bytes": 44,
+      "sha256": "c613282cecc361062375034f996422722bb28262470c9f252bf3ee000c2a4cd4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-attribute-empty-string/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-attribute-empty-string/output.json": {
+      "bytes": 1354,
+      "sha256": "a16c037aae136b474c065b8dceac0af082322da79a718f8b8b5f618f307d5052",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-attribute-empty-string/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-attribute/input.svelte": {
+      "bytes": 50,
+      "sha256": "3d30c6df1c6aeee40880d60bf4419c985ff5ba79bec11a70adda485c3058a0b1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-attribute/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-attribute/output.json": {
+      "bytes": 1366,
+      "sha256": "7896fd886580bbf934feee176e8c9b99664b7d7538888d332f90e9edcc78805e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-attribute/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-mustache/input.svelte": {
+      "bytes": 23,
+      "sha256": "d214b5d1198f0d289e4347acbf189a287cb76617559158eebd125cfe839387c9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-mustache/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-mustache/output.json": {
+      "bytes": 807,
+      "sha256": "2b87139d365a5b028b596fdbccfb879ca2e6b989f0fe0c0a5e98fbd67025efd3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-mustache/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-text/input.svelte": {
+      "bytes": 17,
+      "sha256": "b686db31f729218d774ec750018b3510cc9028bc69df69efdfad5a54a5606523",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-text/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/element-with-text/output.json": {
+      "bytes": 330,
+      "sha256": "0ba2d2d254a7d27d5ef46ab7e20f5dbf755560353cc859502979cd44f2499c08",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/element-with-text/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/elements/input.svelte": {
+      "bytes": 15,
+      "sha256": "fe26c59e91ac8de694b2531dc3bdc1b7faf471d3d7e4e00870af60f5f22897cb",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/elements/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/elements/output.json": {
+      "bytes": 552,
+      "sha256": "54a3ce2b5b25bc128687d22ac2e743959ef30d9fc777d45a31368b19687d9cb1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/elements/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/event-handler/input.svelte": {
+      "bytes": 98,
+      "sha256": "5fba7245fa608da10fe11011820170973125f7f2c4ac2e9aa355ddc3bc20d388",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/event-handler/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/event-handler/output.json": {
+      "bytes": 3101,
+      "sha256": "a1a10a6ec6f10b5b0ab6099d489ac2d47394f0b455ca05e77c8bcd28f5375b56",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/event-handler/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/generic-snippets/input.svelte": {
+      "bytes": 192,
+      "sha256": "78c4e12c2b7b1de1910db586899f6ab2dd8dad5a6b367b9a5c57e002d147284c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/generic-snippets/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/generic-snippets/output.json": {
+      "bytes": 4594,
+      "sha256": "0c32521af748fbf09de1fae01ad95c34d23051af056a25d811d6b0fc57177c0a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/generic-snippets/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block-else/input.svelte": {
+      "bytes": 52,
+      "sha256": "e4eadf0198cebeafca95d8dc661d76709b4dca7d388aa9bc76abfa22e62b3a14",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block-else/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block-else/output.json": {
+      "bytes": 1100,
+      "sha256": "18dcbb3fd1fab9bd6404b18895664363ee6a83f1acc3db001fb11f5342845cf9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block-else/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block-elseif/input.svelte": {
+      "bytes": 108,
+      "sha256": "12e8db383dda27ddb247657379b028c6350adefad0fd87f315bb05e2fcdfd112",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block-elseif/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block-elseif/output.json": {
+      "bytes": 4192,
+      "sha256": "3c54a4b9bfc0e4a850b76782a6770b3b61e2159e21244e8f9d97da8853dc0f18",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block-elseif/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block/input.svelte": {
+      "bytes": 18,
+      "sha256": "14b117f67cb9653008fac92b077116ade5627bc4f4c3bf25c0c9a4657560ecb3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/if-block/output.json": {
+      "bytes": 536,
+      "sha256": "154242b48465a1c1cce3cbab6e87cfc3a5946b99ae77b4867043b01a5fbbbe77",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/if-block/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/implicitly-closed-li-block/input.svelte": {
+      "bytes": 52,
+      "sha256": "75c1d3161262b1a8813f928a756acc0d3e48252a688ccfe9a80704e4b67828b0",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/implicitly-closed-li-block/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/implicitly-closed-li-block/output.json": {
+      "bytes": 1804,
+      "sha256": "23ab1cc5c251fff5e2cab0a0a6dda343650ad0a52a984023364679471a7be993",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/implicitly-closed-li-block/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/implicitly-closed-li/input.svelte": {
+      "bytes": 31,
+      "sha256": "b70c938204ed5b6b84b87ca1e35db0e6f42542aab309b8be15b2ca5de19d626a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/implicitly-closed-li/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/implicitly-closed-li/output.json": {
+      "bytes": 1156,
+      "sha256": "05a548a61a9e247d076e0cae08775fa0f9aa25d93256b9836cb74763193b3137",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/implicitly-closed-li/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/javascript-comments/input.svelte": {
+      "bytes": 827,
+      "sha256": "e152f9288216dad516cdc83413aab65a8387177b0e23d0f05e818a6a67b2ae61",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/javascript-comments/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/javascript-comments/output.json": {
+      "bytes": 22354,
+      "sha256": "2076fda8285296bea89326e3c8114fb39e746c9ec5551f42e2f17f5bbeec03b4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/javascript-comments/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/nbsp/input.svelte": {
+      "bytes": 19,
+      "sha256": "676dcf9ce846dbf84cb214abb7eadbb2fcaba75ac5ab32854b1011f174f01f2f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/nbsp/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/nbsp/output.json": {
+      "bytes": 330,
+      "sha256": "5778456a3576b7047305d547afe54db27c3f10d10664e13e5a3e38078c65fefa",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/nbsp/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/no-error-if-before-closing/input.svelte": {
+      "bytes": 148,
+      "sha256": "9392dfae4584736ef3e0ad86e32889c7b5a9fb746b0d874123a474c2a3d9dbc0",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/no-error-if-before-closing/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/no-error-if-before-closing/output.json": {
+      "bytes": 4708,
+      "sha256": "dd503d4d040873bc2a004a8c6c6a73ce603afc4e34b33b6a8ddd6123eb87814c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/no-error-if-before-closing/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/raw-mustaches/input.svelte": {
+      "bytes": 35,
+      "sha256": "01dc3632e11475638abe41738aefae6768d45bdb9a7ac07ee108d4a8c2e88d7b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/raw-mustaches/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/raw-mustaches/output.json": {
+      "bytes": 1275,
+      "sha256": "3d901a3229317418642609cb4e49198d213807602368f9fecb1c9db4e1ff3a68",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/raw-mustaches/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/refs/input.svelte": {
+      "bytes": 63,
+      "sha256": "318bc656b8471fb1c82bd7f6fd156e23a298e5d6a0b3523dd78cfd5328de83e5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/refs/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/refs/output.json": {
+      "bytes": 2113,
+      "sha256": "5f4ded57f973393b4856602be85b5ab409a335fcd09cce2ade6ce22e99ece9f7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/refs/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script-attribute-with-curly-braces/input.svelte": {
+      "bytes": 101,
+      "sha256": "5b93bce62b9155092776dac8f1830361e5d1e61a51d3609e93e4311521540a21",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script-attribute-with-curly-braces/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script-attribute-with-curly-braces/output.json": {
+      "bytes": 2393,
+      "sha256": "7aceb3bae8974312222e268efb50a7b9421ad096d802d2c636f8b99c51c2396c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script-attribute-with-curly-braces/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script-comment-only/input.svelte": {
+      "bytes": 56,
+      "sha256": "7f4478fb89dbb797ff3d424da4714dfc7386fd8412ecb5b313d1cf7c87c491eb",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script-comment-only/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script-comment-only/output.json": {
+      "bytes": 1015,
+      "sha256": "3bc535889d7e2b3f45c2d1a18d0fd6e69efa09732cb25cc8489349cc29ba2f06",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script-comment-only/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script/input.svelte": {
+      "bytes": 63,
+      "sha256": "d3327c25e3d2bb5279894859695b74889bf29a990b365cc12deaaafcee7dafef",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/script/output.json": {
+      "bytes": 2390,
+      "sha256": "9b26c4093eaa200498066b4acd209eb08da3446ed97246931956f9ffb52d6fdf",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/script/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/self-closing-element/input.svelte": {
+      "bytes": 6,
+      "sha256": "fc7e6385a22749a8b3224a31b05f7cb995e2e62ab4af84ae526262af38c1753e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/self-closing-element/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/self-closing-element/output.json": {
+      "bytes": 209,
+      "sha256": "474eea9f08a7c5831ffd8df57385463ad08665c39eebbcf4cb6e5315c8064ed7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/self-closing-element/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/self-reference/input.svelte": {
+      "bytes": 57,
+      "sha256": "f73bf3e8af837a90488194bb737325425e373dbab73a623a63a02ff47b601898",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/self-reference/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/self-reference/output.json": {
+      "bytes": 2714,
+      "sha256": "45305a55bfa287f72566653ccfcab18711c996b52d56d43e37f280cf1d9f132b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/self-reference/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/slotted-element/input.svelte": {
+      "bytes": 46,
+      "sha256": "29bad284e9ef0d3bad5a349507d9cfd34bf225ab1c95d68d44e1d2d1301e7706",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/slotted-element/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/slotted-element/output.json": {
+      "bytes": 894,
+      "sha256": "5dd7b341fc7f72070fc4f47be1bd0e805a00b4d2e8366351767d65a90ff94659",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/slotted-element/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/space-between-mustaches/input.svelte": {
+      "bytes": 25,
+      "sha256": "7bf4053884a89fd9b2e812efae951eb7b31b0b631a6294bbf3bf4c70862e90ef",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/space-between-mustaches/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/space-between-mustaches/output.json": {
+      "bytes": 1733,
+      "sha256": "f5c2929131ef22238301f23c124394b53d548781b9fdb19ee369eba897c3a4b5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/space-between-mustaches/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/spread/input.svelte": {
+      "bytes": 23,
+      "sha256": "791b02ad2b5eabce3fd7f40e026a3d9306f12af7aed10b5c822556c2ed04607d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/spread/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/spread/output.json": {
+      "bytes": 574,
+      "sha256": "16af4243c6ddb5114769fd76d499b4b433ad4a3edfcb7e4543547ea75a7f6c40",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/spread/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/style-inside-head/input.svelte": {
+      "bytes": 42,
+      "sha256": "017e9b77b288fe52d56580eabeb7ec7c79a49fb48b06d2288f6745d4a05331b4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/style-inside-head/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/style-inside-head/output.json": {
+      "bytes": 472,
+      "sha256": "af91faeaccc6253c15aad93f517a36bd46634d8e5699307d269cff2db51de467",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/style-inside-head/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/textarea-children/input.svelte": {
+      "bytes": 61,
+      "sha256": "13e9ccf6a0f5ee538e1c2040eb496128a7ad56463c7ad028f391a3c89a39838c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/textarea-children/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/textarea-children/output.json": {
+      "bytes": 875,
+      "sha256": "b0ab4fab3aa77bd3b1b06a25d9694acd317c30b0417b33b854039f3c47d4c6ff",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/textarea-children/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/textarea-end-tag/input.svelte": {
+      "bytes": 119,
+      "sha256": "deb3e8c48132b35f0a9407dfbb774fb3a2fad6d464ccf0a391236e9fd5e7fafc",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/textarea-end-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/textarea-end-tag/output.json": {
+      "bytes": 965,
+      "sha256": "333dd33ef3b41a4525ee27eca3268c17501bbf197e18c5acb6d6b6952103b224",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/textarea-end-tag/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/transition-intro-no-params/input.svelte": {
+      "bytes": 27,
+      "sha256": "6b0b654343e1671805f898165b45224854a3be50b9356938e5c98f950b983aa7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/transition-intro-no-params/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/transition-intro-no-params/output.json": {
+      "bytes": 743,
+      "sha256": "639df64979c344afe7e5e933a1069668faadc6def073ce7dba93180e0e3ec2a4",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/transition-intro-no-params/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/transition-intro/input.svelte": {
+      "bytes": 45,
+      "sha256": "11460082a1d932f4bf3a533357039481c25ed0d1189a0d514d4969335e15b144",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/transition-intro/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/transition-intro/output.json": {
+      "bytes": 2082,
+      "sha256": "a59fecd7925ec3656f6742ac2703761013c85d4985a19333e16b43dd173fb1da",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/transition-intro/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/unusual-identifier/input.svelte": {
+      "bytes": 45,
+      "sha256": "df3a865223feb43af0a4fa30f59c2271845661e8e96d1e638676e706d99eea34",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/unusual-identifier/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/unusual-identifier/output.json": {
+      "bytes": 1283,
+      "sha256": "9c15bcf5f42a9a1913e05a631f104586bf1f2c95d2add0bd8cc511ca900c4588",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/unusual-identifier/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-after-script-tag/input.svelte": {
+      "bytes": 73,
+      "sha256": "26d09f9320237be370d50778f2873bf0637821be557433748d1f115201f83b6a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-after-script-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-after-script-tag/output.json": {
+      "bytes": 2392,
+      "sha256": "10b01163db9ac73897ec702975d8f7b0c5d03454802e18b6d5e6e38a6f037a56",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-after-script-tag/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-after-style-tag/input.svelte": {
+      "bytes": 66,
+      "sha256": "e4c311114aa99d0353847837d33c4acd9155a160076b233712c0c027c7220e17",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-after-style-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-after-style-tag/output.json": {
+      "bytes": 1306,
+      "sha256": "023c6f7d810e2625dd78626152f51b2ea222e6ac793443082addc51b5c53afa5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-after-style-tag/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-leading-trailing/input.svelte": {
+      "bytes": 36,
+      "sha256": "3beff22af1aef49e61f765a6531df8674562a8accc423547b4798cd7615afb5f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-leading-trailing/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-leading-trailing/output.json": {
+      "bytes": 480,
+      "sha256": "aa6120bb97ca890b4c8f2badad402d44b0ed9a6ad6cff95e7c07118ba6d6afa1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-leading-trailing/output.json"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-normal/input.svelte": {
+      "bytes": 66,
+      "sha256": "aaaee8b7dbf523d40ae8323e62f3b611fb140dda0c8c145512cb793beb068d7c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-normal/input.svelte"
+    },
+    "packages/svelte/tests/parser-legacy/samples/whitespace-normal/output.json": {
+      "bytes": 1310,
+      "sha256": "f43db7e70fad5cc79fe813e78824c7570839506b93d84965d7c46e882491e740",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-legacy/samples/whitespace-normal/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/attachments/input.svelte": {
+      "bytes": 58,
+      "sha256": "6a522c222ce60c44c54f7db3ca3f6230fa1e3041e5725bf7b84725afaedad44c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/attachments/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/attachments/output.json": {
+      "bytes": 2673,
+      "sha256": "1582df6e49dcf663e5185880373ab470b0a7549a62452488f9cd5acad68f9a75",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/attachments/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-before-function-binding/input.svelte": {
+      "bytes": 118,
+      "sha256": "cfa5150a42baa16a53806694b4955a33f7b878f95c7d6970dd0e0b5aa2ed72dc",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-before-function-binding/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-before-function-binding/output.json": {
+      "bytes": 6651,
+      "sha256": "b21a1825cca515b92a9cf5bed53982b57b0d32c573d3c91258d32d19239a964a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-before-function-binding/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-before-script/input.svelte": {
+      "bytes": 77,
+      "sha256": "6d97b10b5aec8c8f0b6309700b9ae8da91bc2077aa51e1d687bb775ca7126e5d",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-before-script/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-before-script/output.json": {
+      "bytes": 2674,
+      "sha256": "476640652652120c4c32778c4566b33ab5399b0ff4b5c9e470083e11f0eb1271",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-before-script/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-in-tag/input.svelte": {
+      "bytes": 262,
+      "sha256": "2b61cbc25c55d15da43ac7d43ed930daeac2d5190d76f9412ad249d51540b685",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-in-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/comment-in-tag/output.json": {
+      "bytes": 4544,
+      "sha256": "3b0936531dc265a6a070eaaba9f1f582022730f47fcfcf7d350671c251f4e626",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/comment-in-tag/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/css-nth-syntax/input.svelte": {
+      "bytes": 821,
+      "sha256": "e05eb108b4da4e4d7cfa136fb372c046f85b770d96fbbe235f55f7effe8fd7ed",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/css-nth-syntax/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/css-nth-syntax/output.json": {
+      "bytes": 24461,
+      "sha256": "df43e226bc5e782c29c4fa9697955a6e863b190eb4abc6b06b7195c657fd8d90",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/css-nth-syntax/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/css-pseudo-classes/input.svelte": {
+      "bytes": 387,
+      "sha256": "bb0312784c34b2363c6c287bca022b534cfe08f0918e5a263f90e6ad6161179f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/css-pseudo-classes/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/css-pseudo-classes/output.json": {
+      "bytes": 12746,
+      "sha256": "6e664a5d6c9f16ae43a8e7ba642058f155b0b23a287bc9ef3e31b5d53b0a2904",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/css-pseudo-classes/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/each-block-object-pattern-special-characters/input.svelte": {
+      "bytes": 177,
+      "sha256": "1103dcf2fb148888f8fbd6ba2644738a1e437e50323e674ca24583b532b3b3ce",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/each-block-object-pattern-special-characters/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/each-block-object-pattern-special-characters/output.json": {
+      "bytes": 15100,
+      "sha256": "bcc100465ae36015e722de756149e23fb424da31e1705ac5a041fa04e32b78b9",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/each-block-object-pattern-special-characters/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/each-block-object-pattern/input.svelte": {
+      "bytes": 345,
+      "sha256": "5a2801f1d70e8e6680270c6a9a09efc7b3a5582268cfdb8a4a2289d90712c41e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/each-block-object-pattern/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/each-block-object-pattern/output.json": {
+      "bytes": 24233,
+      "sha256": "b5b7d8c180d0a352a2026a9ba1fb97f87d0f0623eb72b8202070ebeed5465ec3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/each-block-object-pattern/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/generic-snippets/input.svelte": {
+      "bytes": 192,
+      "sha256": "78c4e12c2b7b1de1910db586899f6ab2dd8dad5a6b367b9a5c57e002d147284c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/generic-snippets/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/generic-snippets/output.json": {
+      "bytes": 5696,
+      "sha256": "1660e1e3c3dc4d5463d66b49ce08896bea931c7336979793ff86ef63c8bce709",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/generic-snippets/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block-else/input.svelte": {
+      "bytes": 52,
+      "sha256": "e4eadf0198cebeafca95d8dc661d76709b4dca7d388aa9bc76abfa22e62b3a14",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block-else/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block-else/output.json": {
+      "bytes": 2272,
+      "sha256": "1c4c419377fbbaf5a665bb0aca54ce1099b66e61a4a58665f0d511e917827595",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block-else/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block-elseif/input.svelte": {
+      "bytes": 90,
+      "sha256": "c64011d2ec84e5ba1b819946a10ac7b6298faaf0bfdb300fdbad67f938ccd7e8",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block-elseif/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block-elseif/output.json": {
+      "bytes": 4165,
+      "sha256": "9bff406ffc1d9818959a95bf14f6354826fc481d262471d7c71e08dba249a016",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block-elseif/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block/input.svelte": {
+      "bytes": 18,
+      "sha256": "14b117f67cb9653008fac92b077116ade5627bc4f4c3bf25c0c9a4657560ecb3",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/if-block/output.json": {
+      "bytes": 690,
+      "sha256": "67802ad96bb06da6ca5639f83efda1b15abb91dc5bc5462a9df3c9f43df8c26a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/if-block/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-invalid-block/input.svelte": {
+      "bytes": 103,
+      "sha256": "5153e73b33b87ff97160d369db0b80f4091dd95da8024f8bfb8a65257dc0d228",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-invalid-block/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-invalid-block/output.json": {
+      "bytes": 3104,
+      "sha256": "33cd47b020ab42de32fad76b44ca6cc9681264b687c8e89f9b8a932b0a809f08",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-invalid-block/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-invalid-expression/input.svelte": {
+      "bytes": 325,
+      "sha256": "4bac535a27cc0b76bac7def31035d4cd66abd5785fe4668a3ec381ae97aa59eb",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-invalid-expression/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-invalid-expression/output.json": {
+      "bytes": 10504,
+      "sha256": "b3be520f8461ef16918cf4f0d731ba3d80a860adaf1c1e8c93bdf04d163f9472",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-invalid-expression/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-open-tag/input.svelte": {
+      "bytes": 170,
+      "sha256": "9ec47bc959c0dd197dd81e8ecde290016c582f954c6ed668bf1cf1a65724e68c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-unclosed-open-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-open-tag/output.json": {
+      "bytes": 10194,
+      "sha256": "fd2f2380b83d7f6450dcd789255ef23e7c47a6543f9ef89ce15d00e5891d6db5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-unclosed-open-tag/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-tag/input.svelte": {
+      "bytes": 205,
+      "sha256": "2635d00513eb2f410e562dfc2fb059d5eff06796b671e0dd29f974fde4b36e1e",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-unclosed-tag/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-tag/output.json": {
+      "bytes": 11119,
+      "sha256": "7f5cfb8f1e375bc0154d0deb1c0eb09887341edb96fb11a14fb9f69448b9961c",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-unclosed-tag/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-valid-each-as/input.svelte": {
+      "bytes": 120,
+      "sha256": "3d09674f89dac53975296de098e583ba4e495df9eaead70e70a19018b86367b7",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-valid-each-as/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/loose-valid-each-as/output.json": {
+      "bytes": 5681,
+      "sha256": "e2c6d05dd0d8733a7a6bc4f213a00e6c6747430f583bad29a9fdd9cce3de672b",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/loose-valid-each-as/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/options/input.svelte": {
+      "bytes": 170,
+      "sha256": "dc833d479e4cf646c2a272846989adbc90d9aba502497035f08de3c898462f3f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/options/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/options/output.json": {
+      "bytes": 3845,
+      "sha256": "dbe3f81691f4909e5e4143467fb64a25b63f140fff7eebf7771e865c4cd2d2a0",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/options/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/script-style-no-markup/input.svelte": {
+      "bytes": 92,
+      "sha256": "6b021245f3426578996336709cadb6d20e8badae648434cd7d8875bcdb6bcf3a",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/script-style-no-markup/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/script-style-no-markup/output.json": {
+      "bytes": 2026,
+      "sha256": "3c15ad20be136c08be9cb2da6de17f54a247d58555722d75940c8270cab28ed8",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/script-style-no-markup/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/semicolon-inside-quotes/input.svelte": {
+      "bytes": 206,
+      "sha256": "8753a8654ed85a84107d7192508f3ce16994d3f13972a1236c572dbdaee59c59",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/semicolon-inside-quotes/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/semicolon-inside-quotes/output.json": {
+      "bytes": 2374,
+      "sha256": "083592e65db1dc4ecaa837329842a33576f14875a4c39caa920b8b1a7882e097",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/semicolon-inside-quotes/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/snippets/input.svelte": {
+      "bytes": 102,
+      "sha256": "8d06e5799727c8f06ef3b6e3c3e9e885192cd6f03ebac492dc1c1be695b8ab66",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/snippets/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/snippets/output.json": {
+      "bytes": 4410,
+      "sha256": "c8c617d996e46b436308d06e04a82e593519028d64820b4fc1df409cfc577fb1",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/snippets/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/template-shadowroot/input.svelte": {
+      "bytes": 125,
+      "sha256": "707af3af9d0b8a03c036dd831e24c4338f6839f57748f10f4a925b34413966a5",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/template-shadowroot/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/template-shadowroot/output.json": {
+      "bytes": 4309,
+      "sha256": "e5227d9b275f8f402140c4fef7c1dae3171d062aa7e7728334f693b4ce2b00ea",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/template-shadowroot/output.json"
+    },
+    "packages/svelte/tests/parser-modern/samples/typescript-in-event-handler/input.svelte": {
+      "bytes": 174,
+      "sha256": "691d8ea188fa5ecbaa2c534b6b951627c41d18f9967fd9a6398cb01292702a3f",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/typescript-in-event-handler/input.svelte"
+    },
+    "packages/svelte/tests/parser-modern/samples/typescript-in-event-handler/output.json": {
+      "bytes": 10546,
+      "sha256": "f476cff8efeb8c563a56e10c2edbcd2456c213949252d8070fa836c70a0b97f2",
+      "url": "https://raw.githubusercontent.com/sveltejs/svelte/23bb146306ff02cc5041bca0c5de9f8bd086e4a3/packages/svelte/tests/parser-modern/samples/typescript-in-event-handler/output.json"
+    }
+  },
+  "notes": [],
+  "probed_absent": [
+    "packages/svelte/tests/migrate/samples/accessors/_config.js",
+    "packages/svelte/tests/migrate/samples/css-ignore/_config.js",
+    "packages/svelte/tests/migrate/samples/derivations/_config.js",
+    "packages/svelte/tests/migrate/samples/effects-with-alias/input.svelte",
+    "packages/svelte/tests/migrate/samples/effects/_config.js",
+    "packages/svelte/tests/migrate/samples/event-handlers-with-alias/_config.js",
+    "packages/svelte/tests/migrate/samples/event-handlers/_config.js",
+    "packages/svelte/tests/migrate/samples/export-props-multiple-declarations/_config.js",
+    "packages/svelte/tests/migrate/samples/html-comment/input.svelte",
+    "packages/svelte/tests/migrate/samples/impossible-migrate-$$props/input.svelte",
+    "packages/svelte/tests/migrate/samples/is-not-where/input.svelte",
+    "packages/svelte/tests/migrate/samples/jsdoc-with-comments/_config.js",
+    "packages/svelte/tests/migrate/samples/named-slots/_config.js",
+    "packages/svelte/tests/migrate/samples/not-blank-css-if-error/_config.js",
+    "packages/svelte/tests/migrate/samples/props-and-labeled/_config.js",
+    "packages/svelte/tests/migrate/samples/props-export-alias/_config.js",
+    "packages/svelte/tests/migrate/samples/props-interface/_config.js",
+    "packages/svelte/tests/migrate/samples/props-rest-props/_config.js",
+    "packages/svelte/tests/migrate/samples/props-ts/_config.js",
+    "packages/svelte/tests/migrate/samples/props/_config.js",
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-1/_config.js",
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-2/_config.js",
+    "packages/svelte/tests/migrate/samples/reactive-statements-reorder-not-deleting-additions/_config.js",
+    "packages/svelte/tests/migrate/samples/remove-blocks-whitespace/_config.js",
+    "packages/svelte/tests/migrate/samples/self-closing-elements/_config.js",
+    "packages/svelte/tests/migrate/samples/shadowed-forwarded-slot/_config.js",
+    "packages/svelte/tests/migrate/samples/single-assignment-labeled/_config.js",
+    "packages/svelte/tests/migrate/samples/slot-non-identifier/_config.js",
+    "packages/svelte/tests/migrate/samples/slot-shadow-props/_config.js",
+    "packages/svelte/tests/migrate/samples/slots-below-imports/_config.js",
+    "packages/svelte/tests/migrate/samples/slots-custom-element/_config.js",
+    "packages/svelte/tests/migrate/samples/slots-with-$$props/_config.js",
+    "packages/svelte/tests/migrate/samples/slots/_config.js",
+    "packages/svelte/tests/migrate/samples/state-and-derivations-sequence/_config.js",
+    "packages/svelte/tests/migrate/samples/state-no-initial/_config.js",
+    "packages/svelte/tests/migrate/samples/state-ts/_config.js",
+    "packages/svelte/tests/migrate/samples/svelte-component/_config.js",
+    "packages/svelte/tests/migrate/samples/svelte-self-name-conflict/_config.js",
+    "packages/svelte/tests/migrate/samples/svelte-self/_config.js",
+    "packages/svelte/tests/migrate/samples/unused-beforeupdate-afterupdate/input.svelte",
+    "packages/svelte/tests/parser-legacy/samples/script-comment-trailing-multiline/input.svelte",
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-block/input.svelte",
+    "packages/svelte/tests/parser-modern/samples/loose-unclosed-tag-2/input.svelte",
+    "packages/svelte/tests/parser-modern/samples/whitespace-after-script/input.svelte",
+    "packages/svelte/tests/parser-modern/samples/whitespace-after-style/input.svelte"
+  ],
+  "ref": "svelte@5.57.3",
+  "repository": "sveltejs/svelte",
+  "revision": "23bb146306ff02cc5041bca0c5de9f8bd086e4a3",
+  "revision_resolution": "git ls-remote https://github.com/sveltejs/svelte for svelte@5.57.3 (2026-11-17); bytes fetched only at that commit",
+  "schema_version": 1,
+  "suite_id": "svelte-tests"
+}

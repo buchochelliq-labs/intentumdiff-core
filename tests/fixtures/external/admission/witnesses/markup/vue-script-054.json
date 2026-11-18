@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-054",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "c3a9193cd942383a1136af80d87c83b241feb52a78763442424ef44a9643ebd6",
+  "observations": {
+    "crash": "Error: [@vue/compiler-sfc] `defineModel()` in <script setup> cannot reference locally declared variables because it will be hoisted outside of the setup() function. If your component options require initialization in the module scope, use a separate normal <script> to export the options instead.\n\nFixture.vue\n2  |          let bar = 1\n3  |          defineModel({\n4  |            default: () => bar\n "
+  },
+  "old_sha256": "c3a9193cd942383a1136af80d87c83b241feb52a78763442424ef44a9643ebd6",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

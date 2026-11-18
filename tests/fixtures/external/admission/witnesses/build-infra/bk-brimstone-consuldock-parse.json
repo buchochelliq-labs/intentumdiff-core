@@ -1,0 +1,34 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-brimstone-consuldock-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "32942fbbed2d5561de8ff204e6ae05e6cddc18baaff34469621c4f01acac8d47",
+  "old_sha256": "32942fbbed2d5561de8ff204e6ae05e6cddc18baaff34469621c4f01acac8d47",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    10,
+    39,
+    134,
+    168,
+    269
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

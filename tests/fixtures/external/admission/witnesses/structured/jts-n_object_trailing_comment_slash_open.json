@@ -1,0 +1,15 @@
+{
+  "case_id": "jts-n_object_trailing_comment_slash_open",
+  "executed_utc": "2026-11-17T20:20:23+00:00",
+  "new_sha256": "aac61f9c0640ae1f18ec9a0f889e7a2aef163e87f8542bb9cc49ec081ade7b58",
+  "observations": {
+    "error": "Extra data: line 1 column 10 (char 9)",
+    "reference_accepts": false,
+    "upstream_accepts": false
+  },
+  "old_sha256": "aac61f9c0640ae1f18ec9a0f889e7a2aef163e87f8542bb9cc49ec081ade7b58",
+  "oracle": "json_parse",
+  "reference": "CPython 3.13.18 json (strict, parse_constant rejects NaN/Infinity)",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

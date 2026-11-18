@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-attribute-dynamic-boolean-tag_whitespace",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "733ed2fff16d9cffba109654f3c2344d3ed01af373d391fa54a36dcdabd2bb8c",
+  "observations": {
+    "crash": "ReferenceError: readonly is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c39.mjs:4:49)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/10"
+  },
+  "old_sha256": "281f33fdaef2d94eeeeec9eaef24bd1a95e57a81511dc9f3389381c3a7ab246a",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

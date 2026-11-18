@@ -1,0 +1,55 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-go-06-repair",
+  "config": "go",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "83c67770a53f27b23199e3d1213cf85212be29b13dc1edcf913cc95934956d31",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "ok  \thumanevalpack\t0.004s\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "65cf312e262973f0a3af590220914bf2132bd98c609d3b87d3eeccffad346ca7",
+  "new_test_sha256": "0f4f536c04dd8bcd123167d0460d02896bf2936047f9c483fb848261e8437083",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "83c67770a53f27b23199e3d1213cf85212be29b13dc1edcf913cc95934956d31",
+    "steps": [
+      {
+        "argv": [
+          "go",
+          "test",
+          "-vet=off",
+          "-count=1",
+          "./..."
+        ],
+        "exit_code": 1,
+        "stderr_tail": "",
+        "stdout_tail": "nt) 3,\n        \t            \t  (int) 1,\n        \t            \t+ (int) 0,\n        \t            \t+ (int) 0,\n        \t            \t  (int) 3\n        \tTest:       \tTestParseNestedParens\n    main_test.go:11: \n        \tError Trace:\t/tmp/hep-witness-y7l_tc7u/main_test.go:11\n        \tError:      \tNot equal: \n        \t            \texpected: []int{1, 2, 3, 4}\n        \t            \tactual  : []int{0, 0, 0, 0}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,6 +1,6 @@\n        \t            \t ([]int) (len=4) {\n        \t            \t- (int) 1,\n        \t            \t- (int) 2,\n        \t            \t- (int) 3,\n        \t            \t- (int) 4\n        \t            \t+ (int) 0,\n        \t            \t+ (int) 0,\n        \t            \t+ (int) 0,\n        \t            \t+ (int) 0\n        \t            \t }\n        \tTest:       \tTestParseNestedParens\n    main_test.go:12: \n        \tError Trace:\t/tmp/hep-witness-y7l_tc7u/main_test.go:12\n        \tError:      \tNot equal: \n        \t            \texpected: []int{4}\n        \t            \tactual  : []int{3}\n        \t            \t\n        \t            \tDiff:\n        \t            \t--- Expected\n        \t            \t+++ Actual\n        \t            \t@@ -1,3 +1,3 @@\n        \t            \t ([]int) (len=1) {\n        \t            \t- (int) 4\n        \t            \t+ (int) 3\n        \t            \t }\n        \tTest:       \tTestParseNestedParens\nFAIL\nFAIL\thumanevalpack\t0.010s\nFAIL\n",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "634b5dfe64c5413c9587e4b7edeaf19c5881e6c14d5ea9ce204735600abb7d66",
+  "old_test_sha256": "0f4f536c04dd8bcd123167d0460d02896bf2936047f9c483fb848261e8437083",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/go/06.json",
+  "toolchain": [
+    "go version go1.24.7 linux/amd64"
+  ],
+  "verdict": "supports_claim"
+}

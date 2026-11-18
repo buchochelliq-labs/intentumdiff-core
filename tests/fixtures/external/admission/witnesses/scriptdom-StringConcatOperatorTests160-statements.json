@@ -1,0 +1,59 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "scriptdom-StringConcatOperatorTests160-statements",
+  "claim_tested": "0 TSql160Parser errors; TSql150Parser error count equals the upstream Only160SyntaxTests expectation; statement inventory from the ScriptDom tree",
+  "engines": [
+    {
+      "name": "Microsoft.SqlServer.TransactSql.ScriptDom (NuGet)",
+      "parsers": [
+        "TSql160Parser(initialQuotedIdentifiers: true)",
+        "TSql150Parser(initialQuotedIdentifiers: true)"
+      ],
+      "runtime": ".NET 8.0.34",
+      "version": "18.0.140.0+9286938f.9286938f832f746ae50ca5f5a7b6bcc2c89aa465"
+    }
+  ],
+  "new_sha256": "1f469dd93373f6d3945e95c1d0180a5e5ba7a3526dde96fb3f335a0e14f2f935",
+  "old_sha256": "1f469dd93373f6d3945e95c1d0180a5e5ba7a3526dde96fb3f335a0e14f2f935",
+  "oracle": "scriptdom_parse_acceptance_and_statement_inventory",
+  "schema_version": 1,
+  "sides": [
+    {
+      "errors150": 11,
+      "errors160": 0,
+      "generated160_sha256": "ce16f4170c8fbef6279a0c03e3990c75cdff29de7c5106255b6d9c1a7520e934",
+      "statement_count": 12,
+      "statement_starts": [
+        0,
+        26,
+        55,
+        101,
+        140,
+        156,
+        175,
+        204,
+        236,
+        265,
+        292,
+        318
+      ],
+      "statement_types": [
+        "UpdateStatement",
+        "UpdateStatement",
+        "UpdateStatement",
+        "UpdateStatement",
+        "SetVariableStatement",
+        "SelectStatement",
+        "SetVariableStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement",
+        "SelectStatement"
+      ]
+    }
+  ],
+  "status": "executed",
+  "upstream_expected_errors150": 11,
+  "verdict": "supports_claim"
+}

@@ -187,3 +187,73 @@ pub fn apply_policy(request: &Value) -> Result<Value, String> {
     crate::attach_guardrail_violations(&mut diff, violations);
     Ok(diff)
 }
+
+/// The complete guardrail check verdict every binding and the CLI render (never recompute).
+///
+/// Request: exactly one of `diffs` (array of SemanticDiff objects, whose `guardrail_violations`
+/// are concatenated in order) or `violations` (array of GuardrailViolation objects), plus the
+/// required boolean `strict`, optional `checked_files` (non-negative integer or null; defaults to
+/// the number of diffs, or null for a bare violation list) and optional `metadata` (object or
+/// null, passed through). Gate rule: under `strict`, ANY violation (important or immutable)
+/// fails the check; non-strict checks are advisory and always pass. Malformed evidence (unknown
+/// severity, missing `strict`, both or neither evidence source) is an error, never a pass.
+pub fn check_result(request: &Value) -> Result<Value, String> {
+    let request = request.as_object().ok_or("guardrail check request must be an object")?;
+    let strict = match request.get("strict") {
+        Some(Value::Bool(b)) => *b,
+        Some(_) => return Err("guardrail check `strict` must be a boolean".into()),
+        None => return Err("guardrail check requires `strict`".into()),
+    };
+    let diffs = request.get("diffs");
+    let listed = request.get("violations");
+    let (violations, default_checked): (Vec<Value>, Value) = match (diffs, listed) {
+        (Some(Value::Array(diffs)), None) => {
+            let mut all = Vec::new();
+            for (index, diff) in diffs.iter().enumerate() {
+                let diff = diff.as_object().ok_or_else(|| format!("diffs[{index}] must be an object"))?;
+                match diff.get("guardrail_violations") {
+                    None | Some(Value::Null) => {}
+                    Some(Value::Array(items)) => all.extend(items.iter().cloned()),
+                    Some(_) => return Err(format!("diffs[{index}].guardrail_violations must be an array")),
+                }
+            }
+            (all, json!(diffs.len()))
+        }
+        (None, Some(Value::Array(items))) => (items.clone(), Value::Null),
+        (Some(_), Some(_)) => return Err("guardrail check takes `diffs` or `violations`, not both".into()),
+        (None, None) => return Err("guardrail check requires `diffs` or `violations`".into()),
+        (Some(_), None) => return Err("guardrail check `diffs` must be an array".into()),
+        (None, Some(_)) => return Err("guardrail check `violations` must be an array".into()),
+    };
+    let checked_files = match request.get("checked_files") {
+        None | Some(Value::Null) => default_checked,
+        Some(value) if value.as_u64().is_some() => value.clone(),
+        Some(_) => return Err("guardrail check `checked_files` must be a non-negative integer or null".into()),
+    };
+    let metadata = match request.get("metadata") {
+        None | Some(Value::Null) => Value::Null,
+        Some(value @ Value::Object(_)) => value.clone(),
+        Some(_) => return Err("guardrail check `metadata` must be an object or null".into()),
+    };
+    let (mut immutable, mut important) = (0usize, 0usize);
+    for (index, violation) in violations.iter().enumerate() {
+        let violation = violation.as_object().ok_or_else(|| format!("violations[{index}] must be an object"))?;
+        match violation.get("severity").and_then(Value::as_str) {
+            Some("immutable") => immutable += 1,
+            Some("important") => important += 1,
+            Some(other) => return Err(format!("violations[{index}] has unsupported severity '{other}'")),
+            None => return Err(format!("violations[{index}] requires a string severity")),
+        }
+    }
+    let passed = !strict || violations.is_empty();
+    Ok(json!({
+        "violation_count": violations.len(),
+        "immutable_count": immutable,
+        "important_count": important,
+        "violations": violations,
+        "checked_files": checked_files,
+        "strict": strict,
+        "passed": passed,
+        "metadata": metadata,
+    }))
+}

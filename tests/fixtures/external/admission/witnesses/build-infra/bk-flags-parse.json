@@ -1,0 +1,39 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-flags-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "08d42c0aba1521e1ac70eeecf25801be4e7d2f851f564d178050f72533d96c7f",
+  "old_sha256": "08d42c0aba1521e1ac70eeecf25801be4e7d2f851f564d178050f72533d96c7f",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file and AST.Dump() reproduces the upstream result file byte for byte.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    0,
+    13,
+    28,
+    53,
+    80,
+    117,
+    147,
+    165,
+    189,
+    221
+  ],
+  "upstream_result_reproduced": true,
+  "verdict": "supports_claim"
+}

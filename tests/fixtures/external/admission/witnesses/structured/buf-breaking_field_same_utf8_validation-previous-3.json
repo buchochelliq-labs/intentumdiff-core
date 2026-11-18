@@ -1,0 +1,15 @@
+{
+  "case_id": "buf-breaking_field_same_utf8_validation-previous-3",
+  "executed_utc": "2026-11-17T20:20:36+00:00",
+  "new_sha256": "83d81f8fb0b58437fc1476714c18831b7bc079aab2e5e651dd00a73edab0f9a7",
+  "observations": {
+    "reference_accepts": true,
+    "stderr": null,
+    "upstream_accepts": true
+  },
+  "old_sha256": "83d81f8fb0b58437fc1476714c18831b7bc079aab2e5e651dd00a73edab0f9a7",
+  "oracle": "proto_build",
+  "reference": "buf 1.75.0 build",
+  "summary": "reference and upstream label agree",
+  "verdict": "supports_claim"
+}

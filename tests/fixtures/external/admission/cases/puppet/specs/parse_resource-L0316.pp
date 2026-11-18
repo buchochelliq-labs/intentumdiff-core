@@ -1,0 +1,1 @@
+File <| tag == 'foo' or tag == 'bar' and mode != '0777' |>

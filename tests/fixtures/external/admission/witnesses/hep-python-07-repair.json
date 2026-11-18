@@ -1,0 +1,51 @@
+{
+  "behavior_claim": "changed",
+  "case_id": "hep-python-07-repair",
+  "config": "python",
+  "new": {
+    "outcome": "passed",
+    "program_sha256": "124734a4a00af1da802ddf36075469dc36e35522da6b10ffff07bc1e60e8589c",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 0,
+        "stderr_tail": "",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "new_sha256": "b427b8a20a46c3c95927974a7b1c5ba7339af14c211b9058896006fd84836a82",
+  "new_test_sha256": "be34aa6b9ef815ce745d77a03cf896e5547841dc955e53d94591793c52f7dc25",
+  "new_test_substitutions": [],
+  "old": {
+    "outcome": "failed",
+    "program_sha256": "acf3fef6c1731f054d496b11d015c23235c3fa75637e7249cca81e1d9290fbdd",
+    "steps": [
+      {
+        "argv": [
+          "python3",
+          "-I",
+          "prog.py"
+        ],
+        "exit_code": 1,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/hep-witness-tsyj1_rw/prog.py\", line 18, in <module>\n    check(filter_by_substring)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hep-witness-tsyj1_rw/prog.py\", line 14, in check\n    assert filter_by_substring(['xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'], 'xxx') == ['xxx', 'xxxAAA', 'xxx']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "stdout_tail": "",
+        "timed_out": false
+      }
+    ]
+  },
+  "old_sha256": "97678d794754364fffd278c79830cfe40a4f0f3d96418f02e4015e23dc50008c",
+  "old_test_sha256": "be34aa6b9ef815ce745d77a03cf896e5547841dc955e53d94591793c52f7dc25",
+  "schema_version": 1,
+  "status": "executed",
+  "test_source": "upstream `test` field of upstream/python/07.json",
+  "toolchain": [
+    "Python 3.13.18"
+  ],
+  "verdict": "supports_claim"
+}

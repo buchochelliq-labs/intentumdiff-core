@@ -1,0 +1,13 @@
+{
+  "case_id": "svelte-legacy-textarea-end-tag-text_edit",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "61646481a2685cf40fdda27c393c9e62b2bc8f87b1c453bf1db08f89340aa4fc",
+  "observations": {
+    "crash": "ReferenceError: foo is not defined\n    at Fixture (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/.markup-witness-tmp/c33.mjs:6:80)\n    at #open_render (file:///tmp/claude-0/-home-user/10746643-81b8-55e2-99b4-503b94398efc/scratchpad/m263/node/node_modules/svelte/src/internal/server/renderer.js:899:4)\n    at #render (file:///tmp/claude-0/-home-user/1074664"
+  },
+  "old_sha256": "deb3e8c48132b35f0a9407dfbb774fb3a2fad6d464ccf0a391236e9fd5e7fafc",
+  "oracle": "svelte_ssr_equal",
+  "reference": "svelte_ssr_equal: 5.57.3",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,17 @@
+{
+  "bug_type": "operator misuse",
+  "buggy_solution": "    balance = 0\n\n    for op in operations:\n        balance += op\n        if balance == 0:\n            return True\n\n    return False\n",
+  "canonical_solution": "    balance = 0\n\n    for op in operations:\n        balance += op\n        if balance < 0:\n            return True\n\n    return False\n",
+  "declaration": "from typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n",
+  "docstring": "You're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.\n>>> below_zero([1, 2, 3])\nFalse\n>>> below_zero([1, 2, -4, 5])\nTrue",
+  "entry_point": "below_zero",
+  "example_test": "def check(below_zero):\n    assert below_zero([1, 2, 3]) == False\n    assert below_zero([1, 2, -4, 5]) == True\ncheck(below_zero)\n",
+  "failure_symptoms": "incorrect output",
+  "import": "",
+  "instruction": "Write a Python function `below_zero(operations: List[int]) -> bool` to solve the following problem:\nYou're given a list of deposit and withdrawal operations on a bank account that starts with\nzero balance. Your task is to detect if at any point the balance of account fallls below zero, and\nat that point function should return True. Otherwise it should return False.\n>>> below_zero([1, 2, 3])\nFalse\n>>> below_zero([1, 2, -4, 5])\nTrue",
+  "prompt": "from typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \"\"\" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \"\"\"\n",
+  "signature": "below_zero(operations: List[int]) -> bool",
+  "task_id": "Python/3",
+  "test": "\n\n\n\n\ndef check(below_zero):\n    assert below_zero([]) == False\n    assert below_zero([1, 2, -3, 1, 2, -3]) == False\n    assert below_zero([1, 2, -4, 5, 6]) == True\n    assert below_zero([1, -1, 2, -2, 5, -5, 4, -4]) == False\n    assert below_zero([1, -1, 2, -2, 5, -5, 4, -5]) == True\n    assert below_zero([1, -2, 2, -2, 5, -5, 4, -4]) == True\n\ncheck(below_zero)",
+  "test_setup": ""
+}

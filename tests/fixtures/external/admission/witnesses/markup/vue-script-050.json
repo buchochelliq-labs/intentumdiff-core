@@ -1,0 +1,13 @@
+{
+  "case_id": "vue-script-050",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "ea7260f8f226e29cca9a5a099a5463e263ea2516fadc3ed1ac61e28962f4f1fc",
+  "observations": {
+    "crash": "Error: [@vue/compiler-sfc] `defineEmits()` in <script setup> cannot reference locally declared variables because it will be hoisted outside of the setup() function. If your component options require initialization in the module scope, use a separate normal <script> to export the options instead.\n\nFixture.vue\n1  |  <script setup>\n2  |          let bar = 'hello'\n3  |          defineEmits([bar])\n   |"
+  },
+  "old_sha256": "ea7260f8f226e29cca9a5a099a5463e263ea2516fadc3ed1ac61e28962f4f1fc",
+  "oracle": "vue_compile",
+  "reference": "vue_compile: 3.5.45",
+  "summary": "reference crashed",
+  "verdict": "inconclusive"
+}

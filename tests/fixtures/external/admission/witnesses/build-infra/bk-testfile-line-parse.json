@@ -1,0 +1,31 @@
+{
+  "behavior_claim": "preserved",
+  "case_id": "bk-testfile-line-parse",
+  "engines": [
+    {
+      "name": "buildinfra",
+      "version": {
+        "go": "go version go1.24.7 linux/amd64",
+        "go_module_pins": {
+          "github.com/hashicorp/hcl/v2": "v2.23.0",
+          "github.com/moby/buildkit": "v0.17.3",
+          "golang.org/x/mod": "v0.22.0"
+        }
+      }
+    }
+  ],
+  "new_sha256": "323275be20bed47c35e0ae6f23e7afae8b7b40fa457315be1aea789b5ac94b2e",
+  "old_sha256": "323275be20bed47c35e0ae6f23e7afae8b7b40fa457315be1aea789b5ac94b2e",
+  "oracle": "buildkit_parse",
+  "reference_accepts": true,
+  "reference_error": null,
+  "review": "parser.Parse accepts the file.",
+  "schema_version": 1,
+  "tool": "buildkit frontend/dockerfile/parser + instructions",
+  "unit_starts": [
+    14,
+    99,
+    178
+  ],
+  "verdict": "supports_claim"
+}

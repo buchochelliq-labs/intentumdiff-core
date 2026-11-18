@@ -61,3 +61,31 @@ fn partial_invariance_filter_preserves_entity_context_only_for_surviving_evidenc
     assert_eq!(group["old_node_ids"], json!(["c"]));
     assert_eq!(group["new_node_ids"], json!(["d"]));
 }
+
+#[test]
+fn final_group_ownership_uses_node_identity_and_preserves_source_provenance() {
+    let tree = |id: &str| json!({"id":id,"node_type":"identifier","label":id,
+        "structural_hash":id,"children":[],"position":{"start_line":0,"start_col":0,"end_line":0,"end_col":1}});
+    let old = tree("old");
+    let new = tree("new");
+    let groups = json!([
+        {"kind":"MEANINGFUL_CHANGE","raw_change_indices":[99],"old_node_ids":["old"],"metadata":{"index_space":"presentation_input","suppressed_count":3}},
+        {"kind":"IGNORED_STYLE","raw_change_indices":[0],"old_node_ids":["gone"],"metadata":{"index_space":"invariance_input","old_span":[0,1]}},
+        {"kind":"NOISE_SUPPRESSED","raw_change_indices":[0,8],"metadata":{"index_space":"mixed","suppressed_count":4}},
+        {"kind":"MEANINGFUL_CHANGE","raw_change_indices":[0,88],"metadata":{"index_space":"final_changes"}},
+        {"kind":"IGNORED_STYLE","raw_change_indices":[],"metadata":{"index_space":"style_only_shortcut","old_span":[0,1]}}
+    ]);
+    let out = complete(&json!({"language":"python","old_source":"x","new_source":"y",
+        "old_filename":"a.py","new_filename":"a.py","old_tree":old,"new_tree":new,
+        "finalized":{"changes":[{"change_type":"MODIFICATION","old_node":old,"new_node":new}],
+            "change_groups":groups,"is_style_only":false}})).unwrap();
+    let actual = out["change_groups"].as_array().unwrap();
+    assert_eq!(actual.len(), 5);
+    for (group, expected) in actual.iter().zip([json!([0]), json!([]), json!([]), json!([0]), json!([])]) {
+        assert_eq!(group["raw_change_indices"], expected);
+    }
+    for (actual, original) in actual.iter().zip(groups.as_array().unwrap()) {
+        assert_eq!(actual["metadata"], original["metadata"]);
+        assert_eq!(actual["old_node_ids"], original["old_node_ids"]);
+    }
+}

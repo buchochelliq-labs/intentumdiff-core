@@ -1,0 +1,18 @@
+{
+  "case_id": "po-ufeff-translator_comment",
+  "executed_utc": "2026-11-17T23:29:50+00:00",
+  "new_sha256": "61e993b373063d5bd05f8c5241d1048b502686d31220ade895bbd700131f4304",
+  "observations": {
+    "new": {
+      "stderr": "f.po:1:2: syntax error\nf.po: warning: Charset missing in header.\n               Message conversion to user's charset will not work.\nmsgfmt: found 1 fatal error\n"
+    },
+    "old": {
+      "stderr": "f.po:1:2: syntax error\nf.po: warning: Charset missing in header.\n               Message conversion to user's charset will not work.\nmsgfmt: found 1 fatal error\n"
+    }
+  },
+  "old_sha256": "bf59320ec4e0a390775e5d6dd8d54fe94e54432b97c5d9bde9c789f63bf28959",
+  "oracle": "msgfmt_equal",
+  "reference": "msgfmt_equal: msgfmt (GNU gettext-tools) 0.21",
+  "summary": "reference could not process both sides",
+  "verdict": "inconclusive"
+}
