@@ -287,7 +287,7 @@ all report the same state. `finalize_review` also returns `completeness` (and
 | `completeness` | Meaning | `incomplete` |
 |---|---|---|
 | `complete` | `changes` are the review: at least one change, or byte-identical sources | `null` |
-| `equivalent` | Sources differ and equivalence was proved: `is_style_only=true`, or `is_style_only=false` with `metadata.equivalence_proof` naming the rule (e.g. `keyed_data.unordered_mapping_member_order`) | `null` |
+| `equivalent` | Sources differ and equivalence was proved: `is_style_only=true`, or `is_style_only=false` with `metadata.equivalence_proof` naming the rule (e.g. `keyed_data.unordered_mapping_member_order`, `keyed_data.number_exact_decimal_respelling`) | `null` |
 | `incomplete` | Sources differ, no change survived and nothing proved equivalence | object (below) |
 
 Byte-identical input is `complete`, never `equivalent`, so it stays distinguishable from a

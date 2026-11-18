@@ -55,7 +55,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `ini` | 13/13 (100%) | 9/9 (100%) | GAP | <https://github.com/python/cpython/blob/main/Lib/test/test_configparser.py> (official upstream regression suite) |
 | `java` | 27/27 (100%) | GAP | GAP | <https://github.com/pouryafard75/RM-ASTDiff> (recognised software-engineering research benchmark) |
 | `javascript` | 26/27 (96%) | GAP | GAP | <https://github.com/tc39/test262> (standards / conformance suite) |
-| `json` | 128/144 (89%) | 97/245 (40%) | GAP | <https://github.com/nst/JSONTestSuite> (established community / compatibility suite) |
+| `json` | 132/144 (92%) | 97/245 (40%) | GAP | <https://github.com/nst/JSONTestSuite> (established community / compatibility suite) |
 | `kotlin` | GAP | GAP | GAP | <https://github.com/JetBrains/kotlin/blob/master/kotlin-native/HACKING.md> (official upstream regression suite) |
 | `latex` | GAP | GAP | GAP | <https://github.com/latex3/latex2e/tree/develop/base/testfiles> (official upstream regression suite) |
 | `lua` | GAP | GAP | GAP | <https://www.lua.org/tests/> (official upstream regression suite) |
@@ -126,7 +126,7 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 | `json` | json-patch-tests | external_seed_only | change_understanding | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | json-patch-tests | reviewed_external_derived | change_understanding | 73 | 73 | 73 | 73 | 70 | 3 | 0 | 0 | 0 | 70/73 (96%) | 55/56 (98%) | 2/17 (12%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | json-patch-tests | upstream_gold | change_understanding | 112 | 74 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
-| `json` | jsontestsuite | reviewed_external_derived | change_understanding | 71 | 71 | 71 | 71 | 58 | 13 | 0 | 0 | 0 | 58/71 (82%) | 43/44 (98%) | 12/27 (44%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
+| `json` | jsontestsuite | reviewed_external_derived | change_understanding | 71 | 71 | 71 | 71 | 62 | 9 | 0 | 0 | 0 | 62/71 (87%) | 43/44 (98%) | 8/27 (30%) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | jsontestsuite | upstream_gold | change_understanding | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A (0 of 0: no admitted cases) | N/A (0 of 0: no executed behavior-changing cases) | N/A (0 of 0: no executed preservation controls) | N/A (0 of 0: no executed must-accept documents) | N/A (0 of 0: no executed must-reject documents) |
 | `json` | jsontestsuite | upstream_gold | parser_fidelity | 291 | 245 | 245 | 245 | 97 | 148 | 0 | 0 | 0 | 97/245 (40%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 95/95 (100%) | 2/150 (1%) |
 | `m` | powerquery-parser | upstream_gold | parser_fidelity | 78 | 78 | 9 | 9 | 2 | 7 | 0 | 0 | 0 | 2/9 (22%) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | N/A (0 of 0: parser_fidelity lane: no change facts are scored) | 2/9 (22%) | N/A (0 of 0: no executed must-reject documents) |
@@ -177,13 +177,9 @@ case was executed in that lane; it is not a pass. No pooled or macro average is 
 - `json` `jts-y_object_extreme_numbers-reorder`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: reordering members does not add, delete or modify a value
 - `json` `jts-y_number-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_0e+1-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
-- `json` `jts-y_number_0e1-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
-- `json` `jts-y_number_double_close_to_zero-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
-- `json` `jts-y_number_int_with_exp-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_minus_zero-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_negative_zero-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_real_capital_e-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
-- `json` `jts-y_number_real_capital_e_neg_exp-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_real_capital_e_pos_exp-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_real_exponent-reformat`: has_semantic_changes: expected False, got True; forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit
 - `json` `jts-y_number_real_capital_e-value-change`: has_semantic_changes: expected True, got False; is_style_only: expected False, got True; changes_empty: expected False, got True

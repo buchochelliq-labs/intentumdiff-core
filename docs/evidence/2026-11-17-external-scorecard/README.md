@@ -63,7 +63,7 @@ per suite and class are in `scorecard.md`.
 | java | change | 27 | 27 | 0 | 0 | N/A | N/A | 12/12 | 0/15 |
 | javascript | change | 27 | 26 | 1 | 0 | N/A | N/A | 11/12 | 0/15 |
 | json | parser | 245 | 97 | 148 | 0 | 95/95 | 2/150 | N/A | N/A |
-| json | change | 144 | 128 | 16 | 0 | N/A | N/A | 98/100 | 14/44 |
+| json | change | 144 | 132 | 12 | 0 | N/A | N/A | 98/100 | 10/44 |
 | m | parser | 9 | 2 | 7 | 0 | 2/9 | N/A | N/A | N/A |
 | proto | parser | 185 | 173 | 12 | 0 | 173/185 | N/A | N/A | N/A |
 | proto | change | 117 | 117 | 0 | 7 | N/A | N/A | 93/93 | 0/24 |
@@ -78,9 +78,22 @@ per suite and class are in `scorecard.md`.
 | yaml | parser | 303 | 270 | 33 | 0 | 229/229 | 41/74 | N/A | N/A |
 | yaml | change | 184 | 52 | 132 | 0 | N/A | N/A | 6/6 | 132/178 |
 
-The C handwritten regressions (4/4 passed) and the C++ ones (5/5) never enter a lane rate. Totals: 1,467
-passed, 658 failed and 8 unsupported (handwritten 9/9; reviewed_external_derived 367 passed, 32 failed;
+The C handwritten regressions (4/4 passed) and the C++ ones (5/5) never enter a lane rate. Totals: 1,471
+passed, 654 failed and 8 unsupported (handwritten 9/9; reviewed_external_derived 371 passed, 28 failed;
 upstream_gold 1,091 passed, 626 failed, 8 unsupported).
+
+### Baseline update: number respelling equivalence
+
+The engine rule `keyed_data.number_exact_decimal_respelling` (JSON, ADF and Databricks `number` leaves
+whose exact decimal is unchanged) turned four `reviewed_external_derived` JSON preservation false alarms
+into passes: `jts-y_number_0e1-reformat`, `jts-y_number_double_close_to_zero-reformat`,
+`jts-y_number_int_with_exp-reformat` and `jts-y_number_real_capital_e_neg_exp-reformat`. Each one is now
+`completeness="equivalent"` with that rule as `metadata.equivalence_proof`. Only those four entries of
+`results.json`, the scorecard regenerated from it, and the counts above changed; the identity fields
+below still describe the original run. A full rerun with the new library changed no other status,
+error, completeness or review summary, and no `upstream_gold` case. Still failing, and correct to
+decline: `-0` → `0` (signed zero is not equated), and the spellings with `e+` that the pinned JSON
+component splits (`1E22` → `1e+22` keeps only `22`, so the token cannot be proved).
 
 ## Identity (C ABI library and components)
 
@@ -425,7 +438,7 @@ stays a candidate. That biases the admitted YAML subset toward inputs ruamel han
 | Language | Lane | Class | Passed / executed | Notes |
 |---|---|---|---|---|
 | json | parser | upstream_gold | 97/245 | valid accepted 95/95; **invalid rejected 2/150** |
-| json | change | reviewed_external_derived | 128/144 | change recall 98/100; preservation false alarms 14/44 |
+| json | change | reviewed_external_derived | 132/144 | change recall 98/100; preservation false alarms 10/44 (was 14/44; see "Baseline update") |
 | toml | parser | upstream_gold | 270/546 | valid 185/185; **invalid rejected 85/361** |
 | toml | change | reviewed_external_derived | 72/77 | recall 48/48; preservation failures 5/29 (all `incomplete`) |
 | yaml | parser | upstream_gold | 270/303 | valid 229/229; invalid rejected 41/74 |

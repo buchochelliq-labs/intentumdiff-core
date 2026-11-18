@@ -68,6 +68,8 @@ TIER_C_COMPONENTS = [
     "perl", "astro", "svelte",
     # #252 completeness contract: a suppressed bash assignment swap must stay incomplete.
     "bash",
+    # Number respelling equivalence: the pinned ADF component keeps its results.
+    "adf",
 ]
 
 

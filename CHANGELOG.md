@@ -18,6 +18,14 @@
 - Member reorders inside JSON objects, YAML mappings and TOML tables are proved equivalent
   (`metadata.equivalence_proof = keyed_data.unordered_mapping_member_order`); duplicate or
   escaped keys, YAML anchors/aliases/tags and TOML arrays of tables decline the proof.
+- A `number` leaf respelled to the same exact decimal (`9` → `9.0`, `1000` → `1e3`,
+  `1E-2` → `0.01`) in JSON, ADF and Databricks is an equivalent respelling
+  (`keyed_data.number_exact_decimal_respelling`): the pair leaves the review as an
+  `IGNORED_STYLE` group showing both spellings as written, and a review it empties is
+  `equivalent` with that `metadata.equivalence_proof` (`is_style_only=false`). Only strict
+  RFC 8259 tokens within the plugin-sdk #36 exponent domain are proved; `1_000`, `0x10`,
+  `+1`, `.5`, `01`, `-0` vs `0`, out-of-range exponents and number↔string edits stay
+  meaningful. `apply_invariances` results now carry `equivalence_proof`.
 - The language assessment checks the completeness state; cases may pin
   `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for

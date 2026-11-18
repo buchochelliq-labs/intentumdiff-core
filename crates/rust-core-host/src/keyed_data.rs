@@ -973,6 +973,12 @@ pub(crate) fn augment_keyed_data_changes_drafts<'a>(
 #[cfg(test)]
 #[path = "keyed_data_tests.rs"]
 mod tests;
+#[cfg(test)]
+#[path = "number_respelling_tests.rs"]
+mod number_respelling_tests;
+#[cfg(all(test, feature = "tier-c-wasm"))]
+#[path = "number_respelling_source_tests.rs"]
+mod number_respelling_source_tests;
 
 /// Rule id recorded as `equivalence_proof` when a review's only delta is member order inside
 /// specification-unordered mappings (core #252).
@@ -1054,4 +1060,202 @@ pub(crate) fn unordered_mapping_equivalent(old_tree: &SemanticNode, new_tree: &S
         (Some(old), Some(new)) => old == new,
         _ => false,
     }
+}
+
+/// Rule id of the number respelling equivalence: a `number` leaf whose source spelling changed
+/// while its exact decimal value did not (`9` -> `9.0`, `1000` -> `1e3`). Recorded as the
+/// invariance group `rule_id` for each proved pair and, when nothing else changed, as the
+/// review's `equivalence_proof` (core #252).
+pub(crate) const NUMBER_RESPELLING_RULE: &str = "keyed_data.number_exact_decimal_respelling";
+
+/// Routes whose `number` leaves are RFC 8259 JSON numbers: the JSON parser, and the
+/// configuration projections (plugin-sdk #36) of ADF and Databricks, whose number labels are
+/// the exact source token. YAML (`integer_scalar`/`float_scalar`, typed by the core schema) and
+/// TOML (`integer`/`float`) emit no `number` node and stay outside the rule.
+pub(crate) fn number_respelling_language(language: &str) -> bool {
+    matches!(language, "json" | "adf" | "databricks" | "databricks-workflow")
+}
+
+/// The projection domain of plugin-sdk #36 `canonical_decimal`: beyond it a spelling keeps its
+/// source identity, so no equivalence is claimed there either.
+const NUMBER_EXPONENT_BOUND: u64 = 1_000_000;
+
+/// The exact canonical decimal (`exact_decimal`) of a strict RFC 8259 §6 number token
+/// `-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?`, or `None`. Declines every spelling the
+/// grammar does not prove (`1_000`, `0x10`, `+1`, `.5`, `1.`, `01`, `Infinity`) and values
+/// whose explicit or effective exponent leaves the ±1,000,000 projection domain. Negative zero
+/// keeps its sign, so `-0` and `0` are never equated (signed zero is observable in IEEE
+/// consumers; the catalogue's number rule forbids hiding it).
+pub(crate) fn exact_json_number(token: &str) -> Option<String> {
+    static GRAMMAR: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let grammar = GRAMMAR.get_or_init(|| {
+        regex::Regex::new(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?$")
+            .expect("valid RFC 8259 number pattern")
+    });
+    if !grammar.is_match(token) {
+        return None;
+    }
+    if let Some(at) = token.find(['e', 'E']) {
+        if token[at + 1..].parse::<i64>().ok()?.unsigned_abs() > NUMBER_EXPONENT_BOUND {
+            return None;
+        }
+    }
+    let exact = exact_decimal(token)?;
+    if let Some((_, exponent)) = exact.split_once('e') {
+        if exponent.parse::<i64>().ok()?.unsigned_abs() > NUMBER_EXPONENT_BOUND {
+            return None;
+        }
+    }
+    Some(exact)
+}
+
+fn node_span(node: &SemanticNode, source: &str, starts: &[usize]) -> Option<(usize, usize)> {
+    let p = &node.position;
+    let start = starts.get(p.start_line as usize)? + p.start_col as usize;
+    let end = starts.get(p.end_line as usize)? + p.end_col as usize;
+    source.get(start..end).map(|_| (start, end))
+}
+
+/// The complete source token of a `number` leaf: its span must hold exactly the label, and the
+/// bytes on either side must not continue a number (a parser that split `1e+22` and kept only
+/// `22` proves nothing about the value).
+fn number_leaf_token(node: &SemanticNode, source: &str, starts: &[usize]) -> Option<(usize, usize)> {
+    if node.node_type != "number" || !node.children.is_empty() {
+        return None;
+    }
+    let (start, end) = node_span(node, source, starts)?;
+    let continues = |c: char| c.is_ascii_alphanumeric() || matches!(c, '.' | '+' | '-' | '_');
+    if source[start..end] != node.label
+        || source[..start].chars().next_back().is_some_and(continues)
+        || source[end..].chars().next().is_some_and(continues)
+    {
+        return None;
+    }
+    Some((start, end))
+}
+
+/// Leaf proof of one respelling: both nodes are whole `number` tokens with different
+/// spellings and the same exact decimal. Returns that canonical value.
+pub(crate) fn number_respelling_pair(
+    old: &SemanticNode, new: &SemanticNode,
+    old_source: &str, new_source: &str, old_starts: &[usize], new_starts: &[usize],
+) -> Option<String> {
+    number_leaf_token(old, old_source, old_starts)?;
+    number_leaf_token(new, new_source, new_starts)?;
+    if old.label == new.label {
+        return None;
+    }
+    let canonical = exact_json_number(&old.label)?;
+    (exact_json_number(&new.label)? == canonical).then_some(canonical)
+}
+
+pub(crate) fn source_line_starts(source: &str) -> Vec<usize> {
+    line_starts(source)
+}
+
+#[derive(PartialEq)]
+enum JsonToken<'s> {
+    Number(String),
+    Other(&'s str),
+}
+
+/// Whitespace-free RFC 8259 token stream (strings kept as exact bytes, numbers as exact
+/// decimals, with the spelling retained for the respelling count). `None` for anything that
+/// is not strictly lexable JSON, including numbers outside `exact_json_number`.
+fn json_tokens(source: &str) -> Option<Vec<(JsonToken<'_>, &str)>> {
+    let bytes = source.as_bytes();
+    let mut tokens = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        let start = i;
+        match bytes[i] {
+            b' ' | b'\t' | b'\n' | b'\r' => { i += 1; continue; }
+            b'{' | b'}' | b'[' | b']' | b':' | b',' => i += 1,
+            b'"' => {
+                i += 1;
+                loop {
+                    match *bytes.get(i)? {
+                        b'\\' => i += 2,
+                        b'"' => { i += 1; break; }
+                        c if c < 0x20 => return None,
+                        _ => i += 1,
+                    }
+                }
+            }
+            b'-' | b'0'..=b'9' => {
+                while i < bytes.len() && matches!(bytes[i], b'0'..=b'9' | b'.' | b'e' | b'E' | b'+' | b'-') {
+                    i += 1;
+                }
+                let text = source.get(start..i)?;
+                tokens.push((JsonToken::Number(exact_json_number(text)?), text));
+                continue;
+            }
+            _ => {
+                let rest = source.get(i..)?;
+                let word = ["true", "false", "null"].into_iter().find(|w| rest.starts_with(w))?;
+                i += word.len();
+            }
+        }
+        let text = source.get(start..i)?;
+        tokens.push((JsonToken::Other(text), text));
+    }
+    Some(tokens)
+}
+
+/// Whether two sources differ ONLY by respelling `number` values with equal exact decimals
+/// (at least one). JSON-lexable sources compare their whole token streams, so layout may
+/// differ too; any other source (Databricks YAML) must keep identical trees and identical
+/// bytes outside the number tokens. Never consults hashes or labels alone.
+pub(crate) fn number_respelling_equivalent(old_tree: &SemanticNode, new_tree: &SemanticNode,
+    old_source: &str, new_source: &str, language: &str) -> bool {
+    if !number_respelling_language(language) || old_source == new_source {
+        return false;
+    }
+    if let (Some(old), Some(new)) = (json_tokens(old_source), json_tokens(new_source)) {
+        return old.len() == new.len()
+            && old.iter().zip(&new).all(|((a, _), (b, _))| a == b)
+            && old.iter().zip(&new).any(|((_, a), (_, b))| a != b);
+    }
+    let (old_starts, new_starts) = (line_starts(old_source), line_starts(new_source));
+    let (mut old_spans, mut new_spans, mut respelled) = (Vec::new(), Vec::new(), 0usize);
+    fn walk(o: &SemanticNode, n: &SemanticNode, c: &mut (&str, &str, &[usize], &[usize],
+        &mut Vec<(usize, usize)>, &mut Vec<(usize, usize)>, &mut usize)) -> bool {
+        if o.node_type != n.node_type || o.children.len() != n.children.len() {
+            return false;
+        }
+        if !o.children.is_empty() {
+            return o.label == n.label && o.children.iter().zip(&n.children).all(|(a, b)| walk(a, b, c));
+        }
+        if let (Some(a), Some(b)) = (number_leaf_token(o, c.0, c.2), number_leaf_token(n, c.1, c.3)) {
+            if o.label != n.label {
+                if number_respelling_pair(o, n, c.0, c.1, c.2, c.3).is_none() {
+                    return false;
+                }
+                *c.6 += 1;
+            }
+            c.4.push(a);
+            c.5.push(b);
+            return true;
+        }
+        o.label == n.label
+            && matches!((node_bytes(o, c.0, c.2), node_bytes(n, c.1, c.3)), (Some(a), Some(b)) if a == b)
+    }
+    let mut context = (old_source, new_source, &old_starts[..], &new_starts[..], &mut old_spans, &mut new_spans, &mut respelled);
+    if !walk(old_tree, new_tree, &mut context) || respelled == 0 {
+        return false;
+    }
+    // Every byte outside the number tokens must be identical, so nothing the tree omits
+    // (a dropped token, a layout or comment change) is hidden by this proof.
+    fn outside<'s>(source: &'s str, spans: &mut [(usize, usize)]) -> Option<Vec<&'s str>> {
+        spans.sort_unstable();
+        let (mut pieces, mut at) = (Vec::new(), 0);
+        for &(start, end) in spans.iter() {
+            if start < at { return None; }
+            pieces.push(&source[at..start]);
+            at = end;
+        }
+        pieces.push(&source[at..]);
+        Some(pieces)
+    }
+    matches!((outside(old_source, &mut old_spans), outside(new_source, &mut new_spans)), (Some(a), Some(b)) if a == b)
 }

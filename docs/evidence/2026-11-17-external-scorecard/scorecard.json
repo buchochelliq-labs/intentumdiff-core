@@ -2460,8 +2460,8 @@
         "change_understanding": {
           "external_gold_pass_rate": {
             "denominator": 144,
-            "numerator": 128,
-            "value": 0.8889
+            "numerator": 132,
+            "value": 0.9167
           },
           "na_reason": null,
           "status": "measured"
@@ -2669,8 +2669,8 @@
             "discovered": 71,
             "eligible": 71,
             "executed": 71,
-            "failed": 13,
-            "passed": 58,
+            "failed": 9,
+            "passed": 62,
             "skipped": 0,
             "unsupported": 0
           },
@@ -2700,30 +2700,6 @@
               "known_issue": null
             },
             {
-              "case_id": "jts-y_number_0e1-reformat",
-              "errors": [
-                "has_semantic_changes: expected False, got True",
-                "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-              ],
-              "known_issue": null
-            },
-            {
-              "case_id": "jts-y_number_double_close_to_zero-reformat",
-              "errors": [
-                "has_semantic_changes: expected False, got True",
-                "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-              ],
-              "known_issue": null
-            },
-            {
-              "case_id": "jts-y_number_int_with_exp-reformat",
-              "errors": [
-                "has_semantic_changes: expected False, got True",
-                "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-              ],
-              "known_issue": null
-            },
-            {
               "case_id": "jts-y_number_minus_zero-reformat",
               "errors": [
                 "has_semantic_changes: expected False, got True",
@@ -2741,14 +2717,6 @@
             },
             {
               "case_id": "jts-y_number_real_capital_e-reformat",
-              "errors": [
-                "has_semantic_changes: expected False, got True",
-                "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
-              ],
-              "known_issue": null
-            },
-            {
-              "case_id": "jts-y_number_real_capital_e_neg_exp-reformat",
               "errors": [
                 "has_semantic_changes: expected False, got True",
                 "forbidden MODIFICATION reported: re-serialisation with equal typed value is not an edit"
@@ -2798,13 +2766,13 @@
           },
           "pass_rate": {
             "denominator": 71,
-            "numerator": 58,
-            "value": 0.8169
+            "numerator": 62,
+            "value": 0.8732
           },
           "preservation_false_alarm_rate": {
             "denominator": 27,
-            "numerator": 12,
-            "value": 0.4444
+            "numerator": 8,
+            "value": 0.2963
           },
           "suite_id": "jsontestsuite",
           "suite_revision": "1ef36fa01286573e846ac449e8683f8833c5b26a",

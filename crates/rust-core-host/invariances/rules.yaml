@@ -166,6 +166,44 @@ rules:
   - old: '1.0'
     new: '1'
     canonical: f64(1.0)
+- id: keyed_data.number_exact_decimal_respelling
+  status: implemented
+  languages:
+  - json
+  - adf
+  - databricks-workflow
+  evaluator: number_literal_equivalence
+  node_types:
+  - number
+  group_kind: IGNORED_STYLE
+  enabled: true
+  risk: green
+  equivalence_kind: canonical_value_equivalence
+  stage: post_diff_refinement
+  guarantee: spec-defined
+  explanation: Both number spellings denote the same exact decimal value; only the spelling changed.
+  guards:
+  - Only a MODIFICATION between two leaf `number` nodes; the label must be the exact bytes of the node span
+    and that span a whole token. Equal structural hashes alone are never proof.
+  - Both tokens must match the strict RFC 8259 number grammar with explicit and effective exponents within
+    the plugin-sdk PR 36 projection domain (|e| <= 1,000,000); `1_000`, `0x10`, `+1`, `.5`, `01`, `1.` and
+    out-of-range values are declined.
+  - Values compare by exact decimal (keyed_data `exact_decimal`), never via f64; `-0` and `0` are not equated.
+  - When the rule removes every change, `equivalence_proof` is recorded only if the whole document differs
+    solely by such respellings (JSON token stream, or identical tree and bytes outside number tokens);
+    otherwise every number change is kept.
+  notes: >-
+    Also served for the `databricks` language alias. Both spellings are recorded as written; the
+    canonical value is metadata only.
+  source_refs:
+  - https://www.rfc-editor.org/rfc/rfc8259#section-6
+  examples:
+  - old: '9'
+    new: '9.0'
+    canonical: decimal(9e0)
+  - old: '1000'
+    new: 1e3
+    canonical: decimal(1e3)
 - id: core.string_literal.decoded_value.safe
   status: implemented
   languages:
