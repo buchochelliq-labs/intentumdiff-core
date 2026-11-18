@@ -34,6 +34,11 @@ fn review(case: &Value) -> Value {
     .unwrap()
 }
 
+/// Languages whose pinned component exports value payloads as semantic leaves.
+fn exports_value_payload(language: &str) -> bool {
+    matches!(language, "make")
+}
+
 fn meaningful(id: &str) {
     let input = case(id);
     let language = input["language_id"].as_str().unwrap();
@@ -58,16 +63,27 @@ fn meaningful(id: &str) {
         old.structural_hash, new.structural_hash,
         "{id}: raw parser evidence"
     );
-    assert_eq!(
-        whitespace_normalized_tree_hash(&old),
-        whitespace_normalized_tree_hash(&new),
-        "{id}: lossy exported projection"
-    );
-    assert_eq!(
-        review_trees_equivalent_impl(&pair.old_tree, &pair.new_tree).unwrap(),
-        "false",
-        "{id}: a source-less projection cannot discharge opaque hash evidence"
-    );
+    // make-parser#9 exports each assignment value as a semantic `variable_value` leaf,
+    // so make's exported tree carries the value edit itself. Every other language here
+    // still exports a lossy projection whose meaning only source enrichment recovers.
+    if exports_value_payload(language) {
+        assert_ne!(
+            whitespace_normalized_tree_hash(&old),
+            whitespace_normalized_tree_hash(&new),
+            "{id}: the exported tree must carry the value edit"
+        );
+    } else {
+        assert_eq!(
+            whitespace_normalized_tree_hash(&old),
+            whitespace_normalized_tree_hash(&new),
+            "{id}: lossy exported projection"
+        );
+        assert_eq!(
+            review_trees_equivalent_impl(&pair.old_tree, &pair.new_tree).unwrap(),
+            "false",
+            "{id}: a source-less projection cannot discharge opaque hash evidence"
+        );
+    }
     let enriched_old: SemanticNode = serde_json::from_str(
         &enrich_profile_labels_impl(
             &pair.old_tree,
