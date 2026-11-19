@@ -60,9 +60,38 @@ pub(crate) fn source_fallback_diff_impl(old: &str, new: &str, old_filename: &str
     diff["metadata"]["source_ranges"] = json!({"old_start_byte":prefix,"old_end_byte":old_end,"new_start_byte":prefix,"new_end_byte":new_end});
     diff["metadata"]["preview_limit_chars"] = json!(160);
     if reason == "parse_errors" { diff["parse_errors"] = json!(["Incomplete or invalid syntax; source changes preserved without a semantic interpretation"]); }
+    // core #314: the parser component returned its in-band error for a side (`Empty semantic
+    // tree`, `Unclosed script or style block`, ...). Same evidence as a parse error.
+    if reason == "plugin_parse_error" { diff["parse_errors"] = json!(["The parser could not read this input (incomplete or invalid syntax); source changes preserved without a semantic interpretation"]); }
     if changed { diff["change_groups"] = json!([{"kind":"MEANINGFUL_CHANGE","raw_change_indices":[0],"confidence":0.5,"rule_id":"source.incomplete_review","metadata":{"semantic_equivalence":"unknown"}}]); }
     crate::completeness::attach(&mut diff, Some((old, new)));
     Ok(diff)
+}
+
+/// Core #314: the review of a pair where a parser component could not read one `side` (`old` or
+/// `new`) and returned its in-band error `message`. Core decides, not the binding: with
+/// `fallback_to_token_diff` (the default) the result is `{"diff": <source fallback>}`, typed
+/// `fallback_reason = "plugin_parse_error"` with the parser's message, so a file mid-edit keeps its
+/// edit instead of failing the review. With the fallback disabled it is the typed decline
+/// `{"declined": true, "fallback_code": "plugin_parse_error", "reason": ...}`, which a binding
+/// surfaces as the parser error.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn plugin_parse_error_review_impl(
+    old: &str, new: &str, old_filename: &str, new_filename: &str, language: &str,
+    side: &str, message: &str, config_json: &str,
+) -> Result<Value, String> {
+    if !matches!(side, "old" | "new") {
+        return Err(format!("side must be \"old\" or \"new\", got {side:?}"));
+    }
+    let config = crate::RustCoreConfig::from_json(config_json)?;
+    let reason = format!("{}{side}): {message}", crate::live_server::PLUGIN_ERROR_PREFIX);
+    if !config.fallback_to_token_diff {
+        return Ok(json!({"declined": true, "fallback_code": "plugin_parse_error", "reason": reason}));
+    }
+    let mut diff = source_fallback_diff_impl(old, new, old_filename, new_filename, language, "plugin_parse_error")?;
+    diff["metadata"]["plugin_error"] = json!(message);
+    diff["metadata"]["plugin_error_side"] = json!(side);
+    Ok(json!({"diff": diff}))
 }
 
 #[cfg(test)]

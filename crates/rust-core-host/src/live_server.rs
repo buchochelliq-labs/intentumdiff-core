@@ -464,6 +464,22 @@ fn live_diff_parse_incomplete_reason(diff: &Value) -> Option<String> {
     )
 }
 
+/// `{"fallback": <reason>}`, typed with `fallback_code: "plugin_parse_error"` when a parser
+/// component declined to parse a side and returned its in-band `{"error": ...}` envelope
+/// (core #314). Incomplete or invalid input mid-edit is the usual cause: the reason keeps the
+/// parser's own message, and the code lets a binding offer the source fallback instead of
+/// reporting an engine failure.
+pub(crate) fn live_fallback_response(reason: &str) -> String {
+    let mut response = json!({ "fallback": reason });
+    if reason.contains(PLUGIN_ERROR_PREFIX) {
+        response["fallback_code"] = json!("plugin_parse_error");
+    }
+    response.to_string()
+}
+
+/// The prefix `reject_plugin_error_envelope` gives a parser's in-band error.
+pub(crate) const PLUGIN_ERROR_PREFIX: &str = "plugin returned error (";
+
 fn live_incomplete_file_response(path: &str, reason: &str) -> String {
     json!({
         "fallback": format!("{path}: {reason}"),
@@ -776,7 +792,7 @@ fn diff_resolved_sources(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    let fallback = |reason: &str| Ok(json!({ "fallback": reason }).to_string());
+    let fallback = |reason: &str| Ok(live_fallback_response(reason));
 
     let config: Value = if config_json.trim().is_empty() {
         json!({})
@@ -926,7 +942,7 @@ pub fn live_handle_review_impl(
     config_json: &str,
     wasm_dir: &str,
 ) -> Result<String, String> {
-    let fallback = |reason: &str| Ok(json!({ "fallback": reason }).to_string());
+    let fallback = |reason: &str| Ok(live_fallback_response(reason));
 
     // The FULL changed-sources dispatcher: new_ref "" = HEAD-vs-WORKING-TREE (the extension's
     // default review), ":staged" / ":unpushed" sentinels, else commit-to-commit.

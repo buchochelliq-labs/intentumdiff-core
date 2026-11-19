@@ -1,4 +1,6 @@
 mod source_fallback;
+#[cfg(test)]
+mod incomplete_input_source_tests;
 mod operator_tokens;
 mod atx_heading;
 mod markdown_code_block;

@@ -49,6 +49,15 @@
   MODIFICATION ("Change section title …") in a meaningful group: the heading text is content,
   not a symbol, so it no longer carries a `RENAME_SYMBOL` refactoring claim (core #166). INI
   sections and code entities keep their rename handling.
+- Incomplete input mid-edit (core #314): when a parser component returns its in-band error
+  for a side, the live and native review declines with `fallback_code: "plugin_parse_error"`
+  and keeps the parser's message (`plugin returned error (new): Empty semantic tree`).
+  `source_fallback_diff(..., reason="plugin_parse_error")` keeps the edit as a parse error.
+  New C ABI operation `plugin_parse_error_review` for bindings that host the parser
+  themselves: core decides between that typed source fallback (with the parser's message
+  and side) and a typed decline when `fallback_to_token_diff` is off.
+  The eight assessment cases that used to report `literal enrich ... missing field id` now
+  decline with the parser's own reason; the misleading decode error was removed in #280.
 - The language assessment checks the completeness state; cases may pin
   `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for
