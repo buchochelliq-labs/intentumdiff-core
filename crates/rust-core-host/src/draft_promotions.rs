@@ -222,6 +222,13 @@ pub(crate) fn promote_same_id_identifier_renames_from_add_delete_drafts<'a>(
         {
             continue;
         }
+        // A local binder or a read re-pointed at a name the scope already has is a reference
+        // swap (core #316), whatever its slot: it stays a behaviour-changing edit.
+        if (is_same_declaration_binder || is_read_of_renamed_binder)
+            && is_reference_swap_in_scope(old_tree, new_tree, old_node, new_node)
+        {
+            continue;
+        }
         promoted_ids.insert(old_node.id.clone());
         promoted.push(ChangeDraft {
             change_type: "REFACTORING",
@@ -956,7 +963,7 @@ pub(crate) fn promote_corroborated_variable_renames<'a>(
             .zip(local_binder_owner(new_tree, new_node.id.as_str()))
             .is_some_and(|(old_owner, new_owner)| old_owner.id == new_owner.id
                 && old_owner.node_type == new_owner.node_type);
-        if !same_binder {
+        if !same_binder || is_reference_swap_in_scope(old_tree, new_tree, old_node, new_node) {
             continue;
         }
         if let (Some(old_scope), Some(new_scope)) = (
@@ -1022,6 +1029,40 @@ fn enclosing_callable_id(tree: &SemanticNode, target_id: &str) -> Option<String>
             .find_map(|child| visit(child, target_id, nearest))
     }
     visit(tree, target_id, None)
+}
+
+/// True when replacing `old_label` by `new_label` at one identifier is a *reference swap*, not a
+/// rename (core #316): the new name already names an identifier in the old scope, or the old
+/// name still names one in the new scope. A rename introduces a name and retires the old one;
+/// `max_depth -= 1` -> `depth -= 1`, with both parameters still read, re-points the statement
+/// at another binding, which changes behaviour. The scope is the enclosing callable, else the
+/// whole tree.
+pub(crate) fn is_reference_swap_in_scope(
+    old_tree: &SemanticNode,
+    new_tree: &SemanticNode,
+    old_node: &SemanticNode,
+    new_node: &SemanticNode,
+) -> bool {
+    fn scope<'t>(tree: &'t SemanticNode, id: &str) -> &'t SemanticNode {
+        enclosing_callable_id(tree, id)
+            .and_then(|scope_id| {
+                fn find<'n>(node: &'n SemanticNode, id: &str) -> Option<&'n SemanticNode> {
+                    if node.id == id {
+                        return Some(node);
+                    }
+                    node.children.iter().find_map(|child| find(child, id))
+                }
+                find(tree, scope_id.as_str())
+            })
+            .unwrap_or(tree)
+    }
+    fn names(scope: &SemanticNode, label: &str, except: &str) -> bool {
+        scope.descendants().iter().any(|node| {
+            node.node_type == "identifier" && node.label == label && node.id != except
+        })
+    }
+    names(scope(old_tree, old_node.id.as_str()), new_node.label.as_str(), old_node.id.as_str())
+        || names(scope(new_tree, new_node.id.as_str()), old_node.label.as_str(), new_node.id.as_str())
 }
 
 /// Parameter binder identifiers of a callable, across every grammar's parameter-list spelling
@@ -2561,8 +2602,28 @@ pub(crate) fn suppress_same_label_modifications_without_leaf_label_delta(
         // only of unpaired leaves keeps it unless other surviving drafts report it all.
         leaf_label_delta(old_node, new_node, false)
             || (leaf_label_delta(old_node, new_node, true) && !covered)
+            || (inner_label_delta(old_node, new_node) && !covered)
             || opaque_payload::changed(old_node, new_node, old_source, new_source, language)
     });
+}
+
+/// True when an id-aligned, same-type, non-leaf descendant carries a different label of its own
+/// (core #316): grammars that fold a name into its container's label (JavaScript
+/// `augmented_assignment_expression` labelled `max_depth`, with only the `1` operand as a child)
+/// keep that edit off every leaf, so the leaf rule reads `max_depth -= 1` -> `depth -= 1` as no
+/// delta. Labels that are just the node type, or differ only by whitespace, are not a delta.
+fn inner_label_delta(old_node: &SemanticNode, new_node: &SemanticNode) -> bool {
+    let new_by_id = all_descendant_node_refs_by_id(new_node);
+    old_node.descendants().into_iter().any(|old_descendant| {
+        !old_descendant.is_leaf()
+            && new_by_id.get(old_descendant.id.as_str()).is_some_and(|new_descendant| {
+                !new_descendant.is_leaf()
+                    && old_descendant.node_type == new_descendant.node_type
+                    && old_descendant.label != old_descendant.node_type
+                    && new_descendant.label != new_descendant.node_type
+                    && strip_whitespace(&old_descendant.label) != strip_whitespace(&new_descendant.label)
+            })
+    })
 }
 
 fn strip_whitespace(text: &str) -> String {

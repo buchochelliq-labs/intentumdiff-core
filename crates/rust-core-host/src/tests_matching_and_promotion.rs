@@ -493,7 +493,7 @@ fn renamed_function_keeps_behavioral_statement_order_changes() {
             },
         ];
 
-        promote_same_id_named_renames_from_add_delete_drafts(&mut changes);
+        promote_same_id_named_renames_from_add_delete_drafts(&mut changes, "python");
 
         assert_eq!(changes.len(), 2, "position alone cannot collapse a callable: {changes:?}");
         assert!(changes.iter().all(|c| c.refactoring_kind.is_none()));
@@ -1963,4 +1963,125 @@ fn duplicate_sibling_slots_are_indexed_once_for_candidate_ranking() {
     for (i, child) in root.children.iter().enumerate() {
         assert_eq!(index.sibling_slot.get(child.id.as_str()), Some(&i));
     }
+}
+
+const SWAP_OLD_PY: &str = "def walk(node, depth, max_depth):\n    if depth > max_depth:\n        return\n    max_depth -= 1\n    walk(node.child, depth + 1, max_depth)\n";
+
+#[test]
+fn reference_swap_between_existing_variables_is_a_modification_not_a_rename() {
+    // Oracle (Core #316, HumanEvalPack 06): `max_depth -= 1` -> `depth -= 1` re-points the
+    // statement at another binding that already exists, and both names are still read. That is
+    // a behaviour change, so no route may present it as a rename/refactoring.
+    let new = SWAP_OLD_PY.replace("    max_depth -= 1", "    depth -= 1");
+    for (route, result) in rename_review_routes(SWAP_OLD_PY, &new) {
+        let changes = result["changes"].as_array().unwrap();
+        assert!(!changes.iter().any(|c| c["change_type"] == "REFACTORING"),
+            "{route}: a reference swap must not be reported as a rename: {result}");
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+            && c["old_node"]["label"] == "max_depth" && c["new_node"]["label"] == "depth"
+            && c["old_node"]["position"]["start_line"] == 3),
+            "{route}: the swapped reference must be a MODIFICATION at the edit: {result}");
+        assert_ne!(result["is_style_only"], true, "{route}: {result}");
+    }
+}
+
+#[test]
+fn consistent_local_rename_to_a_fresh_name_is_still_a_rename() {
+    // Control for #316: a name that is new to the scope, with every use renamed, stays a rename.
+    let old = "def f(a):\n    total = a + 1\n    return total * 2\n";
+    let new = "def f(a):\n    result = a + 1\n    return result * 2\n";
+    for (route, result) in rename_review_routes(old, new) {
+        let changes = result["changes"].as_array().unwrap();
+        assert!(changes.iter().any(|c| c["refactoring_kind"] == "RENAME_VARIABLE"
+            && c["old_node"]["label"] == "total" && c["new_node"]["label"] == "result"),
+            "{route}: a genuine local rename must stay a rename: {result}");
+        assert!(!changes.iter().any(|c| c["change_type"] == "MODIFICATION"),
+            "{route}: a genuine rename must not also surface as a behaviour change: {result}");
+    }
+}
+
+fn javascript_review(old: &str, new: &str) -> Value {
+    let wasm = bundled_wasm_path("js_ts_parser.wasm");
+    let (old_json, new_json) = run_python_wasm_process_pair(
+        &wasm, old, "", "example.js", new, "", "example.js",
+        u64::MAX, 16 * 1024 * 1024, "javascript",
+    ).expect("JavaScript parser must produce both semantic trees");
+    let old_tree = parse_semantic_tree_json(&old_json).expect("old JavaScript tree");
+    let new_tree = parse_semantic_tree_json(&new_json).expect("new JavaScript tree");
+    serde_json::from_str(&finalize_review_impl(
+        &serde_json::to_string(&old_tree).unwrap(), &serde_json::to_string(&new_tree).unwrap(),
+        old, new, "javascript", "{}",
+    ).unwrap()).unwrap()
+}
+
+const SWAP_OLD_JS: &str = "function f(s) {\n  let depth = 0, max_depth = 0;\n  for (const c of s) {\n    if (c == '(') {\n      depth += 1;\n      max_depth = Math.max(max_depth, depth);\n    } else {\n      max_depth -= 1;\n    }\n  }\n  return max_depth;\n}\n";
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+fn javascript_reference_swap_survives_as_a_modification_over_the_edit() {
+    // Oracle (Core #316, `hep-js-06-repair`): the JavaScript component folds the target name
+    // into `augmented_assignment_expression`'s label, so the edit is on no leaf. It must still
+    // be reported as a behaviour change covering line 7, not dropped to a column-shift MOVE.
+    let new = SWAP_OLD_JS.replace("      max_depth -= 1;", "      depth -= 1;");
+    let result = javascript_review(SWAP_OLD_JS, &new);
+    let changes = result["changes"].as_array().unwrap();
+    assert!(!changes.iter().any(|c| c["change_type"] == "REFACTORING"), "{result}");
+    assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+        && c["old_node"]["position"]["start_line"].as_u64().unwrap() <= 7
+        && c["old_node"]["position"]["end_line"].as_u64().unwrap() >= 7),
+        "the swapped reference on line 7 must be covered by a MODIFICATION: {result}");
+}
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+fn javascript_unchanged_and_whitespace_only_edits_stay_quiet() {
+    // Control for the inner-label rule: no edit, and an edit that only re-spaces an assignment,
+    // must not grow a MODIFICATION.
+    let unchanged = javascript_review(SWAP_OLD_JS, SWAP_OLD_JS);
+    assert!(unchanged["changes"].as_array().unwrap().is_empty(), "{unchanged}");
+    let respaced = SWAP_OLD_JS.replace("      max_depth -= 1;", "      max_depth   -=   1;");
+    let result = javascript_review(SWAP_OLD_JS, &respaced);
+    assert!(!result["changes"].as_array().unwrap().iter().any(|c| c["change_type"] == "MODIFICATION"),
+        "re-spacing an assignment is not a behaviour change: {result}");
+}
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+fn latex_section_retitle_is_a_content_change_not_a_symbol_rename() {
+    // Oracle (Core #166): `\section{Old}` -> `\section{New}` changes visible document text. It
+    // must be an explicit change to the section's title in a meaningful group, never a
+    // REFACTORING / RENAME_SYMBOL (which claims the edit preserves behaviour/content).
+    let wasm = bundled_wasm_path("latex_parser.wasm");
+    for (old, new) in [("\\section{Old}\n", "\\section{New}\n"),
+                       ("\\section{Old}\nBody text.\n", "\\section{New}\nBody text.\n")] {
+        let (old_json, new_json) = run_python_wasm_process_pair(
+            &wasm, old, "", "paper.tex", new, "", "paper.tex", u64::MAX, 16 * 1024 * 1024, "latex",
+        ).expect("LaTeX parser must produce both semantic trees");
+        let old_tree = parse_semantic_tree_json(&old_json).unwrap();
+        let new_tree = parse_semantic_tree_json(&new_json).unwrap();
+        let result: Value = serde_json::from_str(&finalize_review_impl(
+            &serde_json::to_string(&old_tree).unwrap(), &serde_json::to_string(&new_tree).unwrap(),
+            old, new, "latex", "{}",
+        ).unwrap()).unwrap();
+        let changes = result["changes"].as_array().unwrap();
+        assert!(!changes.iter().any(|c| c["change_type"] == "REFACTORING"), "{old:?}: {result}");
+        assert!(changes.iter().any(|c| c["change_type"] == "MODIFICATION"
+            && c["old_node"]["label"] == "Old" && c["new_node"]["label"] == "New"
+            && c["description"].as_str().unwrap().contains("title")),
+            "{old:?}: the retitle must be an explicit section-title change: {result}");
+        let groups = result["change_groups"].as_array().unwrap();
+        assert!(groups.iter().any(|g| g["kind"] == "MEANINGFUL_CHANGE"), "{old:?}: {result}");
+        assert!(!groups.iter().any(|g| g["kind"] == "REFACTORING"), "{old:?}: {result}");
+    }
+}
+
+#[test]
+fn only_document_headings_lose_the_rename_claim() {
+    // Control for #166: INI `section` headers share the node type but name configuration
+    // scopes, and code entities are symbols, so their same-id renames keep the refactoring path.
+    assert!(crate::draft_suppressors::is_document_heading("latex", "section"));
+    assert!(crate::draft_suppressors::is_document_heading("asciidoc", "section_level_2"));
+    assert!(!crate::draft_suppressors::is_document_heading("ini", "section"));
+    assert!(!crate::draft_suppressors::is_document_heading("python", "function_definition"));
+    assert!(!crate::draft_suppressors::is_document_heading("latex", "environment"));
 }

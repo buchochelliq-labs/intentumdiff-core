@@ -9538,7 +9538,7 @@ fn refine_candidate_drafts<'a>(
     measure_value_optional(
         probe.as_deref_mut(),
         "rust_refine_promote_same_id_renames",
-        || promote_same_id_named_renames_from_add_delete_drafts(changes),
+        || promote_same_id_named_renames_from_add_delete_drafts(changes, language),
     );
     finalize_debug_probe("refine:promote_same_id_renames", changes);
     measure_value_optional(
