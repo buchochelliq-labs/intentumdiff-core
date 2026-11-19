@@ -70,6 +70,8 @@ TIER_C_COMPONENTS = [
     "bash",
     # Number respelling equivalence: the pinned ADF component keeps its results.
     "adf",
+    # #166 a LaTeX section retitle is a content change, not a symbol rename.
+    "latex",
 ]
 
 

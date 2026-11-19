@@ -222,7 +222,22 @@ pub(crate) fn promote_same_id_named_line_moves_drafts<'a>(
     changes.extend(promoted);
 }
 
-pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: &mut Vec<ChangeDraft<'a>>) {
+/// A document heading whose label is the heading's visible text (core #166): LaTeX sectioning
+/// commands and AsciiDoc section titles. Retitling one changes the document's content, so it is
+/// never a behaviour-preserving symbol rename. INI `section` headers share the node type but name
+/// configuration scopes, so the language decides.
+pub(crate) fn is_document_heading(language: &str, node_type: &str) -> bool {
+    match language.to_ascii_lowercase().as_str() {
+        "latex" | "tex" => node_type == "section",
+        "asciidoc" => node_type.starts_with("section_level_"),
+        _ => false,
+    }
+}
+
+pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(
+    changes: &mut Vec<ChangeDraft<'a>>,
+    language: &str,
+) {
     let deleted_entities: Vec<&SemanticNode> = changes
         .iter()
         .filter(|change| change.change_type == "DELETION")
@@ -277,6 +292,25 @@ pub(crate) fn promote_same_id_named_renames_from_add_delete_drafts<'a>(changes: 
             continue;
         }
         promoted_keys.insert((old_node.node_type.clone(), old_node.id.clone()));
+        if is_document_heading(language, old_node.node_type.as_str()) {
+            // The heading text IS the content: report the retitle as a content change, with no
+            // refactoring (behaviour-preserving) claim.
+            promoted.push(ChangeDraft {
+                change_type: "MODIFICATION",
+                old_node: Some(old_node),
+                new_node: Some(new_node),
+                old_index: None,
+                new_index: None,
+                confidence: 1.0,
+                description: format!(
+                    "Change {} title '{}' -> '{}'",
+                    old_node.node_type.replace('_', " "), old_node.label, new_node.label
+                ),
+                refactoring_kind: None,
+                text_diff: None,
+            });
+            continue;
+        }
         // Same structural id + same type + different label = a RENAME (the entity stays put; only
         // its name changed), not a MOVE. Emitting MOVE here contradicted this function's own name
         // and surfaced a clean function rename (greet -> welcome) as MOVE + a redundant identifier

@@ -36,6 +36,19 @@
   sibling. The certified and a custom Python component route agree on node ids again
   (intentumdiff-python#346). Host recovery for components that still drop operators keeps
   its `.op<k>` names.
+- A reference swap between variables that already exist (`max_depth -= 1` → `depth -= 1`,
+  with both names still read) is a behaviour-changing MODIFICATION, never a
+  `RENAME_VARIABLE` refactoring (core #316). A local binder or read counts as renamed only when
+  its new name is new to the enclosing callable (or file) and the old name is gone from it;
+  consistent renames to a fresh name are unchanged.
+- A same-label MODIFICATION survives when an id-aligned inner node's own label changed. This
+  covers JavaScript `augmented_assignment_expression`, which carries its target name in its
+  label rather than in a leaf. Previously HumanEvalPack 06's JavaScript repair surfaced only as
+  a column-shift MOVE of the literal `1` (core #316).
+- Retitling a LaTeX section (`\section{Old}` → `\section{New}`) or an AsciiDoc section is a
+  MODIFICATION ("Change section title …") in a meaningful group: the heading text is content,
+  not a symbol, so it no longer carries a `RENAME_SYMBOL` refactoring claim (core #166). INI
+  sections and code entities keep their rename handling.
 - The language assessment checks the completeness state; cases may pin
   `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for
