@@ -135,6 +135,26 @@ Changed input is review-worthy with confidence 0.5 and semantic equivalence unkn
 it is never called refactoring or style-only. Identical input has no changes. The
 operation is linear and accepts at most 4 MiB per source. `reason=parse_errors`
 adds a parse diagnostic; other decline reasons do not invent parse failures.
+`reason=plugin_parse_error` (core #314) is for a side the parser component could not
+read at all, because it returned its in-band `{"error": ...}` envelope instead of a
+tree. It also adds a parse diagnostic.
+
+`plugin_parse_error_review(old_source, new_source, old_filename, new_filename, language,
+side, message, config_json)` is the review of such a pair. `side` is `old` or `new`, and
+`message` is the parser's error. Core decides, and bindings only relay the result:
+- with `fallback_to_token_diff` (the default), it returns `{"diff": <SemanticDiff>}`: the
+  source fallback with `metadata.fallback_reason = "plugin_parse_error"`,
+  `metadata.plugin_error` and `metadata.plugin_error_side`, so a file mid-edit keeps its edit;
+- with the fallback disabled, it returns
+  `{"declined": true, "fallback_code": "plugin_parse_error", "reason": "plugin returned error (<side>): <message>"}`,
+  which a binding raises as the parser error.
+
+When the live/native review (`live_diff_contents`, `live_handle_diff`, the changed-sources
+dispatcher) declines because a parser returned that envelope, its `{"fallback": <reason>}`
+response carries `fallback_code: "plugin_parse_error"`. The reason keeps the parser's own
+message: `<path>: plugin returned error (old|new): <message>`, for example `Empty semantic
+tree` for half-typed YAML or XML. Other declines carry no `fallback_code` unless documented
+here, such as `native_parse_incomplete`.
 
 Native Python batches return `COMPLETE` with this fallback diff, rather than a
 control-plane `FALLBACK` request for a binding to perform comparison. The

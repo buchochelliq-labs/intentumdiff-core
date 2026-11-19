@@ -814,6 +814,12 @@ pub fn dispatch(name: &str, args: &[Value]) -> String {
             arg_str(args, 2, "old_filename")?, arg_str(args, 3, "new_filename")?,
             arg_str(args, 4, "language")?, arg_str(args, 5, "reason")?,
         ).map(|v| v.to_string()),
+        "plugin_parse_error_review" => crate::source_fallback::plugin_parse_error_review_impl(
+            arg_str(args, 0, "old_source")?, arg_str(args, 1, "new_source")?,
+            arg_str(args, 2, "old_filename")?, arg_str(args, 3, "new_filename")?,
+            arg_str(args, 4, "language")?, arg_str(args, 5, "side")?,
+            arg_str(args, 6, "message")?, arg_str(args, 7, "config_json")?,
+        ).map(|v| v.to_string()),
         "parse_errors_present" => crate::source_fallback::parse_errors_present_impl(
             arg_str(args, 0, "source")?, arg_str(args, 1, "tree_json")?, arg_str(args, 2, "language")?,
         ),
