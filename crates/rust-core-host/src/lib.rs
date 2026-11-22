@@ -602,15 +602,32 @@ fn disambiguate_repeated_resource_keys(
     if repeated.is_empty() {
         return;
     }
+    // A repeated key inside a numbered block is counted within that block, so its ordinal is
+    // its place in *that* block: removing an attribute from an earlier repeated block does not
+    // shift the ordinals of the same attribute in later blocks. Tree order visits a block
+    // before its children.
     fn number(keys: &mut HashMap<&str, Vec<String>>, sorted: &[&SemanticNode], repeated: &HashSet<Vec<String>>) {
-        let mut seen: HashMap<Vec<String>, usize> = HashMap::new();
+        let mut seen: HashMap<(String, Vec<String>), usize> = HashMap::new();
+        let mut suffix_by_id: HashMap<&str, String> = HashMap::new();
         for node in sorted {
             let Some(key) = keys.get_mut(node.id.as_str()) else { continue };
-            if repeated.contains(key) {
-                let ordinal = seen.entry(key.clone()).or_insert(0);
-                key.push(format!("#{ordinal}"));
-                *ordinal += 1;
+            if !repeated.contains(key) {
+                continue;
             }
+            let mut scope = String::new();
+            let mut current = node.id.as_str();
+            while let Some((parent, _)) = current.rsplit_once('.') {
+                if let Some(suffix) = suffix_by_id.get(parent) {
+                    scope = suffix.clone();
+                    break;
+                }
+                current = parent;
+            }
+            let ordinal = seen.entry((scope.clone(), key.clone())).or_insert(0);
+            let suffix = format!("{scope}#{ordinal}");
+            *ordinal += 1;
+            key.push(suffix.clone());
+            suffix_by_id.insert(node.id.as_str(), suffix);
         }
     }
     number(old_keys, old_sorted, &repeated);

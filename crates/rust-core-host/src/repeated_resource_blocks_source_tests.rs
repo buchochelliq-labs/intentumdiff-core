@@ -50,3 +50,18 @@ fn an_edit_inside_a_repeated_block_stays_at_that_block() {
         assert!(change.to_string().contains(old_label), "{new:?}: {diff:#}");
     }
 }
+
+#[test]
+#[cfg_attr(not(feature = "tier-c-wasm"), ignore = "needs staged parser wasm (set INTENTUMDIFF_TEST_WASM_DIR or enable tier-c-wasm)")]
+fn removing_an_attribute_from_an_earlier_block_does_not_touch_the_later_one() {
+    // An attribute is counted within its own repeated block: dropping `x` from the first `a`
+    // must not re-pair the second block's unchanged `x = 2` with the removed `x = 1`.
+    let diff = review(REPEATED, "a {\n}\na {\n  x = 2\n}\n");
+    let changes = diff["changes"].as_array().unwrap();
+    assert!(!changes.is_empty(), "{diff:#}");
+    for change in changes {
+        assert_ne!(change["change_type"], "MODIFICATION", "{diff:#}");
+        assert_ne!(change["new_node"]["position"]["start_line"], 4, "the later block is unchanged: {diff:#}");
+        assert_ne!(change["old_node"]["position"]["start_line"], 4, "the later block is unchanged: {diff:#}");
+    }
+}
