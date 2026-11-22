@@ -72,6 +72,8 @@ TIER_C_COMPONENTS = [
     "adf",
     # #166 a LaTeX section retitle is a content change, not a symbol rename.
     "latex",
+    # terraform-parser#4 repeated resource blocks are matched in order.
+    "terraform",
 ]
 
 
