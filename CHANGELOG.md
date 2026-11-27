@@ -58,6 +58,11 @@
   and side) and a typed decline when `fallback_to_token_diff` is off.
   The eight assessment cases that used to report `literal enrich ... missing field id` now
   decline with the parser's own reason; the misleading decode error was removed in #280.
+- Repeated resource blocks that share an identity key (two unlabelled `a { ... }` blocks,
+  several `provider` blocks) are matched in order: the n-th occurrence on one side pairs with
+  the n-th on the other (terraform-parser#4). Byte-identical Terraform no longer reports
+  `Update attribute("x") -> attribute("x")`, and a real edit stays at its own block. Unique keys
+  are unchanged. The external ledger's two Terraform provider cases now pass.
 - The language assessment checks the completeness state; cases may pin
   `expected.completeness`.
 - Add a source-pinned six-language external pilot, explicit admission ledger for

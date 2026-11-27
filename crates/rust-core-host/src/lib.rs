@@ -1,5 +1,7 @@
 mod source_fallback;
 #[cfg(test)]
+mod repeated_resource_blocks_source_tests;
+#[cfg(test)]
 mod incomplete_input_source_tests;
 mod operator_tokens;
 mod atx_heading;
@@ -574,6 +576,64 @@ fn is_generic_resource_label(label: &str, node_type: &str) -> bool {
     )
 }
 
+/// terraform-parser#4: a resource key that occurs more than once on either side (two
+/// unlabelled `a { ... }` blocks, repeated `provider` blocks) cannot identify one node, and the
+/// same-key lookup paired attributes across blocks: byte-identical files reported
+/// `Update attribute("x") -> attribute("x")`. Number every occurrence of such a key in tree
+/// order, on both sides, so the n-th repeated block pairs with the n-th. Unique keys are kept.
+fn disambiguate_repeated_resource_keys(
+    old_keys: &mut HashMap<&str, Vec<String>>,
+    old_sorted: &[&SemanticNode],
+    new_keys: &mut HashMap<&str, Vec<String>>,
+    new_sorted: &[&SemanticNode],
+) {
+    fn counts(keys: &HashMap<&str, Vec<String>>) -> HashMap<Vec<String>, usize> {
+        let mut counts = HashMap::new();
+        for key in keys.values() {
+            *counts.entry(key.clone()).or_insert(0) += 1;
+        }
+        counts
+    }
+    let (old_counts, new_counts) = (counts(old_keys), counts(new_keys));
+    let repeated: HashSet<Vec<String>> = old_counts.iter().chain(new_counts.iter())
+        .filter(|(_, count)| **count > 1)
+        .map(|(key, _)| key.clone())
+        .collect();
+    if repeated.is_empty() {
+        return;
+    }
+    // A repeated key inside a numbered block is counted within that block, so its ordinal is
+    // its place in *that* block: removing an attribute from an earlier repeated block does not
+    // shift the ordinals of the same attribute in later blocks. Tree order visits a block
+    // before its children.
+    fn number(keys: &mut HashMap<&str, Vec<String>>, sorted: &[&SemanticNode], repeated: &HashSet<Vec<String>>) {
+        let mut seen: HashMap<(String, Vec<String>), usize> = HashMap::new();
+        let mut suffix_by_id: HashMap<&str, String> = HashMap::new();
+        for node in sorted {
+            let Some(key) = keys.get_mut(node.id.as_str()) else { continue };
+            if !repeated.contains(key) {
+                continue;
+            }
+            let mut scope = String::new();
+            let mut current = node.id.as_str();
+            while let Some((parent, _)) = current.rsplit_once('.') {
+                if let Some(suffix) = suffix_by_id.get(parent) {
+                    scope = suffix.clone();
+                    break;
+                }
+                current = parent;
+            }
+            let ordinal = seen.entry((scope.clone(), key.clone())).or_insert(0);
+            let suffix = format!("{scope}#{ordinal}");
+            *ordinal += 1;
+            key.push(suffix.clone());
+            suffix_by_id.insert(node.id.as_str(), suffix);
+        }
+    }
+    number(old_keys, old_sorted, &repeated);
+    number(new_keys, new_sorted, &repeated);
+}
+
 fn resource_node_sort_key(node: &SemanticNode) -> (u32, u32, &str) {
     (
         node.position.start_line,
@@ -790,16 +850,14 @@ fn augment_resource_profile_changes_drafts<'a>(
     }
     let old_by_id = semantic_node_refs_by_id_with_root(old_tree);
     let new_by_id = semantic_node_refs_by_id_with_root(new_tree);
-    let old_keys: HashMap<&str, Vec<String>> = old_by_id
+    let mut old_keys: HashMap<&str, Vec<String>> = old_by_id
         .iter()
         .filter_map(|(id, node)| resource_profile_key(node, &old_by_id, language).map(|k| (*id, k)))
         .collect();
-    let new_keys: HashMap<&str, Vec<String>> = new_by_id
+    let mut new_keys: HashMap<&str, Vec<String>> = new_by_id
         .iter()
         .filter_map(|(id, node)| resource_profile_key(node, &new_by_id, language).map(|k| (*id, k)))
         .collect();
-    let old_key_set: HashSet<Vec<String>> = old_keys.values().cloned().collect();
-    let new_key_set: HashSet<Vec<String>> = new_keys.values().cloned().collect();
 
     let mut mentioned_old: HashSet<String> = changes
         .iter()
@@ -824,6 +882,9 @@ fn augment_resource_profile_changes_drafts<'a>(
     old_sorted.sort_by(|a, b| resource_node_sort_key(a).cmp(&resource_node_sort_key(b)));
     let mut new_sorted: Vec<&SemanticNode> = new_by_id.values().copied().collect();
     new_sorted.sort_by(|a, b| resource_node_sort_key(a).cmp(&resource_node_sort_key(b)));
+    disambiguate_repeated_resource_keys(&mut old_keys, &old_sorted, &mut new_keys, &new_sorted);
+    let old_key_set: HashSet<Vec<String>> = old_keys.values().cloned().collect();
+    let new_key_set: HashSet<Vec<String>> = new_keys.values().cloned().collect();
 
     // key -> new node (tree order, last wins) for same-key attribute lookup.
     let mut new_node_by_key: HashMap<Vec<String>, &SemanticNode> = HashMap::new();
